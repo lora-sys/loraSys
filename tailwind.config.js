@@ -40,6 +40,10 @@ const config = {
 					DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
 					foreground: 'hsl(var(--accent-foreground) / <alpha-value>)'
 				},
+				gold: {
+					DEFAULT: 'hsl(45 100% 70%)',
+					foreground: 'hsl(240 6% 5%)'
+				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover) / <alpha-value>)',
 					foreground: 'hsl(var(--popover-foreground) / <alpha-value>)'
@@ -55,7 +59,8 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['"DM Sans"', ...fontFamily.sans],
+				sans: ['"Poppins"', ...fontFamily.sans],
+				serif: ['"Lora"', ...fontFamily.serif],
 				mono: ['"Fragment Mono"', ...fontFamily.mono]
 			}
 		}

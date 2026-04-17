@@ -26,25 +26,25 @@
 		--radius: 0.75rem;
 	}
 	.dark {
-		--background: 240 10% 3.9%;
-		--foreground: 0 0% 98%;
-		--card: 240 10% 3.9%;
-		--card-foreground: 0 0% 98%;
-		--popover: 240 10% 3.9%;
-		--popover-foreground: 0 0% 98%;
-		--primary: 0 0% 98%;
-		--primary-foreground: 240 5.9% 10%;
-		--secondary: 240 3.7% 15.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 240 3.7% 15.9%;
-		--muted-foreground: 240 5% 64.9%;
-		--accent: 240 3.7% 15.9%;
-		--accent-foreground: 0 0% 98%;
+		--background: 240 6% 5%;
+		--foreground: 45 20% 96%;
+		--card: 240 6% 5%;
+		--card-foreground: 45 20% 96%;
+		--popover: 240 6% 5%;
+		--popover-foreground: 45 20% 96%;
+		--primary: 45 20% 96%;
+		--primary-foreground: 240 6% 5%;
+		--secondary: 240 4% 12%;
+		--secondary-foreground: 45 20% 96%;
+		--muted: 240 4% 12%;
+		--muted-foreground: 240 4% 55%;
+		--accent: 45 100% 70%;
+		--accent-foreground: 240 6% 5%;
 		--destructive: 0 62.8% 30.6%;
 		--destructive-foreground: 0 0% 98%;
-		--border: 240 3.7% 15.9%;
-		--input: 240 3.7% 15.9%;
-		--ring: 240 4.9% 83.9%;
+		--border: 240 4% 20%;
+		--input: 240 4% 20%;
+		--ring: 45 100% 70%;
 	}
 }
 
@@ -53,8 +53,7 @@
 		@apply border-border;
 	}
 	body {
-		@apply bg-background text-foreground;
-		font-family: 'Fragment Mono', monospace;
+		@apply bg-background text-foreground font-sans antialiased;
 	}
 	h1,
 	h2,
@@ -62,6 +61,6 @@
 	h4,
 	h5,
 	h6 {
-		font-family: 'DM Sans', sans-serif;
+		@apply font-serif font-semibold tracking-tight;
 	}
 }
