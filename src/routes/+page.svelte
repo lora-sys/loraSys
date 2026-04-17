@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import BlurFade from '$lib/components/magic/BlurFade.svelte';
 	import AnimeSection from '$lib/components/portfolio/AnimeSection.svelte';
 	import HackathonCard from '$lib/components/portfolio/HackathonCard.svelte';
@@ -8,7 +8,27 @@
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { DATA } from '$lib/data/resume';
 	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
+	import { Spotlight } from '$lib/components/aceternity';
+	import { TextGenerateEffect } from '$lib/components/aceternity';
+	import { onMount } from 'svelte';
+
 	let BLUR_FADE_DELAY = 0.04;
+
+	let avatarEl: HTMLDivElement | undefined = $state();
+	let mouseX = $state(0);
+	let mouseY = $state(0);
+
+	onMount(() => {
+		function handleMouseMove(e: MouseEvent) {
+			if (avatarEl) {
+				const rect = avatarEl.getBoundingClientRect();
+				mouseX = (e.clientX - rect.left - rect.width / 2) * 0.08;
+				mouseY = (e.clientY - rect.top - rect.height / 2) * 0.08;
+			}
+		}
+		window.addEventListener('mousemove', handleMouseMove);
+		return () => window.removeEventListener('mousemove', handleMouseMove);
+	});
 </script>
 
 <svelte:head>
@@ -36,26 +56,95 @@
 </svelte:head>
 <main class="flex min-h-[100dvh] flex-col space-y-10">
 	<section id="hero">
-		<div class="mx-auto w-full max-w-2xl space-y-8">
-			<div class="flex justify-between gap-2">
-				<div class="flex flex-1 flex-col space-y-1.5">
-					<BlurFade
-						delay={BLUR_FADE_DELAY}
-						class="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
-						yOffset={8}>Hi, I'm Lora 👋</BlurFade
-					>
-					<BlurFade class="max-w-[600px] md:text-xl" delay={BLUR_FADE_DELAY}
-						>Software Engineer turned Entrepreneur. I love building things and helping people. Very
-						active on Twitter.</BlurFade
-					>
-				</div>
-				<BlurFade delay={BLUR_FADE_DELAY}>
-					<Avatar.Root class="size-28 border">
-						<Avatar.Image alt={DATA.name} src={DATA.avatarUrl} loading="lazy" />
-						<Avatar.Fallback>{DATA.initials}</Avatar.Fallback>
-					</Avatar.Root>
+		<!-- Hero with Spotlight background -->
+		<div class="relative flex min-h-[80vh] items-center justify-center overflow-hidden">
+			<Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="hsl(45 100% 70% / 0.3)" />
+
+			<!-- Radial gradient overlay -->
+			<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(240_6%_5%/0.8)_70%)]"></div>
+
+			<div class="relative z-10 mx-auto w-full max-w-4xl px-6 text-center">
+				<BlurFade delay={BLUR_FADE_DELAY} yOffset={6}>
+					<p class="mb-4 text-sm font-medium uppercase tracking-widest text-gold sm:text-base">
+						{DATA.location}
+					</p>
+				</BlurFade>
+
+				<BlurFade delay={BLUR_FADE_DELAY * 2} yOffset={8}>
+					<h1 class="font-sans text-6xl font-extrabold tracking-tight sm:text-7xl md:text-8xl lg:text-9xl/none">
+						{DATA.name}
+					</h1>
+				</BlurFade>
+
+				<BlurFade delay={BLUR_FADE_DELAY * 3} yOffset={6}>
+					<div class="mt-6 flex items-center justify-center">
+						<span class="mr-2 h-px w-12 bg-gold"></span>
+						<span class="text-lg font-medium text-muted-foreground sm:text-xl">
+							Software Engineer & Entrepreneur
+						</span>
+						<span class="ml-2 h-px w-12 bg-gold"></span>
+					</div>
+				</BlurFade>
+
+				<BlurFade delay={BLUR_FADE_DELAY * 4} yOffset={6}>
+					<div class="mt-10">
+						<TextGenerateEffect
+							words={DATA.description}
+							className="text-base sm:text-lg md:text-xl lg:text-2xl"
+						/>
+					</div>
+				</BlurFade>
+
+				<BlurFade delay={BLUR_FADE_DELAY * 5} yOffset={6}>
+					<div class="mt-12 flex items-center justify-center gap-6">
+						<!-- Magnetic avatar -->
+						<div
+							bind:this={avatarEl}
+							class="group/avatar relative"
+						>
+							<div
+								class="transition-transform duration-300 ease-out group-hover/avatar:scale-105"
+								style="transform: translate({mouseX}px, {mouseY}px)"
+							>
+								<Avatar.Root class="size-32 border-2 border-gold/50 shadow-[0_0_30px_hsl(45_100%_70%_/0.2)] sm:size-40">
+									<Avatar.Image alt={DATA.name} src={DATA.avatarUrl} />
+									<Avatar.Fallback class="bg-gradient-to-br from-gold/20 to-transparent text-gold font-bold text-2xl sm:text-3xl">
+										{DATA.initials}
+									</Avatar.Fallback>
+								</Avatar.Root>
+							</div>
+							<!-- Glow ring -->
+							<div class="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover/avatar:opacity-100"
+								style="background: radial-gradient(circle, hsl(45_100%_70%_/0.15) 0%, transparent 70%); transform: scale(1.2);">
+							</div>
+						</div>
+					</div>
+				</BlurFade>
+
+				<BlurFade delay={BLUR_FADE_DELAY * 6} yOffset={6}>
+					<div class="mt-8 flex flex-wrap justify-center gap-3">
+						{#each Object.values(DATA.contact.social) as link}
+							<a
+								href={link.url}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="rounded-full border border-border px-5 py-2 text-sm font-medium transition-colors hover:border-gold/50 hover:text-gold"
+							>
+								{link.name}
+							</a>
+						{/each}
+					</div>
 				</BlurFade>
 			</div>
+
+			<!-- Scroll indicator -->
+			<BlurFade delay={BLUR_FADE_DELAY * 8} yOffset={4}>
+				<div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+					<svg class="h-6 w-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+					</svg>
+				</div>
+			</BlurFade>
 		</div>
 	</section>
 	<section id="about">

@@ -21,7 +21,7 @@
 
 	function handleMouseMove(event: MouseEvent) {
 		const target = event.currentTarget as HTMLElement;
-		const halfWidth = target?.offsetWidth / 2 ?? 0;
+		const halfWidth = target.offsetWidth / 2;
 		x = event.offsetX - halfWidth;
 	}
 </script>
