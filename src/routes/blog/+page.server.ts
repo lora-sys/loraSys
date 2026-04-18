@@ -1,7 +1,7 @@
 import type { Post } from '$lib/types';
 
 async function getPosts(): Promise<Post[]> {
-	let posts: Post[] = [];
+	const posts: Post[] = [];
 
 	const paths = import.meta.glob('/src/content/*.md');
 	for (const path in paths) {

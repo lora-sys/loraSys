@@ -4,14 +4,8 @@
 	import { formatDate } from '$lib/utils';
 
 	let { data } = $props();
-</script>
 
-<!-- SEO -->
-<svelte:head>
-	<title>{data.meta?.title ?? 'Blog Post'} — lora-sys</title>
-	<meta property="og:type" content="article" />
-	<meta property="og:title" content={data.meta?.title ?? ''} />
-	{@html `<script type="application/ld+json">${JSON.stringify({
+	const ldJson = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
 		headline: data.meta?.title ?? '',
@@ -19,7 +13,15 @@
 		description: data.meta?.description ?? '',
 		keywords: data.meta?.categories?.join(', ') ?? '',
 		author: { '@type': 'Person', name: 'lora-sys' }
-	})}</script>`}
+	});
+</script>
+
+<!-- SEO -->
+<svelte:head>
+	<title>{data.meta?.title ?? 'Blog Post'} — lora-sys</title>
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content={data.meta?.title ?? ''} />
+	{@html `<script type="application/ld+json">${ldJson}<\/script>`}
 </svelte:head>
 
 <div class="mx-auto max-w-2xl space-y-8 py-12">
