@@ -63,7 +63,9 @@
 			isPaused ? '' : 'animate-scroll',
 			direction === 'left' ? 'flex-row' : 'flex-row-reverse'
 		)}
-		style="--animation-duration: {speedMap[speed]}; --animation-direction: {direction === 'left' ? 'forwards' : 'reverse'};"
+		style="--animation-duration: {speedMap[speed]}; --animation-direction: {direction === 'left'
+			? 'forwards'
+			: 'reverse'};"
 	>
 		{#each items as item, idx (`item-${idx}`)}
 			<li

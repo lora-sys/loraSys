@@ -18,7 +18,7 @@
 <div class="absolute inset-0 z-40 {className}">
 	{#each stars as star (star.id)}
 		<span
-			class="absolute inline-block rounded-full animate-star"
+			class="animate-star absolute inline-block rounded-full"
 			style="
 				top: {star.top}%;
 				left: {star.left}%;

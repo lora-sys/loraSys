@@ -10,14 +10,7 @@
 		icon?: import('svelte').Snippet;
 	}
 
-	let {
-		className,
-		title,
-		description,
-		children,
-		header,
-		icon
-	}: Props = $props();
+	let { className, title, description, children, header, icon }: Props = $props();
 </script>
 
 <div
@@ -27,7 +20,9 @@
 	)}
 >
 	{#if header}{@render header()}{:else}
-		<div class="min-h-[6rem] w-full flex-1 rounded-xl bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800"></div>
+		<div
+			class="min-h-[6rem] w-full flex-1 rounded-xl bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800"
+		></div>
 	{/if}
 	<div class="transition duration-200 group-hover/bento:translate-x-2">
 		{#if icon}{@render icon()}{/if}

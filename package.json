@@ -28,6 +28,7 @@
 		"eslint-plugin-svelte": "^2.45.1",
 		"globals": "^15.0.0",
 		"mdsvex": "^0.11.2",
+		"playwright": "^1.59.1",
 		"postcss": "^8.4.38",
 		"prettier": "3.6.2",
 		"prettier-plugin-svelte": "^3.5.0",

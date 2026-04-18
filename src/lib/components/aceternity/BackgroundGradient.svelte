@@ -8,12 +8,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
-		className,
-		containerClassName,
-		animate = true,
-		children
-	}: Props = $props();
+	let { className, containerClassName, animate = true, children }: Props = $props();
 
 	let mounted = $state(false);
 

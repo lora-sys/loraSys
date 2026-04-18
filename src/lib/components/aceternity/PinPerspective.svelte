@@ -31,7 +31,7 @@
 			style="perspective: 1000px; transform: rotateX(70deg) translateZ(0);"
 		>
 			<div
-				class="absolute left-1/2 top-1/2 h-[11.25rem] w-[11.25rem] rounded-[50%] bg-sky-500/[0.08] shadow-[0_8px_16px_rgb(0_0_0/0.4)] animate-ping-perspective"
+				class="animate-ping-perspective absolute left-1/2 top-1/2 h-[11.25rem] w-[11.25rem] rounded-[50%] bg-sky-500/[0.08] shadow-[0_8px_16px_rgb(0_0_0/0.4)]"
 			></div>
 		</div>
 	</div>

@@ -1,5 +1,6 @@
+---
 title: Building a Full-Stacl YouTuBe Clone with nextjs 15, trpc, and more web Technologies
-description: *A deep dive into architecture , core features , and problem solving strategies*
+description: A deep dive into architecture, core features, and problem solving strategies
 date: '2026-3-10'
 categories:
   - Nextjs
@@ -47,16 +48,16 @@ NewTube is a full-featured video-sharing platform that includes:
 
 ### Tech Stack at a Glance
 
-| Layer | Technology |
-|-------|------------|
+| Layer    | Technology                                     |
+| -------- | ---------------------------------------------- |
 | Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS |
-| Backend | tRPC, Drizzle ORM |
-| Database | PostgreSQL (Neon) |
-| Auth | Clerk |
-| Video | Mux |
-| Storage | UploadThing |
-| Cache | Upstash Redis |
-| Queue | QStash |
+| Backend  | tRPC, Drizzle ORM                              |
+| Database | PostgreSQL (Neon)                              |
+| Auth     | Clerk                                          |
+| Video    | Mux                                            |
+| Storage  | UploadThing                                    |
+| Cache    | Upstash Redis                                  |
+| Queue    | QStash                                         |
 
 ---
 
@@ -112,7 +113,7 @@ Here's how a typical API request flows through the system:
 ```typescript
 // 1. Client Component triggers the query
 const [videos] = trpc.videos.getMany.useSuspenseQuery({
-  categoryId: selectedCategory
+	categoryId: selectedCategory
 });
 
 // 2. tRPC Client serializes and sends request
@@ -121,24 +122,26 @@ const [videos] = trpc.videos.getMany.useSuspenseQuery({
 
 // 3. Server-side tRPC handles the request
 export const videosRouter = createTRPCRouter({
-  getMany: baseProcedure
-    .input(z.object({
-      categoryId: z.string().uuid().optional(),
-      limit: z.number().min(1).max(100).default(10),
-    }))
-    .query(async ({ input }) => {
-      // Database query with Drizzle ORM
-      const data = await db
-        .select({
-          id: videos.id,
-          title: videos.title,
-          // ... other fields
-        })
-        .from(videos)
-        .where(eq(videos.videoVisiblity, "public"));
-      
-      return { items: data, nextCursor: null };
-    }),
+	getMany: baseProcedure
+		.input(
+			z.object({
+				categoryId: z.string().uuid().optional(),
+				limit: z.number().min(1).max(100).default(10)
+			})
+		)
+		.query(async ({ input }) => {
+			// Database query with Drizzle ORM
+			const data = await db
+				.select({
+					id: videos.id,
+					title: videos.title
+					// ... other fields
+				})
+				.from(videos)
+				.where(eq(videos.videoVisiblity, 'public'));
+
+			return { items: data, nextCursor: null };
+		})
 });
 ```
 
@@ -152,36 +155,33 @@ Next.js 15's App Router allows us to prefetch data on the server and hydrate it 
 
 ```tsx
 // app/(home)/videos/[videoId]/page.tsx (Server Component)
-import { HydrateClient, trpc } from "@/trpc/server";
+import { HydrateClient, trpc } from '@/trpc/server';
 
-export default async function VideoPage({ 
-  params 
-}: { 
-  params: { videoId: string } 
-}) {
-  // Prefetch on the server
-  void trpc.videos.getOne.prefetch({ id: params.videoId });
-  void trpc.comments.getMany.prefetch({ videoId: params.videoId });
-  
-  return (
-    <HydrateClient>
-      <VideoSection videoId={params.videoId} />
-    </HydrateClient>
-  );
+export default async function VideoPage({ params }: { params: { videoId: string } }) {
+	// Prefetch on the server
+	void trpc.videos.getOne.prefetch({ id: params.videoId });
+	void trpc.comments.getMany.prefetch({ videoId: params.videoId });
+
+	return (
+		<HydrateClient>
+			<VideoSection videoId={params.videoId} />
+		</HydrateClient>
+	);
 }
 
 // VideoSection.tsx (Client Component)
-"use client";
+('use client');
 
 export function VideoSection({ videoId }: { videoId: string }) {
-  // Data is already prefetched - no loading state!
-  const [video] = trpc.videos.getOne.useSuspenseQuery({ id: videoId });
-  
-  return <VideoPlayer video={video} />;
+	// Data is already prefetched - no loading state!
+	const [video] = trpc.videos.getOne.useSuspenseQuery({ id: videoId });
+
+	return <VideoPlayer video={video} />;
 }
 ```
 
 **Benefits**:
+
 - Zero loading states for initial page load
 - Better SEO with server-rendered content
 - Reduced client-side JavaScript
@@ -193,33 +193,36 @@ tRPC provides end-to-end type safety without code generation:
 ```typescript
 // Backend: trpc/router/videos.ts
 export const videosRouter = createTRPCRouter({
-  create: protectedProcedure
-    .mutation(async ({ ctx }) => {
-      const upload = await mux.video.uploads.create({
-        new_asset_settings: {
-          playback_policies: ["public"],
-          inputs: [{
-            generated_subtitles: [{
-              language_code: "en",
-              name: "English",
-            }],
-          }],
-        },
-        cors_origin: process.env.MUX_CORS_ORIGIN || "*",
-      });
+	create: protectedProcedure.mutation(async ({ ctx }) => {
+		const upload = await mux.video.uploads.create({
+			new_asset_settings: {
+				playback_policies: ['public'],
+				inputs: [
+					{
+						generated_subtitles: [
+							{
+								language_code: 'en',
+								name: 'English'
+							}
+						]
+					}
+				]
+			},
+			cors_origin: process.env.MUX_CORS_ORIGIN || '*'
+		});
 
-      const [video] = await db
-        .insert(videos)
-        .values({
-          userId: ctx.user.id,
-          title: "Untitled",
-          muxStatus: "waiting",
-          muxUploadId: upload.id,
-        })
-        .returning();
+		const [video] = await db
+			.insert(videos)
+			.values({
+				userId: ctx.user.id,
+				title: 'Untitled',
+				muxStatus: 'waiting',
+				muxUploadId: upload.id
+			})
+			.returning();
 
-      return { video, url: upload.url };
-    }),
+		return { video, url: upload.url };
+	})
 });
 
 // Frontend: Auto-completion and type checking
@@ -234,38 +237,35 @@ The authentication flow is optimized with a three-tier caching strategy:
 ```typescript
 // trpc/init.ts
 export const protectedProcedure = t.procedure.use(async (opts) => {
-  const { ctx } = opts;
+	const { ctx } = opts;
 
-  if (!ctx.clerkUserId) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
+	if (!ctx.clerkUserId) {
+		throw new TRPCError({ code: 'UNAUTHORIZED' });
+	}
 
-  // Tier 1: Check JWT publicMetadata (fastest)
-  if (ctx.dbUserId) {
-    return opts.next({ ctx: { user: { id: ctx.dbUserId } } });
-  }
+	// Tier 1: Check JWT publicMetadata (fastest)
+	if (ctx.dbUserId) {
+		return opts.next({ ctx: { user: { id: ctx.dbUserId } } });
+	}
 
-  // Tier 2: Check Redis cache
-  const cachedDbId = await redis.get(`user:dbId:${ctx.clerkUserId}`);
-  if (cachedDbId) {
-    return opts.next({ ctx: { user: { id: cachedDbId } } });
-  }
+	// Tier 2: Check Redis cache
+	const cachedDbId = await redis.get(`user:dbId:${ctx.clerkUserId}`);
+	if (cachedDbId) {
+		return opts.next({ ctx: { user: { id: cachedDbId } } });
+	}
 
-  // Tier 3: Database query (fallback)
-  const [user] = await db
-    .select()
-    .from(users)
-    .where(eq(users.clerkId, ctx.clerkUserId));
+	// Tier 3: Database query (fallback)
+	const [user] = await db.select().from(users).where(eq(users.clerkId, ctx.clerkUserId));
 
-  // Cache for future requests
-  await redis.set(`user:dbId:${ctx.clerkUserId}`, user.id, { ex: 3600 });
-  
-  // Update JWT for next time
-  await clerkClient.users.updateUserMetadata(ctx.clerkUserId, {
-    publicMetadata: { dbUserId: user.id },
-  });
+	// Cache for future requests
+	await redis.set(`user:dbId:${ctx.clerkUserId}`, user.id, { ex: 3600 });
 
-  return opts.next({ ctx: { user } });
+	// Update JWT for next time
+	await clerkClient.users.updateUserMetadata(ctx.clerkUserId, {
+		publicMetadata: { dbUserId: user.id }
+	});
+
+	return opts.next({ ctx: { user } });
 });
 ```
 
@@ -283,32 +283,33 @@ User Upload → Mux Upload URL → Mux Processing → Webhook → Database Updat
 ```typescript
 // app/api/videos/webhook/route.ts
 export async function POST(req: Request) {
-  const payload = await req.json();
-  
-  switch (payload.type) {
-    case "video.asset.ready": {
-      const asset = payload.data;
-      const playbackId = asset.playback_ids[0].id;
-      
-      // Generate thumbnail from Mux
-      const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
-      const uploaded = await utapi.uploadFilesFromUrl(thumbnailUrl);
-      
-      // Update database
-      await db.update(videos)
-        .set({
-          muxPlaybackId: playbackId,
-          muxStatus: "ready",
-          duration: Math.round(asset.duration),
-          thumbnailUrl: uploaded.data.ufsUrl,
-        })
-        .where(eq(videos.muxUploadId, asset.upload_id));
-      
-      break;
-    }
-  }
-  
-  return new Response("OK");
+	const payload = await req.json();
+
+	switch (payload.type) {
+		case 'video.asset.ready': {
+			const asset = payload.data;
+			const playbackId = asset.playback_ids[0].id;
+
+			// Generate thumbnail from Mux
+			const thumbnailUrl = `https://image.mux.com/${playbackId}/thumbnail.jpg`;
+			const uploaded = await utapi.uploadFilesFromUrl(thumbnailUrl);
+
+			// Update database
+			await db
+				.update(videos)
+				.set({
+					muxPlaybackId: playbackId,
+					muxStatus: 'ready',
+					duration: Math.round(asset.duration),
+					thumbnailUrl: uploaded.data.ufsUrl
+				})
+				.where(eq(videos.muxUploadId, asset.upload_id));
+
+			break;
+		}
+	}
+
+	return new Response('OK');
 }
 ```
 
@@ -319,33 +320,33 @@ Using QStash for async AI tasks:
 ```typescript
 // Trigger AI task
 const { workflowRunId } = await workflow.trigger({
-  url: `${process.env.QSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
-  body: { userId, videoId },
+	url: `${process.env.QSTASH_WORKFLOW_URL}/api/videos/workflows/title`,
+	body: { userId, videoId }
 });
 
 // Workflow handler
 export async function POST(req: Request) {
-  const { videoId } = await req.json();
-  
-  // Get video transcript from Mux
-  const track = await mux.video.tracks.get(video.muxTrackId);
-  const transcript = track.text;
-  
-  // Generate title with AI
-  const response = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [{
-      role: "user",
-      content: `Generate a YouTube title based on: ${transcript}`,
-    }],
-  });
-  
-  const title = response.choices[0].message.content;
-  
-  // Update database
-  await db.update(videos)
-    .set({ title })
-    .where(eq(videos.id, videoId));
+	const { videoId } = await req.json();
+
+	// Get video transcript from Mux
+	const track = await mux.video.tracks.get(video.muxTrackId);
+	const transcript = track.text;
+
+	// Generate title with AI
+	const response = await openai.chat.completions.create({
+		model: 'gpt-4',
+		messages: [
+			{
+				role: 'user',
+				content: `Generate a YouTube title based on: ${transcript}`
+			}
+		]
+	});
+
+	const title = response.choices[0].message.content;
+
+	// Update database
+	await db.update(videos).set({ title }).where(eq(videos.id, videoId));
 }
 ```
 
@@ -355,32 +356,32 @@ export async function POST(req: Request) {
 const utils = trpc.useUtils();
 
 const likeMutation = trpc.videoReactions.like.useMutation({
-  onMutate: async ({ videoId }) => {
-    // Cancel outgoing refetches
-    await utils.videos.getOne.cancel({ id: videoId });
-    
-    // Snapshot previous value
-    const previous = utils.videos.getOne.getData({ id: videoId });
-    
-    // Optimistically update UI
-    utils.videos.getOne.setData({ id: videoId }, (old) => ({
-      ...old!,
-      viewerReaction: "like",
-      likeCount: old!.likeCount + 1,
-    }));
-    
-    return { previous };
-  },
-  onError: (err, { videoId }, context) => {
-    // Rollback on error
-    utils.videos.getOne.setData({ id: videoId }, context.previous);
-    toast.error("Failed to like video");
-  },
-  onSettled: ({ videoId }) => {
-    // Refetch to ensure consistency
-    utils.videos.getOne.invalidate({ id: videoId });
-    utils.playlists.getLiked.invalidate();
-  },
+	onMutate: async ({ videoId }) => {
+		// Cancel outgoing refetches
+		await utils.videos.getOne.cancel({ id: videoId });
+
+		// Snapshot previous value
+		const previous = utils.videos.getOne.getData({ id: videoId });
+
+		// Optimistically update UI
+		utils.videos.getOne.setData({ id: videoId }, (old) => ({
+			...old!,
+			viewerReaction: 'like',
+			likeCount: old!.likeCount + 1
+		}));
+
+		return { previous };
+	},
+	onError: (err, { videoId }, context) => {
+		// Rollback on error
+		utils.videos.getOne.setData({ id: videoId }, context.previous);
+		toast.error('Failed to like video');
+	},
+	onSettled: ({ videoId }) => {
+		// Refetch to ensure consistency
+		utils.videos.getOne.invalidate({ id: videoId });
+		utils.playlists.getLiked.invalidate();
+	}
 });
 ```
 
@@ -445,13 +446,13 @@ return !!isMobile;
 const [isMobile, setIsMobile] = useState<boolean>(false);
 
 useEffect(() => {
-  const checkMobile = () => {
-    setIsMobile(window.innerWidth < 768);
-  };
-  
-  checkMobile();
-  window.addEventListener("resize", checkMobile);
-  return () => window.removeEventListener("resize", checkMobile);
+	const checkMobile = () => {
+		setIsMobile(window.innerWidth < 768);
+	};
+
+	checkMobile();
+	window.addEventListener('resize', checkMobile);
+	return () => window.removeEventListener('resize', checkMobile);
 }, []);
 
 return isMobile;
@@ -465,14 +466,14 @@ return isMobile;
 
 ```typescript
 const likeMutation = trpc.videoReactions.like.useMutation({
-  onSuccess: () => {
-    // Primary data
-    utils.videos.getOne.invalidate({ id: videoId });
-    
-    // Related features
-    utils.playlists.getLiked.invalidate();
-    utils.playlists.getLikedPreview.invalidate();
-  },
+	onSuccess: () => {
+		// Primary data
+		utils.videos.getOne.invalidate({ id: videoId });
+
+		// Related features
+		utils.playlists.getLiked.invalidate();
+		utils.playlists.getLikedPreview.invalidate();
+	}
 });
 ```
 
@@ -484,9 +485,11 @@ const likeMutation = trpc.videoReactions.like.useMutation({
 
 ```typescript
 const upload = await mux.video.uploads.create({
-  new_asset_settings: { /* ... */ },
-  // Development: "*" | Production: specific domain
-  cors_origin: process.env.MUX_CORS_ORIGIN || "*",
+	new_asset_settings: {
+		/* ... */
+	},
+	// Development: "*" | Production: specific domain
+	cors_origin: process.env.MUX_CORS_ORIGIN || '*'
 });
 ```
 
@@ -500,23 +503,23 @@ const upload = await mux.video.uploads.create({
 const [workflowRunId, setWorkflowRunId] = useState<string | null>(null);
 
 useEffect(() => {
-  if (!workflowRunId) return;
+	if (!workflowRunId) return;
 
-  const interval = setInterval(() => {
-    // Invalidate cache to refetch latest data
-    utils.studio.getOne.invalidate({ id: videoId });
-  }, 2000);
+	const interval = setInterval(() => {
+		// Invalidate cache to refetch latest data
+		utils.studio.getOne.invalidate({ id: videoId });
+	}, 2000);
 
-  // Cleanup after 60 seconds
-  const timeout = setTimeout(() => {
-    clearInterval(interval);
-    toast.info("Processing may take longer than expected");
-  }, 60000);
+	// Cleanup after 60 seconds
+	const timeout = setTimeout(() => {
+		clearInterval(interval);
+		toast.info('Processing may take longer than expected');
+	}, 60000);
 
-  return () => {
-    clearInterval(interval);
-    clearTimeout(timeout);
-  };
+	return () => {
+		clearInterval(interval);
+		clearTimeout(timeout);
+	};
 }, [workflowRunId, videoId, utils]);
 ```
 
@@ -537,6 +540,7 @@ Building NewTube was an incredible learning experience that pushed me to solve r
 ### What's Next?
 
 Future improvements I'm planning:
+
 - Real-time notifications with Server-Sent Events
 - Video chapters and timestamps
 - Live streaming support
@@ -555,4 +559,3 @@ Future improvements I'm planning:
 Thank you for reading! If you found this article helpful, please give the [repository](https://github.com/lora-sys/Newtube-clone) a ⭐ and feel free to reach out with questions.
 
 **Happy coding! 🚀**
-

@@ -64,7 +64,9 @@
 			<Particles className="opacity-40" />
 
 			<!-- Radial gradient overlay -->
-			<div class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(240_6%_5%/0.8)_70%)]"></div>
+			<div
+				class="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(240_6%_5%/0.8)_70%)]"
+			></div>
 
 			<div class="relative z-10 mx-auto w-full max-w-4xl px-6 text-center">
 				<BlurFade delay={BLUR_FADE_DELAY} yOffset={6}>
@@ -74,7 +76,9 @@
 				</BlurFade>
 
 				<BlurFade delay={BLUR_FADE_DELAY * 2} yOffset={8}>
-					<h1 class="font-sans text-6xl font-extrabold tracking-tight sm:text-7xl md:text-8xl lg:text-9xl/none">
+					<h1
+						class="font-sans text-6xl font-extrabold tracking-tight sm:text-7xl md:text-8xl lg:text-9xl/none"
+					>
 						{DATA.name}
 					</h1>
 				</BlurFade>
@@ -101,25 +105,27 @@
 				<BlurFade delay={BLUR_FADE_DELAY * 5} yOffset={6}>
 					<div class="mt-12 flex items-center justify-center gap-6">
 						<!-- Magnetic avatar -->
-						<div
-							bind:this={avatarEl}
-							class="group/avatar relative"
-						>
+						<div bind:this={avatarEl} class="group/avatar relative">
 							<div
 								class="transition-transform duration-300 ease-out group-hover/avatar:scale-105"
 								style="transform: translate({mouseX}px, {mouseY}px)"
 							>
-								<Avatar.Root class="size-32 border-2 border-gold/50 shadow-[0_0_30px_hsl(45_100%_70%_/0.2)] sm:size-40">
+								<Avatar.Root
+									class="size-32 border-2 border-gold/50 shadow-[0_0_30px_hsl(45_100%_70%_/0.2)] sm:size-40"
+								>
 									<Avatar.Image alt={DATA.name} src={DATA.avatarUrl} />
-									<Avatar.Fallback class="bg-gradient-to-br from-gold/20 to-transparent text-gold font-bold text-2xl sm:text-3xl">
+									<Avatar.Fallback
+										class="bg-gradient-to-br from-gold/20 to-transparent text-2xl font-bold text-gold sm:text-3xl"
+									>
 										{DATA.initials}
 									</Avatar.Fallback>
 								</Avatar.Root>
 							</div>
 							<!-- Glow ring -->
-							<div class="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover/avatar:opacity-100"
-								style="background: radial-gradient(circle, hsl(45_100%_70%_/0.15) 0%, transparent 70%); transform: scale(1.2);">
-							</div>
+							<div
+								class="absolute inset-0 rounded-full opacity-0 transition-opacity duration-300 group-hover/avatar:opacity-100"
+								style="background: radial-gradient(circle, hsl(45_100%_70%_/0.15) 0%, transparent 70%); transform: scale(1.2);"
+							></div>
 						</div>
 					</div>
 				</BlurFade>
@@ -143,8 +149,18 @@
 			<!-- Scroll indicator -->
 			<BlurFade delay={BLUR_FADE_DELAY * 8} yOffset={4}>
 				<div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-					<svg class="h-6 w-6 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+					<svg
+						class="h-6 w-6 text-muted-foreground"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M19 14l-7 7m0 0l-7-7m7 7V3"
+						/>
 					</svg>
 				</div>
 			</BlurFade>
@@ -202,7 +218,9 @@
 			<div class="flex flex-wrap gap-2">
 				{#each DATA.skills as skill, id}
 					<BlurFade delay={BLUR_FADE_DELAY * id + 0.002}>
-						<Badge class="rounded-lg border border-border/50 bg-card px-3 py-1 text-sm font-medium transition-all duration-300 hover:border-gold/40 hover:text-gold hover:shadow-[0_0_15px_hsl(45_100%_70%_/0.1)]">
+						<Badge
+							class="rounded-lg border border-border/50 bg-card px-3 py-1 text-sm font-medium transition-all duration-300 hover:border-gold/40 hover:text-gold hover:shadow-[0_0_15px_hsl(45_100%_70%_/0.1)]"
+						>
 							{skill}
 						</Badge>
 					</BlurFade>
@@ -221,7 +239,9 @@
 						<h2 class="font-serif text-4xl font-bold tracking-tight sm:text-5xl">
 							Check out my latest work
 						</h2>
-						<p class="mx-auto max-w-2xl text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+						<p
+							class="mx-auto max-w-2xl text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
+						>
 							I&apos;ve worked on a variety of projects, from simple websites to complex web
 							applications. Here are a few of my favorites.
 						</p>
@@ -238,12 +258,19 @@
 						className={id === 0 ? 'md:col-span-2' : ''}
 					>
 						{#snippet header()}
-							<a href={project.href || '#'} class="block cursor-pointer overflow-hidden rounded-t-xl">
+							<a
+								href={project.href || '#'}
+								class="block cursor-pointer overflow-hidden rounded-t-xl"
+							>
 								{#if project.video}
 									<video
 										class="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-105"
 										src={project.video}
-										autoplay loop muted playsinline preload="none"
+										autoplay
+										loop
+										muted
+										playsinline
+										preload="none"
 									></video>
 								{:else}
 									<img
@@ -258,12 +285,16 @@
 						{#snippet icon()}
 							<div class="flex flex-wrap gap-1">
 								{#each project.technologies.slice(0, 4) as tag}
-									<Badge class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px]">
+									<Badge
+										class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px]"
+									>
 										{tag}
 									</Badge>
 								{/each}
 								{#if project.technologies.length > 4}
-									<Badge class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px] text-muted-foreground">
+									<Badge
+										class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px] text-muted-foreground"
+									>
 										+{project.technologies.length - 4}
 									</Badge>
 								{/if}

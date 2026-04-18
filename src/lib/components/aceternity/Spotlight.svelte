@@ -11,7 +11,7 @@
 
 <svg
 	class={cn(
-		'pointer-events-none absolute z-[1] h-[169%] w-[138%] animate-spotlight opacity-0 lg:w-[84%]',
+		'animate-spotlight pointer-events-none absolute z-[1] h-[169%] w-[138%] opacity-0 lg:w-[84%]',
 		className
 	)}
 	xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@
 			rx="1924.71"
 			ry="273.501"
 			transform="matrix(-0.822377 -0.568943 -0.568943 0.822377 3631.88 2291.09)"
-			fill={fill}
+			{fill}
 			fill-opacity="0.21"
 		></ellipse>
 	</g>

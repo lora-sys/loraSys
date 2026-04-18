@@ -31,10 +31,12 @@
 		return 1 + (factor * (magnification - 38)) / 38;
 	});
 
-	let iconClass = $derived(cn(
-		'flex aspect-square cursor-pointer items-center justify-center rounded-full transition-all duration-150 ease-out',
-		className
-	));
+	let iconClass = $derived(
+		cn(
+			'flex aspect-square cursor-pointer items-center justify-center rounded-full transition-all duration-150 ease-out',
+			className
+		)
+	);
 
 	const children_render = $derived(children);
 </script>

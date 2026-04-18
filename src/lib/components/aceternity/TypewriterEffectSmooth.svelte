@@ -74,7 +74,10 @@
 
 	{#if mounted}
 		<span
-			class={cn('inline-block h-4 w-[4px] animate-pulse rounded-sm bg-blue-500 md:h-6 lg:h-10', cursorClassName)}
+			class={cn(
+				'inline-block h-4 w-[4px] animate-pulse rounded-sm bg-blue-500 md:h-6 lg:h-10',
+				cursorClassName
+			)}
 		></span>
 	{/if}
 </div>

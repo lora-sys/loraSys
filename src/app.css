@@ -53,7 +53,7 @@
 		@apply border-border;
 	}
 	body {
-		@apply bg-background text-foreground font-sans antialiased;
+		@apply bg-background font-sans text-foreground antialiased;
 		scroll-behavior: smooth;
 	}
 	h1,

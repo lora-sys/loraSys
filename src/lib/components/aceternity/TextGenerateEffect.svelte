@@ -15,7 +15,10 @@
 	<div class="mt-4">
 		<div class="text-2xl leading-snug tracking-wide text-foreground">
 			{#each wordsArray as word, idx (idx)}
-				<span class="animate-text-reveal inline-block opacity-0" style="animation-delay: {idx * 0.2}s">
+				<span
+					class="animate-text-reveal inline-block opacity-0"
+					style="animation-delay: {idx * 0.2}s"
+				>
 					{word}{' '}
 				</span>
 			{/each}

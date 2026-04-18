@@ -10,13 +10,7 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let {
-		title,
-		href,
-		className,
-		containerClassName,
-		children
-	}: Props = $props();
+	let { title, href, className, containerClassName, children }: Props = $props();
 
 	let transform = $state('translate(-50%,-50%) rotateX(0deg)');
 

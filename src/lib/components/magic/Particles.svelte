@@ -15,7 +15,7 @@
 		size: Math.random() * 3 + 1,
 		opacity: Math.random() * 0.5 + 0.1,
 		delay: Math.random() * 8,
-		duration: Math.random() * 10 + 8,
+		duration: Math.random() * 10 + 8
 	}));
 </script>
 

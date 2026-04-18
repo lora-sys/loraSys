@@ -35,9 +35,10 @@
 	class="group relative h-full overflow-hidden rounded-xl border border-border bg-card text-card-foreground transition-all duration-500 hover:border-gold/40 hover:shadow-[0_0_30px_hsl(45_100%_70%_/0.1)]"
 >
 	<!-- Gradient border glow on hover -->
-	<div class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-		style="background: radial-gradient(ellipse at top left, hsl(45_100%_70%_/0.08) 0%, transparent 50%); pointer-events: none;">
-	</div>
+	<div
+		class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+		style="background: radial-gradient(ellipse at top left, hsl(45_100%_70%_/0.08) 0%, transparent 50%); pointer-events: none;"
+	></div>
 
 	<a href={href || '#'} class="block cursor-pointer">
 		{#if video}
@@ -60,9 +61,10 @@
 					loading="lazy"
 				/>
 				<!-- Gradient overlay on hover -->
-				<div class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-					style="background: linear-gradient(to top, hsl(45_100%_70%_/0.1) 0%, transparent 50%);">
-				</div>
+				<div
+					class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+					style="background: linear-gradient(to top, hsl(45_100%_70%_/0.1) 0%, transparent 50%);"
+				></div>
 			</div>
 		{/if}
 	</a>
@@ -70,7 +72,9 @@
 	<!-- Card content -->
 	<div class="flex flex-1 flex-col p-4">
 		<div class="space-y-1">
-			<div class="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-gold">
+			<div
+				class="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-gold"
+			>
 				{title}
 			</div>
 			<time class="font-sans text-xs text-muted-foreground">{dates}</time>
@@ -87,7 +91,9 @@
 		{#if tags && tags.length > 0}
 			<div class="mt-3 flex flex-wrap gap-1">
 				{#each tags as tag}
-					<Badge class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px] transition-colors duration-300 hover:border-gold/40 hover:text-gold">
+					<Badge
+						class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px] transition-colors duration-300 hover:border-gold/40 hover:text-gold"
+					>
 						{tag}
 					</Badge>
 				{/each}
@@ -97,8 +103,12 @@
 		{#if links && links.length > 0}
 			<div class="mt-3 flex items-center gap-2">
 				{#each links as link}
-					<a href={link?.href} target="_blank" rel="noopener noreferrer"
-						class="flex items-center gap-1 text-xs text-muted-foreground transition-colors duration-300 hover:text-gold">
+					<a
+						href={link?.href}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="flex items-center gap-1 text-xs text-muted-foreground transition-colors duration-300 hover:text-gold"
+					>
 						<link.icon class="mb-px size-3" strokeWidth={1.6} />
 						{link.type}
 					</a>
@@ -108,5 +118,7 @@
 	</div>
 
 	<!-- Gold accent line at bottom -->
-	<div class="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent transition-all duration-700 group-hover:w-full"></div>
+	<div
+		class="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent transition-all duration-700 group-hover:w-full"
+	></div>
 </div>
