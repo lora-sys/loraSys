@@ -270,7 +270,7 @@
 										loop
 										muted
 										playsinline
-										preload="none"
+										preload="metadata"
 									></video>
 								{:else}
 									<img

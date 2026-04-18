@@ -49,7 +49,7 @@
 				loop
 				muted
 				playsinline
-				preload="none"
+				preload="metadata"
 				aria-hidden="true"
 			></video>
 		{:else}
