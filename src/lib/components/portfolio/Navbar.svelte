@@ -57,14 +57,7 @@
 			{/each}
 			<Separator orientation="vertical" class="h-full py-2" />
 			<DockIcon {magnification} {mouseX} {distance}>
-				<Tooltip.Root openDelay={300}>
-					<Tooltip.Trigger>
-						<ModeToggle />
-					</Tooltip.Trigger>
-					<Tooltip.Content>
-						<p>Theme</p>
-					</Tooltip.Content>
-				</Tooltip.Root>
+				<ModeToggle />
 			</DockIcon>
 		{/snippet}
 	</Dock>

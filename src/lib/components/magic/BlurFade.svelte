@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { inview } from 'svelte-inview';
 	import { cn } from '$lib/utils';
 
@@ -24,7 +25,8 @@
 		children
 	}: Props = $props();
 
-	let isVisible = $state(false);
+	// Initialize to true on server to match hydration; client will manage visibility
+	let isVisible = $state(browser ? false : true);
 	let isBlurred = $derived(!isVisible);
 </script>
 

@@ -14,6 +14,8 @@
 		keywords: data.meta?.categories?.join(', ') ?? '',
 		author: { '@type': 'Person', name: 'lora-sys' }
 	});
+	const ldJsonTag =
+		'<script type="application/ld+json">' + ldJson + '</' + 'script>';
 </script>
 
 <!-- SEO -->
@@ -21,7 +23,7 @@
 	<title>{data.meta?.title ?? 'Blog Post'} — lora-sys</title>
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta?.title ?? ''} />
-	{@html `<script type="application/ld+json">${ldJson}<\/script>`}
+	{@html ldJsonTag}
 </svelte:head>
 
 <div class="mx-auto max-w-2xl space-y-8 py-12">
