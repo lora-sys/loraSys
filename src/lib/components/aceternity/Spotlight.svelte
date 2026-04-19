@@ -60,4 +60,11 @@
 	.animate-spotlight {
 		animation: spotlight 2s ease 0.75s 1 forwards;
 	}
+	@media (prefers-reduced-motion: reduce) {
+		.animate-spotlight {
+			animation: none;
+			opacity: 1;
+			transform: translate(-50%, -40%) scale(1);
+		}
+	}
 </style>

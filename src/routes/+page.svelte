@@ -136,7 +136,7 @@
 								href={link.url}
 								target="_blank"
 								rel="noopener noreferrer"
-								class="rounded-full border border-border px-5 py-2 text-sm font-medium transition-colors hover:border-gold/50 hover:text-gold"
+								class="rounded-full border border-border px-5 py-2 text-sm font-medium transition-colors hover:border-gold/50 hover:text-gold focus-visible:ring-2 focus-visible:ring-gold/50"
 							>
 								{link.name}
 							</a>
@@ -258,7 +258,7 @@
 						{#snippet header()}
 							<a
 								href={project.href || '#'}
-								class="block cursor-pointer overflow-hidden rounded-t-xl"
+								class="block cursor-pointer overflow-hidden rounded-t-xl focus-visible:ring-2 focus-visible:ring-ring/50"
 							>
 								{#if project.video}
 									<video

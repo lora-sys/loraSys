@@ -52,7 +52,7 @@
 	{#if links && links.length > 0}
 		<div class="mt-2 flex flex-row flex-wrap items-start gap-2">
 			{#each links as link, idx}
-				<a href={link.href}>
+				<a href={link.href} class="cursor-pointer">
 					<Badge key={idx} title={link.title} class="flex gap-2">
 						<link.icon class="h-4 w-4 " strokeWidth={1.6} />
 						{link.title}

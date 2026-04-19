@@ -9,7 +9,7 @@
 	onclick={toggleMode}
 	variant="ghost"
 	size="icon"
-	class="rounded-full"
+	class="rounded-full focus-visible:ring-2 focus-visible:ring-ring/50"
 	aria-label="Toggle theme"
 >
 	<Sun

@@ -19,10 +19,10 @@
 		{#snippet children({ magnification, distance, mouseX })}
 			{#each DATA.navbar as item}
 				<DockIcon {magnification} {mouseX} {distance}>
-					<DockTooltip label={item.label} class="contents">
+					<DockTooltip label={item.label}>
 						<a
 							href={item.href}
-							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground"
+							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
 						>
 							<item.icon class="size-[18px]" strokeWidth={1.5} />
 						</a>
@@ -34,12 +34,12 @@
 				.filter(([_, social]) => social.navbar)
 				.map(([_, social]) => social) as social}
 				<DockIcon {magnification} {mouseX} {distance}>
-					<DockTooltip label={social.name} class="contents">
+					<DockTooltip label={social.name}>
 						<a
 							href={social.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground"
+							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
 						>
 							{#if social?.dark_icon}
 								<img src={social.icon} class="size-[18px] dark:hidden" alt={social.name} />

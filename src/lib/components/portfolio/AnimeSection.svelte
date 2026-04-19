@@ -14,7 +14,7 @@
 
 		<Carousel.Root class="w-full" opts={{ align: 'start', loop: true }} {plugins}>
 			<Carousel.Content>
-				{#each DATA.anime as anime, index}
+				{#each DATA.anime as anime}
 					<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
 						<div class="p-2">
 							<Lens {zoomFactor} {lensSize}>

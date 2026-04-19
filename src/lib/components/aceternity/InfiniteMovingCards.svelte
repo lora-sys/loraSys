@@ -16,13 +16,7 @@
 		className?: string;
 	}
 
-	let {
-		items,
-		direction = 'left',
-		speed = 'fast',
-		pauseOnHover = true,
-		className
-	}: Props = $props();
+	let { items, direction = 'left', speed = 'fast', className }: Props = $props();
 
 	let containerRef: HTMLDivElement;
 	let scrollerRef: HTMLUListElement;

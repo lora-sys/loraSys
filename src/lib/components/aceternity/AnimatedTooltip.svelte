@@ -16,7 +16,6 @@
 	let { items, className }: Props = $props();
 
 	let hoveredIndex: number | null = $state(null);
-	let containerEl: HTMLDivElement;
 	let x = $state(0);
 
 	function handleMouseMove(event: MouseEvent) {
@@ -27,7 +26,7 @@
 </script>
 
 <div class={cn('group relative flex flex-row', className)}>
-	{#each items as item, idx (item.name)}
+	{#each items as item (item.name)}
 		<div
 			class="relative -mr-4"
 			role="listitem"

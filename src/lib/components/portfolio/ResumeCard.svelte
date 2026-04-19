@@ -36,7 +36,7 @@
 	};
 </script>
 
-<a href={href || '#'} onclick={handleClick}>
+<a href={href || '#'} onclick={handleClick} class="cursor-pointer">
 	<div class="flex rounded-lg bg-card text-card-foreground">
 		<div class="flex-none">
 			<Avatar.Root class="bg-muted-background m-auto size-12 border dark:bg-foreground">

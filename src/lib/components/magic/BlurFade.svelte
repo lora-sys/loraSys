@@ -27,6 +27,14 @@
 
 	// Initialize to true on server to match hydration; client will manage visibility
 	let isVisible = $state(browser ? false : true);
+	// Respect prefers-reduced-motion: skip animation if user prefers reduced motion
+	let shouldAnimate = $derived(
+		browser ? !window.matchMedia('(prefers-reduced-motion: reduce)').matches : true
+	);
+	$effect(() => {
+		if (browser && shouldAnimate) return;
+		isVisible = true;
+	});
 	let isBlurred = $derived(!isVisible);
 </script>
 
@@ -40,14 +48,14 @@
 	}}
 	class={cn(
 		'will-change-[opacity,transform,filter]',
-		'transition-all ease-out',
+		shouldAnimate ? 'transition-all ease-out' : '',
 		isVisible ? 'opacity-100' : 'opacity-0',
 		_class
 	)}
-	style:transform={isVisible ? 'translateY(0)' : `translateY(${yOffset}px)`}
-	style:filter={isBlurred ? `blur(${blur})` : 'none'}
+	style:transform={isVisible || !shouldAnimate ? 'none' : `translateY(${yOffset}px)`}
+	style:filter={isBlurred && shouldAnimate ? `blur(${blur})` : 'none'}
 	style:transition-duration="{duration}s"
-	style:transition-delay="{0.04 + delay}s"
+	style:transition-delay={shouldAnimate ? 0.04 + delay + 's' : '0s'}
 >
 	{#if children}{@render children()}{:else}Default{/if}
 </div>

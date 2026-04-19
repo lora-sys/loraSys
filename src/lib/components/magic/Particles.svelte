@@ -57,4 +57,22 @@
 			opacity: 0.5;
 		}
 	}
+	@media (prefers-reduced-motion: reduce) {
+		@keyframes particle-float {
+			0%,
+			100% {
+				transform: none;
+				opacity: 0.3;
+			}
+			25%,
+			75% {
+				transform: none;
+				opacity: 0.3;
+			}
+			50% {
+				transform: none;
+				opacity: 0.3;
+			}
+		}
+	}
 </style>
