@@ -147,7 +147,7 @@ export const DATA = {
 			},
 			PeerList: {
 				name: 'PeerList',
-				url: 'https://peerlist.io/bhide',
+				url: 'https://peerlist.io/mierpiter',
 				// // icon: Icons.x,
 				icon: PeerListSvg,
 				navbar: true,
