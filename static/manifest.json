@@ -1,0 +1,36 @@
+{
+  "name": "Lora Portfolio",
+  "short_name": "Lora",
+  "description": "Personal portfolio website of Sikandar Bhide (lora-sys)",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-US",
+  "categories": ["portfolio", "personal", "developer"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Projects",
+      "short_name": "Projects",
+      "description": "View my latest projects",
+      "url": "/#projects",
+      "icons": [{ "src": "/favicon.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "description": "Read my blog posts",
+      "url": "/blog",
+      "icons": [{ "src": "/favicon.png", "sizes": "32x32" }]
+    }
+  ]
+}

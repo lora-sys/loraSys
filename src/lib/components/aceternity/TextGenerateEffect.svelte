@@ -8,18 +8,18 @@
 
 	let { words, className }: Props = $props();
 
-	const wordsArray = $derived(words.split(' '));
+	const wordsArray = $derived(words.match(/[^\s]+(?:\s+|$)/g) ?? []);
 </script>
 
 <div class={cn('font-bold', className)}>
 	<div class="mt-4">
-		<div class="text-2xl leading-snug tracking-wide text-foreground">
-			{#each wordsArray as word, idx (idx)}
+		<div class="text-2xl leading-snug tracking-wide text-foreground whitespace-pre-wrap">
+			{#each wordsArray as token, idx (idx)}
 				<span
-					class="animate-text-reveal inline-block opacity-0"
-					style="animation-delay: {idx * 0.2}s"
+					class="animate-text-reveal inline opacity-0"
+					style="animation-delay: {idx * 0.15}s"
 				>
-					{word}{' '}
+					{token}
 				</span>
 			{/each}
 		</div>

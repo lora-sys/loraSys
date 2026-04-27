@@ -3,6 +3,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 import { mdsvex, escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
+import remarkHeadingId from 'remark-heading-id';
 
 const SUPPORTED_LANGS = [
 	'javascript',
@@ -27,7 +28,7 @@ let _highlighter = null;
 async function getHighlighter() {
 	if (!_highlighter) {
 		_highlighter = await createHighlighter({
-			themes: ['vesper'],
+			themes: ['github-light', 'vesper'],
 			langs: SUPPORTED_LANGS
 		});
 	}
@@ -36,11 +37,16 @@ async function getHighlighter() {
 
 const mdsvexOptions = {
 	extensions: ['.md'],
+	remarkPlugins: [remarkHeadingId],
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
 			const highlighter = await getHighlighter();
 			const validLang = SUPPORTED_LANGS.includes(lang) ? lang : 'text';
-			const html = escapeSvelte(highlighter.codeToHtml(code, { lang: validLang, theme: 'vesper' }));
+			const html = escapeSvelte(highlighter.codeToHtml(code, { 
+				lang: validLang, 
+				themes: { light: 'github-light', dark: 'vesper' },
+				defaultColor: false
+			}));
 			return `{@html \`${html}\` }`;
 		}
 	}

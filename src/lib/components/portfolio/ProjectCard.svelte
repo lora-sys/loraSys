@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Badge from '../ui/badge/badge.svelte';
+	import OptimizedImage from '../ui/optimized-image.svelte';
 
 	interface Props {
 		title: string;
@@ -48,11 +49,12 @@
 			></video>
 		{:else}
 			<div class="relative overflow-hidden">
-				<img
-					class="h-40 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+				<OptimizedImage
 					src={image}
 					alt={title}
+					class="h-40 w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
 					loading="lazy"
+					sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 				/>
 				<!-- Gradient overlay on hover -->
 				<div
@@ -67,16 +69,16 @@
 	<div class="flex flex-1 flex-col p-4">
 		<div class="space-y-1">
 			<div
-				class="font-serif text-lg font-semibold transition-colors duration-300 group-hover:text-gold"
+				class="font-sans text-lg font-semibold transition-colors duration-300 group-hover:text-gold"
 			>
 				{title}
 			</div>
-			<time class="font-sans text-xs text-muted-foreground">{dates}</time>
+			<time class="font-serif text-xs text-muted-foreground">{dates}</time>
 		</div>
 
 		<div class="mt-2 flex-1">
 			<div
-				class="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert"
+				class="prose max-w-full text-pretty font-serif text-xs text-muted-foreground dark:prose-invert"
 			>
 				{@html descriptionHtml}
 			</div>
@@ -86,7 +88,7 @@
 			<div class="mt-3 flex flex-wrap gap-1">
 				{#each tags as tag}
 					<Badge
-						class="rounded-[4px] border border-border/50 bg-card px-2 py-0.5 text-[10px] transition-colors duration-300 hover:border-gold/40 hover:text-gold"
+						class="rounded-[4px] border border-border/50 bg-card text-card-foreground px-2 py-0.5 text-[10px] transition-colors duration-300 hover:border-gold/40 hover:text-gold"
 					>
 						{tag}
 					</Badge>

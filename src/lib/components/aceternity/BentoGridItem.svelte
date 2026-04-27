@@ -15,24 +15,24 @@
 
 <div
 	class={cn(
-		'group/bento row-span-1 flex cursor-pointer flex-col justify-between space-y-4 rounded-xl border border-transparent bg-card p-4 shadow-sm transition duration-200 hover:shadow-xl focus-visible:ring-2 focus-visible:ring-ring/50 dark:border-white/[0.2] dark:bg-black dark:shadow-none',
+		'group/bento row-span-1 flex cursor-pointer flex-col justify-between space-y-4 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm p-6 shadow-sm transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30 hover:bg-card/80 focus-visible:ring-2 focus-visible:ring-primary/50 hover:-translate-y-2',
 		className
 	)}
 >
 	{#if header}{@render header()}{:else}
 		<div
-			class="min-h-[6rem] w-full flex-1 rounded-xl bg-gradient-to-br from-neutral-200 to-neutral-100 dark:from-neutral-900 dark:to-neutral-800"
+			class="min-h-[8rem] w-full flex-1 rounded-xl bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10 transition-all duration-300 group-hover/bento:scale-105"
 		></div>
 	{/if}
-	<div class="transition duration-200 group-hover/bento:translate-x-2">
+	<div class="transition-all duration-300 group-hover/bento:translate-x-1">
 		{#if icon}{@render icon()}{/if}
 		{#if title}
-			<div class="mb-2 mt-2 font-serif text-xl font-bold text-foreground">
+			<div class="mb-3 mt-2 font-sans text-xl font-bold text-foreground transition-colors duration-300 group-hover/bento:text-primary">
 				{title}
 			</div>
 		{/if}
 		{#if description}
-			<div class="text-sm text-muted-foreground">
+			<div class="text-sm text-muted-foreground leading-relaxed">
 				{description}
 			</div>
 		{/if}

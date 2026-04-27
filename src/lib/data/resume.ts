@@ -45,10 +45,10 @@ import IBImg from '$lib/imgs/ib.png';
 export const DATA = {
 	name: 'lora-sys',
 	initials: 'XD',
-	url: 'https://github.com/SikandarJODD',
-	img: 'https://i.pinimg.com/736x/9e/dc/a6/9edca66eba199828bda2dbaf35642154.jpg',
-	location: 'Mumbai, India',
-	locationLink: 'https://www.google.com/maps/place/mumbai',
+	url: 'https://github.com/lora-sys',
+	img: 'https://avatars.githubusercontent.com/u/176668951?v=4',
+	location: 'Xian, China',
+	locationLink: 'https://www.google.com/maps/place/xian',
 	description:
 		'Software Engineer turned Entrepreneur. I love building things and helping people. Very active on Twitter.',
 	// Pre-compiled HTML from markdown summary — avoids runtime parsing on every render
@@ -58,7 +58,7 @@ export const DATA = {
 	// Legacy raw markdown field (kept for backwards compatibility)
 	summary:
 		'At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, [I pursued a double degree in computer science and business](/#education), [interned at big tech companies in Silicon Valley](https://www.youtube.com/watch?v=d-LJ2e5qKdE), and [competed in over 21 hackathons for fun](/#hackathons). I also had the pleasure of being a part of the first ever in-person cohort of buildspace called [buildspace sf1](https://buildspace.so/sf1).',
-	avatarUrl: 'https://i.pinimg.com/564x/df/d2/76/dfd276448eed0f2b6094d1cb2c9d0269.jpg',
+	avatarUrl: 'https://avatars.githubusercontent.com/u/176668951?v=4',
 	skills: [
 		'Svelte',
 		'Sveltekit',

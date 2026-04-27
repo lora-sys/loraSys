@@ -48,7 +48,7 @@
 	<div class="bg-gradient-to-b from-black/80 via-black/50 to-transparent p-4">
 		<div class="z-10 flex flex-col gap-2">
 			<Icon class={cn('h-12 w-12 font-bold text-yellow-400', iconClass)} />
-			<h3 class="text-2xl font-bold text-white">{name}</h3>
+			<h3 class="text-2xl font-bold text-foreground">{name}</h3>
 		</div>
 	</div>
 
@@ -58,7 +58,7 @@
 			'pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 opacity-0 transition-opacity duration-300 group-hover:opacity-100'
 		)}
 	>
-		<p class="max-w-lg text-center font-medium text-white">{description}</p>
+		<p class="max-w-lg text-center font-medium text-foreground">{description}</p>
 		<Button {href} variant="link" size="sm" class="mt-4 font-bold text-yellow-400">
 			{cta}
 			<ArrowRightIcon class="ms-2 h-4 w-4 rtl:rotate-180" />
@@ -67,7 +67,7 @@
 
 	<!-- 移动端：一直显示按钮 -->
 	<div class={cn('pointer-events-none flex w-full flex-row items-center lg:hidden')}>
-		<Button variant="link" size="sm" class="pointer-events-auto p-0 font-bold text-white">
+		<Button variant="link" size="sm" class="pointer-events-auto p-0 font-bold text-foreground">
 			<a {href}>
 				{cta}
 				<ArrowRightIcon class="ms-2 h-4 w-4 rtl:rotate-180" />

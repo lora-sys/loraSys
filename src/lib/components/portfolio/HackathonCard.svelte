@@ -29,7 +29,9 @@
 </script>
 
 <li class="relative ml-10 py-4">
-	<div class="absolute -left-16 top-2 flex items-center justify-center rounded-full bg-white">
+	<div
+		class="absolute -left-16 top-2 flex items-center justify-center rounded-full border border-border bg-background"
+	>
 		<Avatar.Root class="m-auto size-12 border">
 			<Avatar.Image src={image} alt={title} class="object-contain" loading="lazy" />
 			<Avatar.Fallback>{title[0]}</Avatar.Fallback>

@@ -14,7 +14,7 @@
 		class="fixed inset-x-0 bottom-0 h-16 w-full bg-background to-transparent backdrop-blur-lg [-webkit-mask-image:linear-gradient(to_top,black,transparent)] dark:bg-background"
 	></div>
 	<Dock
-		class="pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-0.5 rounded-full bg-background px-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] sm:gap-1 md:gap-2 "
+		class="pointer-events-auto relative z-50 mx-auto flex h-full min-h-full transform-gpu items-center gap-2 rounded-full border border-border/50 bg-card/80 px-2 shadow-2xl backdrop-blur-xl transition-all duration-300 hover:bg-card hover:shadow-[0_0_30px_hsl(45_100%_70%_/0.1)] sm:gap-3 md:gap-4"
 	>
 		{#snippet children({ magnification, distance, mouseX })}
 			{#each DATA.navbar as item}
@@ -22,7 +22,7 @@
 					<DockTooltip label={item.label}>
 						<a
 							href={item.href}
-							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+							class="flex size-12 items-center justify-center rounded-full transition-all duration-300 hover:scale-110 hover:bg-gold/20 hover:text-gold hover:shadow-[0_0_15px_hsl(45_100%_70%_/0.3)] focus-visible:ring-2 focus-visible:ring-gold/50"
 						>
 							<item.icon class="size-[18px]" strokeWidth={1.5} />
 						</a>
@@ -39,7 +39,7 @@
 							href={social.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex size-12 items-center justify-center rounded-full transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+							class="flex size-12 items-center justify-center rounded-full transition-all duration-300 hover:scale-110 hover:bg-gold/20 hover:shadow-[0_0_15px_hsl(45_100%_70%_/0.3)] focus-visible:ring-2 focus-visible:ring-gold/50"
 						>
 							{#if social?.dark_icon}
 								<img src={social.icon} class="size-[18px] dark:hidden" alt={social.name} />
