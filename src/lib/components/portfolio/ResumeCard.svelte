@@ -72,7 +72,7 @@
 					</div>
 				</div>
 				{#if title}
-					<div class="font-serif text-xs">{title}</div>
+					<div class="font-sans text-xs">{title}</div>
 				{/if}
 			</div>
 			{#if description}

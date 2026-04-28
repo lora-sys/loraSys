@@ -61,7 +61,7 @@ const config = {
 			fontFamily: {
 				sans: ['"Space Grotesk"', ...fontFamily.sans],
 				heading: ['"Syne"', ...fontFamily.sans],
-				serif: ['"Lora"', ...fontFamily.serif],
+				serif: fontFamily.serif,
 				mono: ['"Fragment Mono"', ...fontFamily.mono]
 			}
 		}

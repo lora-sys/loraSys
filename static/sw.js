@@ -1,5 +1,4 @@
 // Service Worker for caching static assets
-const CACHE_NAME = 'portfolio-v1';
 const STATIC_CACHE = 'portfolio-static-v1';
 const DYNAMIC_CACHE = 'portfolio-dynamic-v1';
 

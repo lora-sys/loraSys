@@ -15,7 +15,7 @@
 
 <div
 	class={cn(
-		'group/bento row-span-1 flex cursor-pointer flex-col justify-between space-y-4 rounded-xl border border-border/50 bg-card/50 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary/50',
+		'group/bento relative row-span-1 flex h-full cursor-pointer flex-col justify-between space-y-4 overflow-hidden rounded-xl border border-border/50 bg-card/50 p-6 shadow-sm backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary/50',
 		className
 	)}
 >

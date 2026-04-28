@@ -5,7 +5,10 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
-	import '@fontsource/lora/index.css';
+
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
 	let { children }: Props = $props();
 	setMode('dark');
@@ -16,7 +19,7 @@
 			navigator.serviceWorker
 				.register('/sw.js')
 				.then((registration) => {
-					console.log('✅ Service Worker registered successfully');
+					console.log('✅ Service Worker registered successfully', registration);
 				})
 				.catch((error) => {
 					console.log('❌ Service Worker registration failed:', error);

@@ -203,7 +203,7 @@
 		</BlurFade>
 		<BlurFade delay={BLUR_FADE_DELAY * 1.4}>
 			<div
-				class="prose max-w-full text-pretty font-serif text-sm text-muted-foreground dark:prose-invert"
+				class="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert"
 			>
 				{@html DATA.summaryHtml}
 			</div>
@@ -299,7 +299,7 @@
 
 			<!-- Enhanced Bento Grid for Projects -->
 			<div class="mx-auto max-w-7xl">
-				<BentoGrid className="auto-rows-[20rem]">
+				<BentoGrid>
 					{#each DATA.projects as project, id}
 						<BentoGridItem
 							title={project.title}
@@ -309,7 +309,8 @@
 							{#snippet header()}
 								<a
 									href={project.href || '#'}
-									class="block cursor-pointer overflow-hidden rounded-t-xl transition-transform duration-500 focus-visible:ring-2 focus-visible:ring-primary/50 group-hover:scale-105"
+									class="relative block aspect-[16/9] h-full min-h-[18rem] w-full overflow-hidden rounded-t-xl transition-transform duration-500 focus-visible:ring-2 focus-visible:ring-primary/50 group-hover:scale-105"
+									style="aspect-ratio: 16 / 9;"
 								>
 									{#if project.video}
 										<video

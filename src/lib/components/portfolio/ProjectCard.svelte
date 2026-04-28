@@ -73,12 +73,12 @@
 			>
 				{title}
 			</div>
-			<time class="font-serif text-xs text-muted-foreground">{dates}</time>
+			<time class="font-sans text-xs text-muted-foreground">{dates}</time>
 		</div>
 
 		<div class="mt-2 flex-1">
 			<div
-				class="prose max-w-full text-pretty font-serif text-xs text-muted-foreground dark:prose-invert"
+				class="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert"
 			>
 				{@html descriptionHtml}
 			</div>
