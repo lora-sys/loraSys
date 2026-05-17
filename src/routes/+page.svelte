@@ -16,8 +16,28 @@
 	import RetroGrid from '$lib/components/magic/retro-grid/retro-grid.svelte';
 	import AnimatedGradientText from '$lib/components/magic/animated-gradient-text/animated-gradient-text.svelte';
 	import InteractiveHoverButton from '$lib/components/magic/interactive-hover-button/interactive-hover-button.svelte';
+	import ArcTimeline from '$lib/components/magic/arc-timeline/arc-timeline.svelte';
 
 	let BLUR_FADE_DELAY = 0.04;
+
+	// Work data grouped by year for Arc Timeline
+	const workTimeline = (() => {
+		const grouped: Record<string, typeof DATA.work> = {};
+		for (const w of DATA.work) {
+			const year = w.start.split(' ')[1] || w.start;
+			if (!grouped[year]) grouped[year] = [];
+			grouped[year].push(w);
+		}
+		return Object.entries(grouped)
+			.sort(([a], [b]) => Number(b) - Number(a))
+			.map(([year, items]) => ({
+				time: year,
+				steps: items.map((w) => ({
+					icon: 'briefcase',
+					content: `${w.title} @ ${w.company}`
+				}))
+			}));
+	})();
 
 	// Skill icon image URLs for Icon Cloud
 	const skillImages = [
@@ -43,13 +63,6 @@
 		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg'
 	];
 
-	// Work timeline data for Arc Timeline
-	const workTimeline = DATA.work.map((w) => ({
-		time: w.start + ' - ' + (w.end ?? 'Present'),
-		steps: [
-			{ icon: 'briefcase', content: w.title + ' @ ' + w.company }
-		]
-	}));
 </script>
 
 <svelte:head>
@@ -109,6 +122,15 @@
 				</BlurFade>
 			{/each}
 		</div>
+		<!-- Arc Timeline visualization -->
+		<BlurFade delay={BLUR_FADE_DELAY * 2}>
+			<div class="mt-8 overflow-hidden rounded-xl border border-border/30 bg-card/20 p-4">
+				<ArcTimeline
+					data={workTimeline}
+					defaultActiveStep={{ time: workTimeline[0]?.time, stepIndex: 0 }}
+				/>
+			</div>
+		</BlurFade>
 	</section>
 
 	<!-- ==================== EDUCATION ==================== -->
