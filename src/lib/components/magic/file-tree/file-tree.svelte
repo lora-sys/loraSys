@@ -55,7 +55,7 @@
 	let {
 		initialSelectedId,
 		initialExpandedItems = [],
-		_elements,
+		elements: _elements,
 		indicator = true,
 		openIcon,
 		closeIcon,

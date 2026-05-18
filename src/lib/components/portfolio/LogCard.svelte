@@ -7,7 +7,7 @@
 		descriptionHtml,
 		dates = '',
 		location = '',
-		_image = '',
+		image: _image,
 		links = [],
 		pid
 	}: {
