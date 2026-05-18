@@ -3,8 +3,13 @@
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { DATA } from '$lib/data/resume';
+	import { base } from '$app/paths';
 
 	let { zoomFactor = 1.15, lensSize = 140 } = $props();
+
+	function imgPath(path: string): string {
+		return path.startsWith('/') ? base + path : path;
+	}
 </script>
 
 <section id="anime" class="py-12">
@@ -20,7 +25,7 @@
 								{#snippet children()}
 									<div class="relative aspect-[2/3] overflow-hidden rounded-xl bg-card/50">
 										<img
-											src={anime.image}
+											src={imgPath(anime.image)}
 											alt={anime.name}
 											class="h-full w-full object-contain"
 											loading="lazy"

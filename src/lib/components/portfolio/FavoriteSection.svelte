@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { DATA } from '$lib/data/resume';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { base } from '$app/paths';
+
+	function imgPath(path: string): string {
+		return path.startsWith('/') ? base + path : path;
+	}
 </script>
 
 <section id="favorites" class="py-12">
@@ -17,7 +22,7 @@
 								class="group relative flex h-full cursor-pointer flex-col justify-between overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1"
 							>
 								<img
-									src={item.background}
+									src={imgPath(item.background)}
 									alt={item.name}
 									class="absolute inset-0 h-full w-full object-cover"
 									loading="lazy"
@@ -54,7 +59,7 @@
 						class="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-1"
 					>
 						<img
-							src={item.background}
+							src={imgPath(item.background)}
 							alt={item.name}
 							class="absolute inset-0 h-full w-full object-cover"
 							loading="lazy"
