@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Blog — lora-sys</title>
+	<title>Blog — lora</title>
 	<meta
 		name="description"
 		content="Writing on software engineering, startups, and indie hacking."

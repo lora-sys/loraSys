@@ -67,4 +67,5 @@ console.log('🚀 Starting image optimization...\n');
 await optimizeImages('./static');
 // await optimizeImages('./static/hackline');
 await optimizeImages('./static/images/favorites');
+await optimizeImages('src/lib/imgs');
 console.log('\n✅ Image optimization complete!');

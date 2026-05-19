@@ -16,7 +16,7 @@
 		datePublished: data.meta?.date ?? '',
 		description: data.meta?.description ?? '',
 		keywords: data.meta?.categories?.join(', ') ?? '',
-		author: { '@type': 'Person', name: 'lora-sys' }
+		author: { '@type': 'Person', name: 'lora' }
 	});
 	const ldJsonTag = '<script type="application/ld+json">' + ldJson + '<' + '/script>';
 
@@ -97,7 +97,7 @@
 
 <!-- SEO -->
 <svelte:head>
-	<title>{data.meta?.title ?? 'Blog Post'} — lora-sys</title>
+	<title>{data.meta?.title ?? 'Blog Post'} — lora</title>
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta?.title ?? ''} />
 	{@html ldJsonTag}
@@ -149,8 +149,7 @@
 						{data.meta?.title ?? ''}
 					</h1>
 					<p class="font-mono text-sm text-muted-foreground">
-						{data.meta?.date ? formatDate(data.meta.date) : ''} / by {data.meta?.author ??
-							'lora-sys'}
+						{data.meta?.date ? formatDate(data.meta.date) : ''} / by {data.meta?.author ?? 'lora'}
 					</p>
 				</hgroup>
 
@@ -225,7 +224,7 @@
 					>
 						<span class="text-term-green">$</span> cd ../blog
 					</a>
-					<span>by {data.meta?.author ?? 'lora-sys'}</span>
+					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
 			</BlurFade>
 		</article>

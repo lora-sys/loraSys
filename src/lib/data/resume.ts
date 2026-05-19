@@ -30,20 +30,17 @@ import LinkedinDarkSvg from '$lib/imgs/linkedin-dark.svg';
 import TwitterSvg from '$lib/imgs/x.svg';
 import TwitterDarkSvg from '$lib/imgs/x-dark.svg';
 
-import AtomicImg from '$lib/imgs/atomic.png';
-import ShopifyImg from '$lib/imgs/shopify.svg';
-import NvidiaImg from '$lib/imgs/nvidia.png';
-import SplunkImg from '$lib/imgs/splunk.svg';
-import LimeImg from '$lib/imgs/lime.svg';
-import MitreMediaImg from '$lib/imgs/mitremedia.png';
 import BuildSpaceImg from '$lib/imgs/buildspace.jpg';
 import WaterLooImg from '$lib/imgs/waterloo.png';
-import LaurierImg from '$lib/imgs/laurier.png';
-import IBImg from '$lib/imgs/ib.png';
+
+import AtomicImg from '$lib/imgs/atomic.png';
+import ShopifyImg from '$lib/imgs/shopify.svg';
+import SplunkImg from '$lib/imgs/splunk.svg';
+import LimeImg from '$lib/imgs/lime.svg';
 
 // Your resume data
 export const DATA = {
-	name: 'lora-sys',
+	name: 'lora',
 	initials: 'XD',
 	url: 'https://github.com/lora-sys',
 	img: 'https://avatars.githubusercontent.com/u/176668951?v=4',
@@ -138,7 +135,7 @@ export const DATA = {
 		social: {
 			GitHub: {
 				name: 'GitHub',
-				url: 'https://github.com/SikandarJODD/portfolio-template',
+				url: 'https://github.com/lora-sys',
 				// // icon: Icons.github,
 				icon: GithubSvg,
 				navbar: true,
@@ -149,12 +146,12 @@ export const DATA = {
 				url: 'https://www.linkedin.com/in/sikandar-bhide/',
 				// // icon: Icons.linkedin,
 				icon: LinkedinSvg,
-				navbar: true,
+				navbar: false,
 				dark_icon: LinkedinDarkSvg
 			},
 			X: {
 				name: 'X',
-				url: 'https://twitter.com/Sikandar_Bhide',
+				url: 'https://x.com/MierPiter33280',
 				// // icon: Icons.x,
 				icon: TwitterSvg,
 				navbar: true,
@@ -216,7 +213,7 @@ export const DATA = {
 			badges: [],
 			location: 'Santa Clara, CA',
 			title: 'Software Engineer',
-			logoUrl: NvidiaImg,
+			logoUrl: '',
 			start: 'January 2020',
 			end: 'April 2020',
 			description:
@@ -252,7 +249,7 @@ export const DATA = {
 			badges: [],
 			location: 'Toronto, ON',
 			title: 'Software Engineer',
-			logoUrl: MitreMediaImg,
+			logoUrl: '',
 			start: 'May 2017',
 			end: 'August 2017',
 			description:
@@ -280,7 +277,7 @@ export const DATA = {
 			school: 'Wilfrid Laurier University',
 			href: 'https://wlu.ca',
 			degree: "Bachelor's Degree of Business Administration (BBA)",
-			logoUrl: LaurierImg,
+			logoUrl: '',
 			start: '2016',
 			end: '2021'
 		},
@@ -288,7 +285,7 @@ export const DATA = {
 			school: 'International Baccalaureate',
 			href: 'https://ibo.org',
 			degree: 'IB Diploma',
-			logoUrl: IBImg,
+			logoUrl: '',
 			start: '2012',
 			end: '2016'
 		}
