@@ -40,6 +40,7 @@ import BuildSpaceImg from '$lib/imgs/buildspace.jpg';
 import WaterLooImg from '$lib/imgs/waterloo.png';
 
 import AtomicImg from '$lib/imgs/atomic.png';
+import MingdeImg from '$lib/imgs/mingde.png';
 import ShopifyImg from '$lib/imgs/shopify.svg';
 import SplunkImg from '$lib/imgs/splunk.svg';
 import LimeImg from '$lib/imgs/lime.svg';
@@ -293,6 +294,14 @@ export const DATA = {
 			logoUrl: '',
 			start: '2016',
 			end: '2021'
+		},
+		{
+			school: "Xi'an Mingde Institute of Technology",
+			href: 'https://www.mdit.edu.cn',
+			degree: '',
+			logoUrl: MingdeImg,
+			start: '2022',
+			end: '2024'
 		},
 		{
 			school: 'International Baccalaureate',
