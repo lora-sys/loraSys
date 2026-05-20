@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { DATA } from '$lib/data/resume';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { ArrowRightIcon } from '@lucide/svelte';
 	import { base } from '$app/paths';
 
 	function imgPath(path: string): string {
@@ -31,6 +32,16 @@
 								<div class="bg-gradient-to-b from-black/80 via-black/50 to-transparent p-4">
 									<item.icon class="h-10 w-10 font-bold text-yellow-400" />
 									<h3 class="mt-2 text-xl font-bold text-foreground">{item.name}</h3>
+								</div>
+								<!-- 悬停黑遮罩 -->
+								<div
+									class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+								>
+									<p class="max-w-lg text-center font-medium text-foreground">{item.description}</p>
+									<div class="mt-4 flex items-center gap-1 font-bold text-yellow-400 text-sm">
+										{item.cta}
+										<ArrowRightIcon class="h-4 w-4" />
+									</div>
 								</div>
 							</div>
 						</Dialog.Trigger>
@@ -68,6 +79,16 @@
 						<div class="bg-gradient-to-b from-black/80 via-black/50 to-transparent p-4">
 							<item.icon class="h-10 w-10 font-bold text-yellow-400" />
 							<h3 class="mt-2 text-xl font-bold text-foreground">{item.name}</h3>
+						</div>
+						<!-- 悬停黑遮罩 -->
+						<div
+							class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+						>
+							<p class="max-w-lg text-center font-medium text-foreground">{item.description}</p>
+							<div class="mt-4 flex items-center gap-1 font-bold text-yellow-400 text-sm">
+								{item.cta}
+								<ArrowRightIcon class="h-4 w-4" />
+							</div>
 						</div>
 					</a>
 				{/if}
