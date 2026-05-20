@@ -181,7 +181,7 @@ export const DATA = {
 			},
 			Bilibili: {
 				name: 'Bilibili',
-				url: 'https://space.bilibili.com/闲鱼蝶',
+				url: 'https://space.bilibili.com/431821023?spm_id_from=333.788.0.0',
 				icon: BilibiliSvg,
 				navbar: true,
 				dark_icon: BilibiliDarkSvg
