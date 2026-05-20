@@ -471,8 +471,8 @@ export const DATA = {
 		{
 			name: 'Music',
 			description: 'Play my favorite tracks on Spotify',
-			background: '/images/favorites/music.jpg',
-			href: 'https://open.spotify.com/embed/track/4SqWKzw0CbA05TGszDgMlc?utm_source=generator&theme=0',
+			background: '/images/favorites/music.png',
+			href: 'https://open.spotify.com/embed/track/54pvEYFocTlvIAQOfXSjqV?utm_source=generator&theme=0',
 			cta: 'Listen Now',
 			icon: Headphones,
 			isSpotify: true // 特殊标记

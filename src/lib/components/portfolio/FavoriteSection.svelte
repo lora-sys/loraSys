@@ -38,7 +38,7 @@
 									class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
 								>
 									<p class="max-w-lg text-center font-medium text-foreground">{item.description}</p>
-									<div class="mt-4 flex items-center gap-1 font-bold text-yellow-400 text-sm">
+									<div class="mt-4 flex items-center gap-1 text-sm font-bold text-yellow-400">
 										{item.cta}
 										<ArrowRightIcon class="h-4 w-4" />
 									</div>
@@ -85,7 +85,7 @@
 							class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
 						>
 							<p class="max-w-lg text-center font-medium text-foreground">{item.description}</p>
-							<div class="mt-4 flex items-center gap-1 font-bold text-yellow-400 text-sm">
+							<div class="mt-4 flex items-center gap-1 text-sm font-bold text-yellow-400">
 								{item.cta}
 								<ArrowRightIcon class="h-4 w-4" />
 							</div>
