@@ -88,35 +88,35 @@ export const DATA = {
 			name: 'Made in Abyss',
 			quote:
 				"I'll go even deeper. Even if it costs me my humanity, I want to see the truth of the Abyss.",
-			image: '/images/anime/made-in-abyss.jpg',
+			image: '/images/anime/made-in-abyss.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E4%BE%86%E8%87%AA%E6%B7%B1%E6%B7%B5',
 			buttonText: 'Learn More'
 		},
 		{
 			name: '相聚一刻',
 			quote: '即使在最平凡的日子里，也有人在默默守护着你。',
-			image: '/images/anime/xiangjuyike.jpg',
+			image: '/images/anime/xiangjuyike.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E7%9B%B8%E8%81%9A%E4%B8%80%E5%88%BB',
 			buttonText: 'Learn More'
 		},
 		{
 			name: 'Steins;Gate',
 			quote: "No one knows what the future holds, that's why its potential is infinite.",
-			image: '/images/anime/steins-gate.jpg',
+			image: '/images/anime/steins-gate.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E5%91%BD%E9%81%8B%E7%9F%B3%E4%B9%8B%E9%96%80',
 			buttonText: 'Learn More'
 		},
 		{
 			name: 'Attack on Titan',
 			quote: "The world is merciless, and it's also very beautiful.",
-			image: '/images/anime/attack-on-titan.jpg',
+			image: '/images/anime/attack-on-titan.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA',
 			buttonText: 'Learn More'
 		},
 		{
 			name: 'Eureka Seven',
 			quote: 'Freedom is something that you need to actively acquire.',
-			image: '/images/anime/eureka-seven.jpg',
+			image: '/images/anime/eureka-seven.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%93%8D%E8%AF%97%E7%AF%87',
 			buttonText: 'Learn More'
 		},
@@ -124,14 +124,14 @@ export const DATA = {
 			name: 'Bakuman',
 			quote:
 				"Don't think 'it would be nice if that came true'. Work hard and make it your reality.",
-			image: '/images/anime/bakuman.jpg',
+			image: '/images/anime/bakuman.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E7%88%B6%E6%BC%AB%E7%8E%8B',
 			buttonText: 'Learn More'
 		},
 		{
 			name: 'Death Note',
 			quote: 'The world is rotten, and those who are making it rot deserve to die.',
-			image: '/images/anime/death-note.jpg',
+			image: '/images/anime/death-note.webp',
 			link: 'https://zh.wikipedia.org/wiki/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0',
 			buttonText: 'Learn More'
 		}
@@ -455,7 +455,7 @@ export const DATA = {
 		{
 			name: 'Frieren',
 			description: '葬送芙莉莲 - A journey through memory and magic',
-			background: '/images/favorites/frieren.jpg',
+			background: '/images/favorites/frieren.webp',
 			href: 'https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E',
 			cta: 'Learn More',
 			icon: BookOpen
@@ -463,7 +463,7 @@ export const DATA = {
 		{
 			name: 'The Shawshank Redemption',
 			description: 'Hope is a good thing',
-			background: '/images/favorites/shawshank.jpg',
+			background: '/images/favorites/shawshank.webp',
 			href: 'https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E',
 			cta: 'Learn More',
 			icon: Film
@@ -471,7 +471,7 @@ export const DATA = {
 		{
 			name: 'Music',
 			description: 'Play my favorite tracks on Spotify',
-			background: '/images/favorites/music.jpg',
+			background: '/images/favorites/music.webp',
 			href: 'https://open.spotify.com/embed/track/54pvEYFocTlvIAQOfXSjqV?utm_source=generator&theme=0',
 			cta: 'Listen Now',
 			icon: Headphones,
@@ -480,7 +480,7 @@ export const DATA = {
 		{
 			name: 'Bitcoin',
 			description: 'Digital gold and the future of money',
-			background: '/images/favorites/bitcoin.jpg',
+			background: '/images/favorites/bitcoin.webp',
 			href: 'https://zh.wikipedia.org/wiki/%E5%8C%BA%E5%9D%97%E9%93%BE',
 			cta: 'Learn More',
 			icon: Coins
