@@ -34,7 +34,7 @@
 		<div class="flex items-center gap-6">
 			<a
 				href={base + '/'}
-				class="font-pixel-square font-mono text-sm font-bold text-term-green transition-colors hover:text-gold"
+				class="font-mono font-pixel-square text-sm font-bold text-term-green transition-colors hover:text-gold"
 			>
 				{DATA.name}<span class="animate-pulse">_</span>
 			</a>

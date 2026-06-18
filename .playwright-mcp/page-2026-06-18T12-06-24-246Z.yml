@@ -1,0 +1,436 @@
+- generic [ref=e2]:
+    - generic:
+        - img
+    - generic:
+        - img
+    - banner [ref=e3]:
+        - navigation [ref=e4]:
+            - generic [ref=e5]:
+                - link "lora_" [ref=e6] [cursor=pointer]:
+                    - /url: ./
+                - list [ref=e7]:
+                    - listitem [ref=e8]:
+                        - link "Home" [ref=e9] [cursor=pointer]:
+                            - /url: ./
+                    - listitem [ref=e10]:
+                        - link "Blog" [ref=e11] [cursor=pointer]:
+                            - /url: ./blog
+                    - listitem [ref=e12]:
+                        - link "Projects" [ref=e13] [cursor=pointer]:
+                            - /url: ./#projects
+                    - listitem [ref=e14]:
+                        - link "Skills" [ref=e15] [cursor=pointer]:
+                            - /url: ./#skills
+                    - listitem [ref=e16]:
+                        - link "About" [ref=e17] [cursor=pointer]:
+                            - /url: ./#about
+                    - listitem [ref=e18]:
+                        - link "Contact" [ref=e19] [cursor=pointer]:
+                            - /url: ./#contact
+            - generic [ref=e20]:
+                - generic [ref=e21]: ~/
+                - button "Search... Ctrl K" [ref=e22] [cursor=pointer]:
+                    - generic [ref=e23]: Search...
+                    - generic [ref=e24]: Ctrl K
+    - main [ref=e26]:
+        - generic [ref=e37]: guest@portfolio ~ /home/lora
+        - generic [ref=e39]:
+            - generic [ref=e41]: ~/whoami
+            - generic [ref=e43]:
+                - paragraph [ref=e44]: Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.
+                - paragraph [ref=e45]:
+                    - text: I am a student at
+                    - link "Xi'an Mingde Institute of Technology" [ref=e46] [cursor=pointer]:
+                        - /url: /#education
+                    - text: ', majoring in Computer Science. I love exploring new areas — AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more.'
+        - generic [ref=e48]:
+            - generic [ref=e50]:
+                - generic [ref=e51]: $
+                - generic [ref=e52]: ls -la /experience/
+            - generic [ref=e55]:
+                - generic [ref=e56]: permissions
+                - generic [ref=e57]: start
+                - generic [ref=e58]: end
+                - generic [ref=e59]: name
+        - generic [ref=e61]:
+            - generic [ref=e63]:
+                - generic [ref=e64]: $
+                - generic [ref=e65]: cat /education/*.json
+            - generic [ref=e68]:
+                - button "Xi'an Mingde Institute of Technology drwxr-xr-x 2022 2026 Xi'an Mingde Institute of Technology/" [ref=e69] [cursor=pointer]:
+                    - img "Xi'an Mingde Institute of Technology" [ref=e71]
+                    - generic [ref=e72]: drwxr-xr-x
+                    - generic [ref=e73]: '2022'
+                    - generic [ref=e74]: '2026'
+                    - generic [ref=e75]: Xi'an Mingde Institute of Technology/
+                - button "-rw-r--r-- root root Bachelor's Degree of Computer Science (Third Year)" [ref=e76] [cursor=pointer]:
+                    - generic [ref=e77]: '-rw-r--r--'
+                    - generic [ref=e78]: root
+                    - generic [ref=e79]: root
+                    - generic [ref=e80]: Bachelor's Degree of Computer Science (Third Year)
+        - generic [ref=e82]:
+            - generic [ref=e85]:
+                - generic [ref=e86]:
+                    - generic [ref=e87]: ~/
+                    - text: skills --list
+                - heading "Skills & Technologies" [level=2] [ref=e88]
+                - paragraph [ref=e89]: Tools and technologies I use to build things
+            - generic "Interactive 3D Icon Cloud" [ref=e92]
+            - generic [ref=e94]:
+                - generic [ref=e96]: Svelte
+                - generic [ref=e98]: Sveltekit
+                - generic [ref=e100]: Typescript
+                - generic [ref=e102]: Node.js
+                - generic [ref=e104]: Python
+                - generic [ref=e106]: Go
+                - generic [ref=e108]: Postgres
+                - generic [ref=e110]: Docker
+                - generic [ref=e112]: Kubernetes
+                - generic [ref=e114]: Java
+                - generic [ref=e116]: C++
+        - generic [ref=e118]:
+            - generic [ref=e121]:
+                - generic [ref=e122]:
+                    - generic [ref=e123]: ~/
+                    - text: projects
+                - heading "Check out my latest work" [level=2] [ref=e124]
+                - paragraph [ref=e125]: I've worked on a variety of projects, from simple websites to complex web applications. Here are a few of my favorites.
+            - generic [ref=e126]:
+                - generic [ref=e127]:
+                    - generic [ref=e128]:
+                        - generic [ref=e133]: newtube-clone.tsx
+                        - generic [ref=e134]: Feb 2026 - Present
+                    - generic [ref=e135]:
+                        - generic [ref=e136]: //Newtube-clone
+                        - generic [ref=e137]: //A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern ...
+                        - generic [ref=e138]:
+                            - generic [ref=e139]: Next.js
+                            - generic [ref=e140]: TypeScript
+                            - generic [ref=e141]: tRPC
+                            - generic [ref=e142]: PostgreSQL
+                            - generic [ref=e143]: Drizzle ORM
+                            - generic [ref=e144]: '+3'
+                        - generic [ref=e145]:
+                            - text: $ open
+                            - link "github.com" [ref=e146] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/Newtube-clone
+                - generic [ref=e147]:
+                    - generic [ref=e148]:
+                        - generic [ref=e153]: daily-rss.tsx
+                        - generic [ref=e154]: Dec 2025 - Jan 2026
+                    - generic [ref=e155]:
+                        - generic [ref=e156]: //Daily-Rss
+                        - generic [ref=e157]: //A sophisticated daily AI news briefing platform that automatically aggregates co...
+                        - generic [ref=e158]:
+                            - generic [ref=e159]: Next.js
+                            - generic [ref=e160]: TypeScript
+                            - generic [ref=e161]: Supabase
+                            - generic [ref=e162]: TailwindCSS
+                            - generic [ref=e163]: Inngest
+                            - generic [ref=e164]: '+1'
+                        - generic [ref=e165]:
+                            - text: $ open
+                            - link "github.com" [ref=e166] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/Daily-Rss
+                - generic [ref=e167]:
+                    - generic [ref=e168]:
+                        - generic [ref=e173]: trandingos.tsx
+                        - generic [ref=e174]: Jun 2026 - Present
+                    - generic [ref=e175]:
+                        - generic [ref=e176]: //TrandingOs
+                        - generic [ref=e177]: //A personal AI-powered trading terminal with 40+ agent skills, memory system, and...
+                        - generic [ref=e178]:
+                            - generic [ref=e179]: React
+                            - generic [ref=e180]: TypeScript
+                            - generic [ref=e181]: TailwindCSS
+                            - generic [ref=e182]: SQLite
+                            - generic [ref=e183]: Python
+                            - generic [ref=e184]: '+2'
+                        - generic [ref=e185]:
+                            - text: $ open
+                            - link "github.com" [ref=e186] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/TrandingOs
+                - generic [ref=e187]:
+                    - generic [ref=e188]:
+                        - generic [ref=e193]: aicompanyos.tsx
+                        - generic [ref=e194]: Jun 2026 - Present
+                    - generic [ref=e195]:
+                        - generic [ref=e196]: //aicompanyos
+                        - generic [ref=e197]: //A loop-driven AI execution harness with 8-layer architecture and Writer-Critic f...
+                        - generic [ref=e198]:
+                            - generic [ref=e199]: TypeScript
+                            - generic [ref=e200]: pnpm
+                            - generic [ref=e201]: Zod
+                            - generic [ref=e202]: MCP Protocol
+                            - generic [ref=e203]: CLI/TUI
+                        - generic [ref=e204]:
+                            - text: $ open
+                            - link "github.com" [ref=e205] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/aicompanyos
+                - generic [ref=e206]:
+                    - generic [ref=e207]:
+                        - generic [ref=e212]: nanochat-studay.tsx
+                        - generic [ref=e213]: Mar 2026
+                    - generic [ref=e214]:
+                        - generic [ref=e215]: //nanochat-studay
+                        - generic [ref=e216]: //Learning project implementing an end-to-end LLM training pipeline inspired by Ka...
+                        - generic [ref=e217]:
+                            - generic [ref=e218]: Python
+                            - generic [ref=e219]: PyTorch
+                            - generic [ref=e220]: BPE Tokenizer
+                            - generic [ref=e221]: LLM
+                        - generic [ref=e222]:
+                            - text: $ open
+                            - link "github.com" [ref=e223] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/nanochat-studay
+                - generic [ref=e224]:
+                    - generic [ref=e225]:
+                        - generic [ref=e230]: emergence.tsx
+                        - generic [ref=e231]: Feb 2026
+                    - generic [ref=e232]:
+                        - generic [ref=e233]: //Emergence
+                        - generic [ref=e234]: //A multi-agent collaboration protocol with real-time AI debate, evidence chain, a...
+                        - generic [ref=e235]:
+                            - generic [ref=e236]: TypeScript
+                            - generic [ref=e237]: Next.js
+                            - generic [ref=e238]: Zustand
+                            - generic [ref=e239]: SSE
+                            - generic [ref=e240]: OpenAI API
+                        - generic [ref=e241]:
+                            - text: $ open
+                            - link "github.com" [ref=e242] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/hackthon-agent
+                - generic [ref=e243]:
+                    - generic [ref=e244]:
+                        - generic [ref=e249]: tarot-prediction-dapp.tsx
+                        - generic [ref=e250]: Jan 2026
+                    - generic [ref=e251]:
+                        - generic [ref=e252]: //Tarot Prediction DApp
+                        - generic [ref=e253]: //A Web3 tarot card prediction platform on Monad Testnet with 3D cards and token r...
+                        - generic [ref=e254]:
+                            - generic [ref=e255]: Solidity
+                            - generic [ref=e256]: React
+                            - generic [ref=e257]: Three.js
+                            - generic [ref=e258]: Hardhat
+                            - generic [ref=e259]: JavaScript
+                            - generic [ref=e260]: '+1'
+                        - generic [ref=e261]:
+                            - text: $ open
+                            - link "github.com" [ref=e262] [cursor=pointer]:
+                                - /url: https://github.com/lora-sys/demo_monad_hackthon
+        - generic [ref=e264]:
+            - generic [ref=e267]:
+                - generic [ref=e268]:
+                    - generic [ref=e269]: ~/
+                    - text: hackathons.log
+                - heading "I like building things" [level=2] [ref=e270]
+                - paragraph [ref=e271]: During my time in university, I attended 4+ hackathons.
+            - generic [ref=e273]:
+                - 'button "[June 5th - 7th, 2026] hackathond[1000]: ETH Beijing 2026 STATUS: participated" [ref=e276] [cursor=pointer]':
+                    - generic [ref=e277]: '[June 5th - 7th, 2026]'
+                    - generic [ref=e278]: 'hackathond[1000]:'
+                    - generic [ref=e279]: ETH Beijing 2026
+                    - generic [ref=e280]: 'STATUS: participated'
+                - 'button "[2026] hackathond[1001]: Monad Blitz Hackathon STATUS: participated" [ref=e283] [cursor=pointer]':
+                    - generic [ref=e284]: '[2026]'
+                    - generic [ref=e285]: 'hackathond[1001]:'
+                    - generic [ref=e286]: Monad Blitz Hackathon
+                    - generic [ref=e287]: 'STATUS: participated'
+                - 'button "[January 2026] hackathond[1002]: Monad Hackathon STATUS: participated" [ref=e290] [cursor=pointer]':
+                    - generic [ref=e291]: '[January 2026]'
+                    - generic [ref=e292]: 'hackathond[1002]:'
+                    - generic [ref=e293]: Monad Hackathon
+                    - generic [ref=e294]: 'STATUS: participated'
+                - 'button "[February 2026] hackathond[1003]: Online AI Agent Hackathon STATUS: participated" [ref=e297] [cursor=pointer]':
+                    - generic [ref=e298]: '[February 2026]'
+                    - generic [ref=e299]: 'hackathond[1003]:'
+                    - generic [ref=e300]: Online AI Agent Hackathon
+                    - generic [ref=e301]: 'STATUS: participated'
+        - generic [ref=e303]:
+            - generic [ref=e304]:
+                - generic [ref=e305]: $
+                - generic [ref=e306]: cd ~/favorites/anime
+            - generic [ref=e308]:
+                - heading "Anime" [level=2] [ref=e309]
+                - region [ref=e310]:
+                    - generic [ref=e312]:
+                        - group [ref=e313]:
+                            - generic [ref=e314]:
+                                - region "Zoom Area" [ref=e315]:
+                                    - img "Made in Abyss" [ref=e317]
+                                - generic [ref=e318]:
+                                    - heading "Made in Abyss" [level=3] [ref=e319]
+                                    - paragraph [ref=e320]: '"I''ll go even deeper. Even if it costs me my humanity, I want to see the truth of the Abyss."'
+                                    - button "Learn More" [ref=e321] [cursor=pointer]:
+                                        - link "Learn More" [ref=e322]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E4%BE%86%E8%87%AA%E6%B7%B1%E6%B7%B5
+                        - group [ref=e323]:
+                            - generic [ref=e324]:
+                                - region "Zoom Area" [ref=e325]:
+                                    - img "相聚一刻" [ref=e327]
+                                - generic [ref=e328]:
+                                    - heading "相聚一刻" [level=3] [ref=e329]
+                                    - paragraph [ref=e330]: '"即使在最平凡的日子里，也有人在默默守护着你。"'
+                                    - button "Learn More" [ref=e331] [cursor=pointer]:
+                                        - link "Learn More" [ref=e332]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E7%9B%B8%E8%81%9A%E4%B8%80%E5%88%BB
+                        - group [ref=e333]:
+                            - generic [ref=e334]:
+                                - region "Zoom Area" [ref=e335]:
+                                    - img "Steins;Gate" [ref=e337]
+                                - generic [ref=e338]:
+                                    - heading "Steins;Gate" [level=3] [ref=e339]
+                                    - paragraph [ref=e340]: '"No one knows what the future holds, that''s why its potential is infinite."'
+                                    - button "Learn More" [ref=e341] [cursor=pointer]:
+                                        - link "Learn More" [ref=e342]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E5%91%BD%E9%81%8B%E7%9F%B3%E4%B9%8B%E9%96%80
+                        - group [ref=e343]:
+                            - generic [ref=e344]:
+                                - region "Zoom Area" [ref=e345]:
+                                    - img "Attack on Titan" [ref=e347]
+                                - generic [ref=e348]:
+                                    - heading "Attack on Titan" [level=3] [ref=e349]
+                                    - paragraph [ref=e350]: '"The world is merciless, and it''s also very beautiful."'
+                                    - button "Learn More" [ref=e351] [cursor=pointer]:
+                                        - link "Learn More" [ref=e352]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA
+                        - group [ref=e353]:
+                            - generic [ref=e354]:
+                                - region "Zoom Area" [ref=e355]:
+                                    - img "Eureka Seven" [ref=e357]
+                                - generic [ref=e358]:
+                                    - heading "Eureka Seven" [level=3] [ref=e359]
+                                    - paragraph [ref=e360]: '"Freedom is something that you need to actively acquire."'
+                                    - button "Learn More" [ref=e361] [cursor=pointer]:
+                                        - link "Learn More" [ref=e362]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%93%8D%E8%AF%97%E7%AF%87
+                        - group [ref=e363]:
+                            - generic [ref=e364]:
+                                - region "Zoom Area" [ref=e365]:
+                                    - img "Bakuman" [ref=e367]
+                                - generic [ref=e368]:
+                                    - heading "Bakuman" [level=3] [ref=e369]
+                                    - paragraph [ref=e370]: '"Don''t think ''it would be nice if that came true''. Work hard and make it your reality."'
+                                    - button "Learn More" [ref=e371] [cursor=pointer]:
+                                        - link "Learn More" [ref=e372]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E7%88%B6%E6%BC%AB%E7%8E%8B
+                        - group [ref=e373]:
+                            - generic [ref=e374]:
+                                - region "Zoom Area" [ref=e375]:
+                                    - img "Death Note" [ref=e377]
+                                - generic [ref=e378]:
+                                    - heading "Death Note" [level=3] [ref=e379]
+                                    - paragraph [ref=e380]: '"The world is rotten, and those who are making it rot deserve to die."'
+                                    - button "Learn More" [ref=e381] [cursor=pointer]:
+                                        - link "Learn More" [ref=e382]:
+                                            - /url: https://zh.wikipedia.org/wiki/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0
+                    - button "Previous slide" [disabled]:
+                        - img
+                        - generic: Previous slide
+                    - button "Next slide" [disabled]:
+                        - img
+                        - generic: Next slide
+        - generic [ref=e384]:
+            - generic [ref=e385]:
+                - generic [ref=e386]: $
+                - generic [ref=e387]: cat ~/favorites/*.json
+            - generic [ref=e389]:
+                - heading "Favorites" [level=2] [ref=e390]
+                - generic [ref=e391]:
+                    - link "Frieren Frieren 葬送芙莉莲 - A journey through memory and magic Learn More" [ref=e392] [cursor=pointer]:
+                        - /url: https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E
+                        - img "Frieren" [ref=e393]
+                        - generic [ref=e394]:
+                            - img [ref=e395]
+                            - heading "Frieren" [level=3] [ref=e397]
+                        - generic:
+                            - paragraph: 葬送芙莉莲 - A journey through memory and magic
+                            - generic:
+                                - text: Learn More
+                                - img
+                    - link "The Shawshank Redemption The Shawshank Redemption Hope is a good thing Learn More" [ref=e398] [cursor=pointer]:
+                        - /url: https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E
+                        - img "The Shawshank Redemption" [ref=e399]
+                        - generic [ref=e400]:
+                            - img [ref=e401]
+                            - heading "The Shawshank Redemption" [level=3] [ref=e403]
+                        - generic:
+                            - paragraph: Hope is a good thing
+                            - generic:
+                                - text: Learn More
+                                - img
+                    - button "Music Music Play my favorite tracks on Spotify Listen Now" [ref=e404] [cursor=pointer]:
+                        - generic [ref=e405]:
+                            - img "Music" [ref=e406]
+                            - generic [ref=e407]:
+                                - img [ref=e408]
+                                - heading "Music" [level=3] [ref=e410]
+                            - generic:
+                                - paragraph: Play my favorite tracks on Spotify
+                                - generic:
+                                    - text: Listen Now
+                                    - img
+                    - link "Bitcoin Bitcoin Digital gold and the future of money Learn More" [ref=e411] [cursor=pointer]:
+                        - /url: https://zh.wikipedia.org/wiki/%E5%8C%BA%E5%9D%97%E9%93%BE
+                        - img "Bitcoin" [ref=e412]
+                        - generic [ref=e413]:
+                            - img [ref=e414]
+                            - heading "Bitcoin" [level=3] [ref=e419]
+                        - generic:
+                            - paragraph: Digital gold and the future of money
+                            - generic:
+                                - text: Learn More
+                                - img
+                    - 'link "Black Myth: Wukong Black Myth: Wukong A journey to the West reimagined Learn More" [ref=e420] [cursor=pointer]':
+                        - /url: https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA
+                        - 'img "Black Myth: Wukong" [ref=e421]'
+                        - generic [ref=e422]:
+                            - img [ref=e423]
+                            - 'heading "Black Myth: Wukong" [level=3] [ref=e425]'
+                        - generic:
+                            - paragraph: A journey to the West reimagined
+                            - generic:
+                                - text: Learn More
+                                - img
+        - generic [ref=e429]:
+            - generic [ref=e430]:
+                - generic [ref=e431]: ~/
+                - text: contact.sh
+            - heading "Get in Touch" [level=2] [ref=e432]
+            - paragraph [ref=e433]:
+                - text: Want to chat? Just shoot me a dm
+                - link "with a direct question on twitter" [ref=e434] [cursor=pointer]:
+                    - /url: https://x.com/MierPiter33280
+                - text: and I'll respond whenever I can.
+            - link "Say Hello Say Hello" [ref=e436] [cursor=pointer]:
+                - /url: https://x.com/MierPiter33280
+                - button "Say Hello Say Hello" [ref=e437]:
+                    - generic [ref=e440]: Say Hello
+                    - generic [ref=e441]:
+                        - generic [ref=e442]: Say Hello
+                        - img [ref=e443]
+        - generic [ref=e446]:
+            - generic [ref=e447]: lora
+            - generic [ref=e448]:
+                - link "GitHub" [ref=e449] [cursor=pointer]:
+                    - /url: https://github.com/lora-sys
+                    - img "GitHub" [ref=e450]
+                - link "LinkedIn" [ref=e451] [cursor=pointer]:
+                    - /url: https://www.linkedin.com/in/sikandar-bhide/
+                    - img "LinkedIn" [ref=e452]
+                - link "X" [ref=e453] [cursor=pointer]:
+                    - /url: https://x.com/MierPiter33280
+                    - img "X" [ref=e454]
+                - link "PeerList" [ref=e455] [cursor=pointer]:
+                    - /url: https://peerlist.io/mierpiter
+                    - img "PeerList" [ref=e456]
+                - link "YouTube" [ref=e457] [cursor=pointer]:
+                    - /url: https://www.youtube.com/@MierPiter33280
+                    - img "YouTube" [ref=e458]
+                - link "Bilibili" [ref=e459] [cursor=pointer]:
+                    - /url: https://space.bilibili.com/431821023?spm_id_from=333.788.0.0
+                    - img "Bilibili" [ref=e460]
+                - link "Send Email" [ref=e461] [cursor=pointer]:
+                    - /url: '#'
+                    - img "Send Email" [ref=e462]
+            - paragraph [ref=e463]: © 2026 lora. Built with Lora.

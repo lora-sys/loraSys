@@ -57,11 +57,11 @@ export const DATA = {
 		'Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.',
 	// Pre-compiled HTML from markdown summary — avoids runtime parsing on every render
 	summaryHtml: marked.parse(
-		'Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi\'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more.'
+		"Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more."
 	) as string,
 	// Legacy raw markdown field (kept for backwards compatibility)
 	summary:
-		'Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi\'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more.',
+		"Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more.",
 	avatarUrl: 'https://avatars.githubusercontent.com/u/176668951?v=4',
 	skills: [
 		'TypeScript',
@@ -202,174 +202,191 @@ export const DATA = {
 	},
 	work: [],
 	education: [
-			{
-				school: "Xi'an Mingde Institute of Technology",
-				href: 'https://www.mdit.edu.cn',
-				degree: "Bachelor's Degree of Computer Science (Third Year)",
-				logoUrl: MingdeImg,
-				start: '2022',
-				end: '2026'
-			}
-		],
+		{
+			school: "Xi'an Mingde Institute of Technology",
+			href: 'https://www.mdit.edu.cn',
+			degree: "Bachelor's Degree of Computer Science (Third Year)",
+			logoUrl: MingdeImg,
+			start: '2022',
+			end: '2026'
+		}
+	],
 	projects: [
-			{
-				title: 'Newtube-clone',
-				href: 'https://github.com/lora-sys/Newtube-clone',
-				dates: 'Feb 2026 - Present',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern web technologies. Features video upload, streaming, subscriptions, comments, playlists, and creator studio.'
-				) as string,
-				description:
-					'A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern web technologies. Features video upload, streaming, subscriptions, comments, playlists, and creator studio.',
-				technologies: ['Next.js', 'TypeScript', 'tRPC', 'PostgreSQL', 'Drizzle ORM', 'TailwindCSS', 'Clerk', 'Mux'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/Newtube-clone',
-						icon: Github
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'Daily-Rss',
-				href: 'https://github.com/lora-sys/Daily-Rss',
-				dates: 'Dec 2025 - Jan 2026',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A sophisticated daily AI news briefing platform that automatically aggregates content from multiple RSS feeds and delivers curated insights via email. Built with Next.js 16, Supabase, and Inngest for cron-based scheduling.'
-				) as string,
-				description:
-					'A sophisticated daily AI news briefing platform that automatically aggregates content from multiple RSS feeds and delivers curated insights via email. Built with Next.js 16, Supabase, and Inngest.',
-				technologies: ['Next.js', 'TypeScript', 'Supabase', 'TailwindCSS', 'Inngest', 'Resend'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/Daily-Rss',
-						icon: Github
-					},
-					{
-						type: 'Website',
-						href: 'https://daily-rss.vercel.app',
-						icon: Globe
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'TrandingOs',
-				href: 'https://github.com/lora-sys/TrandingOs',
-				dates: 'Jun 2026 - Present',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A personal AI-powered trading terminal. Chat with an AI agent to analyze markets, create trade plans, run backtests, journal trades, and manage a paper portfolio. Features 40+ agent skills, 9 workflows, and a dark glassmorphism UI.'
-				) as string,
-				description:
-					'A personal AI-powered trading terminal with 40+ agent skills, memory system, and dark glassmorphism UI.',
-				technologies: ['React', 'TypeScript', 'TailwindCSS', 'SQLite', 'Python', 'Zustand', 'TanStack Query'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/TrandingOs',
-						icon: Github
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'aicompanyos',
-				href: 'https://github.com/lora-sys/aicompanyos',
-				dates: 'Jun 2026 - Present',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A loop-driven AI execution harness. 8-layer architecture with Planner, Generator, Evaluator, and Evolution agents. Features Writer-Critic feedback loops with consensus locking. 78/78 E2E tests passing.'
-				) as string,
-				description:
-					'A loop-driven AI execution harness with 8-layer architecture and Writer-Critic feedback loops.',
-				technologies: ['TypeScript', 'pnpm', 'Zod', 'MCP Protocol', 'CLI/TUI'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/aicompanyos',
-						icon: Github
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'nanochat-studay',
-				href: 'https://github.com/lora-sys/nanochat-studay',
-				dates: 'Mar 2026',
-				active: true,
-				descriptionHtml: marked.parse(
-					'Learning project inspired by Karpathy\'s nanochat. Implements an end-to-end LLM training pipeline (Pretrain -> SFT -> RL) with custom tokenizer using BPE and regex-based GPT-4 splitting patterns.'
-				) as string,
-				description:
-					'Learning project implementing an end-to-end LLM training pipeline inspired by Karpathy\'s nanochat.',
-				technologies: ['Python', 'PyTorch', 'BPE Tokenizer', 'LLM'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/nanochat-studay',
-						icon: Github
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'Emergence',
-				href: 'https://github.com/lora-sys/hackthon-agent',
-				dates: 'Feb 2026',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A multi-agent collaboration protocol built for an online AI agent hackathon. Features real-time AI-agent debate, evidence chain, voting system, and resilience against LLM provider rate limits.'
-				) as string,
-				description:
-					'A multi-agent collaboration protocol with real-time AI debate, evidence chain, and voting system.',
-				technologies: ['TypeScript', 'Next.js', 'Zustand', 'SSE', 'OpenAI API'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/hackthon-agent',
-						icon: Github
-					}
-				],
-				image: '',
-				video: ''
-			},
-			{
-				title: 'Tarot Prediction DApp',
-				href: 'https://github.com/lora-sys/demo_monad_hackthon',
-				dates: 'Jan 2026',
-				active: true,
-				descriptionHtml: marked.parse(
-					'A Web3 tarot card prediction platform built on the Monad Testnet for the Monad Hackathon. Features interactive 3D tarot cards, TRGL token rewards, prediction markets, and MetaMask integration.'
-				) as string,
-				description:
-					'A Web3 tarot card prediction platform on Monad Testnet with 3D cards and token rewards.',
-				technologies: ['Solidity', 'React', 'Three.js', 'Hardhat', 'JavaScript', 'Web3'],
-				links: [
-					{
-						type: 'Source',
-						href: 'https://github.com/lora-sys/demo_monad_hackthon',
-						icon: Github
-					},
-					{
-						type: 'Website',
-						href: 'https://demo-monad-hackthon.vercel.app',
-						icon: Globe
-					}
-				],
-				image: '',
-				video: ''
-			}
-		],
+		{
+			title: 'Newtube-clone',
+			href: 'https://github.com/lora-sys/Newtube-clone',
+			dates: 'Feb 2026 - Present',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern web technologies. Features video upload, streaming, subscriptions, comments, playlists, and creator studio.'
+			) as string,
+			description:
+				'A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern web technologies. Features video upload, streaming, subscriptions, comments, playlists, and creator studio.',
+			technologies: [
+				'Next.js',
+				'TypeScript',
+				'tRPC',
+				'PostgreSQL',
+				'Drizzle ORM',
+				'TailwindCSS',
+				'Clerk',
+				'Mux'
+			],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/Newtube-clone',
+					icon: Github
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'Daily-Rss',
+			href: 'https://github.com/lora-sys/Daily-Rss',
+			dates: 'Dec 2025 - Jan 2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A sophisticated daily AI news briefing platform that automatically aggregates content from multiple RSS feeds and delivers curated insights via email. Built with Next.js 16, Supabase, and Inngest for cron-based scheduling.'
+			) as string,
+			description:
+				'A sophisticated daily AI news briefing platform that automatically aggregates content from multiple RSS feeds and delivers curated insights via email. Built with Next.js 16, Supabase, and Inngest.',
+			technologies: ['Next.js', 'TypeScript', 'Supabase', 'TailwindCSS', 'Inngest', 'Resend'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/Daily-Rss',
+					icon: Github
+				},
+				{
+					type: 'Website',
+					href: 'https://daily-rss.vercel.app',
+					icon: Globe
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'TrandingOs',
+			href: 'https://github.com/lora-sys/TrandingOs',
+			dates: 'Jun 2026 - Present',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A personal AI-powered trading terminal. Chat with an AI agent to analyze markets, create trade plans, run backtests, journal trades, and manage a paper portfolio. Features 40+ agent skills, 9 workflows, and a dark glassmorphism UI.'
+			) as string,
+			description:
+				'A personal AI-powered trading terminal with 40+ agent skills, memory system, and dark glassmorphism UI.',
+			technologies: [
+				'React',
+				'TypeScript',
+				'TailwindCSS',
+				'SQLite',
+				'Python',
+				'Zustand',
+				'TanStack Query'
+			],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/TrandingOs',
+					icon: Github
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'aicompanyos',
+			href: 'https://github.com/lora-sys/aicompanyos',
+			dates: 'Jun 2026 - Present',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A loop-driven AI execution harness. 8-layer architecture with Planner, Generator, Evaluator, and Evolution agents. Features Writer-Critic feedback loops with consensus locking. 78/78 E2E tests passing.'
+			) as string,
+			description:
+				'A loop-driven AI execution harness with 8-layer architecture and Writer-Critic feedback loops.',
+			technologies: ['TypeScript', 'pnpm', 'Zod', 'MCP Protocol', 'CLI/TUI'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/aicompanyos',
+					icon: Github
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'nanochat-studay',
+			href: 'https://github.com/lora-sys/nanochat-studay',
+			dates: 'Mar 2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				"Learning project inspired by Karpathy's nanochat. Implements an end-to-end LLM training pipeline (Pretrain -> SFT -> RL) with custom tokenizer using BPE and regex-based GPT-4 splitting patterns."
+			) as string,
+			description:
+				"Learning project implementing an end-to-end LLM training pipeline inspired by Karpathy's nanochat.",
+			technologies: ['Python', 'PyTorch', 'BPE Tokenizer', 'LLM'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/nanochat-studay',
+					icon: Github
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'Emergence',
+			href: 'https://github.com/lora-sys/hackthon-agent',
+			dates: 'Feb 2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A multi-agent collaboration protocol built for an online AI agent hackathon. Features real-time AI-agent debate, evidence chain, voting system, and resilience against LLM provider rate limits.'
+			) as string,
+			description:
+				'A multi-agent collaboration protocol with real-time AI debate, evidence chain, and voting system.',
+			technologies: ['TypeScript', 'Next.js', 'Zustand', 'SSE', 'OpenAI API'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/hackthon-agent',
+					icon: Github
+				}
+			],
+			image: '',
+			video: ''
+		},
+		{
+			title: 'Tarot Prediction DApp',
+			href: 'https://github.com/lora-sys/demo_monad_hackthon',
+			dates: 'Jan 2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'A Web3 tarot card prediction platform built on the Monad Testnet for the Monad Hackathon. Features interactive 3D tarot cards, TRGL token rewards, prediction markets, and MetaMask integration.'
+			) as string,
+			description:
+				'A Web3 tarot card prediction platform on Monad Testnet with 3D cards and token rewards.',
+			technologies: ['Solidity', 'React', 'Three.js', 'Hardhat', 'JavaScript', 'Web3'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/demo_monad_hackthon',
+					icon: Github
+				},
+				{
+					type: 'Website',
+					href: 'https://demo-monad-hackthon.vercel.app',
+					icon: Globe
+				}
+			],
+			image: '',
+			video: ''
+		}
+	],
 	favorites: [
 		{
 			name: 'Frieren',
@@ -414,59 +431,64 @@ export const DATA = {
 		}
 	],
 	hackathons: [
-			{
-				title: 'ETH Beijing 2026',
-				dates: 'June 5th - 7th, 2026',
-				location: 'Beijing, China (Kunlun Nest)',
-				description:
-					'Participated in the ETH Beijing Hackathon hosted by PKU Blockchain DAO and WTF Academy. Built an AI Agent x Blockchain project with a team of 5.',
-				image: '',
-				links: [
-					{
-						title: 'Source',
-						icon: Github,
-						href: 'https://github.com/lora-sys/Hackthon'
-					}
-				]
-			},
-			{
-				title: 'Monad Blitz Hackathon',
-				dates: '2026',
-				location: 'Online',
-				description:
-					'Participated in the Monad Blitz hackathon, building on the Monad blockchain.',
-				image: '',
-				links: []
-			},
-			{
-				title: 'Monad Hackathon',
-				dates: 'January 2026',
-				location: 'Online',
-				description:
-					'Built Tarot Prediction DApp — a Web3 tarot card prediction platform on Monad Testnet with interactive 3D cards, TRGL token system, and prediction markets.',
-				image: '',
-				links: [
-					{
-						title: 'Source',
-						icon: Github,
-						href: 'https://github.com/lora-sys/demo_monad_hackthon'
-					}
-				]
-			},
-			{
-				title: 'Online AI Agent Hackathon',
-				dates: 'February 2026',
-				location: 'Online',
-				description:
-					'Built Emergence — a multi-agent collaboration protocol featuring real-time AI debate, evidence chains, and resilient LLM orchestration.',
-				image: '',
-				links: [
-					{
-						title: 'Source',
-						icon: Github,
-						href: 'https://github.com/lora-sys/hackthon-agent'
-					}
-				]
-			}
-		]
+		{
+			title: 'ETH Beijing 2026',
+			dates: 'June 5th - 7th, 2026',
+			location: 'Beijing, China (Kunlun Nest)',
+			description:
+				'Participated in the ETH Beijing Hackathon hosted by PKU Blockchain DAO and WTF Academy. Built an AI Agent x Blockchain project with a team of 5.',
+			descriptionHtml: marked.parse(
+				'Participated in the ETH Beijing Hackathon hosted by PKU Blockchain DAO and WTF Academy. Built an AI Agent x Blockchain project with a team of 5.'
+			) as string,
+			image: '',
+			links: [
+				{
+					title: 'Source',
+					icon: Github,
+					href: 'https://github.com/lora-sys/Hackthon'
+				}
+			]
+		},
+		{
+			title: 'Monad Blitz Hackathon',
+			dates: '2026',
+			location: 'Online',
+			description: 'Participated in the Monad Blitz hackathon, building on the Monad blockchain.',
+			descriptionHtml: marked.parse(
+				'Participated in the Monad Blitz hackathon, building on the Monad blockchain.'
+			) as string,
+			image: '',
+			links: []
+		},
+		{
+			title: 'Monad Hackathon',
+			dates: 'January 2026',
+			location: 'Online',
+			description:
+				'Built Tarot Prediction DApp — a Web3 tarot card prediction platform on Monad Testnet with interactive 3D cards, TRGL token system, and prediction markets.',
+			image: '',
+			links: [
+				{
+					title: 'Source',
+					icon: Github,
+					href: 'https://github.com/lora-sys/demo_monad_hackthon'
+				}
+			]
+		},
+		{
+			title: 'Online AI Agent Hackathon',
+			dates: 'February 2026',
+			location: 'Online',
+			description:
+				'Built Emergence — a multi-agent collaboration protocol featuring real-time AI debate, evidence chains, and resilient LLM orchestration.',
+			image: '',
+			links: [
+				{
+					title: 'Source',
+					icon: Github,
+					href: 'https://github.com/lora-sys/hackthon-agent'
+				}
+			]
+		}
+	]
 };

@@ -1,0 +1,869 @@
+- generic [ref=e2]:
+    - generic [ref=e3]:
+        - link "Skip to content" [ref=e4] [cursor=pointer]:
+            - /url: '#start-of-content'
+        - banner [ref=e6]:
+            - heading "Navigation Menu" [level=2] [ref=e7]
+            - generic [ref=e8]:
+                - link "Homepage" [ref=e10] [cursor=pointer]:
+                    - /url: /
+                    - img [ref=e11]
+                - generic [ref=e13]:
+                    - navigation "Global" [ref=e16]:
+                        - list [ref=e17]:
+                            - listitem [ref=e18]:
+                                - button "Platform" [ref=e20] [cursor=pointer]:
+                                    - text: Platform
+                                    - img [ref=e21]
+                            - listitem [ref=e23]:
+                                - button "Solutions" [ref=e25] [cursor=pointer]:
+                                    - text: Solutions
+                                    - img [ref=e26]
+                            - listitem [ref=e28]:
+                                - button "Resources" [ref=e30] [cursor=pointer]:
+                                    - text: Resources
+                                    - img [ref=e31]
+                            - listitem [ref=e33]:
+                                - button "Open Source" [ref=e35] [cursor=pointer]:
+                                    - text: Open Source
+                                    - img [ref=e36]
+                            - listitem [ref=e38]:
+                                - button "Enterprise" [ref=e40] [cursor=pointer]:
+                                    - text: Enterprise
+                                    - img [ref=e41]
+                            - listitem [ref=e43]:
+                                - link "Pricing" [ref=e44] [cursor=pointer]:
+                                    - /url: https://github.com/pricing
+                                    - generic [ref=e45]: Pricing
+                    - generic [ref=e46]:
+                        - button "Search or jump to…" [ref=e49] [cursor=pointer]:
+                            - img [ref=e51]
+                        - link "Sign in" [ref=e54] [cursor=pointer]:
+                            - /url: /login?return_to=https%3A%2F%2Fgithub.com%2Fvercel%2Fgeist-font
+                        - link "Sign up" [ref=e55] [cursor=pointer]:
+                            - /url: /signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F%3Cuser-name%3E%2F%3Crepo-name%3E&source=header-repo&source_repo=vercel%2Fgeist-font
+                        - button "Appearance settings" [ref=e58] [cursor=pointer]:
+                            - img
+    - main [ref=e62]:
+        - generic [ref=e63]:
+            - generic [ref=e64]:
+                - generic [ref=e66]:
+                    - img [ref=e67]
+                    - link "vercel" [ref=e70] [cursor=pointer]:
+                        - /url: /vercel
+                    - generic [ref=e71]: /
+                    - strong [ref=e72]:
+                        - link "geist-font" [ref=e73] [cursor=pointer]:
+                            - /url: /vercel/geist-font
+                    - generic [ref=e74]: Public
+                - generic [ref=e75]:
+                    - list:
+                        - listitem [ref=e76]:
+                            - link "You must be signed in to change notification settings" [ref=e77] [cursor=pointer]:
+                                - /url: /login?return_to=%2Fvercel%2Fgeist-font
+                                - img [ref=e78]
+                                - text: Notifications
+                        - listitem [ref=e80]:
+                            - link "Fork 109" [ref=e81] [cursor=pointer]:
+                                - /url: /login?return_to=%2Fvercel%2Fgeist-font
+                                - img [ref=e82]
+                                - text: Fork
+                                - generic "109" [ref=e84]
+                        - listitem [ref=e85]:
+                            - link "You must be signed in to star a repository" [ref=e87] [cursor=pointer]:
+                                - /url: /login?return_to=%2Fvercel%2Fgeist-font
+                                - img [ref=e88]
+                                - text: Star
+                                - generic "3484 users starred this repository" [ref=e90]: 3.5k
+            - navigation "Repository" [ref=e91]:
+                - list [ref=e92]:
+                    - listitem [ref=e93]:
+                        - link "Code" [ref=e94] [cursor=pointer]:
+                            - /url: /vercel/geist-font
+                            - img [ref=e95]
+                            - generic [ref=e97]: Code
+                    - listitem [ref=e98]:
+                        - link "Issues 47" [ref=e99] [cursor=pointer]:
+                            - /url: /vercel/geist-font/issues
+                            - img [ref=e100]
+                            - generic [ref=e103]: Issues
+                            - generic "47" [ref=e104]
+                    - listitem [ref=e105]:
+                        - link "Pull requests 4" [ref=e106] [cursor=pointer]:
+                            - /url: /vercel/geist-font/pulls
+                            - img [ref=e107]
+                            - generic [ref=e109]: Pull requests
+                            - generic "4" [ref=e110]
+                    - listitem [ref=e111]:
+                        - link "Actions" [ref=e112] [cursor=pointer]:
+                            - /url: /vercel/geist-font/actions
+                            - img [ref=e113]
+                            - generic [ref=e115]: Actions
+                    - listitem [ref=e116]:
+                        - link "Security and quality" [ref=e117] [cursor=pointer]:
+                            - /url: /vercel/geist-font/security
+                            - img [ref=e118]
+                            - generic [ref=e120]: Security and quality
+                    - listitem [ref=e121]:
+                        - link "Insights" [ref=e122] [cursor=pointer]:
+                            - /url: /vercel/geist-font/pulse
+                            - img [ref=e123]
+                            - generic [ref=e125]: Insights
+        - generic [ref=e138]:
+            - heading "vercel/geist-font" [level=1] [ref=e140]
+            - generic [ref=e141]:
+                - generic [ref=e144]:
+                    - generic [ref=e145]:
+                        - generic [ref=e146]:
+                            - button "main branch" [ref=e148] [cursor=pointer]:
+                                - generic [ref=e149]:
+                                    - generic [ref=e151]:
+                                        - img [ref=e153]
+                                        - generic [ref=e156]: main
+                                    - generic:
+                                        - img
+                            - generic [ref=e157]:
+                                - link "12 Branches" [ref=e158] [cursor=pointer]:
+                                    - /url: /vercel/geist-font/branches
+                                    - generic [ref=e159]:
+                                        - generic:
+                                            - img
+                                        - generic [ref=e161]:
+                                            - strong [ref=e162]: '12'
+                                            - text: Branches
+                                - link "19 Tags" [ref=e163] [cursor=pointer]:
+                                    - /url: /vercel/geist-font/tags
+                                    - generic [ref=e164]:
+                                        - generic:
+                                            - img
+                                        - generic [ref=e166]:
+                                            - strong [ref=e167]: '19'
+                                            - text: Tags
+                        - generic [ref=e168]:
+                            - generic [ref=e172]:
+                                - img [ref=e174]
+                                - combobox "Go to file" [ref=e176]
+                            - button "Code" [ref=e177] [cursor=pointer]:
+                                - generic [ref=e178]:
+                                    - generic:
+                                        - img
+                                    - generic [ref=e179]: Code
+                                    - generic:
+                                        - img
+                    - generic [ref=e180]:
+                        - generic [ref=e181]:
+                            - heading "Folders and files" [level=2] [ref=e182]
+                            - table "Folders and files" [ref=e183]:
+                                - rowgroup:
+                                    - row "Name Last commit message Last commit date":
+                                        - columnheader "Name"
+                                        - columnheader "Last commit message":
+                                            - generic "Last commit message"
+                                        - columnheader "Last commit date":
+                                            - generic "Last commit date"
+                                - rowgroup [ref=e184]:
+                                    - 'row "Latest commit christopherkindl commits by christopherkindl fix(pixel): correct Geist Pixel copyright to reference geist-font (#237) Open commit details success Commit 10dc765 · Jun 1, 20262 weeks ago History 292 Commits" [ref=e185]':
+                                        - 'cell "Latest commit christopherkindl commits by christopherkindl fix(pixel): correct Geist Pixel copyright to reference geist-font (#237) Open commit details success Commit 10dc765 · Jun 1, 20262 weeks ago History 292 Commits" [ref=e186]':
+                                            - generic [ref=e187]:
+                                                - heading "Latest commit" [level=2] [ref=e188]
+                                                - generic [ref=e189]:
+                                                    - generic [ref=e191]:
+                                                        - link "christopherkindl" [ref=e192] [cursor=pointer]:
+                                                            - /url: /christopherkindl
+                                                            - img "christopherkindl" [ref=e193]
+                                                        - link "commits by christopherkindl" [ref=e194] [cursor=pointer]:
+                                                            - /url: /vercel/geist-font/commits?author=christopherkindl
+                                                            - text: christopherkindl
+                                                    - generic [ref=e195]:
+                                                        - generic [ref=e197]:
+                                                            - 'link "fix(pixel): correct Geist Pixel copyright to reference geist-font (" [ref=e198] [cursor=pointer]':
+                                                                - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                                            - link "#237" [ref=e199] [cursor=pointer]:
+                                                                - /url: https://github.com/vercel/geist-font/pull/237
+                                                            - link ")" [ref=e200] [cursor=pointer]:
+                                                                - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                                        - button "Open commit details" [ref=e201] [cursor=pointer]:
+                                                            - img [ref=e202]
+                                                        - button "success" [ref=e204] [cursor=pointer]:
+                                                            - img [ref=e205]
+                                                - generic [ref=e207]:
+                                                    - generic [ref=e209]:
+                                                        - link "Commit 10dc765" [ref=e210] [cursor=pointer]:
+                                                            - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                                            - text: 10dc765
+                                                        - text: ·
+                                                        - generic "Jun 1, 2026, 09:12 PDT" [ref=e211]: Jun 1, 20262 weeks ago
+                                                    - generic [ref=e212]:
+                                                        - heading "History" [level=2] [ref=e213]
+                                                        - link "292 Commits" [ref=e214] [cursor=pointer]:
+                                                            - /url: /vercel/geist-font/commits/main/
+                                                            - generic [ref=e215]:
+                                                                - generic:
+                                                                    - img
+                                                                - generic [ref=e216]: 292 Commits
+                                    - row ".docs/img, (Directory) Add dark mode for hero Oct 17, 20233 years ago" [ref=e217]:
+                                        - cell ".docs/img, (Directory)" [ref=e218]:
+                                            - generic [ref=e219]:
+                                                - img [ref=e220]
+                                                - link ".docs/img, (Directory)" [ref=e225] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/.docs/img
+                                                    - text: .docs/img
+                                        - cell "Add dark mode for hero" [ref=e226]:
+                                            - link "Add dark mode for hero" [ref=e229] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/a7f92e3670a350ee6c8588202ef52c29ab2b3dee
+                                        - cell "Oct 17, 20233 years ago" [ref=e230]:
+                                            - generic [ref=e231]: Oct 17, 20233 years ago
+                                    - 'row ".github, (Directory) fix(release): upload font zip to v$VERSION release tag, not geist@$VE… Jun 1, 20262 weeks ago" [ref=e232]':
+                                        - cell ".github, (Directory)" [ref=e233]:
+                                            - generic [ref=e234]:
+                                                - img [ref=e235]
+                                                - link ".github, (Directory)" [ref=e240] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/.github
+                                                    - text: .github
+                                        - 'cell "fix(release): upload font zip to v$VERSION release tag, not geist@$VE…" [ref=e241]':
+                                            - 'link "fix(release): upload font zip to v$VERSION release tag, not geist@$VE…" [ref=e244] [cursor=pointer]':
+                                                - /url: /vercel/geist-font/commit/ef9c4a55a9129456cfcfb6ce553ef12ba97ed9d5
+                                        - cell "Jun 1, 20262 weeks ago" [ref=e245]:
+                                            - generic [ref=e246]: Jun 1, 20262 weeks ago
+                                    - 'row "documentation, (Directory) update: readme images Feb 5, 20264 months ago" [ref=e247]':
+                                        - cell "documentation, (Directory)" [ref=e248]:
+                                            - generic [ref=e249]:
+                                                - img [ref=e250]
+                                                - link "documentation, (Directory)" [ref=e255] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/documentation
+                                                    - text: documentation
+                                        - 'cell "update: readme images" [ref=e256]':
+                                            - 'link "update: readme images" [ref=e259] [cursor=pointer]':
+                                                - /url: /vercel/geist-font/commit/7a1fb49ce688a78776cbfe3742a855766e357395
+                                        - cell "Feb 5, 20264 months ago" [ref=e260]:
+                                            - generic [ref=e261]: Feb 5, 20264 months ago
+                                    - 'row "fonts, (Directory) fix(pixel): correct Geist Pixel copyright to reference geist-font (#237) Jun 1, 20262 weeks ago" [ref=e262]':
+                                        - cell "fonts, (Directory)" [ref=e263]:
+                                            - generic [ref=e264]:
+                                                - img [ref=e265]
+                                                - link "fonts, (Directory)" [ref=e270] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/fonts
+                                                    - text: fonts
+                                        - 'cell "fix(pixel): correct Geist Pixel copyright to reference geist-font (#237)" [ref=e271]':
+                                            - generic [ref=e273]:
+                                                - 'link "fix(pixel): correct Geist Pixel copyright to reference geist-font (" [ref=e274] [cursor=pointer]':
+                                                    - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                                - link "#237" [ref=e275] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/237
+                                                - link ")" [ref=e276] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                        - cell "Jun 1, 20262 weeks ago" [ref=e277]:
+                                            - generic [ref=e278]: Jun 1, 20262 weeks ago
+                                    - row "out, (Directory) Change to Fontspect QA suite, updated project template repo Jan 30, 20265 months ago" [ref=e279]:
+                                        - cell "out, (Directory)" [ref=e280]:
+                                            - generic [ref=e281]:
+                                                - img [ref=e282]
+                                                - link "out, (Directory)" [ref=e287] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/out
+                                                    - text: out
+                                        - cell "Change to Fontspect QA suite, updated project template repo" [ref=e288]:
+                                            - link "Change to Fontspect QA suite, updated project template repo" [ref=e291] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/b3ee7c466be6ff665180392a877144c2904bd01e
+                                        - cell "Jan 30, 20265 months ago" [ref=e292]:
+                                            - generic [ref=e293]: Jan 30, 20265 months ago
+                                    - row "packages/next, (Directory) Version Packages (#230) Jun 1, 20262 weeks ago" [ref=e294]:
+                                        - cell "packages/next, (Directory)" [ref=e295]:
+                                            - generic [ref=e296]:
+                                                - img [ref=e297]
+                                                - link "packages/next, (Directory)" [ref=e302] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/packages/next
+                                                    - text: packages/next
+                                        - cell "Version Packages (#230)" [ref=e303]:
+                                            - generic [ref=e305]:
+                                                - link "Version Packages (" [ref=e306] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/31b23599ee6f2c1302f5ea553ceb6e870cc7cc9f
+                                                - link "#230" [ref=e307] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/230
+                                                - link ")" [ref=e308] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/31b23599ee6f2c1302f5ea553ceb6e870cc7cc9f
+                                        - cell "Jun 1, 20262 weeks ago" [ref=e309]:
+                                            - generic [ref=e310]: Jun 1, 20262 weeks ago
+                                    - row "scripts, (Directory) Change to Fontspect QA suite, updated project template repo Jan 30, 20265 months ago" [ref=e311]:
+                                        - cell "scripts, (Directory)" [ref=e312]:
+                                            - generic [ref=e313]:
+                                                - img [ref=e314]
+                                                - link "scripts, (Directory)" [ref=e319] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/scripts
+                                                    - text: scripts
+                                        - cell "Change to Fontspect QA suite, updated project template repo" [ref=e320]:
+                                            - link "Change to Fontspect QA suite, updated project template repo" [ref=e323] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/b3ee7c466be6ff665180392a877144c2904bd01e
+                                        - cell "Jan 30, 20265 months ago" [ref=e324]:
+                                            - generic [ref=e325]: Jan 30, 20265 months ago
+                                    - 'row "sources, (Directory) fix(pixel): correct Geist Pixel copyright to reference geist-font (#237) Jun 1, 20262 weeks ago" [ref=e326]':
+                                        - cell "sources, (Directory)" [ref=e327]:
+                                            - generic [ref=e328]:
+                                                - img [ref=e329]
+                                                - link "sources, (Directory)" [ref=e334] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/tree/main/sources
+                                                    - text: sources
+                                        - 'cell "fix(pixel): correct Geist Pixel copyright to reference geist-font (#237)" [ref=e335]':
+                                            - generic [ref=e337]:
+                                                - 'link "fix(pixel): correct Geist Pixel copyright to reference geist-font (" [ref=e338] [cursor=pointer]':
+                                                    - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                                - link "#237" [ref=e339] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/237
+                                                - link ")" [ref=e340] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/10dc7658f13c38a474cde201bb09a4617267545b
+                                        - cell "Jun 1, 20262 weeks ago" [ref=e341]:
+                                            - generic [ref=e342]: Jun 1, 20262 weeks ago
+                                    - row ".gitignore, (File) Geist Pixel on Google Fonts (#229) May 29, 20263 weeks ago" [ref=e343]:
+                                        - cell ".gitignore, (File)" [ref=e344]:
+                                            - generic [ref=e345]:
+                                                - img [ref=e346]
+                                                - link ".gitignore, (File)" [ref=e351] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/.gitignore
+                                                    - text: .gitignore
+                                        - cell "Geist Pixel on Google Fonts (#229)" [ref=e352]:
+                                            - generic [ref=e354]:
+                                                - link "Geist Pixel on Google Fonts (" [ref=e355] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/a4195ae659ce8e6ab33ffef0acaf79978d80b820
+                                                - link "#229" [ref=e356] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/229
+                                                - link ")" [ref=e357] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/a4195ae659ce8e6ab33ffef0acaf79978d80b820
+                                        - cell "May 29, 20263 weeks ago" [ref=e358]:
+                                            - generic [ref=e359]: May 29, 20263 weeks ago
+                                    - 'row ".nvmrc, (File) ci: harden release workflow (#222) May 20, 2026last month" [ref=e360]':
+                                        - cell ".nvmrc, (File)" [ref=e361]:
+                                            - generic [ref=e362]:
+                                                - img [ref=e363]
+                                                - link ".nvmrc, (File)" [ref=e368] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/.nvmrc
+                                                    - text: .nvmrc
+                                        - 'cell "ci: harden release workflow (#222)" [ref=e369]':
+                                            - generic [ref=e371]:
+                                                - 'link "ci: harden release workflow (" [ref=e372] [cursor=pointer]':
+                                                    - /url: /vercel/geist-font/commit/6af2e7fab08b16a0f01eda97c0591d437301636c
+                                                - link "#222" [ref=e373] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/222
+                                                - link ")" [ref=e374] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/6af2e7fab08b16a0f01eda97c0591d437301636c
+                                        - cell "May 20, 2026last month" [ref=e375]:
+                                            - generic [ref=e376]: May 20, 2026last month
+                                    - row "AUTHORS.txt, (File) Vercel added to Authors Oct 1, 20242 years ago" [ref=e377]:
+                                        - cell "AUTHORS.txt, (File)" [ref=e378]:
+                                            - generic [ref=e379]:
+                                                - img [ref=e380]
+                                                - link "AUTHORS.txt, (File)" [ref=e385] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/AUTHORS.txt
+                                                    - text: AUTHORS.txt
+                                        - cell "Vercel added to Authors" [ref=e386]:
+                                            - link "Vercel added to Authors" [ref=e389] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/b5b604de8d9ca75a88339f1025d81a9e6b66824a
+                                        - cell "Oct 1, 20242 years ago" [ref=e390]:
+                                            - generic [ref=e391]: Oct 1, 20242 years ago
+                                    - 'row "CONTRIBUTING.md, (File) ci: harden release workflow (#222) May 20, 2026last month" [ref=e392]':
+                                        - cell "CONTRIBUTING.md, (File)" [ref=e393]:
+                                            - generic [ref=e394]:
+                                                - img [ref=e395]
+                                                - link "CONTRIBUTING.md, (File)" [ref=e400] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/CONTRIBUTING.md
+                                                    - text: CONTRIBUTING.md
+                                        - 'cell "ci: harden release workflow (#222)" [ref=e401]':
+                                            - generic [ref=e403]:
+                                                - 'link "ci: harden release workflow (" [ref=e404] [cursor=pointer]':
+                                                    - /url: /vercel/geist-font/commit/6af2e7fab08b16a0f01eda97c0591d437301636c
+                                                - link "#222" [ref=e405] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/222
+                                                - link ")" [ref=e406] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/6af2e7fab08b16a0f01eda97c0591d437301636c
+                                        - cell "May 20, 2026last month" [ref=e407]:
+                                            - generic [ref=e408]: May 20, 2026last month
+                                    - row "CONTRIBUTORS.txt, (File) Authors and Contributors files updated Oct 1, 20242 years ago" [ref=e409]:
+                                        - cell "CONTRIBUTORS.txt, (File)" [ref=e410]:
+                                            - generic [ref=e411]:
+                                                - img [ref=e412]
+                                                - link "CONTRIBUTORS.txt, (File)" [ref=e417] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/CONTRIBUTORS.txt
+                                                    - text: CONTRIBUTORS.txt
+                                        - cell "Authors and Contributors files updated" [ref=e418]:
+                                            - link "Authors and Contributors files updated" [ref=e421] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/80ac3cbcd30a42a53302cc36422cef0acf8aabac
+                                        - cell "Oct 1, 20242 years ago" [ref=e422]:
+                                            - generic [ref=e423]: Oct 1, 20242 years ago
+                                    - 'row "LICENSE.txt, (File) license: follow template Jan 18, 20242 years ago" [ref=e424]':
+                                        - cell "LICENSE.txt, (File)" [ref=e425]:
+                                            - generic [ref=e426]:
+                                                - img [ref=e427]
+                                                - link "LICENSE.txt, (File)" [ref=e432] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/LICENSE.txt
+                                                    - text: LICENSE.txt
+                                        - 'cell "license: follow template" [ref=e433]':
+                                            - 'link "license: follow template" [ref=e436] [cursor=pointer]':
+                                                - /url: /vercel/geist-font/commit/1dbd7295a29e207318d07fae8f4e2623f9ae6699
+                                        - cell "Jan 18, 20242 years ago" [ref=e437]:
+                                            - generic [ref=e438]: Jan 18, 20242 years ago
+                                    - row "Makefile, (File) Geist Pixel on Google Fonts (#229) May 29, 20263 weeks ago" [ref=e439]:
+                                        - cell "Makefile, (File)" [ref=e440]:
+                                            - generic [ref=e441]:
+                                                - img [ref=e442]
+                                                - link "Makefile, (File)" [ref=e447] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/Makefile
+                                                    - text: Makefile
+                                        - cell "Geist Pixel on Google Fonts (#229)" [ref=e448]:
+                                            - generic [ref=e450]:
+                                                - link "Geist Pixel on Google Fonts (" [ref=e451] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/a4195ae659ce8e6ab33ffef0acaf79978d80b820
+                                                - link "#229" [ref=e452] [cursor=pointer]:
+                                                    - /url: https://github.com/vercel/geist-font/pull/229
+                                                - link ")" [ref=e453] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/commit/a4195ae659ce8e6ab33ffef0acaf79978d80b820
+                                        - cell "May 29, 20263 weeks ago" [ref=e454]:
+                                            - generic [ref=e455]: May 29, 20263 weeks ago
+                                    - row "OFL.txt, (File) update OFL.txt Apr 2, 20263 months ago" [ref=e456]:
+                                        - cell "OFL.txt, (File)" [ref=e457]:
+                                            - generic [ref=e458]:
+                                                - img [ref=e459]
+                                                - link "OFL.txt, (File)" [ref=e464] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/OFL.txt
+                                                    - text: OFL.txt
+                                        - cell "update OFL.txt" [ref=e465]:
+                                            - link "update OFL.txt" [ref=e468] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/c40c1aec7e72b9ebdce65a4fccd03cb3950a359b
+                                        - cell "Apr 2, 20263 months ago" [ref=e469]:
+                                            - generic [ref=e470]: Apr 2, 20263 months ago
+                                    - row "build.stamp, (File) GF Compliance (includes breakin changes, new repo structure Sep 10, 20242 years ago" [ref=e471]:
+                                        - cell "build.stamp, (File)" [ref=e472]:
+                                            - generic [ref=e473]:
+                                                - img [ref=e474]
+                                                - link "build.stamp, (File)" [ref=e479] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/build.stamp
+                                                    - text: build.stamp
+                                        - cell "GF Compliance (includes breakin changes, new repo structure" [ref=e480]:
+                                            - link "GF Compliance (includes breakin changes, new repo structure" [ref=e483] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/30f2926382ea6ba57955f2829d719940fef5f292
+                                        - cell "Sep 10, 20242 years ago" [ref=e484]:
+                                            - generic [ref=e485]: Sep 10, 20242 years ago
+                                    - row "readme.md, (File) Fix punctuation in README instructions link Feb 6, 20264 months ago" [ref=e486]:
+                                        - cell "readme.md, (File)" [ref=e487]:
+                                            - generic [ref=e488]:
+                                                - img [ref=e489]
+                                                - link "readme.md, (File)" [ref=e494] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/readme.md
+                                                    - text: readme.md
+                                        - cell "Fix punctuation in README instructions link" [ref=e495]:
+                                            - link "Fix punctuation in README instructions link" [ref=e498] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/f0086af14512869190c0533f3ed4e5cb3e87fd0b
+                                        - cell "Feb 6, 20264 months ago" [ref=e499]:
+                                            - generic [ref=e500]: Feb 6, 20264 months ago
+                                    - row "renovate.json, (File) GF Compliance (includes breakin changes, new repo structure Sep 10, 20242 years ago" [ref=e501]:
+                                        - cell "renovate.json, (File)" [ref=e502]:
+                                            - generic [ref=e503]:
+                                                - img [ref=e504]
+                                                - link "renovate.json, (File)" [ref=e509] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/renovate.json
+                                                    - text: renovate.json
+                                        - cell "GF Compliance (includes breakin changes, new repo structure" [ref=e510]:
+                                            - link "GF Compliance (includes breakin changes, new repo structure" [ref=e513] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/30f2926382ea6ba57955f2829d719940fef5f292
+                                        - cell "Sep 10, 20242 years ago" [ref=e514]:
+                                            - generic [ref=e515]: Sep 10, 20242 years ago
+                                    - row "requirements-test.in, (File) updated FB May 27, 2025last year" [ref=e516]:
+                                        - cell "requirements-test.in, (File)" [ref=e517]:
+                                            - generic [ref=e518]:
+                                                - img [ref=e519]
+                                                - link "requirements-test.in, (File)" [ref=e524] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/requirements-test.in
+                                                    - text: requirements-test.in
+                                        - cell "updated FB" [ref=e525]:
+                                            - link "updated FB" [ref=e528] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/be9841699683c1f891314d25fc9302e0083031a3
+                                        - cell "May 27, 2025last year" [ref=e529]:
+                                            - generic [ref=e530]: May 27, 2025last year
+                                    - row "requirements-test.txt, (File) Update requirements Sep 25, 20259 months ago" [ref=e531]:
+                                        - cell "requirements-test.txt, (File)" [ref=e532]:
+                                            - generic [ref=e533]:
+                                                - img [ref=e534]
+                                                - link "requirements-test.txt, (File)" [ref=e539] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/requirements-test.txt
+                                                    - text: requirements-test.txt
+                                        - cell "Update requirements" [ref=e540]:
+                                            - link "Update requirements" [ref=e543] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/99003bce4cb025c22b4ad1bb979c3db7f391cda5
+                                        - cell "Sep 25, 20259 months ago" [ref=e544]:
+                                            - generic [ref=e545]: Sep 25, 20259 months ago
+                                    - row "requirements.in, (File) GF Compliance (includes breakin changes, new repo structure Sep 10, 20242 years ago" [ref=e546]:
+                                        - cell "requirements.in, (File)" [ref=e547]:
+                                            - generic [ref=e548]:
+                                                - img [ref=e549]
+                                                - link "requirements.in, (File)" [ref=e554] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/requirements.in
+                                                    - text: requirements.in
+                                        - cell "GF Compliance (includes breakin changes, new repo structure" [ref=e555]:
+                                            - link "GF Compliance (includes breakin changes, new repo structure" [ref=e558] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/30f2926382ea6ba57955f2829d719940fef5f292
+                                        - cell "Sep 10, 20242 years ago" [ref=e559]:
+                                            - generic [ref=e560]: Sep 10, 20242 years ago
+                                    - row "requirements.txt, (File) Update requirements Jan 30, 20265 months ago" [ref=e561]:
+                                        - cell "requirements.txt, (File)" [ref=e562]:
+                                            - generic [ref=e563]:
+                                                - img [ref=e564]
+                                                - link "requirements.txt, (File)" [ref=e569] [cursor=pointer]:
+                                                    - /url: /vercel/geist-font/blob/main/requirements.txt
+                                                    - text: requirements.txt
+                                        - cell "Update requirements" [ref=e570]:
+                                            - link "Update requirements" [ref=e573] [cursor=pointer]:
+                                                - /url: /vercel/geist-font/commit/88b20f1c312aeb47de505617e8e983088bbc101e
+                                        - cell "Jan 30, 20265 months ago" [ref=e574]:
+                                            - generic [ref=e575]: Jan 30, 20265 months ago
+                        - generic [ref=e577]:
+                            - generic [ref=e578]:
+                                - heading "Repository files navigation" [level=2] [ref=e579]
+                                - navigation "Repository files" [ref=e580]:
+                                    - list [ref=e581]:
+                                        - listitem [ref=e582]:
+                                            - link "README" [ref=e583] [cursor=pointer]:
+                                                - /url: '#'
+                                                - img [ref=e585]
+                                                - generic [ref=e587]: README
+                                        - listitem [ref=e588]:
+                                            - link "Contributing" [ref=e589] [cursor=pointer]:
+                                                - /url: '#'
+                                                - img [ref=e591]
+                                                - generic [ref=e593]: Contributing
+                                        - listitem [ref=e594]:
+                                            - link "OFL-1.1 license" [ref=e595] [cursor=pointer]:
+                                                - /url: '#'
+                                                - img [ref=e597]
+                                                - generic [ref=e599]: OFL-1.1 license
+                                        - listitem [ref=e600]:
+                                            - link "OFL-1.1 license" [ref=e601] [cursor=pointer]:
+                                                - /url: '#'
+                                                - img [ref=e603]
+                                                - generic [ref=e605]: OFL-1.1 license
+                                        - listitem [ref=e606]:
+                                            - link "Security" [ref=e607] [cursor=pointer]:
+                                                - /url: '#'
+                                                - img [ref=e609]
+                                                - generic [ref=e611]: Security
+                                - button "Outline" [ref=e612] [cursor=pointer]:
+                                    - img [ref=e613]
+                            - article [ref=e616]:
+                                - generic [ref=e617]:
+                                    - heading "Geist" [level=1] [ref=e618]
+                                    - 'link "Permalink: Geist" [ref=e619] [cursor=pointer]':
+                                        - /url: '#geist'
+                                        - img [ref=e620]
+                                - paragraph [ref=e622]:
+                                    - 'link "The word \"Geist\" written as ASCII art using triangular patterns. Below are three font specimens: Sans - A modern sans-serif typeface showing the alphabet in uppercase and lowercase, numbers, and symbols including punctuation and special characters. Mono - A monospaced typeface displaying the same character set with fixed-width spacing ideal for coding. Pixel - A pixelated bitmap-style typeface showing the complete alphabet, numbers, and symbols with a retro digital aesthetic. At the bottom are five icons representing different geometric patterns or grid styles." [ref=e623] [cursor=pointer]':
+                                        - /url: /vercel/geist-font/blob/main/documentation/img/geist-banner--light.png#gh-light-mode-only
+                                        - 'img "The word \"Geist\" written as ASCII art using triangular patterns. Below are three font specimens: Sans - A modern sans-serif typeface showing the alphabet in uppercase and lowercase, numbers, and symbols including punctuation and special characters. Mono - A monospaced typeface displaying the same character set with fixed-width spacing ideal for coding. Pixel - A pixelated bitmap-style typeface showing the complete alphabet, numbers, and symbols with a retro digital aesthetic. At the bottom are five icons representing different geometric patterns or grid styles." [ref=e624]'
+                                - generic [ref=e625]:
+                                    - heading "Geist Sans, Geist Mono & Geist Pixel" [level=1] [ref=e626]
+                                    - 'link "Permalink: Geist Sans, Geist Mono & Geist Pixel" [ref=e627] [cursor=pointer]':
+                                        - /url: '#geist-sans-geist-mono--geist-pixel'
+                                        - img [ref=e628]
+                                - paragraph [ref=e630]:
+                                    - text: Geist is a new font family for Vercel, created by
+                                    - link "Vercel" [ref=e631] [cursor=pointer]:
+                                        - /url: https://vercel.com/design
+                                    - text: in collaboration with
+                                    - link "Basement Studio" [ref=e632] [cursor=pointer]:
+                                        - /url: https://basement.studio/
+                                    - text: and
+                                    - link "Andrés Briganti" [ref=e633] [cursor=pointer]:
+                                        - /url: https://briganti.works
+                                    - text: .
+                                - paragraph [ref=e634]:
+                                    - text: Geist Sans is a sans-serif typeface designed for legibility and simplicity. It is a modern, geometric typeface that is based on the principles of
+                                    - link "classic Swiss typography" [ref=e635] [cursor=pointer]:
+                                        - /url: https://en.wikipedia.org/wiki/International_Typographic_Style
+                                    - text: . It is designed to be used in headlines, logos, posters, and other large display sizes.
+                                - paragraph [ref=e636]: Geist Mono is a monospaced typeface that has been crafted to be the perfect partner to Geist Sans. It is designed to be used in code editors, diagrams, terminals, and other textbased interfaces where code is represented.
+                                - paragraph [ref=e637]: Geist Pixel is a pixel typeface designed to complement the Geist font family, built on the same principles of minimalism, precision, and simplicity that define the universe. Conceived as a display font, it pays homage to the pixel font genre while expressing the brand’s future-forward, visionary spirit, and is available in five stylistic variants for a wide range of applications.
+                                - generic [ref=e638]:
+                                    - heading "Installation" [level=3] [ref=e639]
+                                    - 'link "Permalink: Installation" [ref=e640] [cursor=pointer]':
+                                        - /url: '#installation'
+                                        - img [ref=e641]
+                                - paragraph [ref=e643]:
+                                    - text: Download the latest release from the
+                                    - link "releases page" [ref=e644] [cursor=pointer]:
+                                        - /url: https://github.com/vercel/geist-font/releases/latest
+                                    - text: and install the fonts on your system.
+                                - paragraph [ref=e645]:
+                                    - strong [ref=e646]: 'Via npm package:'
+                                - generic [ref=e647]:
+                                    - code [ref=e649]: npm i geist
+                                    - button "Copy code to clipboard" [ref=e651] [cursor=pointer]:
+                                        - img [ref=e652]
+                                - paragraph [ref=e655]:
+                                    - text: View the npm README for full instructions
+                                    - link "here" [ref=e656] [cursor=pointer]:
+                                        - /url: https://www.npmjs.com/package/geist
+                                    - text: .
+                                - generic [ref=e657]:
+                                    - heading "Inspiration" [level=3] [ref=e658]
+                                    - 'link "Permalink: Inspiration" [ref=e659] [cursor=pointer]':
+                                        - /url: '#inspiration'
+                                        - img [ref=e660]
+                                - paragraph [ref=e662]:
+                                    - text: 'Geist has been influenced and inspired by the following typefaces:'
+                                    - link "Inter" [ref=e663] [cursor=pointer]:
+                                        - /url: https://rsms.me/inter/
+                                    - text: ','
+                                    - link "Univers" [ref=e664] [cursor=pointer]:
+                                        - /url: https://www.linotype.com/1212814/univers-family.html
+                                    - text: ','
+                                    - link "SF Mono" [ref=e665] [cursor=pointer]:
+                                        - /url: https://developer.apple.com/fonts/
+                                    - text: ','
+                                    - link "SF Pro" [ref=e666] [cursor=pointer]:
+                                        - /url: https://developer.apple.com/fonts/
+                                    - text: ','
+                                    - link "Suisse International" [ref=e667] [cursor=pointer]:
+                                        - /url: https://www.swisstypefaces.com/fonts/suisse/
+                                    - text: ','
+                                    - link "ABC Diatype Mono" [ref=e668] [cursor=pointer]:
+                                        - /url: https://abcdinamo.com/typefaces/diatype
+                                    - text: ', and'
+                                    - link "ABC Diatype" [ref=e669] [cursor=pointer]:
+                                        - /url: https://abcdinamo.com/typefaces/diatype
+                                    - text: . We thank the creators of these typefaces for their craft.
+                                - generic [ref=e670]:
+                                    - heading "Building" [level=2] [ref=e671]
+                                    - 'link "Permalink: Building" [ref=e672] [cursor=pointer]':
+                                        - /url: '#building'
+                                        - img [ref=e673]
+                                - paragraph [ref=e675]: Fonts are built automatically by GitHub Actions - take a look in the "Actions" tab for the latest build.
+                                - paragraph [ref=e676]: 'If you want to build fonts manually on your own computer:'
+                                - list [ref=e677]:
+                                    - listitem [ref=e678]:
+                                        - code [ref=e679]: make build
+                                        - text: will produce font files.
+                                    - listitem [ref=e680]:
+                                        - code [ref=e681]: make test
+                                        - text: will run
+                                        - link "Fontspector" [ref=e682] [cursor=pointer]:
+                                            - /url: https://github.com/fonttools/fontspector
+                                        - text: "'s quality assurance tests."
+                                    - listitem [ref=e683]:
+                                        - code [ref=e684]: make proof
+                                        - text: will generate HTML proof files.
+                                - paragraph [ref=e685]:
+                                    - text: The proof files and QA tests are also available automatically via GitHub Actions - look at
+                                    - link "https://vercel.github.io/geist-font/" [ref=e686] [cursor=pointer]:
+                                        - /url: https://vercel.github.io/geist-font/
+                                    - text: .
+                                - generic [ref=e687]:
+                                    - heading "License" [level=2] [ref=e688]
+                                    - 'link "Permalink: License" [ref=e689] [cursor=pointer]':
+                                        - /url: '#license'
+                                        - img [ref=e690]
+                                - paragraph [ref=e692]:
+                                    - text: This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at
+                                    - link "https://scripts.sil.org/OFL" [ref=e693] [cursor=pointer]:
+                                        - /url: https://scripts.sil.org/OFL
+                                - generic [ref=e694]:
+                                    - heading "Repository Layout" [level=2] [ref=e695]
+                                    - 'link "Permalink: Repository Layout" [ref=e696] [cursor=pointer]':
+                                        - /url: '#repository-layout'
+                                        - img [ref=e697]
+                                - paragraph [ref=e699]:
+                                    - text: This font repository structure is inspired by
+                                    - link "Unified Font Repository v0.3" [ref=e700] [cursor=pointer]:
+                                        - /url: https://github.com/unified-font-repository/Unified-Font-Repository
+                                    - text: ', modified for the Google Fonts workflow.'
+                - generic [ref=e704]:
+                    - generic [ref=e707]:
+                        - heading "About" [level=2] [ref=e708]
+                        - generic [ref=e709]:
+                            - img [ref=e710]
+                            - link "vercel.com/font" [ref=e713] [cursor=pointer]:
+                                - /url: https://vercel.com/font
+                        - heading "Topics" [level=3] [ref=e714]
+                        - generic [ref=e716]:
+                            - link "font" [ref=e717] [cursor=pointer]:
+                                - /url: /topics/font
+                            - link "variable-fonts" [ref=e718] [cursor=pointer]:
+                                - /url: /topics/variable-fonts
+                        - heading "Resources" [level=3] [ref=e719]
+                        - link "Readme" [ref=e721] [cursor=pointer]:
+                            - /url: '#readme-ov-file'
+                            - img [ref=e722]
+                            - text: Readme
+                        - heading "License" [level=3] [ref=e724]
+                        - group [ref=e725]:
+                            - button "OFL-1.1, OFL-1.1 licenses found" [ref=e726] [cursor=pointer]:
+                                - img [ref=e727]
+                                - text: OFL-1.1, OFL-1.1 licenses found
+                        - heading "Contributing" [level=3] [ref=e729]
+                        - link "Contributing" [ref=e731] [cursor=pointer]:
+                            - /url: '#contributing-ov-file'
+                            - img [ref=e732]
+                            - text: Contributing
+                        - heading "Security policy" [level=3] [ref=e734]
+                        - link "Security policy" [ref=e736] [cursor=pointer]:
+                            - /url: '#security-ov-file'
+                            - img [ref=e737]
+                            - text: Security policy
+                        - link "Activity" [ref=e740] [cursor=pointer]:
+                            - /url: /vercel/geist-font/activity
+                            - img [ref=e741]
+                            - text: Activity
+                        - link "Custom properties" [ref=e744] [cursor=pointer]:
+                            - /url: /vercel/geist-font/custom-properties
+                            - img [ref=e745]
+                            - text: Custom properties
+                        - heading "Stars" [level=3] [ref=e747]
+                        - link "3.5k stars" [ref=e749] [cursor=pointer]:
+                            - /url: /vercel/geist-font/stargazers
+                            - img [ref=e750]
+                            - strong [ref=e752]: 3.5k
+                            - text: stars
+                        - heading "Watchers" [level=3] [ref=e753]
+                        - link "16 watching" [ref=e755] [cursor=pointer]:
+                            - /url: /vercel/geist-font/watchers
+                            - img [ref=e756]
+                            - strong [ref=e758]: '16'
+                            - text: watching
+                        - heading "Forks" [level=3] [ref=e759]
+                        - link "109 forks" [ref=e761] [cursor=pointer]:
+                            - /url: /vercel/geist-font/forks
+                            - img [ref=e762]
+                            - strong [ref=e764]: '109'
+                            - text: forks
+                        - link "Report repository" [ref=e766] [cursor=pointer]:
+                            - /url: /contact/report-content?content_url=https%3A%2F%2Fgithub.com%2Fvercel%2Fgeist-font&report=vercel+%28user%29
+                    - generic [ref=e768]:
+                        - heading "Releases 18" [level=2] [ref=e769]:
+                            - link "Releases 18" [ref=e770] [cursor=pointer]:
+                                - /url: /vercel/geist-font/releases
+                                - text: Releases
+                                - generic "18" [ref=e771]
+                        - link "v1.7.2 Latest Jun 1, 20262 weeks ago" [ref=e772] [cursor=pointer]:
+                            - /url: /vercel/geist-font/releases/tag/v1.7.2
+                            - img [ref=e773]
+                            - generic [ref=e775]:
+                                - generic [ref=e776]:
+                                    - generic [ref=e777]: v1.7.2
+                                    - 'generic "Label: Latest" [ref=e778]': Latest
+                                - generic [ref=e779]: Jun 1, 20262 weeks ago
+                        - link "+ 17 releases" [ref=e781] [cursor=pointer]:
+                            - /url: /vercel/geist-font/releases
+                    - generic [ref=e783]:
+                        - heading "Packages" [level=2] [ref=e784]:
+                            - link "Packages" [ref=e785] [cursor=pointer]:
+                                - /url: /orgs/vercel/packages?repo_name=geist-font
+                        - generic [ref=e786]: No packages published
+                    - generic [ref=e788]:
+                        - heading "Contributors 25" [level=2] [ref=e789]:
+                            - link "Contributors 25" [ref=e790] [cursor=pointer]:
+                                - /url: /vercel/geist-font/graphs/contributors
+                                - text: Contributors
+                                - generic "25" [ref=e791]
+                        - list [ref=e792]:
+                            - listitem [ref=e793]:
+                                - link "@guidoferreyra" [ref=e794] [cursor=pointer]:
+                                    - /url: https://github.com/guidoferreyra
+                                    - img "@guidoferreyra" [ref=e795]
+                            - listitem [ref=e796]:
+                                - link "@JohnPhamous" [ref=e797] [cursor=pointer]:
+                                    - /url: https://github.com/JohnPhamous
+                                    - img "@JohnPhamous" [ref=e798]
+                            - listitem [ref=e799]:
+                                - link "@ZeeJab" [ref=e800] [cursor=pointer]:
+                                    - /url: https://github.com/ZeeJab
+                                    - img "@ZeeJab" [ref=e801]
+                            - listitem [ref=e802]:
+                                - link "@christopherkindl" [ref=e803] [cursor=pointer]:
+                                    - /url: https://github.com/christopherkindl
+                                    - img "@christopherkindl" [ref=e804]
+                            - listitem [ref=e805]:
+                                - link "@zacowan" [ref=e806] [cursor=pointer]:
+                                    - /url: https://github.com/zacowan
+                                    - img "@zacowan" [ref=e807]
+                            - listitem [ref=e808]:
+                                - link "@emmamarichal" [ref=e809] [cursor=pointer]:
+                                    - /url: https://github.com/emmamarichal
+                                    - img "@emmamarichal" [ref=e810]
+                            - listitem [ref=e811]:
+                                - link "@almonk" [ref=e812] [cursor=pointer]:
+                                    - /url: https://github.com/almonk
+                                    - img "@almonk" [ref=e813]
+                            - listitem [ref=e814]:
+                                - link "@skullface" [ref=e815] [cursor=pointer]:
+                                    - /url: https://github.com/skullface
+                                    - img "@skullface" [ref=e816]
+                            - listitem [ref=e817]:
+                                - link "@ypessoa" [ref=e818] [cursor=pointer]:
+                                    - /url: https://github.com/ypessoa
+                                    - img "@ypessoa" [ref=e819]
+                            - listitem [ref=e820]:
+                                - link "@github-actions[bot]" [ref=e821] [cursor=pointer]:
+                                    - /url: https://github.com/apps/github-actions
+                                    - img "@github-actions[bot]" [ref=e822]
+                            - listitem [ref=e823]:
+                                - link "@vv-monsalve" [ref=e824] [cursor=pointer]:
+                                    - /url: https://github.com/vv-monsalve
+                                    - img "@vv-monsalve" [ref=e825]
+                            - listitem [ref=e826]:
+                                - link "@bkonkle" [ref=e827] [cursor=pointer]:
+                                    - /url: https://github.com/bkonkle
+                                    - img "@bkonkle" [ref=e828]
+                            - listitem [ref=e829]:
+                                - link "@jamesvclements" [ref=e830] [cursor=pointer]:
+                                    - /url: https://github.com/jamesvclements
+                                    - img "@jamesvclements" [ref=e831]
+                            - listitem [ref=e832]:
+                                - link "@satelllte" [ref=e833] [cursor=pointer]:
+                                    - /url: https://github.com/satelllte
+                                    - img "@satelllte" [ref=e834]
+                        - link "+ 11 contributors" [ref=e836] [cursor=pointer]:
+                            - /url: /vercel/geist-font/graphs/contributors
+                    - generic [ref=e838]:
+                        - heading "Languages" [level=2] [ref=e839]
+                        - list [ref=e844]:
+                            - listitem [ref=e845]:
+                                - link "HTML 99.5%" [ref=e846] [cursor=pointer]:
+                                    - /url: /vercel/geist-font/search?l=html
+                                    - img [ref=e847]
+                                    - generic [ref=e849]: HTML
+                                    - generic [ref=e850]: 99.5%
+                            - listitem [ref=e851]:
+                                - generic [ref=e852]:
+                                    - img [ref=e853]
+                                    - generic [ref=e855]: Other
+                                    - generic [ref=e856]: 0.5%
+    - contentinfo [ref=e858]:
+        - heading "Footer" [level=2] [ref=e859]
+        - generic [ref=e860]:
+            - generic [ref=e861]:
+                - link "GitHub Homepage" [ref=e862] [cursor=pointer]:
+                    - /url: https://github.com
+                    - img [ref=e863]
+                - generic [ref=e865]: © 2026 GitHub, Inc.
+            - navigation "Footer" [ref=e866]:
+                - heading "Footer navigation" [level=3] [ref=e867]
+                - list "Footer navigation" [ref=e868]:
+                    - listitem [ref=e869]:
+                        - link "Terms" [ref=e870] [cursor=pointer]:
+                            - /url: https://docs.github.com/site-policy/github-terms/github-terms-of-service
+                    - listitem [ref=e871]:
+                        - link "Privacy" [ref=e872] [cursor=pointer]:
+                            - /url: https://docs.github.com/site-policy/privacy-policies/github-privacy-statement
+                    - listitem [ref=e873]:
+                        - link "Security" [ref=e874] [cursor=pointer]:
+                            - /url: https://github.com/security
+                    - listitem [ref=e875]:
+                        - link "Status" [ref=e876] [cursor=pointer]:
+                            - /url: https://www.githubstatus.com/
+                    - listitem [ref=e877]:
+                        - link "Community" [ref=e878] [cursor=pointer]:
+                            - /url: https://github.community/
+                    - listitem [ref=e879]:
+                        - link "Docs" [ref=e880] [cursor=pointer]:
+                            - /url: https://docs.github.com/
+                    - listitem [ref=e881]:
+                        - link "Contact" [ref=e882] [cursor=pointer]:
+                            - /url: https://support.github.com?tags=dotcom-footer
+                    - listitem [ref=e883]:
+                        - button "Manage cookies" [ref=e885] [cursor=pointer]
+                    - listitem [ref=e886]:
+                        - button "Do not share my personal information" [ref=e888] [cursor=pointer]

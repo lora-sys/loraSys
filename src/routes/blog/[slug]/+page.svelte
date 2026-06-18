@@ -111,7 +111,7 @@
 				<!-- Back button -->
 				<a
 					href={`${base}/blog`}
-					class="group mb-8 inline-flex items-center gap-1 font-pixel-square font-mono text-sm text-muted-foreground transition-colors hover:text-term-green"
+					class="group mb-8 inline-flex items-center gap-1 font-mono font-pixel-square text-sm text-muted-foreground transition-colors hover:text-term-green"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
