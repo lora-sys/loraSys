@@ -76,7 +76,7 @@
 	<section id="about">
 		<BlurFade delay={BLUR_FADE_DELAY}>
 			<div
-				class="mb-4 inline-block rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono text-xs text-emerald-400"
+				class="mb-4 inline-block rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel-square font-mono text-xs text-emerald-400"
 			>
 				<span class="text-zinc-500">~/</span>whoami
 			</div>
@@ -94,7 +94,7 @@
 	<section id="work">
 		<div class="flex min-h-0 flex-col gap-y-3">
 			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="mb-4 inline-flex items-center gap-2 font-mono text-xs">
+				<div class="mb-4 inline-flex items-center gap-2 font-pixel-square font-mono text-xs">
 					<span class="text-emerald-400">$</span>
 					<span class="text-zinc-400">ls -la /experience/</span>
 				</div>
@@ -123,7 +123,7 @@
 	<section id="education">
 		<div class="flex min-h-0 flex-col gap-y-3">
 			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="mb-4 inline-flex items-center gap-2 font-mono text-xs">
+				<div class="mb-4 inline-flex items-center gap-2 font-pixel-square font-mono text-xs">
 					<span class="text-emerald-400">$</span>
 					<span class="text-zinc-400">cat /education/*.json</span>
 				</div>
@@ -152,7 +152,7 @@
 				<div class="flex flex-col items-center justify-center space-y-6 text-center">
 					<div class="space-y-4">
 						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono text-xs text-emerald-400"
+							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel-grid font-mono text-xs text-emerald-400"
 						>
 							<span class="text-zinc-500">~/</span>skills --list
 						</div>
@@ -193,7 +193,7 @@
 				<div class="flex flex-col items-center justify-center space-y-6 text-center">
 					<div class="space-y-4">
 						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono text-xs text-emerald-400"
+							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel-grid font-mono text-xs text-emerald-400"
 						>
 							<span class="text-zinc-500">~/</span>projects
 						</div>
@@ -232,7 +232,7 @@
 				<div class="flex flex-col items-center justify-center space-y-4 text-center">
 					<div class="space-y-2">
 						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono text-xs text-emerald-400"
+							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel-circle font-mono text-xs text-emerald-400"
 						>
 							<span class="text-zinc-500">~/</span>hackathons.log
 						</div>
@@ -271,7 +271,7 @@
 	<!-- ==================== ANIME (isolated) ==================== -->
 	<section id="anime" class="anime-isolated">
 		<BlurFade delay={BLUR_FADE_DELAY}>
-			<div class="mb-6 inline-flex items-center gap-2 font-mono text-xs">
+			<div class="mb-6 inline-flex items-center gap-2 font-pixel-circle font-mono text-xs">
 				<span class="text-emerald-400">$</span>
 				<span class="text-zinc-400">cd ~/favorites/anime</span>
 			</div>
@@ -282,7 +282,7 @@
 	<!-- ==================== FAVORITES ==================== -->
 	<section id="favorites">
 		<BlurFade delay={BLUR_FADE_DELAY}>
-			<div class="mb-6 inline-flex items-center gap-2 font-mono text-xs">
+			<div class="mb-6 inline-flex items-center gap-2 font-pixel-triangle font-mono text-xs">
 				<span class="text-emerald-400">$</span>
 				<span class="text-zinc-400">cat ~/favorites/*.json</span>
 			</div>
@@ -296,7 +296,7 @@
 			<BlurFade delay={BLUR_FADE_DELAY * 2}>
 				<div class="space-y-6">
 					<div
-						class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono text-xs text-emerald-400"
+						class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel-triangle font-mono text-xs text-emerald-400"
 					>
 						<span class="text-zinc-500">~/</span>contact.sh
 					</div>
@@ -329,7 +329,7 @@
 		<RetroGrid class="opacity-20" />
 		<div class="relative z-10 flex flex-col items-center gap-6">
 			<AnimatedGradientText speed={1.5} colorFrom="#22c55e" colorTo="#9c40ff">
-				<span class="font-heading text-2xl font-bold tracking-tight sm:text-3xl">
+				<span class="font-pixel-circle font-heading text-2xl font-bold tracking-tight sm:text-3xl">
 					{DATA.name}
 				</span>
 			</AnimatedGradientText>

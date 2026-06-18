@@ -2,6 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Geist Pixel fonts — display typeface by Vercel (OFL license) */
+@font-face {
+	font-family: 'GeistPixelSquare';
+	src: url('/fonts/geist-pixel/GeistPixel-Square.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'GeistPixelGrid';
+	src: url('/fonts/geist-pixel/GeistPixel-Grid.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'GeistPixelCircle';
+	src: url('/fonts/geist-pixel/GeistPixel-Circle.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'GeistPixelTriangle';
+	src: url('/fonts/geist-pixel/GeistPixel-Triangle.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'GeistPixelLine';
+	src: url('/fonts/geist-pixel/GeistPixel-Line.woff2') format('woff2');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 98%;

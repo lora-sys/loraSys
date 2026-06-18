@@ -111,7 +111,7 @@
 				<!-- Back button -->
 				<a
 					href={`${base}/blog`}
-					class="group mb-8 inline-flex items-center gap-1 font-mono text-sm text-muted-foreground transition-colors hover:text-term-green"
+					class="group mb-8 inline-flex items-center gap-1 font-pixel-square font-mono text-sm text-muted-foreground transition-colors hover:text-term-green"
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +222,7 @@
 						href={`${base}/blog`}
 						class="flex items-center gap-1 transition-colors hover:text-term-green"
 					>
-						<span class="text-term-green">$</span> cd ../blog
+						<span class="text-term-green">$</span> <span class="font-pixel-square">cd ../blog</span>
 					</a>
 					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
@@ -263,9 +263,9 @@
 									style="padding-left: {(heading.level - 1) * 0.625 + 0.5}rem;"
 								>
 									{#if heading.level > 1}
-										<span class="text-term-green/40">{'├'}</span>
+										<span class="font-pixel-line text-term-green/40">{'├'}</span>
 									{:else}
-										<span class="text-term-green/60">{'└'}</span>
+										<span class="font-pixel-line text-term-green/60">{'└'}</span>
 									{/if}
 									<span class="truncate">{heading.text}</span>
 								</a>

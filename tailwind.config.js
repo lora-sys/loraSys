@@ -63,7 +63,12 @@ const config = {
 				sans: ['"Space Grotesk"', ...fontFamily.sans],
 				heading: ['"Syne"', ...fontFamily.sans],
 				serif: fontFamily.serif,
-				mono: ['"JetBrains Mono"', '"Fira Code"', ...fontFamily.mono]
+				mono: ['"JetBrains Mono"', '"Fira Code"', ...fontFamily.mono],
+				'pixel-square': ['GeistPixelSquare', 'monospace'],
+				'pixel-grid': ['GeistPixelGrid', 'monospace'],
+				'pixel-circle': ['GeistPixelCircle', 'monospace'],
+				'pixel-triangle': ['GeistPixelTriangle', 'monospace'],
+				'pixel-line': ['GeistPixelLine', 'monospace']
 			}
 		}
 	},
