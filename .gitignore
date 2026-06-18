@@ -26,3 +26,4 @@ vite.config.ts.timestamp-*
 ./iflow
 ./qoder
 .atomcode
+.playwright-mcp
