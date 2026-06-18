@@ -64,17 +64,21 @@ export const DATA = {
 		'Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi\'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more.',
 	avatarUrl: 'https://avatars.githubusercontent.com/u/176668951?v=4',
 	skills: [
-		'Svelte',
-		'Sveltekit',
-		'Typescript',
-		'Node.js',
+		'TypeScript',
 		'Python',
-		'Go',
-		'Postgres',
-		'Docker',
-		'Kubernetes',
+		'JavaScript',
 		'Java',
-		'C++'
+		'Solidity',
+		'Next.js',
+		'React',
+		'Svelte',
+		'SvelteKit',
+		'Node.js',
+		'PostgreSQL',
+		'TailwindCSS',
+		'Docker',
+		'AI Agents',
+		'Web3'
 	],
 	navbar: [
 		{ href: '/', icon: HomeIcon, label: 'Home' },
@@ -137,7 +141,7 @@ export const DATA = {
 		}
 	],
 	contact: {
-		email: 'hello@example.com',
+		email: 'lorasys@outlook.com',
 		tel: '+123456789',
 		social: {
 			GitHub: {
