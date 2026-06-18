@@ -101,11 +101,15 @@
 			});
 		};
 
-		document.body.style.cursor = 'none';
+		if (!('ontouchstart' in window)) {
+			document.body.style.cursor = 'none';
+		}
 		window.addEventListener('mousemove', throttledMouseMove);
 		return () => {
 			window.removeEventListener('mousemove', throttledMouseMove);
-			document.body.style.cursor = 'auto';
+			if (!('ontouchstart' in window)) {
+				document.body.style.cursor = 'auto';
+			}
 			if (rafId) cancelAnimationFrame(rafId);
 		};
 	});

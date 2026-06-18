@@ -36,14 +36,7 @@ import BilibiliDarkSvg from '$lib/imgs/bilibili-dark.svg';
 import YouTubeSvg from '$lib/imgs/youtube.svg';
 import YouTubeDarkSvg from '$lib/imgs/youtube-dark.svg';
 
-import BuildSpaceImg from '$lib/imgs/buildspace.jpg';
-import WaterLooImg from '$lib/imgs/waterloo.png';
-
-import AtomicImg from '$lib/imgs/atomic.png';
 import MingdeImg from '$lib/imgs/mingde.png';
-import ShopifyImg from '$lib/imgs/shopify.svg';
-import SplunkImg from '$lib/imgs/splunk.svg';
-import LimeImg from '$lib/imgs/lime.svg';
 
 // Your resume data
 export const DATA = {
@@ -192,7 +185,7 @@ export const DATA = {
 			},
 			email: {
 				name: 'Send Email',
-				url: '#',
+				url: 'mailto:lorasys@outlook.com',
 				// // icon: Icons.email,
 				icon: GmailSvg,
 				navbar: false,
