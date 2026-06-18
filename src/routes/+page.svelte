@@ -353,7 +353,7 @@
 			</div>
 			<p class="font-mono text-xs text-zinc-400">
 				&copy; {new Date().getFullYear()}
-				{DATA.name}. Built with SvelteKit & MagicUI.
+				{DATA.name}. Built with Lora.
 			</p>
 		</div>
 	</footer>
