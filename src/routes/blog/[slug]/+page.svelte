@@ -93,6 +93,34 @@
 
 		return () => clearTimeout(timer);
 	});
+
+	// Giscus comments
+	onMount(() => {
+		const script = document.createElement('script');
+		script.src = 'https://giscus.app/client.js';
+		script.setAttribute('data-repo', 'lora-sys/loraSys');
+		script.setAttribute('data-repo-id', 'R_kgDORZoeSQ');
+		script.setAttribute('data-category', 'Announcements');
+		script.setAttribute('data-category-id', 'DIC_kwDORZoeSc4C9UW6');
+		script.setAttribute('data-mapping', 'pathname');
+		script.setAttribute('data-strict', '0');
+		script.setAttribute('data-reactions-enabled', '1');
+		script.setAttribute('data-emit-metadata', '0');
+		script.setAttribute('data-input-position', 'bottom');
+		script.setAttribute('data-theme', 'preferred_color_scheme');
+		script.setAttribute('data-lang', 'zh-CN');
+		script.setAttribute('crossorigin', 'anonymous');
+		script.async = true;
+
+		const container = document.querySelector('.giscus');
+		if (container) {
+			container.appendChild(script);
+		}
+
+		return () => {
+			script.remove();
+		};
+	});
 </script>
 
 <!-- SEO -->
@@ -227,6 +255,10 @@
 					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
 			</BlurFade>
+
+			<!-- Giscus comments -->
+			<Separator class="my-8 border-border/50" />
+			<div class="giscus" />
 		</article>
 
 		<!-- Right-side fixed TOC (desktop only) -->
