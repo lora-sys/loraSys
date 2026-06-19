@@ -10,7 +10,7 @@ function escXml(s: string): string {
 }
 
 async function getPosts() {
-	let posts: Post[] = [];
+	const posts: Post[] = [];
 	const paths = import.meta.glob('/src/content/*.md');
 	for (const path in paths) {
 		const module = (await paths[path]()) as { metadata?: Omit<Post, 'slug'> };

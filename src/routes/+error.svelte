@@ -9,10 +9,9 @@
 	let effectiveStatus = $derived(status ?? $page.status);
 	let effectiveError = $derived(error?.message ?? $page.error?.message ?? 'Unknown error');
 
-	let errorType = $derived(effectiveStatus === 404 ? 'NOT_FOUND' : 'SERVER_ERROR');
-	let errorTitle = $derived(effectiveStatus === 404 ? 'Page Not Found' : 'Internal Server Error');
-	let errorIcon = $derived(effectiveStatus === 404 ? '404' : '500');
-	let errorHint = $derived(
+	const errorTitle = $derived(effectiveStatus === 404 ? 'Page Not Found' : 'Internal Server Error');
+	const errorIcon = $derived(effectiveStatus === 404 ? '404' : '500');
+	const errorHint = $derived(
 		effectiveStatus === 404
 			? 'The page you are looking for does not exist.'
 			: 'Something went wrong on our end.'
@@ -65,9 +64,7 @@
 				<span class="size-2.5 rounded-full bg-yellow-500/80"></span>
 				<span class="size-2.5 rounded-full bg-emerald-500/80"></span>
 			</div>
-			<span class="ml-3 font-mono text-[10px] text-zinc-500"
-				>error.log — {effectiveStatus}</span
-			>
+			<span class="ml-3 font-mono text-[10px] text-zinc-500">error.log — {effectiveStatus}</span>
 		</div>
 
 		<!-- Terminal Body -->
@@ -77,7 +74,7 @@
 				<pre class="font-pixel-square leading-tight text-emerald-400/90">
 					{#if effectiveStatus === 404}
 						<span class="block text-center text-xs leading-relaxed sm:text-sm"
-								>{`    ██████╗  ██████╗ ██╗  ██╗
+							>{`    ██████╗  ██████╗ ██╗  ██╗
     ╚══██╔╝ ██╔═══╝ ██║  ██║
       ██║   ██║     ███████║
       ██║   ██║     ╚══██║
@@ -86,7 +83,7 @@
 						>
 					{:else}
 						<span class="block text-center text-xs leading-relaxed sm:text-sm"
-								>{`    ███████╗ ██████╗  ██████╗
+							>{`    ███████╗ ██████╗  ██████╗
     ██╔════╝██╔═══██╗██╔══██╗
     ███████╗██║   ██║██████╔╝
     ╚════██║██║   ██║██╔══██╗
@@ -147,4 +144,3 @@
 		</div>
 	</div>
 </div>
-
