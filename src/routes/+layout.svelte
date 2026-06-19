@@ -4,7 +4,7 @@
 	import Meteors from '$lib/components/magic/meteors/meteors.svelte';
 	import SmoothCursor from '$lib/components/magic/smooth-cursor/smooth-cursor.svelte';
 	import '../app.css';
-	import { ModeWatcher, setMode } from 'mode-watcher';
+	import { ModeWatcher } from 'mode-watcher';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { base } from '$app/paths';
 	import '@fontsource/space-grotesk/index.css';
@@ -15,7 +15,6 @@
 	}
 
 	let { children }: Props = $props();
-	setMode('dark');
 
 	// Register Service Worker
 	if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {

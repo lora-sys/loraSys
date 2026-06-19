@@ -7,12 +7,14 @@
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-20">
-	<div class="mb-8 inline-flex items-center gap-2 font-pixel-square font-mono text-xs">
+	<div class="mb-8 inline-flex items-center gap-2 font-mono font-pixel-square text-xs">
 		<span class="text-emerald-400">$</span>
 		<span class="text-zinc-400">cat /now</span>
 	</div>
 
-	<h1 class="font-pixel-square font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+	<h1
+		class="font-mono font-pixel-square text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+	>
 		/now
 	</h1>
 	<p class="mt-2 font-mono text-sm text-zinc-500">Last updated: June 2026</p>

@@ -256,6 +256,7 @@
 						autocorrect="off"
 						autocapitalize="off"
 						spellcheck="false"
+						aria-label="Terminal command input"
 					/>
 					<span class="animate-pulse text-emerald-400">|</span>
 				</div>

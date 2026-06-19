@@ -317,16 +317,44 @@
 						</a>
 					</div>
 					<div class="flex justify-center pt-4">
-						<a href="/api/resume" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]">
+						<a
+							href="/api/resume"
+							target="_blank"
+							class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
+						>
 							$ cat resume.json
 						</a>
 					</div>
-					<div class="mt-8 w-full max-w-md mx-auto">
-						<form action="mailto:lorasys@outlook.com" method="post" enctype="text/plain" class="space-y-4">
-							<input type="text" name="name" placeholder="Name" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20" />
-							<input type="email" name="email" placeholder="Email" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20" />
-							<textarea name="message" placeholder="Message" rows="4" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 resize-none"></textarea>
-							<button type="submit" class="w-full rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]">$ send_message</button>
+					<div class="mx-auto mt-8 w-full max-w-md">
+						<form
+							action="mailto:lorasys@outlook.com"
+							method="post"
+							enctype="text/plain"
+							class="space-y-4"
+						>
+							<input
+								type="text"
+								name="name"
+								placeholder="Name"
+								class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+							/>
+							<input
+								type="email"
+								name="email"
+								placeholder="Email"
+								class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+							/>
+							<textarea
+								name="message"
+								placeholder="Message"
+								rows="4"
+								class="w-full resize-none rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+							></textarea>
+							<button
+								type="submit"
+								class="w-full rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
+								>$ send_message</button
+							>
 						</form>
 					</div>
 				</div>

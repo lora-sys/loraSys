@@ -1,11 +1,11 @@
 {
 	"name": "Lora Portfolio",
 	"short_name": "Lora",
-	"description": "Personal portfolio website of Sikandar Bhide (lora-sys)",
+	"description": "Personal portfolio website of lora-sys",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#0f0f0f",
-	"theme_color": "#2563eb",
+	"theme_color": "#07070a",
 	"orientation": "portrait-primary",
 	"scope": "/",
 	"lang": "en-US",

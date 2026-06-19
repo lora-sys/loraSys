@@ -18,8 +18,6 @@ export function GET() {
 			technologies: p.technologies,
 			href: p.href
 		})),
-		social: Object.fromEntries(
-			Object.entries(DATA.contact.social).map(([k, v]) => [k, v.url])
-		)
+		social: Object.fromEntries(Object.entries(DATA.contact.social).map(([k, v]) => [k, v.url]))
 	});
 }
