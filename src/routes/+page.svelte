@@ -171,14 +171,12 @@
 			</BlurFade>
 			<BlurFade delay={BLUR_FADE_DELAY * 1.5}>
 				<div class="flex flex-wrap items-center justify-center gap-2">
-					{#each DATA.skills as skill, id}
-						<BlurFade delay={BLUR_FADE_DELAY * 1.8 + id * 0.05}>
-							<Badge
-								class="cursor-default rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-1.5 font-mono text-xs text-zinc-200 transition-all duration-300 hover:scale-105 hover:border-emerald-500/40 hover:text-emerald-400 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
-							>
-								{skill}
-							</Badge>
-						</BlurFade>
+					{#each DATA.skills as skill}
+						<Badge
+							class="cursor-default rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-1.5 font-mono text-xs text-zinc-200 transition-all duration-300 hover:scale-105 hover:border-emerald-500/40 hover:text-emerald-400 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
+						>
+							{skill}
+						</Badge>
 					{/each}
 				</div>
 			</BlurFade>
@@ -317,6 +315,19 @@
 								Say Hello
 							</InteractiveHoverButton>
 						</a>
+					</div>
+					<div class="flex justify-center pt-4">
+						<a href="/api/resume" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]">
+							$ cat resume.json
+						</a>
+					</div>
+					<div class="mt-8 w-full max-w-md mx-auto">
+						<form action="mailto:lorasys@outlook.com" method="post" enctype="text/plain" class="space-y-4">
+							<input type="text" name="name" placeholder="Name" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20" />
+							<input type="email" name="email" placeholder="Email" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20" />
+							<textarea name="message" placeholder="Message" rows="4" class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20 resize-none"></textarea>
+							<button type="submit" class="w-full rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]">$ send_message</button>
+						</form>
 					</div>
 				</div>
 			</BlurFade>
