@@ -205,37 +205,39 @@
 </script>
 
 <div class="relative {className}">
-	<MagicCard glowColor="rgba(52,211,153,0.12)" class="border-zinc-800">
+	<MagicCard glowColor="rgba(52,211,153,0.12)" class="rounded-xl border-zinc-800/80">
 		<!-- Terminal Header -->
-		<div class="flex items-center gap-2 border-b border-border/50 bg-zinc-950 px-4 py-2.5">
+		<div
+			class="flex items-center gap-2 rounded-t-xl border-b border-zinc-800/80 bg-zinc-950/80 px-4 py-3"
+		>
 			<div class="flex gap-1.5">
-				<div class="h-3 w-3 rounded-full bg-red-500/80 transition-colors hover:bg-red-500"></div>
 				<div
-					class="h-3 w-3 rounded-full bg-yellow-500/80 transition-colors hover:bg-yellow-500"
+					class="h-3 w-3 rounded-full bg-zinc-700 transition-colors duration-200 hover:bg-red-500/60"
 				></div>
 				<div
-					class="h-3 w-3 rounded-full bg-green-500/80 transition-colors hover:bg-green-500"
+					class="h-3 w-3 rounded-full bg-zinc-700 transition-colors duration-200 hover:bg-yellow-500/60"
+				></div>
+				<div
+					class="h-3 w-3 rounded-full bg-zinc-700 transition-colors duration-200 hover:bg-green-500/60"
 				></div>
 			</div>
 			<div class="flex-1 text-center">
-				<span class="font-mono text-xs text-muted-foreground"
-					>guest@portfolio ~ /home/{DATA.name}</span
-				>
+				<span class="font-mono text-xs text-zinc-500">guest@portfolio ~ /home/{DATA.name}</span>
 			</div>
 			<div class="w-12"></div>
 		</div>
 
 		<!-- Terminal Body -->
-		<div class="min-h-[20rem] p-4 font-mono text-sm">
+		<div class="min-h-[20rem] p-5 font-mono text-sm">
 			<!-- Command History -->
-			<div class="scrollbar-thin mb-4 max-h-72 space-y-0.5 overflow-y-auto overflow-x-hidden">
+			<div class="scrollbar-thin mb-4 max-h-72 space-y-1 overflow-y-auto overflow-x-hidden">
 				{#each commandHistory as line, idx (idx)}
 					<div
 						class="whitespace-pre-wrap {line.startsWith('$')
-							? 'font-bold text-foreground'
+							? 'font-semibold text-foreground'
 							: line.startsWith('>')
 								? 'animate-[fadeIn_0.3s_ease-out] text-emerald-400'
-								: 'text-muted-foreground'}"
+								: 'text-zinc-500'}"
 					>
 						{line}
 					</div>
@@ -244,13 +246,13 @@
 
 			<!-- Input Line -->
 			{#if bootComplete}
-				<div class="flex items-center gap-2 border-t border-border/30 pt-3">
+				<div class="flex items-center gap-2 border-t border-zinc-800/50 pt-4">
 					<span class="select-none text-emerald-400">$</span>
 					<input
 						bind:this={inputEl}
 						bind:value={commandInput}
 						onkeydown={handleKeydown}
-						class="flex-1 bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-muted-foreground/50"
+						class="flex-1 bg-transparent font-mono text-sm text-foreground outline-none placeholder:text-zinc-600"
 						placeholder="type a command..."
 						autocomplete="off"
 						autocorrect="off"

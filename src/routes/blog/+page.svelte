@@ -39,11 +39,11 @@
 			<BlurFade delay={BLUR_FADE_DELAY * 1.5 + id * 0.1}>
 				<a
 					href={`${base}/blog/${post.slug}`}
-					class="group relative block overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:border-primary/30 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/10 focus-visible:ring-2 focus-visible:ring-primary/50"
+					class="group relative block overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/30 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/5 focus-visible:ring-2 focus-visible:ring-primary/50"
 				>
 					<!-- Gradient accent line -->
 					<div
-						class="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent transition-all duration-700 group-hover:w-full"
+						class="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent transition-all duration-700 group-hover:w-full"
 					></div>
 
 					<div class="space-y-4">

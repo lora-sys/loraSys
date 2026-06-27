@@ -12,32 +12,38 @@
 	}
 </script>
 
-<section id="anime" class="py-12">
-	<div class="space-y-6">
-		<h2 class="text-2xl font-bold tracking-tight">Anime</h2>
+<section id="anime" class="py-16 md:py-20">
+	<div class="space-y-8">
+		<h2 class="text-2xl font-bold tracking-tight text-foreground">Anime</h2>
 
 		<Carousel.Root class="w-full" opts={{ align: 'start', loop: true }}>
 			<Carousel.Content>
 				{#each DATA.anime as anime}
 					<Carousel.Item class="md:basis-1/2 lg:basis-1/3">
-						<div class="p-2">
+						<div class="p-3">
 							<Lens {zoomFactor} {lensSize}>
 								{#snippet children()}
-									<div class="relative aspect-[2/3] overflow-hidden rounded-xl bg-card/50">
+									<div
+										class="group relative aspect-[2/3] overflow-hidden rounded-xl bg-card/50 shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-black/30"
+									>
 										<img
 											src={imgPath(anime.image)}
 											alt={anime.name}
-											class="h-full w-full object-contain"
+											class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
 											loading="lazy"
 											decoding="async"
 										/>
 									</div>
 								{/snippet}
 							</Lens>
-							<div class="mt-4 space-y-2">
-								<h3 class="text-lg font-semibold">{anime.name}</h3>
-								<p class="text-sm text-muted-foreground">"{anime.quote}"</p>
-								<Button variant="outline" size="sm">
+							<div class="mt-5 space-y-2">
+								<h3 class="text-lg font-semibold text-foreground">{anime.name}</h3>
+								<p class="text-sm text-zinc-500">"{anime.quote}"</p>
+								<Button
+									variant="outline"
+									size="sm"
+									class="border-zinc-700/60 bg-transparent text-sm hover:bg-zinc-800/50"
+								>
 									<a href={anime.link} target="_blank" rel="noopener noreferrer">
 										{anime.buttonText}
 									</a>

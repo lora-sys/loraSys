@@ -2,3 +2,13 @@
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Claude worktrees (UI improvements, experiments)
+.claude/worktrees/
+
+# SvelteKit generated
+.svelte-kit/
+
+# Build output
+build/
+node_modules/

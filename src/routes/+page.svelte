@@ -222,6 +222,7 @@
 			</div>
 		</div>
 	</section>
+
 	<!-- ==================== HACKATHONS ==================== -->
 	<section id="hackathons">
 		<div class="w-full space-y-12 py-12">
@@ -289,9 +290,9 @@
 
 	<!-- ==================== CONTACT ==================== -->
 	<section id="contact">
-		<div class="grid w-full items-center justify-center gap-4 px-4 py-12 text-center md:px-6">
+		<div class="grid w-full items-center justify-center gap-6 px-4 py-16 text-center md:px-6">
 			<BlurFade delay={BLUR_FADE_DELAY * 2}>
-				<div class="space-y-6">
+				<div class="space-y-8">
 					<div
 						class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
 					>
@@ -307,7 +308,7 @@
 						</a>
 						and I'll respond whenever I can.
 					</p>
-					<div class="flex justify-center pt-4">
+					<div class="flex justify-center pt-2">
 						<a href={DATA.contact.social.X.url} target="_blank" rel="noopener noreferrer">
 							<InteractiveHoverButton
 								class="rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400"
@@ -316,7 +317,7 @@
 							</InteractiveHoverButton>
 						</a>
 					</div>
-					<div class="flex justify-center pt-4">
+					<div class="flex justify-center pt-2">
 						<a
 							href="/api/resume"
 							target="_blank"
@@ -325,7 +326,7 @@
 							$ cat resume.json
 						</a>
 					</div>
-					<div class="mx-auto mt-8 w-full max-w-md">
+					<div class="mx-auto w-full max-w-md">
 						<form
 							action="mailto:lorasys@outlook.com"
 							method="post"
@@ -336,25 +337,26 @@
 								type="text"
 								name="name"
 								placeholder="Name"
-								class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							/>
 							<input
 								type="email"
 								name="email"
 								placeholder="Email"
-								class="w-full rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							/>
 							<textarea
 								name="message"
 								placeholder="Message"
 								rows="4"
-								class="w-full resize-none rounded-lg border border-zinc-700 bg-zinc-900/50 px-4 py-2.5 font-mono text-sm text-zinc-200 placeholder-zinc-500 focus:border-emerald-500/40 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+								class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							></textarea>
 							<button
 								type="submit"
 								class="w-full rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
-								>$ send_message</button
 							>
+								$ send_message
+							</button>
 						</form>
 					</div>
 				</div>

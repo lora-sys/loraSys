@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { DATA } from '$lib/data/resume';
 	import Command from '$lib/components/magic/command/command.svelte';
+	import { slide } from 'svelte/transition';
 	import { base } from '$app/paths';
 
 	let currentPath = $derived($page.url.pathname);
@@ -34,7 +35,7 @@
 		<div class="flex items-center gap-6">
 			<a
 				href={base + '/'}
-				class="font-mono font-pixel-square text-sm font-bold text-term-green transition-colors hover:text-gold"
+				class="font-mono font-pixel-square text-sm font-bold text-term-green transition-colors duration-200 hover:text-term-green/70"
 			>
 				{DATA.name}<span class="animate-pulse">_</span>
 			</a>
@@ -64,8 +65,9 @@
 			<!-- Hamburger (mobile only) -->
 			<button
 				onclick={() => (mobileMenuOpen = !mobileMenuOpen)}
-				class="flex h-8 w-8 items-center justify-center rounded-md border border-border/50 bg-card/50 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:hidden"
 				aria-label="Toggle menu"
+				aria-expanded={mobileMenuOpen}
+				class="flex h-8 w-8 items-center justify-center rounded-md border border-border/50 bg-card/50 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:hidden"
 			>
 				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					{#if mobileMenuOpen}
@@ -90,8 +92,11 @@
 
 	<!-- Mobile dropdown menu -->
 	{#if mobileMenuOpen}
-		<div class="border-t border-border/40 bg-background/95 backdrop-blur-lg sm:hidden">
-			<ul class="flex flex-col px-6 py-3">
+		<div
+			class="border-t border-border/40 bg-background/95 backdrop-blur-lg sm:hidden"
+			transition:slide={{ duration: 200 }}
+		>
+			<ul class="flex flex-col px-6 py-2">
 				{#each navItems as item}
 					<li>
 						<a
