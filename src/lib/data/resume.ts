@@ -38,6 +38,8 @@ import YouTubeDarkSvg from '$lib/imgs/youtube-dark.svg';
 
 import MingdeImg from '$lib/imgs/mingde.png';
 
+import zhihuSvg from '$lib/imgs/zhihu.svg';
+import zhihuDarkSvg from '$lib/imgs/zhihu-dark.svg';
 // Your resume data
 export const DATA = {
 	name: 'lora',
@@ -182,6 +184,13 @@ export const DATA = {
 				icon: BilibiliSvg,
 				navbar: true,
 				dark_icon: BilibiliDarkSvg
+			},
+			ZhiHu: {
+				name: 'ZhiHu',
+				url: 'https://www.zhihu.com/people/lorry-23-28-30',
+				icon: zhihuSvg,
+				navbar: true,
+				dark_icon: zhihuDarkSvg
 			},
 			email: {
 				name: 'Send Email',
