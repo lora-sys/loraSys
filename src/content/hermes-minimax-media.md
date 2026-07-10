@@ -234,6 +234,8 @@ hermes gateway restart
 
 而且两个插件可以**同时启用**，在 `config.yaml` 里改 `image_gen.provider` 就能切换，不需要卸载任何一个。
 
+> **如果你用 StepFun 的话记得也看一眼那边的"避坑"**：StepFun 同一个 key 有 `/v1/` 和 `/step_plan/v1/` 两套 endpoint，分别扣现金和扣订阅 Credit。我自己第一次发版没注意，被按张扣了两周余额才发现。StepFun 那篇的"避坑"小节和 [GitHub README](https://github.com/lora-sys/hermes-stepfun-imagegen#troubleshooting) 里有完整诊断 + 1 段可直接粘贴给你自己 agent 的排查 prompt。
+
 ## 下一步计划
 
 - 跑 `image-01` 的 i2i（subject_reference）真实样例

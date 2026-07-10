@@ -132,11 +132,44 @@ def generate(self, prompt, model=None, aspect_ratio="square", steps=4, seed=None
 
 这意味着插件会在内部根据模型自动路由请求，而不是让上层手动判断。
 
+## ⚠️ 避坑：两个 endpoint，两套计费
+
+在我做完插件正式发 v0.1.0 之后用了一阵子，发现账单"诡异"——账户余额每天被扣几毛钱，但 Step Plan 订阅页面的 Credit 用量没怎么动。后来排查发现：
+
+**StepFun 对同一个 API key 提供两套独立的 endpoint，走不同的计费通道**：
+
+| 路径                                       | 计费方式                        | 适用                   |
+| ------------------------------------------ | ------------------------------- | ---------------------- |
+| `https://api.stepfun.com/v1/...`           | 账户余额按张扣钱（现金）        | 开放平台用户           |
+| `https://api.stepfun.com/step_plan/v1/...` | 扣 Step Plan 订阅的 Credit 额度 | **Step Plan 订阅用户** |
+
+**两个路径用同一个 key 都能通过认证**，但账单走完全不同的通道。我最初插件的默认 `STEPFUN_BASE_URL` 写的是 `/v1/...`，所以 Step Plan 订阅用户（包括我自己）也在被按张扣钱。
+
+修复（v0.1.1 修复，1 行改动）：
+
+```python
+STEPFUN_BASE_URL = os.environ.get(
+    "STEPFUN_BASE_URL",
+    "https://api.stepfun.com/step_plan/v1"  # 改这里：从 /v1 改成 /step_plan/v1
+)
+```
+
+> 如果你**不是** Step Plan 订阅用户（用的是普通开放平台账户 + 充值），保持默认 `/v1` 即可。
+> 如果你是 **Step Plan 订阅用户**，升级到 0.1.1+ 之后所有调用会走 Credit 套餐，不再扣现金。
+
+升级命令：
+
+```bash
+pip install --upgrade hermes-stepfun-imagegen
+```
+
+如果你想看完整的"症状 → 排查 → 修法"诊断流程（含可直接粘贴给你自己 agent 的 7 步排查 prompt），看 README 的 [Troubleshooting → My usage is billing my cash balance, not my Step Plan credit](https://github.com/lora-sys/hermes-stepfun-imagegen#troubleshooting)。
+
 ## 第四步：调用 StepFun API
 
 StepFun 的图片生成接口通常采用类似 OpenAI 的 `/v1/images/generations` 风格，也可能提供专门的 edits 与 image2image 端点。这里主要注意三点：
 
-- **请求头**带 `Authorization: Bearer STEPFUN_API_KEY`
+- **请求头**带 `Authorization: Bearer ***`
 - **参数**里要传 `model`、`prompt`，有时还要带 `size`、`n`
 - **响应**里通常返回图片 URL 或 base64，需要本地落盘保存，便于 Hermes 后续读取
 
