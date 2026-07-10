@@ -34,12 +34,12 @@ StepFun 的优势恰恰相反：
 
 ## 先确认你的环境
 
-| 项目 | 要求 |
-|------|------|
-| Hermes Agent | 已安装并可运行 |
-| Python | 3.11+ |
+| 项目         | 要求                                        |
+| ------------ | ------------------------------------------- |
+| Hermes Agent | 已安装并可运行                              |
+| Python       | 3.11+                                       |
 | StepFun 账号 | 已注册，可访问 https://platform.stepfun.com |
-| API Key | 已创建，格式通常为 `step-...` |
+| API Key      | 已创建，格式通常为 `step-...`               |
 
 > 如果你还没有 StepFun 账号，先去平台注册并创建一个 API Key。
 
@@ -82,7 +82,7 @@ mkdir -p ~/.hermes/plugins/image_gen/stepfun
 
 ```yaml
 name: stepfun
-version: "1.0.0"
+version: '1.0.0'
 description: StepFun image generation backend for Hermes Agent
 requires_env:
   - STEPFUN_API_KEY
@@ -286,18 +286,18 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   release:
-    types: [ published ]
+    types: [published]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ['3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -317,7 +317,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
       - run: pip install build twine
       - run: python -m build
       - run: twine check dist/*
