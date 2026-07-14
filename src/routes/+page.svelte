@@ -141,7 +141,7 @@
 		<section id="self" class="sec">
 			<div class="sec-head"><span class="cn">己</span><div class="sec-title"><h2>The Self</h2>{@render brush()}</div><span class="folio">P.02</span></div>
 			<div class="self-grid">
-				<div class="prose">{@html DATA.summaryHtml}</div>
+				<div class="bio">{@html DATA.summaryHtml}</div>
 				<aside>
 					<p class="mini-h" id="education">Education</p>
 					{#each DATA.education as e}
@@ -518,11 +518,11 @@
 		grid-template-columns: 1.5fr 1fr;
 		gap: clamp(32px, 5vw, 72px);
 	}
-	.prose {
+	.bio {
 		font-size: 1.2rem;
 		line-height: 1.65;
 	}
-	.prose :global(a) {
+	.bio :global(a) {
 		color: var(--zhu);
 		text-decoration: underline;
 		text-underline-offset: 3px;

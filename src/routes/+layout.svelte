@@ -1,17 +1,12 @@
 <script lang="ts">
 	import '../app.css';
-	// INK EDITION fonts
-	import '@fontsource-variable/fraunces/full.css';
-	import '@fontsource-variable/fraunces/full-italic.css';
-	import '@fontsource/noto-serif-sc/400.css';
-	import '@fontsource/noto-serif-sc/900.css';
+	// INK EDITION fonts — Latin display self-hosted; CN uses system serif (blog is CN-heavy;
+	// self-hosting full CJK would be MBs). Fraunces 'standard' axis (wght+opsz) keeps payload light.
+	import '@fontsource-variable/fraunces/standard.css';
+	import '@fontsource-variable/fraunces/standard-italic.css';
 	import '@fontsource/archivo/500.css';
 	import '@fontsource/archivo/700.css';
 	import '@fontsource/archivo/900.css';
-	// Legacy fonts still used by /blog, /now, /error (until reskinned)
-	import '@fontsource/space-grotesk/index.css';
-	import '@fontsource/syne/index.css';
-	import '@fontsource/fragment-mono/index.css';
 
 	interface Props {
 		children?: import('svelte').Snippet;
