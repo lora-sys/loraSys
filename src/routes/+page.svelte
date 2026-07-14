@@ -113,7 +113,11 @@
 		<!-- 序 COVER / HERO -->
 		<section id="top" class="hero">
 			<div class="hero-left">
-				<p class="tag">Cover · 序</p>
+				<div class="hero-meta">
+					<span class="tag">Cover · 序</span>
+					<span class="rule"></span>
+					<span class="folio">P.01</span>
+				</div>
 				<h1>I build<br /><span class="it">systems</span><br />that <span class="z">learn.</span></h1>
 				<p class="dek">{DATA.description}</p>
 			</div>
@@ -329,6 +333,39 @@
 		padding: clamp(40px, 8vh, 96px) 0 var(--page-y);
 		align-items: center;
 	}
+	.hero-left {
+		position: relative;
+	}
+	.hero-left::before {
+		content: '';
+		position: absolute;
+		bottom: -6%;
+		left: -8%;
+		width: 52%;
+		height: 58%;
+		background: radial-gradient(circle, rgba(198, 65, 44, 0.16), transparent 70%);
+		filter: blur(55px);
+		z-index: -1;
+		pointer-events: none;
+	}
+	.hero-meta {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 26px;
+	}
+	.hero-meta .rule {
+		flex: 1;
+		height: 1.5px;
+		background: var(--ink-line);
+	}
+	.hero-meta .folio {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.16em;
+		color: var(--ink-mute);
+	}
 	.tag {
 		font-family: var(--font-label);
 		font-weight: 700;
@@ -336,15 +373,15 @@
 		letter-spacing: 0.3em;
 		text-transform: uppercase;
 		color: var(--zhu);
-		margin-bottom: 18px;
+		white-space: nowrap;
 	}
 	h1 {
 		font-family: var(--font-serif);
 		font-weight: 900;
 		font-optical-sizing: auto;
-		font-size: var(--type-hero);
-		line-height: 0.85;
-		letter-spacing: -0.025em;
+		font-size: clamp(4rem, 11.5vw, 11rem);
+		line-height: 0.82;
+		letter-spacing: -0.03em;
 		margin: 0;
 	}
 	h1 .it {
