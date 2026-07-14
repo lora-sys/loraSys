@@ -388,17 +388,15 @@
 			</ul>
 			<p class="drag-hint">↔ drag · hover a poster to magnify</p>
 			<p class="mini-h">Favorites</p>
-			<ul class="gallery favs-g">
+			<ul class="favs-mosaic">
 				{#each DATA.favorites as f}
-					<li class="card">
+					<li class="fav">
 						<a href={f.href} target="_blank" rel="noreferrer">
-							<Lens zoomFactor={1.4} lensSize={120} class="rounded-none">
-								{#snippet children()}
-									<div class="frame sq"><img src={f.background} alt={f.name} loading="lazy" /></div>
-								{/snippet}
-							</Lens>
-							<b class="card-name">{f.name}</b>
-							<span class="card-desc">{f.description}</span>
+							<div class="fav-img"><img src={f.background} alt={f.name} loading="lazy" /></div>
+							<div class="fav-cap">
+								<b>{f.name}</b>
+								<span>{f.description}</span>
+							</div>
 						</a>
 					</li>
 				{/each}
@@ -1367,6 +1365,83 @@
 		text-transform: uppercase;
 		color: var(--ink-mute);
 		margin: 12px 0 0;
+	}
+
+	/* Favorites — asymmetric editorial mosaic */
+	.favs-mosaic {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		grid-auto-rows: 168px;
+		gap: 14px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.fav {
+		margin: 0;
+	}
+	.fav:first-child {
+		grid-row: span 2;
+	}
+	.fav > a {
+		position: relative;
+		display: block;
+		height: 100%;
+		overflow: hidden;
+		border: 1px solid var(--ink-line-strong);
+		transition: border-color 0.3s ease;
+	}
+	.fav-img {
+		position: absolute;
+		inset: 0;
+	}
+	.fav-img img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		filter: saturate(0.88) contrast(1.03);
+		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+	}
+	.fav > a:hover .fav-img img {
+		transform: scale(1.06);
+		filter: none;
+	}
+	.fav > a:hover {
+		border-color: var(--zhu);
+	}
+	.fav-cap {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 28px 14px 13px;
+		background: linear-gradient(transparent, rgba(26, 24, 21, 0.5) 42%, rgba(26, 24, 21, 0.88));
+		color: var(--paper);
+	}
+	.fav-cap b {
+		display: block;
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: 1.15rem;
+		line-height: 1.1;
+	}
+	.fav-cap span {
+		display: block;
+		font-size: 0.72rem;
+		color: rgba(243, 239, 230, 0.82);
+		margin-top: 3px;
+		line-height: 1.3;
+	}
+	@media (max-width: 640px) {
+		.favs-mosaic {
+			grid-template-columns: repeat(2, 1fr);
+			grid-auto-rows: 150px;
+		}
+		.fav:first-child {
+			grid-row: span 2;
+			grid-column: span 2;
+		}
 	}
 
 	/* Contact */
