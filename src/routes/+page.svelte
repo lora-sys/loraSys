@@ -1,30 +1,58 @@
 <script lang="ts">
+	// FIELD main page — hosts the canvas + scroll-to-depth + audio + cursor
+	import { onMount, onDestroy } from 'svelte';
+	import { field } from '$lib/components/field/FieldState.svelte';
+	import Field from '$lib/components/field/Field.svelte';
+	import FieldCursor from '$lib/components/field/FieldCursor.svelte';
+	import AudioGates from '$lib/components/field/AudioGates.svelte';
 	import { DATA } from '$lib/data/resume';
-	import RoomDirector from '$lib/components/agent/RoomDirector.svelte';
-	import AgentCursor from '$lib/components/agent/AgentCursor.svelte';
-	import AudioGates from '$lib/components/agent/AudioGates.svelte';
-	import { agent } from '$lib/components/agent/AgentState.svelte';
-	import { onMount } from 'svelte';
+
+	let scrollY = $state(0);
+	let docHeight = $state(1);
+
+	function onScroll() {
+		scrollY = window.scrollY;
+		docHeight = document.documentElement.scrollHeight - window.innerHeight;
+		const progress = docHeight > 0 ? scrollY / docHeight : 0;
+		field.setDepth(progress);
+	}
+
+	function onKey(e: KeyboardEvent) {
+		if (e.code === 'Escape') field.closeNode();
+	}
 
 	onMount(() => {
-		const tick = () => agent.tick();
-		tick();
-		const id = setInterval(tick, 1000);
-		return () => clearInterval(id);
+		window.addEventListener('scroll', onScroll, { passive: true });
+		window.addEventListener('keydown', onKey);
+		// Set a tall body to enable depth travel via scroll
+		document.body.style.minHeight = '500vh';
+		onScroll();
+		return () => {
+			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener('keydown', onKey);
+			document.body.style.minHeight = '';
+		};
 	});
 </script>
 
 <svelte:head>
-	<title>{DATA.name} — agent online</title>
+	<title>{DATA.name} — field</title>
 	<meta name="description" content={DATA.description} />
-	<meta property="og:title" content={`${DATA.name} — agent online`} />
+	<meta property="og:title" content={`${DATA.name} — field`} />
 	<meta property="og:description" content={DATA.description} />
 	<meta property="og:type" content="website" />
 	<meta name="robots" content="index, follow" />
 </svelte:head>
 
 <main>
-	<RoomDirector />
+	<Field />
 	<AudioGates />
-	<AgentCursor />
+	<FieldCursor />
 </main>
+
+<style>
+	main {
+		min-height: 100vh;
+		background: var(--field-bg);
+	}
+</style>

@@ -358,3 +358,45 @@ body {
 	color: inherit;
 	text-decoration: inherit;
 }
+
+/* ============================================================
+   FIELD theme — design tokens
+   ============================================================ */
+:root {
+	--field-bg: #0a0a0a;
+	--field-fg: #fafafa;
+	--field-fg-dim: #a1a1aa;
+	--field-fg-mute: #71717a;
+	--field-fg-ghost: #52525b;
+	--field-line: #1f1f23;
+	--field-line-strong: #2a2a30;
+	--field-accent: #67e8f9;
+
+	--font-display: 'Space Grotesk', system-ui, sans-serif;
+	--font-mono: 'Fragment Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+	--font-syne: 'Syne', 'Space Grotesk', system-ui, sans-serif;
+}
+
+::-webkit-scrollbar {
+	width: 6px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: #27272a;
+	border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #3f3f46;
+}
+
+::selection {
+	background: rgba(103, 232, 249, 0.3);
+	color: #fff;
+}
+
+@keyframes field-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.4; }
+}

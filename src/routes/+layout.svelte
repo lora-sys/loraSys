@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<meta name="theme-color" content="#000000" />
+	<meta name="theme-color" content="#0a0a0a" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </svelte:head>
 
@@ -22,9 +22,9 @@
 
 <style>
 	:global(html, body) {
-		background: #000;
-		color: #fff;
-		font-family: 'Space Grotesk', system-ui, sans-serif;
+		background: var(--field-bg) !important;
+		color: var(--field-fg) !important;
+		font-family: var(--font-display) !important;
 		margin: 0;
 		padding: 0;
 		-webkit-font-smoothing: antialiased;
@@ -32,6 +32,11 @@
 	}
 	:global(body) {
 		cursor: none;
+	}
+	@media (max-width: 767px) {
+		:global(body) {
+			cursor: auto;
+		}
 	}
 	:global(a) {
 		color: inherit;
