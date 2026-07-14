@@ -19,10 +19,11 @@
 	const contents = [
 		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', page: 'P.02' },
 		{ n: '02', cn: '技', title: 'Skills', note: 'what I build with', href: '#skills', page: 'P.03' },
-		{ n: '03', cn: '作', title: 'Selected Work', note: `${DATA.projects.length} projects`, href: '#work', page: 'P.04' },
-		{ n: '04', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
-		{ n: '05', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
-		{ n: '06', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
+		{ n: '03', cn: '歷', title: 'Experience', note: 'work history', href: '#exp', page: 'P.04' },
+		{ n: '04', cn: '作', title: 'Selected Work', note: `${DATA.projects.length} projects`, href: '#work', page: 'P.06' },
+		{ n: '05', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
+		{ n: '06', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
+		{ n: '07', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
 	];
 
 	// Skills grouped for the kinetic marquee (presentation grouping of flat DATA.skills).
@@ -31,6 +32,20 @@
 		{ label: 'Frameworks', items: ['React', 'Next.js', 'Svelte', 'SvelteKit', 'Node.js', 'TailwindCSS'] },
 		{ label: 'Tools & Domains', items: ['PostgreSQL', 'Docker', 'AI Agents', 'Web3'] }
 	];
+
+	// Work experience (content added to resume.ts later). Timeline renders these when present.
+	type WorkItem = {
+		company?: string;
+		title?: string;
+		start?: string;
+		end?: string;
+		location?: string;
+		description?: string;
+		badges?: string[];
+		logoUrl?: string;
+		href?: string;
+	};
+	const work = DATA.work as WorkItem[];
 
 	let showWash = $state(false);
 
@@ -192,6 +207,46 @@
 					</div>
 				{/each}
 			</div>
+		</section>
+
+				<!-- 歷 EXPERIENCE -->
+		<section id="exp" class="sec">
+			<div class="sec-head"><span class="cn">歷</span><div class="sec-title"><h2>Experience</h2>{@render brush()}</div><span class="folio">P.04</span></div>
+			{#if work.length}
+				<ol class="timeline">
+					{#each work as w}
+						<li class="tl-item">
+							<span class="tl-dot" aria-hidden="true"></span>
+							<div class="tl-date">{w.start} — {w.end}</div>
+							<div class="tl-body">
+								<div class="tl-top">
+									{#if w.logoUrl}<img class="tl-logo" src={w.logoUrl} alt={w.company} loading="lazy" />{/if}
+									<div>
+										<h3 class="tl-role">{w.title}</h3>
+										<p class="tl-co">{w.company}{#if w.location} · {w.location}{/if}</p>
+									</div>
+								</div>
+								{#if w.description}<p class="tl-desc">{w.description}</p>{/if}
+								{#if w.badges?.length}
+									<div class="tl-badges">{#each w.badges as b}<span>{b}</span>{/each}</div>
+								{/if}
+							</div>
+						</li>
+					{/each}
+				</ol>
+			{:else}
+				<div class="exp-empty">
+					<p class="exp-lead">First chapter,<br /><span class="z">loading.</span></p>
+					<div class="exp-side">
+						<p class="exp-note">
+							No formal roles on the record yet — I've been building independently: 103
+							repositories, hackathons (ETH Beijing, Monad), and self-directed systems. The
+							next entry here is open.
+						</p>
+						<a class="exp-cta" href={`mailto:${DATA.contact.email}`}>Let's talk →</a>
+					</div>
+				</div>
+			{/if}
 		</section>
 
 		<!-- 作 SELECTED WORK -->
@@ -905,6 +960,156 @@
 		}
 		.mviewport {
 			overflow-x: auto;
+		}
+	}
+
+	/* Experience timeline */
+	.timeline {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		position: relative;
+	}
+	.timeline::before {
+		content: '';
+		position: absolute;
+		left: 7px;
+		top: 6px;
+		bottom: 6px;
+		width: 2px;
+		background: var(--ink-line);
+	}
+	.tl-item {
+		position: relative;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 6px;
+		padding: 0 0 clamp(28px, 4vh, 48px) 34px;
+	}
+	.tl-dot {
+		position: absolute;
+		left: 0;
+		top: 5px;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: var(--paper);
+		border: 2.5px solid var(--zhu);
+	}
+	.tl-date {
+		font-family: var(--font-label);
+		font-size: 0.75rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+	}
+	.tl-top {
+		display: flex;
+		gap: 14px;
+		align-items: center;
+	}
+	.tl-logo {
+		width: 44px;
+		height: 44px;
+		object-fit: contain;
+		border: 1px solid var(--ink-line);
+		background: var(--paper);
+		padding: 4px;
+	}
+	.tl-role {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+		line-height: 1.1;
+		margin: 0;
+	}
+	.tl-co {
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--zhu);
+		margin-top: 4px;
+	}
+	.tl-desc {
+		margin-top: 10px;
+		line-height: 1.55;
+		color: var(--ink-soft);
+		max-width: 60ch;
+	}
+	.tl-badges {
+		margin-top: 12px;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.tl-badges span {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		border: 1px solid var(--ink-line-strong);
+		padding: 3px 9px;
+	}
+	@media (min-width: 761px) {
+		.timeline::before {
+			left: 187px;
+		}
+		.tl-item {
+			grid-template-columns: 180px 1fr;
+			gap: 40px;
+			padding-left: 0;
+		}
+		.tl-dot {
+			left: 180px;
+		}
+		.tl-date {
+			text-align: right;
+			padding-right: 44px;
+			padding-top: 2px;
+		}
+	}
+	/* Experience empty state */
+	.exp-empty {
+		display: grid;
+		grid-template-columns: 1.3fr 1fr;
+		gap: clamp(24px, 4vw, 64px);
+		align-items: end;
+	}
+	.exp-lead {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+		line-height: 0.92;
+		letter-spacing: -0.03em;
+		margin: 0;
+	}
+	.exp-note {
+		line-height: 1.6;
+		color: var(--ink-soft);
+		max-width: 46ch;
+	}
+	.exp-cta {
+		display: inline-block;
+		margin-top: 18px;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 0.85rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		border-bottom: 2px solid var(--zhu);
+		padding-bottom: 3px;
+		transition: color 0.25s ease;
+	}
+	.exp-cta:hover {
+		color: var(--zhu);
+	}
+	@media (max-width: 760px) {
+		.exp-empty {
+			grid-template-columns: 1fr;
+			align-items: start;
 		}
 	}
 
