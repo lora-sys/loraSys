@@ -4,6 +4,7 @@
 	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
 	import { Canvas } from '@threlte/core';
 	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
+	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
 	import * as THREE from 'three';
 
 	interface Props {}
@@ -423,7 +424,19 @@
 				</div>
 
 				<div class="md:col-span-7">
-					<ol class="relative space-y-3 border-l border-zinc-800/80 pl-8 md:pl-12">
+					<!-- Local 3D Canvas — curved glowing timeline -->
+					<div
+						class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
+					>
+						<Canvas
+							dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+							toneMapping={THREE.ACESFilmicToneMapping}
+						>
+							<HackathonTimeline3D count={DATA.hackathons.length} />
+						</Canvas>
+					</div>
+
+					<ol class="relative mt-10 space-y-3 border-l border-zinc-800/80 pl-8 md:pl-12">
 						{#each DATA.hackathons as project, idx}
 							<li class="group relative">
 								<span
