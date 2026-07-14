@@ -7,6 +7,7 @@
 	import '@fontsource/archivo/500.css';
 	import '@fontsource/archivo/700.css';
 	import '@fontsource/archivo/900.css';
+	import Navbar from '$lib/components/ink/Navbar.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -16,10 +17,11 @@
 </script>
 
 <svelte:head>
-	<meta name="theme-color" content="#0a0a0a" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="theme-color" content="#f3efe6" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 </svelte:head>
 
+<Navbar />
 <div class="layout">
 	{@render children?.()}
 </div>
@@ -38,7 +40,13 @@
 	:global(*) {
 		box-sizing: border-box;
 	}
+	/* Offset for the fixed navbar + anchor targets clear the nav */
+	:global(section[id]),
+	:global([id='top']) {
+		scroll-margin-top: 64px;
+	}
 	.layout {
 		min-height: 100vh;
+		padding-top: 52px;
 	}
 </style>
