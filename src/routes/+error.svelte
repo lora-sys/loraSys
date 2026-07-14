@@ -2,6 +2,9 @@
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
 	import { fade } from 'svelte/transition';
+	import { Canvas } from '@threlte/core';
+	import * as THREE from 'three';
+	import BrokenMesh from '$lib/components/spatial/BrokenMesh.svelte';
 
 	let { status, error }: { status?: number; error?: Error & { frame?: string } } = $props();
 
@@ -52,10 +55,27 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-[#07070a] p-4">
+<div class="relative flex min-h-screen items-center justify-center bg-[#07070a] p-4">
+	<!-- 3D broken mesh backdrop -->
+	<div class="pointer-events-none absolute inset-0 opacity-50">
+		<Canvas
+			dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)}
+			toneMapping={THREE.ACESFilmicToneMapping}
+		>
+			<BrokenMesh />
+		</Canvas>
+	</div>
+
+	<!-- Scene label top-left -->
+	<div
+		class="absolute left-6 top-6 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500 md:left-10 md:top-10"
+	>
+		<span class="text-emerald-400">scene</span>=err / <span class="text-zinc-300">page-not-found</span>
+	</div>
+
 	<!-- Terminal Window -->
 	<div
-		class="w-full max-w-lg overflow-hidden rounded-lg border border-zinc-800 bg-[#111116] shadow-2xl shadow-emerald-500/5"
+		class="relative w-full max-w-lg overflow-hidden rounded-lg border border-zinc-800 bg-[#111116]/90 shadow-2xl shadow-emerald-500/5 backdrop-blur-sm"
 	>
 		<!-- Title Bar -->
 		<div class="flex items-center gap-2 border-b border-zinc-800 bg-[#0c0c12] px-4 py-3">
