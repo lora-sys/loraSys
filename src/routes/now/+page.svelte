@@ -3,7 +3,28 @@
 </script>
 
 <svelte:head>
-	<title>/now — lora</title>
+	<title>/now — What Lora Sys Is Focused On Right Now</title>
+	<meta
+		name="description"
+		content="Current focus of Lora Sys (Sikandar Bhide): what I'm shipping, learning, and exploring right now. The /now page is a living snapshot."
+	/>
+	<link rel="canonical" href="https://lora-sys.github.io/loraSys/now" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="/now — Lora Sys" />
+	<meta
+		property="og:description"
+		content="Current focus of Lora Sys (Sikandar Bhide) — what I'm shipping, learning, and exploring right now."
+	/>
+	<meta property="og:url" content="https://lora-sys.github.io/loraSys/now" />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="/now — Lora Sys" />
+	<meta
+		name="twitter:description"
+		content="What I'm shipping, learning, and exploring right now."
+	/>
 </svelte:head>
 
 <div class="mx-auto max-w-2xl px-4 py-20">

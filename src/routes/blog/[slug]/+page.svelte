@@ -126,9 +126,37 @@
 
 <!-- SEO -->
 <svelte:head>
-	<title>{data.meta?.title ?? 'Blog Post'} — lora</title>
+	<title>{data.meta?.title ?? 'Blog Post'} — Lora Sys</title>
+	<meta
+		name="description"
+		content={data.meta?.description ?? 'Writing on software engineering, AI, and indie hacking.'}
+	/>
+	<meta name="author" content="Lora Sys (Sikandar Bhide)" />
+	{#if data.meta?.categories?.length}
+		<meta
+			name="keywords"
+			content={['Lora Sys', 'Sikandar Bhide', ...(data.meta.categories ?? [])].join(', ')}
+		/>
+	{/if}
+	<link
+		rel="canonical"
+		href={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`}
+	/>
+
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta?.title ?? ''} />
+	<meta property="og:description" content={data.meta?.description ?? ''} />
+	<meta property="og:url" content={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`} />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta property="article:published_time" content={data.meta?.date ?? ''} />
+	{#if data.meta?.categories?.length}
+		<meta property="article:section" content={data.meta.categories[0]} />
+	{/if}
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={data.meta?.title ?? ''} />
+	<meta name="twitter:description" content={data.meta?.description ?? ''} />
+	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
 	{@html ldJsonTag}
 </svelte:head>
 

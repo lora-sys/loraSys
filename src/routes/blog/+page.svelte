@@ -8,10 +8,31 @@
 </script>
 
 <svelte:head>
-	<title>Blog — lora</title>
+	<title>Blog — Lora Sys · Software Engineering, Indie Hacking, AI</title>
 	<meta
 		name="description"
-		content="Writing on software engineering, startups, and indie hacking."
+		content="Writing from Lora Sys (Sikandar Bhide) on software engineering, indie hacking, AI agents, spatial web, and shipping products end-to-end."
+	/>
+	<meta
+		name="keywords"
+		content="Lora Sys blog, Sikandar Bhide, software engineering, indie hacking, AI agents, spatial web, monorepo, Svelte, TypeScript"
+	/>
+	<link rel="canonical" href="https://lora-sys.github.io/loraSys/blog" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Blog — Lora Sys" />
+	<meta
+		property="og:description"
+		content="Writing on software engineering, indie hacking, AI agents, spatial web, and shipping products end-to-end."
+	/>
+	<meta property="og:url" content="https://lora-sys.github.io/loraSys/blog" />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Blog — Lora Sys" />
+	<meta
+		name="twitter:description"
+		content="Writing on software engineering, indie hacking, AI agents, spatial web, and shipping products end-to-end."
 	/>
 </svelte:head>
 
