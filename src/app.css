@@ -122,19 +122,104 @@
 	}
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-	width: 6px;
+/* ============================================================
+   AGENT theme — design tokens for /, /blog, /now, 404
+   ============================================================ */
+:root {
+	/* Color */
+	--agent-bg: #000000;
+	--agent-fg: #ffffff;
+	--agent-fg-dim: #a1a1aa;
+	--agent-fg-mute: #71717a;
+	--agent-fg-ghost: #52525b;
+	--agent-line: #18181b;
+	--agent-line-strong: #27272a;
+	--agent-accent: #67e8f9;
+	--agent-accent-warm: #fbbf24;
+
+	/* Type scale (fluid, clamp) */
+	--type-hero: clamp(3.5rem, 16vw, 14rem);
+	--type-room-title: clamp(2.5rem, 9vw, 7rem);
+	--type-now-label: clamp(3rem, 11vw, 8rem);
+	--type-now-desc: clamp(0.75rem, 1.6vw, 1.25rem);
+	--type-mono-lg: clamp(0.875rem, 1.2vw, 1.125rem);
+	--type-mono-md: clamp(0.75rem, 1vw, 0.875rem);
+	--type-mono-sm: clamp(0.625rem, 0.8vw, 0.75rem);
+
+	/* Spacing */
+	--space-page-x: clamp(24px, 6vw, 96px);
+	--space-page-y: clamp(24px, 8vh, 96px);
+	--space-room-gap: clamp(24px, 5vh, 64px);
+
+	/* Fonts */
+	--font-display: 'Space Grotesk', system-ui, sans-serif;
+	--font-mono: 'Fragment Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+	--font-syne: 'Syne', 'Space Grotesk', system-ui, sans-serif;
 }
-::-webkit-scrollbar-track {
-	background: transparent;
+
+/* ============================================================
+   Override base bg/fg/cursor for AGENT theme
+   ============================================================ */
+html,
+body {
+	background: var(--agent-bg) !important;
+	color: var(--agent-fg) !important;
+	font-family: var(--font-display) !important;
 }
+
+body {
+	cursor: none !important;
+}
+
+@media (max-width: 767px) {
+	body {
+		cursor: auto !important;
+	}
+}
+
+/* Block the gold scrollbar — theme is monochrome */
 ::-webkit-scrollbar-thumb {
-	background: hsl(45 100% 70% / 0.3);
-	border-radius: 3px;
+	background: #27272a !important;
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: hsl(45 100% 70% / 0.5);
+	background: #3f3f46 !important;
+}
+
+/* AGENT type utilities */
+.agent-hero {
+	font-family: var(--font-display);
+	font-size: var(--type-hero);
+	font-weight: 700;
+	letter-spacing: -0.05em;
+	line-height: 0.88;
+	color: var(--agent-fg);
+}
+.agent-room-title {
+	font-family: var(--font-display);
+	font-size: var(--type-room-title);
+	font-weight: 700;
+	letter-spacing: -0.04em;
+	line-height: 0.95;
+	color: var(--agent-fg);
+}
+.agent-mono {
+	font-family: var(--font-mono);
+	color: var(--agent-fg-dim);
+}
+.agent-accent {
+	color: var(--agent-accent);
+}
+.agent-line {
+	border-color: var(--agent-line);
+}
+
+/* Caret blink for "awaiting" state */
+@keyframes agent-blink {
+	0%, 49% { opacity: 1; }
+	50%, 100% { opacity: 0; }
+}
+.agent-blink {
+	animation: agent-blink 1.05s steps(2, end) infinite;
 }
 
 /* Text selection */
