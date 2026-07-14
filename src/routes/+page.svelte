@@ -17,11 +17,19 @@
 
 	// Contents index doubles as navigation.
 	const contents = [
-		{ n: '01', cn: '己', title: 'The Self', note: 'who & stack', href: '#self', page: 'P.02' },
-		{ n: '02', cn: '作', title: 'Selected Work', note: `${DATA.projects.length} projects`, href: '#work', page: 'P.04' },
-		{ n: '03', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
-		{ n: '04', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
-		{ n: '05', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
+		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', page: 'P.02' },
+		{ n: '02', cn: '技', title: 'Skills', note: 'what I build with', href: '#skills', page: 'P.03' },
+		{ n: '03', cn: '作', title: 'Selected Work', note: `${DATA.projects.length} projects`, href: '#work', page: 'P.04' },
+		{ n: '04', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
+		{ n: '05', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
+		{ n: '06', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
+	];
+
+	// Skills grouped for the kinetic marquee (presentation grouping of flat DATA.skills).
+	const skillGroups = [
+		{ label: 'Languages', items: ['TypeScript', 'Python', 'JavaScript', 'Java', 'Solidity'] },
+		{ label: 'Frameworks', items: ['React', 'Next.js', 'Svelte', 'SvelteKit', 'Node.js', 'TailwindCSS'] },
+		{ label: 'Tools & Domains', items: ['PostgreSQL', 'Docker', 'AI Agents', 'Web3'] }
 	];
 
 	let showWash = $state(false);
@@ -161,11 +169,28 @@
 							</div>
 						</div>
 					{/each}
-					<p class="mini-h">Stack</p>
-					<ul class="skills">
+					<p class="mini-h" hidden>Stack</p>
+					<ul class="skills" hidden style="display:none">
 						{#each DATA.skills as s}<li>{s}</li>{/each}
 					</ul>
 				</aside>
+			</div>
+		</section>
+
+				<!-- 技 SKILLS -->
+		<section id="skills" class="sec skills">
+			<div class="sec-head"><span class="cn">技</span><div class="sec-title"><h2>Skills</h2>{@render brush()}</div><span class="folio">P.03</span></div>
+			<div class="marquees">
+				{#each skillGroups as g, gi}
+					<div class="mrow" class:rev={gi % 2 === 1}>
+						<span class="mrow-label">{g.label}</span>
+						<div class="mviewport">
+							<div class="mtrack">
+								{#each [...g.items, ...g.items, ...g.items] as s}<span class="skill">{s}</span><span class="sep">✦</span>{/each}
+							</div>
+						</div>
+					</div>
+				{/each}
 			</div>
 		</section>
 
@@ -801,6 +826,86 @@
 		font-family: var(--font-serif);
 		font-style: italic;
 		font-size: 1.4rem;
+	}
+
+	/* Skills — kinetic marquee */
+	.marquees {
+		display: flex;
+		flex-direction: column;
+	}
+	.mrow {
+		display: flex;
+		align-items: center;
+		gap: 24px;
+		border-top: 1px solid var(--ink-line);
+		padding: clamp(8px, 1.4vh, 16px) 0;
+	}
+	.mrow:last-child {
+		border-bottom: 1px solid var(--ink-line);
+	}
+	.mrow-label {
+		flex: 0 0 auto;
+		width: clamp(84px, 10vw, 150px);
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--zhu);
+	}
+	.mviewport {
+		flex: 1;
+		overflow: hidden;
+		-webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+		mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+	}
+	.mtrack {
+		display: inline-flex;
+		align-items: center;
+		white-space: nowrap;
+		will-change: transform;
+		animation: marquee-x 32s linear infinite;
+	}
+	.mrow.rev .mtrack {
+		animation-direction: reverse;
+	}
+	.mrow:hover .mtrack {
+		animation-play-state: paused;
+	}
+	.skill {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.75rem, 4vw, 3.25rem);
+		letter-spacing: -0.02em;
+		padding: 0 0.28em;
+		color: var(--ink);
+		transition: color 0.2s ease;
+		cursor: default;
+	}
+	.skill:hover {
+		color: var(--zhu);
+	}
+	.sep {
+		color: var(--zhu);
+		opacity: 0.55;
+		font-size: clamp(0.9rem, 1.5vw, 1.3rem);
+	}
+	@keyframes marquee-x {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-33.333%);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.mtrack {
+			animation: none;
+		}
+		.mviewport {
+			overflow-x: auto;
+		}
 	}
 
 	/* Off hours — image galleries */
