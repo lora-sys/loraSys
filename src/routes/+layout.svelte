@@ -6,6 +6,8 @@
 	import { base } from '$app/paths';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
+	import SpatialScroll from '$lib/components/spatial/SpatialScroll.svelte';
+	import SpatialStage from '$lib/components/spatial/SpatialStage.svelte';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
 	import '@fontsource/fragment-mono/index.css';
@@ -50,15 +52,14 @@
 <ModeWatcher />
 
 {#if browser && spatialEnabled}
-	<!-- 3D scene lazy-loaded only after first mount + capability check -->
-	{#await import('$lib/components/spatial/SpatialStage.svelte') then { default: SpatialStage }}
-		<SpatialStage />
-	{/await}
+	<SpatialStage />
 {/if}
 
 <Tooltip.Provider>
 	<TopNav />
-	<div class="relative min-h-screen antialiased">
-		{@render children?.()}
-	</div>
+	<SpatialScroll>
+		<div class="relative min-h-screen antialiased">
+			{@render children?.()}
+		</div>
+	</SpatialScroll>
 </Tooltip.Provider>
