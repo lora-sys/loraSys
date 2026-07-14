@@ -7,6 +7,7 @@
 	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
 	import ContactOrb3D from '$lib/components/spatial/ContactOrb3D.svelte';
 	import ManifestoAccent3D from '$lib/components/spatial/ManifestoAccent3D.svelte';
+	import FooterBurst3D from '$lib/components/spatial/FooterBurst3D.svelte';
 	import LazyScene from '$lib/components/spatial/LazyScene.svelte';
 	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
 	import * as THREE from 'three';
@@ -610,6 +611,16 @@
 
 	<!-- ==================== FOOTER ==================== -->
 	<footer class="relative overflow-hidden border-t border-zinc-800/40 py-16">
+		<!-- 3D particle burst fires once on entry, fades to black -->
+		<LazyScene class="pointer-events-none absolute inset-0">
+			<Canvas
+				dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+				toneMapping={THREE.ACESFilmicToneMapping}
+			>
+				<FooterBurst3D count={150} />
+			</Canvas>
+		</LazyScene>
+
 		<div class="relative z-10 flex flex-col items-center gap-6">
 			<p class="font-heading text-2xl font-bold tracking-tight sm:text-3xl">{DATA.name}</p>
 			<div class="flex items-center gap-4">

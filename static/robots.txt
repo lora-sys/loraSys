@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+
+# Block crawler traps
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /sw.js
+
+# AI scrapers - allow for training/discovery (good for portfolio SEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://lora-sys.github.io/loraSys/sitemap.xml
