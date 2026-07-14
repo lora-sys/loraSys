@@ -241,7 +241,7 @@ export const DATA = {
 					icon: Github
 				}
 			],
-			image: 'https://raw.githubusercontent.com/lora-sys/Newtube-clone/main/logo/architecture.png',
+			image: '/images/projects/newtube.webp',
 			video: ''
 		},
 		{
@@ -267,8 +267,7 @@ export const DATA = {
 					icon: Globe
 				}
 			],
-			image:
-				'https://raw.githubusercontent.com/lora-sys/Daily-Rss/main/public/Snipaste_2025-12-28_16-28-54.png',
+			image: '/images/projects/dailyrss.webp',
 			video: ''
 		},
 		{
@@ -297,7 +296,7 @@ export const DATA = {
 					icon: Github
 				}
 			],
-			image: 'https://raw.githubusercontent.com/lora-sys/TrandingOs/main/images/image1.jpg',
+			image: '/images/projects/trandingos.webp',
 			video: ''
 		},
 		{
@@ -339,7 +338,7 @@ export const DATA = {
 					icon: Github
 				}
 			],
-			image: 'https://opengraph.githubassets.com/1/lora-sys/nanochat-studay',
+			image: '/images/projects/nanochat.webp',
 			video: ''
 		},
 		{
@@ -360,8 +359,7 @@ export const DATA = {
 					icon: Github
 				}
 			],
-			image:
-				'https://raw.githubusercontent.com/lora-sys/hackthon-agent/master/docs/assets/emergence-demo.png',
+			image: '/images/projects/emergence.webp',
 			video: ''
 		},
 		{
@@ -387,7 +385,7 @@ export const DATA = {
 					icon: Globe
 				}
 			],
-			image: 'https://opengraph.githubassets.com/1/lora-sys/demo_monad_hackthon',
+			image: '/images/projects/tarot.webp',
 			video: ''
 		}
 	],
