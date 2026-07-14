@@ -1,13 +1,5 @@
 <script lang="ts">
-	import TopNav from '$lib/components/portfolio/TopNav.svelte';
 	import '../app.css';
-	import { ModeWatcher, setMode } from 'mode-watcher';
-	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { base } from '$app/paths';
-	import { browser } from '$app/environment';
-	import { onMount, type Component } from 'svelte';
-	import SpatialScroll from '$lib/components/spatial/SpatialScroll.svelte';
-	import GrainOverlay from '$lib/components/spatial/GrainOverlay.svelte';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
 	import '@fontsource/fragment-mono/index.css';
@@ -17,122 +9,38 @@
 	}
 
 	let { children }: Props = $props();
-
-	let spatialEnabled = $state(false);
-	// dynamic-imported SpatialStage — keeps Three.js out of main bundle.
-	let SpatialStageComp = $state<null | Component<any>>(null);
-
-	onMount(() => {
-		setMode('dark');
-		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const mobile = window.matchMedia('(max-width: 767px)').matches;
-		spatialEnabled = !reduced && !mobile;
-
-		if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-			window.addEventListener('load', () => {
-				navigator.serviceWorker
-					.register(`${base}/sw.js`)
-					.then(() => console.log('Service Worker registered'))
-					.catch((error) => console.log('SW registration failed:', error));
-			});
-		}
-
-		// Defer SpatialStage import until idle so Three.js bundle doesn't
-		// block TBT. SpatialScroll stays eager — testing showed
-		// dynamic-importing it actually hurt Perf score (Promise.all
-		// parallelized two heavy bundles).
-		const loadSpatial = () =>
-			import('$lib/components/spatial/SpatialStage.svelte').then((m) => {
-				SpatialStageComp = m.default;
-			});
-		if ('requestIdleCallback' in window) {
-			window.requestIdleCallback(loadSpatial, { timeout: 2000 });
-		} else {
-			setTimeout(loadSpatial, 100);
-		}
-	});
 </script>
 
 <svelte:head>
-	<title>Lora Sys — AI Engineer · Spatial Web · Indie Hacker</title>
-	<meta
-		name="description"
-		content="Portfolio of Sikandar Bhide (Lora Sys) — AI engineer, indie hacker, and builder of spatial web experiences. Shipped projects across agents, blockchain, dev tools, and creative coding."
-	/>
-	<meta name="author" content="Sikandar Bhide (Lora Sys)" />
-	<meta name="keywords" content="Lora Sys, Sikandar Bhide, AI engineer, indie hacker, portfolio, spatial web, agents, blockchain, monad, hackathon, dev tools, Svelte, TypeScript, 3D" />
-	<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
-	<link rel="canonical" href="https://lora-sys.github.io/loraSys/" />
-
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="Lora Sys" />
-	<meta property="og:title" content="Lora Sys — AI Engineer · Spatial Web · Indie Hacker" />
-	<meta
-		property="og:description"
-		content="Portfolio of Sikandar Bhide (Lora Sys) — AI engineer, indie hacker, builder of spatial web experiences. Agents, blockchain, dev tools, creative coding."
-	/>
-	<meta property="og:url" content="https://lora-sys.github.io/loraSys/" />
-	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
-	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<meta property="og:locale" content="en_US" />
-
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Lora Sys — AI Engineer · Spatial Web · Indie Hacker" />
-	<meta
-		name="twitter:description"
-		content="AI engineer, indie hacker, builder of spatial web experiences. Agents, blockchain, dev tools, creative coding."
-	/>
-	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
-
-	<link rel="preconnect" href="https://i.pinimg.com" />
-	<link rel="preconnect" href="https://pub-83c5db439b40468498f97946200806f7.r2.dev" />
-	<link rel="preconnect" href="https://cdn.magicui.design" />
-	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="anonymous" />
-	<link rel="manifest" href="{base}/manifest.json" />
-	<meta name="theme-color" content="#020617" />
-	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-	<meta name="apple-mobile-web-app-title" content="Lora Portfolio" />
-
-	{@html `<script type="application/ld+json">${JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'Person',
-		name: 'Sikandar Bhide',
-		alternateName: 'Lora Sys',
-		url: 'https://lora-sys.github.io/loraSys/',
-		image: 'https://lora-sys.github.io/loraSys/og-cover.png',
-		jobTitle: 'AI Engineer · Indie Hacker',
-		sameAs: [
-			'https://github.com/lora-sys',
-			'https://twitter.com/lora_sys',
-			'https://lora-sys.github.io/loraSys/'
-		],
-		knowsAbout: [
-			'AI Engineering',
-			'Multi-Agent Systems',
-			'Blockchain',
-			'Spatial Web',
-			'Svelte',
-			'TypeScript',
-			'Indie Hacking'
-		]
-	}).replace(/</g, '\\u003c')}</script>`}
+	<meta name="theme-color" content="#000000" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 </svelte:head>
 
-<ModeWatcher />
+<div class="layout">
+	{@render children?.()}
+</div>
 
-{#if browser && spatialEnabled && SpatialStageComp}
-	<svelte:component this={SpatialStageComp} />
-{/if}
-
-<GrainOverlay opacity={0.05} />
-
-<Tooltip.Provider>
-	<TopNav />
-	<SpatialScroll>
-		<div class="relative min-h-screen antialiased">
-			{@render children?.()}
-		</div>
-	</SpatialScroll>
-</Tooltip.Provider>
+<style>
+	:global(html, body) {
+		background: #000;
+		color: #fff;
+		font-family: 'Space Grotesk', system-ui, sans-serif;
+		margin: 0;
+		padding: 0;
+		-webkit-font-smoothing: antialiased;
+		overflow-x: hidden;
+	}
+	:global(body) {
+		cursor: none;
+	}
+	:global(a) {
+		color: inherit;
+		text-decoration: none;
+	}
+	:global(*) {
+		box-sizing: border-box;
+	}
+	.layout {
+		min-height: 100vh;
+	}
+</style>
