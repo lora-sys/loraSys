@@ -5,6 +5,7 @@
 	import { Canvas } from '@threlte/core';
 	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
 	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
+	import ContactOrb3D from '$lib/components/spatial/ContactOrb3D.svelte';
 	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
 	import * as THREE from 'three';
 
@@ -544,37 +545,51 @@
 					</div>
 				</div>
 				<div class="md:col-span-5 md:pt-12">
-					<form
-						action="mailto:lorasys@outlook.com"
-						method="post"
-						enctype="text/plain"
-						class="space-y-4"
+					<!-- Local 3D Canvas — gradient orb + dense particle cloud climax -->
+					<div
+						class="relative aspect-square w-full overflow-hidden rounded-2xl border border-zinc-800/60"
 					>
-						<input
-							type="text"
-							name="name"
-							placeholder="Name"
-							class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-						/>
-						<input
-							type="email"
-							name="email"
-							placeholder="Email"
-							class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-						/>
-						<textarea
-							name="message"
-							placeholder="Message"
-							rows="4"
-							class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-						></textarea>
-						<button
-							type="submit"
-							class="w-full rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-cyan-300 transition hover:border-cyan-400/40"
+						<Canvas
+							dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+							toneMapping={THREE.ACESFilmicToneMapping}
 						>
-							$ send_message
-						</button>
-					</form>
+							<ContactOrb3D orbSize={1.5} />
+						</Canvas>
+						<!-- Form overlays the orb so visitors can act on the climax -->
+						<div class="pointer-events-none absolute inset-0 flex items-end justify-center p-6">
+							<form
+								action="mailto:lorasys@outlook.com"
+								method="post"
+								enctype="text/plain"
+								class="pointer-events-auto w-full max-w-md space-y-4 rounded-xl border border-zinc-800/80 bg-zinc-950/70 p-4 backdrop-blur-md"
+							>
+								<input
+									type="text"
+									name="name"
+									placeholder="Name"
+									class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/60 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+								/>
+								<input
+									type="email"
+									name="email"
+									placeholder="Email"
+									class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/60 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+								/>
+								<textarea
+									name="message"
+									placeholder="Message"
+									rows="3"
+									class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/60 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-cyan-400/50 focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
+								></textarea>
+								<button
+									type="submit"
+									class="w-full rounded-full border border-zinc-700 bg-zinc-900/60 px-8 py-3 font-mono text-sm text-cyan-300 transition hover:border-cyan-400/40"
+								>
+									$ send_message
+								</button>
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
