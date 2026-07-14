@@ -167,9 +167,9 @@
 				</p>
 			</ScrollScene>
 
-			<div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+			<div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6">
 				{#each DATA.projects as project, i}
-					<ScrollScene delay={0.1 + i * 0.05} y={28}>
+					<ScrollScene delay={0.1 + i * 0.05} y={28} class={i === 0 ? 'md:col-span-6' : 'md:col-span-3'}>
 						<TerminalCard
 							title={project.title}
 							description={project.description}
@@ -206,23 +206,27 @@
 						more.
 					</p>
 				</ScrollScene>
+
 				<ScrollScene delay={0.2}>
-					<div
-						class="mt-12 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/40 p-3 font-mono text-xs"
-					>
+					<ol class="relative mt-16 space-y-2 border-l border-zinc-800/80 pl-8 md:pl-12">
 						{#each DATA.hackathons as project, idx}
-							<LogCard
-								title={project.title}
-								description={project.description}
-								descriptionHtml={project.descriptionHtml}
-								dates={project.dates}
-								location={project.location}
-								image={project.image}
-								links={project.links}
-								pid={idx + 1000}
-							/>
+							<li class="group relative">
+								<span
+									class="absolute -left-[2.05rem] top-3 inline-block size-2.5 rounded-full bg-emerald-400/80 ring-4 ring-emerald-400/10 transition group-hover:ring-emerald-400/30 md:-left-[3.05rem]"
+								></span>
+								<LogCard
+									title={project.title}
+									description={project.description}
+									descriptionHtml={project.descriptionHtml}
+									dates={project.dates}
+									location={project.location}
+									image={project.image}
+									links={project.links}
+									pid={idx + 1000}
+								/>
+							</li>
 						{/each}
-					</div>
+					</ol>
 				</ScrollScene>
 			</div>
 		</section>
