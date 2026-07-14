@@ -1,7 +1,8 @@
 <script lang="ts">
-	// INK EDITION (墨刊) — redo #5. Round 1 · commit 1 (skeleton).
-	// Structure + real data + nav. Type/color polish → commit 2. Motion → commit 3.
+	// INK EDITION (墨刊) — redo #5. Round 1 · commit 3 (motion).
+	import { onMount } from 'svelte';
 	import { DATA } from '$lib/data/resume';
+	import InkWash from '$lib/components/ink/InkWash.svelte';
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
 
@@ -13,7 +14,69 @@
 		{ n: '04', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
 		{ n: '05', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
 	];
+
+	let showWash = $state(false);
+
+	onMount(() => {
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const desktop = window.matchMedia('(min-width: 861px)').matches;
+		showWash = !reduce && desktop;
+		if (reduce) return;
+
+		let cleanup = () => {};
+		(async () => {
+			try {
+				const gsapMod = await import('gsap');
+				const stMod = await import('gsap/dist/ScrollTrigger');
+				const gsap = (gsapMod as any).gsap ?? (gsapMod as any).default;
+				const ScrollTrigger = (stMod as any).ScrollTrigger ?? (stMod as any).default;
+				gsap.registerPlugin(ScrollTrigger);
+
+				// Entry: seal stamp + masthead + hero + index
+				gsap.from('.seal', { scale: 2.4, opacity: 0, rotate: -24, duration: 0.5, ease: 'back.out(2)', delay: 0.15 });
+				gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
+				gsap.from('.hero-left > *', { y: 26, opacity: 0, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
+				gsap.from('.index-h, .index li, .pull', { y: 16, opacity: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.35 });
+
+				// Per-section: header rise + brush-underline draw
+				gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
+					const head = sec.querySelector('.sec-head');
+					if (head) {
+						gsap.from(head, { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%' } });
+					}
+					const brush = sec.querySelector<SVGPathElement>('.brush path');
+					if (brush) {
+						const len = brush.getTotalLength();
+						gsap.set(brush, { strokeDasharray: len, strokeDashoffset: len });
+						gsap.to(brush, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', scrollTrigger: { trigger: sec, start: 'top 74%' } });
+					}
+				});
+				gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
+					gsap.from(row, { y: 24, opacity: 0, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 90%' } });
+				});
+
+				ScrollTrigger.refresh();
+				cleanup = () => ScrollTrigger.getAll().forEach((s: any) => s.kill());
+			} catch (err) {
+				console.warn('[ink] motion init failed, static fallback', err);
+			}
+		})();
+
+		return () => cleanup();
+	});
 </script>
+
+{#snippet brush()}
+	<svg class="brush" viewBox="0 0 320 12" preserveAspectRatio="none" aria-hidden="true">
+		<path
+			d="M3 8 C 64 2 128 11 190 5 S 300 3 317 7"
+			fill="none"
+			stroke="var(--zhu)"
+			stroke-width="3"
+			stroke-linecap="round"
+		/>
+	</svg>
+{/snippet}
 
 <svelte:head>
 	<title>{DATA.name} — Field Notes on Building</title>
@@ -27,6 +90,7 @@
 <div class="edition">
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
+	{#if showWash}<InkWash />{/if}
 	<!-- MASTHEAD -->
 	<header class="mast">
 		<a class="logo" href="#top" aria-label="lora — home">
@@ -71,7 +135,7 @@
 
 		<!-- 己 THE SELF -->
 		<section id="self" class="sec">
-			<div class="sec-head"><span class="cn">己</span><h2>The Self</h2><span class="folio">P.02</span></div>
+			<div class="sec-head"><span class="cn">己</span><div class="sec-title"><h2>The Self</h2>{@render brush()}</div><span class="folio">P.02</span></div>
 			<div class="self-grid">
 				<div class="prose">{@html DATA.summaryHtml}</div>
 				<aside>
@@ -89,7 +153,7 @@
 
 		<!-- 作 SELECTED WORK -->
 		<section id="work" class="sec">
-			<div class="sec-head"><span class="cn">作</span><h2>Selected Work</h2><span class="folio">P.04</span></div>
+			<div class="sec-head"><span class="cn">作</span><div class="sec-title"><h2>Selected Work</h2>{@render brush()}</div><span class="folio">P.04</span></div>
 			<ol class="work">
 				{#each DATA.projects as p, i}
 					<li class="row">
@@ -110,7 +174,7 @@
 
 		<!-- 戰 HACKATHONS -->
 		<section id="hack" class="sec">
-			<div class="sec-head"><span class="cn">戰</span><h2>Hackathons &amp; Signals</h2><span class="folio">P.09</span></div>
+			<div class="sec-head"><span class="cn">戰</span><div class="sec-title"><h2>Hackathons &amp; Signals</h2>{@render brush()}</div><span class="folio">P.09</span></div>
 			<ul class="hacks">
 				{#each DATA.hackathons as h}
 					<li>
@@ -126,7 +190,7 @@
 
 		<!-- 閒 OFF HOURS -->
 		<section id="off" class="sec">
-			<div class="sec-head"><span class="cn">閒</span><h2>Off Hours</h2><span class="folio">P.12</span></div>
+			<div class="sec-head"><span class="cn">閒</span><div class="sec-title"><h2>Off Hours</h2>{@render brush()}</div><span class="folio">P.12</span></div>
 			<p class="mini-h">Anime</p>
 			<ul class="anime">
 				{#each DATA.anime as a}
@@ -374,6 +438,9 @@
 		font-size: clamp(1.75rem, 3vw, 2.5rem);
 		color: var(--zhu);
 	}
+	.sec-title {
+		flex: 1;
+	}
 	.sec-head h2 {
 		font-family: var(--font-serif);
 		font-weight: 900;
@@ -382,7 +449,13 @@
 		letter-spacing: -0.02em;
 		line-height: 1;
 		margin: 0;
-		flex: 1;
+	}
+	.brush {
+		display: block;
+		width: clamp(140px, 26%, 300px);
+		height: 11px;
+		margin-top: 10px;
+		overflow: visible;
 	}
 	.folio {
 		font-family: var(--font-label);
