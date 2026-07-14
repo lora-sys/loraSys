@@ -14,7 +14,7 @@
 
 	let {
 		text = 'lora',
-		fontUrl = 'https://cdn.jsdelivr.net/npm/three@0.185.1/examples/fonts/helvetiker_bold.typeface.json',
+		fontUrl = '/fonts/helvetiker_bold.typeface.json',
 		size = 4,
 		depth = 0.6
 	}: Props = $props();
