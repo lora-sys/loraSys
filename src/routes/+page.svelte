@@ -1345,6 +1345,10 @@
 		margin: 0;
 		list-style: none;
 		scrollbar-width: none;
+		cursor: grab;
+	}
+	.track:active {
+		cursor: grabbing;
 	}
 	.track::-webkit-scrollbar {
 		display: none;
