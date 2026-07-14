@@ -10,6 +10,7 @@
 	import FooterBurst3D from '$lib/components/spatial/FooterBurst3D.svelte';
 	import LazyScene from '$lib/components/spatial/LazyScene.svelte';
 	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
+	import EntryReveal from '$lib/components/spatial/EntryReveal.svelte';
 	import * as THREE from 'three';
 
 	interface Props {}
@@ -161,54 +162,62 @@
 				<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
 					<span class="text-emerald-400">scene</span>=02 / credo
 				</span>
-				<blockquote
-					class="mt-6 font-heading text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
-				>
-					<span class="text-emerald-400">"</span>Builder of evolving
-					<span class="text-zinc-500 line-through decoration-zinc-700">ideas</span>
-					<span
-						class="bg-gradient-to-r from-cyan-300 via-purple-400 to-amber-200 bg-clip-text text-transparent"
-						>systems</span
-					>. Always building, learning, and shipping.<span class="text-emerald-400">"</span>
-				</blockquote>
+				<EntryReveal delay={0.15} y={20}>
+					<blockquote
+						class="mt-6 font-heading text-[clamp(2rem,5.5vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+					>
+						<span class="text-emerald-400">"</span>Builder of evolving
+						<span class="text-zinc-500 line-through decoration-zinc-700">ideas</span>
+						<span
+							class="bg-gradient-to-r from-cyan-300 via-purple-400 to-amber-200 bg-clip-text text-transparent"
+							>systems</span
+						>. Always building, learning, and shipping.<span class="text-emerald-400">"</span>
+					</blockquote>
+				</EntryReveal>
 			</div>
 
 			<div class="flex flex-col gap-8 md:col-span-4 md:col-start-9 md:pt-12">
-				<LazyScene
-					class="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
-				>
-					<Canvas
-						dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
-						toneMapping={THREE.ACESFilmicToneMapping}
+				<EntryReveal delay={0.3} y={12}>
+					<LazyScene
+						class="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
 					>
-						<ManifestoAccent3D count={5} />
-					</Canvas>
-				</LazyScene>
+						<Canvas
+							dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+							toneMapping={THREE.ACESFilmicToneMapping}
+						>
+							<ManifestoAccent3D count={5} />
+						</Canvas>
+					</LazyScene>
+				</EntryReveal>
 
-				<dl
-					class="grid grid-cols-2 gap-y-6 font-mono text-xs uppercase tracking-[0.18em]"
-				>
-					<dt class="text-zinc-500">base</dt>
-					<dd class="text-zinc-300">{DATA.location}</dd>
+				<EntryReveal delay={0.4} y={12}>
+					<dl
+						class="grid grid-cols-2 gap-y-6 font-mono text-xs uppercase tracking-[0.18em]"
+					>
+						<dt class="text-zinc-500">base</dt>
+						<dd class="text-zinc-300">{DATA.location}</dd>
 
-					<dt class="text-zinc-500">craft</dt>
-					<dd class="text-zinc-300">full-stack · agents</dd>
+						<dt class="text-zinc-500">craft</dt>
+						<dd class="text-zinc-300">full-stack · agents</dd>
 
-					<dt class="text-zinc-500">focus</dt>
-					<dd class="text-zinc-300">AI · Web3 · DX</dd>
+						<dt class="text-zinc-500">focus</dt>
+						<dd class="text-zinc-300">AI · Web3 · DX</dd>
 
-					<dt class="text-zinc-500">repos</dt>
-					<dd class="text-cyan-300">103+ public</dd>
+						<dt class="text-zinc-500">repos</dt>
+						<dd class="text-cyan-300">103+ public</dd>
 
-					<dt class="text-zinc-500">hackathons</dt>
-					<dd class="text-cyan-300">Monad · ETH Beijing</dd>
-				</dl>
+						<dt class="text-zinc-500">hackathons</dt>
+						<dd class="text-cyan-300">Monad · ETH Beijing</dd>
+					</dl>
+				</EntryReveal>
 
-				<div
-					class="prose prose-invert max-w-full text-pretty font-mono text-sm leading-relaxed text-zinc-400 prose-a:font-bold prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline"
-				>
-					{@html DATA.summaryHtml}
-				</div>
+				<EntryReveal delay={0.5} y={12}>
+					<div
+						class="prose prose-invert max-w-full text-pretty font-mono text-sm leading-relaxed text-zinc-400 prose-a:font-bold prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline"
+					>
+						{@html DATA.summaryHtml}
+					</div>
+				</EntryReveal>
 			</div>
 		</div>
 

@@ -24,6 +24,17 @@
 	let mesh: THREE.Mesh | null = null;
 	let geom: TextGeometry | null = null;
 	let mat: THREE.ShaderMaterial | null = null;
+	let scrollY = 0;
+
+	if (typeof window !== 'undefined') {
+		window.addEventListener(
+			'scroll',
+			() => {
+				scrollY = window.scrollY;
+			},
+			{ passive: true }
+		);
+	}
 
 	onMount(() => {
 		const loader = new FontLoader();
@@ -48,7 +59,8 @@
 					uTime: { value: 0 },
 					uColorA: { value: new THREE.Color('#67e8f9') },
 					uColorB: { value: new THREE.Color('#c084fc') },
-					uMouse: { value: new THREE.Vector2(0, 0) }
+					uMouse: { value: new THREE.Vector2(0, 0) },
+					uOpacity: { value: 1 }
 				},
 				vertexShader: /* glsl */ `
 					uniform float uTime;
@@ -67,12 +79,13 @@
 				fragmentShader: /* glsl */ `
 					uniform vec3 uColorA;
 					uniform vec3 uColorB;
+					uniform float uOpacity;
 					varying vec3 vNormal;
 
 					void main() {
 						float fresnel = pow(1.0 - abs(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0))), 1.5);
 						vec3 col = mix(uColorA, uColorB, fresnel);
-						gl_FragColor = vec4(col, 0.95);
+						gl_FragColor = vec4(col, uOpacity);
 					}
 				`,
 				transparent: true,
@@ -81,6 +94,7 @@
 			mat = m;
 
 			const newMesh = new THREE.Mesh(g, m);
+			newMesh.position.z = -12; // park text far from camera so it stays small
 			mesh = newMesh;
 			scene.add(newMesh);
 		});
@@ -101,10 +115,18 @@
 	});
 
 	useTask((delta) => {
-		if (mat) mat.uniforms.uTime.value += delta;
+		if (!mat) return;
+		mat.uniforms.uTime.value += delta;
 		if (mesh) {
 			mesh.rotation.y += delta * 0.08;
 			mesh.rotation.x = Math.sin(performance.now() * 0.0004) * 0.05;
+			// Fade out as user scrolls past hero. Hero is ~1 viewport tall;
+			// the text fades to invisible by the start of the manifesto section
+			// so it doesn't visually collide with the pull-quote.
+			const fadeStart = window.innerHeight * 0.5;
+			const fadeEnd = window.innerHeight * 1.2;
+			const t = Math.max(0, Math.min(1, (scrollY - fadeStart) / (fadeEnd - fadeStart)));
+			mat.uniforms.uOpacity.value = 1 - t;
 		}
 	});
 </script>
