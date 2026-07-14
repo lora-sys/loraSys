@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
-	import BlurFade from '$lib/components/magic/BlurFade.svelte';
-	import Badge from '$lib/components/ui/badge/badge.svelte';
 	let { data } = $props();
 	import { base } from '$app/paths';
-	let BLUR_FADE_DELAY = 0.04;
 </script>
 
 <svelte:head>
@@ -36,85 +33,90 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto max-w-4xl space-y-16 py-16">
-	<BlurFade delay={BLUR_FADE_DELAY}>
-		<div class="space-y-6 text-center">
-			<div
-				class="inline-block rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary"
-			>
-				Writing
-			</div>
-			<h1
-				class="bg-gradient-to-r from-foreground to-primary bg-clip-text font-sans text-4xl font-bold tracking-tight text-transparent sm:text-5xl"
-			>
-				Blog
-			</h1>
-			<p class="mx-auto max-w-2xl text-muted-foreground md:text-lg">
-				Writing on software engineering, startups, and indie hacking.
-			</p>
+<main class="relative min-h-screen pb-32 pt-32">
+	<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+		<!-- Section label -->
+		<div class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
+			<span class="text-emerald-400">scene</span>=B / <span class="text-zinc-300">writing</span>
 		</div>
-	</BlurFade>
 
-	<div class="space-y-8">
-		{#each data.posts as post, id}
-			<BlurFade delay={BLUR_FADE_DELAY * 1.5 + id * 0.1}>
+		<!-- Giant title with split composition -->
+		<div class="mt-6 grid grid-cols-1 gap-8 md:grid-cols-12">
+			<h1
+				class="font-heading text-[clamp(3.5rem,12vw,9rem)] font-bold leading-[0.86] tracking-[-0.04em] text-foreground md:col-span-8"
+			>
+				Writing.
+				<span class="text-zinc-500">/dev/log</span>
+			</h1>
+			<div class="flex flex-col justify-end gap-4 md:col-span-4">
+				<p class="font-heading text-lg leading-snug text-zinc-300 md:text-xl">
+					On software engineering, AI agents, blockchain, and indie hacking.
+				</p>
+				<dl class="grid grid-cols-2 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em]">
+					<dt class="text-zinc-500">posts</dt>
+					<dd class="text-cyan-300">{data.posts.length}</dd>
+					<dt class="text-zinc-500">topics</dt>
+					<dd class="text-zinc-300">AI · Web3 · DX</dd>
+				</dl>
+			</div>
+		</div>
+
+		<!-- Divider -->
+		<div class="mt-16 border-t border-zinc-800/40"></div>
+
+		<!-- Post list — terminal-style horizontal rows -->
+		<div class="mt-2">
+			{#each data.posts as post, id (post.slug)}
 				<a
 					href={`${base}/blog/${post.slug}`}
-					class="group relative block overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-primary/30 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/5 focus-visible:ring-2 focus-visible:ring-primary/50"
+					class="group block border-b border-zinc-800/40 py-8 transition hover:bg-zinc-900/30 md:py-10"
 				>
-					<!-- Gradient accent line -->
-					<div
-						class="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-transparent via-primary/60 to-transparent transition-all duration-700 group-hover:w-full"
-					></div>
+					<div class="grid grid-cols-1 gap-4 md:grid-cols-12 md:items-baseline">
+						<div
+							class="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 md:col-span-2"
+						>
+							{formatDate(post.date)}
+						</div>
 
-					<div class="space-y-4">
-						<div class="flex flex-wrap gap-2">
+						<div class="md:col-span-7">
+							<h2
+								class="font-heading text-2xl font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-cyan-300 md:text-3xl"
+							>
+								{post.title}
+							</h2>
+							{#if post.description}
+								<p class="mt-2 line-clamp-2 font-mono text-sm leading-relaxed text-zinc-400">
+									{post.description}
+								</p>
+							{/if}
+						</div>
+
+						<div class="flex flex-wrap items-center gap-2 md:col-span-3 md:justify-end">
 							{#each post.categories as category}
-								<Badge
-									variant="secondary"
-									class="rounded-lg border border-primary/30 bg-primary/5 text-xs text-primary"
+								<span
+									class="rounded border border-zinc-800/80 bg-zinc-900/40 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-300 transition group-hover:border-cyan-400/40 group-hover:text-cyan-300"
 								>
 									{category}
-								</Badge>
+								</span>
 							{/each}
 						</div>
+					</div>
 
-						<h2
-							class="font-sans text-xl font-semibold transition-colors duration-300 group-hover:text-primary sm:text-2xl"
-						>
-							{post.title}
-						</h2>
-
-						{#if post.description}
-							<p class="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-								{post.description}
-							</p>
-						{/if}
-
-						<div class="flex items-center justify-between text-sm text-muted-foreground">
-							<span>{formatDate(post.date)}</span>
-							<div
-								class="flex items-center gap-1 text-primary/60 transition-colors duration-300 group-hover:text-primary"
-							>
-								<span>Read more</span>
-								<svg
-									class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M9 5l7 7-7 7"
-									></path>
-								</svg>
-							</div>
-						</div>
+					<div
+						class="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition group-hover:text-cyan-300"
+					>
+						read → {post.slug}
 					</div>
 				</a>
-			</BlurFade>
-		{/each}
+			{/each}
+		</div>
+
+		<!-- Page index strip -->
+		<div
+			class="mt-16 flex items-center justify-between border-t border-zinc-800/40 pt-6 font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-600"
+		>
+			<span>cd /blog</span>
+			<span>{data.posts.length} entries</span>
+		</div>
 	</div>
-</div>
+</main>
