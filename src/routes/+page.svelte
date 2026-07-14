@@ -87,6 +87,47 @@
 					gsap.from(row, { y: 24, opacity: 0, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 90%' } });
 				});
 
+				// Staggered reveals for ledger cards, galleries, skill rows
+				gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item').forEach((el) => {
+					gsap.from(el, { y: 22, opacity: 0, duration: 0.5, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+				});
+				gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
+					gsap.from(el, { xPercent: i % 2 ? 5 : -5, opacity: 0, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+				});
+
+				// Count-up on figures
+				gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
+					const target = Number(el.dataset.count || '0');
+					const obj = { v: 0 };
+					ScrollTrigger.create({
+						trigger: el,
+						start: 'top 92%',
+						once: true,
+						onEnter: () =>
+							gsap.to(obj, {
+								v: target,
+								duration: 1.4,
+								ease: 'power2.out',
+								onUpdate: () => (el.textContent = String(Math.round(obj.v)))
+							})
+					});
+				});
+
+				// Magnetic hover
+				gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
+					const move = (e: MouseEvent) => {
+						const r = el.getBoundingClientRect();
+						gsap.to(el, {
+							x: (e.clientX - (r.left + r.width / 2)) * 0.3,
+							y: (e.clientY - (r.top + r.height / 2)) * 0.3,
+							duration: 0.3
+						});
+					};
+					const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+					el.addEventListener('mousemove', move);
+					el.addEventListener('mouseleave', leave);
+				});
+
 				ScrollTrigger.refresh();
 				cleanup = () => ScrollTrigger.getAll().forEach((s: any) => s.kill());
 			} catch (err) {
@@ -131,7 +172,7 @@
 		</a>
 		<p class="ed-line">
 			Field Notes on Building<br />
-			<b>Edition 2026 — 103 Repositories</b>
+			<b>Edition 2026 — <span class="count" data-count="103">103</span> Repositories</b>
 		</p>
 	</header>
 
@@ -289,7 +330,7 @@
 					</li>
 				{/each}
 			</ol>
-			<p class="repos">103 public repositories on GitHub — AI agents, Web3 dApps, full-stack applications.</p>
+			<p class="repos"><span class="count" data-count="103">103</span> public repositories on GitHub — AI agents, Web3 dApps, full-stack applications.</p>
 		</section>
 
 		<!-- 閒 OFF HOURS -->
