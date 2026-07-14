@@ -2,9 +2,35 @@
 	import { DATA } from '$lib/data/resume';
 	import AnimeSection from '$lib/components/portfolio/AnimeSection.svelte';
 	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
+	import { Canvas } from '@threlte/core';
+	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
+	import * as THREE from 'three';
 
 	interface Props {}
 	let {}: Props = $props();
+
+	const skillImages = [
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
+		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg'
+	];
 </script>
 
 <svelte:head>
@@ -249,15 +275,16 @@
 					</p>
 				</div>
 				<div class="md:col-span-7">
-					<!-- 3D scene placeholder for skills (later: floating orbiting meshes) -->
+					<!-- Local 3D Canvas — skill icons orbit around a central anchor -->
 					<div
-						class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10"
+						class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
 					>
-						<div class="absolute inset-0 flex items-center justify-center">
-							<p class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
-								3D skill orbit · scene=04
-							</p>
-						</div>
+						<Canvas
+							dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+							toneMapping={THREE.ACESFilmicToneMapping}
+						>
+							<SkillOrbit images={skillImages} radius={2.4} iconSize={0.65} />
+						</Canvas>
 					</div>
 
 					<div class="mt-8 flex flex-wrap items-center gap-2">
