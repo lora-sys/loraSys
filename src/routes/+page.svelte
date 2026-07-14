@@ -6,6 +6,7 @@
 	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
 	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
 	import ContactOrb3D from '$lib/components/spatial/ContactOrb3D.svelte';
+	import ManifestoAccent3D from '$lib/components/spatial/ManifestoAccent3D.svelte';
 	import LazyScene from '$lib/components/spatial/LazyScene.svelte';
 	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
 	import * as THREE from 'three';
@@ -172,6 +173,17 @@
 			</div>
 
 			<div class="flex flex-col gap-8 md:col-span-4 md:col-start-9 md:pt-12">
+				<LazyScene
+					class="aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
+				>
+					<Canvas
+						dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2)}
+						toneMapping={THREE.ACESFilmicToneMapping}
+					>
+						<ManifestoAccent3D count={5} />
+					</Canvas>
+				</LazyScene>
+
 				<dl
 					class="grid grid-cols-2 gap-y-6 font-mono text-xs uppercase tracking-[0.18em]"
 				>
