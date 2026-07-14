@@ -211,8 +211,9 @@
 
 		<!-- 聯 CONTACT -->
 		<section id="contact" class="sec contact">
-			<span class="cn big">聯</span>
-			<h2 class="say">Say Hello.</h2>
+			<span class="cn ghost" aria-hidden="true">聯</span>
+			<p class="c-tag">聯 · Say Hello</p>
+			<h2 class="say">Say hello.</h2>
 			<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 			<ul class="socials">
 				{#each socials as s}<li><a href={s.url}>{s.name} →</a></li>{/each}
@@ -565,11 +566,32 @@
 		padding: 0;
 	}
 	.row {
+		position: relative;
 		display: grid;
 		grid-template-columns: 60px 1fr auto;
 		gap: 24px;
-		padding: 28px 0;
+		padding: 28px 0 28px 20px;
 		border-top: 1px solid var(--ink-line);
+		transition: background 0.35s ease, padding-left 0.35s ease;
+	}
+	.row::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: -1px;
+		bottom: 0;
+		width: 0;
+		background: var(--zhu);
+		transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.row:hover,
+	.row:focus-within {
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.05), transparent 60%);
+		padding-left: 32px;
+	}
+	.row:hover::before,
+	.row:focus-within::before {
+		width: 4px;
 	}
 	.row:last-child {
 		border-bottom: 1px solid var(--ink-line);
@@ -578,7 +600,14 @@
 		font-family: var(--font-label);
 		font-weight: 900;
 		font-size: 1.5rem;
+		color: var(--ink-mute);
+		transition: color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		transform-origin: left center;
+	}
+	.row:hover .idx,
+	.row:focus-within .idx {
 		color: var(--zhu);
+		transform: scale(1.25);
 	}
 	.row-title {
 		font-family: var(--font-serif);
@@ -587,8 +616,11 @@
 		font-size: clamp(1.5rem, 3vw, 2.25rem);
 		line-height: 1.05;
 		letter-spacing: -0.01em;
+		transition: color 0.3s ease;
 	}
-	.row-title:hover {
+	.row-title:hover,
+	.row:hover .row-title,
+	.row:focus-within .row-title {
 		color: var(--zhu);
 	}
 	.row-desc {
@@ -723,12 +755,47 @@
 
 	/* Contact */
 	.contact {
+		position: relative;
 		text-align: center;
+		overflow: hidden;
 	}
-	.cn.big {
-		display: block;
-		font-size: clamp(4rem, 12vw, 9rem);
+	.contact::before {
+		content: '';
+		position: absolute;
+		top: 42%;
+		left: 50%;
+		width: 60%;
+		height: 70%;
+		transform: translate(-50%, -50%);
+		background: radial-gradient(circle, rgba(198, 65, 44, 0.12), transparent 68%);
+		filter: blur(50px);
+		z-index: 0;
+		pointer-events: none;
+	}
+	.contact > *:not(.ghost) {
+		position: relative;
+		z-index: 1;
+	}
+	.cn.ghost {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -54%);
+		font-size: clamp(14rem, 34vw, 30rem);
 		line-height: 1;
+		color: var(--zhu);
+		opacity: 0.08;
+		z-index: 0;
+		pointer-events: none;
+	}
+	.c-tag {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.3em;
+		text-transform: uppercase;
+		color: var(--zhu);
+		margin-bottom: 16px;
 	}
 	.say {
 		font-family: var(--font-serif);
@@ -736,13 +803,21 @@
 		font-optical-sizing: auto;
 		font-size: var(--type-hero);
 		letter-spacing: -0.03em;
-		margin: 8px 0 24px;
+		line-height: 0.9;
+		margin: 0 0 28px;
 	}
 	.email {
+		display: inline-block;
 		font-size: clamp(1.25rem, 3vw, 2rem);
 		text-decoration: underline;
 		text-underline-offset: 6px;
+		text-decoration-thickness: 2px;
 		text-decoration-color: var(--zhu);
+		transition: color 0.25s ease, text-underline-offset 0.25s ease;
+	}
+	.email:hover {
+		color: var(--zhu);
+		text-underline-offset: 10px;
 	}
 	.socials {
 		list-style: none;
