@@ -6,6 +6,7 @@
 	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
 	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
 	import ContactOrb3D from '$lib/components/spatial/ContactOrb3D.svelte';
+	import LazyScene from '$lib/components/spatial/LazyScene.svelte';
 	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
 	import * as THREE from 'three';
 
@@ -279,7 +280,7 @@
 				</div>
 				<div class="md:col-span-7">
 					<!-- Local 3D Canvas — skill icons orbit around a central anchor -->
-					<div
+					<LazyScene
 						class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
 					>
 						<Canvas
@@ -288,7 +289,7 @@
 						>
 							<SkillOrbit images={skillImages} radius={2.4} iconSize={0.65} />
 						</Canvas>
-					</div>
+					</LazyScene>
 
 					<div class="mt-8 flex flex-wrap items-center gap-2">
 						{#each DATA.skills as skill}
@@ -430,7 +431,7 @@
 
 				<div class="md:col-span-7">
 					<!-- Local 3D Canvas — curved glowing timeline -->
-					<div
+					<LazyScene
 						class="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-zinc-800/60 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"
 					>
 						<Canvas
@@ -439,7 +440,7 @@
 						>
 							<HackathonTimeline3D count={DATA.hackathons.length} />
 						</Canvas>
-					</div>
+					</LazyScene>
 
 					<ol class="relative mt-10 space-y-3 border-l border-zinc-800/80 pl-8 md:pl-12">
 						{#each DATA.hackathons as project, idx}
@@ -546,7 +547,7 @@
 				</div>
 				<div class="md:col-span-5 md:pt-12">
 					<!-- Local 3D Canvas — gradient orb + dense particle cloud climax -->
-					<div
+					<LazyScene
 						class="relative aspect-square w-full overflow-hidden rounded-2xl border border-zinc-800/60"
 					>
 						<Canvas
@@ -589,7 +590,7 @@
 								</button>
 							</form>
 						</div>
-					</div>
+					</LazyScene>
 				</div>
 			</div>
 		</div>
