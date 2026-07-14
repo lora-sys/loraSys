@@ -3,6 +3,15 @@
 	import { onMount } from 'svelte';
 	import { DATA } from '$lib/data/resume';
 	import InkWash from '$lib/components/ink/InkWash.svelte';
+	import Lens from '$lib/components/magic/lens/lens.svelte';
+
+	let animeTrack: HTMLElement | undefined = $state();
+	function animeScroll(dir: number) {
+		if (!animeTrack) return;
+		const card = animeTrack.querySelector('.acard') as HTMLElement | null;
+		const amount = card ? card.offsetWidth + 24 : 300;
+		animeTrack.scrollBy({ left: dir * amount, behavior: 'smooth' });
+	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
 
@@ -205,24 +214,39 @@
 		<!-- 閒 OFF HOURS -->
 		<section id="off" class="sec">
 			<div class="sec-head"><span class="cn">閒</span><div class="sec-title"><h2>Off Hours</h2>{@render brush()}</div><span class="folio">P.12</span></div>
-			<p class="mini-h">Anime</p>
-			<ul class="gallery anime-g">
+			<div class="anime-head">
+				<p class="mini-h">Anime</p>
+				<div class="c-nav">
+					<button class="c-arrow" aria-label="Previous" onclick={() => animeScroll(-1)}>←</button>
+					<button class="c-arrow" aria-label="Next" onclick={() => animeScroll(1)}>→</button>
+				</div>
+			</div>
+			<ul class="track" bind:this={animeTrack}>
 				{#each DATA.anime as a}
-					<li class="card">
-						<a href={a.link} target="_blank" rel="noreferrer">
-							<div class="frame"><img src={a.image} alt={a.name} loading="lazy" /></div>
+					<li class="acard">
+						<a href={a.link} target="_blank" rel="noreferrer" aria-label={a.name}>
+							<Lens zoomFactor={1.5} lensSize={150} class="rounded-none">
+								{#snippet children()}
+									<div class="frame"><img src={a.image} alt={a.name} loading="lazy" /></div>
+								{/snippet}
+							</Lens>
 							<b class="card-name">{a.name}</b>
 							<em class="card-quote">“{a.quote}”</em>
 						</a>
 					</li>
 				{/each}
 			</ul>
+			<p class="drag-hint">↔ drag · hover a poster to magnify</p>
 			<p class="mini-h">Favorites</p>
 			<ul class="gallery favs-g">
 				{#each DATA.favorites as f}
 					<li class="card">
 						<a href={f.href} target="_blank" rel="noreferrer">
-							<div class="frame sq"><img src={f.background} alt={f.name} loading="lazy" /></div>
+							<Lens zoomFactor={1.4} lensSize={120} class="rounded-none">
+								{#snippet children()}
+									<div class="frame sq"><img src={f.background} alt={f.name} loading="lazy" /></div>
+								{/snippet}
+							</Lens>
 							<b class="card-name">{f.name}</b>
 							<span class="card-desc">{f.description}</span>
 						</a>
@@ -851,6 +875,67 @@
 		font-size: 0.85rem;
 		color: var(--ink-soft);
 		margin-top: 5px;
+	}
+
+	/* Anime carousel (scroll-snap + lens) */
+	.anime-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.anime-head .mini-h {
+		margin: 32px 0 14px;
+	}
+	.c-nav {
+		display: flex;
+		gap: 8px;
+	}
+	.c-arrow {
+		width: 42px;
+		height: 42px;
+		display: grid;
+		place-items: center;
+		border: 1.5px solid var(--ink);
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-label);
+		font-size: 1.05rem;
+		cursor: pointer;
+		transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+	}
+	.c-arrow:hover {
+		background: var(--ink);
+		color: var(--paper);
+		transform: translateY(-2px);
+	}
+	.track {
+		display: flex;
+		gap: 24px;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		padding-bottom: 6px;
+		margin: 0;
+		list-style: none;
+		scrollbar-width: none;
+	}
+	.track::-webkit-scrollbar {
+		display: none;
+	}
+	.acard {
+		flex: 0 0 clamp(200px, 24%, 280px);
+		scroll-snap-align: start;
+	}
+	.acard > a {
+		display: block;
+	}
+	.drag-hint {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		margin: 12px 0 0;
 	}
 
 	/* Contact */
