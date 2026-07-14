@@ -1,7 +1,6 @@
 <script lang="ts">
 	import TopNav from '$lib/components/portfolio/TopNav.svelte';
-	import GridPattern from '$lib/components/magic/grid-pattern/grid-pattern.svelte';
-	import Meteors from '$lib/components/magic/meteors/meteors.svelte';
+	import GrainOverlay from '$lib/components/magic/cinema/GrainOverlay.svelte';
 	import SmoothCursor from '$lib/components/magic/smooth-cursor/smooth-cursor.svelte';
 	import '../app.css';
 	import { ModeWatcher } from 'mode-watcher';
@@ -9,6 +8,7 @@
 	import { base } from '$app/paths';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
+	import '@fontsource/fragment-mono/index.css';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -45,18 +45,13 @@
 <ModeWatcher />
 <SmoothCursor />
 
-<!-- Global background layers -->
-<div class="pointer-events-none fixed inset-0 z-0">
-	<GridPattern />
-	<Meteors number={12} />
-	<div
-		class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background)/0.85)_70%)]"
-	></div>
-</div>
+<!-- Cinematic background: grain + scanlines + vignette -->
+<GrainOverlay opacity={0.07} scanlineOpacity={0.03} />
 
 <Tooltip.Provider>
 	<TopNav />
-	<div class="relative mx-auto min-h-screen max-w-5xl px-6 pb-12 pt-20 antialiased sm:pb-24">
+	<!-- Full-bleed layout — sections own their own max-w / bleed -->
+	<div class="relative min-h-screen antialiased">
 		{@render children?.()}
 	</div>
 </Tooltip.Provider>

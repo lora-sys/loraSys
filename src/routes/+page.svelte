@@ -1,21 +1,21 @@
 <script lang="ts">
-	import BlurFade from '$lib/components/magic/BlurFade.svelte';
 	import AnimeSection from '$lib/components/portfolio/AnimeSection.svelte';
 	import EduCard from '$lib/components/portfolio/EduCard.svelte';
 	import LogCard from '$lib/components/portfolio/LogCard.svelte';
 	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { DATA } from '$lib/data/resume';
 	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
-	import TerminalHero from '$lib/components/magic/terminal/terminal-hero.svelte';
 	import TerminalCard from '$lib/components/portfolio/TerminalCard.svelte';
 	import IconCloud from '$lib/components/magic/icon-cloud/icon-cloud.svelte';
 	import RetroGrid from '$lib/components/magic/retro-grid/retro-grid.svelte';
 	import AnimatedGradientText from '$lib/components/magic/animated-gradient-text/animated-gradient-text.svelte';
 	import InteractiveHoverButton from '$lib/components/magic/interactive-hover-button/interactive-hover-button.svelte';
 
-	let BLUR_FADE_DELAY = 0.04;
+	import CinematicHero from '$lib/components/magic/cinema/CinematicHero.svelte';
+	import SceneManifesto from '$lib/components/magic/cinema/SceneManifesto.svelte';
+	import ScrollScene from '$lib/components/magic/cinema/ScrollScene.svelte';
+	import SceneLabel from '$lib/components/magic/cinema/SceneLabel.svelte';
 
-	// Skill icon image URLs for Icon Cloud
 	const skillImages = [
 		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg',
 		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
@@ -61,194 +61,156 @@
 	<meta name="twitter:description" content={DATA.description} />
 </svelte:head>
 
-<main class="flex min-h-[100dvh] flex-col space-y-16 md:space-y-24">
+<main class="relative">
 	<!-- ==================== HERO ==================== -->
-	<section id="hero" class="relative flex min-h-[90vh] items-center justify-center overflow-hidden">
-		<div class="relative z-10 mx-auto w-full max-w-3xl px-6">
-			<BlurFade delay={BLUR_FADE_DELAY} yOffset={6}>
-				<TerminalHero />
-			</BlurFade>
-		</div>
-	</section>
+	<CinematicHero />
 
-	<!-- ==================== ABOUT ==================== -->
-	<section id="about">
-		<BlurFade delay={BLUR_FADE_DELAY}>
-			<div
-				class="mb-4 inline-block rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
-			>
-				<span class="text-zinc-500">~/</span>whoami
-			</div>
-		</BlurFade>
-		<BlurFade delay={BLUR_FADE_DELAY * 1.4}>
-			<div
-				class="prose prose-invert max-w-full text-pretty font-mono text-sm leading-relaxed text-zinc-400 prose-a:font-bold prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline"
-			>
-				{@html DATA.summaryHtml}
-			</div>
-		</BlurFade>
-	</section>
+	<!-- ==================== MANIFESTO / ABOUT ==================== -->
+	<SceneManifesto />
 
-	<!-- ==================== WORK EXPERIENCE ==================== -->
-	{#if DATA.work.length > 0}
-		<section id="work">
-			<div class="flex min-h-0 flex-col gap-y-3">
-				<BlurFade delay={BLUR_FADE_DELAY}>
-					<div class="mb-4 inline-flex items-center gap-2 font-mono font-pixel-square text-xs">
-						<span class="text-emerald-400">$</span>
-						<span class="text-zinc-400">ls -la /experience/</span>
-					</div>
-				</BlurFade>
-				<BlurFade delay={BLUR_FADE_DELAY * 1.2}>
-					<div class="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/50 p-3">
-						<div class="mb-2 flex items-baseline gap-2 px-2 font-mono text-[10px] text-zinc-500">
-							<span class="w-[9ch]">permissions</span>
-							<span class="w-[14ch]">start</span>
-							<span class="w-[14ch]">end</span>
-							<span>name</span>
-						</div>
-						<div class="space-y-0.5">
-							{#each DATA.work as job, id}
-								<!-- work entries rendered here -->
-							{/each}
-						</div>
-					</div>
-				</BlurFade>
+	<!-- ==================== EDUCATION ==================== -->
+	{#if DATA.education.length > 0}
+		<section id="education" class="relative isolate overflow-hidden py-24 md:py-32">
+			<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+				<ScrollScene>
+					<SceneLabel prompt="scene=04" path="/education" />
+				</ScrollScene>
+				<ScrollScene delay={0.1} y={20}>
+					<h2
+						class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+					>
+						Trained<br />
+						<span class="text-zinc-500">at.</span>
+					</h2>
+				</ScrollScene>
+
+				<div class="mt-10 space-y-3 border-l border-zinc-700/60 pl-5 md:pl-8">
+					{#each DATA.education as edu, id}
+						<ScrollScene delay={0.15 + id * 0.05}>
+							<EduCard
+								school={edu.school}
+								degree={edu.degree}
+								start={edu.start}
+								end={edu.end}
+								logoUrl={edu.logoUrl}
+								href={edu.href}
+							/>
+						</ScrollScene>
+					{/each}
+				</div>
 			</div>
 		</section>
 	{/if}
 
-	<!-- ==================== EDUCATION ==================== -->
-	<section id="education">
-		<div class="flex min-h-0 flex-col gap-y-3">
-			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="mb-4 inline-flex items-center gap-2 font-mono font-pixel-square text-xs">
-					<span class="text-emerald-400">$</span>
-					<span class="text-zinc-400">cat /education/*.json</span>
+	<!-- ==================== SKILLS ==================== -->
+	<section id="skills" class="relative isolate overflow-hidden py-24 md:py-32">
+		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+			<div class="grid grid-cols-1 gap-12 md:grid-cols-12">
+				<div class="md:col-span-5">
+					<ScrollScene>
+						<SceneLabel prompt="scene=05" path="/skills" />
+					</ScrollScene>
+					<ScrollScene delay={0.1} y={20}>
+						<h2
+							class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+						>
+							Tools I<br />
+							<span class="text-zinc-500">reach for.</span>
+						</h2>
+					</ScrollScene>
+					<ScrollScene delay={0.2}>
+						<p class="mt-6 max-w-[40ch] font-mono text-sm text-zinc-400">
+							A working set — opinionated where it matters, pragmatic everywhere else.
+						</p>
+					</ScrollScene>
 				</div>
-			</BlurFade>
-			<div class="space-y-2 border-l border-zinc-700 pl-4">
-				{#each DATA.education as edu, id}
-					<BlurFade delay={BLUR_FADE_DELAY * 1.2 + id * 0.05}>
-						<EduCard
-							school={edu.school}
-							degree={edu.degree}
-							start={edu.start}
-							end={edu.end}
-							logoUrl={edu.logoUrl}
-							href={edu.href}
-						/>
-					</BlurFade>
-				{/each}
+				<div class="md:col-span-7">
+					<ScrollScene delay={0.15}>
+						<div class="flex justify-center md:justify-end">
+							<IconCloud images={skillImages} class="mx-auto md:mx-0" />
+						</div>
+					</ScrollScene>
+					<ScrollScene delay={0.25}>
+						<div class="mt-8 flex flex-wrap items-center justify-center gap-2 md:justify-end">
+							{#each DATA.skills as skill}
+								<Badge
+									class="cursor-default rounded-lg border border-zinc-700 bg-zinc-800/40 px-3 py-1.5 font-mono text-xs text-zinc-200 transition hover:scale-105 hover:border-emerald-500/40 hover:text-emerald-400"
+								>
+									{skill}
+								</Badge>
+							{/each}
+						</div>
+					</ScrollScene>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- ==================== SKILLS (Icon Cloud) ==================== -->
-	<section id="skills">
-		<div class="w-full space-y-8 py-8 md:space-y-12 md:py-16">
-			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="flex flex-col items-center justify-center space-y-6 text-center">
-					<div class="space-y-4">
-						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
-						>
-							<span class="text-zinc-500">~/</span>skills --list
-						</div>
-						<h2 class="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-							Skills & Technologies
-						</h2>
-						<p class="font-mono text-sm text-zinc-400">
-							Tools and technologies I use to build things
-						</p>
-					</div>
-				</div>
-			</BlurFade>
-			<BlurFade delay={BLUR_FADE_DELAY * 1.5}>
-				<div class="flex justify-center">
-					<IconCloud images={skillImages} class="mx-auto" />
-				</div>
-			</BlurFade>
-			<BlurFade delay={BLUR_FADE_DELAY * 1.5}>
-				<div class="flex flex-wrap items-center justify-center gap-2">
-					{#each DATA.skills as skill}
-						<Badge
-							class="cursor-default rounded-lg border border-zinc-700 bg-zinc-800/50 px-3 py-1.5 font-mono text-xs text-zinc-200 transition-all duration-300 hover:scale-105 hover:border-emerald-500/40 hover:text-emerald-400 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
-						>
-							{skill}
-						</Badge>
-					{/each}
-				</div>
-			</BlurFade>
-		</div>
-	</section>
+	<!-- ==================== PROJECTS ==================== -->
+	<section id="projects" class="relative isolate overflow-hidden py-24 md:py-32">
+		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+			<ScrollScene>
+				<SceneLabel prompt="scene=06" path="/projects" />
+			</ScrollScene>
+			<ScrollScene delay={0.1} y={20}>
+				<h2
+					class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+				>
+					Things I've<br />
+					<span class="text-zinc-500">built.</span>
+				</h2>
+			</ScrollScene>
+			<ScrollScene delay={0.15}>
+				<p class="mt-6 max-w-[60ch] font-mono text-sm text-zinc-400">
+					A selection — interactive terminals, full-stack apps, AI agents, dApps. Click any card to
+					open.
+				</p>
+			</ScrollScene>
 
-	<!-- ==================== PROJECTS (Bento + Shine/Neon) ==================== -->
-	<section id="projects">
-		<div class="w-full space-y-8 py-8 md:space-y-16 md:py-16">
-			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="flex flex-col items-center justify-center space-y-6 text-center">
-					<div class="space-y-4">
-						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
-						>
-							<span class="text-zinc-500">~/</span>projects
-						</div>
-						<h2 class="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-							Check out my latest work
-						</h2>
-						<p
-							class="mx-auto max-w-2xl text-zinc-400 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed"
-						>
-							I've worked on a variety of projects, from simple websites to complex web
-							applications. Here are a few of my favorites.
-						</p>
-					</div>
-				</div>
-			</BlurFade>
-
-			<div class="grid w-full auto-rows-[28rem] grid-cols-1 gap-4 md:grid-cols-2">
-				{#each DATA.projects as project}
-					<TerminalCard
-						title={project.title}
-						description={project.description}
-						technologies={project.technologies}
-						href={project.href}
-						video={project.video}
-						image={project.image}
-						dates={project.dates}
-					/>
+			<div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+				{#each DATA.projects as project, i}
+					<ScrollScene delay={0.1 + i * 0.05} y={28}>
+						<TerminalCard
+							title={project.title}
+							description={project.description}
+							technologies={project.technologies}
+							href={project.href}
+							video={project.video}
+							image={project.image}
+							dates={project.dates}
+						/>
+					</ScrollScene>
 				{/each}
 			</div>
 		</div>
 	</section>
 
 	<!-- ==================== HACKATHONS ==================== -->
-	<section id="hackathons">
-		<div class="w-full space-y-12 py-12">
-			<BlurFade delay={BLUR_FADE_DELAY}>
-				<div class="flex flex-col items-center justify-center space-y-4 text-center">
-					<div class="space-y-2">
-						<div
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
-						>
-							<span class="text-zinc-500">~/</span>hackathons.log
-						</div>
-						<h2 class="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-							I like building things
-						</h2>
-						<p class="font-mono text-sm text-zinc-400">
-							During my time in university, I attended {DATA.hackathons.length}+ hackathons.
-						</p>
-					</div>
-				</div>
-			</BlurFade>
-			<BlurFade delay={BLUR_FADE_DELAY * 2}>
-				<div
-					class="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/50 p-3 font-mono text-xs"
-				>
-					{#each DATA.hackathons as project, idx}
-						<BlurFade delay={BLUR_FADE_DELAY}>
+	{#if DATA.hackathons.length > 0}
+		<section id="hackathons" class="relative isolate overflow-hidden py-24 md:py-32">
+			<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+				<ScrollScene>
+					<SceneLabel prompt="scene=07" path="/hackathons.log" />
+				</ScrollScene>
+				<ScrollScene delay={0.1} y={20}>
+					<h2
+						class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+					>
+						I like building<br />
+						<span class="text-zinc-500">things.</span>
+					</h2>
+				</ScrollScene>
+				<ScrollScene delay={0.15}>
+					<p class="mt-6 max-w-[60ch] font-mono text-sm text-zinc-400">
+						{DATA.hackathons.length}+ hackathons — Monad, ETH Beijing, online AI agent jams, and
+						more.
+					</p>
+				</ScrollScene>
+				<ScrollScene delay={0.2}>
+					<div
+						class="mt-12 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/40 p-3 font-mono text-xs"
+					>
+						{#each DATA.hackathons as project, idx}
 							<LogCard
 								title={project.title}
 								description={project.description}
@@ -259,74 +221,86 @@
 								links={project.links}
 								pid={idx + 1000}
 							/>
-						</BlurFade>
-					{/each}
-				</div>
-			</BlurFade>
+						{/each}
+					</div>
+				</ScrollScene>
+			</div>
+		</section>
+	{/if}
+
+	<!-- ==================== ANIME ==================== -->
+	<section id="anime" class="anime-isolated relative isolate overflow-hidden py-24 md:py-32">
+		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+			<ScrollScene>
+				<SceneLabel prompt="scene=08" path="/favorites/anime" />
+			</ScrollScene>
+			<ScrollScene delay={0.1}>
+				<AnimeSection />
+			</ScrollScene>
 		</div>
 	</section>
 
-	<!-- ==================== ANIME (isolated) ==================== -->
-	<section id="anime" class="anime-isolated">
-		<BlurFade delay={BLUR_FADE_DELAY}>
-			<div class="mb-6 inline-flex items-center gap-2 font-mono font-pixel-square text-xs">
-				<span class="text-emerald-400">$</span>
-				<span class="text-zinc-400">cd ~/favorites/anime</span>
-			</div>
-			<AnimeSection />
-		</BlurFade>
-	</section>
-
 	<!-- ==================== FAVORITES ==================== -->
-	<section id="favorites">
-		<BlurFade delay={BLUR_FADE_DELAY}>
-			<div class="mb-6 inline-flex items-center gap-2 font-mono font-pixel-square text-xs">
-				<span class="text-emerald-400">$</span>
-				<span class="text-zinc-400">cat ~/favorites/*.json</span>
-			</div>
-			<FavoritesSection />
-		</BlurFade>
+	<section id="favorites" class="relative isolate overflow-hidden py-24 md:py-32">
+		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+			<ScrollScene>
+				<SceneLabel prompt="scene=09" path="/favorites" />
+			</ScrollScene>
+			<ScrollScene delay={0.1}>
+				<FavoritesSection />
+			</ScrollScene>
+		</div>
 	</section>
 
 	<!-- ==================== CONTACT ==================== -->
-	<section id="contact">
-		<div class="grid w-full items-center justify-center gap-6 px-4 py-16 text-center md:px-6">
-			<BlurFade delay={BLUR_FADE_DELAY * 2}>
-				<div class="space-y-8">
-					<div
-						class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 font-mono font-pixel-square text-xs text-emerald-400"
-					>
-						<span class="text-zinc-500">~/</span>contact.sh
-					</div>
-					<h2 class="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-						Get in Touch
-					</h2>
-					<p class="mx-auto max-w-[600px] font-mono text-sm text-zinc-400">
-						Want to chat? Just shoot me a dm
-						<a href={DATA.contact.social.X.url} class="text-emerald-400 hover:underline">
-							with a direct question on twitter
-						</a>
-						and I'll respond whenever I can.
-					</p>
-					<div class="flex justify-center pt-2">
-						<a href={DATA.contact.social.X.url} target="_blank" rel="noopener noreferrer">
-							<InteractiveHoverButton
-								class="rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400"
-							>
-								Say Hello
-							</InteractiveHoverButton>
-						</a>
-					</div>
-					<div class="flex justify-center pt-2">
-						<a
-							href="/api/resume"
-							target="_blank"
-							class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
+	<section id="contact" class="relative isolate overflow-hidden py-24 md:py-40">
+		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+			<div class="grid grid-cols-1 gap-12 md:grid-cols-12">
+				<div class="md:col-span-7">
+					<ScrollScene>
+						<SceneLabel prompt="scene=10" path="/contact.sh" tone="magenta" />
+					</ScrollScene>
+					<ScrollScene delay={0.1} y={28}>
+						<h2
+							class="mt-6 font-heading text-[clamp(2.5rem,8vw,7rem)] font-bold leading-[0.92] tracking-[-0.04em] text-foreground"
 						>
-							$ cat resume.json
-						</a>
-					</div>
-					<div class="mx-auto w-full max-w-md">
+							Say<br />
+							<span
+								class="bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 bg-clip-text text-transparent"
+								>hello.</span
+							>
+						</h2>
+					</ScrollScene>
+					<ScrollScene delay={0.2}>
+						<p class="mt-8 max-w-[50ch] font-mono text-sm leading-relaxed text-zinc-400">
+							Want to chat? DM me
+							<a
+								href={DATA.contact.social.X.url}
+								class="text-emerald-400 hover:underline">on X</a
+							>, or use the form. I respond when I can.
+						</p>
+					</ScrollScene>
+					<ScrollScene delay={0.3}>
+						<div class="mt-8 flex flex-wrap items-center gap-3">
+							<a href={DATA.contact.social.X.url} target="_blank" rel="noopener noreferrer">
+								<InteractiveHoverButton
+									class="rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400"
+								>
+									Say Hello
+								</InteractiveHoverButton>
+							</a>
+							<a
+								href="/api/resume"
+								target="_blank"
+								class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400 transition hover:border-emerald-500/40"
+							>
+								$ cat resume.json
+							</a>
+						</div>
+					</ScrollScene>
+				</div>
+				<div class="md:col-span-5 md:pt-12">
+					<ScrollScene delay={0.25}>
 						<form
 							action="mailto:lorasys@outlook.com"
 							method="post"
@@ -337,30 +311,30 @@
 								type="text"
 								name="name"
 								placeholder="Name"
-								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							/>
 							<input
 								type="email"
 								name="email"
 								placeholder="Email"
-								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							/>
 							<textarea
 								name="message"
 								placeholder="Message"
 								rows="4"
-								class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition-all duration-200 hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+								class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
 							></textarea>
 							<button
 								type="submit"
-								class="w-full rounded-full border border-zinc-700 bg-zinc-800/50 px-8 py-3 font-mono text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:bg-zinc-800 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
+								class="w-full rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400 transition hover:border-emerald-500/40"
 							>
 								$ send_message
 							</button>
 						</form>
-					</div>
+					</ScrollScene>
 				</div>
-			</BlurFade>
+			</div>
 		</div>
 	</section>
 
@@ -369,9 +343,7 @@
 		<RetroGrid class="opacity-20" />
 		<div class="relative z-10 flex flex-col items-center gap-6">
 			<AnimatedGradientText speed={1.5} colorFrom="#22c55e" colorTo="#9c40ff">
-				<span class="font-heading font-pixel-square text-2xl font-bold tracking-tight sm:text-3xl">
-					{DATA.name}
-				</span>
+				<span class="font-heading font-bold text-2xl tracking-tight sm:text-3xl">{DATA.name}</span>
 			</AnimatedGradientText>
 			<div class="flex items-center gap-4">
 				{#each Object.entries(DATA.contact.social) as [_, social]}
@@ -392,8 +364,7 @@
 				{/each}
 			</div>
 			<p class="font-mono text-xs text-zinc-400">
-				&copy; {new Date().getFullYear()}
-				{DATA.name}. Built with Lora.
+				&copy; {new Date().getFullYear()} {DATA.name}. Built with Lora.
 			</p>
 		</div>
 	</footer>
