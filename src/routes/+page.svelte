@@ -5,6 +5,7 @@
 	import { Canvas } from '@threlte/core';
 	import SkillOrbit from '$lib/components/spatial/SkillOrbit.svelte';
 	import HackathonTimeline3D from '$lib/components/spatial/HackathonTimeline3D.svelte';
+	import TiltCard from '$lib/components/spatial/TiltCard.svelte';
 	import * as THREE from 'three';
 
 	interface Props {}
@@ -321,84 +322,87 @@
 			<!-- Asymmetric bento grid: first project full-width, rest 2-up -->
 			<div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6">
 				{#each DATA.projects as project, i}
-					<a
-						href={project.href}
-						target="_blank"
-						rel="noopener noreferrer"
-						class={'group relative overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/40 transition hover:border-cyan-400/40 hover:shadow-[0_0_60px_-15px_rgba(103,232,249,0.4)] ' +
-							(i === 0 ? 'md:col-span-6 md:row-span-2' : 'md:col-span-3')}
-					>
-						<!-- Terminal-style header -->
-						<div
-							class="flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 py-2.5"
+					<TiltCard class={i === 0 ? 'md:col-span-6 md:row-span-2' : 'md:col-span-3'} maxTilt={5}>
+						<a
+							href={project.href}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="group relative block h-full overflow-hidden rounded-xl border border-zinc-800/80 bg-zinc-950/40 transition hover:border-cyan-400/40"
 						>
-							<div class="flex gap-1.5">
-								<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
-								<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
-								<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
-							</div>
-							<span class="font-mono text-[11px] text-zinc-500">
-								{project.title.toLowerCase().replace(/\s+/g, '-')}.tsx
-							</span>
-							{#if project.dates}
-								<span class="font-mono text-[10px] text-zinc-500">{project.dates}</span>
-							{:else}
-								<span></span>
-							{/if}
-						</div>
-
-						<div class={'p-6 ' + (i === 0 ? 'md:p-8' : '')}>
-							<div class="mb-3 flex items-center gap-2 font-mono text-sm leading-none">
-								<span class="text-zinc-600">//</span>
-								<span class="font-semibold tracking-tight text-zinc-200">{project.title}</span>
-							</div>
-
-							<p class="mb-4 font-mono text-[13px] leading-relaxed text-zinc-400">
-								{project.description}
-							</p>
-
-							{#if project.image && i === 0}
-								<div class="mb-4 overflow-hidden rounded-lg border border-zinc-800/60">
-									<img
-										src={project.image}
-										alt={project.title}
-										class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-										loading="lazy"
-									/>
+							<!-- Terminal-style header -->
+							<div
+								class="flex items-center justify-between gap-2 border-b border-zinc-800/60 px-4 py-2.5"
+							>
+								<div class="flex gap-1.5">
+									<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
+									<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
+									<div class="h-2.5 w-2.5 rounded-full bg-zinc-800"></div>
 								</div>
-							{:else if project.video}
-								<div class="mb-4 overflow-hidden rounded-lg border border-zinc-800/60">
-									<video
-										src={project.video}
-										class="h-32 w-full object-cover"
-										autoplay
-										loop
-										muted
-										playsinline
-										preload="metadata"
-									></video>
-								</div>
-							{/if}
-
-							<div class="mb-4 flex flex-wrap gap-1.5">
-								{#each project.technologies.slice(0, 5) as tech}
-									<span
-										class="rounded border border-zinc-800/80 bg-zinc-900/50 px-2 py-0.5 font-mono text-[10px] text-zinc-300"
-									>
-										{tech}
-									</span>
-								{/each}
-							</div>
-
-							<div class="flex items-center gap-2 font-mono text-xs text-zinc-500">
-								<span class="text-cyan-300">$</span>
-								<span>open</span>
-								<span class="text-cyan-300 underline decoration-cyan-500/20 underline-offset-4 group-hover:decoration-cyan-400/50">
-									{project.href.replace(/^https?:\/\//, '')}
+								<span class="font-mono text-[11px] text-zinc-500">
+									{project.title.toLowerCase().replace(/\s+/g, '-')}.tsx
 								</span>
+								{#if project.dates}
+									<span class="font-mono text-[10px] text-zinc-500">{project.dates}</span>
+								{:else}
+									<span></span>
+								{/if}
 							</div>
-						</div>
-					</a>
+
+							<div class={'p-6 ' + (i === 0 ? 'md:p-8' : '')}>
+								<div class="mb-3 flex items-center gap-2 font-mono text-sm leading-none">
+									<span class="text-zinc-600">//</span>
+									<span class="font-semibold tracking-tight text-zinc-200">{project.title}</span>
+								</div>
+
+								<p class="mb-4 font-mono text-[13px] leading-relaxed text-zinc-400">
+									{project.description}
+								</p>
+
+								{#if project.image && i === 0}
+									<div class="mb-4 overflow-hidden rounded-lg border border-zinc-800/60">
+										<img
+											src={project.image}
+											alt={project.title}
+											class="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+											loading="lazy"
+										/>
+									</div>
+								{:else if project.video}
+									<div class="mb-4 overflow-hidden rounded-lg border border-zinc-800/60">
+										<video
+											src={project.video}
+											class="h-32 w-full object-cover"
+											autoplay
+											loop
+											muted
+											playsinline
+											preload="metadata"
+										></video>
+									</div>
+								{/if}
+
+								<div class="mb-4 flex flex-wrap gap-1.5">
+									{#each project.technologies.slice(0, 5) as tech}
+										<span
+											class="rounded border border-zinc-800/80 bg-zinc-900/50 px-2 py-0.5 font-mono text-[10px] text-zinc-300"
+										>
+											{tech}
+										</span>
+									{/each}
+								</div>
+
+								<div class="flex items-center gap-2 font-mono text-xs text-zinc-500">
+									<span class="text-cyan-300">$</span>
+									<span>open</span>
+									<span
+										class="text-cyan-300 underline decoration-cyan-500/20 underline-offset-4 group-hover:decoration-cyan-400/50"
+									>
+										{project.href.replace(/^https?:\/\//, '')}
+									</span>
+								</div>
+							</div>
+						</a>
+					</TiltCard>
 				{/each}
 			</div>
 		</div>
