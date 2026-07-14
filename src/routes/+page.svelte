@@ -145,7 +145,12 @@
 				<aside>
 					<p class="mini-h" id="education">Education</p>
 					{#each DATA.education as e}
-						<p class="edu"><a href={e.href}>{e.school}</a><br /><em>{e.degree}</em><br /><span class="years">{e.start} — {e.end}</span></p>
+						<div class="edu">
+							{#if e.logoUrl}<img class="edu-logo" src={e.logoUrl} alt={e.school} loading="lazy" />{/if}
+							<div>
+								<a href={e.href}>{e.school}</a><br /><em>{e.degree}</em><br /><span class="years">{e.start} — {e.end}</span>
+							</div>
+						</div>
 					{/each}
 					<p class="mini-h">Stack</p>
 					<ul class="skills">
@@ -163,14 +168,19 @@
 					<li class="row">
 						<span class="idx">{String(i + 1).padStart(2, '0')}</span>
 						<div class="row-main">
-							<a class="row-title" href={p.href}>{p.title}</a>
+							<span class="row-date">{p.dates}</span>
+							<a class="row-title" href={p.href} target="_blank" rel="noreferrer">{p.title}</a>
 							<p class="row-desc">{p.description}</p>
 							<p class="row-tech">{p.technologies.join(' · ')}</p>
 							<p class="row-links">
-								{#each p.links as l}<a href={l.href}>{l.type} →</a>{/each}
+								{#each p.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.type} →</a>{/each}
 							</p>
 						</div>
-						<span class="row-date">{p.dates}</span>
+						{#if p.image}
+							<a class="row-thumb" href={p.href} target="_blank" rel="noreferrer" tabindex="-1" aria-hidden="true">
+								<img src={p.image} alt="" loading="lazy" />
+							</a>
+						{/if}
 					</li>
 				{/each}
 			</ol>
@@ -196,15 +206,27 @@
 		<section id="off" class="sec">
 			<div class="sec-head"><span class="cn">閒</span><div class="sec-title"><h2>Off Hours</h2>{@render brush()}</div><span class="folio">P.12</span></div>
 			<p class="mini-h">Anime</p>
-			<ul class="anime">
+			<ul class="gallery anime-g">
 				{#each DATA.anime as a}
-					<li><a href={a.link}><b>{a.name}</b><em>“{a.quote}”</em></a></li>
+					<li class="card">
+						<a href={a.link} target="_blank" rel="noreferrer">
+							<div class="frame"><img src={a.image} alt={a.name} loading="lazy" /></div>
+							<b class="card-name">{a.name}</b>
+							<em class="card-quote">“{a.quote}”</em>
+						</a>
+					</li>
 				{/each}
 			</ul>
 			<p class="mini-h">Favorites</p>
-			<ul class="favs">
+			<ul class="gallery favs-g">
 				{#each DATA.favorites as f}
-					<li><a href={f.href}><b>{f.name}</b><span>{f.description}</span></a></li>
+					<li class="card">
+						<a href={f.href} target="_blank" rel="noreferrer">
+							<div class="frame sq"><img src={f.background} alt={f.name} loading="lazy" /></div>
+							<b class="card-name">{f.name}</b>
+							<span class="card-desc">{f.description}</span>
+						</a>
+					</li>
 				{/each}
 			</ul>
 		</section>
@@ -532,8 +554,20 @@
 		padding-left: clamp(18px, 2vw, 30px);
 	}
 	.edu {
+		display: flex;
+		gap: 12px;
+		align-items: flex-start;
 		line-height: 1.5;
 		margin-bottom: 8px;
+	}
+	.edu-logo {
+		width: 42px;
+		height: 42px;
+		object-fit: contain;
+		flex-shrink: 0;
+		border: 1px solid var(--ink-line);
+		background: var(--paper);
+		padding: 4px;
 	}
 	.edu a {
 		font-weight: 700;
@@ -557,6 +591,11 @@
 		border: 1px solid var(--ink-line-strong);
 		padding: 4px 10px;
 		border-radius: 2px;
+		transition: border-color 0.25s ease, color 0.25s ease;
+	}
+	.skills li:hover {
+		border-color: var(--zhu);
+		color: var(--zhu);
 	}
 
 	/* Work */
@@ -568,10 +607,11 @@
 	.row {
 		position: relative;
 		display: grid;
-		grid-template-columns: 60px 1fr auto;
-		gap: 24px;
-		padding: 28px 0 28px 20px;
+		grid-template-columns: 48px 1fr 240px;
+		gap: 28px;
+		padding: 30px 0 30px 20px;
 		border-top: 1px solid var(--ink-line);
+		align-items: center;
 		transition: background 0.35s ease, padding-left 0.35s ease;
 	}
 	.row::before {
@@ -649,12 +689,37 @@
 		color: var(--zhu);
 	}
 	.row-date {
+		display: block;
 		font-family: var(--font-label);
-		font-size: 0.75rem;
-		letter-spacing: 0.06em;
+		font-size: 0.72rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
 		color: var(--ink-mute);
-		white-space: nowrap;
-		text-align: right;
+		margin-bottom: 8px;
+	}
+	.row-thumb {
+		display: block;
+		align-self: center;
+		aspect-ratio: 16 / 10;
+		overflow: hidden;
+		border: 1px solid var(--ink-line-strong);
+		background: var(--paper-2);
+		transition: border-color 0.3s ease;
+	}
+	.row-thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		filter: saturate(0.9) contrast(1.02);
+		transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+	}
+	.row:hover .row-thumb {
+		border-color: var(--zhu);
+	}
+	.row:hover .row-thumb img {
+		transform: scale(1.05);
+		filter: none;
 	}
 
 	/* Hackathons */
@@ -714,43 +779,78 @@
 		font-size: 1.4rem;
 	}
 
-	/* Off hours */
-	.anime,
-	.favs {
+	/* Off hours — image galleries */
+	.gallery {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-		gap: 20px;
+		gap: clamp(16px, 2vw, 28px);
 	}
-	.anime li a,
-	.favs li a {
-		display: block;
-		border-top: 1px solid var(--ink-line);
-		padding-top: 12px;
+	.anime-g {
+		grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
 	}
-	.anime b,
-	.favs b {
+	.favs-g {
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	}
+	.card a {
 		display: block;
+	}
+	.frame {
+		position: relative;
+		overflow: hidden;
+		aspect-ratio: 3 / 4;
+		border: 1px solid var(--ink-line-strong);
+		background: var(--paper-2);
+		transition: border-color 0.3s ease;
+	}
+	.frame.sq {
+		aspect-ratio: 1 / 1;
+	}
+	.frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		filter: saturate(0.9) contrast(1.02);
+		transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+	}
+	.card a:hover .frame {
+		border-color: var(--zhu);
+	}
+	.card a:hover .frame img {
+		transform: scale(1.05);
+		filter: none;
+	}
+	.card-name {
+		display: block;
+		font-family: var(--font-serif);
 		font-weight: 900;
-		font-size: 1.1rem;
+		font-optical-sizing: auto;
+		font-size: 1.05rem;
+		line-height: 1.1;
+		margin-top: 12px;
+		transition: color 0.25s ease;
 	}
-	.anime em {
-		display: block;
+	.card a:hover .card-name {
+		color: var(--zhu);
+	}
+	.card-quote {
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
 		font-style: italic;
+		font-size: 0.82rem;
+		line-height: 1.4;
 		color: var(--ink-soft);
 		margin-top: 6px;
-		line-height: 1.4;
 	}
-	.favs span {
+	.card-desc {
 		display: block;
+		font-size: 0.85rem;
 		color: var(--ink-soft);
-		margin-top: 4px;
-	}
-	.anime li a:hover b,
-	.favs li a:hover b {
-		color: var(--zhu);
+		margin-top: 5px;
 	}
 
 	/* Contact */
@@ -855,6 +955,14 @@
 	}
 
 	/* Responsive */
+	@media (max-width: 980px) {
+		.row {
+			grid-template-columns: 48px 1fr;
+		}
+		.row-thumb {
+			display: none;
+		}
+	}
 	@media (max-width: 860px) {
 		.hero,
 		.self-grid {
@@ -869,10 +977,6 @@
 		}
 		.row {
 			grid-template-columns: 40px 1fr;
-		}
-		.row-date {
-			grid-column: 2;
-			text-align: left;
 		}
 	}
 </style>
