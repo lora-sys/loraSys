@@ -347,14 +347,16 @@
 		<!-- 戰 HACKATHONS -->
 		<section id="hack" class="sec">
 			<div class="sec-head"><span class="cn">戰</span><div class="sec-title"><h2>Hackathons &amp; Signals</h2>{@render brush()}</div><span class="folio">P.09</span></div>
-			<ol class="hacks">
+			<ol class="hx-list">
 				{#each DATA.hackathons as h, i}
-					<li class="hk">
-						<span class="hk-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-						<h3>{h.title}</h3>
-						<p class="hk-meta"><span class="hk-loc">{h.location}</span><span class="hk-date">{h.dates}</span></p>
-						<p class="hk-desc">{h.description}</p>
-						{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a>{/each}
+					<li class="hx">
+						<span class="hx-idx" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+						<div class="hx-body">
+							<h3 class="hx-title">{h.title}</h3>
+							<p class="hx-meta"><span class="hx-loc">{h.location}</span> · {h.dates}</p>
+							<p class="hx-desc">{h.description}</p>
+							{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a>{/each}
+						</div>
 					</li>
 				{/each}
 			</ol>
@@ -1226,6 +1228,93 @@
 			grid-template-columns: 1fr;
 			align-items: start;
 		}
+	}
+
+	/* Hackathons — full-width editorial index (not cards) */
+	.hx-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.hx {
+		position: relative;
+		display: grid;
+		grid-template-columns: clamp(56px, 7vw, 110px) 1fr;
+		gap: clamp(16px, 3vw, 44px);
+		align-items: start;
+		border-top: 2px solid var(--ink);
+		padding: clamp(20px, 3vh, 34px) 0 clamp(20px, 3vh, 34px) 18px;
+		transition: padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.hx:last-child {
+		border-bottom: 2px solid var(--ink);
+	}
+	.hx::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: -2px;
+		bottom: 0;
+		width: 0;
+		background: var(--zhu);
+		transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.hx:hover {
+		padding-left: 30px;
+	}
+	.hx:hover::before {
+		width: 3px;
+	}
+	.hx-idx {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-size: clamp(2rem, 4vw, 3.5rem);
+		line-height: 1;
+		color: transparent;
+		-webkit-text-stroke: 1.5px var(--ink-line-strong);
+		transition: -webkit-text-stroke-color 0.3s ease, color 0.3s ease;
+	}
+	.hx:hover .hx-idx {
+		-webkit-text-stroke-color: var(--zhu);
+		color: var(--zhu);
+	}
+	.hx-title {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.6rem, 3.6vw, 2.75rem);
+		line-height: 1.02;
+		letter-spacing: -0.02em;
+		margin: 0;
+		transition: color 0.3s ease;
+	}
+	.hx:hover .hx-title {
+		color: var(--zhu);
+	}
+	.hx-meta {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		margin-top: 10px;
+	}
+	.hx-loc {
+		color: var(--zhu);
+	}
+	.hx-desc {
+		line-height: 1.55;
+		color: var(--ink-soft);
+		margin-top: 12px;
+		max-width: 66ch;
+	}
+	.hx a {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 0.8rem;
+		color: var(--zhu);
+		display: inline-block;
+		margin-top: 12px;
 	}
 
 	/* Off hours — image galleries */
