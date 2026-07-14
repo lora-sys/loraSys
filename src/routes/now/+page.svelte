@@ -1,5 +1,34 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+
+	const sections = [
+		{
+			n: '01',
+			title: 'Building',
+			items: [
+				{ t: 'lora-sys portfolio — this site', m: 'active · daily' },
+				{ t: 'AI agent orchestration experiments', m: 'active · weekly' }
+			]
+		},
+		{
+			n: '02',
+			title: 'Learning',
+			items: [
+				{ t: 'Generative canvas + motion systems', m: 'ink · atmosphere' },
+				{ t: 'LangGraph + multi-agent systems', m: 'agents · coordination' }
+			]
+		},
+		{
+			n: '03',
+			title: 'Reading',
+			items: [{ t: 'Designing Data-Intensive Applications', m: 'book · systems' }]
+		},
+		{
+			n: '04',
+			title: 'Vibing',
+			items: [{ t: 'Tame Impala — Currents', m: 'music · on repeat' }]
+		}
+	];
 </script>
 
 <svelte:head>
@@ -8,215 +37,224 @@
 		name="description"
 		content="Current focus of Lora Sys (Sikandar Bhide): what I'm shipping, learning, and exploring right now. The /now page is a living snapshot."
 	/>
-	<link rel="canonical" href="https://lora-sys.github.io/loraSys/now" />
-
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="/now — Lora Sys" />
 	<meta
 		property="og:description"
-		content="Current focus of Lora Sys (Sikandar Bhide) — what I'm shipping, learning, and exploring right now."
-	/>
-	<meta property="og:url" content="https://lora-sys.github.io/loraSys/now" />
-	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
-
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="/now — Lora Sys" />
-	<meta
-		name="twitter:description"
-		content="What I'm shipping, learning, and exploring right now."
+		content="Current focus of Lora Sys — what I'm shipping, learning, and exploring right now."
 	/>
 </svelte:head>
 
-<main class="relative min-h-screen pb-32 pt-32">
-	<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-		<!-- Scene label -->
-		<div class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
-			<span class="text-emerald-400">scene</span>=N / <span class="text-zinc-300">now</span>
-		</div>
+<main class="now">
+	<div class="paper-grain" aria-hidden="true"></div>
+	<div class="wrap">
+		<p class="tag">Now · 現</p>
 
-		<!-- Giant title with split composition -->
-		<div class="mt-6 grid grid-cols-1 gap-8 md:grid-cols-12">
-			<h1
-				class="font-heading text-[clamp(4rem,14vw,10rem)] font-bold leading-[0.86] tracking-[-0.04em] text-foreground md:col-span-8"
-			>
-				/now
-				<span class="text-zinc-500">.live()</span>
-			</h1>
-			<div class="flex flex-col justify-end gap-4 md:col-span-4">
-				<p class="font-heading text-lg leading-snug text-zinc-300 md:text-xl">
-					A living snapshot — what I'm shipping, learning, and exploring right now.
-				</p>
-				<dl class="grid grid-cols-2 gap-y-2 font-mono text-[11px] uppercase tracking-[0.18em]">
-					<dt class="text-zinc-500">updated</dt>
-					<dd class="text-cyan-300">2026-07</dd>
-					<dt class="text-zinc-500">cadence</dt>
-					<dd class="text-zinc-300">monthly</dd>
+		<div class="head">
+			<h1>/now<span class="dim">.live()</span></h1>
+			<div class="head-side">
+				<p class="dek">A living snapshot — what I'm shipping, learning, and exploring right now.</p>
+				<dl class="meta">
+					<dt>Updated</dt><dd>2026-07</dd>
+					<dt>Cadence</dt><dd>Monthly</dd>
 				</dl>
 			</div>
 		</div>
 
-		<div class="mt-16 border-t border-zinc-800/40"></div>
+		<div class="rule"></div>
 
-		<!-- Sections grid -->
-		<div class="mt-12 grid grid-cols-1 gap-x-12 gap-y-16 md:grid-cols-12">
-			<!-- Currently Building -->
-			<section class="md:col-span-6">
-				<div class="flex items-baseline gap-3">
-					<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-emerald-400">
-						01 /
-					</span>
-					<h2
-						class="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl"
-					>
-						Building
-					</h2>
-				</div>
-				<ul class="mt-6 space-y-4">
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-emerald-400">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								lora-sys portfolio — this site
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								active · daily
-							</div>
-						</div>
-					</li>
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-emerald-400">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								AI agent orchestration experiments
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								active · weekly
-							</div>
-						</div>
-					</li>
-				</ul>
-			</section>
-
-			<!-- Currently Learning -->
-			<section class="md:col-span-6">
-				<div class="flex items-baseline gap-3">
-					<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-cyan-300">
-						02 /
-					</span>
-					<h2
-						class="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl"
-					>
-						Learning
-					</h2>
-				</div>
-				<ul class="mt-6 space-y-4">
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-cyan-300">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								Three.js + GLSL shaders
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								depth · spatial
-							</div>
-						</div>
-					</li>
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-cyan-300">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								LangGraph + multi-agent systems
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								agents · coordination
-							</div>
-						</div>
-					</li>
-				</ul>
-			</section>
-
-			<!-- Currently Reading -->
-			<section class="md:col-span-6">
-				<div class="flex items-baseline gap-3">
-					<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-purple-400">
-						03 /
-					</span>
-					<h2
-						class="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl"
-					>
-						Reading
-					</h2>
-				</div>
-				<ul class="mt-6 space-y-4">
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-purple-300">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								Designing Data-Intensive Applications
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								book · systems
-							</div>
-						</div>
-					</li>
-				</ul>
-			</section>
-
-			<!-- Currently Vibing -->
-			<section class="md:col-span-6">
-				<div class="flex items-baseline gap-3">
-					<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-amber-300">
-						04 /
-					</span>
-					<h2
-						class="font-heading text-2xl font-bold tracking-tight text-foreground md:text-3xl"
-					>
-						Vibing
-					</h2>
-				</div>
-				<ul class="mt-6 space-y-4">
-					<li class="group flex items-baseline gap-3">
-						<span class="mt-1 font-mono text-amber-300">→</span>
-						<div>
-							<div class="text-zinc-200 transition group-hover:text-cyan-300">
-								Tame Impala — Currents
-							</div>
-							<div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-600">
-								music · on repeat
-							</div>
-						</div>
-					</li>
-				</ul>
-			</section>
+		<div class="grid">
+			{#each sections as s}
+				<section>
+					<div class="s-head"><span class="n">{s.n} /</span><h2>{s.title}</h2></div>
+					<ul>
+						{#each s.items as it}
+							<li>
+								<span class="arrow">→</span>
+								<div>
+									<div class="it-t">{it.t}</div>
+									<div class="it-m">{it.m}</div>
+								</div>
+							</li>
+						{/each}
+					</ul>
+				</section>
+			{/each}
 		</div>
 
-		<!-- Back link + page index -->
-		<div
-			class="mt-24 flex items-center justify-between border-t border-zinc-800/40 pt-6"
-		>
-			<a
-				href={base + '/'}
-				class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-cyan-300"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="14"
-					height="14"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-				>
-					<path d="m12 19-7-7 7-7" />
-					<path d="M19 12H5" />
-				</svg>
-				cd ..
-			</a>
-			<span class="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-600">
-				04 sections · last updated 2026-07
-			</span>
+		<div class="foot">
+			<a href={base + '/'} class="back">← Back to cover</a>
+			<span>04 sections · last updated 2026-07</span>
 		</div>
 	</div>
 </main>
+
+<style>
+	.now {
+		position: relative;
+		min-height: 100vh;
+		padding: clamp(80px, 14vh, 160px) 0 96px;
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-serif);
+	}
+	.paper-grain {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		pointer-events: none;
+		mix-blend-mode: multiply;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+	}
+	.wrap {
+		max-width: 1400px;
+		margin: 0 auto;
+		padding: 0 var(--page-x);
+	}
+	.tag {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--zhu);
+	}
+	.head {
+		display: grid;
+		grid-template-columns: 1.6fr 1fr;
+		gap: clamp(24px, 4vw, 56px);
+		align-items: flex-end;
+		margin-top: 22px;
+	}
+	h1 {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(4rem, 13vw, 10rem);
+		line-height: 0.84;
+		letter-spacing: -0.04em;
+		margin: 0;
+	}
+	h1 .dim {
+		color: var(--ink-mute);
+		font-style: italic;
+		font-weight: 400;
+	}
+	.head-side {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+	.dek {
+		font-size: var(--type-dek);
+		line-height: 1.45;
+		color: var(--ink-soft);
+	}
+	.meta {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 4px 16px;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+	.meta dt {
+		color: var(--ink-mute);
+	}
+	.meta dd {
+		color: var(--zhu);
+		margin: 0;
+	}
+	.rule {
+		height: 2px;
+		background: var(--ink);
+		margin: clamp(40px, 7vh, 72px) 0 clamp(28px, 5vh, 48px);
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: clamp(32px, 5vh, 56px) clamp(32px, 5vw, 72px);
+	}
+	.s-head {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+		margin-bottom: 22px;
+	}
+	.s-head .n {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.28em;
+		color: var(--zhu);
+	}
+	.s-head h2 {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+		letter-spacing: -0.02em;
+		margin: 0;
+	}
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+	}
+	li {
+		display: flex;
+		gap: 12px;
+		align-items: baseline;
+		border-top: 1px solid var(--ink-line);
+		padding-top: 14px;
+	}
+	.arrow {
+		color: var(--zhu);
+		font-family: var(--font-label);
+	}
+	.it-t {
+		font-size: 1.15rem;
+		line-height: 1.35;
+	}
+	.it-m {
+		margin-top: 5px;
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+	}
+	.foot {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: clamp(56px, 10vh, 96px);
+		border-top: 2px solid var(--ink);
+		padding-top: 20px;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--ink-soft);
+	}
+	.back {
+		color: var(--ink);
+		transition: color 0.25s;
+	}
+	.back:hover {
+		color: var(--zhu);
+	}
+	@media (max-width: 760px) {
+		.head {
+			grid-template-columns: 1fr;
+			align-items: flex-start;
+			gap: 20px;
+		}
+	}
+</style>

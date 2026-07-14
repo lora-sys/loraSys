@@ -2,18 +2,13 @@
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
 	import { fade } from 'svelte/transition';
-	import { Canvas } from '@threlte/core';
-	import * as THREE from 'three';
-	import BrokenMesh from '$lib/components/spatial/BrokenMesh.svelte';
 
 	let { status, error }: { status?: number; error?: Error & { frame?: string } } = $props();
 
-	// Fall back to $page store if props not passed (SvelteKit 2 compat)
 	let effectiveStatus = $derived(status ?? $page.status);
 	let effectiveError = $derived(error?.message ?? $page.error?.message ?? 'Unknown error');
 
 	const errorTitle = $derived(effectiveStatus === 404 ? 'Page Not Found' : 'Internal Server Error');
-	const errorIcon = $derived(effectiveStatus === 404 ? '404' : '500');
 	const errorHint = $derived(
 		effectiveStatus === 404
 			? 'The page you are looking for does not exist.'
@@ -23,11 +18,13 @@
 	let typedText = $state('');
 	let showCursor = $state(true);
 	let showNav = $state(false);
-	let fullMessage = $derived(`$ ${effectiveStatus} ${errorTitle} // ${effectiveError}`);
+	let fullMessage = $derived(`${effectiveStatus} · ${errorTitle} — ${effectiveError}`);
 
 	$effect(() => {
+		typedText = '';
+		showNav = false;
 		let i = 0;
-		let interval = setInterval(() => {
+		const interval = setInterval(() => {
 			if (i < fullMessage.length) {
 				typedText += fullMessage[i];
 				i++;
@@ -35,17 +32,14 @@
 				clearInterval(interval);
 				showNav = true;
 			}
-		}, 20);
+		}, 22);
 		return () => clearInterval(interval);
 	});
 
 	$effect(() => {
-		if (showNav) {
-			let blink = setInterval(() => {
-				showCursor = !showCursor;
-			}, 530);
-			return () => clearInterval(blink);
-		}
+		if (!showNav) return;
+		const blink = setInterval(() => (showCursor = !showCursor), 530);
+		return () => clearInterval(blink);
 	});
 </script>
 
@@ -55,112 +49,111 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<div class="relative flex min-h-screen items-center justify-center bg-[#07070a] p-4">
-	<!-- 3D broken mesh backdrop -->
-	<div class="pointer-events-none absolute inset-0 opacity-50">
-		<Canvas
-			dpr={Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)}
-			toneMapping={THREE.ACESFilmicToneMapping}
-		>
-			<BrokenMesh />
-		</Canvas>
+<main class="err">
+	<div class="paper-grain" aria-hidden="true"></div>
+	<div class="wash" aria-hidden="true"></div>
+	<div class="inner">
+		<p class="tag">誤 · Error</p>
+		<h1>{effectiveStatus}</h1>
+		<svg class="brush" viewBox="0 0 320 12" preserveAspectRatio="none" aria-hidden="true">
+			<path d="M3 8 C 64 2 128 11 190 5 S 300 3 317 7" fill="none" stroke="var(--zhu)" stroke-width="3" stroke-linecap="round" />
+		</svg>
+		<p class="msg">
+			<span>{typedText}</span>{#if showCursor}<span class="caret"></span>{/if}
+		</p>
+		{#if showNav}
+			<a class="home" href={base + '/'} in:fade>← Back to cover</a>
+		{/if}
 	</div>
+</main>
 
-	<!-- Scene label top-left -->
-	<div
-		class="absolute left-6 top-6 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500 md:left-10 md:top-10"
-	>
-		<span class="text-emerald-400">scene</span>=err / <span class="text-zinc-300">page-not-found</span>
-	</div>
-
-	<!-- Terminal Window -->
-	<div
-		class="relative w-full max-w-lg overflow-hidden rounded-lg border border-zinc-800 bg-[#111116]/90 shadow-2xl shadow-emerald-500/5 backdrop-blur-sm"
-	>
-		<!-- Title Bar -->
-		<div class="flex items-center gap-2 border-b border-zinc-800 bg-[#0c0c12] px-4 py-3">
-			<div class="flex items-center gap-1.5">
-				<span class="size-2.5 rounded-full bg-red-500/80"></span>
-				<span class="size-2.5 rounded-full bg-yellow-500/80"></span>
-				<span class="size-2.5 rounded-full bg-emerald-500/80"></span>
-			</div>
-			<span class="ml-3 font-mono text-[10px] text-zinc-500">error.log — {effectiveStatus}</span>
-		</div>
-
-		<!-- Terminal Body -->
-		<div class="space-y-6 p-6 font-mono">
-			<!-- Error icon / ASCII art -->
-			<div class="flex justify-center">
-				<pre class="font-pixel-square leading-tight text-emerald-400/90">
-					{#if effectiveStatus === 404}
-						<span class="block text-center text-xs leading-relaxed sm:text-sm"
-							>{`    ██████╗  ██████╗ ██╗  ██╗
-    ╚══██╔╝ ██╔═══╝ ██║  ██║
-      ██║   ██║     ███████║
-      ██║   ██║     ╚══██║
-      ██║   ╚██████╗   ██║
-      ╚═╝    ╚═════╝   ╚═╝`}</span
-						>
-					{:else}
-						<span class="block text-center text-xs leading-relaxed sm:text-sm"
-							>{`    ███████╗ ██████╗  ██████╗
-    ██╔════╝██╔═══██╗██╔══██╗
-    ███████╗██║   ██║██████╔╝
-    ╚════██║██║   ██║██╔══██╗
-    ███████║╚██████╔╝██║  ██║
-    ╚══════╝ ╚═════╝ ╚═╝  ╚═╝`}</span
-						>
-					{/if}
-				</pre>
-			</div>
-
-			<!-- Status code badge -->
-			<div class="flex justify-center">
-				<span
-					class="inline-block rounded border border-zinc-700 bg-zinc-900/50 px-4 py-1 font-pixel-square text-2xl font-bold text-zinc-100 sm:text-3xl"
-				>
-					{errorIcon}
-				</span>
-			</div>
-
-			<!-- Typing animation -->
-			<div class="rounded border border-zinc-800 bg-zinc-900/30 p-4">
-				<div class="flex items-start gap-2">
-					<span class="text-emerald-400">&gt;</span>
-					<div class="flex-1">
-						<span class="text-zinc-300">{typedText}</span>
-						{#if showCursor}
-							<span class="inline-block h-4 w-2 bg-emerald-400 align-text-bottom"></span>
-						{/if}
-					</div>
-				</div>
-				{#if showNav}
-					<div class="mt-2 flex items-center gap-2 text-zinc-500">
-						<span class="text-emerald-400">$</span>
-						<span class="text-zinc-400">exit </span>
-						<a
-							href={base + '/'}
-							class="text-emerald-400 underline decoration-emerald-400/30 underline-offset-2 transition-colors hover:decoration-emerald-400"
-						>
-							cd ~
-						</a>
-					</div>
-				{/if}
-			</div>
-
-			<!-- Navigation link -->
-			{#if showNav}
-				<div class="flex justify-center pt-2" in:fade>
-					<a
-						href={base + '/'}
-						class="group inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/50 px-6 py-2.5 font-pixel-square text-sm text-emerald-400 transition-all duration-300 hover:border-emerald-500/40 hover:shadow-[0_0_12px_rgba(52,211,153,0.12)]"
-					>
-						<span class="text-zinc-500 group-hover:text-emerald-400">$</span>
-						cd ~/home
-						<span class="inline-block animate-pulse text-zinc-500">_</span>
-					</a>
-				</div>
-			{/if}
-		</div>
-	</div>
-</div>
+<style>
+	.err {
+		position: relative;
+		min-height: 100vh;
+		display: grid;
+		place-items: center;
+		padding: 24px;
+		background: var(--paper);
+		color: var(--ink);
+		font-family: var(--font-serif);
+		overflow: hidden;
+	}
+	.paper-grain {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		pointer-events: none;
+		mix-blend-mode: multiply;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+	}
+	.wash {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+		background: radial-gradient(45% 45% at 50% 42%, rgba(198, 65, 44, 0.12), transparent 70%);
+		filter: blur(50px);
+	}
+	.inner {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+	}
+	.tag {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--zhu);
+		margin-bottom: 12px;
+	}
+	h1 {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(6rem, 22vw, 16rem);
+		line-height: 0.8;
+		letter-spacing: -0.04em;
+		margin: 0;
+	}
+	.brush {
+		display: block;
+		width: clamp(160px, 30%, 320px);
+		height: 12px;
+		margin: 8px auto 0;
+		overflow: visible;
+	}
+	.msg {
+		margin-top: 26px;
+		font-family: var(--font-label);
+		font-size: 0.9rem;
+		letter-spacing: 0.04em;
+		color: var(--ink-soft);
+		min-height: 1.4em;
+	}
+	.caret {
+		display: inline-block;
+		width: 8px;
+		height: 1em;
+		background: var(--zhu);
+		vertical-align: text-bottom;
+		margin-left: 2px;
+	}
+	.home {
+		display: inline-block;
+		margin-top: 28px;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 0.85rem;
+		letter-spacing: 0.06em;
+		color: var(--ink);
+		border-bottom: 2px solid var(--zhu);
+		padding-bottom: 3px;
+		transition: color 0.25s;
+	}
+	.home:hover {
+		color: var(--zhu);
+	}
+</style>

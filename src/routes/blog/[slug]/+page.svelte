@@ -107,7 +107,7 @@
 		script.setAttribute('data-reactions-enabled', '1');
 		script.setAttribute('data-emit-metadata', '1');
 		script.setAttribute('data-input-position', 'top');
-		script.setAttribute('data-theme', 'catppuccin_macchiato');
+		script.setAttribute('data-theme', 'light');
 		script.setAttribute('data-lang', 'zh-CN');
 		script.setAttribute('data-loading', 'lazy');
 		script.setAttribute('crossorigin', 'anonymous');
@@ -165,14 +165,14 @@
 		<!-- Main content -->
 		<article class="min-w-0 max-w-3xl flex-1">
 			<!-- Scene label -->
-			<div class="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
-				<span class="text-emerald-400">scene</span>=B / <span class="text-zinc-300">post · {data.meta?.slug ?? '...'}</span>
+			<div class="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-[#8a857c]">
+				<span class="text-[#c6412c]">scene</span>=B / <span class="text-[#5a544b]">post · {data.meta?.slug ?? '...'}</span>
 			</div>
 
 			<!-- Back button -->
 			<a
 				href={`${base}/blog`}
-				class="group mb-6 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-cyan-300"
+				class="group mb-6 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c] transition-colors hover:text-[#c6412c]"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +197,7 @@
 				<div class="flex flex-wrap gap-2">
 					{#each data.meta?.categories ?? [] as category}
 						<span
-							class="rounded border border-cyan-400/30 bg-cyan-400/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-300"
+							class="rounded border border-[#c6412c]/30 bg-[#c6412c]/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-[#c6412c]"
 						>
 							{category}
 						</span>
@@ -208,18 +208,18 @@
 				>
 					{data.meta?.title ?? ''}
 				</h1>
-				<p class="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
-					<span class="text-zinc-400">{data.meta?.date ? formatDate(data.meta.date) : ''}</span>
-					<span class="text-zinc-700">·</span>
+				<p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]">
+					<span class="text-[#5a544b]">{data.meta?.date ? formatDate(data.meta.date) : ''}</span>
+					<span class="text-[#cfc8ba]">·</span>
 					<span>by {data.meta?.author ?? 'lora'}</span>
 					{#if data.meta?.readTime}
-						<span class="text-zinc-700">·</span>
-						<span class="text-cyan-300">{data.meta.readTime} min read</span>
+						<span class="text-[#cfc8ba]">·</span>
+						<span class="text-[#c6412c]">{data.meta.readTime} min read</span>
 					{/if}
 				</p>
 			</hgroup>
 
-			<div class="mb-12 border-t border-zinc-800/60"></div>
+			<div class="mb-12 border-t border-[#1a1815]/60"></div>
 
 				<!-- Mobile TOC toggle -->
 				{#if toc.length > 0}
@@ -251,12 +251,12 @@
 									onclick={() => (tocDrawerOpen = false)}
 									class="block rounded px-2 py-1.5 font-mono text-sm transition-colors
 										{activeHeading === heading.id
-										? 'bg-term-green/10 text-term-green'
+										? 'bg-[#c6412c]/10 text-[#c6412c]'
 										: 'text-muted-foreground hover:text-foreground'}"
 									style="padding-left: {(heading.level - 1) * 0.75}rem;"
 								>
 									{#if heading.level > 1}
-										<span class="mr-2 text-term-green/50">{'-'.repeat(heading.level - 1)}</span>
+										<span class="mr-2 text-[#c6412c]/50">{'-'.repeat(heading.level - 1)}</span>
 									{/if}
 									{heading.text}
 								</a>
@@ -272,10 +272,10 @@
 						prose-headings:font-sans prose-headings:tracking-tight
 						prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
 						prose-p:text-base prose-p:leading-relaxed
-						prose-a:text-term-green prose-a:no-underline hover:prose-a:underline
-						prose-blockquote:border-l-term-green prose-blockquote:text-muted-foreground
+						prose-a:text-[#c6412c] prose-a:no-underline hover:prose-a:underline
+						prose-blockquote:border-l-[#c6412c] prose-blockquote:text-muted-foreground
 						prose-code:rounded prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm
-						prose-pre:border prose-pre:border-border/50 prose-pre:bg-term-bg
+						prose-pre:border prose-pre:border-border/50 prose-pre:bg-[#ece7db]
 						prose-img:rounded-xl prose-img:shadow-lg"
 				>
 					<data.content />
@@ -286,9 +286,9 @@
 				<div class="flex items-center justify-between font-mono text-sm text-muted-foreground">
 					<a
 						href={`${base}/blog`}
-						class="flex items-center gap-1 transition-colors hover:text-term-green"
+						class="flex items-center gap-1 transition-colors hover:text-[#c6412c]"
 					>
-						<span class="text-term-green">$</span> <span class="font-pixel-square">cd ../blog</span>
+						<span class="text-[#c6412c]">$</span> <span class="font-pixel-square">cd ../blog</span>
 					</a>
 					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
@@ -307,7 +307,7 @@
 							class="mb-3 flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-muted-foreground"
 						>
 							<svg
-								class="h-3.5 w-3.5 text-term-green"
+								class="h-3.5 w-3.5 text-[#c6412c]"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -327,14 +327,14 @@
 									href="#{heading.id}"
 									class="flex items-center gap-1 rounded-md px-2 py-1.5 font-mono text-xs transition-all duration-200
 										{activeHeading === heading.id
-										? 'bg-term-green/10 font-medium text-term-green'
+										? 'bg-[#c6412c]/10 font-medium text-[#c6412c]'
 										: 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}"
 									style="padding-left: {(heading.level - 1) * 0.625 + 0.5}rem;"
 								>
 									{#if heading.level > 1}
-										<span class="font-pixel-line text-term-green/40">{'├'}</span>
+										<span class="font-pixel-line text-[#c6412c]/40">{'├'}</span>
 									{:else}
-										<span class="font-pixel-line text-term-green/60">{'└'}</span>
+										<span class="font-pixel-line text-[#c6412c]/60">{'└'}</span>
 									{/if}
 									<span class="truncate">{heading.text}</span>
 								</a>
@@ -348,16 +348,16 @@
 
 	<!-- Tags Marquee -->
 	{#if (data.meta?.categories?.length ?? 0) > 0}
-		<div class="mt-16 border-t border-zinc-800/60 pt-8">
+		<div class="mt-16 border-t border-[#1a1815]/60 pt-8">
 			<p
-				class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500"
+				class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]"
 			>
-				<span class="text-emerald-400">$</span> cat tags
+				<span class="text-[#c6412c]">$</span> cat tags
 			</p>
 			<Marquee pauseOnHover class="[--duration:20s]">
 				{#each [...(data.meta?.categories ?? []), ...(data.meta?.categories ?? []), ...(data.meta?.categories ?? [])] as tag}
 					<span
-						class="mx-3 inline-block rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-1.5 font-mono text-sm text-cyan-300"
+						class="mx-3 inline-block rounded-full border border-[#c6412c]/20 bg-[#c6412c]/5 px-4 py-1.5 font-mono text-sm text-[#c6412c]"
 					>
 						#{tag}
 					</span>
