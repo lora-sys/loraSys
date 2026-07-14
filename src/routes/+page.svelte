@@ -25,11 +25,13 @@
 </svelte:head>
 
 <div class="edition">
+	<div class="paper-grain" aria-hidden="true"></div>
+	<div class="ink-wash" aria-hidden="true"></div>
 	<!-- MASTHEAD -->
 	<header class="mast">
 		<a class="logo" href="#top" aria-label="lora — home">
 			<span class="word">{DATA.name}</span>
-			<span class="seal" aria-hidden="true">洛拉</span>
+			<span class="seal" aria-hidden="true">lora</span>
 		</a>
 		<p class="ed-line">
 			Field Notes on Building<br />
@@ -159,11 +161,32 @@
 
 <style>
 	.edition {
+		position: relative;
 		max-width: 1600px;
 		margin: 0 auto;
 		padding: clamp(20px, 3vw, 40px) var(--page-x) 0;
 		font-family: var(--font-serif);
 		color: var(--ink);
+	}
+
+	/* Atmosphere: paper grain (over all) + soft ink wash (behind content) */
+	.paper-grain {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		pointer-events: none;
+		mix-blend-mode: multiply;
+		background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+	}
+	.ink-wash {
+		position: fixed;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background:
+			radial-gradient(50% 45% at 88% 8%, rgba(26, 24, 21, 0.14), transparent 70%),
+			radial-gradient(38% 38% at 12% 96%, rgba(198, 65, 44, 0.08), transparent 70%);
+		filter: blur(30px);
 	}
 
 	/* Masthead */
@@ -182,6 +205,7 @@
 	}
 	.logo .word {
 		font-weight: 900;
+		font-optical-sizing: auto;
 		font-size: clamp(2.5rem, 6vw, 4rem);
 		line-height: 0.8;
 		letter-spacing: -0.02em;
@@ -189,18 +213,21 @@
 	.seal {
 		display: grid;
 		place-items: center;
-		width: 54px;
-		height: 54px;
+		width: 58px;
+		height: 58px;
 		border-radius: 8px;
 		background: var(--zhu);
 		color: var(--paper);
-		font-family: var(--font-cn);
+		font-family: var(--font-serif);
+		font-optical-sizing: auto;
 		font-weight: 900;
-		font-size: 15px;
+		font-style: italic;
+		font-size: 20px;
 		line-height: 1;
+		letter-spacing: -0.02em;
 		text-align: center;
 		transform: rotate(-4deg);
-		box-shadow: inset 0 0 0 2.5px rgba(243, 239, 230, 0.3);
+		box-shadow: inset 0 0 0 2.5px rgba(243, 239, 230, 0.32);
 	}
 	.ed-line {
 		text-align: right;
@@ -250,6 +277,7 @@
 	h1 {
 		font-family: var(--font-serif);
 		font-weight: 900;
+		font-optical-sizing: auto;
 		font-size: var(--type-hero);
 		line-height: 0.85;
 		letter-spacing: -0.025em;
@@ -349,6 +377,7 @@
 	.sec-head h2 {
 		font-family: var(--font-serif);
 		font-weight: 900;
+		font-optical-sizing: auto;
 		font-size: var(--type-section);
 		letter-spacing: -0.02em;
 		line-height: 1;
@@ -444,6 +473,7 @@
 	.row-title {
 		font-family: var(--font-serif);
 		font-weight: 900;
+		font-optical-sizing: auto;
 		font-size: clamp(1.5rem, 3vw, 2.25rem);
 		line-height: 1.05;
 		letter-spacing: -0.01em;
@@ -593,6 +623,7 @@
 	.say {
 		font-family: var(--font-serif);
 		font-weight: 900;
+		font-optical-sizing: auto;
 		font-size: var(--type-hero);
 		letter-spacing: -0.03em;
 		margin: 8px 0 24px;

@@ -52,6 +52,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@fontsource-variable/fraunces": "^5.2.9",
+		"@fontsource/archivo": "^5.2.8",
+		"@fontsource/noto-serif-sc": "^5.2.8",
 		"@fontsource/space-grotesk": "^5.2.10",
 		"@fontsource/syne": "^5.2.7",
 		"@threlte/core": "^8.5.16",

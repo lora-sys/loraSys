@@ -174,8 +174,8 @@
 	--ink-line: rgba(26, 24, 21, 0.18);
 	--ink-line-strong: rgba(26, 24, 21, 0.4);
 
-	/* Fonts (Fraunces + Noto Serif SC land in commit 2; fall back for now) */
-	--font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+	/* Fonts */
+	--font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
 	--font-cn: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
 	--font-label: 'Archivo', 'Space Grotesk', system-ui, sans-serif;
 

@@ -1,5 +1,14 @@
 <script lang="ts">
 	import '../app.css';
+	// INK EDITION fonts
+	import '@fontsource-variable/fraunces/full.css';
+	import '@fontsource-variable/fraunces/full-italic.css';
+	import '@fontsource/noto-serif-sc/400.css';
+	import '@fontsource/noto-serif-sc/900.css';
+	import '@fontsource/archivo/500.css';
+	import '@fontsource/archivo/700.css';
+	import '@fontsource/archivo/900.css';
+	// Legacy fonts still used by /blog, /now, /error (until reskinned)
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
 	import '@fontsource/fragment-mono/index.css';
