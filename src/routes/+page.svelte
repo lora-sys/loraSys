@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { DATA } from '$lib/data/resume';
+	import AnimeSection from '$lib/components/portfolio/AnimeSection.svelte';
+	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
 
 	interface Props {}
 	let {}: Props = $props();
@@ -436,6 +438,9 @@
 			<p class="mt-4 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
 				<span class="text-cyan-300">$</span> cd ~/favorites/anime
 			</p>
+			<div class="mt-10">
+				<AnimeSection />
+			</div>
 		</div>
 	</section>
 
@@ -448,6 +453,9 @@
 			<p class="mt-4 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
 				<span class="text-cyan-300">$</span> cat ~/favorites/*.json
 			</p>
+			<div class="mt-10">
+				<FavoritesSection />
+			</div>
 		</div>
 	</section>
 
