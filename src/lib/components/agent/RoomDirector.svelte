@@ -1,6 +1,8 @@
 <script lang="ts">
-	// RoomDirector — routes by agent.room. Manages per-room layout tokens.
+	// RoomDirector — routes by agent.room. GSAP transition between rooms.
 	import { agent } from './AgentState.svelte';
+	import { onMount } from 'svelte';
+	import { gsap } from 'gsap';
 	import AgentOrb from './AgentOrb.svelte';
 	import AgentStatus from './AgentStatus.svelte';
 	import AgentVoice from './AgentVoice.svelte';
@@ -10,9 +12,70 @@
 	import NowMetrics from './NowMetrics.svelte';
 
 	let activeProject = $state<number | null>(null);
+	let stageEl: HTMLElement | undefined = $state();
+
+	const thoughts = [
+		'I BUILD SYSTEMS THAT LEARN.',
+		'WANT TO KNOW ABOUT MY WORK?',
+		'TRY ASKING ME SOMETHING.',
+		"TYPE 'work' · 'self' · 'blog' · 'now' · 'email'."
+	];
+	let thoughtIndex = $state(0);
+	let currentThought = $derived(thoughts[thoughtIndex]);
+
+	function cycleThought() {
+		if (agent.room !== '01') return;
+		thoughtIndex = (thoughtIndex + 1) % thoughts.length;
+	}
+
+	onMount(() => {
+		const onKey = (e: KeyboardEvent) => {
+			if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+			if (e.code === 'Space') {
+				e.preventDefault();
+				cycleThought();
+			} else if (/^[1-6]$/.test(e.key)) {
+				agent.setRoom(e.key.padStart(2, '0') as any);
+			}
+		};
+		window.addEventListener('keydown', onKey);
+		return () => window.removeEventListener('keydown', onKey);
+	});
+
+	$effect(() => {
+		// Animate orb scale based on room
+		const orb = document.querySelector('.orb') as HTMLElement | null;
+		if (!orb) return;
+		const map: Record<string, number> = {
+			'01': 1,
+			'02': 0.6,
+			'03': 1.15,
+			'04': 0.5,
+			'05': 0.4,
+			'06': 1.4
+		};
+		const target = map[agent.room] ?? 1;
+		gsap.to(orb, {
+			scale: target,
+			duration: 0.8,
+			ease: 'power3.out'
+		});
+	});
+
+	$effect(() => {
+		if (!stageEl) return;
+		// Trigger re-trigger by reading agent.room
+		const _room = agent.room;
+		void _room;
+		gsap.fromTo(
+			stageEl,
+			{ opacity: 0, y: 12 },
+			{ opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+		);
+	});
 
 	const rooms = {
-		'01': { title: 'I BUILD SYSTEMS THAT LEARN.' },
+		'01': {},
 		'02': {
 			lines: [
 				'LORA.',
@@ -45,11 +108,15 @@
 		</nav>
 	</header>
 
-	<main class="stage" data-mode={agent.mode}>
+	<main class="stage" bind:this={stageEl} data-mode={agent.mode}>
 		{#if agent.room === '01'}
 			<section class="room room-01">
 				<AgentOrb mode={agent.mode} />
-				<h1 class="agent-hero hero-text">{rooms['01'].title}</h1>
+				<h1 class="agent-hero hero-text">
+					{#key currentThought}
+						<AgentVoice text={currentThought} speed={45} />
+					{/key}
+				</h1>
 				<AgentInput />
 			</section>
 		{:else if agent.room === '02'}
@@ -59,14 +126,16 @@
 					{#each rooms['02'].lines as line, i}
 						<p class="self-line">
 							<span class="self-prefix">{String(i + 1).padStart(2, '0')}</span>
-							<AgentVoice text={line} />
+							<AgentVoice text={line} speed={28} />
 						</p>
 					{/each}
 				</div>
 			</section>
 		{:else if agent.room === '03'}
 			<section class="room room-03">
-				<h2 class="agent-room-title">{rooms['03'].title}</h2>
+				<h2 class="agent-room-title">
+					<AgentVoice text={rooms['03'].title} speed={40} />
+				</h2>
 				<VoxelShips bind:activeProject />
 				{#if activeProject !== null}
 					<ProjectReveal index={activeProject} />
@@ -74,8 +143,10 @@
 			</section>
 		{:else if agent.room === '04'}
 			<section class="room room-04">
-				<h2 class="agent-room-title">{rooms['04'].title}</h2>
-				<p class="agent-mono hint">3 articles · click to read</p>
+				<h2 class="agent-room-title">
+					<AgentVoice text={rooms['04'].title} speed={40} />
+				</h2>
+				<p class="hint">3 articles · click to read</p>
 			</section>
 		{:else if agent.room === '05'}
 			<section class="room room-05">
@@ -94,7 +165,7 @@
 				>
 					<input type="email" name="email" placeholder="your@email" aria-label="email" />
 					<textarea name="message" placeholder="message (optional)" rows="2"></textarea>
-					<button type="submit" class="agent-mono submit">
+					<button type="submit" class="submit">
 						<span class="submit-prompt">$</span>
 						<span>send_message</span>
 						<span class="arrow">→</span>
@@ -164,6 +235,7 @@
 	.hero-text {
 		text-align: center;
 		max-width: 18ch;
+		min-height: 1.2em;
 	}
 	.room-02 {
 		max-width: 900px;
@@ -195,9 +267,12 @@
 		gap: clamp(16px, 3vh, 32px);
 	}
 	.hint {
+		font-family: var(--font-mono);
 		font-size: var(--type-mono-sm);
 		letter-spacing: 0.18em;
 		text-transform: uppercase;
+		color: var(--agent-fg-mute);
+		margin: 0;
 	}
 	.room-05 {
 		gap: clamp(24px, 5vh, 64px);
@@ -256,10 +331,13 @@
 		text-transform: lowercase;
 		letter-spacing: 0.04em;
 		align-self: flex-start;
-		transition: border-color 0.2s;
+		font-family: var(--font-mono);
+		font-size: var(--type-mono-md);
+		transition: border-color 0.2s, color 0.2s;
 	}
 	.submit:hover {
 		border-color: var(--agent-accent);
+		color: var(--agent-fg);
 	}
 	.submit-prompt {
 		color: var(--agent-fg-ghost);

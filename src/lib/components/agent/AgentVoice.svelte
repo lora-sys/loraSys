@@ -1,21 +1,18 @@
 <script lang="ts">
-	// Typewriter reveal — Round 2 will wire svelte-typewriter
+	// Typewriter reveal — wired with svelte-typewriter
+	import Typewriter from 'svelte-typewriter';
+
 	interface Props {
 		text: string;
 		speed?: number;
 	}
-	let { text, speed = 60 }: Props = $props();
-	let shown = $state('');
-	$effect(() => {
-		shown = text;
-	});
+	let { text, speed = 50 }: Props = $props();
+
+	let key = $derived(text);
 </script>
 
-<span class="voice">{shown}</span>
-
-<style>
-	.voice {
-		font-family: inherit;
-		color: inherit;
-	}
-</style>
+{#key key}
+	<Typewriter {speed} cursor={false}>
+		{text}
+	</Typewriter>
+{/key}
