@@ -318,7 +318,7 @@ export const DATA = {
 					icon: Github
 				}
 			],
-			image: 'https://raw.githubusercontent.com/lora-sys/aicompanyos/main/image/1.png',
+			image: '/images/projects/aicompanyos.webp',
 			video: ''
 		},
 		{

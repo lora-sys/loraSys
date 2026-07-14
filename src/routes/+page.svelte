@@ -15,6 +15,17 @@
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
 
+	// Graceful INK cover if an (external) project image 404s.
+	function coverFallback(title: string): string {
+		const t = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').slice(0, 22);
+		return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect width='100%25' height='100%25' fill='%23ece7db'/><text x='18' y='46' font-family='Georgia,serif' font-size='22' font-weight='900' fill='%231a1815'>${t}</text><text x='18' y='182' font-family='monospace' font-size='11' letter-spacing='2' fill='%23c6412c'>lora://project</text></svg>`;
+	}
+	function onImgError(e: Event, title: string) {
+		const img = e.currentTarget as HTMLImageElement;
+		img.onerror = null;
+		img.src = coverFallback(title);
+	}
+
 	// Contents index doubles as navigation.
 	const contents = [
 		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', page: 'P.02' },
@@ -53,9 +64,20 @@
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const desktop = window.matchMedia('(min-width: 861px)').matches;
 		showWash = !reduce && desktop;
-		if (reduce) return;
+
+		// Scroll progress bar (always on, even under reduced motion)
+		const prog = document.querySelector('.scroll-progress') as HTMLElement | null;
+		const onScroll = () => {
+			const el = document.documentElement;
+			const max = el.scrollHeight - el.clientHeight;
+			const p = max > 0 ? el.scrollTop / max : 0;
+			if (prog) prog.style.transform = `scaleX(${p})`;
+		};
+		window.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
 
 		let cleanup = () => {};
+		if (!reduce) {
 		(async () => {
 			try {
 				const gsapMod = await import('gsap');
@@ -135,7 +157,12 @@
 			}
 		})();
 
-		return () => cleanup();
+		}
+
+		return () => {
+			window.removeEventListener('scroll', onScroll);
+			cleanup();
+		};
 	});
 </script>
 
@@ -161,7 +188,8 @@
 </svelte:head>
 
 <div class="edition">
-	<div class="paper-grain" aria-hidden="true"></div>
+	<div class="scroll-progress" aria-hidden="true"></div>
+		<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
 	{#if showWash}<InkWash />{/if}
 	<!-- MASTHEAD -->
@@ -308,7 +336,7 @@
 						</div>
 						{#if p.image}
 							<a class="row-thumb" href={p.href} target="_blank" rel="noreferrer" tabindex="-1" aria-hidden="true">
-								<img src={p.image} alt="" loading="lazy" />
+								<img src={p.image} alt="" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
 							</a>
 						{/if}
 					</li>
@@ -407,6 +435,18 @@
 	}
 
 	/* Atmosphere: paper grain (over all) + soft ink wash (behind content) */
+	.scroll-progress {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 3px;
+		width: 100%;
+		background: var(--zhu);
+		transform: scaleX(0);
+		transform-origin: 0 50%;
+		z-index: 60;
+		will-change: transform;
+	}
 	.paper-grain {
 		position: fixed;
 		inset: 0;
