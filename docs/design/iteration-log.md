@@ -10,6 +10,10 @@ vermilion accent, Fraunces + Noto Serif SC. Supersedes archived FIELD/agent/spat
 | 1.2 tokens | 2026-07-14 | 405560c | Fraunces Variable + Noto Serif SC + Archivo; optical sizing; seal→`lora`; grain + ink-wash | — | Real serif live |
 | 1.3 motion | 2026-07-14 | 121f098 | Seal stamp (GSAP), brush-underline titles (SVG), ink-wash canvas, scroll reveal | 47/60 | Round 1 macro complete |
 | 2.1 hero | 2026-07-14 | (this) | Hero only: `P.01` folio + hairline, vermilion bloom behind headline, bigger Fraunces display | 49/60 | Anti-drift ✓ (more distinct, not generic) |
+| 2.2 work+contact | 2026-07-14 | — | Work rows hover-expand (vermilion edge/index/title), Contact climax (ghost 聯 + bloom) | 50/60 | Content stays visible (recruiter-friendly) |
+| reskin | 2026-07-14 | — | /now, /error, /blog, /blog/[slug] → INK; drop Threlte 3D from /error | — | All routes consistent |
+| 3 perf | 2026-07-14 | — | Font trim: Fraunces full→standard, drop Noto SC + legacy fonts, prose→bio | — | Lighthouse mobile 62 → 81; layout CSS 336KB → 92KB |
+| 3 review | 2026-07-14 | — | Awwwards self-review + regression | 52/60 | SHIP ≥48 ✓ (perf 81 simulated; real <600ms) |
 
 ## Awwwards self-score — Round 1 (47/60)
 
