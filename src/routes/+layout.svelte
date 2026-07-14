@@ -7,7 +7,6 @@
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	import SpatialScroll from '$lib/components/spatial/SpatialScroll.svelte';
-	import SpatialStage from '$lib/components/spatial/SpatialStage.svelte';
 	import GrainOverlay from '$lib/components/spatial/GrainOverlay.svelte';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
@@ -20,6 +19,11 @@
 	let { children }: Props = $props();
 
 	let spatialEnabled = $state(false);
+	// dynamic-imported SpatialStage component — keeps Three.js out of the
+	// main bundle. Resolves after first paint to avoid blocking TBT.
+	let SpatialStageComp = $state<
+		null | (typeof import('$lib/components/spatial/SpatialStage.svelte').default)
+	>(null);
 
 	onMount(() => {
 		setMode('dark');
@@ -34,6 +38,18 @@
 					.then(() => console.log('Service Worker registered'))
 					.catch((error) => console.log('SW registration failed:', error));
 			});
+		}
+
+		// Defer SpatialStage import until after first paint so Three.js +
+		// Threlte don't block TBT. requestIdleCallback fallback for Safari.
+		const loadSpatial = () =>
+			import('$lib/components/spatial/SpatialStage.svelte').then((m) => {
+				SpatialStageComp = m.default;
+			});
+		if ('requestIdleCallback' in window) {
+			window.requestIdleCallback(loadSpatial, { timeout: 2000 });
+		} else {
+			setTimeout(loadSpatial, 100);
 		}
 	});
 </script>
@@ -107,8 +123,8 @@
 
 <ModeWatcher />
 
-{#if browser && spatialEnabled}
-	<SpatialStage />
+{#if browser && spatialEnabled && SpatialStageComp}
+	<svelte:component this={SpatialStageComp} />
 {/if}
 
 <GrainOverlay opacity={0.05} />
