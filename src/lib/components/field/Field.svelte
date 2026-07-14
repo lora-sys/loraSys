@@ -5,43 +5,39 @@
 	import FieldNode from './FieldNode.svelte';
 	import FieldBackground from './FieldBackground.svelte';
 
-	// Pre-baked positions for Round 1 (vw/vh).
-	// Round 2 will tune via visual review.
+	// Pre-baked positions for Round 1 commit 2 — tuned to avoid overlap.
 	const POSITIONS: Record<string, { x: number; y: number; align?: 'left' | 'center' | 'right' }> = {
-		'manifest-claim': { x: 50, y: 38, align: 'center' },
+		'manifest-claim': { x: 50, y: 36, align: 'center' },
 		'manifest-enter': { x: 50, y: 88, align: 'center' },
-		'self-name': { x: 18, y: 32, align: 'left' },
-		'self-stack': { x: 78, y: 56, align: 'left' },
-		'self-repos': { x: 30, y: 78, align: 'left' },
-		'work-0': { x: 12, y: 18 },
-		'work-1': { x: 42, y: 22 },
-		'work-2': { x: 78, y: 26 },
-		'work-3': { x: 18, y: 50 },
-		'work-4': { x: 60, y: 56 },
-		'work-5': { x: 86, y: 64 },
-		'work-6': { x: 32, y: 80 },
-		'idea-blog': { x: 22, y: 30 },
-		'idea-now': { x: 72, y: 60 },
-		'reach-claim': { x: 50, y: 44, align: 'center' },
-		'reach-email': { x: 30, y: 70 },
-		'reach-x': { x: 70, y: 76 }
+		'self-name': { x: 50, y: 32, align: 'center' },
+		'self-stack': { x: 50, y: 56, align: 'center' },
+		'self-repos': { x: 50, y: 70, align: 'center' },
+		'work-0': { x: 14, y: 18 },
+		'work-1': { x: 50, y: 20, align: 'center' },
+		'work-2': { x: 86, y: 18 },
+		'work-3': { x: 14, y: 46 },
+		'work-4': { x: 50, y: 46, align: 'center' },
+		'work-5': { x: 86, y: 46 },
+		'work-6': { x: 14, y: 78 },
+		'idea-blog': { x: 28, y: 36 },
+		'idea-now': { x: 70, y: 64 },
+		'reach-claim': { x: 50, y: 36, align: 'center' },
+		'reach-email': { x: 30, y: 64 },
+		'reach-x': { x: 70, y: 74 }
 	};
 
-	// Per-layer tokens (size, weight, color, opacity, family)
+	// Layer tokens. Hero cap reduced to 9rem so it doesn't eat the viewport.
 	const LAYER_TOKENS = {
-		0: { size: 'clamp(3rem, 16vw, 14rem)', weight: 700, color: 'var(--field-fg)', opacity: 1, family: 'display' as const, letterSpacing: '-0.05em' },
-		1: { size: 'clamp(1.5rem, 5vw, 5rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.85, family: 'display' as const, letterSpacing: '-0.03em' },
-		2: { size: 'clamp(0.75rem, 1.2vw, 1.1rem)', weight: 400, color: 'var(--field-fg-dim)', opacity: 0.65, family: 'mono' as const, letterSpacing: '0.04em' },
-		3: { size: 'clamp(0.7rem, 0.95vw, 0.95rem)', weight: 400, color: 'var(--field-fg-mute)', opacity: 0.5, family: 'mono' as const, letterSpacing: '0.06em' },
-		4: { size: 'clamp(1.2rem, 3.5vw, 3rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.75, family: 'display' as const, letterSpacing: '-0.03em' }
+		0: { size: 'clamp(2.4rem, 9vw, 9rem)', weight: 700, color: 'var(--field-fg)', opacity: 1, family: 'display' as const, letterSpacing: '-0.05em', lineHeight: 0.92 },
+		1: { size: 'clamp(1.4rem, 4vw, 3.6rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.82, family: 'display' as const, letterSpacing: '-0.03em', lineHeight: 1.05 },
+		2: { size: 'clamp(0.7rem, 0.95vw, 0.9rem)', weight: 400, color: 'var(--field-fg-dim)', opacity: 0.62, family: 'mono' as const, letterSpacing: '0.04em', lineHeight: 1.4 },
+		3: { size: 'clamp(0.65rem, 0.85vw, 0.82rem)', weight: 400, color: 'var(--field-fg-mute)', opacity: 0.45, family: 'mono' as const, letterSpacing: '0.06em', lineHeight: 1.4 },
+		4: { size: 'clamp(1rem, 2.4vw, 2.2rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.78, family: 'display' as const, letterSpacing: '-0.03em', lineHeight: 1.1 }
 	};
 
-	// Mouse parallax: translate the whole field slightly
-	let tiltX = $derived(field.mouseY * 4); // deg
-	let tiltY = $derived(field.mouseX * -4); // deg
-
-	// Scroll depth: scale + translate-z the canvas based on scroll
-	let scrollZ = $derived(field.depthProgress * 800); // px virtual depth
+	let tiltX = $derived(field.mouseY * 3);
+	let tiltY = $derived(field.mouseX * -3);
+	let scrollZ = $derived(field.depthProgress * 600);
 </script>
 
 <div
