@@ -278,16 +278,17 @@
 		<!-- 戰 HACKATHONS -->
 		<section id="hack" class="sec">
 			<div class="sec-head"><span class="cn">戰</span><div class="sec-title"><h2>Hackathons &amp; Signals</h2>{@render brush()}</div><span class="folio">P.09</span></div>
-			<ul class="hacks">
-				{#each DATA.hackathons as h}
-					<li>
-						<div class="hk-top"><h3>{h.title}</h3><span>{h.dates}</span></div>
-						<p class="hk-loc">{h.location}</p>
+			<ol class="hacks">
+				{#each DATA.hackathons as h, i}
+					<li class="hk">
+						<span class="hk-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+						<h3>{h.title}</h3>
+						<p class="hk-meta"><span class="hk-loc">{h.location}</span><span class="hk-date">{h.dates}</span></p>
 						<p class="hk-desc">{h.description}</p>
-						{#each h.links as l}<a href={l.href}>{l.title} →</a>{/each}
+						{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a>{/each}
 					</li>
 				{/each}
-			</ul>
+			</ol>
 			<p class="repos">103 public repositories on GitHub — AI agents, Web3 dApps, full-stack applications.</p>
 		</section>
 
@@ -826,61 +827,96 @@
 		filter: none;
 	}
 
-	/* Hackathons */
+	/* Hackathons — ledger: outlined index + top-bar draw on hover */
 	.hacks {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-		gap: 28px;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 0 clamp(28px, 4vw, 56px);
 	}
-	.hacks li {
-		border-top: 1px solid var(--ink-line);
-		padding-top: 16px;
+	.hk {
+		position: relative;
+		border-top: 2px solid var(--ink);
+		padding: 22px 0 30px;
 	}
-	.hk-top {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-		gap: 12px;
+	.hk::before {
+		content: '';
+		position: absolute;
+		top: -2px;
+		left: 0;
+		height: 2px;
+		width: 0;
+		background: var(--zhu);
+		transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
-	.hk-top h3 {
+	.hk:hover::before {
+		width: 100%;
+	}
+	.hk-n {
+		font-family: var(--font-serif);
 		font-weight: 900;
-		font-size: 1.25rem;
+		font-size: 2.75rem;
+		line-height: 1;
+		color: transparent;
+		-webkit-text-stroke: 1.5px var(--ink-line-strong);
+		display: block;
+		margin-bottom: 10px;
+		transition: -webkit-text-stroke-color 0.3s ease, color 0.3s ease;
+	}
+	.hk:hover .hk-n {
+		-webkit-text-stroke-color: var(--zhu);
+		color: var(--zhu);
+	}
+	.hk h3 {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.25rem, 2vw, 1.6rem);
+		line-height: 1.1;
 		margin: 0;
 	}
-	.hk-top span {
-		font-family: var(--font-label);
-		font-size: 0.72rem;
-		color: var(--ink-mute);
-		white-space: nowrap;
+	.hk-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 14px;
+		align-items: baseline;
+		margin: 8px 0 10px;
 	}
 	.hk-loc {
 		font-family: var(--font-label);
-		font-size: 0.72rem;
-		letter-spacing: 0.1em;
+		font-size: 0.7rem;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: var(--zhu);
-		margin: 6px 0 10px;
+	}
+	.hk-date {
+		font-family: var(--font-label);
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
 	}
 	.hk-desc {
 		line-height: 1.5;
 		color: var(--ink-soft);
 	}
-	.hacks a {
+	.hk a {
 		font-family: var(--font-label);
 		font-weight: 700;
 		font-size: 0.8rem;
 		color: var(--zhu);
 		display: inline-block;
-		margin-top: 8px;
+		margin-top: 10px;
 	}
 	.repos {
-		margin-top: 40px;
+		margin-top: 44px;
 		font-family: var(--font-serif);
 		font-style: italic;
-		font-size: 1.4rem;
+		font-size: clamp(1.2rem, 2vw, 1.5rem);
+		border-top: 1px solid var(--ink-line);
+		padding-top: 24px;
 	}
 
 	/* Skills — kinetic marquee */
