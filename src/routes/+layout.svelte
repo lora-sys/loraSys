@@ -8,6 +8,7 @@
 	import { onMount } from 'svelte';
 	import SpatialScroll from '$lib/components/spatial/SpatialScroll.svelte';
 	import SpatialStage from '$lib/components/spatial/SpatialStage.svelte';
+	import GrainOverlay from '$lib/components/spatial/GrainOverlay.svelte';
 	import '@fontsource/space-grotesk/index.css';
 	import '@fontsource/syne/index.css';
 	import '@fontsource/fragment-mono/index.css';
@@ -109,6 +110,8 @@
 {#if browser && spatialEnabled}
 	<SpatialStage />
 {/if}
+
+<GrainOverlay opacity={0.05} />
 
 <Tooltip.Provider>
 	<TopNav />
