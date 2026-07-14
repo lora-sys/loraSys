@@ -163,54 +163,63 @@
 <div class="relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
 	<div class="flex gap-8">
 		<!-- Main content -->
-		<article class="min-w-0 max-w-2xl flex-1">
-			<BlurFade>
-				<!-- Back button -->
-				<a
-					href={`${base}/blog`}
-					class="group mb-8 inline-flex items-center gap-1 font-mono font-pixel-square text-sm text-muted-foreground transition-colors hover:text-term-green"
+		<article class="min-w-0 max-w-3xl flex-1">
+			<!-- Scene label -->
+			<div class="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
+				<span class="text-emerald-400">scene</span>=B / <span class="text-zinc-300">post · {data.meta?.slug ?? '...'}</span>
+			</div>
+
+			<!-- Back button -->
+			<a
+				href={`${base}/blog`}
+				class="group mb-6 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-cyan-300"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="14"
+					height="14"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="transition-transform duration-300 group-hover:-translate-x-1"
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="14"
-						height="14"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="1.5"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="transition-transform duration-300 group-hover:-translate-x-1"
-					>
-						<path d="m12 19-7-7 7-7" />
-						<path d="M19 12H5" />
-					</svg>
-					cd ../blog
-				</a>
+					<path d="m12 19-7-7 7-7" />
+					<path d="M19 12H5" />
+				</svg>
+				cd ../blog
+			</a>
 
-				<!-- Title -->
-				<hgroup class="mb-8 space-y-4">
-					<div class="flex flex-wrap gap-2">
-						{#each data.meta?.categories ?? [] as category}
-							<Badge
-								variant="secondary"
-								class="rounded-lg border border-term-green/30 font-mono text-xs text-term-green"
-							>
-								{category}
-							</Badge>
-						{/each}
-					</div>
-					<h1
-						class="font-sans text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl"
-					>
-						{data.meta?.title ?? ''}
-					</h1>
-					<p class="font-mono text-sm text-muted-foreground">
-						{data.meta?.date ? formatDate(data.meta.date) : ''} / by {data.meta?.author ?? 'lora'}
-					</p>
-				</hgroup>
+			<!-- Title -->
+			<hgroup class="mb-8 space-y-4">
+				<div class="flex flex-wrap gap-2">
+					{#each data.meta?.categories ?? [] as category}
+						<span
+							class="rounded border border-cyan-400/30 bg-cyan-400/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-cyan-300"
+						>
+							{category}
+						</span>
+					{/each}
+				</div>
+				<h1
+					class="font-heading text-[clamp(2.25rem,5.5vw,4rem)] font-bold leading-[1.05] tracking-[-0.03em] text-foreground"
+				>
+					{data.meta?.title ?? ''}
+				</h1>
+				<p class="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+					<span class="text-zinc-400">{data.meta?.date ? formatDate(data.meta.date) : ''}</span>
+					<span class="text-zinc-700">·</span>
+					<span>by {data.meta?.author ?? 'lora'}</span>
+					{#if data.meta?.readTime}
+						<span class="text-zinc-700">·</span>
+						<span class="text-cyan-300">{data.meta.readTime} min read</span>
+					{/if}
+				</p>
+			</hgroup>
 
-				<Separator class="mb-8 border-border/50" />
+			<div class="mb-12 border-t border-zinc-800/60"></div>
 
 				<!-- Mobile TOC toggle -->
 				{#if toc.length > 0}
@@ -283,7 +292,6 @@
 					</a>
 					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
-			</BlurFade>
 
 			<!-- Giscus comments -->
 			<Separator class="my-8 border-border/50" />
@@ -340,14 +348,16 @@
 
 	<!-- Tags Marquee -->
 	{#if (data.meta?.categories?.length ?? 0) > 0}
-		<div class="mt-16 border-t border-border/40 pt-8">
-			<p class="mb-4 text-center font-mono text-xs uppercase tracking-wider text-muted-foreground">
-				Tags
+		<div class="mt-16 border-t border-zinc-800/60 pt-8">
+			<p
+				class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500"
+			>
+				<span class="text-emerald-400">$</span> cat tags
 			</p>
 			<Marquee pauseOnHover class="[--duration:20s]">
 				{#each [...(data.meta?.categories ?? []), ...(data.meta?.categories ?? []), ...(data.meta?.categories ?? [])] as tag}
 					<span
-						class="mx-3 inline-block rounded-full border border-term-green/20 bg-term-green/5 px-4 py-1.5 font-mono text-sm text-term-green"
+						class="mx-3 inline-block rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-1.5 font-mono text-sm text-cyan-300"
 					>
 						#{tag}
 					</span>
