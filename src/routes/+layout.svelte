@@ -5,7 +5,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { base } from '$app/paths';
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
+	import { onMount, type Component } from 'svelte';
 	import SpatialScroll from '$lib/components/spatial/SpatialScroll.svelte';
 	import GrainOverlay from '$lib/components/spatial/GrainOverlay.svelte';
 	import '@fontsource/space-grotesk/index.css';
@@ -19,11 +19,8 @@
 	let { children }: Props = $props();
 
 	let spatialEnabled = $state(false);
-	// dynamic-imported SpatialStage component — keeps Three.js out of the
-	// main bundle. Resolves after first paint to avoid blocking TBT.
-	let SpatialStageComp = $state<
-		null | (typeof import('$lib/components/spatial/SpatialStage.svelte').default)
-	>(null);
+	// dynamic-imported SpatialStage — keeps Three.js out of main bundle.
+	let SpatialStageComp = $state<null | Component<any>>(null);
 
 	onMount(() => {
 		setMode('dark');
@@ -40,8 +37,10 @@
 			});
 		}
 
-		// Defer SpatialStage import until after first paint so Three.js +
-		// Threlte don't block TBT. requestIdleCallback fallback for Safari.
+		// Defer SpatialStage import until idle so Three.js bundle doesn't
+		// block TBT. SpatialScroll stays eager — testing showed
+		// dynamic-importing it actually hurt Perf score (Promise.all
+		// parallelized two heavy bundles).
 		const loadSpatial = () =>
 			import('$lib/components/spatial/SpatialStage.svelte').then((m) => {
 				SpatialStageComp = m.default;
