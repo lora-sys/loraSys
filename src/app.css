@@ -158,23 +158,47 @@
 }
 
 /* ============================================================
-   Override base bg/fg/cursor for AGENT theme
+   INK EDITION (墨刊) — global base for `/` (redo #5)
+   Paper base + normal cursor. Overrides the legacy dark force.
+   `.agent-*` / `.field-*` utility classes are kept for /blog /now /error
+   until those routes are reskinned.
    ============================================================ */
+:root {
+	/* Color */
+	--ink: #1a1815;
+	--ink-soft: #5a544b;
+	--ink-mute: #8a857c;
+	--paper: #f3efe6;
+	--paper-2: #ece7db;
+	--zhu: #c6412c; /* vermilion — single accent */
+	--ink-line: rgba(26, 24, 21, 0.18);
+	--ink-line-strong: rgba(26, 24, 21, 0.4);
+
+	/* Fonts (Fraunces + Noto Serif SC land in commit 2; fall back for now) */
+	--font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+	--font-cn: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+	--font-label: 'Archivo', 'Space Grotesk', system-ui, sans-serif;
+
+	/* Type scale (fluid) */
+	--type-hero: clamp(3.75rem, 10.5vw, 9.5rem);
+	--type-section: clamp(2.25rem, 6vw, 4.5rem);
+	--type-dek: clamp(1rem, 1.6vw, 1.25rem);
+	--type-label: clamp(0.65rem, 0.9vw, 0.75rem);
+
+	/* Spacing */
+	--page-x: clamp(20px, 5vw, 72px);
+	--page-y: clamp(48px, 10vh, 128px);
+}
+
 html,
 body {
-	background: var(--agent-bg) !important;
-	color: var(--agent-fg) !important;
-	font-family: var(--font-display) !important;
+	background: var(--paper) !important;
+	color: var(--ink) !important;
+	font-family: var(--font-serif) !important;
 }
 
 body {
-	cursor: none !important;
-}
-
-@media (max-width: 767px) {
-	body {
-		cursor: auto !important;
-	}
+	cursor: auto !important;
 }
 
 /* Block the gold scrollbar — theme is monochrome */
@@ -399,4 +423,25 @@ body {
 @keyframes field-pulse {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0.4; }
+}
+
+/* ============================================================
+   INK EDITION — selection + scrollbar (source-order wins over legacy)
+   ============================================================ */
+::selection {
+	background: rgba(198, 65, 44, 0.22);
+	color: var(--ink);
+}
+::-webkit-scrollbar {
+	width: 10px;
+}
+::-webkit-scrollbar-track {
+	background: var(--paper);
+}
+::-webkit-scrollbar-thumb {
+	background: #cdc6b6 !important;
+	border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: var(--ink-mute) !important;
 }

@@ -22,21 +22,10 @@
 
 <style>
 	:global(html, body) {
-		background: var(--field-bg) !important;
-		color: var(--field-fg) !important;
-		font-family: var(--font-display) !important;
 		margin: 0;
 		padding: 0;
 		-webkit-font-smoothing: antialiased;
 		overflow-x: hidden;
-	}
-	:global(body) {
-		cursor: none;
-	}
-	@media (max-width: 767px) {
-		:global(body) {
-			cursor: auto;
-		}
 	}
 	:global(a) {
 		color: inherit;
