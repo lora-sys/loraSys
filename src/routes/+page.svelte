@@ -1,42 +1,22 @@
 <script lang="ts">
-	import AnimeSection from '$lib/components/portfolio/AnimeSection.svelte';
-	import EduCard from '$lib/components/portfolio/EduCard.svelte';
-	import LogCard from '$lib/components/portfolio/LogCard.svelte';
-	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import { DATA } from '$lib/data/resume';
-	import FavoritesSection from '$lib/components/portfolio/FavoriteSection.svelte';
-	import TerminalCard from '$lib/components/portfolio/TerminalCard.svelte';
-	import IconCloud from '$lib/components/magic/icon-cloud/icon-cloud.svelte';
-	import RetroGrid from '$lib/components/magic/retro-grid/retro-grid.svelte';
-	import AnimatedGradientText from '$lib/components/magic/animated-gradient-text/animated-gradient-text.svelte';
-	import InteractiveHoverButton from '$lib/components/magic/interactive-hover-button/interactive-hover-button.svelte';
+	import { onMount } from 'svelte';
 
-	import CinematicHero from '$lib/components/magic/cinema/CinematicHero.svelte';
-	import SceneManifesto from '$lib/components/magic/cinema/SceneManifesto.svelte';
-	import ScrollScene from '$lib/components/magic/cinema/ScrollScene.svelte';
-	import SceneLabel from '$lib/components/magic/cinema/SceneLabel.svelte';
+	interface Props {}
+	let {}: Props = $props();
 
-	const skillImages = [
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/svelte/svelte-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg',
-		'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg'
+	// For mobile: scene label + index
+	const SCENES = [
+		{ id: 'hero', label: 'lora', index: '01' },
+		{ id: 'manifesto', label: 'credo', index: '02' },
+		{ id: 'education', label: 'trained', index: '03' },
+		{ id: 'skills', label: 'tools', index: '04' },
+		{ id: 'projects', label: 'built', index: '05' },
+		{ id: 'hackathons', label: 'events', index: '06' },
+		{ id: 'anime', label: 'culture', index: '07' },
+		{ id: 'favorites', label: 'favorites', index: '08' },
+		{ id: 'contact', label: 'hello', index: '09' },
+		{ id: 'footer', label: 'end_credit', index: '10' }
 	];
 </script>
 
@@ -63,292 +43,124 @@
 
 <main class="relative">
 	<!-- ==================== HERO ==================== -->
-	<CinematicHero />
+	<section
+		id="hero"
+		class="hero-stage relative isolate flex min-h-[100svh] flex-col overflow-hidden pt-24 pb-16"
+	>
+		<!-- Scene label + status -->
+		<div
+			class="relative z-10 mx-auto flex w-full max-w-[1400px] items-center justify-between px-6 md:px-10"
+		>
+			<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
+				<span class="text-emerald-400">scene</span>=01 / hero · <span class="text-zinc-300">lora</span>
+			</span>
+			<div
+				class="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500 md:flex"
+			>
+				<span class="size-1.5 animate-pulse rounded-full bg-emerald-400"></span>
+				<span>rec</span>
+				<span class="text-zinc-700">·</span>
+				<span>{DATA.location}</span>
+			</div>
+		</div>
 
-	<!-- ==================== MANIFESTO / ABOUT ==================== -->
-	<SceneManifesto />
+		<!-- Main composition -->
+		<div
+			class="relative z-10 mx-auto grid w-full max-w-[1400px] flex-1 grid-cols-1 gap-8 px-6 py-10 md:grid-cols-12 md:gap-6 md:px-10 md:py-16"
+		>
+			<!-- LEFT: Type as hero (visible on mobile, layered over 3D on desktop) -->
+			<div class="relative col-span-1 flex flex-col justify-center md:col-span-12 lg:col-span-7">
+				<span
+					class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500"
+				>
+					<span class="text-emerald-400">$</span> whoami
+				</span>
 
-	<!-- ==================== EDUCATION ==================== -->
-	{#if DATA.education.length > 0}
-		<section id="education" class="relative isolate overflow-hidden py-24 md:py-32">
-			<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-				<ScrollScene>
-					<SceneLabel prompt="scene=04" path="/education" />
-				</ScrollScene>
-				<ScrollScene delay={0.1} y={20}>
-					<h2
-						class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
+				<!-- The giant name — mirrors the 3D text behind it on desktop, is the hero on mobile -->
+				<h1
+					class="mt-4 font-heading text-[clamp(5rem,18vw,14rem)] font-bold leading-[0.82] tracking-[-0.04em] text-foreground mix-blend-difference"
+					aria-label={DATA.name}
+				>
+					{DATA.name}
+				</h1>
+
+				<p class="mt-6 max-w-[42ch] font-heading text-lg leading-snug text-zinc-200 md:text-xl lg:text-2xl">
+					Builder of evolving systems.<br />
+					<span class="text-zinc-500"
+						>Turning ambitious ideas into reality. Always building, learning, shipping.</span
 					>
-						Trained<br />
-						<span class="text-zinc-500">at.</span>
-					</h2>
-				</ScrollScene>
+				</p>
 
-				<div class="mt-10 space-y-3 border-l border-zinc-700/60 pl-5 md:pl-8">
-					{#each DATA.education as edu, id}
-						<ScrollScene delay={0.15 + id * 0.05}>
-							<EduCard
-								school={edu.school}
-								degree={edu.degree}
-								start={edu.start}
-								end={edu.end}
-								logoUrl={edu.logoUrl}
-								href={edu.href}
-							/>
-						</ScrollScene>
-					{/each}
+				<div class="mt-8 flex flex-wrap items-center gap-3">
+					<a
+						href={DATA.url}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="group inline-flex items-center gap-2 rounded-full border border-zinc-700/60 bg-zinc-900/40 px-4 py-2 font-mono text-xs text-zinc-200 transition hover:border-emerald-500/50 hover:text-emerald-400"
+					>
+						<span class="text-emerald-400">gh:</span>
+						<span>{DATA.url.replace('https://', '')}</span>
+						<span class="text-zinc-600 transition group-hover:translate-x-0.5">→</span>
+					</a>
+					{#if DATA.contact?.social?.X}
+						<a
+							href={DATA.contact.social.X.url}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="group inline-flex items-center gap-2 rounded-full border border-zinc-700/60 bg-zinc-900/40 px-4 py-2 font-mono text-xs text-zinc-200 transition hover:border-emerald-500/50 hover:text-emerald-400"
+						>
+							<span class="text-emerald-400">x:</span>
+							<span>@{DATA.contact.social.X.url.split('/').pop()}</span>
+						</a>
+					{/if}
 				</div>
 			</div>
-		</section>
-	{/if}
 
-	<!-- ==================== SKILLS ==================== -->
-	<section id="skills" class="relative isolate overflow-hidden py-24 md:py-32">
-		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-			<div class="grid grid-cols-1 gap-12 md:grid-cols-12">
-				<div class="md:col-span-5">
-					<ScrollScene>
-						<SceneLabel prompt="scene=05" path="/skills" />
-					</ScrollScene>
-					<ScrollScene delay={0.1} y={20}>
-						<h2
-							class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
-						>
-							Tools I<br />
-							<span class="text-zinc-500">reach for.</span>
-						</h2>
-					</ScrollScene>
-					<ScrollScene delay={0.2}>
-						<p class="mt-6 max-w-[40ch] font-mono text-sm text-zinc-400">
-							A working set — opinionated where it matters, pragmatic everywhere else.
-						</p>
-					</ScrollScene>
-				</div>
-				<div class="md:col-span-7">
-					<ScrollScene delay={0.15}>
-						<div class="flex justify-center md:justify-end">
-							<IconCloud images={skillImages} class="mx-auto md:mx-0" />
-						</div>
-					</ScrollScene>
-					<ScrollScene delay={0.25}>
-						<div class="mt-8 flex flex-wrap items-center justify-center gap-2 md:justify-end">
-							{#each DATA.skills as skill}
-								<Badge
-									class="cursor-default rounded-lg border border-zinc-700 bg-zinc-800/40 px-3 py-1.5 font-mono text-xs text-zinc-200 transition hover:scale-105 hover:border-emerald-500/40 hover:text-emerald-400"
-								>
-									{skill}
-								</Badge>
-							{/each}
-						</div>
-					</ScrollScene>
+			<!-- RIGHT (desktop only): hint of what 3D is showing -->
+			<div class="hidden lg:col-span-5 lg:block">
+				<!-- 3D canvas fills this area visually; HTML placeholder for now -->
+				<div class="flex h-full items-end justify-end">
+					<p
+						class="max-w-[20ch] text-right font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-600"
+					>
+						drag · scroll · watch<br />
+						<span class="text-zinc-400">three.js · threlte · glsl</span>
+					</p>
 				</div>
 			</div>
 		</div>
+
+		<!-- Page index strip -->
+		<div
+			class="relative z-10 mx-auto mt-6 flex w-full max-w-[1400px] items-center justify-between px-6 md:px-10"
+		>
+			<span class="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-600">
+				scroll → manifesto
+			</span>
+			<span class="font-mono text-[10px] uppercase tracking-[0.32em] text-zinc-600">01 / 09</span>
+		</div>
 	</section>
 
-	<!-- ==================== PROJECTS ==================== -->
-	<section id="projects" class="relative isolate overflow-hidden py-24 md:py-32">
-		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-			<ScrollScene>
-				<SceneLabel prompt="scene=06" path="/projects" />
-			</ScrollScene>
-			<ScrollScene delay={0.1} y={20}>
+	<!-- ==================== PLACEHOLDER SECTIONS (skeleton) ==================== -->
+	{#each SCENES.slice(1, -1) as scene}
+		<section id={scene.id === 'manifesto' ? 'about' : scene.id} class="relative isolate overflow-hidden py-24 md:py-40">
+			<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
+				<span class="font-mono text-[11px] uppercase tracking-[0.32em] text-zinc-500">
+					<span class="text-emerald-400">scene</span>={scene.index} / {scene.label}
+				</span>
 				<h2
 					class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
 				>
-					Things I've<br />
-					<span class="text-zinc-500">built.</span>
+					{section_title(scene.id)}
 				</h2>
-			</ScrollScene>
-			<ScrollScene delay={0.15}>
-				<p class="mt-6 max-w-[60ch] font-mono text-sm text-zinc-400">
-					A selection — interactive terminals, full-stack apps, AI agents, dApps. Click any card to
-					open.
-				</p>
-			</ScrollScene>
-
-			<div class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-6">
-				{#each DATA.projects as project, i}
-					<ScrollScene delay={0.1 + i * 0.05} y={28} class={i === 0 ? 'md:col-span-6' : 'md:col-span-3'}>
-						<TerminalCard
-							title={project.title}
-							description={project.description}
-							technologies={project.technologies}
-							href={project.href}
-							video={project.video}
-							image={project.image}
-							dates={project.dates}
-						/>
-					</ScrollScene>
-				{/each}
-			</div>
-		</div>
-	</section>
-
-	<!-- ==================== HACKATHONS ==================== -->
-	{#if DATA.hackathons.length > 0}
-		<section id="hackathons" class="relative isolate overflow-hidden py-24 md:py-32">
-			<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-				<ScrollScene>
-					<SceneLabel prompt="scene=07" path="/hackathons.log" />
-				</ScrollScene>
-				<ScrollScene delay={0.1} y={20}>
-					<h2
-						class="mt-6 font-heading text-[clamp(2rem,5vw,4rem)] font-bold leading-[1.02] tracking-[-0.03em] text-foreground"
-					>
-						I like building<br />
-						<span class="text-zinc-500">things.</span>
-					</h2>
-				</ScrollScene>
-				<ScrollScene delay={0.15}>
-					<p class="mt-6 max-w-[60ch] font-mono text-sm text-zinc-400">
-						{DATA.hackathons.length}+ hackathons — Monad, ETH Beijing, online AI agent jams, and
-						more.
-					</p>
-				</ScrollScene>
-
-				<ScrollScene delay={0.2}>
-					<ol class="relative mt-16 space-y-2 border-l border-zinc-800/80 pl-8 md:pl-12">
-						{#each DATA.hackathons as project, idx}
-							<li class="group relative">
-								<span
-									class="absolute -left-[2.05rem] top-3 inline-block size-2.5 rounded-full bg-emerald-400/80 ring-4 ring-emerald-400/10 transition group-hover:ring-emerald-400/30 md:-left-[3.05rem]"
-								></span>
-								<LogCard
-									title={project.title}
-									description={project.description}
-									descriptionHtml={project.descriptionHtml}
-									dates={project.dates}
-									location={project.location}
-									image={project.image}
-									links={project.links}
-									pid={idx + 1000}
-								/>
-							</li>
-						{/each}
-					</ol>
-				</ScrollScene>
 			</div>
 		</section>
-	{/if}
-
-	<!-- ==================== ANIME ==================== -->
-	<section id="anime" class="anime-isolated relative isolate overflow-hidden py-24 md:py-32">
-		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-			<ScrollScene>
-				<SceneLabel prompt="scene=08" path="/favorites/anime" />
-			</ScrollScene>
-			<ScrollScene delay={0.1}>
-				<AnimeSection />
-			</ScrollScene>
-		</div>
-	</section>
-
-	<!-- ==================== FAVORITES ==================== -->
-	<section id="favorites" class="relative isolate overflow-hidden py-24 md:py-32">
-		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-			<ScrollScene>
-				<SceneLabel prompt="scene=09" path="/favorites" />
-			</ScrollScene>
-			<ScrollScene delay={0.1}>
-				<FavoritesSection />
-			</ScrollScene>
-		</div>
-	</section>
-
-	<!-- ==================== CONTACT ==================== -->
-	<section id="contact" class="relative isolate overflow-hidden py-24 md:py-40">
-		<div class="mx-auto w-full max-w-[1400px] px-6 md:px-10">
-			<div class="grid grid-cols-1 gap-12 md:grid-cols-12">
-				<div class="md:col-span-7">
-					<ScrollScene>
-						<SceneLabel prompt="scene=10" path="/contact.sh" tone="magenta" />
-					</ScrollScene>
-					<ScrollScene delay={0.1} y={28}>
-						<h2
-							class="mt-6 font-heading text-[clamp(2.5rem,8vw,7rem)] font-bold leading-[0.92] tracking-[-0.04em] text-foreground"
-						>
-							Say<br />
-							<span
-								class="bg-gradient-to-r from-emerald-300 via-emerald-400 to-amber-200 bg-clip-text text-transparent"
-								>hello.</span
-							>
-						</h2>
-					</ScrollScene>
-					<ScrollScene delay={0.2}>
-						<p class="mt-8 max-w-[50ch] font-mono text-sm leading-relaxed text-zinc-400">
-							Want to chat? DM me
-							<a
-								href={DATA.contact.social.X.url}
-								class="text-emerald-400 hover:underline">on X</a
-							>, or use the form. I respond when I can.
-						</p>
-					</ScrollScene>
-					<ScrollScene delay={0.3}>
-						<div class="mt-8 flex flex-wrap items-center gap-3">
-							<a href={DATA.contact.social.X.url} target="_blank" rel="noopener noreferrer">
-								<InteractiveHoverButton
-									class="rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400"
-								>
-									Say Hello
-								</InteractiveHoverButton>
-							</a>
-							<a
-								href="/api/resume"
-								target="_blank"
-								class="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400 transition hover:border-emerald-500/40"
-							>
-								$ cat resume.json
-							</a>
-						</div>
-					</ScrollScene>
-				</div>
-				<div class="md:col-span-5 md:pt-12">
-					<ScrollScene delay={0.25}>
-						<form
-							action="mailto:lorasys@outlook.com"
-							method="post"
-							enctype="text/plain"
-							class="space-y-4"
-						>
-							<input
-								type="text"
-								name="name"
-								placeholder="Name"
-								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-							/>
-							<input
-								type="email"
-								name="email"
-								placeholder="Email"
-								class="w-full rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-							/>
-							<textarea
-								name="message"
-								placeholder="Message"
-								rows="4"
-								class="w-full resize-none rounded-lg border border-zinc-700/60 bg-zinc-900/40 px-4 py-3 font-mono text-sm text-zinc-200 placeholder-zinc-500 transition hover:border-zinc-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-							></textarea>
-							<button
-								type="submit"
-								class="w-full rounded-full border border-zinc-700 bg-zinc-900/40 px-8 py-3 font-mono text-sm text-emerald-400 transition hover:border-emerald-500/40"
-							>
-								$ send_message
-							</button>
-						</form>
-					</ScrollScene>
-				</div>
-			</div>
-		</div>
-	</section>
+	{/each}
 
 	<!-- ==================== FOOTER ==================== -->
 	<footer class="relative overflow-hidden border-t border-border/40 py-16">
-		<RetroGrid class="opacity-20" />
 		<div class="relative z-10 flex flex-col items-center gap-6">
-			<AnimatedGradientText speed={1.5} colorFrom="#22c55e" colorTo="#9c40ff">
-				<span class="font-heading font-bold text-2xl tracking-tight sm:text-3xl">{DATA.name}</span>
-			</AnimatedGradientText>
+			<p class="font-heading text-2xl font-bold tracking-tight sm:text-3xl">{DATA.name}</p>
 			<div class="flex items-center gap-4">
 				{#each Object.entries(DATA.contact.social) as [_, social]}
 					<a
@@ -368,8 +180,24 @@
 				{/each}
 			</div>
 			<p class="font-mono text-xs text-zinc-400">
-				&copy; {new Date().getFullYear()} {DATA.name}. Built with Lora.
+				&copy; {new Date().getFullYear()} {DATA.name}. Built with lora.
 			</p>
 		</div>
 	</footer>
 </main>
+
+<script context="module" lang="ts">
+	function section_title(id: string): string {
+		const map: Record<string, string> = {
+			manifesto: 'Builder of evolving systems.',
+			education: 'Trained at.',
+			skills: 'Tools I reach for.',
+			projects: "Things I've built.",
+			hackathons: 'I like building things.',
+			anime: '$ cd ~/favorites/anime',
+			favorites: '$ cat ~/favorites/*.json',
+			contact: 'Say hello.'
+		};
+		return map[id] ?? id;
+	}
+</script>
