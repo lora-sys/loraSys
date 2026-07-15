@@ -6,11 +6,30 @@
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 
 	let animeTrack: HTMLElement | undefined = $state();
+	let animeProg = $state(0);
+	let autoOK = $state(false);
+	let animeTimer: ReturnType<typeof setInterval> | undefined;
+
 	function animeScroll(dir: number) {
 		if (!animeTrack) return;
 		const card = animeTrack.querySelector('.acard') as HTMLElement | null;
 		const amount = card ? card.offsetWidth + 24 : 300;
 		animeTrack.scrollBy({ left: dir * amount, behavior: 'smooth' });
+	}
+	function updateAnimeProg() {
+		if (!animeTrack) return;
+		const max = animeTrack.scrollWidth - animeTrack.clientWidth;
+		animeProg = max > 0 ? animeTrack.scrollLeft / max : 0;
+	}
+	function animeAuto(on: boolean) {
+		clearInterval(animeTimer);
+		if (!on) return;
+		animeTimer = setInterval(() => {
+			if (!animeTrack) return;
+			const atEnd = animeTrack.scrollLeft + animeTrack.clientWidth >= animeTrack.scrollWidth - 6;
+			if (atEnd) animeTrack.scrollTo({ left: 0, behavior: 'smooth' });
+			else animeScroll(1);
+		}, 3800);
 	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
@@ -64,6 +83,8 @@
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const desktop = window.matchMedia('(min-width: 861px)').matches;
 		showWash = !reduce && desktop;
+		autoOK = !reduce;
+		if (autoOK) animeAuto(true);
 
 		// Scroll progress bar (always on, even under reduced motion)
 		const prog = document.querySelector('.scroll-progress') as HTMLElement | null;
@@ -161,6 +182,7 @@
 
 		return () => {
 			window.removeEventListener('scroll', onScroll);
+			clearInterval(animeTimer);
 			cleanup();
 		};
 	});
@@ -373,7 +395,13 @@
 					<button class="c-arrow" aria-label="Next" onclick={() => animeScroll(1)}>→</button>
 				</div>
 			</div>
-			<ul class="track" bind:this={animeTrack}>
+			<ul
+				class="track"
+				bind:this={animeTrack}
+				onscroll={updateAnimeProg}
+				onmouseenter={() => animeAuto(false)}
+				onmouseleave={() => autoOK && animeAuto(true)}
+			>
 				{#each DATA.anime as a}
 					<li class="acard">
 						<a href={a.link} target="_blank" rel="noreferrer" aria-label={a.name}>
@@ -388,7 +416,10 @@
 					</li>
 				{/each}
 			</ul>
-			<p class="drag-hint">↔ drag · hover a poster to magnify</p>
+			<div class="track-foot">
+				<div class="track-bar"><span class="track-bar-fill" style="transform: scaleX({animeProg})"></span></div>
+				<p class="drag-hint">↔ drag · hover to magnify</p>
+			</div>
 			<p class="mini-h">Favorites</p>
 			<ul class="favs-mosaic">
 				{#each DATA.favorites as f}
@@ -1447,13 +1478,34 @@
 	.acard > a {
 		display: block;
 	}
+	.track-foot {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+		margin-top: 16px;
+	}
+	.track-bar {
+		flex: 1;
+		height: 2px;
+		background: var(--ink-line);
+		position: relative;
+		overflow: hidden;
+	}
+	.track-bar-fill {
+		position: absolute;
+		inset: 0;
+		background: var(--zhu);
+		transform-origin: 0 50%;
+		transform: scaleX(0);
+	}
 	.drag-hint {
 		font-family: var(--font-label);
 		font-size: 0.68rem;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		color: var(--ink-mute);
-		margin: 12px 0 0;
+		margin: 0;
+		white-space: nowrap;
 	}
 
 	/* Favorites — asymmetric editorial mosaic */
