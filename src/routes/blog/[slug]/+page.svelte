@@ -166,7 +166,7 @@
 		<article class="min-w-0 max-w-3xl flex-1">
 			<!-- Scene label -->
 			<div class="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-[#8a857c]">
-				<span class="text-[#c6412c]">scene</span>=B / <span class="text-[#5a544b]">post · {data.meta?.slug ?? '...'}</span>
+				<span class="text-[#c6412c]">書</span> · <span class="text-[#5a544b]">Field Note</span>
 			</div>
 
 			<!-- Back button -->
@@ -189,7 +189,7 @@
 					<path d="m12 19-7-7 7-7" />
 					<path d="M19 12H5" />
 				</svg>
-				cd ../blog
+				All writing
 			</a>
 
 			<!-- Title -->
@@ -288,7 +288,7 @@
 						href={`${base}/blog`}
 						class="flex items-center gap-1 transition-colors hover:text-[#c6412c]"
 					>
-						<span class="text-[#c6412c]">$</span> <span class="font-pixel-square">cd ../blog</span>
+						<span class="font-pixel-square">← All writing</span>
 					</a>
 					<span>by {data.meta?.author ?? 'lora'}</span>
 				</div>
@@ -352,7 +352,7 @@
 			<p
 				class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]"
 			>
-				<span class="text-[#c6412c]">$</span> cat tags
+				<span class="text-[#c6412c]">✦</span> Tagged
 			</p>
 			<Marquee pauseOnHover class="[--duration:20s]">
 				{#each [...(data.meta?.categories ?? []), ...(data.meta?.categories ?? []), ...(data.meta?.categories ?? [])] as tag}
