@@ -3,6 +3,7 @@
 ## Files changed
 
 **New cinema components:**
+
 - `src/lib/components/magic/cinema/CinematicHero.svelte` — split hero with giant display type + terminal sidekick
 - `src/lib/components/magic/cinema/SceneManifesto.svelte` — giant pull-quote + meta dl sidebar
 - `src/lib/components/magic/cinema/SceneLabel.svelte` — CLI-style section labels
@@ -10,6 +11,7 @@
 - `src/lib/components/magic/cinema/GrainOverlay.svelte` — canvas grain + scanlines + vignette
 
 **Modified:**
+
 - `src/routes/+layout.svelte` — drop GridPattern + Meteors, mount GrainOverlay, drop max-w-5xl
 - `src/routes/+page.svelte` — use CinematicHero, SceneManifesto, ScrollScene wrappers; bento projects; hackathons timeline
 - `src/lib/components/portfolio/EduCard.svelte` — column width fix
@@ -18,14 +20,17 @@
 ## Screenshots
 
 Pre-redesign baseline:
+
 - `.design-screenshots/before-takeover/desktop-viewport.png`
 - `.design-screenshots/before-takeover/desktop-full.png`
 
 Round 1 (macro):
+
 - `.design-screenshots/round-1-hero-desktop.png`
 - `.design-screenshots/round-1-full-desktop.png`
 
 Round 2 (local refinement):
+
 - `.design-screenshots/round-2-manifesto-viewport.png`
 - `.design-screenshots/round-2-edu.png`
 - `.design-screenshots/round-2-skills.png`

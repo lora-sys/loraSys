@@ -55,7 +55,7 @@ Texture: subtle paper grain + one soft ink wash. Seal = personal mark (`洛拉`/
 ## 7. Out of scope
 
 - Xi'an / location-as-theme copy
-- Blog *content* edits (reskin only)
+- Blog _content_ edits (reskin only)
 - Auth, search, i18n
 - Heavy 3D, WebGL scene, Web Audio, autoplay
 - Custom-cursor-required interactions (page must work with a normal cursor)
@@ -64,7 +64,8 @@ Texture: subtle paper grain + one soft ink wash. Seal = personal mark (`洛拉`/
 
 Sections carry a single CN character marker (長安 flavor) + EN title + page no.
 
-### 序 — COVER / HERO  (P.01)
+### 序 — COVER / HERO (P.01)
+
 - Masthead: `lora` (Fraunces black) + vermilion seal
 - Edition line: `Field Notes on Building · Edition 2026 — 103 Repositories`
 - Meta band: `Builder of Evolving Systems · AI Agents · Full-Stack · Web3 · github.com/lora-sys`
@@ -72,44 +73,49 @@ Sections carry a single CN character marker (長安 flavor) + EN title + page no
 - Dek: DATA.description / summary (drop-cap)
 - Contents index (doubles as nav) with page numbers → all sections
 
-### 己 — THE SELF  (P.02)
+### 己 — THE SELF (P.02)
+
 - DATA.summaryHtml (bio), DATA.education (Mingde), DATA.skills as a typeset stack list
 
-### 作 — SELECTED WORK  (P.04)  ← core payload
+### 作 — SELECTED WORK (P.04) ← core payload
+
 - DATA.projects (7): Chinese numerals 壹–柒 or 01–07, title, dates, blurb,
   technologies, real links (Source/Website). Editorial list, hover expand.
 
-### 戰 — HACKATHONS & SIGNALS  (P.09)
+### 戰 — HACKATHONS & SIGNALS (P.09)
+
 - DATA.hackathons (ETH Beijing, Monad ×2, AI Agent) + `103 public repos` statement
 
-### 閒 — OFF HOURS  (P.12)
+### 閒 — OFF HOURS (P.12)
+
 - DATA.anime + DATA.favorites, presented as a "collection / 題跋" spread
 
-### 聯 — SAY HELLO  (P.16)
+### 聯 — SAY HELLO (P.16)
+
 - Big `聯` + DATA.contact.email + DATA.contact.social links
 
 Other routes: `/blog`, `/blog/[slug]`, `/now`, `+error` — reskin to INK tokens.
 
 ## 9. Interaction model
 
-| Input | Result |
-|-------|--------|
-| Load | Seal stamps onto masthead (ink-press), then hero settles |
-| Scroll into a section | Section title "written" by a brush stroke (SVG) |
-| Hover project row | Row expands: blurb + tech + links slide in |
-| Move mouse (hero) | Ink wash drifts subtly (canvas, desktop only) |
-| Contents item click | Smooth-scroll to section |
-| Reduced-motion / mobile | No canvas, no stamp animation; static elegant layout |
+| Input                   | Result                                                   |
+| ----------------------- | -------------------------------------------------------- |
+| Load                    | Seal stamps onto masthead (ink-press), then hero settles |
+| Scroll into a section   | Section title "written" by a brush stroke (SVG)          |
+| Hover project row       | Row expands: blurb + tech + links slide in               |
+| Move mouse (hero)       | Ink wash drifts subtly (canvas, desktop only)            |
+| Contents item click     | Smooth-scroll to section                                 |
+| Reduced-motion / mobile | No canvas, no stamp animation; static elegant layout     |
 
 ## 10. Performance budget
 
-| Route | Canvas | JS gz | Lighthouse mobile |
-|-------|--------|-------|-------------------|
-| `/` | 1 (hero ink, lazy) | ≤180kb | ≥90 |
-| `/blog` | 0 | ≤90kb | ≥95 |
-| `/blog/[slug]` | 0 | ≤90kb | ≥95 |
-| `/now` | 0 | ≤70kb | ≥95 |
-| 404 | 0 | ≤60kb | ≥95 |
+| Route          | Canvas             | JS gz  | Lighthouse mobile |
+| -------------- | ------------------ | ------ | ----------------- |
+| `/`            | 1 (hero ink, lazy) | ≤180kb | ≥90               |
+| `/blog`        | 0                  | ≤90kb  | ≥95               |
+| `/blog/[slug]` | 0                  | ≤90kb  | ≥95               |
+| `/now`         | 0                  | ≤70kb  | ≥95               |
+| 404            | 0                  | ≤60kb  | ≥95               |
 
 ## 11. Reject criteria
 

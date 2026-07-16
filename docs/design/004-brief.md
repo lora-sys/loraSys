@@ -66,6 +66,7 @@ agent — it greets, observes, responds, has state. Theme is **AGENT**
 ## 8. Per-room plan (6 rooms, single 3D scene)
 
 ### Room 01 — MANIFEST (entry, always loaded)
+
 - Black void. 3D orb, breathing (sin pulse).
 - Status: `[ LORA · ONLINE · T+ HH:MM:SS ]`
 - Below orb: typewriter thoughts cycling on spacebar
@@ -76,6 +77,7 @@ agent — it greets, observes, responds, has state. Theme is **AGENT**
   intent match → transition to that room.
 
 ### Room 02 — SELF
+
 - Camera lerps to mid-distance. Orb dimmed.
 - Status: `[ AGENT SPEAKING ]`
 - Typewriter fires 7 lines (60ms/char):
@@ -90,17 +92,20 @@ agent — it greets, observes, responds, has state. Theme is **AGENT**
 - After complete: status → `[ AGENT AWAITING ]`, cursor blinks.
 
 ### Room 03 — WORK
+
 - Camera pulls back. 7 voxels visible, floating in 3D space.
 - Above voxels: typewriter: `I'VE SHIPPED 7 THINGS THIS YEAR.`
 - Click voxel → camera pushes to it → voxel explodes → text reveals
   project info (3 lines max). `NEXT →` to advance.
 
 ### Room 04 — BLOG
+
 - Camera lowers. Vertical wall of text.
 - Typewriter: `I WRITE ABOUT AGENTS.`
 - 3-4 post titles, monospace, 1 line each. Click → post.
 
 ### Room 05 — NOW
+
 - Single screen. `/NOW` at 18vw.
 - 4 stacked metrics (label 11vw, description 2vw):
   ```
@@ -111,19 +116,20 @@ agent — it greets, observes, responds, has state. Theme is **AGENT**
   ```
 
 ### Room 06 — CONTACT
+
 - Camera pushes orb forward. Orb pulses fast.
 - `WRITE ME.` at 28vw.
 - mailto link + optional textarea. Submit = mailto.
 
 ## 9. Performance budget
 
-| Route | 3D | JS gz | Lighthouse mobile |
-|-------|----|----|-------------------|
-| `/` | 1 scene | ≤200kb | ≥80 |
-| `/blog` | 0 | ≤80kb | ≥95 |
-| `/blog/[slug]` | 0 | ≤80kb | ≥95 |
-| `/now` | 0 | ≤60kb | ≥95 |
-| 404 | 0 | ≤60kb | ≥95 |
+| Route          | 3D      | JS gz  | Lighthouse mobile |
+| -------------- | ------- | ------ | ----------------- |
+| `/`            | 1 scene | ≤200kb | ≥80               |
+| `/blog`        | 0       | ≤80kb  | ≥95               |
+| `/blog/[slug]` | 0       | ≤80kb  | ≥95               |
+| `/now`         | 0       | ≤60kb  | ≥95               |
+| 404            | 0       | ≤60kb  | ≥95               |
 
 ## 10. Reject criteria
 

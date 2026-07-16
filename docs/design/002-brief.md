@@ -29,7 +29,7 @@ the user navigates, not a 2D page with effects on top. Theme D — Future 3D Par
 - [ ] A — Cyberpunk Immersive Dark
 - [ ] B — Minimal Art Gallery
 - [ ] C — Retro Acid Y2K
-- [x] D — Future-Tech 3D Particle  *(adapted: "Generative Spatial")*
+- [x] D — Future-Tech 3D Particle _(adapted: "Generative Spatial")_
 
 > Generative Spatial: the page is a 3D scene. Hero floats a giant "lora" text in space, lit by
 > a moving volumetric light. Mouse moves the camera. Scroll pulls the camera forward through a
@@ -140,7 +140,8 @@ on hero only.
 
 **3D scene management**: one `<Canvas>` mounted at root (`+layout.svelte`), camera state shared
 across sections, scene composition reactive to current section index (driven by scroll position
-+ IntersectionObserver). Render pause when scene off-screen.
+
+- IntersectionObserver). Render pause when scene off-screen.
 
 ### 10.2 `/blog` — blog list
 
@@ -198,13 +199,13 @@ No change. Workbox-generated `sw.js`, existing manifest.json.
 
 ## 11. Performance budget per route
 
-| Route | WebGL | Particle count | DPR cap | Initial JS |
-|-------|-------|---------------|---------|------------|
-| `/` | yes | 3000 desktop / 800 mobile | 2 | ~250kb gz |
-| `/blog` | no | — | — | ~150kb gz |
-| `/blog/[slug]` | no | — | — | ~150kb gz |
-| `/now` | no | — | — | ~80kb gz |
-| 404 | yes (minimal) | 200 | 1.5 | ~200kb gz |
+| Route          | WebGL         | Particle count            | DPR cap | Initial JS |
+| -------------- | ------------- | ------------------------- | ------- | ---------- |
+| `/`            | yes           | 3000 desktop / 800 mobile | 2       | ~250kb gz  |
+| `/blog`        | no            | —                         | —       | ~150kb gz  |
+| `/blog/[slug]` | no            | —                         | —       | ~150kb gz  |
+| `/now`         | no            | —                         | —       | ~80kb gz   |
+| 404            | yes (minimal) | 200                       | 1.5     | ~200kb gz  |
 
 ## 12. Risk register
 

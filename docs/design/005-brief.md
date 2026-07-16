@@ -64,11 +64,13 @@ Personal portfolio for `lora` (Sikandar Bhide). Single infinite canvas.
 ## 8. Per-depth-layer plan
 
 ### Layer 0 — MANIFEST (closest, sharpest)
+
 - Single hero claim, 25vw, white: `I BUILD SYSTEMS THAT LEARN.`
 - 1 secondary node: `READ →` (links to a "primer" or stays blank)
 - Subtle scroll cue bottom-right: `↓ enter field`
 
 ### Layer 1 — SELF (mid-distance)
+
 - 4 nodes:
   - `LORA · XI'AN · 2026` (8vw)
   - `BUILDING SYSTEMS · AGENTS · DX` (mono)
@@ -76,6 +78,7 @@ Personal portfolio for `lora` (Sikandar Bhide). Single infinite canvas.
   - `103 PUBLIC REPOS` (mono)
 
 ### Layer 2 — WORK (distant, drifting)
+
 - 7 nodes, one per project:
   - `01 · MONADHACK-AGENTS →`
   - `02 · NEW-TUBE →`
@@ -83,6 +86,7 @@ Personal portfolio for `lora` (Sikandar Bhide). Single infinite canvas.
 - Click any → node explodes → reveals 3-line project blurb + link
 
 ### Layer 3 — IDEAS (deepest, faintest)
+
 - 4 nodes: blog posts + /now
   - `ON BUILDING AGENTS →`
   - `/NOW →`
@@ -90,6 +94,7 @@ Personal portfolio for `lora` (Sikandar Bhide). Single infinite canvas.
   - `VIBING: HANIA RANI →`
 
 ### Layer 4 — REACH (deepest, but slightly sharper)
+
 - 3 nodes:
   - `WRITE ME.` (6vw)
   - `LORASYS@OUTLOOK.COM →` (mailto)
@@ -97,24 +102,24 @@ Personal portfolio for `lora` (Sikandar Bhide). Single infinite canvas.
 
 ## 9. Interaction model
 
-| Input | Result |
-|-------|--------|
-| Move mouse | Whole field tilts ±4° (parallax) |
-| Scroll | Z-axis travel through 5 layers (depth = scroll progress) |
-| Hover node | Node grows 1.04x, kerning tightens, cursor magnifies |
-| Click node | Node explodes to center; siblings fade to 10% opacity |
-| ESC / click again | Node folds back; siblings return |
-| Spacebar | Cycle through 3 closest-layer nodes in sequence |
+| Input             | Result                                                   |
+| ----------------- | -------------------------------------------------------- |
+| Move mouse        | Whole field tilts ±4° (parallax)                         |
+| Scroll            | Z-axis travel through 5 layers (depth = scroll progress) |
+| Hover node        | Node grows 1.04x, kerning tightens, cursor magnifies     |
+| Click node        | Node explodes to center; siblings fade to 10% opacity    |
+| ESC / click again | Node folds back; siblings return                         |
+| Spacebar          | Cycle through 3 closest-layer nodes in sequence          |
 
 ## 10. Performance budget
 
-| Route | 3D | JS gz | Lighthouse mobile |
-|-------|----|----|-------------------|
-| `/` | 1 scene, ≤50 particles | ≤200kb | ≥80 |
-| `/blog` | 0 | ≤80kb | ≥95 |
-| `/blog/[slug]` | 0 | ≤80kb | ≥95 |
-| `/now` | 0 | ≤60kb | ≥95 |
-| 404 | 0 | ≤60kb | ≥95 |
+| Route          | 3D                     | JS gz  | Lighthouse mobile |
+| -------------- | ---------------------- | ------ | ----------------- |
+| `/`            | 1 scene, ≤50 particles | ≤200kb | ≥80               |
+| `/blog`        | 0                      | ≤80kb  | ≥95               |
+| `/blog/[slug]` | 0                      | ≤80kb  | ≥95               |
+| `/now`         | 0                      | ≤60kb  | ≥95               |
+| 404            | 0                      | ≤60kb  | ≥95               |
 
 ## 11. Reject criteria
 

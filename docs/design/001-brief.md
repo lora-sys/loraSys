@@ -44,7 +44,7 @@ the personality that makes the content (work, projects, hackathons, anime, favor
 
 - **Stack override**: site is SvelteKit 2 + Svelte 5. Keep it. Swap Framer Motion → `svelte-motion`
   (already installed) + `motion-sv`. Add `gsap` for ScrollTrigger (replaces magic UI's BlurFade-only).
-- Tailwind v3 + existing tokens (term-* colors)
+- Tailwind v3 + existing tokens (term-\* colors)
 - Fonts already loaded: `@fontsource/syne` (display), `@fontsource/space-grotesk` (body),
   `@fontsource/fragment-mono` (terminal)
 - Browser support: modern evergreen (Chrome, Safari, Firefox). No IE.

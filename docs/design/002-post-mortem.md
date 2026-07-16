@@ -22,10 +22,10 @@ User said "重新推翻现在的" + "非常有大胆创意". The Cinema directio
 existing terminal aesthetic and **enhanced** composition within it. That fits "takeover" but not
 "redo". The user wants the terminal motif **gone**, replaced by something genuinely different and
 visually louder. Cinema still looks like a developer portfolio with extra polish. The user wants
-a *spatial* / *generative* / *3D-first* experience — not a styled-up dashboard.
+a _spatial_ / _generative_ / _3D-first_ experience — not a styled-up dashboard.
 
-Constraint that led to wrong direction: I picked a theme that *respected* the existing site
-instead of *answering* "what should this site look like if it had never been built". Theme A
+Constraint that led to wrong direction: I picked a theme that _respected_ the existing site
+instead of _answering_ "what should this site look like if it had never been built". Theme A
 (Cinema) was a defensive choice. Theme D (Future 3D Particle) is the offensive answer.
 
 ## Decision

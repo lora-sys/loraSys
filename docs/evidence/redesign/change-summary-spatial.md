@@ -8,6 +8,7 @@ Cinema theme archived to `archive/before-redo-1-cinema` branch.
 ## Files added
 
 **3D stack** (`src/lib/components/spatial/`):
+
 - `SpatialStage.svelte` — Threlte Canvas wrapper, PerspectiveCamera + 3 point lights (cyan / purple / amber), publishes camera target to `window.__spatialCamera` for ScrollTrigger
 - `CameraRig.svelte` — mounts INSIDE Canvas, lerp-damps PerspectiveCamera toward scroll-driven target each frame (frame-rate-independent factor `1 - 0.001^delta`)
 - `ParticleField.svelte` — 3000 spherical particles, additive blending, custom rotation task
@@ -39,15 +40,15 @@ docs(design): spatial redo — Awwwards review + iteration log update
 
 53/60 — SHIP threshold met.
 
-| Category | Cinema | Spatial |
-|----------|--------|---------|
-| Composition | 9 | 9 |
-| Type | 9 | 9 |
-| Color | 9 | 8 |
-| Motion | 7 | **9** |
-| Originality | 8 | 9 |
-| Performance | 9 | 9 |
-| **Total** | **52** | **53** |
+| Category    | Cinema | Spatial |
+| ----------- | ------ | ------- |
+| Composition | 9      | 9       |
+| Type        | 9      | 9       |
+| Color       | 9      | 8       |
+| Motion      | 7      | **9**   |
+| Originality | 8      | 9       |
+| Performance | 9      | 9       |
+| **Total**   | **52** | **53**  |
 
 The motion score jump (7→9) is the headline: scroll-driven camera dolly + Lenis smooth scroll +
 GSAP ScrollTrigger + 3D shader time + mouse parallax. Color dipped slightly (9→8) because the

@@ -7,46 +7,47 @@
 
 **57/60** — above SHIP threshold (≥48) by 9 points.
 
-| Category | Score | Note |
-|----------|-------|------|
-| Composition | 9/10 | Asymmetric splits, scene narrative, 7 distinct 3D patterns |
-| Type | 9/10 | Giant display (clamp 5-18rem), Syne/Fragment Mono, experimental layouts |
-| Color | 9/10 | Theme D palette (zinc + cyan + purple + amber), gradient orb, grain |
-| Motion | 9/10 | ScrollTrigger camera dolly, mouse-orbit, tilt, entry reveals |
-| Originality | 10/10 | 7 distinct 3D patterns (none generic) |
-| Performance | 9/10 | Local font, lazy-mount, mobile fallback |
+| Category    | Score | Note                                                                    |
+| ----------- | ----- | ----------------------------------------------------------------------- |
+| Composition | 9/10  | Asymmetric splits, scene narrative, 7 distinct 3D patterns              |
+| Type        | 9/10  | Giant display (clamp 5-18rem), Syne/Fragment Mono, experimental layouts |
+| Color       | 9/10  | Theme D palette (zinc + cyan + purple + amber), gradient orb, grain     |
+| Motion      | 9/10  | ScrollTrigger camera dolly, mouse-orbit, tilt, entry reveals            |
+| Originality | 10/10 | 7 distinct 3D patterns (none generic)                                   |
+| Performance | 9/10  | Local font, lazy-mount, mobile fallback                                 |
 
 ## Lighthouse Mobile (dev server)
 
 **Performance: 55-57** (target ≥90; 3D-first design trade-off)
 
-| Metric | Value | Threshold |
-|--------|-------|-----------|
-| FCP | 2.4s | <1.8s ⚠ |
-| LCP | 2.8s | <2.5s ⚠ |
-| TBT | 2.4s | <200ms ❌ (3D bundle) |
-| CLS | 0.001 | <0.1 ✓ excellent |
-| A11y | 93 | ≥95 ⚠ |
-| BP | 100 | ≥95 ✓ |
-| SEO | 92 | ≥95 ⚠ |
+| Metric | Value | Threshold             |
+| ------ | ----- | --------------------- |
+| FCP    | 2.4s  | <1.8s ⚠              |
+| LCP    | 2.8s  | <2.5s ⚠              |
+| TBT    | 2.4s  | <200ms ❌ (3D bundle) |
+| CLS    | 0.001 | <0.1 ✓ excellent      |
+| A11y   | 93    | ≥95 ⚠                |
+| BP     | 100   | ≥95 ✓                 |
+| SEO    | 92    | ≥95 ⚠                |
 
 Full breakdown: `docs/evidence/redesign/lighthouse-mobile.md`
 
 ## Routes — All 5 Updated to Theme D
 
-| Route | Scene label | Visual | 3D | Brief ref |
-|-------|-------------|--------|-----|-----------|
-| `/` | 01-09 / hero → hello | 9 scenes, 7 3D patterns | ✓ | §10.1 |
-| `/blog` | B / writing | Horizontal reading rows | ✗ | §10.2 |
-| `/blog/[slug]` | B / post · {slug} | Editorial detail, TOC preserved | ✗ | §10.3 |
-| `/now` | N / now | 4 status cards (Building/Learning/Reading/Vibing) | ✗ | §10.4 |
-| 404 (/) | err / page-not-found | Broken-mesh glitch 3D + terminal UI | ✓ | §10.6 |
+| Route          | Scene label          | Visual                                            | 3D  | Brief ref |
+| -------------- | -------------------- | ------------------------------------------------- | --- | --------- |
+| `/`            | 01-09 / hero → hello | 9 scenes, 7 3D patterns                           | ✓   | §10.1     |
+| `/blog`        | B / writing          | Horizontal reading rows                           | ✗   | §10.2     |
+| `/blog/[slug]` | B / post · {slug}    | Editorial detail, TOC preserved                   | ✗   | §10.3     |
+| `/now`         | N / now              | 4 status cards (Building/Learning/Reading/Vibing) | ✗   | §10.4     |
+| 404 (/)        | err / page-not-found | Broken-mesh glitch 3D + terminal UI               | ✓   | §10.6     |
 
 JSON/RSS/sitemap/sw.js routes: no visual change (functional only).
 
 ## Files Changed (cumulative)
 
 **New cinema → spatial** (15 new components):
+
 - `src/lib/components/spatial/SpatialStage.svelte` (Canvas + camera + scene)
 - `src/lib/components/spatial/SpatialScroll.svelte` (Lenis + ScrollTrigger)
 - `src/lib/components/spatial/CameraRig.svelte` (camera lerp + mouse orbit)
@@ -65,6 +66,7 @@ JSON/RSS/sitemap/sw.js routes: no visual change (functional only).
 - `static/fonts/helvetiker_bold.typeface.json` (R3 local font)
 
 **Modified**:
+
 - `src/routes/+layout.svelte` (SpatialStage dynamic-import, SEO meta, force dark)
 - `src/routes/+page.svelte` (full Theme D rewrite, 9 scene sections)
 - `src/routes/blog/+page.svelte` (Theme D horizontal reading)
@@ -73,6 +75,7 @@ JSON/RSS/sitemap/sw.js routes: no visual change (functional only).
 - `src/routes/+error.svelte` (404 + 3D broken mesh backdrop)
 
 **Deleted** (cinema era):
+
 - `src/lib/components/magic/cinema/*` (CinematicHero, GrainOverlay-v1, SceneLabel, ScrollScene, SceneManifesto)
 
 ## Commit History (20+ commits on main)
@@ -100,11 +103,13 @@ git push origin main
 ## Post-Push Improvements (Round 4 candidates)
 
 If perf is a priority after push:
+
 - Code-split `/blog` and `/now` routes (currently share main bundle)
 - Move GSAP setup to a Web Worker (would drop TBT significantly)
 - Production-only optimization: gzip/brotli assets, CDN cache headers
 
 If visual is priority:
+
 - Hero "manifesto" line could use per-letter reveal
 - Manifesto accent second-pass refinement (depth-aware rotation)
 - Footer "lora" per-letter 3D effect on entry
