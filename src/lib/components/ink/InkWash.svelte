@@ -7,14 +7,23 @@
 	let canvas: HTMLCanvasElement;
 
 	onMount(() => {
-		const ctx = canvas.getContext('2d');
-		if (!ctx) return;
+		const ctxOrNull = canvas.getContext('2d');
+		if (!ctxOrNull) return;
+		const ctx: CanvasRenderingContext2D = ctxOrNull;
 
 		let w = 0;
 		let h = 0;
 		const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-		type Blob = { x: number; y: number; r: number; hue: string; sx: number; sy: number; ph: number };
+		type Blob = {
+			x: number;
+			y: number;
+			r: number;
+			hue: string;
+			sx: number;
+			sy: number;
+			ph: number;
+		};
 		let blobs: Blob[] = [];
 
 		function seed() {

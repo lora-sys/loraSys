@@ -2,9 +2,12 @@
 	import { T, useTask } from '@threlte/core';
 	import * as THREE from 'three';
 
-	interface Props {}
+	interface Props {
+		[key: string]: unknown;
+	}
 
-	let {}: Props = $props();
+	let props: Props = $props();
+	void props;
 
 	// Build a "broken" mesh from multiple small cubes that drift apart
 	// and re-attach. Each fragment has its own rotation + offset velocity.
@@ -45,9 +48,7 @@
 		cubes.forEach((c, i) => {
 			if (!c) return;
 			const f = fragments[i];
-			const offset = f.vel
-				.clone()
-				.multiplyScalar(elapsed * 0.05 * glitchAmount);
+			const offset = f.vel.clone().multiplyScalar(elapsed * 0.05 * glitchAmount);
 			c.position.copy(f.basePos).add(offset);
 			c.rotation.x = f.rotSpeed.x * elapsed;
 			c.rotation.y = f.rotSpeed.y * elapsed;

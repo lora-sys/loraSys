@@ -48,9 +48,23 @@
 	// Contents index doubles as navigation.
 	const contents = [
 		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', page: 'P.02' },
-		{ n: '02', cn: '技', title: 'Skills', note: 'what I build with', href: '#skills', page: 'P.03' },
+		{
+			n: '02',
+			cn: '技',
+			title: 'Skills',
+			note: 'what I build with',
+			href: '#skills',
+			page: 'P.03'
+		},
 		{ n: '03', cn: '歷', title: 'Experience', note: 'work history', href: '#exp', page: 'P.04' },
-		{ n: '04', cn: '作', title: 'Selected Work', note: `${DATA.projects.length} projects`, href: '#work', page: 'P.06' },
+		{
+			n: '04',
+			cn: '作',
+			title: 'Selected Work',
+			note: `${DATA.projects.length} projects`,
+			href: '#work',
+			page: 'P.06'
+		},
 		{ n: '05', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
 		{ n: '06', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
 		{ n: '07', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
@@ -59,7 +73,10 @@
 	// Skills grouped for the kinetic marquee (presentation grouping of flat DATA.skills).
 	const skillGroups = [
 		{ label: 'Languages', items: ['TypeScript', 'Python', 'JavaScript', 'Java', 'Solidity'] },
-		{ label: 'Frameworks', items: ['React', 'Next.js', 'Svelte', 'SvelteKit', 'Node.js', 'TailwindCSS'] },
+		{
+			label: 'Frameworks',
+			items: ['React', 'Next.js', 'Svelte', 'SvelteKit', 'Node.js', 'TailwindCSS']
+		},
 		{ label: 'Tools & Domains', items: ['PostgreSQL', 'Docker', 'AI Agents', 'Web3'] }
 	];
 
@@ -99,85 +116,137 @@
 
 		let cleanup = () => {};
 		if (!reduce) {
-		(async () => {
-			try {
-				const gsapMod = await import('gsap');
-				const stMod = await import('gsap/dist/ScrollTrigger');
-				const gsap = (gsapMod as any).gsap ?? (gsapMod as any).default;
-				const ScrollTrigger = (stMod as any).ScrollTrigger ?? (stMod as any).default;
-				gsap.registerPlugin(ScrollTrigger);
+			(async () => {
+				try {
+					const gsapMod = await import('gsap');
+					const stMod = await import('gsap/dist/ScrollTrigger');
+					const gsap: typeof import('gsap').gsap =
+						(gsapMod as any).gsap ?? (gsapMod as any).default;
+					const ScrollTrigger: typeof import('gsap/dist/ScrollTrigger').ScrollTrigger =
+						(stMod as any).ScrollTrigger ?? (stMod as any).default;
+					gsap.registerPlugin(ScrollTrigger);
 
-				// Entry: seal stamp + masthead + hero + index
-				gsap.from('.seal', { scale: 2.4, opacity: 0, rotate: -24, duration: 0.5, ease: 'back.out(2)', delay: 0.15 });
-				gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
-				gsap.from('.hero-left > *', { y: 26, opacity: 0, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
-				gsap.from('.index-h, .index li, .pull', { y: 16, opacity: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.35 });
-
-				// Per-section: header rise + brush-underline draw
-				gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
-					const head = sec.querySelector('.sec-head');
-					if (head) {
-						gsap.from(head, { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%' } });
-					}
-					const brush = sec.querySelector<SVGPathElement>('.brush path');
-					if (brush) {
-						const len = brush.getTotalLength();
-						gsap.set(brush, { strokeDasharray: len, strokeDashoffset: len });
-						gsap.to(brush, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', scrollTrigger: { trigger: sec, start: 'top 74%' } });
-					}
-				});
-				gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
-					gsap.from(row, { y: 24, opacity: 0, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 90%' } });
-				});
-
-				// Staggered reveals for ledger cards, galleries, skill rows
-				gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item').forEach((el) => {
-					gsap.from(el, { y: 22, opacity: 0, duration: 0.5, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
-				});
-				gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
-					gsap.from(el, { xPercent: i % 2 ? 5 : -5, opacity: 0, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
-				});
-
-				// Count-up on figures
-				gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
-					const target = Number(el.dataset.count || '0');
-					const obj = { v: 0 };
-					ScrollTrigger.create({
-						trigger: el,
-						start: 'top 92%',
-						once: true,
-						onEnter: () =>
-							gsap.to(obj, {
-								v: target,
-								duration: 1.4,
-								ease: 'power2.out',
-								onUpdate: () => (el.textContent = String(Math.round(obj.v)))
-							})
+					// Entry: seal stamp + masthead + hero + index
+					gsap.from('.seal', {
+						scale: 2.4,
+						opacity: 0,
+						rotate: -24,
+						duration: 0.5,
+						ease: 'back.out(2)',
+						delay: 0.15
 					});
-				});
+					gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
+					gsap.from('.hero-left > *', {
+						y: 26,
+						opacity: 0,
+						duration: 0.7,
+						stagger: 0.09,
+						ease: 'power3.out',
+						delay: 0.1
+					});
+					gsap.from('.index-h, .index li, .pull', {
+						y: 16,
+						opacity: 0,
+						duration: 0.6,
+						stagger: 0.05,
+						ease: 'power2.out',
+						delay: 0.35
+					});
 
-				// Magnetic hover
-				gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
-					const move = (e: MouseEvent) => {
-						const r = el.getBoundingClientRect();
-						gsap.to(el, {
-							x: (e.clientX - (r.left + r.width / 2)) * 0.3,
-							y: (e.clientY - (r.top + r.height / 2)) * 0.3,
-							duration: 0.3
+					// Per-section: header rise + brush-underline draw
+					gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
+						const head = sec.querySelector('.sec-head');
+						if (head) {
+							gsap.from(head, {
+								y: 30,
+								opacity: 0,
+								duration: 0.7,
+								ease: 'power3.out',
+								scrollTrigger: { trigger: sec, start: 'top 80%' }
+							});
+						}
+						const brush = sec.querySelector<SVGPathElement>('.brush path');
+						if (brush) {
+							const len = brush.getTotalLength();
+							gsap.set(brush, { strokeDasharray: len, strokeDashoffset: len });
+							gsap.to(brush, {
+								strokeDashoffset: 0,
+								duration: 0.9,
+								ease: 'power2.inOut',
+								scrollTrigger: { trigger: sec, start: 'top 74%' }
+							});
+						}
+					});
+					gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
+						gsap.from(row, {
+							y: 24,
+							opacity: 0,
+							duration: 0.55,
+							ease: 'power2.out',
+							scrollTrigger: { trigger: row, start: 'top 90%' }
 						});
-					};
-					const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-					el.addEventListener('mousemove', move);
-					el.addEventListener('mouseleave', leave);
-				});
+					});
 
-				ScrollTrigger.refresh();
-				cleanup = () => ScrollTrigger.getAll().forEach((s: any) => s.kill());
-			} catch (err) {
-				console.warn('[ink] motion init failed, static fallback', err);
-			}
-		})();
+					// Staggered reveals for ledger cards, galleries, skill rows
+					gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item').forEach((el) => {
+						gsap.from(el, {
+							y: 22,
+							opacity: 0,
+							duration: 0.5,
+							ease: 'power2.out',
+							scrollTrigger: { trigger: el, start: 'top 92%' }
+						});
+					});
+					gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
+						gsap.from(el, {
+							xPercent: i % 2 ? 5 : -5,
+							opacity: 0,
+							duration: 0.6,
+							ease: 'power2.out',
+							scrollTrigger: { trigger: el, start: 'top 92%' }
+						});
+					});
 
+					// Count-up on figures
+					gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
+						const target = Number(el.dataset.count || '0');
+						const obj = { v: 0 };
+						ScrollTrigger.create({
+							trigger: el,
+							start: 'top 92%',
+							once: true,
+							onEnter: () =>
+								gsap.to(obj, {
+									v: target,
+									duration: 1.4,
+									ease: 'power2.out',
+									onUpdate: () => (el.textContent = String(Math.round(obj.v)))
+								})
+						});
+					});
+
+					// Magnetic hover
+					gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
+						const move = (e: MouseEvent) => {
+							const r = el.getBoundingClientRect();
+							gsap.to(el, {
+								x: (e.clientX - (r.left + r.width / 2)) * 0.3,
+								y: (e.clientY - (r.top + r.height / 2)) * 0.3,
+								duration: 0.3
+							});
+						};
+						const leave = () =>
+							gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+						el.addEventListener('mousemove', move);
+						el.addEventListener('mouseleave', leave);
+					});
+
+					ScrollTrigger.refresh();
+					cleanup = () => ScrollTrigger.getAll().forEach((s: any) => s.kill());
+				} catch (err) {
+					console.warn('[ink] motion init failed, static fallback', err);
+				}
+			})();
 		}
 
 		return () => {
@@ -211,7 +280,7 @@
 
 <div class="edition">
 	<div class="scroll-progress" aria-hidden="true"></div>
-		<div class="paper-grain" aria-hidden="true"></div>
+	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
 	{#if showWash}<InkWash />{/if}
 	<!-- MASTHEAD -->
@@ -241,7 +310,9 @@
 					<span class="rule"></span>
 					<span class="folio">P.01</span>
 				</div>
-				<h1>I build<br /><span class="it">systems</span><br />that <span class="z">learn.</span></h1>
+				<h1>
+					I build<br /><span class="it">systems</span><br />that <span class="z">learn.</span>
+				</h1>
 				<p class="dek">{DATA.description}</p>
 			</div>
 			<nav class="index" aria-label="Contents">
@@ -250,28 +321,47 @@
 					{#each contents as c}
 						<li>
 							<a href={c.href}>
-								<span class="l"><span class="n">{c.n}</span> {c.cn} &nbsp;{c.title}{#if c.note}<em> — {c.note}</em>{/if}</span>
+								<span class="l"
+									><span class="n">{c.n}</span>
+									{c.cn} &nbsp;{c.title}{#if c.note}<em> — {c.note}</em>{/if}</span
+								>
 								<span class="p">{c.page}</span>
 							</a>
 						</li>
 					{/each}
 				</ul>
-				<p class="pull">“Turning ambitious ideas into <b>reality</b> — always building, learning, and shipping.”</p>
+				<p class="pull">
+					“Turning ambitious ideas into <b>reality</b> — always building, learning, and shipping.”
+				</p>
 			</nav>
 		</section>
 
 		<!-- 己 THE SELF -->
 		<section id="self" class="sec">
-			<div class="sec-head"><span class="cn">己</span><div class="sec-title"><h2>The Self</h2>{@render brush()}</div><span class="folio">P.02</span></div>
+			<div class="sec-head">
+				<span class="cn">己</span>
+				<div class="sec-title">
+					<h2>The Self</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.02</span>
+			</div>
 			<div class="self-grid">
 				<div class="bio">{@html DATA.summaryHtml}</div>
 				<aside>
 					<p class="mini-h" id="education">Education</p>
 					{#each DATA.education as e}
 						<div class="edu">
-							{#if e.logoUrl}<img class="edu-logo" src={e.logoUrl} alt={e.school} loading="lazy" />{/if}
+							{#if e.logoUrl}<img
+									class="edu-logo"
+									src={e.logoUrl}
+									alt={e.school}
+									loading="lazy"
+								/>{/if}
 							<div>
-								<a href={e.href}>{e.school}</a><br /><em>{e.degree}</em><br /><span class="years">{e.start} — {e.end}</span>
+								<a href={e.href}>{e.school}</a><br /><em>{e.degree}</em><br /><span class="years"
+									>{e.start} — {e.end}</span
+								>
 							</div>
 						</div>
 					{/each}
@@ -283,16 +373,25 @@
 			</div>
 		</section>
 
-				<!-- 技 SKILLS -->
+		<!-- 技 SKILLS -->
 		<section id="skills" class="sec skills">
-			<div class="sec-head"><span class="cn">技</span><div class="sec-title"><h2>Skills</h2>{@render brush()}</div><span class="folio">P.03</span></div>
+			<div class="sec-head">
+				<span class="cn">技</span>
+				<div class="sec-title">
+					<h2>Skills</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.03</span>
+			</div>
 			<div class="marquees">
 				{#each skillGroups as g, gi}
 					<div class="mrow" class:rev={gi % 2 === 1}>
 						<span class="mrow-label">{g.label}</span>
 						<div class="mviewport">
 							<div class="mtrack">
-								{#each [...g.items, ...g.items, ...g.items] as s}<span class="skill">{s}</span><span class="sep">✦</span>{/each}
+								{#each [...g.items, ...g.items, ...g.items] as s}<span class="skill">{s}</span><span
+										class="sep">✦</span
+									>{/each}
 							</div>
 						</div>
 					</div>
@@ -300,9 +399,16 @@
 			</div>
 		</section>
 
-				<!-- 歷 EXPERIENCE -->
+		<!-- 歷 EXPERIENCE -->
 		<section id="exp" class="sec">
-			<div class="sec-head"><span class="cn">歷</span><div class="sec-title"><h2>Experience</h2>{@render brush()}</div><span class="folio">P.04</span></div>
+			<div class="sec-head">
+				<span class="cn">歷</span>
+				<div class="sec-title">
+					<h2>Experience</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.04</span>
+			</div>
 			{#if work.length}
 				<ol class="timeline">
 					{#each work as w}
@@ -311,15 +417,25 @@
 							<div class="tl-date">{w.start} — {w.end}</div>
 							<div class="tl-body">
 								<div class="tl-top">
-									{#if w.logoUrl}<img class="tl-logo" src={w.logoUrl} alt={w.company} loading="lazy" />{/if}
+									{#if w.logoUrl}<img
+											class="tl-logo"
+											src={w.logoUrl}
+											alt={w.company}
+											loading="lazy"
+										/>{/if}
 									<div>
 										<h3 class="tl-role">{w.title}</h3>
-										<p class="tl-co">{w.company}{#if w.location} · {w.location}{/if}</p>
+										<p class="tl-co">
+											{w.company}{#if w.location}
+												· {w.location}{/if}
+										</p>
 									</div>
 								</div>
 								{#if w.description}<p class="tl-desc">{w.description}</p>{/if}
 								{#if w.badges?.length}
-									<div class="tl-badges">{#each w.badges as b}<span>{b}</span>{/each}</div>
+									<div class="tl-badges">
+										{#each w.badges as b}<span>{b}</span>{/each}
+									</div>
 								{/if}
 							</div>
 						</li>
@@ -331,8 +447,8 @@
 					<div class="exp-side">
 						<p class="exp-note">
 							No formal roles on the record yet — I've been building independently: 103
-							repositories, hackathons (ETH Beijing, Monad), and self-directed systems. The
-							next entry here is open.
+							repositories, hackathons (ETH Beijing, Monad), and self-directed systems. The next
+							entry here is open.
 						</p>
 						<a class="exp-cta" href={`mailto:${DATA.contact.email}`}>Let's talk →</a>
 					</div>
@@ -342,7 +458,14 @@
 
 		<!-- 作 SELECTED WORK -->
 		<section id="work" class="sec">
-			<div class="sec-head"><span class="cn">作</span><div class="sec-title"><h2>Selected Work</h2>{@render brush()}</div><span class="folio">P.04</span></div>
+			<div class="sec-head">
+				<span class="cn">作</span>
+				<div class="sec-title">
+					<h2>Selected Work</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.04</span>
+			</div>
 			<ol class="work">
 				{#each DATA.projects as p, i}
 					<li class="row">
@@ -353,11 +476,19 @@
 							<p class="row-desc">{p.description}</p>
 							<p class="row-tech">{p.technologies.join(' · ')}</p>
 							<p class="row-links">
-								{#each p.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.type} →</a>{/each}
+								{#each p.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.type} →</a
+									>{/each}
 							</p>
 						</div>
 						{#if p.image}
-							<a class="row-thumb" href={p.href} target="_blank" rel="noreferrer" tabindex="-1" aria-hidden="true">
+							<a
+								class="row-thumb"
+								href={p.href}
+								target="_blank"
+								rel="noreferrer"
+								tabindex="-1"
+								aria-hidden="true"
+							>
 								<img src={p.image} alt="" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
 							</a>
 						{/if}
@@ -368,7 +499,14 @@
 
 		<!-- 戰 HACKATHONS -->
 		<section id="hack" class="sec">
-			<div class="sec-head"><span class="cn">戰</span><div class="sec-title"><h2>Hackathons &amp; Signals</h2>{@render brush()}</div><span class="folio">P.09</span></div>
+			<div class="sec-head">
+				<span class="cn">戰</span>
+				<div class="sec-title">
+					<h2>Hackathons &amp; Signals</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.09</span>
+			</div>
 			<ol class="hx-list">
 				{#each DATA.hackathons as h, i}
 					<li class="hx">
@@ -377,17 +515,28 @@
 							<h3 class="hx-title">{h.title}</h3>
 							<p class="hx-meta"><span class="hx-loc">{h.location}</span> · {h.dates}</p>
 							<p class="hx-desc">{h.description}</p>
-							{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a>{/each}
+							{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a
+								>{/each}
 						</div>
 					</li>
 				{/each}
 			</ol>
-			<p class="repos"><span class="count" data-count="103">103</span> public repositories on GitHub — AI agents, Web3 dApps, full-stack applications.</p>
+			<p class="repos">
+				<span class="count" data-count="103">103</span> public repositories on GitHub — AI agents, Web3
+				dApps, full-stack applications.
+			</p>
 		</section>
 
 		<!-- 閒 OFF HOURS -->
 		<section id="off" class="sec">
-			<div class="sec-head"><span class="cn">閒</span><div class="sec-title"><h2>Off Hours</h2>{@render brush()}</div><span class="folio">P.12</span></div>
+			<div class="sec-head">
+				<span class="cn">閒</span>
+				<div class="sec-title">
+					<h2>Off Hours</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.12</span>
+			</div>
 			<div class="anime-head">
 				<p class="mini-h">Anime</p>
 				<div class="c-nav">
@@ -417,7 +566,9 @@
 				{/each}
 			</ul>
 			<div class="track-foot">
-				<div class="track-bar"><span class="track-bar-fill" style="transform: scaleX({animeProg})"></span></div>
+				<div class="track-bar">
+					<span class="track-bar-fill" style="transform: scaleX({animeProg})"></span>
+				</div>
 				<p class="drag-hint">↔ drag · hover to magnify</p>
 			</div>
 			<p class="mini-h">Favorites</p>
@@ -808,7 +959,9 @@
 		border: 1px solid var(--ink-line-strong);
 		padding: 4px 10px;
 		border-radius: 2px;
-		transition: border-color 0.25s ease, color 0.25s ease;
+		transition:
+			border-color 0.25s ease,
+			color 0.25s ease;
 	}
 	.skills li:hover {
 		border-color: var(--zhu);
@@ -829,7 +982,9 @@
 		padding: 30px 0 30px 20px;
 		border-top: 1px solid var(--ink-line);
 		align-items: center;
-		transition: background 0.35s ease, padding-left 0.35s ease;
+		transition:
+			background 0.35s ease,
+			padding-left 0.35s ease;
 	}
 	.row::before {
 		content: '';
@@ -858,7 +1013,9 @@
 		font-weight: 900;
 		font-size: 1.5rem;
 		color: var(--ink-mute);
-		transition: color 0.3s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		transition:
+			color 0.3s ease,
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 		transform-origin: left center;
 	}
 	.row:hover .idx,
@@ -929,7 +1086,9 @@
 		object-fit: cover;
 		display: block;
 		filter: saturate(0.9) contrast(1.02);
-		transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+		transition:
+			transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.4s ease;
 	}
 	.row:hover .row-thumb {
 		border-color: var(--zhu);
@@ -975,7 +1134,9 @@
 		-webkit-text-stroke: 1.5px var(--ink-line-strong);
 		display: block;
 		margin-bottom: 10px;
-		transition: -webkit-text-stroke-color 0.3s ease, color 0.3s ease;
+		transition:
+			-webkit-text-stroke-color 0.3s ease,
+			color 0.3s ease;
 	}
 	.hk:hover .hk-n {
 		-webkit-text-stroke-color: var(--zhu);
@@ -1303,7 +1464,9 @@
 		line-height: 1;
 		color: transparent;
 		-webkit-text-stroke: 1.5px var(--ink-line-strong);
-		transition: -webkit-text-stroke-color 0.3s ease, color 0.3s ease;
+		transition:
+			-webkit-text-stroke-color 0.3s ease,
+			color 0.3s ease;
 	}
 	.hx:hover .hx-idx {
 		-webkit-text-stroke-color: var(--zhu);
@@ -1382,7 +1545,9 @@
 		object-fit: cover;
 		display: block;
 		filter: saturate(0.9) contrast(1.02);
-		transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+		transition:
+			transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.4s ease;
 	}
 	.card a:hover .frame {
 		border-color: var(--zhu);
@@ -1446,7 +1611,10 @@
 		font-family: var(--font-label);
 		font-size: 1.05rem;
 		cursor: pointer;
-		transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+		transition:
+			background 0.25s ease,
+			color 0.25s ease,
+			transform 0.25s ease;
 	}
 	.c-arrow:hover {
 		background: var(--ink);
@@ -1541,7 +1709,9 @@
 		height: 100%;
 		object-fit: cover;
 		filter: saturate(0.88) contrast(1.03);
-		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+		transition:
+			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.4s ease;
 	}
 	.fav > a:hover .fav-img img {
 		transform: scale(1.06);
@@ -1645,7 +1815,9 @@
 		text-underline-offset: 6px;
 		text-decoration-thickness: 2px;
 		text-decoration-color: var(--zhu);
-		transition: color 0.25s ease, text-underline-offset 0.25s ease;
+		transition:
+			color 0.25s ease,
+			text-underline-offset 0.25s ease;
 	}
 	.email:hover {
 		color: var(--zhu);
