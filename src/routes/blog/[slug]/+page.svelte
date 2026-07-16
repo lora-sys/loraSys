@@ -138,15 +138,15 @@
 			content={['Lora Sys', 'Sikandar Bhide', ...(data.meta.categories ?? [])].join(', ')}
 		/>
 	{/if}
-	<link
-		rel="canonical"
-		href={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`}
-	/>
+	<link rel="canonical" href={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`} />
 
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta?.title ?? ''} />
 	<meta property="og:description" content={data.meta?.description ?? ''} />
-	<meta property="og:url" content={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`} />
+	<meta
+		property="og:url"
+		content={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`}
+	/>
 	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
 	<meta property="article:published_time" content={data.meta?.date ?? ''} />
 	{#if data.meta?.categories?.length}
@@ -221,53 +221,53 @@
 
 			<div class="mb-12 border-t border-[#1a1815]/60"></div>
 
-				<!-- Mobile TOC toggle -->
-				{#if toc.length > 0}
-					<button
-						onclick={() => (tocDrawerOpen = !tocDrawerOpen)}
-						class="mb-6 flex w-full items-center justify-between rounded-lg border border-border/50 bg-card/50 px-4 py-3 font-mono text-sm text-muted-foreground transition-colors hover:bg-card/80 lg:hidden"
+			<!-- Mobile TOC toggle -->
+			{#if toc.length > 0}
+				<button
+					onclick={() => (tocDrawerOpen = !tocDrawerOpen)}
+					class="mb-6 flex w-full items-center justify-between rounded-lg border border-border/50 bg-card/50 px-4 py-3 font-mono text-sm text-muted-foreground transition-colors hover:bg-card/80 lg:hidden"
+				>
+					<span>Table of Contents</span>
+					<svg
+						class="h-4 w-4 transition-transform {tocDrawerOpen ? 'rotate-180' : ''}"
+						fill="none"
+						stroke="currentColor"
+						viewBox="0 0 24 24"
 					>
-						<span>Table of Contents</span>
-						<svg
-							class="h-4 w-4 transition-transform {tocDrawerOpen ? 'rotate-180' : ''}"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								stroke-width="2"
-								d="M19 9l-7 7-7-7"
-							/>
-						</svg>
-					</button>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M19 9l-7 7-7-7"
+						/>
+					</svg>
+				</button>
 
-					{#if tocDrawerOpen}
-						<nav class="mb-6 rounded-xl border border-border/50 bg-card/50 p-4 lg:hidden">
-							{#each toc as heading}
-								<a
-									href="#{heading.id}"
-									onclick={() => (tocDrawerOpen = false)}
-									class="block rounded px-2 py-1.5 font-mono text-sm transition-colors
+				{#if tocDrawerOpen}
+					<nav class="mb-6 rounded-xl border border-border/50 bg-card/50 p-4 lg:hidden">
+						{#each toc as heading}
+							<a
+								href="#{heading.id}"
+								onclick={() => (tocDrawerOpen = false)}
+								class="block rounded px-2 py-1.5 font-mono text-sm transition-colors
 										{activeHeading === heading.id
-										? 'bg-[#c6412c]/10 text-[#c6412c]'
-										: 'text-muted-foreground hover:text-foreground'}"
-									style="padding-left: {(heading.level - 1) * 0.75}rem;"
-								>
-									{#if heading.level > 1}
-										<span class="mr-2 text-[#c6412c]/50">{'-'.repeat(heading.level - 1)}</span>
-									{/if}
-									{heading.text}
-								</a>
-							{/each}
-						</nav>
-					{/if}
+									? 'bg-[#c6412c]/10 text-[#c6412c]'
+									: 'text-muted-foreground hover:text-foreground'}"
+								style="padding-left: {(heading.level - 1) * 0.75}rem;"
+							>
+								{#if heading.level > 1}
+									<span class="mr-2 text-[#c6412c]/50">{'-'.repeat(heading.level - 1)}</span>
+								{/if}
+								{heading.text}
+							</a>
+						{/each}
+					</nav>
 				{/if}
+			{/if}
 
-				<!-- Post content -->
-				<div
-					class="prose prose-lg max-w-none font-sans
+			<!-- Post content -->
+			<div
+				class="prose prose-lg max-w-none font-sans
 						dark:prose-invert
 						prose-headings:font-sans prose-headings:tracking-tight
 						prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl
@@ -277,21 +277,21 @@
 						prose-code:rounded prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm
 						prose-pre:border prose-pre:border-border/50 prose-pre:bg-[#ece7db]
 						prose-img:rounded-xl prose-img:shadow-lg"
-				>
-					<data.content />
-				</div>
+			>
+				<data.content />
+			</div>
 
-				<!-- Footer -->
-				<Separator class="my-8 border-border/50" />
-				<div class="flex items-center justify-between font-mono text-sm text-muted-foreground">
-					<a
-						href={`${base}/blog`}
-						class="flex items-center gap-1 transition-colors hover:text-[#c6412c]"
-					>
-						<span class="font-pixel-square">← All writing</span>
-					</a>
-					<span>by {data.meta?.author ?? 'lora'}</span>
-				</div>
+			<!-- Footer -->
+			<Separator class="my-8 border-border/50" />
+			<div class="flex items-center justify-between font-mono text-sm text-muted-foreground">
+				<a
+					href={`${base}/blog`}
+					class="flex items-center gap-1 transition-colors hover:text-[#c6412c]"
+				>
+					<span class="font-pixel-square">← All writing</span>
+				</a>
+				<span>by {data.meta?.author ?? 'lora'}</span>
+			</div>
 
 			<!-- Giscus comments -->
 			<Separator class="my-8 border-border/50" />
@@ -349,9 +349,7 @@
 	<!-- Tags Marquee -->
 	{#if (data.meta?.categories?.length ?? 0) > 0}
 		<div class="mt-16 border-t border-[#1a1815]/60 pt-8">
-			<p
-				class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]"
-			>
+			<p class="mb-4 text-center font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]">
 				<span class="text-[#c6412c]">✦</span> Tagged
 			</p>
 			<Marquee pauseOnHover class="[--duration:20s]">

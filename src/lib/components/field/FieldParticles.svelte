@@ -20,7 +20,8 @@
 
 	useTask((delta) => {
 		if (!points) return;
-		const arr = (points.geometry.attributes.position as THREE.BufferAttribute).array as Float32Array;
+		const arr = (points.geometry.attributes.position as THREE.BufferAttribute)
+			.array as Float32Array;
 		const t = performance.now() * 0.0003;
 		for (let i = 0; i < COUNT; i++) {
 			const s = seeds[i];
@@ -33,12 +34,7 @@
 
 <T.Points bind:ref={points}>
 	<T.BufferGeometry>
-		<T.BufferAttribute
-			attach="attributes-position"
-			count={COUNT}
-			array={positions}
-			itemSize={3}
-		/>
+		<T.BufferAttribute attach="attributes-position" count={COUNT} array={positions} itemSize={3} />
 	</T.BufferGeometry>
 	<T.PointsMaterial
 		size={0.035}

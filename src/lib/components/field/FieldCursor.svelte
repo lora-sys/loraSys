@@ -42,7 +42,9 @@
 		pointer-events: none;
 		z-index: 9999;
 		mix-blend-mode: difference;
-		transition: width 0.2s ease, height 0.2s ease;
+		transition:
+			width 0.2s ease,
+			height 0.2s ease;
 	}
 	.cursor.over {
 		width: 36px;

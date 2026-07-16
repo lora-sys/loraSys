@@ -61,7 +61,11 @@
 	role="presentation"
 	class={'tilt-wrapper relative ' + _class}
 >
-	<div bind:this={inner} class="tilt-inner will-change-transform" style:transform="perspective(1200px) rotateX(0deg) rotateY(0deg)">
+	<div
+		bind:this={inner}
+		class="tilt-inner will-change-transform"
+		style:transform="perspective(1200px) rotateX(0deg) rotateY(0deg)"
+	>
 		{#if children}{@render children()}{/if}
 	</div>
 </div>

@@ -74,11 +74,7 @@
 	<T.PointLight position={[0, 0, 5]} intensity={2} color="#67e8f9" />
 
 	{#each items as item, i}
-		<T.Mesh
-			position={[item.baseX, item.baseY, item.baseZ]}
-			rotation.y={i * 0.5}
-			rotation.x={0.2}
-		>
+		<T.Mesh position={[item.baseX, item.baseY, item.baseZ]} rotation.y={i * 0.5} rotation.x={0.2}>
 			<T.PlaneGeometry args={[iconSize, iconSize]} />
 			<T.MeshBasicMaterial map={item.tex} transparent={true} side={THREE.DoubleSide} />
 		</T.Mesh>

@@ -60,7 +60,7 @@
 		<canvas
 			bind:this={canvas}
 			class="absolute inset-0 h-full w-full mix-blend-overlay"
-			style:opacity={opacity}
+			style:opacity
 		></canvas>
 	</div>
 {/if}

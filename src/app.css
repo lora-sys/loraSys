@@ -176,7 +176,9 @@
 
 	/* Fonts */
 	--font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
-	--font-cn: 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Noto Serif SC', 'PingFang SC', 'Noto Sans CJK SC', serif;
+	--font-cn:
+		'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Noto Serif SC', 'PingFang SC', 'Noto Sans CJK SC',
+		serif;
 	--font-label: 'Archivo', 'Space Grotesk', system-ui, sans-serif;
 
 	/* Type scale (fluid) */
@@ -239,8 +241,14 @@ body {
 
 /* Caret blink for "awaiting" state */
 @keyframes agent-blink {
-	0%, 49% { opacity: 1; }
-	50%, 100% { opacity: 0; }
+	0%,
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		opacity: 0;
+	}
 }
 .agent-blink {
 	animation: agent-blink 1.05s steps(2, end) infinite;
@@ -421,8 +429,13 @@ body {
 }
 
 @keyframes field-pulse {
-	0%, 100% { opacity: 1; }
-	50% { opacity: 0.4; }
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
 }
 
 /* ============================================================

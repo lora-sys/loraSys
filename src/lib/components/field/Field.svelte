@@ -28,11 +28,51 @@
 
 	// Layer tokens. Hero cap reduced to 9rem so it doesn't eat the viewport.
 	const LAYER_TOKENS = {
-		0: { size: 'clamp(2.4rem, 9vw, 9rem)', weight: 700, color: 'var(--field-fg)', opacity: 1, family: 'display' as const, letterSpacing: '-0.05em', lineHeight: 0.92 },
-		1: { size: 'clamp(1.4rem, 4vw, 3.6rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.82, family: 'display' as const, letterSpacing: '-0.03em', lineHeight: 1.05 },
-		2: { size: 'clamp(0.7rem, 0.95vw, 0.9rem)', weight: 400, color: 'var(--field-fg-dim)', opacity: 0.62, family: 'mono' as const, letterSpacing: '0.04em', lineHeight: 1.4 },
-		3: { size: 'clamp(0.65rem, 0.85vw, 0.82rem)', weight: 400, color: 'var(--field-fg-mute)', opacity: 0.45, family: 'mono' as const, letterSpacing: '0.06em', lineHeight: 1.4 },
-		4: { size: 'clamp(1rem, 2.4vw, 2.2rem)', weight: 600, color: 'var(--field-fg)', opacity: 0.78, family: 'display' as const, letterSpacing: '-0.03em', lineHeight: 1.1 }
+		0: {
+			size: 'clamp(2.4rem, 9vw, 9rem)',
+			weight: 700,
+			color: 'var(--field-fg)',
+			opacity: 1,
+			family: 'display' as const,
+			letterSpacing: '-0.05em',
+			lineHeight: 0.92
+		},
+		1: {
+			size: 'clamp(1.4rem, 4vw, 3.6rem)',
+			weight: 600,
+			color: 'var(--field-fg)',
+			opacity: 0.82,
+			family: 'display' as const,
+			letterSpacing: '-0.03em',
+			lineHeight: 1.05
+		},
+		2: {
+			size: 'clamp(0.7rem, 0.95vw, 0.9rem)',
+			weight: 400,
+			color: 'var(--field-fg-dim)',
+			opacity: 0.62,
+			family: 'mono' as const,
+			letterSpacing: '0.04em',
+			lineHeight: 1.4
+		},
+		3: {
+			size: 'clamp(0.65rem, 0.85vw, 0.82rem)',
+			weight: 400,
+			color: 'var(--field-fg-mute)',
+			opacity: 0.45,
+			family: 'mono' as const,
+			letterSpacing: '0.06em',
+			lineHeight: 1.4
+		},
+		4: {
+			size: 'clamp(1rem, 2.4vw, 2.2rem)',
+			weight: 600,
+			color: 'var(--field-fg)',
+			opacity: 0.78,
+			family: 'display' as const,
+			letterSpacing: '-0.03em',
+			lineHeight: 1.1
+		}
 	};
 
 	let tiltX = $derived(field.mouseY * 3);
@@ -40,10 +80,7 @@
 	let scrollZ = $derived(field.depthProgress * 600);
 </script>
 
-<div
-	class="field"
-	style="--tilt-x: {tiltX}deg; --tilt-y: {tiltY}deg; --scroll-z: {scrollZ}px"
->
+<div class="field" style="--tilt-x: {tiltX}deg; --tilt-y: {tiltY}deg; --scroll-z: {scrollZ}px">
 	<FieldBackground />
 
 	<div class="nodes">

@@ -29,8 +29,10 @@
 			<div class="head-side">
 				<p class="dek">On software engineering, AI agents, blockchain, and indie hacking.</p>
 				<dl class="meta">
-					<dt>Posts</dt><dd>{data.posts.length}</dd>
-					<dt>Topics</dt><dd>AI · Web3 · DX</dd>
+					<dt>Posts</dt>
+					<dd>{data.posts.length}</dd>
+					<dt>Topics</dt>
+					<dd>AI · Web3 · DX</dd>
 				</dl>
 			</div>
 		</div>
@@ -164,7 +166,9 @@
 		gap: 24px;
 		align-items: baseline;
 		padding: 30px 0 30px 20px;
-		transition: background 0.35s ease, padding-left 0.35s ease;
+		transition:
+			background 0.35s ease,
+			padding-left 0.35s ease;
 	}
 	.row a::before {
 		content: '';

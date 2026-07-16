@@ -74,7 +74,10 @@
 		height: 52px;
 		padding: 0 clamp(16px, 5vw, 72px);
 		background: transparent;
-		transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+		transition:
+			background 0.3s ease,
+			border-color 0.3s ease,
+			box-shadow 0.3s ease;
 		border-bottom: 1px solid transparent;
 	}
 	.nav.scrolled {
@@ -97,7 +100,9 @@
 		opacity: 0;
 		transform: translateY(-4px);
 		pointer-events: none;
-		transition: opacity 0.3s ease, transform 0.3s ease;
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s ease;
 	}
 	.nav.scrolled .brand {
 		opacity: 1;

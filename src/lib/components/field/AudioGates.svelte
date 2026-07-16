@@ -56,7 +56,9 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 8px;
-		transition: color 0.2s, border-color 0.2s;
+		transition:
+			color 0.2s,
+			border-color 0.2s;
 	}
 	.speaker:hover {
 		color: var(--field-accent);
@@ -67,7 +69,9 @@
 		height: 6px;
 		border-radius: 50%;
 		background: var(--field-fg-ghost);
-		transition: background 0.2s, box-shadow 0.2s;
+		transition:
+			background 0.2s,
+			box-shadow 0.2s;
 	}
 	.dot.on {
 		background: var(--field-accent);

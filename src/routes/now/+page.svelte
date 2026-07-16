@@ -55,8 +55,10 @@
 			<div class="head-side">
 				<p class="dek">A living snapshot — what I'm shipping, learning, and exploring right now.</p>
 				<dl class="meta">
-					<dt>Updated</dt><dd>2026-07</dd>
-					<dt>Cadence</dt><dd>Monthly</dd>
+					<dt>Updated</dt>
+					<dd>2026-07</dd>
+					<dt>Cadence</dt>
+					<dd>Monthly</dd>
 				</dl>
 			</div>
 		</div>
@@ -66,7 +68,10 @@
 		<div class="grid">
 			{#each sections as s}
 				<section>
-					<div class="s-head"><span class="n">{s.n} /</span><h2>{s.title}</h2></div>
+					<div class="s-head">
+						<span class="n">{s.n} /</span>
+						<h2>{s.title}</h2>
+					</div>
 					<ul>
 						{#each s.items as it}
 							<li>

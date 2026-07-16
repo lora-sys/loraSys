@@ -88,7 +88,12 @@
 		opacity: 0.08 !important;
 	}
 	@keyframes breathe {
-		0%, 100% { transform: translate(-50%, -50%) scale(1); }
-		50% { transform: translate(-50%, -50%) scale(1.025); }
+		0%,
+		100% {
+			transform: translate(-50%, -50%) scale(1);
+		}
+		50% {
+			transform: translate(-50%, -50%) scale(1.025);
+		}
 	}
 </style>
