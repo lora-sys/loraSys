@@ -409,6 +409,7 @@
 					“Turning ambitious ideas into <b>reality</b> — always building, learning, and shipping.”
 				</p>
 			</nav>
+			<span class="hero-watermark" aria-hidden="true">Edition<br />2026</span>
 		</section>
 
 		<!-- 己 THE SELF -->
@@ -703,6 +704,13 @@
 	<footer>
 		<span>◆ {DATA.name} — Field Notes on Building</span>
 		<span>Edition 2026</span>
+		<span class="footer-meta"
+			>Built {new Date().toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric'
+			})}</span
+		>
 		<a href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 	</footer>
 
@@ -766,8 +774,16 @@
 		z-index: -1;
 		pointer-events: none;
 		background:
-			radial-gradient(50% 45% at 88% 8%, rgba(26, 24, 21, 0.14), transparent 70%),
-			radial-gradient(38% 38% at 12% 96%, rgba(198, 65, 44, 0.08), transparent 70%);
+			radial-gradient(
+				50% 45% at 88% 8%,
+				var(--ink-wash-1, rgba(26, 24, 21, 0.14)),
+				transparent 70%
+			),
+			radial-gradient(
+				38% 38% at 12% 96%,
+				var(--ink-wash-2, rgba(198, 65, 44, 0.08)),
+				transparent 70%
+			);
 		filter: blur(30px);
 	}
 
@@ -974,6 +990,21 @@
 	.pull b {
 		font-style: normal;
 		color: var(--zhu);
+	}
+	.hero-watermark {
+		position: absolute;
+		right: -20px;
+		bottom: -40px;
+		font-family: var(--font-label);
+		font-weight: 900;
+		font-size: clamp(5rem, 10vw, 9rem);
+		line-height: 0.85;
+		letter-spacing: -0.04em;
+		color: var(--ink);
+		opacity: 0.025;
+		pointer-events: none;
+		writing-mode: vertical-rl;
+		text-orientation: mixed;
 	}
 
 	/* Sections */

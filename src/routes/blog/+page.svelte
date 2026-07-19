@@ -12,6 +12,7 @@
 		content="Writing from Lora Sys (Sikandar Bhide) on software engineering, indie hacking, AI agents, and shipping products end-to-end."
 	/>
 	<link rel="canonical" href="https://lora-sys.github.io/loraSys/blog" />
+	<link rel="alternate" type="application/rss+xml" title="lora's blog" href="{base}/api/rss.xml" />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="Blog — Lora Sys" />
 	<meta
@@ -61,6 +62,7 @@
 
 		<div class="foot">
 			<a href={base + '/'} class="back">← Back to cover</a>
+			<a href={base + '/api/rss.xml'} class="rss" target="_blank" rel="noreferrer">RSS ↗</a>
 			<span>{data.posts.length} entries</span>
 		</div>
 	</div>
@@ -296,6 +298,23 @@
 	}
 	.back:hover {
 		color: var(--zhu);
+	}
+	.rss {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 0.72rem;
+		letter-spacing: 0.1em;
+		color: var(--zhu);
+		border: 1px solid var(--ink-line-strong);
+		padding: 5px 14px;
+		border-radius: 100px;
+		transition:
+			background 0.25s ease,
+			color 0.25s ease;
+	}
+	.rss:hover {
+		background: var(--zhu);
+		color: var(--paper);
 	}
 	@media (max-width: 760px) {
 		.head {

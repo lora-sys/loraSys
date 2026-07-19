@@ -192,6 +192,39 @@
 	--page-y: clamp(48px, 10vh, 128px);
 }
 
+/* Dark mode (亮刊 / 墨刊 toggle) */
+:global(html.mode-dark),
+:global(html.mode-dark) :root {
+	--ink: #f3efe6;
+	--ink-soft: #b5afa6;
+	--ink-mute: #8a857c;
+	--paper: #1a1815;
+	--paper-2: #24211c;
+	--zhu: #e0473a;
+	--ink-line: rgba(243, 239, 230, 0.12);
+	--ink-line-strong: rgba(243, 239, 230, 0.25);
+}
+:global(html.mode-dark) body,
+:global(html.mode-dark) {
+	background: var(--paper) !important;
+	color: var(--ink) !important;
+}
+:global(html.mode-dark) ::-webkit-scrollbar-thumb {
+	background: #3f3a33 !important;
+}
+:global(html.mode-dark) ::-webkit-scrollbar-thumb:hover {
+	background: #5a544b !important;
+}
+:global(html.mode-dark) ::selection {
+	background: rgba(224, 71, 58, 0.3);
+}
+:global(html.mode-dark) .ink-wash {
+	opacity: 0.6;
+}
+:global(html.mode-dark) .cursor-glow {
+	background: radial-gradient(circle, rgba(224, 71, 58, 0.1) 0%, transparent 70%);
+}
+
 html,
 body {
 	background: var(--paper) !important;

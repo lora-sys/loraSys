@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
+	import ModeToggle from './ModeToggle.svelte';
 
 	type Link = { label: string; href: string; id?: string; route?: string };
 	const links: Link[] = [
@@ -59,6 +60,7 @@
 			<a href={l.href} class:on={isActive(l)}>{l.label}</a>
 		{/each}
 	</div>
+	<ModeToggle />
 </nav>
 
 <style>

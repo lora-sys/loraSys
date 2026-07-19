@@ -52,6 +52,8 @@
 <main class="err">
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="wash" aria-hidden="true"></div>
+	<div class="splash" aria-hidden="true"></div>
+	<div class="splash-sm" aria-hidden="true"></div>
 	<div class="inner">
 		<p class="tag">誤 · Error</p>
 		<h1>{effectiveStatus}</h1>
@@ -100,6 +102,40 @@
 		pointer-events: none;
 		background: radial-gradient(45% 45% at 50% 42%, rgba(198, 65, 44, 0.12), transparent 70%);
 		filter: blur(50px);
+	}
+	.splash {
+		position: absolute;
+		top: 20%;
+		left: 10%;
+		width: 300px;
+		height: 300px;
+		z-index: 0;
+		pointer-events: none;
+		background: radial-gradient(circle, rgba(198, 65, 44, 0.06) 0%, transparent 70%);
+		filter: blur(40px);
+		opacity: 0.5;
+		animation: inkFloat 8s ease-in-out infinite alternate;
+	}
+	.splash-sm {
+		position: absolute;
+		bottom: 15%;
+		right: 12%;
+		width: 200px;
+		height: 200px;
+		z-index: 0;
+		pointer-events: none;
+		background: radial-gradient(circle, rgba(26, 24, 21, 0.04) 0%, transparent 70%);
+		filter: blur(35px);
+		opacity: 0.4;
+		animation: inkFloat 6s ease-in-out infinite alternate-reverse;
+	}
+	@keyframes inkFloat {
+		from {
+			transform: translate(0, 0) scale(1);
+		}
+		to {
+			transform: translate(20px, -15px) scale(1.15);
+		}
 	}
 	.inner {
 		position: relative;
