@@ -1380,6 +1380,7 @@
 	}
 	.skill:hover {
 		color: var(--zhu);
+		transform: scale(1.08);
 	}
 	.sep {
 		color: var(--zhu);
