@@ -37,7 +37,7 @@
 			const atEnd = animeTrack.scrollLeft + animeTrack.clientWidth >= animeTrack.scrollWidth - 6;
 			if (atEnd) animeTrack.scrollTo({ left: 0, behavior: 'smooth' });
 			else animeScroll(1);
-		}, 3800);
+		}, 2500);
 	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
@@ -122,6 +122,16 @@
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
 
+		// Image fade-in on load
+		const onImgLoad = (img: HTMLImageElement) => {
+			if (img.complete && img.naturalWidth > 0) {
+				img.classList.add('loaded');
+			} else {
+				img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+			}
+		};
+		document.querySelectorAll('img').forEach(onImgLoad);
+
 		let cleanup = () => {};
 		if (!reduce) {
 			(async () => {
@@ -195,8 +205,8 @@
 						});
 					});
 
-					// Staggered reveals for ledger cards, galleries, skill rows
-					gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item').forEach((el) => {
+					// Staggered reveals for cards, galleries, sections
+					gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item, .hx, .fav').forEach((el) => {
 						gsap.from(el, {
 							y: 22,
 							opacity: 0,
@@ -362,7 +372,7 @@
 						<div class="edu">
 							{#if e.logoUrl}<img
 									class="edu-logo"
-									src={img(e.logoUrl)}
+									src={e.logoUrl}
 									alt={e.school}
 									loading="lazy"
 								/>{/if}
@@ -427,7 +437,7 @@
 								<div class="tl-top">
 									{#if w.logoUrl}<img
 											class="tl-logo"
-											src={img(w.logoUrl)}
+											src={w.logoUrl}
 											alt={w.company}
 											loading="lazy"
 										/>{/if}
@@ -1622,24 +1632,28 @@
 		transition:
 			background 0.25s ease,
 			color 0.25s ease,
-			transform 0.25s ease;
+			transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.c-arrow:hover {
 		background: var(--ink);
 		color: var(--paper);
 		transform: translateY(-2px);
 	}
+	.c-arrow:active {
+		transform: scale(0.92);
+	}
 	.track {
 		display: flex;
 		gap: 24px;
 		overflow-x: auto;
-		scroll-snap-type: x mandatory;
+		scroll-snap-type: x proximity;
 		scroll-behavior: smooth;
 		padding-bottom: 6px;
 		margin: 0;
 		list-style: none;
 		scrollbar-width: none;
 		cursor: grab;
+		scroll-padding: 0 16px;
 	}
 	.track:active {
 		cursor: grabbing;
@@ -1647,12 +1661,33 @@
 	.track::-webkit-scrollbar {
 		display: none;
 	}
+	.track:hover {
+		scroll-snap-type: x mandatory;
+	}
 	.acard {
 		flex: 0 0 clamp(200px, 24%, 280px);
 		scroll-snap-align: start;
 	}
 	.acard > a {
 		display: block;
+	}
+	.acard .frame {
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.acard:hover .frame {
+		transform: scale(1.03);
+	}
+	.acard .card-name {
+		transition: color 0.25s ease;
+	}
+	.acard:hover .card-name {
+		color: var(--zhu);
+	}
+	.acard .card-quote {
+		transition: opacity 0.3s ease;
+	}
+	.acard:hover .card-quote {
+		opacity: 0.8;
 	}
 	.track-foot {
 		display: flex;
@@ -1673,6 +1708,7 @@
 		background: var(--zhu);
 		transform-origin: 0 50%;
 		transform: scaleX(0);
+		transition: transform 0.15s ease-out;
 	}
 	.drag-hint {
 		font-family: var(--font-label);
@@ -1682,9 +1718,49 @@
 		color: var(--ink-mute);
 		margin: 0;
 		white-space: nowrap;
+		transition: opacity 0.3s ease;
+	}
+	.track:hover ~ .track-foot .drag-hint {
+		opacity: 0.5;
 	}
 
-	/* Favorites — asymmetric editorial mosaic */
+	/* Global image loading */
+	@keyframes imgReveal {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+	.frame img,
+	.fav-img img,
+	.row-thumb img,
+	.edu-logo,
+	.tl-logo {
+		background: var(--paper-2);
+		animation: imgReveal 0.5s ease forwards;
+		animation-play-state: paused;
+	}
+	.frame img.loaded,
+	.fav-img img.loaded,
+	.row-thumb img.loaded,
+	.edu-logo.loaded,
+	.tl-logo.loaded {
+		animation-play-state: running;
+	}
+
+	/* Social links arrow micro-movement */
+	.socials a {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+	}
+	.socials a::after {
+		content: '→';
+		display: inline-block;
+		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.socials a:hover::after {
+		transform: translateX(3px);
+	}
 	.favs-mosaic {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
@@ -1699,6 +1775,9 @@
 	}
 	.fav:first-child {
 		grid-row: span 2;
+	}
+	.fav:nth-child(4) {
+		grid-column: span 2;
 	}
 	.fav > a {
 		position: relative;
@@ -1736,6 +1815,7 @@
 		padding: 28px 14px 13px;
 		background: linear-gradient(transparent, rgba(26, 24, 21, 0.5) 42%, rgba(26, 24, 21, 0.88));
 		color: var(--paper);
+		transition: opacity 0.35s ease;
 	}
 	.fav-cap b {
 		display: block;
@@ -1751,6 +1831,19 @@
 		color: rgba(243, 239, 230, 0.82);
 		margin-top: 3px;
 		line-height: 1.3;
+	}
+	/* Hover mask overlay */
+	.fav > a::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: rgba(26, 24, 21, 0);
+		transition: background 0.4s ease;
+		pointer-events: none;
+		z-index: 1;
+	}
+	.fav > a:hover::after {
+		background: rgba(26, 24, 21, 0.45);
 	}
 	@media (max-width: 640px) {
 		.favs-mosaic {

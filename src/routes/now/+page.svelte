@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { reveal } from '$lib/actions/reveal';
 
 	const sections = [
 		{
@@ -74,7 +75,7 @@
 					</div>
 					<ul>
 						{#each s.items as it}
-							<li>
+							<li class="reveal" use:reveal>
 								<span class="arrow">→</span>
 								<div>
 									<div class="it-t">{it.t}</div>
@@ -208,22 +209,39 @@
 		padding: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 18px;
+		gap: 0;
 	}
 	li {
 		display: flex;
 		gap: 12px;
 		align-items: baseline;
 		border-top: 1px solid var(--ink-line);
-		padding-top: 14px;
+		padding: 14px 8px;
+		transition: background 0.3s ease, padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	li:last-child {
+		border-bottom: 1px solid var(--ink-line);
+	}
+	li:hover {
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.05), transparent 50%);
+		padding-left: 14px;
 	}
 	.arrow {
 		color: var(--zhu);
 		font-family: var(--font-label);
+		display: inline-block;
+		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	li:hover .arrow {
+		transform: translateX(4px);
 	}
 	.it-t {
 		font-size: 1.15rem;
 		line-height: 1.35;
+		transition: color 0.25s ease;
+	}
+	li:hover .it-t {
+		color: var(--zhu);
 	}
 	.it-m {
 		margin-top: 5px;

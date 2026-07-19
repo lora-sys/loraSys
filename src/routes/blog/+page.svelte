@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import { base } from '$app/paths';
+	import { reveal } from '$lib/actions/reveal';
 	let { data } = $props();
 </script>
 
@@ -41,7 +42,7 @@
 
 		<ol class="posts">
 			{#each data.posts as post, i (post.slug)}
-				<li class="row">
+				<li class="row reveal" use:reveal style="transition-delay: {i * 0.06}s">
 					<a href={`${base}/blog/${post.slug}`}>
 						<span class="idx">{String(i + 1).padStart(2, '0')}</span>
 						<div class="row-main">
@@ -249,6 +250,10 @@
 		text-transform: uppercase;
 		color: var(--zhu);
 		white-space: nowrap;
+		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.row a:hover .go {
+		transform: translateX(4px);
 	}
 	.foot {
 		display: flex;

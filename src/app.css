@@ -458,3 +458,16 @@ body {
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--ink-mute) !important;
 }
+
+/* ============================================================
+   Reveal-on-scroll action styles (used by reveal.ts)
+   ============================================================ */
+.reveal {
+	opacity: 0;
+	transform: translateY(20px);
+	transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.revealed {
+	opacity: 1;
+	transform: translateY(0);
+}

@@ -364,3 +364,22 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	/* Code block hover accent */
+	:global(.prose pre) {
+		transition: border-color 0.3s ease;
+	}
+	:global(.prose pre:hover) {
+		border-color: rgba(198, 65, 44, 0.3) !important;
+	}
+	/* Image fade-in in article */
+	:global(.prose img) {
+		background: #ece7db;
+		animation: imgReveal 0.5s ease forwards;
+		animation-play-state: paused;
+	}
+	:global(.prose img.loaded) {
+		animation-play-state: running;
+	}
+</style>
