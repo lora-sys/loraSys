@@ -8,7 +8,9 @@
 		document.documentElement.classList.toggle('mode-dark', isDark);
 		try {
 			localStorage.setItem('ink-mode', isDark ? 'dark' : 'light');
-		} catch {}
+		} catch {
+			/* localStorage unavailable */
+		}
 	}
 
 	onMount(() => {
@@ -18,7 +20,9 @@
 				isDark = true;
 				document.documentElement.classList.add('mode-dark');
 			}
-		} catch {}
+		} catch {
+			/* localStorage unavailable */
+		}
 		const mq = window.matchMedia('(prefers-color-scheme: dark)');
 		if (!localStorage.getItem('ink-mode') && mq.matches) {
 			isDark = true;
