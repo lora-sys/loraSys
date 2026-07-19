@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 
 	type Link = { label: string; href: string; id?: string; route?: string };
 	const links: Link[] = [
-		{ label: 'Self', href: '/#self', id: 'self' },
-		{ label: 'Skills', href: '/#skills', id: 'skills' },
-		{ label: 'Experience', href: '/#exp', id: 'exp' },
-		{ label: 'Work', href: '/#work', id: 'work' },
-		{ label: 'Hackathons', href: '/#hack', id: 'hack' },
-		{ label: 'Off Hours', href: '/#off', id: 'off' },
-		{ label: 'Blog', href: '/blog', route: '/blog' },
-		{ label: 'Now', href: '/now', route: '/now' },
-		{ label: 'Contact', href: '/#contact', id: 'contact' }
+		{ label: 'Self', href: `${base}/#self`, id: 'self' },
+		{ label: 'Skills', href: `${base}/#skills`, id: 'skills' },
+		{ label: 'Experience', href: `${base}/#exp`, id: 'exp' },
+		{ label: 'Work', href: `${base}/#work`, id: 'work' },
+		{ label: 'Hackathons', href: `${base}/#hack`, id: 'hack' },
+		{ label: 'Off Hours', href: `${base}/#off`, id: 'off' },
+		{ label: 'Blog', href: `${base}/blog`, route: '/blog' },
+		{ label: 'Now', href: `${base}/now`, route: '/now' },
+		{ label: 'Contact', href: `${base}/#contact`, id: 'contact' }
 	];
 
 	let active = $state('');
@@ -50,7 +51,7 @@
 </script>
 
 <nav class="nav" class:scrolled aria-label="Primary">
-	<a class="brand" href="/" aria-label="lora — home">
+	<a class="brand" href="{base}/" aria-label="lora — home">
 		lora<span class="seal-dot" aria-hidden="true"></span>
 	</a>
 	<div class="links">

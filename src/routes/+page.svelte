@@ -4,6 +4,14 @@
 	import { DATA } from '$lib/data/resume';
 	import InkWash from '$lib/components/ink/InkWash.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
+	import { base } from '$app/paths';
+
+	/** Resolve image paths relative to the deployment base.
+	 *  Vite-imported assets already include base; runtime strings from data need it prepended. */
+	function img(path: string): string {
+		if (!path.startsWith('/') || path.startsWith(base)) return path;
+		return base + path;
+	}
 
 	let animeTrack: HTMLElement | undefined = $state();
 	let animeProg = $state(0);
@@ -354,7 +362,7 @@
 						<div class="edu">
 							{#if e.logoUrl}<img
 									class="edu-logo"
-									src={e.logoUrl}
+									src={img(e.logoUrl)}
 									alt={e.school}
 									loading="lazy"
 								/>{/if}
@@ -419,7 +427,7 @@
 								<div class="tl-top">
 									{#if w.logoUrl}<img
 											class="tl-logo"
-											src={w.logoUrl}
+											src={img(w.logoUrl)}
 											alt={w.company}
 											loading="lazy"
 										/>{/if}
@@ -489,7 +497,7 @@
 								tabindex="-1"
 								aria-hidden="true"
 							>
-								<img src={p.image} alt="" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
+								<img src={img(p.image)} alt="" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
 							</a>
 						{/if}
 					</li>
@@ -556,7 +564,7 @@
 						<a href={a.link} target="_blank" rel="noreferrer" aria-label={a.name}>
 							<Lens zoomFactor={1.5} lensSize={150} class="rounded-none">
 								{#snippet children()}
-									<div class="frame"><img src={a.image} alt={a.name} loading="lazy" /></div>
+									<div class="frame"><img src={img(a.image)} alt={a.name} loading="lazy" /></div>
 								{/snippet}
 							</Lens>
 							<b class="card-name">{a.name}</b>
@@ -576,7 +584,7 @@
 				{#each DATA.favorites as f}
 					<li class="fav">
 						<a href={f.href} target="_blank" rel="noreferrer">
-							<div class="fav-img"><img src={f.background} alt={f.name} loading="lazy" /></div>
+							<div class="fav-img"><img src={img(f.background)} alt={f.name} loading="lazy" /></div>
 							<div class="fav-cap">
 								<b>{f.name}</b>
 								<span>{f.description}</span>
