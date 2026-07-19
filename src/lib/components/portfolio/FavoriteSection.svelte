@@ -3,9 +3,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { ArrowRightIcon } from '@lucide/svelte';
 	import { base } from '$app/paths';
-	import { browser } from '$app/environment';
 	import { inview } from 'svelte-inview';
-	import { cn } from '$lib/utils';
 
 	function imgPath(path: string): string {
 		return path.startsWith('/') ? base + path : path;

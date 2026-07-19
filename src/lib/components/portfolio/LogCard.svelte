@@ -7,7 +7,6 @@
 		descriptionHtml,
 		dates = '',
 		location = '',
-		image: _image,
 		links = [],
 		pid
 	}: {
@@ -16,7 +15,6 @@
 		descriptionHtml?: string;
 		dates: string;
 		location: string;
-		image?: string;
 		links?: readonly { icon?: any; title: string; href: string }[];
 		pid: number;
 	} = $props();
