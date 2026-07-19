@@ -16,9 +16,9 @@
 	}> = [];
 
 	const COLORS = [
-		'rgba(26, 24, 21,',  // ink
+		'rgba(26, 24, 21,', // ink
 		'rgba(198, 65, 44,', // vermilion
-		'rgba(90, 84, 77,',  // ink-soft
+		'rgba(90, 84, 77,' // ink-soft
 	];
 
 	function createParticle(width: number, height: number) {
@@ -96,11 +96,7 @@
 	});
 </script>
 
-<canvas
-	bind:this={canvas}
-	class="ink-particles"
-	aria-hidden="true"
-/>
+<canvas bind:this={canvas} class="ink-particles" aria-hidden="true" />
 
 <style>
 	.ink-particles {

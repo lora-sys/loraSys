@@ -313,7 +313,9 @@
 						if (t) {
 							t.style.transition = 'opacity 0.15s ease';
 							t.style.opacity = '1';
-							setTimeout(() => { window.location.href = href; }, 160);
+							setTimeout(() => {
+								window.location.href = href;
+							}, 160);
 						}
 					}
 				});
