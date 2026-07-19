@@ -1862,11 +1862,12 @@
 		width: 16px;
 		height: 16px;
 		object-fit: contain;
-		filter: invert(0.35);
-		transition: filter 0.3s ease;
+		filter: none;
+		opacity: 0.7;
+		transition: opacity 0.3s ease;
 	}
 	.social-link:hover .social-icon {
-		filter: invert(1);
+		opacity: 1;
 	}
 	.social-icon-svg {
 		width: 16px;

@@ -387,6 +387,90 @@ export const DATA = {
 			],
 			image: '/images/projects/tarot.webp',
 			video: ''
+		},
+		{
+			title: 'Moss',
+			href: 'https://github.com/lora-sys/moss',
+			dates: '2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'Turns Monad protocol interactions into Agent-callable Capabilities through discover → load → action → simulate. Builds and verifies unsigned transactions; never signs or sends them. TypeScript SDK + MCP server.'
+			) as string,
+			description:
+				'Monad protocol interaction framework for AI agents. Discover, load, simulate, and verify transactions without signing.',
+			technologies: ['TypeScript', 'Monad', 'MCP', 'Web3', 'Agents'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/moss',
+					icon: Github
+				}
+			],
+			image: '/images/projects/moss.webp',
+			video: ''
+		},
+		{
+			title: 'Second Brain',
+			href: 'https://github.com/lora-sys/second-brain',
+			dates: '2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'Personal second-brain dashboard with Obsidian vault sync, knowledge graph visualization, daily notes, and task tracking. Local-first UI that treats your Obsidian Markdown files as the source of truth.'
+			) as string,
+			description:
+				'Local-first second-brain dashboard — Obsidian vault sync, knowledge graph, daily notes, kanban tasks.',
+			technologies: ['JavaScript', 'Obsidian', 'Markdown', 'Knowledge Graph', 'Local-first'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/second-brain',
+					icon: Github
+				}
+			],
+			image: '/images/projects/second-brain.webp',
+			video: ''
+		},
+		{
+			title: 'MonadMon',
+			href: 'https://github.com/lora-sys/monadmon',
+			dates: '2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'The first living creatures on Monad. On-chain creature-raising + PvP battle game. Tamagotchi meets crypto — breed, feed, and battle your digital creatures on Monad Testnet.'
+			) as string,
+			description:
+				'On-chain Tamagotchi on Monad. Breed, feed, and battle digital creatures with PvP mechanics.',
+			technologies: ['TypeScript', 'Monad', 'Web3', 'GameFi', 'Smart Contracts'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/monadmon',
+					icon: Github
+				}
+			],
+			image: '/images/projects/monadmon.webp',
+			video: ''
+		},
+		{
+			title: 'Mianshiya-Next',
+			href: 'https://github.com/lora-sys/mianshiya-next',
+			dates: '2026',
+			active: true,
+			descriptionHtml: marked.parse(
+				'Enterprise-grade interview practice platform built with Next.js + Spring Boot + Redis + MySQL + Elasticsearch. Features full-text search, token-based auth, rate limiting, circuit breaker patterns, and an interactive calendar for tracking practice history.'
+			) as string,
+			description:
+				'Full-stack interview platform — Next.js + Spring Boot + Elasticsearch. Full-text search, Sa-Token auth, calendar tracking.',
+			technologies: ['Next.js', 'Spring Boot', 'Redis', 'MySQL', 'Elasticsearch', 'Java'],
+			links: [
+				{
+					type: 'Source',
+					href: 'https://github.com/lora-sys/mianshiya-next',
+					icon: Github
+				}
+			],
+			image: '/images/projects/mianshiya.webp',
+			video: ''
 		}
 	],
 	favorites: [
