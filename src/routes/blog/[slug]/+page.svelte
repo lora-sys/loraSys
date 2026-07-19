@@ -65,17 +65,33 @@
 		const timer = setTimeout(() => {
 			document.querySelectorAll('pre').forEach((pre) => {
 				if (pre.querySelector('.copy-btn')) return;
+
+				// Detect language from Shiki's class on the wrapper div
+				const shikiDiv = pre.querySelector('div.shiki');
+				const langClass = shikiDiv?.className?.match(/language-(\w+)/)?.[1];
+				const langLabel = langClass ?? '';
+
+				// Language label (top-left, de-emphasized)
+				if (langLabel) {
+					const label = document.createElement('span');
+					label.className = 'code-lang-label';
+					label.textContent = langLabel;
+					pre.appendChild(label);
+				}
+
 				const btn = document.createElement('button');
 				btn.className =
-					'copy-btn absolute top-2 right-2 rounded-md border border-border/50 bg-background/80 px-2 py-1 text-xs font-mono text-muted-foreground opacity-0 transition-opacity duration-200 hover:bg-muted hover:text-foreground backdrop-blur-sm';
+					'copy-btn absolute top-2 right-2 rounded-md border border-zinc-700/50 bg-zinc-800/90 px-2.5 py-1 text-[11px] font-mono text-zinc-400 opacity-0 transition-all duration-200 hover:border-[#c6412c]/40 hover:bg-zinc-700/90 hover:text-zinc-200 backdrop-blur-sm';
 				btn.textContent = 'Copy';
 				btn.onclick = async () => {
 					const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
 					try {
 						await navigator.clipboard.writeText(code);
 						btn.textContent = 'Copied!';
+						btn.classList.add('text-green-400');
 						setTimeout(() => {
 							btn.textContent = 'Copy';
+							btn.classList.remove('text-green-400');
 						}, 2000);
 					} catch {
 						btn.textContent = 'Failed';
@@ -275,7 +291,7 @@
 						prose-a:text-[#c6412c] prose-a:no-underline hover:prose-a:underline
 						prose-blockquote:border-l-[#c6412c] prose-blockquote:text-muted-foreground
 						prose-code:rounded prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm
-						prose-pre:border prose-pre:border-border/50 prose-pre:bg-[#ece7db]
+						prose-pre:border prose-pre:border-border/50 prose-pre:rounded-xl prose-pre:shadow-lg
 						prose-img:rounded-xl prose-img:shadow-lg"
 			>
 				<data.content />
@@ -366,17 +382,57 @@
 </div>
 
 <style>
-	/* Code block hover accent */
+	/* Code blocks — let Shiki's github-dark-dimmed theme show through */
 	:global(.prose pre) {
+		position: relative;
+		border: 1px solid rgba(198, 65, 44, 0.15);
+		border-radius: 0.75rem;
+		overflow: hidden;
 		transition:
 			border-color 0.3s ease,
 			box-shadow 0.3s ease,
 			transform 0.2s ease;
 	}
 	:global(.prose pre:hover) {
-		border-color: rgba(198, 65, 44, 0.3) !important;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+		border-color: rgba(198, 65, 44, 0.35);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
 		transform: translateY(-2px);
+	}
+	/* Strip the Shiki wrapper — keep only the inner code element */
+	:global(.prose pre > div.shiki) {
+		margin: 0;
+		padding: 1.25rem 1.5rem;
+		background: transparent !important;
+		border-radius: 0;
+		overflow-x: auto;
+	}
+	:global(.prose pre code) {
+		font-size: 0.8rem;
+		line-height: 1.7;
+		background: transparent !important;
+		padding: 0;
+	}
+	/* Language label */
+	:global(.prose pre .code-lang-label) {
+		position: absolute;
+		top: 0.5rem;
+		left: 1rem;
+		font-family: var(--font-label, 'Archivo', sans-serif);
+		font-size: 0.65rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: rgba(198, 65, 44, 0.5);
+		pointer-events: none;
+		z-index: 2;
+	}
+	/* Inline code */
+	:global(.prose code:not(pre code)) {
+		background: rgba(198, 65, 44, 0.08);
+		color: #c6412c;
+		border-radius: 0.25rem;
+		padding: 0.15em 0.45em;
+		font-size: 0.88em;
 	}
 	/* Image fade-in in article */
 	:global(.prose img) {

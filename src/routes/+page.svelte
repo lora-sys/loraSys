@@ -616,9 +616,9 @@
 			</div>
 			<p class="mini-h">Favorites</p>
 			<ul class="favs-mosaic">
-				{#each DATA.favorites as f}
-					<li class="fav">
-						<a href={f.href} target="_blank" rel="noreferrer">
+				{#each DATA.favorites as f, i}
+					<li class="fav" style="--fav-delay: {i * 0.06}s">
+						<a href={f.href} target="_blank" rel="noreferrer" class="fav-link">
 							<div class="fav-img">
 								<img src={img(f.background)} alt={f.name} width="400" height="225" loading="lazy" />
 							</div>
@@ -626,6 +626,7 @@
 								<b>{f.name}</b>
 								<span>{f.description}</span>
 							</div>
+							<div class="fav-shimmer"></div>
 						</a>
 					</li>
 				{/each}
@@ -1821,6 +1822,16 @@
 	}
 	.fav {
 		margin: 0;
+		opacity: 0;
+		transform: translateY(16px);
+		animation: favReveal 0.7s ease forwards;
+		animation-delay: var(--fav-delay, 0s);
+	}
+	@keyframes favReveal {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 	.fav:first-child {
 		grid-row: span 2;
@@ -1828,17 +1839,20 @@
 	.fav:nth-child(4) {
 		grid-column: span 2;
 	}
-	.fav > a {
+	.fav-link {
 		position: relative;
 		display: block;
 		height: 100%;
 		overflow: hidden;
 		border: 1px solid var(--ink-line-strong);
-		transition: border-color 0.3s ease;
+		border-radius: 0.75rem;
+		transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 	}
 	.fav-img {
 		position: absolute;
 		inset: 0;
+		border-radius: inherit;
+		overflow: hidden;
 	}
 	.fav-img img {
 		width: 100%;
@@ -1846,43 +1860,62 @@
 		object-fit: cover;
 		filter: saturate(0.88) contrast(1.03);
 		transition:
-			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
 			filter 0.4s ease;
 	}
-	.fav > a:hover .fav-img img {
+	.fav-link:hover .fav-img img {
 		transform: scale(1.06);
 		filter: none;
 	}
-	.fav > a:hover {
+	.fav-link:hover {
 		border-color: var(--zhu);
+		transform: translateY(-3px);
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 	}
 	.fav-cap {
 		position: absolute;
 		left: 0;
 		right: 0;
 		bottom: 0;
-		padding: 28px 14px 13px;
-		background: linear-gradient(transparent, rgba(26, 24, 21, 0.5) 42%, rgba(26, 24, 21, 0.88));
+		padding: 32px 16px 14px;
+		background: linear-gradient(transparent, rgba(26, 24, 21, 0.4) 40%, rgba(26, 24, 21, 0.9));
 		color: var(--paper);
-		transition: opacity 0.35s ease;
+		z-index: 2;
+		transition: padding-bottom 0.4s ease;
 	}
 	.fav-cap b {
 		display: block;
 		font-family: var(--font-serif);
 		font-weight: 900;
 		font-optical-sizing: auto;
-		font-size: 1.15rem;
+		font-size: 1.2rem;
 		line-height: 1.1;
+		letter-spacing: -0.01em;
 	}
 	.fav-cap span {
 		display: block;
 		font-size: 0.72rem;
 		color: rgba(243, 239, 230, 0.82);
-		margin-top: 3px;
-		line-height: 1.3;
+		margin-top: 4px;
+		line-height: 1.35;
+		max-width: 90%;
+	}
+	/* Vermilion shimmer line on hover */
+	.fav-shimmer {
+		position: absolute;
+		inset-x: 0;
+		top: 0;
+		height: 1px;
+		background: linear-gradient(90deg, transparent, rgba(198, 65, 44, 0.4), transparent);
+		opacity: 0;
+		transition: opacity 0.4s ease;
+		z-index: 3;
+	}
+	.fav-link:hover .fav-shimmer {
+		opacity: 1;
 	}
 	/* Hover mask overlay */
-	.fav > a::after {
+	.fav-link::after {
 		content: '';
 		position: absolute;
 		inset: 0;
@@ -1890,9 +1923,10 @@
 		transition: background 0.4s ease;
 		pointer-events: none;
 		z-index: 1;
+		border-radius: inherit;
 	}
-	.fav > a:hover::after {
-		background: rgba(26, 24, 21, 0.45);
+	.fav-link:hover::after {
+		background: rgba(26, 24, 21, 0.35);
 	}
 	@media (max-width: 640px) {
 		.favs-mosaic {
