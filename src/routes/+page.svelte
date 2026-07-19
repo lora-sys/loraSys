@@ -103,6 +103,7 @@
 	const work = DATA.work as WorkItem[];
 
 	let showWash = $state(false);
+	let scrolled = $state(false);
 
 	onMount(() => {
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -111,13 +112,18 @@
 		autoOK = !reduce;
 		if (autoOK) animeAuto(true);
 
-		// Scroll progress bar (always on, even under reduced motion)
+		// Scroll progress bar + back-to-top visibility
 		const prog = document.querySelector('.scroll-progress') as HTMLElement | null;
+		const btt = document.querySelector('.back-to-top') as HTMLElement | null;
 		const onScroll = () => {
 			const el = document.documentElement;
 			const max = el.scrollHeight - el.clientHeight;
 			const p = max > 0 ? el.scrollTop / max : 0;
 			if (prog) prog.style.transform = `scaleX(${p})`;
+			scrolled = el.scrollTop > 600;
+			if (btt) {
+				btt.classList.toggle('visible', el.scrollTop > 600);
+			}
 		};
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
@@ -640,7 +646,17 @@
 			<h2 class="say">Say hello.</h2>
 			<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 			<ul class="socials">
-				{#each socials as s}<li><a href={s.url}>{s.name} →</a></li>{/each}
+				{#each socials as s}
+					<li>
+						<a href={s.url} target="_blank" rel="noopener noreferrer" class="social-link">
+							{#if s.icon}
+								<img src={s.icon} alt="" class="social-icon" aria-hidden="true" />
+							{/if}
+							<span class="social-name">{s.name}</span>
+							<span class="social-arrow">→</span>
+						</a>
+					</li>
+				{/each}
 			</ul>
 		</section>
 	</main>
@@ -650,6 +666,17 @@
 		<span>Edition 2026</span>
 		<a href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 	</footer>
+
+<!-- Back to top -->
+<button
+	onclick={() => window.scrollTo({top: 0, behavior: "smooth"})}
+	class="back-to-top" aria-label="Back to top"
+	class:visible={scrolled}
+>
+	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+		<path d="m18 15-6-6-6 6"/>
+	</svg>
+</button>
 </div>
 
 <style>
@@ -1796,20 +1823,66 @@
 		animation: none;
 	}
 
-	/* Social links arrow micro-movement */
-	.socials a {
-		position: relative;
+	/* Social links with icons */
+	.socials {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: clamp(16px, 3vw, 28px);
+		list-style: none;
+		margin: 28px 0 0;
+		padding: 0;
+	}
+	.social-link {
 		display: inline-flex;
 		align-items: center;
-		gap: 4px;
+		gap: 8px;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: 0.78rem;
+		letter-spacing: 0.1em;
+		color: var(--ink);
+		padding: 8px 14px;
+		border: 1px solid var(--ink-line-strong);
+		border-radius: 100px;
+		background: transparent;
+		transition:
+			background 0.3s ease,
+			border-color 0.3s ease,
+			color 0.3s ease,
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
-	.socials a::after {
-		content: '→';
-		display: inline-block;
-		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	.social-link:hover {
+		background: var(--ink);
+		border-color: var(--ink);
+		color: var(--paper);
+		transform: translateY(-2px);
 	}
-	.socials a:hover::after {
+	.social-icon {
+		width: 16px;
+		height: 16px;
+		object-fit: contain;
+		filter: invert(0.35);
+		transition: filter 0.3s ease;
+	}
+	.social-link:hover .social-icon {
+		filter: invert(1);
+	}
+	.social-icon-svg {
+		width: 16px;
+		height: 16px;
+	}
+	.social-name {
+		white-space: nowrap;
+	}
+	.social-arrow {
+		font-size: 0.85em;
+		opacity: 0.5;
+		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+	}
+	.social-link:hover .social-arrow {
 		transform: translateX(3px);
+		opacity: 1;
 	}
 	.favs-mosaic {
 		display: grid;
@@ -2040,6 +2113,45 @@
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
+	}
+
+	/* Back to top button */
+	.back-to-top {
+		position: fixed;
+		bottom: 28px;
+		right: 28px;
+		z-index: 55;
+		width: 44px;
+		height: 44px;
+		display: grid;
+		place-items: center;
+		border: 1.5px solid var(--ink-line-strong);
+		border-radius: 50%;
+		background: var(--paper);
+		color: var(--ink);
+		cursor: pointer;
+		opacity: 0;
+		transform: translateY(10px) scale(0.9);
+		pointer-events: none;
+		transition:
+			opacity 0.35s ease,
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.25s ease,
+			border-color 0.25s ease;
+	}
+	.back-to-top.visible {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
+	}
+	.back-to-top:hover {
+		background: var(--ink);
+		border-color: var(--ink);
+		color: var(--paper);
+		transform: translateY(-2px) scale(1.05);
+	}
+	.back-to-top:active {
+		transform: scale(0.92);
 	}
 
 	/* Responsive */

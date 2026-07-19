@@ -82,9 +82,9 @@
 		border-bottom: 1px solid transparent;
 	}
 	.nav.scrolled {
-		background: color-mix(in srgb, var(--paper) 88%, transparent);
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(10px);
+		background: color-mix(in srgb, var(--paper) 92%, transparent);
+		-webkit-backdrop-filter: blur(12px) saturate(1.2);
+		backdrop-filter: blur(12px) saturate(1.2);
 		border-bottom-color: var(--ink-line);
 	}
 	.brand {
@@ -136,7 +136,7 @@
 		font-size: 0.7rem;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: var(--ink-soft);
+		color: var(--ink-mute);
 		white-space: nowrap;
 		padding: 4px 0;
 		transition: color 0.2s ease;
@@ -149,7 +149,7 @@
 		height: 2px;
 		width: 0;
 		background: var(--zhu);
-		transition: width 0.25s ease;
+		transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.links a:hover {
 		color: var(--ink);

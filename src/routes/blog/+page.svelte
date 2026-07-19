@@ -152,6 +152,9 @@
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
 	}
 	.row {
 		position: relative;
@@ -163,13 +166,13 @@
 	.row a {
 		position: relative;
 		display: grid;
-		grid-template-columns: 60px 1fr auto;
-		gap: 24px;
+		grid-template-columns: 56px 1fr auto;
+		gap: 20px;
 		align-items: baseline;
-		padding: 30px 0 30px 20px;
+		padding: 28px 16px 28px 16px;
 		transition:
 			background 0.35s ease,
-			padding-left 0.35s ease;
+			padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.row a::before {
 		content: '';
@@ -182,8 +185,8 @@
 		transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.row a:hover {
-		background: linear-gradient(90deg, rgba(198, 65, 44, 0.05), transparent 60%);
-		padding-left: 32px;
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.06), transparent 50%);
+		padding-left: 28px;
 	}
 	.row a:hover::before {
 		width: 4px;
@@ -191,9 +194,9 @@
 	.idx {
 		font-family: var(--font-label);
 		font-weight: 900;
-		font-size: 1.4rem;
+		font-size: 1.3rem;
 		color: var(--ink-mute);
-		transition: color 0.3s;
+		transition: color 0.3s ease;
 	}
 	.row a:hover .idx {
 		color: var(--zhu);
@@ -201,7 +204,7 @@
 	.date {
 		display: block;
 		font-family: var(--font-label);
-		font-size: 0.7rem;
+		font-size: 0.68rem;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		color: var(--ink-mute);
@@ -211,20 +214,21 @@
 		font-family: var(--font-serif);
 		font-weight: 900;
 		font-optical-sizing: auto;
-		font-size: clamp(1.5rem, 3vw, 2.25rem);
-		line-height: 1.05;
+		font-size: clamp(1.35rem, 2.8vw, 2rem);
+		line-height: 1.08;
 		letter-spacing: -0.01em;
 		margin: 0;
-		transition: color 0.3s;
+		transition: color 0.3s ease;
 	}
 	.row a:hover h2 {
 		color: var(--zhu);
 	}
 	.desc {
 		margin-top: 8px;
-		max-width: 60ch;
+		max-width: 55ch;
 		line-height: 1.5;
 		color: var(--ink-soft);
+		font-size: 0.95rem;
 	}
 	.cats {
 		margin-top: 12px;
@@ -234,26 +238,40 @@
 	}
 	.cats span {
 		font-family: var(--font-label);
-		font-size: 0.68rem;
-		letter-spacing: 0.08em;
+		font-size: 0.65rem;
+		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		border: 1px solid var(--ink-line-strong);
-		padding: 3px 9px;
+		padding: 3px 10px;
 		border-radius: 2px;
 		color: var(--ink-soft);
+		transition: border-color 0.25s ease, color 0.25s ease;
+	}
+	.row a:hover .cats span {
+		border-color: var(--ink-line-strong);
+		color: var(--ink-soft);
+	}
+	.cats span:hover {
+		border-color: var(--zhu);
+		color: var(--zhu);
 	}
 	.go {
 		font-family: var(--font-label);
 		font-weight: 700;
-		font-size: 0.75rem;
-		letter-spacing: 0.06em;
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--zhu);
 		white-space: nowrap;
-		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+		opacity: 0;
+		transform: translateX(-8px);
+		transition:
+			opacity 0.3s ease,
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.row a:hover .go {
-		transform: translateX(4px);
+		opacity: 1;
+		transform: translateX(0);
 	}
 	.foot {
 		display: flex;

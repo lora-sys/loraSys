@@ -43,7 +43,7 @@
 	/* Offset for the fixed navbar + anchor targets clear the nav */
 	:global(section[id]),
 	:global([id='top']) {
-		scroll-margin-top: 64px;
+		scroll-margin-top: 80px;
 	}
 	.layout {
 		min-height: 100vh;
