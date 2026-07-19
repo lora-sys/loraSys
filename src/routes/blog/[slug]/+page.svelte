@@ -382,4 +382,10 @@
 	:global(.prose img.loaded) {
 		animation-play-state: running;
 	}
-</style>
+@media (prefers-reduced-motion: reduce) {
+			:global(.prose img) {
+				animation: none;
+				opacity: 1;
+			}
+		}
+	</style>

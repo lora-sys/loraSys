@@ -471,3 +471,11 @@ body {
 	opacity: 1;
 	transform: translateY(0);
 }
+
+/* ============================================================
+   Image reveal animation (global keyframe)
+   ============================================================ */
+@keyframes imgReveal {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}

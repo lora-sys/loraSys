@@ -1288,6 +1288,23 @@
 		.mviewport {
 			overflow-x: auto;
 		}
+		.reveal {
+			opacity: 1;
+			transform: none;
+			transition: none;
+		}
+		.acard:hover .frame,
+		.fav-img img,
+		.c-arrow:hover,
+		.c-arrow:active {
+			transform: none !important;
+		}
+		.socials a::after {
+			transition: none;
+		}
+		.fav > a::after {
+			display: none;
+		}
 	}
 
 	/* Experience timeline */
