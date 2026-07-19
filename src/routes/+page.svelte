@@ -105,10 +105,12 @@
 
 	let showWash = $state(false);
 	let scrolled = $state(false);
+	let reduceMotion = $state(true);
 
 	onMount(() => {
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const desktop = window.matchMedia('(min-width: 861px)').matches;
+		reduceMotion = reduce;
 		showWash = !reduce && desktop;
 		autoOK = !reduce;
 		if (autoOK) animeAuto(true);
@@ -290,7 +292,7 @@
 		// Cursor glow (desktop only, non-reduced-motion)
 		const glow = document.querySelector('.cursor-glow') as HTMLElement | null;
 		let mouseTimer: ReturnType<typeof setTimeout> | undefined;
-		if (glow && desktop && !reduce) {
+		if (glow && desktop && !reduceMotion) {
 			const onMove = (e: MouseEvent) => {
 				glow.style.left = e.clientX + 'px';
 				glow.style.top = e.clientY + 'px';
@@ -301,15 +303,18 @@
 			window.addEventListener('mousemove', onMove, { passive: true });
 		}
 		// Page transition on internal nav links
-		if (trans && !reduce) {
+		if (!reduceMotion) {
 			document.querySelectorAll('a[href^="/"]').forEach((a) => {
 				a.addEventListener('click', () => {
 					const el = a as HTMLAnchorElement;
 					const href = el.getAttribute('href');
 					if (href && !href.includes('#') && !el.target) {
-						trans.style.transition = 'opacity 0.15s ease';
-						trans.style.opacity = '1';
-						setTimeout(() => { window.location.href = href; }, 160);
+						const t = document.querySelector('.page-transition') as HTMLElement | null;
+						if (t) {
+							t.style.transition = 'opacity 0.15s ease';
+							t.style.opacity = '1';
+							setTimeout(() => { window.location.href = href; }, 160);
+						}
 					}
 				});
 			});
@@ -371,7 +376,7 @@
 	<main>
 		<!-- 序 COVER / HERO -->
 		<section id="top" data-chapter="序" class="hero">
-			{#if !reduce}<InkParticles />{/if}
+			{#if !reduceMotion}<InkParticles />{/if}
 			<div class="hero-left">
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
