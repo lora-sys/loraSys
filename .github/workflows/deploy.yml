@@ -42,7 +42,7 @@ jobs:
         run: pnpm run build
         env:
           ADAPTER: static
-          BASE_PATH: /lora-website-svelte
+          BASE_PATH: /loraSys
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { DATA } from '$lib/data/resume';
 	import InkWash from '$lib/components/ink/InkWash.svelte';
+	import InkParticles from '$lib/components/ink/InkParticles.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 	import { base } from '$app/paths';
 
@@ -154,14 +155,19 @@
 					gsap.registerPlugin(ScrollTrigger);
 
 					// Entry: seal stamp with ink-splash feel
-					gsap.from('.seal', {
-						scale: 3,
-						opacity: 0,
-						rotate: -30,
-						duration: 0.6,
-						ease: 'back.out(1.8)',
-						delay: 0.1
-					});
+					gsap.fromTo(
+						'.seal',
+						{ scale: 2.8, opacity: 0, rotate: -30, filter: 'blur(8px)' },
+						{
+							scale: 1,
+							opacity: 1,
+							rotate: -4,
+							filter: 'blur(0px)',
+							duration: 0.8,
+							ease: 'back.out(1.4)',
+							delay: 0.1
+						}
+					);
 					gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
 					gsap.from('.hero-left > *', {
 						y: 26,
@@ -294,6 +300,20 @@
 			};
 			window.addEventListener('mousemove', onMove, { passive: true });
 		}
+		// Page transition on internal nav links
+		if (trans && !reduce) {
+			document.querySelectorAll('a[href^="/"]').forEach((a) => {
+				a.addEventListener('click', () => {
+					const el = a as HTMLAnchorElement;
+					const href = el.getAttribute('href');
+					if (href && !href.includes('#') && !el.target) {
+						trans.style.transition = 'opacity 0.15s ease';
+						trans.style.opacity = '1';
+						setTimeout(() => { window.location.href = href; }, 160);
+					}
+				});
+			});
+		}
 		return () => {
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
@@ -351,6 +371,7 @@
 	<main>
 		<!-- 序 COVER / HERO -->
 		<section id="top" data-chapter="序" class="hero">
+			{#if !reduce}<InkParticles />{/if}
 			<div class="hero-left">
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
@@ -782,6 +803,8 @@
 		text-align: center;
 		transform: rotate(-4deg);
 		box-shadow: inset 0 0 0 2.5px rgba(243, 239, 230, 0.32);
+		filter: blur(0px);
+		transition: filter 0.6s ease;
 	}
 	.ed-line {
 		text-align: right;
@@ -818,6 +841,8 @@
 		gap: clamp(32px, 5vw, 72px);
 		padding: clamp(40px, 8vh, 96px) 0 var(--page-y);
 		align-items: center;
+		position: relative;
+		overflow: hidden;
 	}
 	.hero-left {
 		position: relative;
@@ -946,6 +971,7 @@
 
 	/* Sections */
 	.sec {
+		position: relative;
 		padding: var(--page-y) 0;
 		border-top: 2px solid var(--ink);
 	}
@@ -2216,17 +2242,17 @@
 	.sec::before {
 		content: attr(data-chapter);
 		position: absolute;
-		top: -20px;
-		right: -10px;
+		top: -50px;
+		right: -30px;
 		font-family: var(--font-label);
 		font-weight: 900;
-		font-size: clamp(6rem, 14vw, 12rem);
+		font-size: clamp(8rem, 18vw, 16rem);
 		line-height: 1;
 		color: var(--ink);
 		opacity: 0.025;
 		pointer-events: none;
 		z-index: 0;
-		letter-spacing: -0.04em;
+		letter-spacing: -0.05em;
 	}
 	/* Responsive */
 	@media (max-width: 980px) {
