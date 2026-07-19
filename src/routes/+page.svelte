@@ -112,18 +112,14 @@
 		autoOK = !reduce;
 		if (autoOK) animeAuto(true);
 
-		// Scroll progress bar + back-to-top visibility
+		// Scroll progress bar + back-to-top visibility (Svelte handles BTT via class:visible)
 		const prog = document.querySelector('.scroll-progress') as HTMLElement | null;
-		const btt = document.querySelector('.back-to-top') as HTMLElement | null;
 		const onScroll = () => {
 			const el = document.documentElement;
 			const max = el.scrollHeight - el.clientHeight;
 			const p = max > 0 ? el.scrollTop / max : 0;
 			if (prog) prog.style.transform = `scaleX(${p})`;
 			scrolled = el.scrollTop > 600;
-			if (btt) {
-				btt.classList.toggle('visible', el.scrollTop > 600);
-			}
 		};
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
