@@ -103,9 +103,12 @@
 						}}
 						style:opacity="0"
 						style:transform="translateY(20px)"
-						style:transition="opacity 0.7s ease {delay}s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) {delay}s"
+						style:transition="opacity 0.7s ease {delay}s, transform 0.7s cubic-bezier(0.16, 1, 0.3,
+						1) {delay}s"
 					>
-						<div class="favorite-card-inner relative flex h-full flex-col justify-between overflow-hidden rounded-2xl transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:shadow-black/30">
+						<div
+							class="favorite-card-inner relative flex h-full flex-col justify-between overflow-hidden rounded-2xl transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:shadow-black/30"
+						>
 							<img
 								src={imgPath(item.background)}
 								alt={item.name}
@@ -114,7 +117,9 @@
 								decoding="async"
 							/>
 							<!-- Layered gradient: top vignette + bottom heavy -->
-							<div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/75"></div>
+							<div
+								class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/75"
+							></div>
 							<!-- Subtle color wash on hover -->
 							<div
 								class="absolute inset-0 bg-[#c6412c]/0 transition-colors duration-500 ease-out group-hover:bg-[#c6412c]/[0.07]"
@@ -125,19 +130,19 @@
 							></div>
 							<div class="relative z-10 flex flex-col justify-end p-5 md:p-6">
 								<item.icon class="h-8 w-8 text-yellow-400 drop-shadow-lg" />
-								<h3 class="mt-2.5 text-lg font-bold text-zinc-100 tracking-tight">{item.name}</h3>
+								<h3 class="mt-2.5 text-lg font-bold tracking-tight text-zinc-100">{item.name}</h3>
 							</div>
 							<!-- Hover overlay -->
 							<div
-								class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/85 p-5 opacity-0 transition-all duration-400 ease-out backdrop-blur-sm group-hover:opacity-100"
+								class="duration-400 pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/85 p-5 opacity-0 backdrop-blur-sm transition-all ease-out group-hover:opacity-100"
 							>
 								<p
-									class="max-w-sm text-center text-sm leading-relaxed text-zinc-200 translate-y-2 transition-transform duration-500 ease-out group-hover:translate-y-0"
+									class="max-w-sm translate-y-2 text-center text-sm leading-relaxed text-zinc-200 transition-transform duration-500 ease-out group-hover:translate-y-0"
 								>
 									{item.description}
 								</p>
 								<div
-									class="mt-4 flex items-center gap-1.5 text-xs font-bold tracking-wide text-yellow-400 translate-y-2 transition-transform duration-500 ease-out delay-75 group-hover:translate-y-0"
+									class="mt-4 flex translate-y-2 items-center gap-1.5 text-xs font-bold tracking-wide text-yellow-400 transition-transform delay-75 duration-500 ease-out group-hover:translate-y-0"
 								>
 									{item.cta}
 									<ArrowRightIcon class="h-3.5 w-3.5" />
@@ -184,7 +189,9 @@
 					style:transform="translateY(20px)"
 					style:transition="opacity 0.7s ease {delay}s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) {delay}s"
 				>
-					<div class="favorite-card-inner relative flex h-full flex-col justify-between overflow-hidden rounded-2xl transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:shadow-black/30">
+					<div
+						class="favorite-card-inner relative flex h-full flex-col justify-between overflow-hidden rounded-2xl transition-all duration-500 ease-out group-hover:-translate-y-1 group-hover:shadow-2xl group-hover:shadow-black/30"
+					>
 						<img
 							src={imgPath(item.background)}
 							alt={item.name}
@@ -192,7 +199,9 @@
 							loading="lazy"
 							decoding="async"
 						/>
-						<div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/75"></div>
+						<div
+							class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/25 to-black/75"
+						></div>
 						<div
 							class="absolute inset-0 bg-[#c6412c]/0 transition-colors duration-500 ease-out group-hover:bg-[#c6412c]/[0.07]"
 						></div>
@@ -201,18 +210,18 @@
 						></div>
 						<div class="relative z-10 flex flex-col justify-end p-5 md:p-6">
 							<item.icon class="h-8 w-8 text-yellow-400 drop-shadow-lg" />
-							<h3 class="mt-2.5 text-lg font-bold text-zinc-100 tracking-tight">{item.name}</h3>
+							<h3 class="mt-2.5 text-lg font-bold tracking-tight text-zinc-100">{item.name}</h3>
 						</div>
 						<div
-							class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/85 p-5 opacity-0 transition-all duration-300 ease-out backdrop-blur-sm group-hover:opacity-100"
+							class="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/85 p-5 opacity-0 backdrop-blur-sm transition-all duration-300 ease-out group-hover:opacity-100"
 						>
 							<p
-								class="max-w-sm text-center text-sm leading-relaxed text-zinc-200 translate-y-2 transition-transform duration-500 ease-out group-hover:translate-y-0"
+								class="max-w-sm translate-y-2 text-center text-sm leading-relaxed text-zinc-200 transition-transform duration-500 ease-out group-hover:translate-y-0"
 							>
 								{item.description}
 							</p>
 							<div
-								class="mt-4 flex items-center gap-1.5 text-xs font-bold tracking-wide text-yellow-400 translate-y-2 transition-transform duration-500 ease-out group-hover:[&]:translate-y-0"
+								class="mt-4 flex translate-y-2 items-center gap-1.5 text-xs font-bold tracking-wide text-yellow-400 transition-transform duration-500 ease-out group-hover:[&]:translate-y-0"
 							>
 								{item.cta}
 								<ArrowRightIcon class="h-3.5 w-3.5" />

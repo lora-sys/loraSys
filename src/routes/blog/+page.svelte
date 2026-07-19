@@ -245,7 +245,9 @@
 		padding: 3px 10px;
 		border-radius: 2px;
 		color: var(--ink-soft);
-		transition: border-color 0.25s ease, color 0.25s ease;
+		transition:
+			border-color 0.25s ease,
+			color 0.25s ease;
 	}
 	.row a:hover .cats span {
 		border-color: var(--ink-line-strong);

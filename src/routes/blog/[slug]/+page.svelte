@@ -291,7 +291,7 @@
 						prose-a:text-[#c6412c] prose-a:no-underline hover:prose-a:underline
 						prose-blockquote:border-l-[#c6412c] prose-blockquote:text-muted-foreground
 						prose-code:rounded prose-code:bg-muted/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:font-mono prose-code:text-sm
-						prose-pre:border prose-pre:border-border/50 prose-pre:rounded-xl prose-pre:shadow-lg
+						prose-pre:rounded-xl prose-pre:border prose-pre:border-border/50 prose-pre:shadow-lg
 						prose-img:rounded-xl prose-img:shadow-lg"
 			>
 				<data.content />

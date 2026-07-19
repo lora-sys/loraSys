@@ -281,19 +281,18 @@
 			})();
 		}
 
-
 		// Cursor glow (desktop only, non-reduced-motion)
-		const glow = document.querySelector(".cursor-glow") as HTMLElement | null;
+		const glow = document.querySelector('.cursor-glow') as HTMLElement | null;
 		let mouseTimer: ReturnType<typeof setTimeout> | undefined;
 		if (glow && desktop && !reduce) {
 			const onMove = (e: MouseEvent) => {
-				glow.style.left = e.clientX + "px";
-				glow.style.top = e.clientY + "px";
-				glow.classList.add("active");
+				glow.style.left = e.clientX + 'px';
+				glow.style.top = e.clientY + 'px';
+				glow.classList.add('active');
 				clearTimeout(mouseTimer);
-				mouseTimer = setTimeout(() => glow.classList.remove("active"), 1500);
+				mouseTimer = setTimeout(() => glow.classList.remove('active'), 1500);
 			};
-			window.addEventListener("mousemove", onMove, { passive: true });
+			window.addEventListener('mousemove', onMove, { passive: true });
 		}
 		return () => {
 			window.removeEventListener('scroll', onScroll);
@@ -679,16 +678,27 @@
 		<a href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 	</footer>
 
-<!-- Back to top -->
-<button
-	onclick={() => window.scrollTo({top: 0, behavior: "smooth"})}
-	class="back-to-top" aria-label="Back to top"
-	class:visible={scrolled}
->
-	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-		<path d="m18 15-6-6-6 6"/>
-	</svg>
-</button>
+	<!-- Back to top -->
+	<button
+		onclick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+		class="back-to-top"
+		aria-label="Back to top"
+		class:visible={scrolled}
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="20"
+			height="20"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		>
+			<path d="m18 15-6-6-6 6" />
+		</svg>
+	</button>
 </div>
 
 <style>
@@ -1894,7 +1904,9 @@
 	.social-arrow {
 		font-size: 0.85em;
 		opacity: 0.5;
-		transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.3s ease;
 	}
 	.social-link:hover .social-arrow {
 		transform: translateX(3px);
@@ -1935,7 +1947,10 @@
 		overflow: hidden;
 		border: 1px solid var(--ink-line-strong);
 		border-radius: 0.75rem;
-		transition: border-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+		transition:
+			border-color 0.3s ease,
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 0.4s ease;
 	}
 	.fav-img {
 		position: absolute;
@@ -2180,7 +2195,6 @@
 		opacity: 0;
 	}
 
-
 	/* Cursor glow — vermilion light follows mouse */
 	.cursor-glow {
 		position: fixed;
@@ -2258,7 +2272,11 @@
 		transition: opacity 0.3s ease;
 	}
 	.nav.scrolled .links::after {
-		background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--paper) 92%, transparent));
+		background: linear-gradient(
+			90deg,
+			transparent,
+			color-mix(in srgb, var(--paper) 92%, transparent)
+		);
 	}
 	/* Skills section — prevent title clipping under fixed nav */
 	#skills {
