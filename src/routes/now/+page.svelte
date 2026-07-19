@@ -69,7 +69,7 @@
 		<div class="grid">
 			{#each sections as s}
 				<section>
-					<div class="s-head">
+					<div class="s-head reveal" use:reveal>
 						<span class="n">{s.n} /</span>
 						<h2>{s.title}</h2>
 					</div>

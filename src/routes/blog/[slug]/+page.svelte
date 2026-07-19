@@ -368,10 +368,12 @@
 <style>
 	/* Code block hover accent */
 	:global(.prose pre) {
-		transition: border-color 0.3s ease;
+		transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 	}
 	:global(.prose pre:hover) {
 		border-color: rgba(198, 65, 44, 0.3) !important;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+		transform: translateY(-2px);
 	}
 	/* Image fade-in in article */
 	:global(.prose img) {
