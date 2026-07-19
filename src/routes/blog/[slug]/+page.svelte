@@ -378,11 +378,12 @@
 	/* Image fade-in in article */
 	:global(.prose img) {
 		background: #ece7db;
+		opacity: 0;
 		animation: imgReveal 0.5s ease forwards;
-		animation-play-state: paused;
 	}
 	:global(.prose img.loaded) {
-		animation-play-state: running;
+		opacity: 1;
+		animation: none;
 	}
 @media (prefers-reduced-motion: reduce) {
 			:global(.prose img) {

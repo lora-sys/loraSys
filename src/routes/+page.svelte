@@ -122,13 +122,20 @@
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
 
-		// Image fade-in on load
+		// Image fade-in on load (handles cached images via rAF fallback)
 		const onImgLoad = (img: HTMLImageElement) => {
+			const mark = () => img.classList.add('loaded');
 			if (img.complete && img.naturalWidth > 0) {
-				img.classList.add('loaded');
+				mark();
 			} else {
-				img.addEventListener('load', () => img.classList.add('loaded'), { once: true });
+				img.addEventListener('load', mark, { once: true });
+				img.addEventListener('error', mark, { once: true });
 			}
+			requestAnimationFrame(() => {
+				if (img.complete && img.naturalWidth > 0 && !img.classList.contains('loaded')) {
+					mark();
+				}
+			});
 		};
 		document.querySelectorAll('img').forEach(onImgLoad);
 
@@ -205,14 +212,19 @@
 						});
 					});
 
-					// Staggered reveals for cards, galleries, sections
-					gsap.utils.toArray<HTMLElement>('.hk, .card, .acard, .tl-item, .hx, .fav').forEach((el) => {
-						gsap.from(el, {
+					// Staggered reveals — exclude .acard (anime cards already visible on load)
+					gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
+						const tween = gsap.from(el, {
 							y: 22,
 							opacity: 0,
 							duration: 0.5,
 							ease: 'power2.out',
-							scrollTrigger: { trigger: el, start: 'top 92%' }
+							scrollTrigger: {
+								trigger: el,
+								start: 'top 92%',
+								once: true,
+								onRefresh: (self: any) => self.animation.play()
+							}
 						});
 					});
 					gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
@@ -1751,15 +1763,16 @@
 	.edu-logo,
 	.tl-logo {
 		background: var(--paper-2);
+		opacity: 0;
 		animation: imgReveal 0.5s ease forwards;
-		animation-play-state: paused;
 	}
 	.frame img.loaded,
 	.fav-img img.loaded,
 	.row-thumb img.loaded,
 	.edu-logo.loaded,
 	.tl-logo.loaded {
-		animation-play-state: running;
+		opacity: 1;
+		animation: none;
 	}
 
 	/* Social links arrow micro-movement */
