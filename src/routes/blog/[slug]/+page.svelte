@@ -295,7 +295,7 @@
 
 			<!-- Giscus comments -->
 			<Separator class="my-8 border-border/50" />
-			<div class="giscus" />
+			<div class="giscus"></div>
 		</article>
 
 		<!-- Right-side fixed TOC (desktop only) -->

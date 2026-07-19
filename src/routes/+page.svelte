@@ -374,7 +374,7 @@
 									class="edu-logo"
 									src={e.logoUrl}
 									alt={e.school}
-									loading="lazy"
+									width="42" height="42" loading="lazy"
 								/>{/if}
 							<div>
 								<a href={e.href}>{e.school}</a><br /><em>{e.degree}</em><br /><span class="years"
@@ -436,11 +436,10 @@
 							<div class="tl-body">
 								<div class="tl-top">
 									{#if w.logoUrl}<img
-											class="tl-logo"
-											src={w.logoUrl}
-											alt={w.company}
-											loading="lazy"
-										/>{/if}
+										class="tl-logo"
+										src={w.logoUrl}
+										alt={w.company}
+										width="44" height="44" loading="lazy" />{/if}
 									<div>
 										<h3 class="tl-role">{w.title}</h3>
 										<p class="tl-co">
@@ -507,7 +506,7 @@
 								tabindex="-1"
 								aria-hidden="true"
 							>
-								<img src={img(p.image)} alt="" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
+								<img src={img(p.image)} alt="" width="320" height="200" loading="lazy" onerror={(e) => onImgError(e, p.title)} />
 							</a>
 						{/if}
 					</li>
@@ -574,7 +573,7 @@
 						<a href={a.link} target="_blank" rel="noreferrer" aria-label={a.name}>
 							<Lens zoomFactor={1.5} lensSize={150} class="rounded-none">
 								{#snippet children()}
-									<div class="frame"><img src={img(a.image)} alt={a.name} loading="lazy" /></div>
+									<div class="frame"><img src={img(a.image)} alt={a.name} width="280" height="373" loading="lazy" /></div>
 								{/snippet}
 							</Lens>
 							<b class="card-name">{a.name}</b>
@@ -594,7 +593,7 @@
 				{#each DATA.favorites as f}
 					<li class="fav">
 						<a href={f.href} target="_blank" rel="noreferrer">
-							<div class="fav-img"><img src={img(f.background)} alt={f.name} loading="lazy" /></div>
+							<div class="fav-img"><img src={img(f.background)} alt={f.name} width="400" height="225" loading="lazy" /></div>
 							<div class="fav-cap">
 								<b>{f.name}</b>
 								<span>{f.description}</span>
