@@ -368,7 +368,10 @@
 <style>
 	/* Code block hover accent */
 	:global(.prose pre) {
-		transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+		transition:
+			border-color 0.3s ease,
+			box-shadow 0.3s ease,
+			transform 0.2s ease;
 	}
 	:global(.prose pre:hover) {
 		border-color: rgba(198, 65, 44, 0.3) !important;
@@ -385,10 +388,10 @@
 		opacity: 1;
 		animation: none;
 	}
-@media (prefers-reduced-motion: reduce) {
-			:global(.prose img) {
-				animation: none;
-				opacity: 1;
-			}
+	@media (prefers-reduced-motion: reduce) {
+		:global(.prose img) {
+			animation: none;
+			opacity: 1;
 		}
-	</style>
+	}
+</style>

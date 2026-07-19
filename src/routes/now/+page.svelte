@@ -217,7 +217,9 @@
 		align-items: baseline;
 		border-top: 1px solid var(--ink-line);
 		padding: 14px 8px;
-		transition: background 0.3s ease, padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		transition:
+			background 0.3s ease,
+			padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	li:last-child {
 		border-bottom: 1px solid var(--ink-line);
