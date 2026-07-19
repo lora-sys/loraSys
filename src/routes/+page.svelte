@@ -153,14 +153,14 @@
 						(stMod as any).ScrollTrigger ?? (stMod as any).default;
 					gsap.registerPlugin(ScrollTrigger);
 
-					// Entry: seal stamp + masthead + hero + index
+					// Entry: seal stamp with ink-splash feel
 					gsap.from('.seal', {
-						scale: 2.4,
+						scale: 3,
 						opacity: 0,
-						rotate: -24,
-						duration: 0.5,
-						ease: 'back.out(2)',
-						delay: 0.15
+						rotate: -30,
+						duration: 0.6,
+						ease: 'back.out(1.8)',
+						delay: 0.1
 					});
 					gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
 					gsap.from('.hero-left > *', {
@@ -281,6 +281,20 @@
 			})();
 		}
 
+
+		// Cursor glow (desktop only, non-reduced-motion)
+		const glow = document.querySelector(".cursor-glow") as HTMLElement | null;
+		let mouseTimer: ReturnType<typeof setTimeout> | undefined;
+		if (glow && desktop && !reduce) {
+			const onMove = (e: MouseEvent) => {
+				glow.style.left = e.clientX + "px";
+				glow.style.top = e.clientY + "px";
+				glow.classList.add("active");
+				clearTimeout(mouseTimer);
+				mouseTimer = setTimeout(() => glow.classList.remove("active"), 1500);
+			};
+			window.addEventListener("mousemove", onMove, { passive: true });
+		}
 		return () => {
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
@@ -315,6 +329,8 @@
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
 	{#if showWash}<InkWash />{/if}
+	<div class="cursor-glow" aria-hidden="true"></div>
+	<div class="page-transition" aria-hidden="true"></div>
 	<!-- MASTHEAD -->
 	<header class="mast">
 		<a class="logo" href="#top" aria-label="lora — home">
@@ -335,7 +351,7 @@
 
 	<main>
 		<!-- 序 COVER / HERO -->
-		<section id="top" class="hero">
+		<section id="top" data-chapter="序" class="hero">
 			<div class="hero-left">
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
@@ -369,7 +385,7 @@
 		</section>
 
 		<!-- 己 THE SELF -->
-		<section id="self" class="sec">
+		<section id="self" data-chapter="己" class="sec">
 			<div class="sec-head">
 				<span class="cn">己</span>
 				<div class="sec-title">
@@ -408,7 +424,7 @@
 		</section>
 
 		<!-- 技 SKILLS -->
-		<section id="skills" class="sec skills">
+		<section id="skills" data-chapter="技" class="sec skills">
 			<div class="sec-head">
 				<span class="cn">技</span>
 				<div class="sec-title">
@@ -434,7 +450,7 @@
 		</section>
 
 		<!-- 歷 EXPERIENCE -->
-		<section id="exp" class="sec">
+		<section id="exp" data-chapter="歷" class="sec">
 			<div class="sec-head">
 				<span class="cn">歷</span>
 				<div class="sec-title">
@@ -493,7 +509,7 @@
 		</section>
 
 		<!-- 作 SELECTED WORK -->
-		<section id="work" class="sec">
+		<section id="work" data-chapter="作" class="sec">
 			<div class="sec-head">
 				<span class="cn">作</span>
 				<div class="sec-title">
@@ -541,7 +557,7 @@
 		</section>
 
 		<!-- 戰 HACKATHONS -->
-		<section id="hack" class="sec">
+		<section id="hack" data-chapter="戰" class="sec">
 			<div class="sec-head">
 				<span class="cn">戰</span>
 				<div class="sec-title">
@@ -571,7 +587,7 @@
 		</section>
 
 		<!-- 閒 OFF HOURS -->
-		<section id="off" class="sec">
+		<section id="off" data-chapter="閒" class="sec">
 			<div class="sec-head">
 				<span class="cn">閒</span>
 				<div class="sec-title">
@@ -636,7 +652,7 @@
 		</section>
 
 		<!-- 聯 CONTACT -->
-		<section id="contact" class="sec contact">
+		<section id="contact" data-chapter="聯" class="sec contact">
 			<span class="cn ghost" aria-hidden="true">聯</span>
 			<p class="c-tag">聯 · Say Hello</p>
 			<h2 class="say">Say hello.</h2>
@@ -1147,24 +1163,27 @@
 		overflow: hidden;
 		border: 1px solid var(--ink-line-strong);
 		background: var(--paper-2);
-		transition: border-color 0.3s ease;
+		transition:
+			border-color 0.3s ease,
+			box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.row-thumb img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		filter: saturate(0.9) contrast(1.02);
+		filter: saturate(0.85) contrast(1.02);
 		transition:
-			transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-			filter 0.4s ease;
+			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.5s ease;
 	}
 	.row:hover .row-thumb {
 		border-color: var(--zhu);
+		box-shadow: 0 8px 30px rgba(198, 65, 44, 0.12);
 	}
 	.row:hover .row-thumb img {
-		transform: scale(1.05);
-		filter: none;
+		transform: scale(1.08);
+		filter: saturate(1.1) contrast(1.05);
 	}
 
 	/* Hackathons — ledger: outlined index + top-bar draw on hover */
@@ -2151,6 +2170,50 @@
 		transform: scale(0.92);
 	}
 
+	/* Page transition overlay */
+	.page-transition {
+		position: fixed;
+		inset: 0;
+		background: var(--paper);
+		z-index: 100;
+		pointer-events: none;
+		opacity: 0;
+	}
+
+
+	/* Cursor glow — vermilion light follows mouse */
+	.cursor-glow {
+		position: fixed;
+		width: 300px;
+		height: 300px;
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 0;
+		background: radial-gradient(circle, rgba(198, 65, 44, 0.06) 0%, transparent 70%);
+		transform: translate(-50%, -50%);
+		transition: opacity 0.4s ease;
+		opacity: 0;
+		will-change: left, top;
+	}
+	.cursor-glow.active {
+		opacity: 1;
+	}
+	/* Chapter watermark — large faint section numbers */
+	.sec::before {
+		content: attr(data-chapter);
+		position: absolute;
+		top: -20px;
+		right: -10px;
+		font-family: var(--font-label);
+		font-weight: 900;
+		font-size: clamp(6rem, 14vw, 12rem);
+		line-height: 1;
+		color: var(--ink);
+		opacity: 0.025;
+		pointer-events: none;
+		z-index: 0;
+		letter-spacing: -0.04em;
+	}
 	/* Responsive */
 	@media (max-width: 980px) {
 		.row {
@@ -2175,5 +2238,30 @@
 		.row {
 			grid-template-columns: 40px 1fr;
 		}
+		.links {
+			scroll-padding: 0 16px;
+		}
+	}
+	/* Nav scroll hint — fade edges */
+	.links {
+		position: relative;
+	}
+	.links::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 24px;
+		background: linear-gradient(90deg, transparent, var(--paper));
+		pointer-events: none;
+		transition: opacity 0.3s ease;
+	}
+	.nav.scrolled .links::after {
+		background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--paper) 92%, transparent));
+	}
+	/* Skills section — prevent title clipping under fixed nav */
+	#skills {
+		scroll-margin-top: 90px;
 	}
 </style>
