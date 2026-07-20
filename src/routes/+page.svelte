@@ -1866,7 +1866,9 @@
 	.acard:hover .frame {
 		border-color: var(--zhu);
 		transform: scale(1.03);
-		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(198, 65, 44, 0.08);
+		box-shadow:
+			0 16px 40px rgba(0, 0, 0, 0.18),
+			0 0 0 1px rgba(198, 65, 44, 0.08);
 	}
 	.acard .card-name {
 		transition: color 0.25s ease;
