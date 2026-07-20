@@ -14,20 +14,6 @@
 	}
 
 	let { children }: Props = $props();
-
-	// Sync dark class with mode-dark for Tailwind dark: variants
-	import { onMount } from 'svelte';
-	onMount(() => {
-		const observer = new MutationObserver(() => {
-			const isDark = document.documentElement.classList.contains('mode-dark');
-			document.documentElement.classList.toggle('dark', isDark);
-		});
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-		// Initial sync
-		const saved = document.documentElement.classList.contains('mode-dark');
-		document.documentElement.classList.toggle('dark', saved);
-		return () => observer.disconnect();
-	});
 </script>
 
 <svelte:head>
