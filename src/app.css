@@ -204,16 +204,15 @@
 	--ink-line: rgba(243, 239, 230, 0.12);
 	--ink-line-strong: rgba(243, 239, 230, 0.25);
 }
-:global(html.mode-dark) body,
-:global(html.mode-dark) {
-	background: var(--paper) !important;
-	color: var(--ink) !important;
+:global(html.mode-dark) body {
+	background: var(--paper);
+	color: var(--ink);
 }
 :global(html.mode-dark) ::-webkit-scrollbar-thumb {
-	background: #3f3a33 !important;
+	background: #3f3a33;
 }
 :global(html.mode-dark) ::-webkit-scrollbar-thumb:hover {
-	background: #5a544b !important;
+	background: #5a544b;
 }
 :global(html.mode-dark) ::selection {
 	background: rgba(224, 71, 58, 0.3);
@@ -223,6 +222,43 @@
 }
 :global(html.mode-dark) .cursor-glow {
 	background: radial-gradient(circle, rgba(224, 71, 58, 0.1) 0%, transparent 70%);
+}
+:global(html.mode-dark) .edition {
+	color: var(--ink);
+}
+:global(html.mode-dark) .mast {
+	border-bottom-color: var(--ink);
+}
+:global(html.mode-dark) .ed-line {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .ed-line b {
+	color: var(--ink);
+}
+:global(html.mode-dark) .band {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .logo .word {
+	color: var(--ink);
+}
+:global(html.mode-dark) .logo .seal-dot {
+	background: var(--zhu);
+}
+:global(html.mode-dark) .back-to-top {
+	border-color: var(--ink-line-strong);
+	background: var(--paper);
+	color: var(--ink);
+}
+:global(html.mode-dark) .back-to-top:hover {
+	background: var(--ink);
+	color: var(--paper);
+	border-color: var(--ink);
+}
+:global(html.mode-dark) .paper-grain {
+	opacity: 0.4;
+}
+:global(html.mode-dark) .page-transition {
+	background: var(--paper);
 }
 
 html,
@@ -490,6 +526,182 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--ink-mute) !important;
+}
+
+/* ============================================================
+   Blog pages — light/dark mode color overrides
+   When html.mode-dark is active, override hardcoded blog colors
+   ============================================================ */
+:global(html.mode-dark) .blog,
+:global(html.mode-dark) .blog-post-wrap {
+	--blog-fg: var(--ink);
+	--blog-muted: var(--ink-mute);
+	--blog-soft: var(--ink-soft);
+	--blog-accent: var(--zhu);
+	--blog-border: var(--ink-line);
+	--blog-border-strong: var(--ink-line-strong);
+	--blog-surface: var(--paper-2);
+	color: var(--ink);
+	background: var(--paper);
+}
+:global(html.mode-dark) .blog .paper-grain,
+:global(html.mode-dark) .blog-post-wrap .paper-grain {
+	opacity: 0.4;
+}
+/* Blog listing overrides */
+:global(html.mode-dark) .blog .tag {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .blog h1 .dim {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .blog .dek {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .blog .meta dt {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .blog .meta dd {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .blog .rule {
+	background: var(--ink);
+}
+:global(html.mode-dark) .blog .row {
+	border-top-color: var(--ink-line);
+}
+:global(html.mode-dark) .blog .row:last-child {
+	border-bottom-color: var(--ink-line);
+}
+:global(html.mode-dark) .blog .date {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .blog .desc {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .blog .cats span {
+	border-color: var(--ink-line-strong);
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .blog .cats span:hover {
+	border-color: var(--zhu);
+	color: var(--zhu);
+}
+:global(html.mode-dark) .blog .foot {
+	border-top-color: var(--ink);
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .blog .back {
+	color: var(--ink);
+}
+:global(html.mode-dark) .blog .rss {
+	border-color: var(--ink-line-strong);
+	color: var(--zhu);
+}
+:global(html.mode-dark) .blog .rss:hover {
+	background: var(--zhu);
+	color: var(--paper);
+}
+/* Blog post overrides */
+:global(html.mode-dark) .blog-post-wrap .prose {
+	color: var(--ink);
+}
+:global(html.mode-dark) .blog-post-wrap .prose :global(a) {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .blog-post-wrap .prose :global(strong) {
+	color: var(--ink);
+}
+:global(html.mode-dark) .blog-post-wrap .prose blockquote {
+	border-left-color: var(--zhu);
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .blog-post-wrap .prose code:not(pre code) {
+	background: rgba(224, 71, 58, 0.12);
+	color: #e0473a;
+}
+:global(html.mode-dark) .blog-post-wrap .prose pre {
+	border-color: rgba(224, 71, 58, 0.18);
+}
+:global(html.mode-dark) .blog-post-wrap .prose :global(thead) {
+	border-bottom-color: var(--ink-line);
+}
+:global(html.mode-dark) .blog-post-wrap .prose :global(td),
+:global(html.mode-dark) .blog-post-wrap .prose :global(th) {
+	border-color: var(--ink-line);
+}
+/* Now page */
+:global(html.mode-dark) .now {
+	color: var(--ink);
+	background: var(--paper);
+}
+:global(html.mode-dark) .now .tag {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .now h1 .dim {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .now .dek {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .now .meta dt {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .now .meta dd {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .now .rule {
+	background: var(--ink);
+}
+:global(html.mode-dark) .now .s-head {
+	border-top-color: var(--ink);
+}
+:global(html.mode-dark) .now li {
+	border-top-color: var(--ink-line);
+}
+:global(html.mode-dark) .now li:last-child {
+	border-bottom-color: var(--ink-line);
+}
+:global(html.mode-dark) .now .it-m {
+	color: var(--ink-mute);
+}
+:global(html.mode-dark) .now .foot {
+	border-top-color: var(--ink);
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .now .back {
+	color: var(--ink);
+}
+/* Error page */
+:global(html.mode-dark) .err {
+	color: var(--ink);
+	background: var(--paper);
+}
+:global(html.mode-dark) .err .tag {
+	color: var(--zhu);
+}
+:global(html.mode-dark) .err .msg {
+	color: var(--ink-soft);
+}
+:global(html.mode-dark) .err .home {
+	color: var(--ink);
+}
+:global(html.mode-dark) .err .wash {
+	background: radial-gradient(45% 45% at 50% 42%, rgba(224, 71, 58, 0.14), transparent 70%);
+}
+:global(html.mode-dark) .err .splash {
+	background: radial-gradient(circle, rgba(224, 71, 58, 0.08) 0%, transparent 70%);
+}
+:global(html.mode-dark) .err .splash-sm {
+	background: radial-gradient(circle, rgba(243, 239, 230, 0.04) 0%, transparent 70%);
+}
+/* Selection color in light mode (ink-edition specific) */
+:global(html:not(.mode-dark)) ::selection {
+	background: rgba(198, 65, 44, 0.22);
+	color: var(--ink);
+}
+:global(html.mode-dark) ::selection {
+	background: rgba(224, 71, 58, 0.3);
 }
 
 /* ============================================================

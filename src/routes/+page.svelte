@@ -389,6 +389,7 @@
 					I build<br /><span class="it">systems</span><br />that <span class="z">learn.</span>
 				</h1>
 				<p class="dek">{DATA.description}</p>
+				<div class="hero-divider" aria-hidden="true"></div>
 			</div>
 			<nav class="index" aria-label="Contents">
 				<p class="index-h">In This Issue</p>
@@ -928,10 +929,18 @@
 	}
 	.dek {
 		font-size: var(--type-dek);
-		line-height: 1.5;
+		line-height: 1.65;
 		max-width: 46ch;
 		margin-top: 26px;
 		color: var(--ink);
+	}
+	.hero-divider {
+		width: 48px;
+		height: 1.5px;
+		background: var(--zhu);
+		opacity: 0.4;
+		margin-top: 28px;
+		margin-bottom: 0;
 	}
 
 	/* Contents index / nav */
@@ -1615,8 +1624,10 @@
 		gap: clamp(16px, 3vw, 44px);
 		align-items: start;
 		border-top: 2px solid var(--ink);
-		padding: clamp(20px, 3vh, 34px) 0 clamp(20px, 3vh, 34px) 18px;
-		transition: padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		padding: clamp(24px, 4vh, 42px) 0 clamp(24px, 4vh, 42px) 18px;
+		transition:
+			padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.35s ease;
 	}
 	.hx:last-child {
 		border-bottom: 2px solid var(--ink);
@@ -1633,6 +1644,7 @@
 	}
 	.hx:hover {
 		padding-left: 30px;
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.04), transparent 40%);
 	}
 	.hx:hover::before {
 		width: 3px;
@@ -1689,6 +1701,17 @@
 		color: var(--zhu);
 		display: inline-block;
 		margin-top: 12px;
+	}
+
+	@media (max-width: 640px) {
+		.hx {
+			grid-template-columns: 40px 1fr;
+			gap: 12px;
+			padding-left: 12px;
+		}
+		.hx-idx {
+			font-size: clamp(1.5rem, 6vw, 2.5rem);
+		}
 	}
 
 	/* Off hours — image galleries */
@@ -1834,10 +1857,16 @@
 		display: block;
 	}
 	.acard .frame {
-		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		border: 1px solid var(--ink-line);
+		transition:
+			border-color 0.35s ease,
+			box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.acard:hover .frame {
+		border-color: var(--zhu);
 		transform: scale(1.03);
+		box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(198, 65, 44, 0.08);
 	}
 	.acard .card-name {
 		transition: color 0.25s ease;
@@ -2113,6 +2142,7 @@
 		position: relative;
 		text-align: center;
 		overflow: hidden;
+		border-top: 3px solid var(--ink);
 	}
 	.contact::before {
 		content: '';
@@ -2160,6 +2190,16 @@
 		letter-spacing: -0.03em;
 		line-height: 0.9;
 		margin: 0 0 28px;
+		position: relative;
+		display: inline-block;
+	}
+	.say::after {
+		content: '';
+		display: block;
+		width: 64px;
+		height: 3px;
+		background: var(--zhu);
+		margin: 18px auto 0;
 	}
 	.email {
 		display: inline-block;
@@ -2307,6 +2347,10 @@
 		.self-grid {
 			grid-template-columns: 1fr;
 		}
+		.hero-left::before {
+			width: 70%;
+			height: 40%;
+		}
 		.index,
 		aside {
 			border-left: none;
@@ -2319,6 +2363,29 @@
 		}
 		.links {
 			scroll-padding: 0 16px;
+		}
+	}
+	@media (max-width: 640px) {
+		.acard {
+			flex: 0 0 clamp(160px, 70vw, 220px);
+		}
+		.acard .frame {
+			border-width: 0.75px;
+		}
+		.acard:hover .frame {
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+		}
+		.say::after {
+			width: 40px;
+			height: 2px;
+		}
+		.favs-mosaic {
+			grid-template-columns: repeat(2, 1fr);
+			grid-auto-rows: 140px;
+		}
+		.fav:first-child {
+			grid-row: span 2;
+			grid-column: span 2;
 		}
 	}
 	/* Nav scroll hint — fade edges */

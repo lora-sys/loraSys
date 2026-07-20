@@ -176,7 +176,7 @@
 	{@html ldJsonTag}
 </svelte:head>
 
-<div class="relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
+<div class="blog-post-wrap relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
 	<div class="flex gap-8">
 		<!-- Main content -->
 		<article class="min-w-0 max-w-3xl flex-1">
@@ -382,7 +382,56 @@
 </div>
 
 <style>
-	/* Code blocks — let Shiki's github-dark-dimmed theme show through */
+	/* Blog post — ink edition palette via CSS custom properties */
+	:global(html.mode-dark) .blog-post-wrap {
+		--blog-bg: var(--paper);
+		--blog-fg: var(--ink);
+		--blog-muted: var(--ink-mute);
+		--blog-soft: var(--ink-soft);
+		--blog-border: var(--ink-line);
+		--blog-border-strong: var(--ink-line-strong);
+		--blog-accent: var(--zhu);
+		--blog-surface: var(--paper-2);
+	}
+	:global(html:not(.mode-dark)) .blog-post-wrap {
+		--blog-bg: #ffffff;
+		--blog-fg: #1a1815;
+		--blog-muted: #8a857c;
+		--blog-soft: #5a544b;
+		--blog-border: rgba(26, 24, 21, 0.12);
+		--blog-border-strong: rgba(26, 24, 21, 0.22);
+		--blog-accent: #c6412c;
+		--blog-surface: #f3efe6;
+	}
+	.blog-post-wrap {
+		background: var(--blog-bg);
+		color: var(--blog-fg);
+		min-height: 100vh;
+	}
+	/* Override Tailwind prose defaults with ink palette */
+	:global(.blog-post-wrap .prose) {
+		--tw-prose-body: var(--blog-fg);
+		--tw-prose-headings: var(--blog-fg);
+		--tw-prose-links: var(--blog-accent);
+		--tw-prose-bold: var(--blog-fg);
+		--tw-prose-muted: var(--blog-muted);
+		color: var(--blog-fg);
+	}
+	:global(.blog-post-wrap .prose blockquote) {
+		border-left-color: var(--blog-accent);
+		color: var(--blog-muted);
+	}
+	:global(.blog-post-wrap .prose code:not(pre code)) {
+		background: color-mix(in srgb, var(--blog-accent) 8%, transparent);
+		color: var(--blog-accent);
+	}
+	:global(.blog-post-wrap .prose pre) {
+		border-color: color-mix(in srgb, var(--blog-accent) 15%, var(--blog-border));
+	}
+	:global(.blog-post-wrap .prose a) {
+		color: var(--blog-accent);
+	}
+	/* Code blocks */
 	:global(.prose pre) {
 		position: relative;
 		border: 1px solid rgba(198, 65, 44, 0.15);

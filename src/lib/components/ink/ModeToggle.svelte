@@ -6,6 +6,7 @@
 	function toggle() {
 		isDark = !isDark;
 		document.documentElement.classList.toggle('mode-dark', isDark);
+		document.documentElement.classList.toggle('dark', isDark);
 		try {
 			localStorage.setItem('ink-mode', isDark ? 'dark' : 'light');
 		} catch {
@@ -18,7 +19,7 @@
 			const saved = localStorage.getItem('ink-mode');
 			if (saved === 'dark') {
 				isDark = true;
-				document.documentElement.classList.add('mode-dark');
+				document.documentElement.classList.add('mode-dark', 'dark');
 			}
 		} catch {
 			/* localStorage unavailable */
@@ -26,7 +27,7 @@
 		const mq = window.matchMedia('(prefers-color-scheme: dark)');
 		if (!localStorage.getItem('ink-mode') && mq.matches) {
 			isDark = true;
-			document.documentElement.classList.add('mode-dark');
+			document.documentElement.classList.add('mode-dark', 'dark');
 		}
 	});
 </script>
