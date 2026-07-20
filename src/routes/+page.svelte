@@ -6,6 +6,7 @@
 	import InkParticles from '$lib/components/ink/InkParticles.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 	import { base } from '$app/paths';
+import type { WorkItem } from '$lib/types';
 
 	/** Resolve image paths relative to the deployment base.
 	 *  Vite-imported assets already include base; runtime strings from data need it prepended. */
@@ -16,7 +17,7 @@
 
 	let animeTrack: HTMLElement | undefined = $state();
 	let animeProg = $state(0);
-	let autoOK = $state(false);
+	let autoOK = false;
 	let animeTimer: ReturnType<typeof setInterval> | undefined;
 
 	function animeScroll(dir: number) {
@@ -39,6 +40,11 @@
 			if (atEnd) animeTrack.scrollTo({ left: 0, behavior: 'smooth' });
 			else animeScroll(1);
 		}, 2500);
+	}
+
+	function onAnimeKey(e: KeyboardEvent) {
+		if (e.key === 'ArrowLeft') { e.preventDefault(); animeScroll(-1); }
+		if (e.key === 'ArrowRight') { e.preventDefault(); animeScroll(1); }
 	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
@@ -90,17 +96,6 @@
 	];
 
 	// Work experience (content added to resume.ts later). Timeline renders these when present.
-	type WorkItem = {
-		company?: string;
-		title?: string;
-		start?: string;
-		end?: string;
-		location?: string;
-		description?: string;
-		badges?: string[];
-		logoUrl?: string;
-		href?: string;
-	};
 	const work = DATA.work as WorkItem[];
 
 	let showWash = $state(false);
@@ -266,6 +261,7 @@
 					});
 
 					// Magnetic hover
+					const magCleanups: Array<{el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void}> = [];
 					gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
 						const move = (e: MouseEvent) => {
 							const r = el.getBoundingClientRect();
@@ -279,10 +275,17 @@
 							gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
 						el.addEventListener('mousemove', move);
 						el.addEventListener('mouseleave', leave);
+						magCleanups.push({el, move, leave});
 					});
 
 					ScrollTrigger.refresh();
-					cleanup = () => ScrollTrigger.getAll().forEach((s: any) => s.kill());
+					cleanup = () => {
+						magCleanups.forEach(({el, move, leave}) => {
+							el.removeEventListener('mousemove', move);
+							el.removeEventListener('mouseleave', leave);
+						});
+						ScrollTrigger.getAll().forEach((s: any) => s.kill());
+					};
 				} catch (err) {
 					console.warn('[ink] motion init failed, static fallback', err);
 				}
@@ -303,10 +306,11 @@
 			window.addEventListener('mousemove', onMove, { passive: true });
 		}
 		// Page transition on internal nav links
+		const pageLinkCleanups: Array<(e: MouseEvent) => void> = [];
 		if (!reduceMotion) {
-			document.querySelectorAll('a[href^="/"]').forEach((a) => {
-				a.addEventListener('click', () => {
-					const el = a as HTMLAnchorElement;
+			document.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach((a) => {
+				const handler = (e: MouseEvent) => {
+					const el = e.currentTarget as HTMLAnchorElement;
 					const href = el.getAttribute('href');
 					if (href && !href.includes('#') && !el.target) {
 						const t = document.querySelector('.page-transition') as HTMLElement | null;
@@ -318,12 +322,19 @@
 							}, 160);
 						}
 					}
-				});
+				};
+				a.addEventListener('click', handler);
+				pageLinkCleanups.push(handler);
 			});
 		}
 		return () => {
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
+			pageLinkCleanups.forEach((h) => {
+				document.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach((a) => {
+					a.removeEventListener('click', h);
+				});
+			});
 			cleanup();
 		};
 	});
@@ -351,6 +362,7 @@
 </svelte:head>
 
 <div class="edition">
+	<a href="#main" class="skip-link">Skip to content</a>
 	<div class="scroll-progress" aria-hidden="true"></div>
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
@@ -375,7 +387,7 @@
 		<a href={DATA.url}>github.com/lora-sys</a>
 	</div>
 
-	<main>
+	<main id="main">
 		<!-- 序 COVER / HERO -->
 		<section id="top" data-chapter="序" class="hero">
 			{#if !reduceMotion}<InkParticles />{/if}
@@ -638,6 +650,10 @@
 				onscroll={updateAnimeProg}
 				onmouseenter={() => animeAuto(false)}
 				onmouseleave={() => autoOK && animeAuto(true)}
+				onkeydown={onAnimeKey}
+				role="region"
+				aria-label="Anime collection"
+				tabindex="0"
 			>
 				{#each DATA.anime as a}
 					<li class="acard">
@@ -732,6 +748,7 @@
 			stroke-width="2"
 			stroke-linecap="round"
 			stroke-linejoin="round"
+			aria-hidden="true"
 		>
 			<path d="m18 15-6-6-6 6" />
 		</svg>
@@ -746,6 +763,28 @@
 		padding: clamp(20px, 3vw, 40px) var(--page-x) 0;
 		font-family: var(--font-serif);
 		color: var(--ink);
+	}
+
+	.skip-link {
+		position: absolute;
+		top: -100%;
+		left: var(--page-x);
+		z-index: 9999;
+		padding: 8px 16px;
+		background: var(--ink);
+		color: var(--paper);
+		font-family: var(--font-label);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-decoration: none;
+		border-radius: 0 0 4px 4px;
+		transition: top 0.2s ease;
+	}
+	.skip-link:focus {
+		top: 0;
+		outline: 2px solid var(--zhu);
+		outline-offset: -2px;
 	}
 
 	/* Atmosphere: paper grain (over all) + soft ink wash (behind content) */
@@ -1951,8 +1990,8 @@
 		justify-content: center;
 		gap: clamp(16px, 3vw, 28px);
 		list-style: none;
-		margin: 28px 0 0;
-		padding: 0;
+		padding: 32px 0 0;
+		margin: 0;
 	}
 	.social-link {
 		display: inline-flex;
@@ -2217,15 +2256,6 @@
 	.email:hover {
 		color: var(--zhu);
 		text-underline-offset: 10px;
-	}
-	.socials {
-		list-style: none;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 14px 28px;
-		padding: 32px 0 0;
-		margin: 0;
 	}
 	.socials a {
 		font-family: var(--font-label);

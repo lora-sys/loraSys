@@ -167,10 +167,10 @@
 	/* Color */
 	--ink: #1a1815;
 	--ink-soft: #5a544b;
-	--ink-mute: #8a857c;
+	--ink-mute: #5c5650;
 	--paper: #f3efe6;
 	--paper-2: #ece7db;
-	--zhu: #c6412c; /* vermilion — single accent */
+	--zhu: #c0392b; /* vermilion — single accent */
 	--ink-line: rgba(26, 24, 21, 0.18);
 	--ink-line-strong: rgba(26, 24, 21, 0.4);
 
@@ -195,10 +195,6 @@
 /* ============================================================
    Light mode defaults (dark mode overrides are in +layout.svelte)
    ============================================================ */
-
-body {
-	cursor: auto !important;
-}
 
 /* Block the gold scrollbar — theme is monochrome */
 ::-webkit-scrollbar-thumb {
@@ -259,7 +255,7 @@ body {
 
 /* Focus visible */
 :focus-visible {
-	outline: 2px solid hsl(45 100% 70% / 0.6);
+	outline: 2px solid var(--zhu);
 	outline-offset: 2px;
 }
 

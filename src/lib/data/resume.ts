@@ -14,6 +14,13 @@ import {
 	FilmIcon
 } from '@lucide/svelte';
 import { marked } from 'marked';
+import type { WorkItem } from '$lib/types';
+
+/** Safely parse markdown to HTML string. marked v9+ returns string synchronously. */
+const toHtml = (md: string): string => {
+	const result = marked.parse(md);
+	return typeof result === 'string' ? result : String(result);
+};
 // Navbar Icons
 import GithubSvg from '$lib/imgs/github.svg';
 import GithubDarkSvg from '$lib/imgs/github-dark.svg';
@@ -43,7 +50,7 @@ import zhihuDarkSvg from '$lib/imgs/zhihu-dark.svg';
 // Your resume data
 export const DATA = {
 	name: 'lora',
-	initials: 'XD',
+	initials: 'L',
 	url: 'https://github.com/lora-sys',
 	img: 'https://avatars.githubusercontent.com/u/176668951?v=4',
 	location: 'Xian, China',
@@ -51,7 +58,7 @@ export const DATA = {
 	description:
 		'Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.',
 	// Pre-compiled HTML from markdown summary — avoids runtime parsing on every render
-	summaryHtml: marked.parse(
+	summaryHtml: toHtml(
 		"Builder of evolving systems. Turning ambitious ideas into reality. Always building, learning, and shipping.\n\nI am a student at [Xi'an Mingde Institute of Technology](/#education), majoring in Computer Science. I love exploring new areas \u2014 AI, blockchain, Web3, and full-stack development. I have participated in hackathons including Monad Hackathon, Monad Blitz, ETH Beijing 2026, and multiple online AI agent hackathons. I have 103+ public repos on GitHub covering AI agents, Web3 dApps, full-stack applications, and more."
 	) as string,
 	// Legacy raw markdown field (kept for backwards compatibility)
@@ -149,7 +156,7 @@ export const DATA = {
 			},
 			LinkedIn: {
 				name: 'LinkedIn',
-				url: 'https://www.linkedin.com/in/sikandar-bhide/',
+				url: 'https://www.linkedin.com/in/lora-sys/',
 				// // icon: Icons.linkedin,
 				icon: LinkedinSvg,
 				navbar: false,
@@ -219,7 +226,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/Newtube-clone',
 			dates: 'Feb 2026 - Present',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A full-stack YouTube clone built with Next.js 15, tRPC, Drizzle ORM, and modern web technologies. Features video upload, streaming, subscriptions, comments, playlists, and creator studio.'
 			) as string,
 			description:
@@ -249,7 +256,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/Daily-Rss',
 			dates: 'Dec 2025 - Jan 2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A sophisticated daily AI news briefing platform that automatically aggregates content from multiple RSS feeds and delivers curated insights via email. Built with Next.js 16, Supabase, and Inngest for cron-based scheduling.'
 			) as string,
 			description:
@@ -275,7 +282,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/TrandingOs',
 			dates: 'Jun 2026 - Present',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A personal AI-powered trading terminal. Chat with an AI agent to analyze markets, create trade plans, run backtests, journal trades, and manage a paper portfolio. Features 40+ agent skills, 9 workflows, and a dark glassmorphism UI.'
 			) as string,
 			description:
@@ -304,7 +311,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/aicompanyos',
 			dates: 'Jun 2026 - Present',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A loop-driven AI execution harness. 8-layer architecture with Planner, Generator, Evaluator, and Evolution agents. Features Writer-Critic feedback loops with consensus locking. 78/78 E2E tests passing.'
 			) as string,
 			description:
@@ -325,7 +332,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/nanochat-studay',
 			dates: 'Mar 2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				"Learning project inspired by Karpathy's nanochat. Implements an end-to-end LLM training pipeline (Pretrain -> SFT -> RL) with custom tokenizer using BPE and regex-based GPT-4 splitting patterns."
 			) as string,
 			description:
@@ -346,7 +353,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/hackthon-agent',
 			dates: 'Feb 2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A multi-agent collaboration protocol built for an online AI agent hackathon. Features real-time AI-agent debate, evidence chain, voting system, and resilience against LLM provider rate limits.'
 			) as string,
 			description:
@@ -367,7 +374,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/demo_monad_hackthon',
 			dates: 'Jan 2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'A Web3 tarot card prediction platform built on the Monad Testnet for the Monad Hackathon. Features interactive 3D tarot cards, TRGL token rewards, prediction markets, and MetaMask integration.'
 			) as string,
 			description:
@@ -393,7 +400,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/moss',
 			dates: '2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'Turns Monad protocol interactions into Agent-callable Capabilities through discover → load → action → simulate. Builds and verifies unsigned transactions; never signs or sends them. TypeScript SDK + MCP server.'
 			) as string,
 			description:
@@ -414,7 +421,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/second-brain',
 			dates: '2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'Personal second-brain dashboard with Obsidian vault sync, knowledge graph visualization, daily notes, and task tracking. Local-first UI that treats your Obsidian Markdown files as the source of truth.'
 			) as string,
 			description:
@@ -435,7 +442,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/monadmon',
 			dates: '2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'The first living creatures on Monad. On-chain creature-raising + PvP battle game. Tamagotchi meets crypto — breed, feed, and battle your digital creatures on Monad Testnet.'
 			) as string,
 			description:
@@ -456,7 +463,7 @@ export const DATA = {
 			href: 'https://github.com/lora-sys/mianshiya-next',
 			dates: '2026',
 			active: true,
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'Enterprise-grade interview practice platform built with Next.js + Spring Boot + Redis + MySQL + Elasticsearch. Features full-text search, token-based auth, rate limiting, circuit breaker patterns, and an interactive calendar for tracking practice history.'
 			) as string,
 			description:
@@ -523,7 +530,7 @@ export const DATA = {
 			location: 'Beijing, China (Kunlun Nest)',
 			description:
 				'Participated in the ETH Beijing Hackathon hosted by PKU Blockchain DAO and WTF Academy. Built an AI Agent x Blockchain project with a team of 5.',
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'Participated in the ETH Beijing Hackathon hosted by PKU Blockchain DAO and WTF Academy. Built an AI Agent x Blockchain project with a team of 5.'
 			) as string,
 			image: '',
@@ -540,7 +547,7 @@ export const DATA = {
 			dates: '2026',
 			location: 'Online',
 			description: 'Participated in the Monad Blitz hackathon, building on the Monad blockchain.',
-			descriptionHtml: marked.parse(
+			descriptionHtml: toHtml(
 				'Participated in the Monad Blitz hackathon, building on the Monad blockchain.'
 			) as string,
 			image: '',
