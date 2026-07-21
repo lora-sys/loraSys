@@ -435,7 +435,7 @@
    INK EDITION — selection + scrollbar (source-order wins over legacy)
    ============================================================ */
 ::selection {
-	background: rgba(198, 65, 44, 0.22);
+	background: rgba(198, 65, 44, 0.18);
 	color: var(--ink);
 }
 ::-webkit-scrollbar {
@@ -449,7 +449,7 @@
 	border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: var(--ink-mute) !important;
+	background: var(--ink) !important;
 }
 
 /* ============================================================

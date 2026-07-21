@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+	<defs>
+		<filter id="grain" x="0" y="0" width="100%" height="100%">
+			<feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2"/>
+			<feColorMatrix values="0 0 0 0 0.1  0 0 0 0 0.09  0 0 0 0 0.08  0 0 0 0.06 0"/>
+		</filter>
+		<pattern id="paper" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+			<rect width="200" height="200" fill="#f3efe6"/>
+			<rect width="200" height="200" filter="url(#grain)" fill="#f3efe6"/>
+		</pattern>
+	</defs>
+
+	<rect width="1200" height="630" fill="url(#paper)"/>
+
+	<!-- Top brand row -->
+	<g transform="translate(80 80)">
+		<rect x="0" y="0" width="56" height="56" rx="6" fill="#c0392b" transform="rotate(-4 28 28)"/>
+		<text x="28" y="40" text-anchor="middle" font-family="Georgia, serif" font-weight="900" font-size="24" fill="#f3efe6">l</text>
+		<text x="84" y="40" font-family="Georgia, serif" font-weight="900" font-size="38" fill="#1a1815" letter-spacing="-1">lora</text>
+	</g>
+
+	<text x="80" y="200" font-family="'Courier New', monospace" font-weight="700" font-size="14" fill="#1a1815" letter-spacing="6">EDITION 2026 · FIELD NOTES ON BUILDING</text>
+
+	<!-- Big headline -->
+	<g font-family="Georgia, serif" font-weight="900" fill="#1a1815" letter-spacing="-3">
+		<text x="80" y="320" font-size="120">I build</text>
+		<text x="80" y="430" font-size="120">systems that</text>
+		<text x="80" y="540" font-size="120">learn.</text>
+	</g>
+
+	<!-- Vermilion underline on "learn" -->
+	<path d="M 580 545 C 640 540 720 552 800 545 S 920 542 950 548" fill="none" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+
+	<!-- Footer URL -->
+	<text x="80" y="600" font-family="'Courier New', monospace" font-weight="700" font-size="16" fill="#1a1815" letter-spacing="3">GITHUB.COM/LORA-SYS</text>
+
+	<!-- Right edge folio -->
+	<g transform="translate(1100 580)" font-family="'Courier New', monospace" font-weight="700" fill="#1a1815">
+		<text text-anchor="end" font-size="14" letter-spacing="3" opacity="0.55">P.01 / 07</text>
+	</g>
+</svg>

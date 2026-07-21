@@ -546,9 +546,10 @@ export const DATA = {
 			title: 'Monad Blitz Hackathon',
 			dates: '2026',
 			location: 'Online',
-			description: 'Participated in the Monad Blitz hackathon, building on the Monad blockchain.',
+			description:
+				'Took part in Monad Blitz — rapid-iteration sprints on Monad. Shipped a working prototype in 48 hours; repo archived after the event.',
 			descriptionHtml: toHtml(
-				'Participated in the Monad Blitz hackathon, building on the Monad blockchain.'
+				'Took part in Monad Blitz — rapid-iteration sprints on Monad. Shipped a working prototype in 48 hours; repo archived after the event.'
 			) as string,
 			image: '',
 			links: []

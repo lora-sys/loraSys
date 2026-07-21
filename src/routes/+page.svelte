@@ -62,27 +62,27 @@ import type { WorkItem } from '$lib/types';
 
 	// Contents index doubles as navigation.
 	const contents = [
-		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', page: 'P.02' },
+		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', total: 7 },
 		{
 			n: '02',
 			cn: '技',
 			title: 'Skills',
 			note: 'what I build with',
 			href: '#skills',
-			page: 'P.03'
+			total: 7
 		},
-		{ n: '03', cn: '歷', title: 'Experience', note: 'work history', href: '#exp', page: 'P.04' },
+		{ n: '03', cn: '歷', title: 'Experience', note: 'work history', href: '#exp', total: 7 },
 		{
 			n: '04',
 			cn: '作',
 			title: 'Selected Work',
 			note: `${DATA.projects.length} projects`,
 			href: '#work',
-			page: 'P.06'
+			total: 7
 		},
-		{ n: '05', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', page: 'P.09' },
-		{ n: '06', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', page: 'P.12' },
-		{ n: '07', cn: '聯', title: 'Say Hello', note: '', href: '#contact', page: 'P.16' }
+		{ n: '05', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', total: 7 },
+		{ n: '06', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', total: 7 },
+		{ n: '07', cn: '聯', title: 'Say Hello', note: '', href: '#contact', total: 7 }
 	];
 
 	// Skills grouped for the kinetic marquee (presentation grouping of flat DATA.skills).
@@ -97,6 +97,12 @@ import type { WorkItem } from '$lib/types';
 
 	// Work experience (content added to resume.ts later). Timeline renders these when present.
 	const work = DATA.work as WorkItem[];
+
+	const builtDate = new Date().toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'short',
+		day: 'numeric'
+	});
 
 	let showWash = $state(false);
 	let scrolled = $state(false);
@@ -292,49 +298,10 @@ import type { WorkItem } from '$lib/types';
 			})();
 		}
 
-		// Cursor glow (desktop only, non-reduced-motion)
-		const glow = document.querySelector('.cursor-glow') as HTMLElement | null;
-		let mouseTimer: ReturnType<typeof setTimeout> | undefined;
-		if (glow && desktop && !reduceMotion) {
-			const onMove = (e: MouseEvent) => {
-				glow.style.left = e.clientX + 'px';
-				glow.style.top = e.clientY + 'px';
-				glow.classList.add('active');
-				clearTimeout(mouseTimer);
-				mouseTimer = setTimeout(() => glow.classList.remove('active'), 1500);
-			};
-			window.addEventListener('mousemove', onMove, { passive: true });
-		}
-		// Page transition on internal nav links
-		const pageLinkCleanups: Array<(e: MouseEvent) => void> = [];
-		if (!reduceMotion) {
-			document.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach((a) => {
-				const handler = (e: MouseEvent) => {
-					const el = e.currentTarget as HTMLAnchorElement;
-					const href = el.getAttribute('href');
-					if (href && !href.includes('#') && !el.target) {
-						const t = document.querySelector('.page-transition') as HTMLElement | null;
-						if (t) {
-							t.style.transition = 'opacity 0.15s ease';
-							t.style.opacity = '1';
-							setTimeout(() => {
-								window.location.href = href;
-							}, 160);
-						}
-					}
-				};
-				a.addEventListener('click', handler);
-				pageLinkCleanups.push(handler);
-			});
-		}
+		// Cursor glow + page-transition removed — were AI-template decoration with no info value.
 		return () => {
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
-			pageLinkCleanups.forEach((h) => {
-				document.querySelectorAll<HTMLAnchorElement>('a[href^="/"]').forEach((a) => {
-					a.removeEventListener('click', h);
-				});
-			});
 			cleanup();
 		};
 	});
@@ -367,8 +334,7 @@ import type { WorkItem } from '$lib/types';
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
 	{#if showWash}<InkWash />{/if}
-	<div class="cursor-glow" aria-hidden="true"></div>
-	<div class="page-transition" aria-hidden="true"></div>
+	<!-- Page transition overlay removed — was AI-template decoration. -->
 	<!-- MASTHEAD -->
 	<header class="mast">
 		<a class="logo" href="#top" aria-label="lora — home">
@@ -395,10 +361,10 @@ import type { WorkItem } from '$lib/types';
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
 					<span class="rule"></span>
-					<span class="folio">P.01</span>
+					<span class="folio">P.01<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 				</div>
 				<h1>
-					I build<br /><span class="it">systems</span><br />that <span class="z">learn.</span>
+					I build<br /><span class="em">systems</span><br />that <span class="z">learn.</span>
 				</h1>
 				<p class="dek">{DATA.description}</p>
 				<div class="hero-divider" aria-hidden="true"></div>
@@ -413,7 +379,7 @@ import type { WorkItem } from '$lib/types';
 									><span class="n">{c.n}</span>
 									{c.cn} &nbsp;{c.title}{#if c.note}<em> — {c.note}</em>{/if}</span
 								>
-								<span class="p">{c.page}</span>
+								<span class="p">{c.n}<span class="p-sep">/</span><span class="p-total">{c.total.toString().padStart(2, '0')}</span></span>
 							</a>
 						</li>
 					{/each}
@@ -433,7 +399,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>The Self</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.02</span>
+				<span class="folio">P.02<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			<div class="self-grid">
 				<div class="bio">{@html DATA.summaryHtml}</div>
@@ -472,7 +438,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>Skills</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.03</span>
+				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			<div class="marquees">
 				{#each skillGroups as g, gi}
@@ -498,7 +464,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>Experience</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.04</span>
+				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			{#if work.length}
 				<ol class="timeline">
@@ -535,16 +501,38 @@ import type { WorkItem } from '$lib/types';
 					{/each}
 				</ol>
 			{:else}
-				<div class="exp-empty">
-					<p class="exp-lead">First chapter,<br /><span class="z">loading.</span></p>
-					<div class="exp-side">
-						<p class="exp-note">
-							No formal roles on the record yet — I've been building independently: 103
-							repositories, hackathons (ETH Beijing, Monad), and self-directed systems. The next
-							entry here is open.
-						</p>
-						<a class="exp-cta" href={`mailto:${DATA.contact.email}`}>Let's talk →</a>
+				<div class="exp-open">
+					<div class="exp-status">
+						<span class="status-dot" aria-hidden="true"></span>
+						<span class="status-label">Open to opportunities</span>
 					</div>
+					<div class="exp-grid">
+						<div class="exp-stat">
+							<span class="exp-num"><span class="count" data-count="103">103</span></span>
+							<span class="exp-cap">public repositories on GitHub</span>
+						</div>
+						<div class="exp-stat">
+							<span class="exp-num"><span class="count" data-count="4">4</span></span>
+							<span class="exp-cap">hackathons shipped (ETH Beijing · Monad ×2 · agent jams)</span>
+						</div>
+						<div class="exp-stat">
+							<span class="exp-num">∞</span>
+							<span class="exp-cap">side systems in flight</span>
+						</div>
+					</div>
+					<div class="exp-actions">
+						<a class="exp-cta exp-cta-primary" href={`mailto:${DATA.contact.email}`}
+							>Get in touch →</a
+						>
+						<a class="exp-cta" href="/resume.pdf" target="_blank" rel="noreferrer"
+							>Download résumé ↓</a
+						>
+					</div>
+					<p class="exp-note">
+						Currently building at the seam of AI agents, Web3, and full-stack systems. The
+						formal work history starts when the right chapter opens — until then, the work
+						above is the record.
+					</p>
 				</div>
 			{/if}
 		</section>
@@ -557,7 +545,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>Selected Work</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.04</span>
+				<span class="folio">P.04<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			<ol class="work">
 				{#each DATA.projects as p, i}
@@ -605,7 +593,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>Hackathons &amp; Signals</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.09</span>
+				<span class="folio">P.05<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			<ol class="hx-list">
 				{#each DATA.hackathons as h, i}
@@ -615,8 +603,16 @@ import type { WorkItem } from '$lib/types';
 							<h3 class="hx-title">{h.title}</h3>
 							<p class="hx-meta"><span class="hx-loc">{h.location}</span> · {h.dates}</p>
 							<p class="hx-desc">{h.description}</p>
-							{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a
-								>{/each}
+							<div class="hx-links">
+								{#each h.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.title} →</a
+									>{/each}
+								{#if h.links.length === 0}
+									<a
+										href={`mailto:${DATA.contact.email}?subject=${encodeURIComponent(h.title + ' details')}`}
+										>Ask for details →</a
+									>
+								{/if}
+							</div>
 						</div>
 					</li>
 				{/each}
@@ -635,7 +631,7 @@ import type { WorkItem } from '$lib/types';
 					<h2>Off Hours</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.12</span>
+				<span class="folio">P.06<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 			</div>
 			<div class="anime-head">
 				<p class="mini-h">Anime</p>
@@ -701,7 +697,7 @@ import type { WorkItem } from '$lib/types';
 			<span class="cn ghost" aria-hidden="true">聯</span>
 			<p class="c-tag">聯 · Say Hello</p>
 			<h2 class="say">Say hello.</h2>
-			<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
+			<p class="email-wrap"><a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a></p>
 			<ul class="socials">
 				{#each socials as s}
 					<li>
@@ -718,17 +714,21 @@ import type { WorkItem } from '$lib/types';
 		</section>
 	</main>
 
-	<footer>
-		<span>◆ {DATA.name} — Field Notes on Building</span>
-		<span>Edition 2026</span>
-		<span class="footer-meta"
-			>Built {new Date().toLocaleDateString('en-US', {
-				year: 'numeric',
-				month: 'short',
-				day: 'numeric'
-			})}</span
-		>
-		<a href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
+	<footer class="colophon">
+		<div class="col-l">
+			<span class="col-mark">◆</span>
+			<span class="col-title">{DATA.name} — Field Notes on Building</span>
+			<span class="col-edition">Edition 2026</span>
+		</div>
+		<div class="col-c">
+			<p class="col-set">Set in <em>Fraunces</em> &amp; <em>Archivo</em></p>
+			<p class="col-print">Hand-inked · Xi&apos;an Mingde Institute of Technology</p>
+		</div>
+		<div class="col-r">
+			<span class="col-built">Built {builtDate}</span>
+			<a href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
+			<a href={DATA.url} target="_blank" rel="noreferrer">github.com/lora-sys →</a>
+		</div>
 	</footer>
 
 	<!-- Back to top -->
@@ -794,7 +794,7 @@ import type { WorkItem } from '$lib/types';
 		left: 0;
 		height: 3px;
 		width: 100%;
-		background: var(--zhu);
+		background: var(--ink);
 		transform: scaleX(0);
 		transform-origin: 0 50%;
 		z-index: 60;
@@ -859,10 +859,10 @@ import type { WorkItem } from '$lib/types';
 		font-family: var(--font-serif);
 		font-optical-sizing: auto;
 		font-weight: 900;
-		font-style: italic;
-		font-size: 20px;
+		font-style: normal;
+		font-size: 22px;
 		line-height: 1;
-		letter-spacing: -0.02em;
+		letter-spacing: -0.04em;
 		text-align: center;
 		transform: rotate(-4deg);
 		box-shadow: inset 0 0 0 2.5px rgba(243, 239, 230, 0.32);
@@ -894,7 +894,7 @@ import type { WorkItem } from '$lib/types';
 		color: var(--ink-soft);
 	}
 	.band .z {
-		color: var(--zhu);
+		color: var(--ink);
 	}
 
 	/* Hero */
@@ -946,7 +946,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: var(--type-label);
 		letter-spacing: 0.3em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink);
 		white-space: nowrap;
 	}
 	h1 {
@@ -958,13 +958,32 @@ import type { WorkItem } from '$lib/types';
 		letter-spacing: -0.03em;
 		margin: 0;
 	}
-	h1 .it {
-		font-weight: 400;
-		font-style: italic;
-		color: var(--ink-soft);
-	}
-	.z {
+	h1 .em {
+		font-weight: 700;
+		font-style: normal;
+		font-size: clamp(2.75rem, 7vw, 6.5rem);
 		color: var(--zhu);
+		position: relative;
+		display: inline-block;
+		padding-bottom: 0.12em;
+		letter-spacing: -0.02em;
+	}
+	h1 .em::after {
+		content: '';
+		position: absolute;
+		left: -2%;
+		right: -2%;
+		bottom: 0.04em;
+		height: 0.14em;
+		background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2 8 C 40 3 90 9 140 4 S 190 3 198 6' fill='none' stroke='%231a1815' stroke-width='1.4' stroke-linecap='round' opacity='0.7'/></svg>")
+			no-repeat center / 100% 100%;
+		pointer-events: none;
+	}
+	h1 .z {
+		font-weight: 700;
+		font-size: clamp(2.75rem, 7vw, 6.5rem);
+		color: var(--zhu);
+		letter-spacing: -0.02em;
 	}
 	.dek {
 		font-size: var(--type-dek);
@@ -976,7 +995,7 @@ import type { WorkItem } from '$lib/types';
 	.hero-divider {
 		width: 48px;
 		height: 1.5px;
-		background: var(--zhu);
+		background: var(--ink);
 		opacity: 0.4;
 		margin-top: 28px;
 		margin-bottom: 0;
@@ -1016,7 +1035,7 @@ import type { WorkItem } from '$lib/types';
 		font-family: var(--font-label);
 		font-weight: 700;
 		font-size: 0.7em;
-		color: var(--zhu);
+		color: var(--ink-mute);
 	}
 	.index em {
 		font-style: italic;
@@ -1028,6 +1047,14 @@ import type { WorkItem } from '$lib/types';
 		font-weight: 700;
 		font-size: 0.7em;
 		color: var(--ink-soft);
+		font-variant-numeric: tabular-nums;
+	}
+	.index .p-sep {
+		opacity: 0.4;
+		margin: 0 2px;
+	}
+	.index .p-total {
+		opacity: 0.55;
 	}
 	.pull {
 		font-style: italic;
@@ -1037,7 +1064,9 @@ import type { WorkItem } from '$lib/types';
 	}
 	.pull b {
 		font-style: normal;
-		color: var(--zhu);
+		color: var(--ink);
+		border-bottom: 2px solid var(--zhu);
+		padding-bottom: 1px;
 	}
 	.hero-watermark {
 		position: absolute;
@@ -1071,7 +1100,7 @@ import type { WorkItem } from '$lib/types';
 		font-family: var(--font-cn);
 		font-weight: 900;
 		font-size: clamp(1.75rem, 3vw, 2.5rem);
-		color: var(--zhu);
+		color: var(--ink);
 	}
 	.sec-title {
 		flex: 1;
@@ -1105,7 +1134,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: var(--type-label);
 		letter-spacing: 0.26em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink);
 		margin: 32px 0 14px;
 	}
 
@@ -1267,7 +1296,16 @@ import type { WorkItem } from '$lib/types';
 		font-family: var(--font-label);
 		font-weight: 700;
 		font-size: 0.8rem;
+		color: var(--ink);
+		border-bottom: 1px solid var(--ink-line-strong);
+		padding-bottom: 1px;
+		transition:
+			color 0.25s ease,
+			border-color 0.25s ease;
+	}
+	.row-links a:hover {
 		color: var(--zhu);
+		border-bottom-color: var(--zhu);
 	}
 	.row-date {
 		display: block;
@@ -1372,7 +1410,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: 0.7rem;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink);
 	}
 	.hk-date {
 		font-family: var(--font-label);
@@ -1425,7 +1463,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: var(--type-label);
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink);
 	}
 	.mviewport {
 		flex: 1;
@@ -1462,7 +1500,7 @@ import type { WorkItem } from '$lib/types';
 		transform: scale(1.08);
 	}
 	.sep {
-		color: var(--zhu);
+		color: var(--ink-mute);
 		opacity: 0.55;
 		font-size: clamp(0.9rem, 1.5vw, 1.3rem);
 	}
@@ -1531,7 +1569,7 @@ import type { WorkItem } from '$lib/types';
 		height: 16px;
 		border-radius: 50%;
 		background: var(--paper);
-		border: 2.5px solid var(--zhu);
+		border: 2.5px solid var(--ink);
 	}
 	.tl-date {
 		font-family: var(--font-label);
@@ -1566,7 +1604,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: 0.8rem;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink-soft);
 		margin-top: 4px;
 	}
 	.tl-desc {
@@ -1607,46 +1645,112 @@ import type { WorkItem } from '$lib/types';
 			padding-top: 2px;
 		}
 	}
-	/* Experience empty state */
-	.exp-empty {
+	/* Experience open state */
+	.exp-open {
 		display: grid;
-		grid-template-columns: 1.3fr 1fr;
-		gap: clamp(24px, 4vw, 64px);
-		align-items: end;
+		gap: clamp(24px, 4vh, 40px);
 	}
-	.exp-lead {
+	.exp-status {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--ink);
+	}
+	.status-dot {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--zhu);
+		box-shadow: 0 0 0 4px rgba(198, 65, 44, 0.18);
+		animation: statusPulse 2.4s ease-in-out infinite;
+	}
+	@keyframes statusPulse {
+		0%,
+		100% {
+			box-shadow: 0 0 0 4px rgba(198, 65, 44, 0.18);
+		}
+		50% {
+			box-shadow: 0 0 0 8px rgba(198, 65, 44, 0.05);
+		}
+	}
+	.exp-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0;
+		border-top: 1px solid var(--ink-line);
+		border-bottom: 1px solid var(--ink-line);
+	}
+	.exp-stat {
+		padding: clamp(20px, 3vh, 36px) clamp(16px, 2vw, 28px);
+		border-right: 1px solid var(--ink-line);
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.exp-stat:last-child {
+		border-right: none;
+	}
+	.exp-num {
 		font-family: var(--font-serif);
 		font-weight: 900;
 		font-optical-sizing: auto;
-		font-size: clamp(2.5rem, 6.5vw, 5.5rem);
-		line-height: 0.92;
+		font-size: clamp(3rem, 7vw, 5.5rem);
+		line-height: 0.9;
 		letter-spacing: -0.03em;
-		margin: 0;
+		color: var(--ink);
 	}
-	.exp-note {
-		line-height: 1.6;
-		color: var(--ink-soft);
-		max-width: 46ch;
-	}
-	.exp-cta {
-		display: inline-block;
-		margin-top: 18px;
+	.exp-cap {
 		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 0.85rem;
+		font-size: 0.75rem;
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
-		border-bottom: 2px solid var(--zhu);
-		padding-bottom: 3px;
-		transition: color 0.25s ease;
+		color: var(--ink-soft);
+		line-height: 1.5;
 	}
-	.exp-cta:hover {
-		color: var(--zhu);
+	.exp-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px 28px;
+		align-items: center;
+	}
+	.exp-cta-primary {
+		background: var(--ink);
+		color: var(--paper);
+		border-bottom-color: var(--ink);
+		padding: 10px 18px;
+		transition:
+			background 0.25s ease,
+			color 0.25s ease;
+	}
+	.exp-cta-primary:hover {
+		background: var(--zhu);
+		color: var(--paper);
+		border-bottom-color: var(--zhu);
+	}
+	.exp-note {
+		line-height: 1.65;
+		color: var(--ink-soft);
+		max-width: 62ch;
+		font-size: 0.98rem;
+		border-left: 2px solid var(--ink-line-strong);
+		padding-left: 18px;
 	}
 	@media (max-width: 760px) {
-		.exp-empty {
+		.exp-grid {
 			grid-template-columns: 1fr;
-			align-items: start;
+		}
+		.exp-stat {
+			border-right: none;
+			border-bottom: 1px solid var(--ink-line);
+			padding: 22px 0;
+		}
+		.exp-stat:last-child {
+			border-bottom: none;
 		}
 	}
 
@@ -1725,7 +1829,8 @@ import type { WorkItem } from '$lib/types';
 		margin-top: 10px;
 	}
 	.hx-loc {
-		color: var(--zhu);
+		color: var(--ink);
+		font-weight: 700;
 	}
 	.hx-desc {
 		line-height: 1.55;
@@ -1733,13 +1838,26 @@ import type { WorkItem } from '$lib/types';
 		margin-top: 12px;
 		max-width: 66ch;
 	}
+	.hx-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 14px;
+		margin-top: 12px;
+	}
 	.hx a {
 		font-family: var(--font-label);
 		font-weight: 700;
 		font-size: 0.8rem;
+		color: var(--ink);
+		border-bottom: 1px solid var(--ink-line-strong);
+		padding-bottom: 1px;
+		transition:
+			color 0.25s ease,
+			border-color 0.25s ease;
+	}
+	.hx a:hover {
 		color: var(--zhu);
-		display: inline-block;
-		margin-top: 12px;
+		border-bottom-color: var(--zhu);
 	}
 
 	@media (max-width: 640px) {
@@ -1937,7 +2055,7 @@ import type { WorkItem } from '$lib/types';
 	.track-bar-fill {
 		position: absolute;
 		inset: 0;
-		background: var(--zhu);
+		background: var(--ink);
 		transform-origin: 0 50%;
 		transform: scaleX(0);
 		transition: transform 0.15s ease-out;
@@ -2220,7 +2338,7 @@ import type { WorkItem } from '$lib/types';
 		font-size: var(--type-label);
 		letter-spacing: 0.3em;
 		text-transform: uppercase;
-		color: var(--zhu);
+		color: var(--ink);
 		margin-bottom: 16px;
 	}
 	.say {
@@ -2239,8 +2357,11 @@ import type { WorkItem } from '$lib/types';
 		display: block;
 		width: 64px;
 		height: 3px;
-		background: var(--zhu);
+		background: var(--ink);
 		margin: 18px auto 0;
+	}
+	.email-wrap {
+		margin: 0 0 28px;
 	}
 	.email {
 		display: inline-block;
@@ -2248,14 +2369,16 @@ import type { WorkItem } from '$lib/types';
 		text-decoration: underline;
 		text-underline-offset: 6px;
 		text-decoration-thickness: 2px;
-		text-decoration-color: var(--zhu);
+		text-decoration-color: var(--ink);
 		transition:
 			color 0.25s ease,
-			text-underline-offset 0.25s ease;
+			text-underline-offset 0.25s ease,
+			text-decoration-color 0.25s ease;
 	}
 	.email:hover {
 		color: var(--zhu);
 		text-underline-offset: 10px;
+		text-decoration-color: var(--zhu);
 	}
 	.socials a {
 		font-family: var(--font-label);
@@ -2267,20 +2390,100 @@ import type { WorkItem } from '$lib/types';
 		color: var(--zhu);
 	}
 
-	/* Footer */
-	footer {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 12px 24px;
-		justify-content: space-between;
+	/* Footer — three-column colophon, matches the editorial frame */
+	footer.colophon {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr 1fr;
+		gap: clamp(20px, 3vw, 48px);
 		border-top: 2.5px solid var(--ink);
 		margin-top: var(--page-y);
-		padding: 20px 0 40px;
+		padding: 36px 0 44px;
 		font-family: var(--font-label);
 		font-size: 0.72rem;
 		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: var(--ink-soft);
+	}
+	.col-l,
+	.col-c,
+	.col-r {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+	}
+	.col-l .col-mark {
+		font-size: 1.1rem;
+		color: var(--zhu);
+		letter-spacing: 0;
+	}
+	.col-l .col-title {
+		font-weight: 900;
+		color: var(--ink);
+		letter-spacing: 0.04em;
+	}
+	.col-l .col-edition {
+		font-size: 0.66rem;
+		opacity: 0.7;
+		letter-spacing: 0.22em;
+	}
+	.col-c {
+		font-style: italic;
+		text-transform: none;
+		letter-spacing: 0.02em;
+		font-size: 0.78rem;
+		color: var(--ink-soft);
+		justify-content: center;
+		border-left: 1px solid var(--ink-line);
+		border-right: 1px solid var(--ink-line);
+		padding: 0 clamp(12px, 2vw, 28px);
+	}
+	.col-c .col-set em {
+		font-style: italic;
+		font-weight: 700;
+		color: var(--ink);
+	}
+	.col-c .col-print {
+		font-size: 0.68rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		margin-top: 4px;
+		opacity: 0.65;
+	}
+	.col-r {
+		text-align: right;
+		gap: 4px;
+		font-size: 0.7rem;
+		letter-spacing: 0.1em;
+	}
+	.col-r a {
+		color: var(--ink);
+		border-bottom: 1px solid transparent;
+		transition:
+			color 0.25s ease,
+			border-color 0.25s ease;
+	}
+	.col-r a:hover {
+		color: var(--zhu);
+		border-bottom-color: var(--zhu);
+	}
+	.col-r .col-built {
+		opacity: 0.6;
+	}
+	@media (max-width: 760px) {
+		footer.colophon {
+			grid-template-columns: 1fr;
+			gap: 24px;
+		}
+		.col-c {
+			border-left: none;
+			border-right: none;
+			border-top: 1px solid var(--ink-line);
+			border-bottom: 1px solid var(--ink-line);
+			padding: 20px 0;
+		}
+		.col-r {
+			text-align: left;
+		}
 	}
 
 	/* Back to top button */
@@ -2322,33 +2525,8 @@ import type { WorkItem } from '$lib/types';
 		transform: scale(0.92);
 	}
 
-	/* Page transition overlay */
-	.page-transition {
-		position: fixed;
-		inset: 0;
-		background: var(--paper);
-		z-index: 100;
-		pointer-events: none;
-		opacity: 0;
-	}
+	/* Page transition overlay — removed. */
 
-	/* Cursor glow — vermilion light follows mouse */
-	.cursor-glow {
-		position: fixed;
-		width: 300px;
-		height: 300px;
-		border-radius: 50%;
-		pointer-events: none;
-		z-index: 0;
-		background: radial-gradient(circle, rgba(198, 65, 44, 0.06) 0%, transparent 70%);
-		transform: translate(-50%, -50%);
-		transition: opacity 0.4s ease;
-		opacity: 0;
-		will-change: left, top;
-	}
-	.cursor-glow.active {
-		opacity: 1;
-	}
 	/* Chapter watermark — large faint section numbers */
 	.sec::before {
 		content: attr(data-chapter);

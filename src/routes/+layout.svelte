@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import { base } from '$app/paths';
 	// INK EDITION fonts — Latin display self-hosted; CN uses system serif (blog is CN-heavy;
 	// self-hosting full CJK would be MBs). Fraunces 'standard' axis (wght+opsz) keeps payload light.
 	import '@fontsource-variable/fraunces/standard.css';
@@ -19,6 +20,12 @@
 <svelte:head>
 	<meta name="theme-color" content="#f3efe6" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+	<link rel="icon" type="image/svg+xml" href="{base}/favicon.svg" />
+	<meta property="og:image" content="{base}/og-image.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="{base}/og-image.png" />
 </svelte:head>
 
 <Navbar />
