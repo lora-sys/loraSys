@@ -50,9 +50,12 @@ import type { WorkItem } from '$lib/types';
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
 
 	// Graceful INK cover if an (external) project image 404s.
+	// Monogram style: large initial + title, vermilion accent.
 	function coverFallback(title: string): string {
-		const t = title.replace(/&/g, '&amp;').replace(/</g, '&lt;').slice(0, 22);
-		return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect width='100%25' height='100%25' fill='%23ece7db'/><text x='18' y='46' font-family='Georgia,serif' font-size='22' font-weight='900' fill='%231a1815'>${t}</text><text x='18' y='182' font-family='monospace' font-size='11' letter-spacing='2' fill='%23c6412c'>lora://project</text></svg>`;
+		const safe = title.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+		const initial = (safe.trim().charAt(0) || 'L').toUpperCase();
+		const t = safe.slice(0, 22);
+		return `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect width='100%25' height='100%25' fill='%23ece7db'/><text x='28' y='128' font-family='Georgia,serif' font-size='108' font-weight='900' fill='%23c0392b' opacity='0.85'>${initial}</text><line x1='28' y1='146' x2='292' y2='146' stroke='%231a1815' stroke-width='1.2'/><text x='28' y='172' font-family='Georgia,serif' font-size='14' font-weight='700' fill='%231a1815'>${t}</text></svg>`;
 	}
 	function onImgError(e: Event, title: string) {
 		const img = e.currentTarget as HTMLImageElement;
@@ -254,12 +257,12 @@ import type { WorkItem } from '$lib/types';
 						const obj = { v: 0 };
 						ScrollTrigger.create({
 							trigger: el,
-							start: 'top 92%',
+							start: 'top 75%',
 							once: true,
 							onEnter: () =>
 								gsap.to(obj, {
 									v: target,
-									duration: 1.4,
+									duration: 1.0,
 									ease: 'power2.out',
 									onUpdate: () => (el.textContent = String(Math.round(obj.v)))
 								})
@@ -368,6 +371,11 @@ import type { WorkItem } from '$lib/types';
 				</h1>
 				<p class="dek">{DATA.description}</p>
 				<div class="hero-divider" aria-hidden="true"></div>
+				<ul class="hero-bullets">
+					<li><span class="arrow">→</span> Shipping <b>AI agents</b><span class="tag">LangGraph · MCP</span></li>
+					<li><span class="arrow">→</span> Built <b>Monad Blitz</b> prototype<span class="tag">48h sprint</span></li>
+					<li><span class="arrow">→</span> <b>103 repos</b> &amp; counting<span class="tag">always shipping</span></li>
+				</ul>
 			</div>
 			<nav class="index" aria-label="Contents">
 				<p class="index-h">In This Issue</p>
@@ -387,6 +395,10 @@ import type { WorkItem } from '$lib/types';
 				<p class="pull">
 					“Turning ambitious ideas into <b>reality</b> — always building, learning, and shipping.”
 				</p>
+				<a class="now-link" href={`${base}/now`}>
+					<span>Currently building — /now</span>
+					<span class="now-arrow" aria-hidden="true">→</span>
+				</a>
 			</nav>
 			<span class="hero-watermark" aria-hidden="true">Edition<br />2026</span>
 		</section>
@@ -998,7 +1010,42 @@ import type { WorkItem } from '$lib/types';
 		background: var(--ink);
 		opacity: 0.4;
 		margin-top: 28px;
-		margin-bottom: 0;
+		margin-bottom: 22px;
+	}
+
+	.hero-bullets {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.hero-bullets li {
+		display: flex;
+		align-items: baseline;
+		gap: 10px;
+		flex-wrap: wrap;
+		font-size: 1.02rem;
+		line-height: 1.45;
+		color: var(--ink);
+	}
+	.hero-bullets .arrow {
+		color: var(--zhu);
+		font-weight: 700;
+		flex: 0 0 auto;
+	}
+	.hero-bullets b {
+		font-weight: 700;
+	}
+	.hero-bullets .tag {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		padding-left: 8px;
+		border-left: 1px solid var(--ink-line);
 	}
 
 	/* Contents index / nav */
@@ -1067,6 +1114,36 @@ import type { WorkItem } from '$lib/types';
 		color: var(--ink);
 		border-bottom: 2px solid var(--zhu);
 		padding-bottom: 1px;
+	}
+
+	.now-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 16px;
+		padding: 6px 0;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: var(--ink);
+		border-bottom: 1px solid var(--ink);
+		transition:
+			color 0.25s ease,
+			border-color 0.25s ease,
+			gap 0.25s ease;
+	}
+	.now-link:hover {
+		color: var(--zhu);
+		border-color: var(--zhu);
+		gap: 12px;
+	}
+	.now-link .now-arrow {
+		transition: transform 0.25s ease;
+	}
+	.now-link:hover .now-arrow {
+		transform: translateX(2px);
 	}
 	.hero-watermark {
 		position: absolute;

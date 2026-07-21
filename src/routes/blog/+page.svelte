@@ -116,7 +116,7 @@
 	}
 	h1 .dim {
 		color: var(--ink-mute);
-		font-style: italic;
+		font-style: normal;
 		font-weight: 400;
 	}
 	.head-side {
@@ -142,7 +142,8 @@
 		color: var(--ink-mute);
 	}
 	.meta dd {
-		color: var(--zhu);
+		color: var(--ink);
+		font-weight: 700;
 		margin: 0;
 	}
 	.rule {

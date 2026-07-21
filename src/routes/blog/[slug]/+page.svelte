@@ -394,14 +394,14 @@
 		--blog-surface: var(--paper-2);
 	}
 	:global(html:not(.mode-dark)) .blog-post-wrap {
-		--blog-bg: #ffffff;
-		--blog-fg: #1a1815;
-		--blog-muted: #8a857c;
-		--blog-soft: #5a544b;
-		--blog-border: rgba(26, 24, 21, 0.12);
-		--blog-border-strong: rgba(26, 24, 21, 0.22);
-		--blog-accent: #c6412c;
-		--blog-surface: #f3efe6;
+		--blog-bg: var(--paper);
+		--blog-fg: var(--ink);
+		--blog-muted: var(--ink-mute);
+		--blog-soft: var(--ink-soft);
+		--blog-border: var(--ink-line);
+		--blog-border-strong: var(--ink-line-strong);
+		--blog-accent: var(--zhu);
+		--blog-surface: var(--paper-2);
 	}
 	.blog-post-wrap {
 		background: var(--blog-bg);
