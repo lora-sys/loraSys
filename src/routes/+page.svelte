@@ -6,7 +6,7 @@
 	import InkParticles from '$lib/components/ink/InkParticles.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 	import { base } from '$app/paths';
-import type { WorkItem } from '$lib/types';
+	import type { WorkItem } from '$lib/types';
 
 	/** Resolve image paths relative to the deployment base.
 	 *  Vite-imported assets already include base; runtime strings from data need it prepended. */
@@ -43,12 +43,20 @@ import type { WorkItem } from '$lib/types';
 	}
 
 	function onAnimeKey(e: KeyboardEvent) {
-		if (e.key === 'ArrowLeft') { e.preventDefault(); animeScroll(-1); }
-		if (e.key === 'ArrowRight') { e.preventDefault(); animeScroll(1); }
+		if (e.key === 'ArrowLeft') {
+			e.preventDefault();
+			animeScroll(-1);
+		}
+		if (e.key === 'ArrowRight') {
+			e.preventDefault();
+			animeScroll(1);
+		}
 	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
-	const contactSocials = socials.filter((s) => ['GitHub', 'LinkedIn', 'X', 'email'].includes(s.name));
+	const contactSocials = socials.filter((s) =>
+		['GitHub', 'LinkedIn', 'X', 'email'].includes(s.name)
+	);
 
 	// Graceful INK cover if an (external) project image 404s.
 	// Monogram style: large initial + title, vermilion accent.
@@ -271,7 +279,11 @@ import type { WorkItem } from '$lib/types';
 					});
 
 					// Magnetic hover
-					const magCleanups: Array<{el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void}> = [];
+					const magCleanups: Array<{
+						el: HTMLElement;
+						move: (e: MouseEvent) => void;
+						leave: () => void;
+					}> = [];
 					gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
 						const move = (e: MouseEvent) => {
 							const r = el.getBoundingClientRect();
@@ -285,12 +297,12 @@ import type { WorkItem } from '$lib/types';
 							gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
 						el.addEventListener('mousemove', move);
 						el.addEventListener('mouseleave', leave);
-						magCleanups.push({el, move, leave});
+						magCleanups.push({ el, move, leave });
 					});
 
 					ScrollTrigger.refresh();
 					cleanup = () => {
-						magCleanups.forEach(({el, move, leave}) => {
+						magCleanups.forEach(({ el, move, leave }) => {
 							el.removeEventListener('mousemove', move);
 							el.removeEventListener('mouseleave', leave);
 						});
@@ -365,7 +377,9 @@ import type { WorkItem } from '$lib/types';
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
 					<span class="rule"></span>
-					<span class="folio">P.01<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+					<span class="folio"
+						>P.01<span class="folio-sep">/</span><span class="folio-total">07</span></span
+					>
 				</div>
 				<h1>
 					I build<br /><span class="em">systems</span><br />that <span class="z">learn.</span>
@@ -373,9 +387,21 @@ import type { WorkItem } from '$lib/types';
 				<p class="dek">{DATA.description}</p>
 				<div class="hero-divider" aria-hidden="true"></div>
 				<ul class="hero-bullets">
-					<li><span class="arrow">→</span> Shipping <b>AI agents</b><span class="tag">LangGraph · MCP</span></li>
-					<li><span class="arrow">→</span> Built <b>Monad Blitz</b> prototype<span class="tag">48h sprint</span></li>
-					<li><span class="arrow">→</span> <b>103 repos</b> &amp; counting<span class="tag">always shipping</span></li>
+					<li>
+						<span class="arrow">→</span> Shipping <b>AI agents</b><span class="tag"
+							>LangGraph · MCP</span
+						>
+					</li>
+					<li>
+						<span class="arrow">→</span> Built <b>Monad Blitz</b> prototype<span class="tag"
+							>48h sprint</span
+						>
+					</li>
+					<li>
+						<span class="arrow">→</span> <b>103 repos</b> &amp; counting<span class="tag"
+							>always shipping</span
+						>
+					</li>
 				</ul>
 			</div>
 			<nav class="index" aria-label="Contents">
@@ -388,7 +414,11 @@ import type { WorkItem } from '$lib/types';
 									><span class="n">{c.n}</span>
 									{c.cn} &nbsp;{c.title}{#if c.note}<em> — {c.note}</em>{/if}</span
 								>
-								<span class="p">{c.n}<span class="p-sep">/</span><span class="p-total">{c.total.toString().padStart(2, '0')}</span></span>
+								<span class="p"
+									>{c.n}<span class="p-sep">/</span><span class="p-total"
+										>{c.total.toString().padStart(2, '0')}</span
+									></span
+								>
 							</a>
 						</li>
 					{/each}
@@ -412,7 +442,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>The Self</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.02<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.02<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			<div class="self-grid">
 				<div class="bio">{@html DATA.summaryHtml}</div>
@@ -451,7 +483,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>Skills</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			<div class="marquees">
 				{#each skillGroups as g, gi}
@@ -477,7 +511,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>Experience</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			{#if work.length}
 				<ol class="timeline">
@@ -542,9 +578,9 @@ import type { WorkItem } from '$lib/types';
 						>
 					</div>
 					<p class="exp-note">
-						Currently building at the seam of AI agents, Web3, and full-stack systems. The
-						formal work history starts when the right chapter opens — until then, the work
-						above is the record.
+						Currently building at the seam of AI agents, Web3, and full-stack systems. The formal
+						work history starts when the right chapter opens — until then, the work above is the
+						record.
 					</p>
 				</div>
 			{/if}
@@ -558,7 +594,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>Selected Work</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.04<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.04<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			<ol class="work">
 				{#each DATA.projects as p, i}
@@ -606,7 +644,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>Hackathons &amp; Signals</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.05<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.05<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			<ol class="hx-list">
 				{#each DATA.hackathons as h, i}
@@ -644,7 +684,9 @@ import type { WorkItem } from '$lib/types';
 					<h2>Off Hours</h2>
 					{@render brush()}
 				</div>
-				<span class="folio">P.06<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio"
+					>P.06<span class="folio-sep">/</span><span class="folio-total">07</span></span
+				>
 			</div>
 			<div class="anime-head">
 				<p class="mini-h">Anime</p>
@@ -710,7 +752,9 @@ import type { WorkItem } from '$lib/types';
 			<span class="cn ghost" aria-hidden="true">聯</span>
 			<p class="c-tag">聯 · Say Hello</p>
 			<h2 class="say">Say hello.</h2>
-			<p class="email-wrap"><a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a></p>
+			<p class="email-wrap">
+				<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
+			</p>
 			<ul class="socials">
 				{#each contactSocials as s}
 					<li>
@@ -735,7 +779,9 @@ import type { WorkItem } from '$lib/types';
 		</div>
 		<div class="col-c">
 			<p class="col-set">Set in <em>Fraunces</em> &amp; <em>Archivo</em></p>
-			<p class="col-print">Hand-inked · {DATA.education[0]?.school ?? 'Xi\'an Mingde Institute of Technology'}</p>
+			<p class="col-print">
+				Hand-inked · {DATA.education[0]?.school ?? "Xi'an Mingde Institute of Technology"}
+			</p>
 		</div>
 		<div class="col-r">
 			<span class="col-built">Built {builtDate}</span>

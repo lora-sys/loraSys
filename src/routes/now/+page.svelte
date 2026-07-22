@@ -91,28 +91,48 @@
 		<div class="elsewhere">
 			<p class="elsewhere-tag">Elsewhere · 散</p>
 			<div class="elsewhere-grid">
-				<a href="https://peerlist.io/mierpiter" target="_blank" rel="noreferrer" class="elsewhere-link">
+				<a
+					href="https://peerlist.io/mierpiter"
+					target="_blank"
+					rel="noreferrer"
+					class="elsewhere-link"
+				>
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">PeerList</div>
 						<div class="it-m">dev community</div>
 					</div>
 				</a>
-				<a href="https://www.youtube.com/@MierPiter33280" target="_blank" rel="noreferrer" class="elsewhere-link">
+				<a
+					href="https://www.youtube.com/@MierPiter33280"
+					target="_blank"
+					rel="noreferrer"
+					class="elsewhere-link"
+				>
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">YouTube</div>
 						<div class="it-m">videos · tech</div>
 					</div>
 				</a>
-				<a href="https://space.bilibili.com/431821023" target="_blank" rel="noreferrer" class="elsewhere-link">
+				<a
+					href="https://space.bilibili.com/431821023"
+					target="_blank"
+					rel="noreferrer"
+					class="elsewhere-link"
+				>
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">Bilibili</div>
 						<div class="it-m">视频 · 技术</div>
 					</div>
 				</a>
-				<a href="https://www.zhihu.com/people/lorry-23-28-30" target="_blank" rel="noreferrer" class="elsewhere-link">
+				<a
+					href="https://www.zhihu.com/people/lorry-23-28-30"
+					target="_blank"
+					rel="noreferrer"
+					class="elsewhere-link"
+				>
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">ZhiHu</div>
