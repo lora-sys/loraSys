@@ -48,6 +48,7 @@ import type { WorkItem } from '$lib/types';
 	}
 
 	const socials = Object.values(DATA.contact.social).filter((s) => s.url);
+	const contactSocials = socials.filter((s) => ['GitHub', 'LinkedIn', 'X', 'email'].includes(s.name));
 
 	// Graceful INK cover if an (external) project image 404s.
 	// Monogram style: large initial + title, vermilion accent.
@@ -711,7 +712,7 @@ import type { WorkItem } from '$lib/types';
 			<h2 class="say">Say hello.</h2>
 			<p class="email-wrap"><a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a></p>
 			<ul class="socials">
-				{#each socials as s}
+				{#each contactSocials as s}
 					<li>
 						<a href={s.url} target="_blank" rel="noopener noreferrer" class="social-link">
 							{#if s.icon}
@@ -734,7 +735,7 @@ import type { WorkItem } from '$lib/types';
 		</div>
 		<div class="col-c">
 			<p class="col-set">Set in <em>Fraunces</em> &amp; <em>Archivo</em></p>
-			<p class="col-print">Hand-inked · Xi&apos;an Mingde Institute of Technology</p>
+			<p class="col-print">Hand-inked · {DATA.education[0]?.school ?? 'Xi\'an Mingde Institute of Technology'}</p>
 		</div>
 		<div class="col-r">
 			<span class="col-built">Built {builtDate}</span>
@@ -1409,18 +1410,18 @@ import type { WorkItem } from '$lib/types';
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		filter: saturate(0.85) contrast(1.02);
+		filter: grayscale(0.95) saturate(0.6) contrast(1.02);
 		transition:
 			transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-			filter 0.5s ease;
+			filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 	}
 	.row:hover .row-thumb {
 		border-color: var(--zhu);
 		box-shadow: 0 8px 30px rgba(198, 65, 44, 0.12);
 	}
 	.row:hover .row-thumb img {
-		transform: scale(1.08);
-		filter: saturate(1.1) contrast(1.05);
+		transform: scale(1.04);
+		filter: grayscale(0) saturate(1) contrast(1);
 	}
 
 	/* Hackathons — ledger: outlined index + top-bar draw on hover */

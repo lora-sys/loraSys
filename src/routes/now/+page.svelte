@@ -7,8 +7,8 @@
 			n: '01',
 			title: 'Building',
 			items: [
-				{ t: 'lora-sys portfolio — this site', m: 'active · daily' },
-				{ t: 'AI agent orchestration experiments', m: 'active · weekly' }
+				{ t: 'Agent sandbox: MCP tools + LangGraph', m: 'building · weekly' },
+				{ t: 'Designing generative canvas + motion', m: 'exploring · weekly' }
 			]
 		},
 		{
@@ -86,6 +86,40 @@
 					</ul>
 				</section>
 			{/each}
+		</div>
+
+		<div class="elsewhere">
+			<p class="elsewhere-tag">Elsewhere · 散</p>
+			<div class="elsewhere-grid">
+				<a href="https://peerlist.io/mierpiter" target="_blank" rel="noreferrer" class="elsewhere-link">
+					<span class="arrow">→</span>
+					<div>
+						<div class="it-t">PeerList</div>
+						<div class="it-m">dev community</div>
+					</div>
+				</a>
+				<a href="https://www.youtube.com/@MierPiter33280" target="_blank" rel="noreferrer" class="elsewhere-link">
+					<span class="arrow">→</span>
+					<div>
+						<div class="it-t">YouTube</div>
+						<div class="it-m">videos · tech</div>
+					</div>
+				</a>
+				<a href="https://space.bilibili.com/431821023" target="_blank" rel="noreferrer" class="elsewhere-link">
+					<span class="arrow">→</span>
+					<div>
+						<div class="it-t">Bilibili</div>
+						<div class="it-m">视频 · 技术</div>
+					</div>
+				</a>
+				<a href="https://www.zhihu.com/people/lorry-23-28-30" target="_blank" rel="noreferrer" class="elsewhere-link">
+					<span class="arrow">→</span>
+					<div>
+						<div class="it-t">ZhiHu</div>
+						<div class="it-m">知乎 · 问答</div>
+					</div>
+				</a>
+			</div>
 		</div>
 
 		<div class="foot">
@@ -284,5 +318,53 @@
 			align-items: flex-start;
 			gap: 20px;
 		}
+	}
+	.elsewhere {
+		margin-top: clamp(40px, 7vh, 64px);
+	}
+	.elsewhere-tag {
+		font-family: var(--font-label);
+		font-weight: 700;
+		font-size: var(--type-label);
+		letter-spacing: 0.32em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		margin-bottom: 20px;
+	}
+	.elsewhere-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 0;
+	}
+	.elsewhere-link {
+		display: flex;
+		gap: 12px;
+		align-items: baseline;
+		border-top: 1px solid var(--ink-line);
+		padding: 14px 8px;
+		transition:
+			background 0.3s ease,
+			padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.elsewhere-link:hover {
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.05), transparent 50%);
+		padding-left: 14px;
+	}
+	.elsewhere-link .it-t {
+		font-size: 1.05rem;
+		line-height: 1.35;
+		color: var(--ink-soft);
+		transition: color 0.25s ease;
+	}
+	.elsewhere-link:hover .it-t {
+		color: var(--zhu);
+	}
+	.elsewhere-link .it-m {
+		margin-top: 5px;
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
 	}
 </style>
