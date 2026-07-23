@@ -28,3 +28,8 @@ vite.config.ts.timestamp-*
 .atomcode
 .playwright-mcp
 screenshot*.png
+
+
+output/agent-browser-profile
+.codegraph
+cyber-dragon
