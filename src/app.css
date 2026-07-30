@@ -259,6 +259,28 @@
 	outline-offset: 2px;
 }
 
+/* Global interaction polish — tactile without adding layout work. */
+:where(a, button, [role='button']) {
+	-webkit-tap-highlight-color: transparent;
+}
+button,
+[role='button'] {
+	cursor: pointer;
+}
+:where(.layout a, .layout button) {
+	transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+:where(.layout a, .layout button):active {
+	transform: translateY(1px);
+}
+@media (hover: hover) {
+	:where(.layout a[href]):focus-visible {
+		text-decoration-color: var(--zhu);
+		text-decoration-thickness: 2px;
+		text-underline-offset: 4px;
+	}
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
 	*,

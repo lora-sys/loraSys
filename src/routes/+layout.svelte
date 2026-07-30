@@ -9,6 +9,7 @@
 	import '@fontsource/archivo/700.css';
 	import '@fontsource/archivo/900.css';
 	import Navbar from '$lib/components/ink/Navbar.svelte';
+	import ResumeViewer from '$lib/components/ink/ResumeViewer.svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -32,6 +33,7 @@
 <div class="layout">
 	{@render children?.()}
 </div>
+<ResumeViewer />
 
 <style>
 	:global(html, body) {

@@ -605,7 +605,7 @@
 						<a class="exp-cta exp-cta-primary" href={`mailto:${DATA.contact.email}`}
 							>Get in touch →</a
 						>
-						<a class="exp-cta" href="/resume.pdf" target="_blank" rel="noreferrer"
+						<a class="exp-cta" href={`${base}/resume.pdf`} target="_blank" rel="noreferrer"
 							>Download résumé ↓</a
 						>
 					</div>
