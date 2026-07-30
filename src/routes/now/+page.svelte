@@ -54,6 +54,7 @@
 		<div class="head">
 			<h1>/now<span class="dim">.live()</span></h1>
 			<div class="head-side">
+				<div class="live-orbit" aria-hidden="true"><span></span><b>LIVE</b></div>
 				<p class="dek">A living snapshot — what I'm shipping, learning, and exploring right now.</p>
 				<dl class="meta">
 					<dt>Updated</dt>
@@ -67,8 +68,8 @@
 		<div class="rule"></div>
 
 		<div class="grid">
-			{#each sections as s}
-				<section>
+			{#each sections as s, i}
+				<section class:wide={i === 0}>
 					<div class="s-head reveal" use:reveal>
 						<span class="n">{s.n} /</span>
 						<h2>{s.title}</h2>
@@ -386,5 +387,80 @@
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		color: var(--ink-mute);
+	}
+	.live-orbit {
+		position: relative;
+		width: 76px;
+		height: 76px;
+		border: 1px solid var(--ink-line-strong);
+		border-radius: 50%;
+		display: grid;
+		place-items: center;
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.18em;
+		color: var(--zhu);
+	}
+	.live-orbit::before {
+		content: '';
+		position: absolute;
+		inset: 8px;
+		border: 1px dashed var(--ink-line-strong);
+		border-radius: 50%;
+		animation: orbitSpin 12s linear infinite;
+	}
+	.live-orbit span {
+		position: absolute;
+		top: 2px;
+		left: 50%;
+		width: 7px;
+		height: 7px;
+		border-radius: 50%;
+		background: var(--zhu);
+		box-shadow: 0 0 0 6px rgba(198, 65, 44, 0.12);
+	}
+	.live-orbit b {
+		font-weight: 800;
+	}
+	@keyframes orbitSpin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	.grid {
+		grid-template-columns: repeat(12, minmax(0, 1fr));
+		gap: clamp(28px, 5vw, 72px) clamp(20px, 3vw, 44px);
+	}
+	.grid section {
+		grid-column: span 4;
+	}
+	.grid section.wide {
+		grid-column: span 8;
+	}
+	.grid section:nth-child(4) {
+		grid-column: 9 / -1;
+	}
+	.grid section.wide .s-head h2 {
+		font-size: clamp(2.5rem, 6vw, 5.5rem);
+		line-height: 0.9;
+	}
+	.grid section.wide li {
+		padding-block: 22px;
+	}
+	@media (max-width: 820px) {
+		.grid section,
+		.grid section.wide,
+		.grid section:nth-child(4) {
+			grid-column: 1 / -1;
+		}
+		.live-orbit {
+			width: 60px;
+			height: 60px;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.live-orbit::before {
+			animation: none;
+		}
 	}
 </style>

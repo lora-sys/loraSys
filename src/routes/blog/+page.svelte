@@ -23,6 +23,7 @@
 
 <main class="blog">
 	<div class="paper-grain" aria-hidden="true"></div>
+	<div class="writing-mark" aria-hidden="true">書</div>
 	<div class="wrap">
 		<p class="tag">書 · Writing</p>
 
@@ -43,7 +44,12 @@
 
 		<ol class="posts">
 			{#each data.posts as post, i (post.slug)}
-				<li class="row reveal" use:reveal style="transition-delay: {i * 0.06}s">
+				<li
+					class="row reveal"
+					class:featured={i === 0}
+					use:reveal
+					style="transition-delay: {i * 0.06}s"
+				>
 					<a href={`${base}/blog/${post.slug}`}>
 						<span class="idx">{String(i + 1).padStart(2, '0')}</span>
 						<div class="row-main">
@@ -317,6 +323,49 @@
 		background: var(--zhu);
 		color: var(--paper);
 	}
+	.writing-mark {
+		position: fixed;
+		right: -0.04em;
+		top: 8vh;
+		font-family: var(--font-serif);
+		font-size: min(48vw, 42rem);
+		font-weight: 900;
+		line-height: 0.8;
+		color: rgba(198, 65, 44, 0.035);
+		pointer-events: none;
+		user-select: none;
+	}
+	.row.featured {
+		border-top: 2px solid var(--ink);
+		border-bottom: 2px solid var(--ink);
+		margin-bottom: clamp(36px, 6vw, 72px);
+	}
+	.row.featured a {
+		min-height: min(52vh, 560px);
+		grid-template-columns: clamp(76px, 9vw, 140px) 1fr auto;
+		align-items: center;
+		padding: clamp(40px, 7vw, 96px) clamp(16px, 3vw, 44px);
+		background: linear-gradient(120deg, rgba(198, 65, 44, 0.08), transparent 54%);
+	}
+	.row.featured .idx {
+		align-self: start;
+		font-size: clamp(4rem, 10vw, 9rem);
+		line-height: 0.8;
+		letter-spacing: -0.08em;
+		color: transparent;
+		-webkit-text-stroke: 1px var(--ink-line-strong);
+	}
+	.row.featured h2 {
+		max-width: 15ch;
+		font-size: clamp(2.4rem, 6vw, 6rem);
+		line-height: 0.92;
+		letter-spacing: -0.045em;
+	}
+	.row.featured .desc {
+		margin-top: 22px;
+		font-size: clamp(1rem, 1.4vw, 1.2rem);
+		max-width: 48ch;
+	}
 	@media (max-width: 760px) {
 		.head {
 			grid-template-columns: 1fr;
@@ -328,6 +377,14 @@
 		}
 		.go {
 			display: none;
+		}
+		.row.featured a {
+			min-height: 56vh;
+			grid-template-columns: 1fr;
+			align-content: space-between;
+		}
+		.row.featured .idx {
+			font-size: 5rem;
 		}
 	}
 </style>

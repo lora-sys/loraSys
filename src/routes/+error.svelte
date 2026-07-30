@@ -55,23 +55,29 @@
 	<div class="splash" aria-hidden="true"></div>
 	<div class="splash-sm" aria-hidden="true"></div>
 	<div class="inner">
-		<p class="tag">誤 · Error</p>
-		<h1>{effectiveStatus}</h1>
-		<svg class="brush" viewBox="0 0 320 12" preserveAspectRatio="none" aria-hidden="true">
-			<path
-				d="M3 8 C 64 2 128 11 190 5 S 300 3 317 7"
-				fill="none"
-				stroke="var(--zhu)"
-				stroke-width="3"
-				stroke-linecap="round"
-			/>
-		</svg>
-		<p class="msg">
-			<span>{typedText}</span>{#if showCursor}<span class="caret"></span>{/if}
-		</p>
-		{#if showNav}
-			<a class="home" href={base + '/'} in:fade>← Back to cover</a>
-		{/if}
+		<div class="code-block">
+			<p class="tag">誤 · Error</p>
+			<h1>{effectiveStatus}</h1>
+			<span class="ghost" aria-hidden="true">LOST</span>
+		</div>
+		<div class="message-block">
+			<p class="eyebrow">Field note / interrupted</p>
+			<h2>{errorTitle}</h2>
+			<p class="hint">{errorHint}</p>
+			<svg class="brush" viewBox="0 0 320 12" preserveAspectRatio="none" aria-hidden="true">
+				<path
+					d="M3 8 C 64 2 128 11 190 5 S 300 3 317 7"
+					fill="none"
+					stroke="var(--zhu)"
+					stroke-width="3"
+					stroke-linecap="round"
+				/>
+			</svg>
+			<p class="msg">
+				<span>{typedText}</span>{#if showCursor}<span class="caret"></span>{/if}
+			</p>
+			{#if showNav}<a class="home" href={base + '/'} in:fade>← Back to cover</a>{/if}
+		</div>
 	</div>
 </main>
 
@@ -140,7 +146,14 @@
 	.inner {
 		position: relative;
 		z-index: 1;
-		text-align: center;
+		width: min(1180px, 100%);
+		display: grid;
+		grid-template-columns: 1.2fr 0.8fr;
+		gap: clamp(36px, 8vw, 120px);
+		align-items: center;
+	}
+	.code-block {
+		position: relative;
 	}
 	.tag {
 		font-family: var(--font-label);
@@ -159,6 +172,37 @@
 		line-height: 0.8;
 		letter-spacing: -0.04em;
 		margin: 0;
+	}
+	.ghost {
+		position: absolute;
+		left: 0;
+		bottom: -0.28em;
+		font-family: var(--font-label);
+		font-size: clamp(4rem, 13vw, 10rem);
+		font-weight: 900;
+		letter-spacing: -0.08em;
+		color: transparent;
+		-webkit-text-stroke: 1px rgba(26, 24, 21, 0.1);
+		z-index: -1;
+	}
+	.eyebrow {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--zhu);
+	}
+	h2 {
+		margin: 12px 0 18px;
+		font-size: clamp(2.5rem, 6vw, 5.8rem);
+		line-height: 0.92;
+		letter-spacing: -0.045em;
+	}
+	.hint {
+		max-width: 34ch;
+		color: var(--ink-soft);
+		font-size: 1.08rem;
+		line-height: 1.55;
 	}
 	.brush {
 		display: block;
@@ -197,5 +241,17 @@
 	}
 	.home:hover {
 		color: var(--zhu);
+	}
+	@media (max-width: 760px) {
+		.inner {
+			grid-template-columns: 1fr;
+			gap: 56px;
+		}
+		h1 {
+			font-size: clamp(7rem, 36vw, 12rem);
+		}
+		.message-block {
+			padding-left: 12vw;
+		}
 	}
 </style>

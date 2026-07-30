@@ -177,6 +177,7 @@
 </svelte:head>
 
 <div class="blog-post-wrap relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
+	<div class="article-watermark" aria-hidden="true">NOTE</div>
 	<div class="flex gap-8">
 		<!-- Main content -->
 		<article class="min-w-0 max-w-3xl flex-1">
@@ -492,6 +493,85 @@
 	:global(.prose img.loaded) {
 		opacity: 1;
 		animation: none;
+	}
+	.article-watermark {
+		position: fixed;
+		right: -0.04em;
+		top: 14vh;
+		font-family: var(--font-label);
+		font-weight: 900;
+		font-size: min(20vw, 18rem);
+		line-height: 0.8;
+		writing-mode: vertical-rl;
+		color: transparent;
+		-webkit-text-stroke: 1px rgba(198, 65, 44, 0.08);
+		pointer-events: none;
+	}
+	.blog-post-wrap {
+		padding-top: clamp(88px, 12vh, 150px);
+		padding-bottom: 100px;
+	}
+	.blog-post-wrap > :global(.flex) {
+		gap: clamp(36px, 6vw, 88px);
+	}
+	.blog-post-wrap article {
+		max-width: 780px;
+	}
+	.blog-post-wrap article > :global(hgroup) {
+		margin-bottom: 3.5rem;
+	}
+	.blog-post-wrap article > :global(hgroup h1) {
+		font-family: var(--font-serif);
+		font-size: clamp(3rem, 7vw, 6.8rem);
+		line-height: 0.92;
+		letter-spacing: -0.045em;
+	}
+	.blog-post-wrap aside > div > div {
+		border-radius: 0;
+		border: 0;
+		border-top: 2px solid var(--ink);
+		background: transparent;
+		padding: 20px 0;
+		backdrop-filter: none;
+	}
+	:global(.blog-post-wrap aside nav a) {
+		border-radius: 0;
+		border-left: 1px solid var(--ink-line);
+	}
+	:global(.blog-post-wrap .prose) {
+		font-family: var(--font-serif);
+		font-size: 1.08rem;
+		line-height: 1.82;
+	}
+	:global(.blog-post-wrap .prose h2) {
+		margin-top: 2.8em;
+		padding-top: 0.5em;
+		border-top: 1px solid var(--ink-line-strong);
+		font-family: var(--font-serif);
+		font-size: clamp(2rem, 4vw, 3.3rem);
+		letter-spacing: -0.03em;
+	}
+	:global(.blog-post-wrap .prose h3) {
+		font-family: var(--font-serif);
+	}
+	:global(.blog-post-wrap .prose blockquote) {
+		margin-block: 2.4em;
+		padding: 1.3em 1.6em;
+		border-left-width: 4px;
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.07), transparent);
+		font-size: 1.2em;
+	}
+	:global(.blog-post-wrap .prose img) {
+		border-radius: 0;
+		box-shadow: 14px 14px 0 var(--paper-2);
+	}
+	@media (max-width: 760px) {
+		.article-watermark {
+			display: none;
+		}
+		.blog-post-wrap article > :global(hgroup h1) {
+			font-size: clamp(2.8rem, 14vw, 4.8rem);
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		:global(.prose img) {
