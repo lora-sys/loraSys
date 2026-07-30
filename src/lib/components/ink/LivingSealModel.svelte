@@ -4,6 +4,11 @@
 	import { base } from '$app/paths';
 	import * as THREE from 'three';
 
+	interface Props {
+		onready?: () => void;
+	}
+	let { onready }: Props = $props();
+
 	let group: THREE.Group = $state()!;
 	const gltf = useGltf(`${base}/models/living-seal.glb`);
 	let pointerX = 0;
@@ -13,6 +18,7 @@
 	let mobile = false;
 	let children: Array<{ object: THREE.Object3D; origin: THREE.Vector3 }> = [];
 	let preparedScene: THREE.Group | undefined = $state();
+	let announcedReady = false;
 
 	const chapters = ['top', 'self', 'skills', 'exp', 'work', 'hack', 'off', 'contact'];
 	const poses = [
@@ -73,6 +79,10 @@
 			object,
 			origin: object.position.clone()
 		}));
+		if (!announcedReady) {
+			announcedReady = true;
+			onready?.();
+		}
 	});
 
 	useTask((delta) => {
@@ -81,9 +91,9 @@
 		const a = poses[index];
 		const b = poses[next];
 		const ease = 1 - Math.pow(0.0008, delta);
-		const px = mobile ? 1.45 : mix(a.x, b.x, t);
-		const py = mobile ? -0.65 : mix(a.y, b.y, t);
-		const scale = (mobile ? 0.39 : mix(a.s, b.s, t)) * (1 + impulse * 0.08);
+		const px = mobile ? 0.72 : mix(a.x, b.x, t);
+		const py = mobile ? -0.52 : mix(a.y, b.y, t);
+		const scale = (mobile ? 0.34 : mix(a.s, b.s, t)) * (1 + impulse * 0.08);
 		group.position.x += (px + pointerX * (mobile ? 0.08 : 0.22) - group.position.x) * ease;
 		group.position.y += (py - pointerY * (mobile ? 0.05 : 0.14) - group.position.y) * ease;
 		group.position.z += (mix(a.z, b.z, t) - group.position.z) * ease;

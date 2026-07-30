@@ -517,7 +517,7 @@ export const DATA = {
 		{
 			name: 'Black Myth: Wukong',
 			description: 'A journey to the West reimagined',
-			background: 'https://upload.wikimedia.org/wikipedia/zh/a/a6/Black_Myth_Wukong_cover_art.jpg',
+			background: '/images/favorites/black-myth-wukong.jpg',
 			href: 'https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA',
 			cta: 'Learn More',
 			icon: Gamepad2

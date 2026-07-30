@@ -128,8 +128,7 @@
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const desktop = window.matchMedia('(min-width: 861px)').matches;
 		const probe = document.createElement('canvas');
-		const roomyViewport = window.matchMedia('(min-width: 761px)').matches;
-		show3d = roomyViewport && Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
+		show3d = Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
 		if (show3d) {
 			const loadSeal = () =>
 				void import('$lib/components/ink/LivingSealStage.svelte').then((module) => {
@@ -663,6 +662,8 @@
 									width="320"
 									height="200"
 									loading="lazy"
+									decoding="async"
+									fetchpriority="low"
 									onerror={(e) => onImgError(e, p.title)}
 								/>
 							</a>
@@ -748,7 +749,15 @@
 							<Lens zoomFactor={1.5} lensSize={150} class="rounded-none">
 								{#snippet children()}
 									<div class="frame">
-										<img src={img(a.image)} alt={a.name} width="280" height="373" loading="lazy" />
+										<img
+											src={img(a.image)}
+											alt={a.name}
+											width="280"
+											height="373"
+											loading="lazy"
+											decoding="async"
+											fetchpriority="low"
+										/>
 										<span class="anime-no"
 											>{String(DATA.anime.indexOf(a) + 1).padStart(2, '0')}</span
 										>
@@ -785,7 +794,15 @@
 					<li class="fav" class:featured-fav={i === 0} style="--fav-delay: {i * 0.06}s">
 						<a href={f.href} target="_blank" rel="noreferrer" class="fav-link">
 							<div class="fav-img">
-								<img src={img(f.background)} alt={f.name} width="400" height="225" loading="lazy" />
+								<img
+									src={img(f.background)}
+									alt={f.name}
+									width="400"
+									height="225"
+									loading="lazy"
+									decoding="async"
+									fetchpriority="low"
+								/>
 							</div>
 							<div class="fav-cap">
 								<span class="fav-index">{String(i + 1).padStart(2, '0')}</span>
@@ -2862,6 +2879,8 @@
 		counter-reset: projects;
 	}
 	.row.featured {
+		content-visibility: auto;
+		contain-intrinsic-size: auto 560px;
 		grid-template-columns: clamp(42px, 5vw, 74px) minmax(0, 0.9fr) minmax(320px, 1.1fr);
 		min-height: clamp(420px, 62vh, 680px);
 		gap: clamp(24px, 4vw, 64px);
