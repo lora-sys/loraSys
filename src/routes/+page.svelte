@@ -220,9 +220,8 @@
 						const head = sec.querySelector('.sec-head');
 						if (head) {
 							gsap.from(head, {
-								y: 30,
-								opacity: 0,
-								duration: 0.7,
+								y: 16,
+								duration: 0.45,
 								ease: 'power3.out',
 								scrollTrigger: { trigger: sec, start: 'top 80%' }
 							});
@@ -241,9 +240,8 @@
 					});
 					gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
 						gsap.from(row, {
-							y: 24,
-							opacity: 0,
-							duration: 0.55,
+							y: 12,
+							duration: 0.35,
 							ease: 'power2.out',
 							scrollTrigger: { trigger: row, start: 'top 90%' }
 						});
@@ -252,9 +250,8 @@
 					// Staggered reveals — exclude .acard (anime cards already visible on load)
 					gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
 						const tween = gsap.from(el, {
-							y: 22,
-							opacity: 0,
-							duration: 0.5,
+							y: 12,
+							duration: 0.35,
 							ease: 'power2.out',
 							scrollTrigger: {
 								trigger: el,
@@ -2879,8 +2876,6 @@
 		counter-reset: projects;
 	}
 	.row.featured {
-		content-visibility: auto;
-		contain-intrinsic-size: auto 560px;
 		grid-template-columns: clamp(42px, 5vw, 74px) minmax(0, 0.9fr) minmax(320px, 1.1fr);
 		min-height: clamp(420px, 62vh, 680px);
 		gap: clamp(24px, 4vw, 64px);
