@@ -70,8 +70,9 @@ Edit [`src/lib/data/resume.ts`](src/lib/data/resume.ts) to update:
 
 ## Blog
 
-Blog posts are Markdown files in [`src/content/`](src/content/) with YAML frontmatter. Published posts (4 total):
+Blog posts are Markdown files in [`src/content/`](src/content/) with YAML frontmatter. Published posts (5 total):
 
+- [Free Vision Skill: 给文本模型装上一双按需调用的眼睛](src/content/free-vision-skill.md) — 低 Token 视觉证据编译器，VEP/1 协议，90-95% Token 节省
 - [Building WishLive: A Multi-Agent Runtime with Real Economics](src/content/WishLIve.md) — SVG architecture diagrams, dual-mode AI execution, Solidity smart contracts
 - [Building a Full-Stack YouTube Clone](src/content/newtube.md) — Next.js 15, tRPC, Prisma, PostgreSQL
 - Svelte is Fun — platform overview
