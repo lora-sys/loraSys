@@ -59,18 +59,19 @@ DeepSeek: "我看到你上传了一个文件 error.png，
 
 但这种方法会带来**四大问题**：
 
-| 问题 | 影响 | 数据 |
-|------|------|------|
-| 💸 **Token 消耗高** | 每次调用 2000-5000 tokens | 成本高 |
-| 🗑️ **无关描述多** | 视觉模型输出大量不需要的内容 | 上下文污染 |
-| 🧹 **上下文污染** | 主模型上下文被长描述占满 | 性能下降 |
-| 🧠 **越权推理** | 视觉模型替主模型做决策 | 责任不清 |
+| 问题                | 影响                         | 数据       |
+| ------------------- | ---------------------------- | ---------- |
+| 💸 **Token 消耗高** | 每次调用 2000-5000 tokens    | 成本高     |
+| 🗑️ **无关描述多**   | 视觉模型输出大量不需要的内容 | 上下文污染 |
+| 🧹 **上下文污染**   | 主模型上下文被长描述占满     | 性能下降   |
+| 🧠 **越权推理**     | 视觉模型替主模型做决策       | 责任不清   |
 
 ### 举个实际例子
 
 当用户上传一张 400x300 的错误截图时：
 
 **传统方案**:
+
 ```
 视觉模型输出: "这张图片显示了一个终端窗口，其中包含一个 Python
 错误信息。错误类型是 ModuleNotFoundError，具体信息是无法找到
@@ -80,6 +81,7 @@ DeepSeek: "我看到你上传了一个文件 error.png，
 ```
 
 **Free Vision Skill**:
+
 ```
 VEP/1|src=zhipu/glm-4.6v-flash|m=error|a="ModuleNotFoundError: No module named 'requests'"|t="app.py:42"|c=0.97
 → 约 130 tokens
@@ -111,15 +113,15 @@ DeepSeek / Codex / Claude Code / OpenCode 继续推理
 
 ### 关键特性
 
-| 特性 | 说明 |
-|------|------|
-| 🎯 **低 Token 消耗** | 50-150 tokens，比完整描述节省 90-95% |
-| 🔄 **自动降级** | Provider 限流时自动切换到备用服务 |
-| 💾 **智能缓存** | TTL + LRU 策略，命中率可达 90%+ |
-| 🔐 **安全存储** | macOS Keychain、Linux Secret Service、Windows Credential Manager |
-| 🌍 **13 个 Provider** | 国内 4 个 + 全球 9 个，全面覆盖 |
-| ⚡ **性能优化** | 32.5x 加速（健康检查从 65s → 2s） |
-| 🔌 **VEP/1 协议** | 极简视觉证据包格式 |
+| 特性                  | 说明                                                             |
+| --------------------- | ---------------------------------------------------------------- |
+| 🎯 **低 Token 消耗**  | 50-150 tokens，比完整描述节省 90-95%                             |
+| 🔄 **自动降级**       | Provider 限流时自动切换到备用服务                                |
+| 💾 **智能缓存**       | TTL + LRU 策略，命中率可达 90%+                                  |
+| 🔐 **安全存储**       | macOS Keychain、Linux Secret Service、Windows Credential Manager |
+| 🌍 **13 个 Provider** | 国内 4 个 + 全球 9 个，全面覆盖                                  |
+| ⚡ **性能优化**       | 32.5x 加速（健康检查从 65s → 2s）                                |
+| 🔌 **VEP/1 协议**     | 极简视觉证据包格式                                               |
 
 ---
 
@@ -141,27 +143,27 @@ c=0.97
 
 ### 字段说明
 
-| 字段 | 含义 | 示例 |
-|------|------|------|
-| `VEP/1` | 协议版本 | VEP/1 |
-| `src` | Provider 和模型 | `zhipu/glm-4.6v-flash` |
-| `m` | 任务模式 | `error` / `ocr` / `ui` / `chart` |
-| `a` | 直接答案 | `"Cannot find module"` |
-| `t` | OCR 文本 | `"src/app.ts:42"` |
-| `o` | 关键对象 | `[button, input, modal]` |
-| `e` | 可见错误 | `[overlapping, clipped]` |
-| `v` | 关键值 | `["$99", "2024-12-31"]` |
-| `c` | 置信度 | `0.97` |
-| `cache` | 缓存状态 | `cache=hit` |
+| 字段    | 含义            | 示例                             |
+| ------- | --------------- | -------------------------------- |
+| `VEP/1` | 协议版本        | VEP/1                            |
+| `src`   | Provider 和模型 | `zhipu/glm-4.6v-flash`           |
+| `m`     | 任务模式        | `error` / `ocr` / `ui` / `chart` |
+| `a`     | 直接答案        | `"Cannot find module"`           |
+| `t`     | OCR 文本        | `"src/app.ts:42"`                |
+| `o`     | 关键对象        | `[button, input, modal]`         |
+| `e`     | 可见错误        | `[overlapping, clipped]`         |
+| `v`     | 关键值          | `["$99", "2024-12-31"]`          |
+| `c`     | 置信度          | `0.97`                           |
+| `cache` | 缓存状态        | `cache=hit`                      |
 
 ### Token 对比
 
-| 场景 | VEP 大小 | 主模型接收 | 传统方案 | 节省 |
-|------|---------|-----------|---------|------|
-| **错误提取** | ~150 chars | ~50 tokens | 2000+ tokens | **97%** ⬇️ |
-| **UI 审计** | ~400 chars | ~80 tokens | 3000+ tokens | **97%** ⬇️ |
+| 场景         | VEP 大小   | 主模型接收  | 传统方案     | 节省       |
+| ------------ | ---------- | ----------- | ------------ | ---------- |
+| **错误提取** | ~150 chars | ~50 tokens  | 2000+ tokens | **97%** ⬇️ |
+| **UI 审计**  | ~400 chars | ~80 tokens  | 3000+ tokens | **97%** ⬇️ |
 | **OCR 表格** | ~500 chars | ~120 tokens | 4000+ tokens | **97%** ⬇️ |
-| **图表分析** | ~300 chars | ~70 tokens | 2500+ tokens | **97%** ⬇️ |
+| **图表分析** | ~300 chars | ~70 tokens  | 2500+ tokens | **97%** ⬇️ |
 
 ---
 
@@ -206,22 +208,19 @@ c=0.97
 
 ```typescript
 // 13 个 Provider 配置
-export function resolveProviderOrder(
-  requested: string,
-  region: Region
-): ProviderConfig[] {
-  if (requested !== "auto") return [getProvider(requested)];
+export function resolveProviderOrder(requested: string, region: Region): ProviderConfig[] {
+	if (requested !== 'auto') return [getProvider(requested)];
 
-  // 自动降级：优先同区域，然后 fallback
-  const preferred = registry.providers
-    .filter(p => p.region === region)
-    .sort((a, b) => a.priority - b.priority);
+	// 自动降级：优先同区域，然后 fallback
+	const preferred = registry.providers
+		.filter((p) => p.region === region)
+		.sort((a, b) => a.priority - b.priority);
 
-  const fallback = registry.providers
-    .filter(p => p.region !== region)
-    .sort((a, b) => a.priority - b.priority);
+	const fallback = registry.providers
+		.filter((p) => p.region !== region)
+		.sort((a, b) => a.priority - b.priority);
 
-  return [...preferred, ...fallback];
+	return [...preferred, ...fallback];
 }
 ```
 
@@ -257,22 +256,19 @@ async get(key: string): Promise<string | null> {
 
 ```typescript
 class RequestPool<T> {
-  // 指数退避重试
-  private async execute(item): Promise<void> {
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        const value = await this.withTimeout(fn(), timeoutMs);
-        return resolve({ success: true, value });
-      } catch (error) {
-        // 指数退避: 1000ms → 2000ms → 4000ms
-        const delay = Math.min(
-          baseDelayMs * Math.pow(2, attempt),
-          maxDelayMs
-        );
-        await sleep(delay);
-      }
-    }
-  }
+	// 指数退避重试
+	private async execute(item): Promise<void> {
+		for (let attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				const value = await this.withTimeout(fn(), timeoutMs);
+				return resolve({ success: true, value });
+			} catch (error) {
+				// 指数退避: 1000ms → 2000ms → 4000ms
+				const delay = Math.min(baseDelayMs * Math.pow(2, attempt), maxDelayMs);
+				await sleep(delay);
+			}
+		}
+	}
 }
 ```
 
@@ -280,17 +276,19 @@ class RequestPool<T> {
 
 ```typescript
 export function toVep(result: VisionResult, maxChars: number): string {
-  const parts = [
-    "VEP/1",
-    `src=${result.provider}/${result.model}`,
-    `m=${result.mode}`,
-    result.answer ? `a="${result.answer}"` : "",
-    result.text ? `t="${result.text}"` : "",
-    result.issues?.length ? `e=[${result.issues.join(",")}]` : "",
-    `c=${result.confidence?.toFixed(2)}`
-  ].filter(Boolean).join("|");
+	const parts = [
+		'VEP/1',
+		`src=${result.provider}/${result.model}`,
+		`m=${result.mode}`,
+		result.answer ? `a="${result.answer}"` : '',
+		result.text ? `t="${result.text}"` : '',
+		result.issues?.length ? `e=[${result.issues.join(',')}]` : '',
+		`c=${result.confidence?.toFixed(2)}`
+	]
+		.filter(Boolean)
+		.join('|');
 
-  return compact.slice(0, maxChars);
+	return compact.slice(0, maxChars);
 }
 ```
 
@@ -301,23 +299,25 @@ export function toVep(result: VisionResult, maxChars: number): string {
 ### 健康检查优化
 
 **优化前**（v0.3 及以前）:
+
 ```typescript
 // 串行检查，每个 5s timeout
 for (const provider of providers) {
-  await checkProviderHealth(provider); // 5s each
-  await sleep(1000); // 批次延迟
+	await checkProviderHealth(provider); // 5s each
+	await sleep(1000); // 批次延迟
 }
 // 13 个 provider × 5s = 65s
 ```
 
 **优化后**（v0.4）:
+
 ```typescript
 // 并发批次检查
 const batchSize = 3;
 for (let i = 0; i < providers.length; i += batchSize) {
-  const batch = providers.slice(i, i + batchSize);
-  await Promise.all(batch.map(p => checkProviderHealth(p)));
-  await sleep(500); // 批次延迟
+	const batch = providers.slice(i, i + batchSize);
+	await Promise.all(batch.map((p) => checkProviderHealth(p)));
+	await sleep(500); // 批次延迟
 }
 // 13 个 provider: [3 + 3 + 3 + 1] = ~2s
 
@@ -327,6 +327,7 @@ for (let i = 0; i < providers.length; i += batchSize) {
 ### 缓存性能
 
 **TTL + LRU 策略**:
+
 ```
 缓存命中率: 90%+
 TTL: 24 小时
@@ -335,6 +336,7 @@ LRU 淘汰: 最少访问优先
 ```
 
 **实测数据**:
+
 ```
 Hit Rate:     87.5% (7/8)
 Misses:       1
@@ -346,6 +348,7 @@ Size:         8 entries
 ### 并发控制
 
 **RequestPool 配置**:
+
 ```typescript
 {
   maxConcurrency: 3,    // 最大并发
@@ -357,6 +360,7 @@ Size:         8 entries
 ```
 
 **指数退避策略**:
+
 ```
 尝试 1: 失败 → 延迟 1000ms
 尝试 2: 失败 → 延迟 2000ms
@@ -375,6 +379,7 @@ free-vision see --image ./error.png \
 ```
 
 **VEP 输出**:
+
 ```
 VEP/1|src=zhipu/glm-4.6v-flash|m=error|
 a="Cannot find module 'lodash'"|
@@ -397,6 +402,7 @@ free-vision see --image ./ui-screenshot.png \
 ```
 
 **VEP 输出**:
+
 ```
 VEP/1|src=zhipu/glm-4.6v-flash|m=ui|
 o=[{name:"Submit",issue:"disabled"},{name:"Avatar",issue:"clipped"}]|
@@ -413,6 +419,7 @@ free-vision see --image ./table.png \
 ```
 
 **VEP 输出**:
+
 ```
 VEP/1|src=zhipu/glm-4.6v-flash|m=ocr|
 a="Q3 销售报表"|
@@ -430,6 +437,7 @@ free-vision see --image ./chart.png \
 ```
 
 **VEP 输出**:
+
 ```
 VEP/1|src=zhipu/glm-4.6v-flash|m=chart|
 a="月度营收增长"|
@@ -447,6 +455,7 @@ free-vision see --image ./screenshot.png --auto-crop \
 ```
 
 **裁剪结果**:
+
 ```
 ✂️  Cropped: 400x300 → 369x58
    Reduction: 82%
@@ -479,16 +488,16 @@ curl -fsSL https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/ins
 
 ```json
 {
-  "agents": {
-    "coder": {
-      "skills": ["free-vision"],
-      "vision": {
-        "provider": "auto",
-        "region": "cn",
-        "auto-detect-images": true
-      }
-    }
-  }
+	"agents": {
+		"coder": {
+			"skills": ["free-vision"],
+			"vision": {
+				"provider": "auto",
+				"region": "cn",
+				"auto-detect-images": true
+			}
+		}
+	}
 }
 ```
 
@@ -572,6 +581,7 @@ Free Vision Skill 解决了一个**真实且迫切的问题**：如何让文本-
 **许可证**: MIT
 
 **贡献欢迎**:
+
 - 新 Provider Adapter
 - VEP 压缩改进
 - 本地模型支持（Ollama 等）
