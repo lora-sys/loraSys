@@ -38,11 +38,18 @@ jobs:
       - name: Type check
         run: pnpm run check
 
-      - name: Build
+      - name: Build for GitHub Pages
         run: pnpm run build
         env:
           ADAPTER: static
           BASE_PATH: /loraSys
+          NODE_ENV: production
+
+      - name: Verify build output
+        run: |
+          ls -la build/
+          test -f build/index.html || (echo "Build failed: index.html not found" && exit 1)
+          echo "✅ Build verified successfully"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
