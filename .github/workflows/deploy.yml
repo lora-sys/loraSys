@@ -39,11 +39,7 @@ jobs:
         run: pnpm run check
 
       - name: Build for GitHub Pages
-        run: pnpm run build
-        env:
-          ADAPTER: static
-          BASE_PATH: /loraSys
-          NODE_ENV: production
+        run: pnpm run build:github
 
       - name: Verify build output
         run: |
