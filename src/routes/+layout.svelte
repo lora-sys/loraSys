@@ -27,31 +27,6 @@
 	<meta property="og:image:height" content="630" />
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content="{base}/og-image.png" />
-
-	<!-- Mermaid initialization for blog diagrams -->
-	<script>
-		import mermaid from 'mermaid';
-		mermaid.initialize({
-			startOnLoad: true,
-			theme: 'dark',
-			themeVariables: {
-				primaryColor: '#7c5cff',
-				primaryTextColor: '#fff',
-				primaryBorderColor: '#4a3aff',
-				lineColor: '#5fb3ff',
-				secondaryColor: '#1e293b',
-				tertiaryColor: '#0a0d1a',
-				background: '#0a0d1a',
-				mainBkg: '#1e293b',
-				nodeBorder: '#3b4a6b',
-				clusterBkg: '#0f1a2e',
-				clusterBorder: '#1e293b',
-				titleColor: '#f4f6ff',
-				edgeLabelBackground: '#1e293b',
-				textColor: '#a8b3d6'
-			}
-		});
-	</script>
 </svelte:head>
 
 <Navbar />
@@ -71,7 +46,9 @@
 		color: inherit;
 		text-decoration: none;
 	}
-	:global(*) {
+	:global(*),
+	:global(::before),
+	:global(::after) {
 		box-sizing: border-box;
 	}
 	/* Offset for the fixed navbar + anchor targets clear the nav */

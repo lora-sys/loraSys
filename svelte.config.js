@@ -46,7 +46,7 @@ const mdsvexOptions = {
 		[
 			rehypeMermaid,
 			{
-				strategy: 'pre-mermaid', // Use client-side rendering, no Playwright needed
+				strategy: 'inline-svg', // Server-side render with Playwright
 				mermaidConfig: {
 					theme: 'dark',
 					themeVariables: {

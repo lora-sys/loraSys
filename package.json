@@ -41,6 +41,7 @@
 		"prettier-plugin-tailwindcss": "^0.6.4",
 		"puppeteer": "^24.42.0",
 		"rehype-mermaid": "^3.0.0",
+		"remark-mermaid": "^0.2.0",
 		"sharp": "^0.34.5",
 		"svelte": "^5.0.0",
 		"svelte-bash": "^1.2.0",
