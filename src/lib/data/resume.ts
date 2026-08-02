@@ -4,7 +4,6 @@ import {
 	Globe,
 	HomeIcon,
 	NotebookIcon,
-	Youtube,
 	BookOpen,
 	Film,
 	Headphones,

@@ -249,7 +249,7 @@
 
 					// Staggered reveals — exclude .acard (anime cards already visible on load)
 					gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
-						const tween = gsap.from(el, {
+						gsap.from(el, {
 							y: 12,
 							duration: 0.35,
 							ease: 'power2.out',

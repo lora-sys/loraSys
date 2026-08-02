@@ -11,7 +11,7 @@
 
 	// Build a "broken" mesh from multiple small cubes that drift apart
 	// and re-attach. Each fragment has its own rotation + offset velocity.
-	const fragments = Array.from({ length: 12 }).map((_, i) => {
+	const fragments = Array.from({ length: 12 }).map(() => {
 		const phi = Math.acos(2 * Math.random() - 1);
 		const theta = Math.random() * Math.PI * 2;
 		const r = 0.6 + Math.random() * 0.6;

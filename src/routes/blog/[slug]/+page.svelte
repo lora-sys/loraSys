@@ -1,8 +1,6 @@
 <script lang="ts">
-	import Badge from '$lib/components/ui/badge/badge.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Marquee from '$lib/components/magic/marquee/marquee.svelte';
-	import BlurFade from '$lib/components/magic/BlurFade.svelte';
 	import { formatDate } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
