@@ -6,6 +6,7 @@ import { mdsvex, escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
 import remarkHeadingId from 'remark-heading-id';
 import rehypeSlug from 'rehype-slug';
+import rehypeMermaid from 'rehype-mermaid';
 
 const SUPPORTED_LANGS = [
 	'javascript',
@@ -40,7 +41,28 @@ async function getHighlighter() {
 const mdsvexOptions = {
 	extensions: ['.md'],
 	remarkPlugins: [remarkHeadingId],
-	rehypePlugins: [rehypeSlug],
+	rehypePlugins: [rehypeSlug, [rehypeMermaid, {
+		strategy: 'pre-mermaid',  // Use client-side rendering, no Playwright needed
+		mermaidConfig: {
+			theme: 'dark',
+			themeVariables: {
+				primaryColor: '#7c5cff',
+				primaryTextColor: '#fff',
+				primaryBorderColor: '#4a3aff',
+				lineColor: '#5fb3ff',
+				secondaryColor: '#1e293b',
+				tertiaryColor: '#0a0d1a',
+				background: '#0a0d1a',
+				mainBkg: '#1e293b',
+				nodeBorder: '#3b4a6b',
+				clusterBkg: '#0f1a2e',
+				clusterBorder: '#1e293b',
+				titleColor: '#f4f6ff',
+				edgeLabelBackground: '#1e293b',
+				textColor: '#a8b3d6'
+			}
+		}
+	}]],
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
 			const highlighter = await getHighlighter();
