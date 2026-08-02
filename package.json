@@ -32,7 +32,7 @@
 		"eslint-plugin-svelte": "^2.45.1",
 		"globals": "^15.0.0",
 		"lighthouse": "^13.1.0",
-		"mdsvex": "^0.11.2",
+		"mdsvex": "^0.12.8",
 		"mermaid": "^11.16.0",
 		"playwright": "^1.59.1",
 		"postcss": "^8.4.38",
