@@ -71,6 +71,10 @@ const mdsvexOptions = {
 	],
 	highlight: {
 		highlighter: async (code, lang = 'text') => {
+			// Skip Shiki for mermaid blocks—let rehype-mermaid handle them
+			if (lang === 'mermaid') {
+				return code;
+			}
 			const highlighter = await getHighlighter();
 			const validLang = SUPPORTED_LANGS.includes(lang) ? lang : 'text';
 			const html = escapeSvelte(
