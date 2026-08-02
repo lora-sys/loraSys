@@ -49,6 +49,7 @@ Claude: (30 秒后) "完成了！放在 src/auth/"
 ```
 
 AI 能快速产出**看起来能跑的代码**，但它不会：
+
 - 写测试
 - 配置 CI
 - 写文档
@@ -63,12 +64,12 @@ AI 能快速产出**看起来能跑的代码**，但它不会：
 
 ## 问题：AI 工程的四大痛点
 
-| 痛点 | 影响 | 数据 |
-|------|------|------|
-| 🚧 **没有测试** | 改了怕炸 | 85/108 测试通过，但还是挂了 |
-| 🔴 **CI 全绿，但假的** | 误导性强 | 生产环境发现严重 bug |
-| 📝 **没有文档** | 知识碎片化 | 下次接手的开发者要重读所有代码 |
-| 🔐 **没有审查** | 安全隐患 | AI 写入了硬编码密钥 |
+| 痛点                   | 影响       | 数据                           |
+| ---------------------- | ---------- | ------------------------------ |
+| 🚧 **没有测试**        | 改了怕炸   | 85/108 测试通过，但还是挂了    |
+| 🔴 **CI 全绿，但假的** | 误导性强   | 生产环境发现严重 bug           |
+| 📝 **没有文档**        | 知识碎片化 | 下次接手的开发者要重读所有代码 |
+| 🔐 **没有审查**        | 安全隐患   | AI 写入了硬编码密钥            |
 
 ### 传统方案的代价
 
@@ -114,11 +115,13 @@ Idea → PRD → Issue → Agent 认领 → Worktree → 实施计划
 #### 1️⃣ 证据驱动的工程纪律
 
 **传统开发**：
+
 ```
 PR 合进去 → Done ✅
 ```
 
 **Harness**：
+
 ```
 PR → CI 绿 → 2+ 审查员 Approved → 证据齐全 → Done ✅
 ```
@@ -152,6 +155,7 @@ Coordinator
 ```
 
 **好处**：
+
 - ✅ 并行开发，互不干扰
 - ✅ 冲突自动检测，Conflict Resolver 处理
 - ✅ 每个分支独立 CI 和审查
@@ -203,12 +207,14 @@ graph TD
 #### 🧠 Coordinator（协调者）
 
 **职责**：
+
 - 读 PRD，拆解成 Issue
 - 分派 Agent 到 Worktree
 - 维护 PROJECT_STATUS.md
 - 人工审批闸门（鉴权/DB schema/生产密钥）
 
 **不做什么**：
+
 - ❌ 不写业务代码
 - ❌ 不做技术决策
 - ❌ 不合并代码（除非证据闸门全绿）
@@ -216,12 +222,14 @@ graph TD
 #### 🎨 Frontend Agent（前端工程师）
 
 **职责**：
+
 - 实现 UI 组件
 - 响应式设计
 - 截图 + Playwright trace
 - Accessibility 扫描
 
 **输出**：
+
 ```
 docs/evidence/17/
 ├── change-summary.md
@@ -240,12 +248,14 @@ docs/evidence/17/
 #### ⚙️ Backend Agent（后端工程师）
 
 **职责**：
+
 - API 实现
 - 业务逻辑
 - 异常处理
 - 鉴权逻辑
 
 **输出**：
+
 ```
 docs/evidence/17/
 ├── api-trace.json
@@ -257,11 +267,13 @@ docs/evidence/17/
 #### 🐛 Bug Hunter（缺陷猎人）
 
 **职责**：
+
 - 冷启动审查（不读实现者的聊天历史）
 - 只读 Issue + Plan + PR Diff + Evidence
 - 找边界条件、竞态条件、类型错误
 
 **审查清单**：
+
 - [ ] 空值处理
 - [ ] 类型安全
 - [ ] 并发安全
@@ -271,6 +283,7 @@ docs/evidence/17/
 #### 👁️ Behavior Reviewer（行为审查员）
 
 **职责**：
+
 - 功能是否符合 AC（Acceptance Criteria）
 - 用户体验是否合理
 - 边缘场景是否覆盖
@@ -290,6 +303,7 @@ docs/evidence/17/
 **输入**：`PRD.md`
 
 **Coordinator 做**：
+
 1. 读取 PRD，提取功能点
 2. 生成 `docs/product/`、`docs/architecture/`、`docs/design/`
 3. 创建 `memory/` 目录
@@ -298,6 +312,7 @@ docs/evidence/17/
 6. 生成首批 5-10 个 Issue
 
 **输出**：
+
 ```
 docs/
 ├── product/
@@ -323,6 +338,7 @@ AGENTS.md
 **前提**：Issue 字段齐全
 
 **必须字段**：
+
 ```
 Context / Goal / Scope / Non-Goal / Related Docs / Implementation Plan /
 Acceptance Criteria / Evidence Requirements / Reviewer Requirements /
@@ -330,6 +346,7 @@ Owner / Estimate
 ```
 
 **Coordinator 检查**：
+
 - ❌ 缺字段 → 停在 Planning，不启动
 - ✅ 字段齐全 → 进入 Worktree Phase
 
@@ -338,6 +355,7 @@ Owner / Estimate
 #### Phase 2: Worktree → Owner Agent
 
 **操作**：
+
 ```bash
 # 为 Issue #17 创建独立 worktree
 git worktree add ../myproject-worktree-17 -b feature/17-user-auth main
@@ -351,6 +369,7 @@ cd ../myproject-worktree-17
 ```
 
 **每个 Worktree**：
+
 - ✅ 独立分支
 - ✅ 独立 CI
 - ✅ 独立审查
@@ -368,6 +387,7 @@ cd ../myproject-worktree-17
 4. **写 Evidence**：开始填充 `docs/evidence/<id>/`
 
 **Owner Agent 不做什么**：
+
 - ❌ 不合并代码
 - ❌ 不做架构决策
 - ❌ 不绕过审查
@@ -379,6 +399,7 @@ cd ../myproject-worktree-17
 **触发**：Owner 推第一个 commit
 
 **Coordinator 监控**：
+
 ```yaml
 # .github/workflows/test.yml
 on: [push, pull_request]
@@ -393,6 +414,7 @@ jobs:
 ```
 
 **红灯处理**：
+
 - 🔴 CI 失败 → 停在 Phase 4
 - 🔧 派 Recovery Agent 修复
 - 🟢 CI 通过 → 进入 Phase 5
@@ -404,16 +426,19 @@ jobs:
 #### Phase 5: Review → Bug Hunter + Behavior Reviewer
 
 **Bug Hunter（冷启动）**：
+
 - 只读 Issue + Plan + PR Diff + Evidence
 - **不读实现者的聊天或解释**
 - 输出：`docs/evidence/<id>/review-bug-hunter.md`
 
 **Behavior Reviewer（冷启动）**：
+
 - 只读 Issue + Plan + PR Diff + Evidence
 - 检查 AC 是否满足
 - 输出：`docs/evidence/<id>/review-behavior.md`
 
 **审查员规则**：
+
 - ✅ 必须冷启动（零上下文）
 - ✅ 必须 Approved / Changes Requested
 - ❌ 不能"看起来可以"
@@ -430,12 +455,12 @@ jobs:
 
 ## Acceptance Criteria
 
-| AC | 状态 | 证据 |
-|----|------|------|
-| AC-1: 用户可以用邮箱注册 | ✅ PASS | screenshot:register.png |
-| AC-2: 登录态持久化 | ✅ PASS | screenshot:persistent.png |
-| AC-3: 忘记密码功能 | ❌ FAIL | 未实现 |
-| AC-4: 邮箱验证 | ⏸️ PENDING | - |
+| AC                       | 状态       | 证据                      |
+| ------------------------ | ---------- | ------------------------- |
+| AC-1: 用户可以用邮箱注册 | ✅ PASS    | screenshot:register.png   |
+| AC-2: 登录态持久化       | ✅ PASS    | screenshot:persistent.png |
+| AC-3: 忘记密码功能       | ❌ FAIL    | 未实现                    |
+| AC-4: 邮箱验证           | ⏸️ PENDING | -                         |
 
 ## Review Checklist
 
@@ -455,12 +480,14 @@ jobs:
 #### Phase 7: Merge → Coordinator
 
 **合并条件**：
+
 - ✅ CI 绿
 - ✅ ≥ 2 名审查员 Approved
 - ✅ Evidence 齐全（`docs/evidence/<id>/`）
 - ✅ Aggregator ✅
 
 **Coordinator 检查**：
+
 ```bash
 # 自动检查
 - [ ] docs/evidence/17/change-summary.md
@@ -479,12 +506,14 @@ jobs:
 #### Phase 8: Memory → Coordinator
 
 **Phase Summary**：
+
 ```bash
 workflows/06-phase-summary.md
 → 沉淀到 memory/phase-17-summary.md
 ```
 
 **Memory Evolution**：
+
 ```bash
 workflows/08-memory-evolution.md
 → 更新 memory/project-memory.md
@@ -500,6 +529,7 @@ workflows/08-memory-evolution.md
 ### 什么是证据闸门？
 
 **传统开发**：
+
 ```
 PR 合进去 → Done ✅
 "我觉得可以" → 合并 ✅
@@ -507,6 +537,7 @@ PR 合进去 → Done ✅
 ```
 
 **证据闸门**：
+
 ```
 PR → CI 绿 + 2+ 审查员 Approved + 证据齐全 → Done ✅
 ```
@@ -543,28 +574,33 @@ docs/evidence/17/
 ### 证据检查清单
 
 **前端**：
+
 - ✅ 6 态截图（桌面/平板/手机/空/错/加载）
 - ✅ Playwright trace
 - ✅ Console 干净
 - ✅ a11y 扫描通过
 
 **后端**：
+
 - ✅ API trace
 - ✅ 异常覆盖
 - ✅ 鉴权负面用例
 - ✅ 性能基线
 
 **数据库**：
+
 - ✅ Migration + Rollback
 - ✅ Pre/Post stats
 - ✅ Sample rows
 
 **审查**：
+
 - ✅ review-bug-hunter.md
 - ✅ review-behavior.md
 - ✅ fix-tasks.md Aggregator ✅
 
 **CI**：
+
 - ✅ 绿
 - ❌ 无 Critical/High 阻断
 
@@ -575,6 +611,7 @@ docs/evidence/17/
 ### 场景
 
 你刚用 AI 写了一个项目，能跑，但：
+
 - ❌ 没有测试
 - ❌ 没有 CI
 - ❌ 没有文档
@@ -594,6 +631,7 @@ npx -y skills add lora-sys/ai-engineering-harness -g --all --full-depth
 ```
 
 **装了什么**：
+
 - ✅ `ai-engineering-harness` skill
 - ✅ `build-agent-app` skill
 - ✅ `frontend-creative` skill
@@ -614,6 +652,7 @@ bash skills/dashboard/scripts/scan-to-issues.sh --create
 ```
 
 **Quick Scan 检测**：
+
 ```
 ✅ 硬编码密钥 (HIGH) → Issue #1
 ✅ 缺失错误处理 (MEDIUM) → Issue #2
@@ -635,11 +674,13 @@ pieces; do not edit code yet.
 ```
 
 **Coordinator 做**：
+
 1. 盘点差距（"现状 → 期望"的 Gap）
 2. 生成 Issue（按类别归列）
 3. 不先动业务代码
 
 **输出**：
+
 ```
 📊 盘点完成
 - ✅ 发现 23 个问题
@@ -724,16 +765,16 @@ npx -y skills add lora-sys/ai-engineering-harness -g -a claude-code codex grok
 
 ### 兼容 40 个 CLI Agent
 
-| Agent | 安装路径 |
-|-------|---------|
-| Claude Code | `~/.claude/skills/` |
-| Codex | `~/.codex/skills/` |
-| Cursor | `~/.cursor/skills/` |
-| Gemini CLI | `~/.gemini/skills/` |
-| Qwen | `~/.qwen/skills/` |
-| Grok | `~/.grok/skills/` |
-| OpenCode | `~/.config/opencode/skills/` |
-| ... | 共 40 个 |
+| Agent       | 安装路径                     |
+| ----------- | ---------------------------- |
+| Claude Code | `~/.claude/skills/`          |
+| Codex       | `~/.codex/skills/`           |
+| Cursor      | `~/.cursor/skills/`          |
+| Gemini CLI  | `~/.gemini/skills/`          |
+| Qwen        | `~/.qwen/skills/`            |
+| Grok        | `~/.grok/skills/`            |
+| OpenCode    | `~/.config/opencode/skills/` |
+| ...         | 共 40 个                     |
 
 ---
 
@@ -758,6 +799,7 @@ for Issue #20 (frontend), #21 (backend), #22 (database).
 ```
 
 **Coordinator 做**：
+
 1. 拉 3 个 Worktree
 2. 分派对应 Agent
 3. 并行推到 PR
@@ -771,6 +813,7 @@ CI is red on PR #23. Use $ai-engineering-harness to recover.
 ```
 
 **流程**：
+
 1. 60 秒分类（flaky / 真缺陷 / lint / 集成 / infra）
 2. 派 Owner Agent 修复
 3. 重新跑 CI
@@ -790,6 +833,7 @@ git add . && git commit -m "feat: init"
 ```
 
 **Coordinator 生成**：
+
 - 目录骨架
 - 首轮 Issue
 - ADR 模板
@@ -806,13 +850,13 @@ git add . && git commit -m "feat: init"
 
 ![Proof](./images/harness/section-proof.svg)
 
-| 案例 | Before → After | 类型 |
-|------|---------------|------|
-| 内部工具项目（0 测试 → 47 测试） | Chaos 35 → 87 | 示意 |
-| install-session-hook（自审） | 0 → 完整证据包 | **真实** |
-| Dashboard 一键接管 | 30 秒发现 23 个问题 | 示意 |
-| 测试通过 ≠ 测试有效（issue #9） | 9 检测器 → 10 检测器 | **真实** |
-| 绿色的 CI 骗了我们（issue #13） | 85/108 → 108/108 | **真实** |
+| 案例                             | Before → After       | 类型     |
+| -------------------------------- | -------------------- | -------- |
+| 内部工具项目（0 测试 → 47 测试） | Chaos 35 → 87        | 示意     |
+| install-session-hook（自审）     | 0 → 完整证据包       | **真实** |
+| Dashboard 一键接管               | 30 秒发现 23 个问题  | 示意     |
+| 测试通过 ≠ 测试有效（issue #9）  | 9 检测器 → 10 检测器 | **真实** |
+| 绿色的 CI 骗了我们（issue #13）  | 85/108 → 108/108     | **真实** |
 
 ### 真实案例：install-session-hook
 
@@ -821,11 +865,13 @@ git add . && git commit -m "feat: init"
 **问题**：`--status` 第一版有 bug，在空环境跑会把 `settings.json` 创建出来。
 
 **Harness 的审查发现**：
+
 - Bug Hunter 审查：7 个手动测试抓到的
 - 修复：删了文件创建那行
 - Evidence：`docs/evidence/15/` 完整证据包
 
 **自审诚实说**：
+
 - Adversarial review 只做了一行自问自答
 - 真生产里得 spawn `bug-hunter` + `behavior-reviewer`
 - 没真的开 GitHub Issue #15
@@ -838,17 +884,17 @@ git add . && git commit -m "feat: init"
 
 ![Operating Principles](./images/harness/section-principles.svg)
 
-| # | 原则 | 为什么 |
-|---|------|--------|
-| 1 | **信任证据，不信任"看起来好了"** | Coordinator 不会因为"本地测试过了"就合并 |
-| 2 | **冷启动审查** | Reviewer 只读 Issue + Diff + Evidence，不读实现者的聊天 |
-| 3 | **Issue 是工作单元** | 没有 Issue 不开工 |
-| 4 | **Worktree 隔离** | 一个 Issue = 一个 Owner = 一个 Worktree = 一个分支 |
-| 5 | **上下文按 L0-L3 加载** | 默认不加载 docs/ 全文 |
-| 6 | **人工审批闸门** | 鉴权/DB schema/生产密钥 → Coordinator 暂停 |
-| 7 | **记忆是项目状态** | 稳定结论写到 docs/ 与 memory/，对话历史不留 |
-| 8 | **CI/CD 是阻塞闸门** | Red CI → 停在 recovery 流程 |
-| 9 | **本地优先** | PR 提议的代码本地已有等价实现时，不直接合并 |
+| #   | 原则                             | 为什么                                                  |
+| --- | -------------------------------- | ------------------------------------------------------- |
+| 1   | **信任证据，不信任"看起来好了"** | Coordinator 不会因为"本地测试过了"就合并                |
+| 2   | **冷启动审查**                   | Reviewer 只读 Issue + Diff + Evidence，不读实现者的聊天 |
+| 3   | **Issue 是工作单元**             | 没有 Issue 不开工                                       |
+| 4   | **Worktree 隔离**                | 一个 Issue = 一个 Owner = 一个 Worktree = 一个分支      |
+| 5   | **上下文按 L0-L3 加载**          | 默认不加载 docs/ 全文                                   |
+| 6   | **人工审批闸门**                 | 鉴权/DB schema/生产密钥 → Coordinator 暂停              |
+| 7   | **记忆是项目状态**               | 稳定结论写到 docs/ 与 memory/，对话历史不留             |
+| 8   | **CI/CD 是阻塞闸门**             | Red CI → 停在 recovery 流程                             |
+| 9   | **本地优先**                     | PR 提议的代码本地已有等价实现时，不直接合并             |
 
 ---
 
@@ -864,15 +910,15 @@ git add . && git commit -m "feat: init"
 
 ### 适用场景
 
-| 场景 | 用 Harness? |
-|------|:-----------:|
-| 从 PRD 落地 MVP | ✅ 必须 |
-| 多 Issue 并行开发 | ✅ 必须 |
+| 场景                   | 用 Harness? |
+| ---------------------- | :---------: |
+| 从 PRD 落地 MVP        |   ✅ 必须   |
+| 多 Issue 并行开发      |   ✅ 必须   |
 | 接手老项目、清理技术债 | ✅ 强烈推荐 |
-| 复盘失序的 repo | ✅ 强烈推荐 |
-| 跨团队 / 跨 CLI 协作 | ✅ 推荐 |
-| 改一行 typo | ❌ 不要 |
-| 一次性脚本 | ❌ 不要 |
+| 复盘失序的 repo        | ✅ 强烈推荐 |
+| 跨团队 / 跨 CLI 协作   |   ✅ 推荐   |
+| 改一行 typo            |   ❌ 不要   |
+| 一次性脚本             |   ❌ 不要   |
 
 ### 快速开始
 
@@ -904,6 +950,7 @@ ls docs/evidence/1/  # 证据齐全 ✅
 **许可证**: MIT
 
 **贡献欢迎**：
+
 - 新 Agent 角色
 - 新 Workflow
 - 新检测器
