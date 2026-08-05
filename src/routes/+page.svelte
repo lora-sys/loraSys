@@ -126,6 +126,7 @@
 	let reduceMotion = $state(true);
 
 	onMount(() => {
+		loadContributions();
 		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const desktop = window.matchMedia('(min-width: 861px)').matches;
 		const probe = document.createElement('canvas');
@@ -333,6 +334,23 @@
 			cleanup();
 		};
 	});
+
+	let contribData: any = $state(null);
+	let contribLoading = $state(true);
+	let contribError = $state(false);
+
+	function loadContributions() {
+		fetch(`${base}/api/contributions`)
+			.then((r) => r.json())
+			.then((d) => {
+				contribData = d;
+				contribLoading = false;
+			})
+			.catch(() => {
+				contribError = true;
+				contribLoading = false;
+			});
+	}
 </script>
 
 {#snippet brush()}
@@ -505,13 +523,13 @@
 
 				<!-- Contribution Graph -->
 				<div class="contrib-embed">
-					{#await fetch(`${base}/api/contributions`).then((r) => r.json())}
+					{#if contribLoading}
 						<p class="contrib-loading">加载贡献数据…</p>
-					{:then data}
-						<ContributionGraph {data} />
-					{:catch}
+					{:else if contribData}
+						<ContributionGraph data={contribData} />
+					{:else if contribError}
 						<p class="contrib-loading">贡献图谱加载失败</p>
-					{/await}
+					{/if}
 				</div>
 			</div>
 		</section>
