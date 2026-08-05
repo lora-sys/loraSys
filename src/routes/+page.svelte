@@ -379,7 +379,8 @@
 		</a>
 		<p class="ed-line">
 			在建造中记录<br />
-			<b>2026 版 — <span class="count" data-count="103">103</span> 个仓库</b>
+			<b>2026 版 — <span class="count" data-count={DATA.repoCount}>{DATA.repoCount}</span> 个仓库</b
+			>
 		</p>
 	</header>
 
@@ -418,7 +419,7 @@
 						>
 					</li>
 					<li>
-						<span class="arrow">→</span> <b>103 个仓库</b> 持续增长<span class="tag"
+						<span class="arrow">→</span> <b>{DATA.repoCount} 个仓库</b> 持续增长<span class="tag"
 							>一直在打造</span
 						>
 					</li>
@@ -597,7 +598,9 @@
 					</div>
 					<div class="exp-grid">
 						<div class="exp-stat">
-							<span class="exp-num"><span class="count" data-count="103">103</span></span>
+							<span class="exp-num"
+								><span class="count" data-count={DATA.repoCount}>{DATA.repoCount}</span></span
+							>
 							<span class="exp-cap">GitHub 公开仓库</span>
 						</div>
 						<div class="exp-stat">
@@ -714,8 +717,8 @@
 				{/each}
 			</ol>
 			<p class="repos">
-				<span class="count" data-count="103">103</span> public repositories on GitHub — AI agents, Web3
-				dApps, full-stack applications.
+				<span class="count" data-count={DATA.repoCount}>{DATA.repoCount}</span> 个 GitHub 公开仓库 —
+				AI 智能体、Web3 dApps, full-stack applications.
 			</p>
 		</section>
 
