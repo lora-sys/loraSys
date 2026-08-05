@@ -5,8 +5,9 @@ export type Post = {
 	slug: string;
 	description: string;
 	date: string;
-	categories: Categories[];
+	categories: string[];
 	published: boolean;
+	readingTime?: number;
 };
 
 /** Work experience entry — shared between resume data and page component */

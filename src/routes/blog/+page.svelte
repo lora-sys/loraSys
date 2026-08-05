@@ -3,6 +3,34 @@
 	import { base } from '$app/paths';
 	import { reveal } from '$lib/actions/reveal';
 	let { data } = $props();
+
+	const allCategories = Array.from(new Set(data.posts.flatMap((p) => p.categories ?? []))).sort();
+
+	let searchQuery = $state('');
+	let activeCategory = $state<string | null>(null);
+
+	const filtered = $derived.by(() => {
+		let posts = data.posts;
+		if (activeCategory !== null) {
+			const cat = activeCategory;
+			posts = posts.filter((p) => (p.categories ?? []).includes(cat));
+		}
+		if (searchQuery.trim()) {
+			const q = searchQuery.toLowerCase();
+			posts = posts.filter(
+				(p) =>
+					p.title.toLowerCase().includes(q) ||
+					p.description?.toLowerCase().includes(q) ||
+					p.categories?.some((c) => c.toLowerCase().includes(q))
+			);
+		}
+		return posts;
+	});
+
+	function readingTime(text: string): number {
+		const words = text.split(/\s+/).length;
+		return Math.max(1, Math.round(words / 200));
+	}
 </script>
 
 <svelte:head>
@@ -16,6 +44,25 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="写作·日志 — Lora Sys" />
 	<meta property="og:description" content="关于软件工程、AI 智能体、区块链和独立开发的写作。" />
+	<meta property="og:url" content="https://lora-sys.github.io/loraSys/blog" />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta property="og:site_name" content="Lora Sys" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="写作·日志 — Lora Sys" />
+	<meta name="twitter:description" content="关于软件工程、AI 智能体、区块链和独立开发的写作。" />
+	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		name: 'Lora Sys Blog Posts',
+		description: '关于软件工程、AI 智能体、区块链和独立开发的写作。',
+		itemListElement: data.posts.map((post, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			url: `https://lora-sys.github.io/loraSys/blog/${post.slug}`,
+			name: post.title
+		}))
+	})}<\/script>`}
 </svelte:head>
 
 <main class="blog">
@@ -32,36 +79,90 @@
 					<dt>文章</dt>
 					<dd>{data.posts.length}</dd>
 					<dt>主题</dt>
-					<dd>AI · Web3 · DX</dd>
+					<dd>{allCategories.slice(0, 4).join(' · ')}</dd>
 				</dl>
 			</div>
 		</div>
 
 		<div class="rule"></div>
 
-		<ol class="posts">
-			{#each data.posts as post, i (post.slug)}
-				<li
-					class="row reveal"
-					class:featured={i === 0}
-					use:reveal
-					style="transition-delay: {i * 0.06}s"
+		<!-- Filter bar -->
+		<div class="filter-bar">
+			<div class="search-wrap">
+				<svg
+					class="search-icon"
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="1.5"
 				>
-					<a href={`${base}/blog/${post.slug}`}>
-						<span class="idx">{String(i + 1).padStart(2, '0')}</span>
-						<div class="row-main">
-							<span class="date">{formatDate(post.date)}</span>
-							<h2>{post.title}</h2>
-							{#if post.description}<p class="desc">{post.description}</p>{/if}
-							<div class="cats">
-								{#each post.categories as c}<span>{c}</span>{/each}
-							</div>
+					<circle cx="11" cy="11" r="8" />
+					<line x1="21" y1="21" x2="16.65" y2="16.65" />
+				</svg>
+				<input
+					type="search"
+					placeholder="搜索文章…"
+					bind:value={searchQuery}
+					class="search-input"
+				/>
+			</div>
+			<div class="cat-pills" role="group" aria-label="分类筛选">
+				<button
+					class="pill {activeCategory === null ? 'active' : ''}"
+					onclick={() => (activeCategory = null)}
+				>
+					全部
+				</button>
+				{#each allCategories as cat}
+					<button
+						class="pill {activeCategory === cat ? 'active' : ''}"
+						onclick={() => (activeCategory = activeCategory === cat ? null : cat)}
+					>
+						{cat}
+					</button>
+				{/each}
+			</div>
+		</div>
+
+		{#if filtered.length === 0}
+			<p class="no-results">没有匹配的文章。</p>
+		{:else}
+			<div class="card-grid">
+				{#each filtered as post, i}
+					<a
+						href={`${base}/blog/${post.slug}`}
+						class="card reveal"
+						class:featured={i === 0 && !activeCategory && !searchQuery}
+						use:reveal
+						style="transition-delay: {i * 0.05}s"
+					>
+						<div class="card-head">
+							<time class="card-date" datetime={post.date}>
+								{formatDate(post.date)}
+							</time>
+							{#if post.description}
+								<span class="card-rt">
+									{readingTime(post.description)} 分钟
+								</span>
+							{/if}
 						</div>
-						<span class="go">阅读 →</span>
+						<h2 class="card-title">{post.title}</h2>
+						{#if post.description}
+							<p class="card-desc">{post.description}</p>
+						{/if}
+						<div class="card-cats">
+							{#each post.categories as c}
+								<span class="cat-tag">{c}</span>
+							{/each}
+						</div>
+						<div class="card-hover-line" aria-hidden="true"></div>
 					</a>
-				</li>
-			{/each}
-		</ol>
+				{/each}
+			</div>
+		{/if}
 
 		<div class="foot">
 			<a href={base + '/'} class="back">← 返回封面</a>
@@ -154,133 +255,209 @@
 		background: var(--ink);
 		margin: clamp(40px, 7vh, 72px) 0 clamp(8px, 2vh, 16px);
 	}
-	.posts {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+
+	/* Filter bar */
+	.filter-bar {
 		display: flex;
-		flex-direction: column;
-		gap: 0;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px 16px;
+		margin-bottom: clamp(32px, 5vh, 48px);
 	}
-	.row {
+	.search-wrap {
 		position: relative;
-		border-top: 1px solid var(--ink-line);
+		flex: 1;
+		min-width: 200px;
+		max-width: 360px;
 	}
-	.row:last-child {
-		border-bottom: 1px solid var(--ink-line);
-	}
-	.row a {
-		position: relative;
-		display: grid;
-		grid-template-columns: 56px 1fr auto;
-		gap: 20px;
-		align-items: baseline;
-		padding: 28px 16px 28px 16px;
-		transition:
-			background 0.35s ease,
-			padding-left 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-	.row a::before {
-		content: '';
+	.search-icon {
 		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		width: 0;
-		background: var(--zhu);
-		transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-	.row a:hover {
-		background: linear-gradient(90deg, rgba(198, 65, 44, 0.06), transparent 50%);
-		padding-left: 28px;
-	}
-	.row a:hover::before {
-		width: 4px;
-	}
-	.idx {
-		font-family: var(--font-label);
-		font-weight: 900;
-		font-size: 1.3rem;
+		left: 14px;
+		top: 50%;
+		translate: 0 -50%;
 		color: var(--ink-mute);
-		transition: color 0.3s ease;
+		pointer-events: none;
 	}
-	.row a:hover .idx {
+	.search-input {
+		width: 100%;
+		padding: 10px 14px 10px 40px;
+		font-family: var(--font-label);
+		font-size: 0.82rem;
+		letter-spacing: 0.06em;
+		color: var(--ink);
+		background: var(--paper);
+		border: 1px solid var(--ink-line);
+		border-radius: 2px;
+		outline: none;
+		transition:
+			border-color 0.25s,
+			box-shadow 0.25s;
+	}
+	.search-input::placeholder {
+		color: var(--ink-mute);
+	}
+	.search-input:focus {
+		border-color: var(--zhu);
+		box-shadow: 0 0 0 3px rgba(198, 65, 44, 0.1);
+	}
+	.cat-pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.pill {
+		font-family: var(--font-label);
+		font-size: 0.68rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		padding: 6px 14px;
+		border: 1px solid var(--ink-line);
+		border-radius: 100px;
+		color: var(--ink-soft);
+		background: transparent;
+		cursor: pointer;
+		transition:
+			background 0.25s,
+			border-color 0.25s,
+			color 0.25s;
+	}
+	.pill:hover {
+		border-color: var(--zhu);
 		color: var(--zhu);
 	}
-	.date {
-		display: block;
+	.pill.active {
+		background: var(--zhu);
+		border-color: var(--zhu);
+		color: var(--paper);
+	}
+
+	/* Card grid */
+	.card-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px;
+	}
+	.card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		padding: 28px 28px 24px;
+		background: var(--paper);
+		border: 1px solid var(--ink-line);
+		border-radius: 2px;
+		text-decoration: none;
+		color: inherit;
+		transition:
+			border-color 0.35s,
+			box-shadow 0.35s,
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+		overflow: hidden;
+	}
+	.card:hover {
+		border-color: var(--ink-line-strong);
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+		transform: translateY(-3px);
+	}
+	.card-hover-line {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: var(--zhu);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.card:hover .card-hover-line {
+		transform: scaleX(1);
+	}
+	.card.featured {
+		grid-column: 1 / -1;
+		border-top: 2px solid var(--ink);
+		border-bottom: 2px solid var(--ink);
+		padding: 40px 44px 36px;
+		background: linear-gradient(120deg, rgba(198, 65, 44, 0.06), transparent 60%);
+	}
+	.card-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		margin-bottom: 14px;
+	}
+	.card-date {
 		font-family: var(--font-label);
 		font-size: 0.68rem;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
 		color: var(--ink-mute);
-		margin-bottom: 8px;
 	}
-	.row h2 {
-		font-family: var(--font-serif);
-		font-weight: 900;
-		font-optical-sizing: auto;
-		font-size: clamp(1.35rem, 2.8vw, 2rem);
-		line-height: 1.08;
-		letter-spacing: -0.01em;
-		margin: 0;
-		transition: color 0.3s ease;
-	}
-	.row a:hover h2 {
-		color: var(--zhu);
-	}
-	.desc {
-		margin-top: 8px;
-		max-width: 55ch;
-		line-height: 1.5;
-		color: var(--ink-soft);
-		font-size: 0.95rem;
-	}
-	.cats {
-		margin-top: 12px;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-	}
-	.cats span {
+	.card-rt {
 		font-family: var(--font-label);
 		font-size: 0.65rem;
 		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		border: 1px solid var(--ink-line-strong);
-		padding: 3px 10px;
-		border-radius: 2px;
-		color: var(--ink-soft);
-		transition:
-			border-color 0.25s ease,
-			color 0.25s ease;
+		color: var(--ink-mute);
+		opacity: 0.8;
 	}
-	.row a:hover .cats span {
+	.card-title {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(1.2rem, 2vw, 1.6rem);
+		line-height: 1.15;
+		letter-spacing: -0.01em;
+		margin: 0 0 10px;
+		transition: color 0.3s;
+	}
+	.card:hover .card-title {
+		color: var(--zhu);
+	}
+	.card-desc {
+		font-size: 0.92rem;
+		line-height: 1.55;
+		color: var(--ink-soft);
+		margin: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.card.featured .card-desc {
+		-webkit-line-clamp: 3;
+		max-width: 58ch;
+	}
+	.card-cats {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+		margin-top: 16px;
+	}
+	.cat-tag {
+		font-family: var(--font-label);
+		font-size: 0.62rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		border: 1px solid var(--ink-line);
+		padding: 2px 9px;
+		border-radius: 2px;
+		color: var(--ink-mute);
+		transition:
+			border-color 0.25s,
+			color 0.25s;
+	}
+	.card:hover .cat-tag {
 		border-color: var(--ink-line-strong);
 		color: var(--ink-soft);
 	}
-	.cats span:hover {
-		border-color: var(--zhu);
-		color: var(--zhu);
-	}
-	.go {
+	.no-results {
+		text-align: center;
+		padding: 60px 0;
 		font-family: var(--font-label);
-		font-weight: 700;
-		font-size: 0.72rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--zhu);
-		white-space: nowrap;
-		opacity: 0;
-		transform: translateX(-8px);
-		transition:
-			opacity 0.3s ease,
-			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		font-size: 0.85rem;
+		letter-spacing: 0.12em;
+		color: var(--ink-mute);
 	}
-	.row a:hover .go {
-		opacity: 1;
-		transform: translateX(0);
-	}
+
 	.foot {
 		display: flex;
 		justify-content: space-between;
@@ -298,6 +475,7 @@
 	}
 	.back {
 		color: var(--ink);
+		text-decoration: none;
 		transition: color 0.25s;
 	}
 	.back:hover {
@@ -312,9 +490,10 @@
 		border: 1px solid var(--ink-line-strong);
 		padding: 5px 14px;
 		border-radius: 100px;
+		text-decoration: none;
 		transition:
-			background 0.25s ease,
-			color 0.25s ease;
+			background 0.25s,
+			color 0.25s;
 	}
 	.rss:hover {
 		background: var(--zhu);
@@ -332,56 +511,28 @@
 		pointer-events: none;
 		user-select: none;
 	}
-	.row.featured {
-		border-top: 2px solid var(--ink);
-		border-bottom: 2px solid var(--ink);
-		margin-bottom: clamp(36px, 6vw, 72px);
-	}
-	.row.featured a {
-		min-height: min(52vh, 560px);
-		grid-template-columns: clamp(76px, 9vw, 140px) 1fr auto;
-		align-items: center;
-		padding: clamp(40px, 7vw, 96px) clamp(16px, 3vw, 44px);
-		background: linear-gradient(120deg, rgba(198, 65, 44, 0.08), transparent 54%);
-	}
-	.row.featured .idx {
-		align-self: start;
-		font-size: clamp(4rem, 10vw, 9rem);
-		line-height: 0.8;
-		letter-spacing: -0.08em;
-		color: transparent;
-		-webkit-text-stroke: 1px var(--ink-line-strong);
-	}
-	.row.featured h2 {
-		max-width: 15ch;
-		font-size: clamp(2.4rem, 6vw, 6rem);
-		line-height: 0.92;
-		letter-spacing: -0.045em;
-	}
-	.row.featured .desc {
-		margin-top: 22px;
-		font-size: clamp(1rem, 1.4vw, 1.2rem);
-		max-width: 48ch;
-	}
+
 	@media (max-width: 760px) {
 		.head {
 			grid-template-columns: 1fr;
 			align-items: flex-start;
 			gap: 20px;
 		}
-		.row a {
-			grid-template-columns: 40px 1fr;
-		}
-		.go {
-			display: none;
-		}
-		.row.featured a {
-			min-height: 56vh;
+		.card-grid {
 			grid-template-columns: 1fr;
-			align-content: space-between;
+			gap: 14px;
 		}
-		.row.featured .idx {
-			font-size: 5rem;
+		.card {
+			padding: 22px 20px 20px;
+		}
+		.card.featured {
+			padding: 28px 24px 24px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card:hover {
+			transform: none;
 		}
 	}
 </style>

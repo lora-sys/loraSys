@@ -18,3 +18,11 @@
 	/>
 	<span class="sr-only">Toggle theme</span>
 </button>
+
+<style>
+	@media (prefers-reduced-motion: reduce) {
+		button :global(svg) {
+			transition: none !important;
+		}
+	}
+</style>

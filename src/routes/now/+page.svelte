@@ -38,9 +38,16 @@
 		name="description"
 		content="Lora 当前的专注：正在打造、学习和探索的方向。/now 页面是一个持续更新的快照。"
 	/>
+	<link rel="canonical" href="https://lora-sys.github.io/loraSys/now" />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="/now — Lora Sys" />
 	<meta property="og:description" content="Lora 当前的专注 — 正在打造、学习和探索的方向。" />
+	<meta property="og:url" content="https://lora-sys.github.io/loraSys/now" />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="/now — Lora Sys" />
+	<meta name="twitter:description" content="Lora 当前的专注 — 正在打造、学习和探索的方向。" />
+	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
 </svelte:head>
 
 <main class="now">

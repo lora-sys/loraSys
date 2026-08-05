@@ -4,72 +4,121 @@
 	import { formatDate } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
+	import { getPosts } from '$lib/utils/posts';
 
 	let { data } = $props();
+
+	const slug = data.meta?.slug ?? '';
+	const siteUrl = 'https://lora-sys.github.io/loraSys';
+	const postUrl = `${siteUrl}/blog/${slug}`;
 
 	const ldJson = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
 		headline: data.meta?.title ?? '',
 		datePublished: data.meta?.date ?? '',
+		dateModified: data.meta?.date ?? '',
 		description: data.meta?.description ?? '',
 		keywords: data.meta?.categories?.join(', ') ?? '',
-		author: { '@type': 'Person', name: 'lora' }
+		author: { '@type': 'Person', name: 'Lora Sys', url: siteUrl },
+		publisher: {
+			'@type': 'Person',
+			name: 'Lora Sys',
+			url: siteUrl
+		},
+		mainEntityOfPage: {
+			'@type': 'WebPage',
+			'@id': postUrl
+		},
+		url: postUrl,
+		image: `${siteUrl}/og-cover.png`,
+		inLanguage: 'zh-CN',
+		articleSection: data.meta?.categories?.[0] ?? 'Technology',
+		...(data.meta?.categories?.length ? { articleTag: data.meta.categories } : {}),
+		'@graph': [
+			{
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{ '@type': 'ListItem', position: 1, name: '首页', item: `${siteUrl}/` },
+					{ '@type': 'ListItem', position: 2, name: '日志', item: `${siteUrl}/blog` },
+					{ '@type': 'ListItem', position: 3, name: data.meta?.title ?? '' }
+				]
+			}
+		]
 	});
 	const ldJsonTag = '<script type="application/ld+json">' + ldJson + '<' + '/script>';
 
-	// Extract headings for TOC — read actual DOM ids (set after mount when content renders)
 	let toc = $state<Array<{ id: string; text: string; level: number }>>([]);
-
 	let activeHeading = $state('');
 	let tocDrawerOpen = $state(false);
+	let readingProgress = $state(0);
+	let prevPost: { title: string; slug: string } | null = $state(null);
+	let nextPost: { title: string; slug: string } | null = $state(null);
 
-	// Track active heading on scroll
 	onMount(() => {
-		let observer: IntersectionObserver | undefined;
+		// TOC — use rAF chain for reliable heading detection (avoids async onMount)
+		const tocRaf = requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				const headings = document.querySelectorAll(
+					'article h1, article h2, article h3, article h4, article h5, article h6'
+				);
+				toc = Array.from(headings).map((h) => ({
+					id: h.id || '',
+					text: h.textContent || '',
+					level: parseInt(h.tagName.charAt(1))
+				}));
 
-		// Small delay to let async/mdsvex content render headings with ids
-		const timer = setTimeout(() => {
-			const headings = document.querySelectorAll(
-				'article h1, article h2, article h3, article h4, article h5, article h6'
-			);
-			toc = Array.from(headings).map((h) => ({
-				id: h.id || '',
-				text: h.textContent || '',
-				level: parseInt(h.tagName.charAt(1))
-			}));
-
-			observer = new IntersectionObserver(
-				(entries) => {
-					for (const entry of entries) {
-						if (entry.isIntersecting) {
-							activeHeading = entry.target.id;
+				const observer = new IntersectionObserver(
+					(entries) => {
+						for (const entry of entries) {
+							if (entry.isIntersecting) {
+								activeHeading = entry.target.id;
+							}
 						}
-					}
-				},
-				{ rootMargin: '-80px 0px -60% 0px', threshold: 0.1 }
-			);
-			headings.forEach((h) => observer!.observe(h));
-		}, 100);
+					},
+					{ rootMargin: '-80px 0px -60% 0px', threshold: 0.1 }
+				);
+				headings.forEach((h) => observer.observe(h));
 
-		return () => {
-			clearTimeout(timer);
-			observer?.disconnect();
-		};
+				// Reading progress
+				const progressBar = document.querySelector('.reading-progress-bar') as HTMLElement | null;
+				const article = document.querySelector('article') as HTMLElement | null;
+
+				const onScroll = () => {
+					if (!article) return;
+					const rect = article.getBoundingClientRect();
+					const articleTop = rect.top + window.scrollY;
+					const articleHeight = article.scrollHeight;
+					const scrolled = window.scrollY - articleTop + window.innerHeight * 0.3;
+					const progress = Math.min(1, Math.max(0, scrolled / articleHeight));
+					readingProgress = progress;
+					if (progressBar) {
+						progressBar.style.transform = `scaleX(${progress})`;
+					}
+				};
+				window.addEventListener('scroll', onScroll, { passive: true });
+				onScroll();
+
+				return () => {
+					observer.disconnect();
+					window.removeEventListener('scroll', onScroll);
+				};
+			});
+		});
+
+		return () => cancelAnimationFrame(tocRaf);
 	});
 
-	// Code copy functionality
+	// Code copy — also sync onMount with rAF
 	onMount(() => {
 		const timer = setTimeout(() => {
 			document.querySelectorAll('pre').forEach((pre) => {
 				if (pre.querySelector('.copy-btn')) return;
 
-				// Detect language from Shiki's class on the wrapper div
 				const shikiDiv = pre.querySelector('div.shiki');
 				const langClass = shikiDiv?.className?.match(/language-(\w+)/)?.[1];
 				const langLabel = langClass ?? '';
 
-				// Language label (top-left, de-emphasized)
 				if (langLabel) {
 					const label = document.createElement('span');
 					label.className = 'code-lang-label';
@@ -108,8 +157,20 @@
 		return () => clearTimeout(timer);
 	});
 
-	// Giscus comments
+	// Prev / Next posts
+	onMount(async () => {
+		const posts = await getPosts();
+		const idx = posts.findIndex((p) => p.slug === data.meta?.slug);
+		if (idx > 0) prevPost = { title: posts[idx - 1].title, slug: posts[idx - 1].slug };
+		if (idx < posts.length - 1)
+			nextPost = { title: posts[idx + 1].title, slug: posts[idx + 1].slug };
+	});
+
+	// Giscus — theme follows system preference
 	onMount(() => {
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const theme = prefersDark ? 'dark' : 'light';
+
 		const script = document.createElement('script');
 		script.src = 'https://giscus.app/client.js';
 		script.setAttribute('data-repo', 'lora-sys/loraSys');
@@ -121,7 +182,7 @@
 		script.setAttribute('data-reactions-enabled', '1');
 		script.setAttribute('data-emit-metadata', '1');
 		script.setAttribute('data-input-position', 'top');
-		script.setAttribute('data-theme', 'light');
+		script.setAttribute('data-theme', theme);
 		script.setAttribute('data-lang', 'zh-CN');
 		script.setAttribute('data-loading', 'lazy');
 		script.setAttribute('crossorigin', 'anonymous');
@@ -152,29 +213,32 @@
 			content={['Lora Sys', 'Sikandar Bhide', ...(data.meta.categories ?? [])].join(', ')}
 		/>
 	{/if}
-	<link rel="canonical" href={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`} />
+	<link rel="canonical" href={postUrl} />
 
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={data.meta?.title ?? ''} />
 	<meta property="og:description" content={data.meta?.description ?? ''} />
-	<meta
-		property="og:url"
-		content={`https://lora-sys.github.io/loraSys/blog/${data.meta?.slug ?? ''}`}
-	/>
-	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta property="og:url" content={postUrl} />
+	<meta property="og:image" content={`${siteUrl}/og-cover.png`} />
 	<meta property="article:published_time" content={data.meta?.date ?? ''} />
 	{#if data.meta?.categories?.length}
 		<meta property="article:section" content={data.meta.categories[0]} />
+		{#each data.meta.categories as cat}
+			<meta property="article:tag" content={cat} />
+		{/each}
 	{/if}
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={data.meta?.title ?? ''} />
 	<meta name="twitter:description" content={data.meta?.description ?? ''} />
-	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta name="twitter:image" content={`${siteUrl}/og-cover.png`} />
 	{@html ldJsonTag}
 </svelte:head>
 
 <div class="blog-post-wrap relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
+	<!-- Reading progress bar -->
+	<div class="reading-progress-bar" aria-hidden="true"></div>
+
 	<div class="article-watermark" aria-hidden="true">NOTE</div>
 	<div class="flex gap-8">
 		<!-- Main content -->
@@ -224,13 +288,11 @@
 					{data.meta?.title ?? ''}
 				</h1>
 				<p class="font-mono text-[11px] uppercase tracking-[0.18em] text-[#8a857c]">
-					<span class="text-[#5a544b]">{data.meta?.date ? formatDate(data.meta.date) : ''}</span>
+					<span class="text-[#5a544b]"
+						>{data.meta?.date ? formatDate(data.meta.date, 'long', 'zh-CN') : ''}</span
+					>
 					<span class="text-[#cfc8ba]">·</span>
 					<span>by {data.meta?.author ?? 'lora'}</span>
-					{#if data.meta?.readTime}
-						<span class="text-[#cfc8ba]">·</span>
-						<span class="text-[#c6412c]">{data.meta.readTime} min read</span>
-					{/if}
 				</p>
 			</hgroup>
 
@@ -296,7 +358,42 @@
 				<data.content />
 			</div>
 
-			<!-- Footer -->
+			<!-- Prev / Next -->
+			<div class="mt-16 grid grid-cols-2 gap-4">
+				{#if prevPost}
+					<a
+						href={`${base}/blog/${prevPost.slug}`}
+						class="group flex flex-col gap-1 rounded-lg border border-border/50 bg-card/30 p-4 transition-all hover:border-[#c6412c]/30 hover:bg-card/50"
+					>
+						<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8a857c]"
+							>← 上一篇</span
+						>
+						<span
+							class="font-serif text-sm font-bold leading-snug transition-colors group-hover:text-[#c6412c]"
+						>
+							{prevPost.title}
+						</span>
+					</a>
+				{:else}
+					<div></div>
+				{/if}
+				{#if nextPost}
+					<a
+						href={`${base}/blog/${nextPost.slug}`}
+						class="group flex flex-col gap-1 rounded-lg border border-border/50 bg-card/30 p-4 text-right transition-all hover:border-[#c6412c]/30 hover:bg-card/50"
+					>
+						<span class="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8a857c]"
+							>下一篇 →</span
+						>
+						<span
+							class="font-serif text-sm font-bold leading-snug transition-colors group-hover:text-[#c6412c]"
+						>
+							{nextPost.title}
+						</span>
+					</a>
+				{/if}
+			</div>
+
 			<Separator class="my-8 border-border/50" />
 			<div class="flex items-center justify-between font-mono text-sm text-muted-foreground">
 				<a
@@ -382,16 +479,7 @@
 
 <style>
 	/* Blog post — ink edition palette via CSS custom properties */
-	:global(html.mode-dark) .blog-post-wrap {
-		--blog-bg: var(--paper);
-		--blog-fg: var(--ink);
-		--blog-muted: var(--ink-mute);
-		--blog-soft: var(--ink-soft);
-		--blog-border: var(--ink-line);
-		--blog-border-strong: var(--ink-line-strong);
-		--blog-accent: var(--zhu);
-		--blog-surface: var(--paper-2);
-	}
+	:global(html.mode-dark) .blog-post-wrap,
 	:global(html:not(.mode-dark)) .blog-post-wrap {
 		--blog-bg: var(--paper);
 		--blog-fg: var(--ink);
@@ -406,6 +494,19 @@
 		background: var(--blog-bg);
 		color: var(--blog-fg);
 		min-height: 100vh;
+	}
+	/* Reading progress bar */
+	.reading-progress-bar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: var(--zhu);
+		transform: scaleX(0);
+		transform-origin: left;
+		z-index: 100;
+		transition: none;
 	}
 	/* Override Tailwind prose defaults with ink palette */
 	:global(.blog-post-wrap .prose) {
@@ -570,11 +671,17 @@
 		.blog-post-wrap article > :global(hgroup h1) {
 			font-size: clamp(2.8rem, 14vw, 4.8rem);
 		}
+		.blog-post-wrap > :global(.flex) {
+			flex-direction: column;
+		}
 	}
 	@media (prefers-reduced-motion: reduce) {
 		:global(.prose img) {
 			animation: none;
 			opacity: 1;
+		}
+		:global(.prose pre:hover) {
+			transform: none;
 		}
 	}
 </style>

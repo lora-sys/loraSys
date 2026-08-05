@@ -368,10 +368,35 @@
 <svelte:head>
 	<title>{DATA.name} — 在建造中记录</title>
 	<meta name="description" content={DATA.description} />
+	<meta name="author" content={DATA.name} />
+	<link rel="canonical" href="https://lora-sys.github.io/loraSys/" />
 	<meta property="og:title" content={`${DATA.name} — 在建造中记录`} />
 	<meta property="og:description" content={DATA.description} />
 	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://lora-sys.github.io/loraSys/" />
+	<meta property="og:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
+	<meta property="og:site_name" content="Lora Sys" />
+	<meta property="og:locale" content="zh_CN" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={`${DATA.name} — 在建造中记录`} />
+	<meta name="twitter:description" content={DATA.description} />
+	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
 	<meta name="robots" content="index, follow" />
+	<script type="application/ld+json">
+		{JSON.stringify({
+			'@context': 'https://schema.org',
+			'@type': 'Person',
+			name: DATA.name,
+			description: DATA.description,
+			url: 'https://lora-sys.github.io/loraSys/',
+			sameAs: [
+				DATA.contact.social.GitHub?.url,
+				DATA.contact.social.LinkedIn?.url,
+				DATA.contact.social.X?.url
+			].filter(Boolean),
+			knowsAbout: DATA.skills.slice(0, 10).map((s) => s.name)
+		})}
+	</script>
 </svelte:head>
 
 <div class="edition">

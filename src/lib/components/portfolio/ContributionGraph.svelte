@@ -361,8 +361,12 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.contrib-grid {
+			gap: 2px;
+		}
 		.cell:hover {
 			transform: none;
+			box-shadow: none;
 		}
 	}
 </style>
