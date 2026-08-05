@@ -15,3 +15,4 @@ node_modules/
 
 # Three.js typeface JSON — single-line delivery format, prettier reform breaks it
 static/fonts/*.json
+src/lib/data/contributions.json
