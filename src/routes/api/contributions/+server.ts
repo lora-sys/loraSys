@@ -2,6 +2,8 @@ import { json } from '@sveltejs/kit';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+export const prerender = true;
+
 export const GET = async () => {
 	try {
 		const filePath = join(process.cwd(), 'src/lib/data/contributions.json');
