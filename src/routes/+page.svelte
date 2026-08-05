@@ -5,6 +5,7 @@
 	import InkWash from '$lib/components/ink/InkWash.svelte';
 	import InkParticles from '$lib/components/ink/InkParticles.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
+	import ContributionGraph from '$lib/components/portfolio/ContributionGraph.svelte';
 	import { base } from '$app/paths';
 	import type { WorkItem } from '$lib/types';
 
@@ -500,6 +501,17 @@
 						{#each DATA.skills as s}<li>{s}</li>{/each}
 					</ul>
 				</aside>
+
+				<!-- Contribution Graph -->
+				<div class="contrib-embed">
+					{#await fetch(`${base}/api/contributions`).then((r) => r.json())}
+						<p class="contrib-loading">加载贡献数据…</p>
+					{:then data}
+						<ContributionGraph {data} />
+					{:catch}
+						<p class="contrib-loading">贡献图谱加载失败</p>
+					{/await}
+				</div>
 			</div>
 		</section>
 
@@ -1457,6 +1469,18 @@
 	aside {
 		border-left: 1.5px solid var(--ink-line);
 		padding-left: clamp(18px, 2vw, 30px);
+	}
+	.contrib-embed {
+		grid-column: 1 / -1;
+		margin-top: clamp(28px, 4vh, 48px);
+	}
+	.contrib-loading {
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--ink-mute);
+		padding: 24px 0;
 	}
 	.edu {
 		display: flex;
