@@ -33,4 +33,3 @@ screenshot*.png
 output/agent-browser-profile
 .codegraph
 cyber-dragon
-src/lib/data/contributions.json
