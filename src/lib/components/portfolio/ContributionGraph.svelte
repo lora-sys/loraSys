@@ -22,13 +22,15 @@
 		return 4;
 	}
 
-	const months = $derived.by(() => {
+	const months: { name: string; col: number }[] = $derived.by(() => {
 		if (!data.weeks?.length) return [];
 		const result: { name: string; col: number }[] = [];
 		let lastMonth = -1;
-		data.weeks.forEach((week, i) => {
+		const weeks = data.weeks as ContributionData['weeks'];
+		for (let i = 0; i < weeks.length; i++) {
+			const week = weeks[i];
 			const firstDay = week.contributionDays[0];
-			if (!firstDay) return;
+			if (!firstDay) continue;
 			const month = new Date(firstDay.date).getMonth();
 			if (month !== lastMonth) {
 				const names = [
@@ -48,7 +50,7 @@
 				result.push({ name: names[month], col: i });
 				lastMonth = month;
 			}
-		});
+		}
 		return result;
 	});
 
