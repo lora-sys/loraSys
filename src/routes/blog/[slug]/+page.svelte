@@ -80,21 +80,21 @@
 				const btn = document.createElement('button');
 				btn.className =
 					'copy-btn absolute top-2 right-2 rounded-md border border-zinc-700/50 bg-zinc-800/90 px-2.5 py-1 text-[11px] font-mono text-zinc-400 opacity-0 transition-all duration-200 hover:border-[#c6412c]/40 hover:bg-zinc-700/90 hover:text-zinc-200 backdrop-blur-sm';
-				btn.textContent = 'Copy';
+				btn.textContent = '复制';
 				btn.onclick = async () => {
 					const code = pre.querySelector('code')?.textContent ?? pre.textContent ?? '';
 					try {
 						await navigator.clipboard.writeText(code);
-						btn.textContent = 'Copied!';
+						btn.textContent = '已复制';
 						btn.classList.add('text-green-400');
 						setTimeout(() => {
-							btn.textContent = 'Copy';
+							btn.textContent = '复制';
 							btn.classList.remove('text-green-400');
 						}, 2000);
 					} catch {
-						btn.textContent = 'Failed';
+						btn.textContent = '失败';
 						setTimeout(() => {
-							btn.textContent = 'Copy';
+							btn.textContent = '复制';
 						}, 2000);
 					}
 				};
@@ -181,7 +181,7 @@
 		<article class="min-w-0 max-w-3xl flex-1">
 			<!-- Scene label -->
 			<div class="mb-6 font-mono text-[11px] uppercase tracking-[0.32em] text-[#8a857c]">
-				<span class="text-[#c6412c]">書</span> · <span class="text-[#5a544b]">Field Note</span>
+				<span class="text-[#c6412c]">書</span> · <span class="text-[#5a544b]">札记</span>
 			</div>
 
 			<!-- Back button -->
@@ -204,7 +204,7 @@
 					<path d="m12 19-7-7 7-7" />
 					<path d="M19 12H5" />
 				</svg>
-				All writing
+				全部文章
 			</a>
 
 			<!-- Title -->
@@ -242,7 +242,7 @@
 					onclick={() => (tocDrawerOpen = !tocDrawerOpen)}
 					class="mb-6 flex w-full items-center justify-between rounded-lg border border-border/50 bg-card/50 px-4 py-3 font-mono text-sm text-muted-foreground transition-colors hover:bg-card/80 lg:hidden"
 				>
-					<span>Table of Contents</span>
+					<span>目录</span>
 					<svg
 						class="h-4 w-4 transition-transform {tocDrawerOpen ? 'rotate-180' : ''}"
 						fill="none"
@@ -303,7 +303,7 @@
 					href={`${base}/blog`}
 					class="flex items-center gap-1 transition-colors hover:text-[#c6412c]"
 				>
-					<span class="font-pixel-square">← All writing</span>
+					<span class="font-pixel-square">← 全部文章</span>
 				</a>
 				<span>by {data.meta?.author ?? 'lora'}</span>
 			</div>
@@ -334,7 +334,7 @@
 									d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
 								/>
 							</svg>
-							Table of Contents
+							目录
 						</h3>
 						<nav class="space-y-0.5">
 							{#each toc as heading}

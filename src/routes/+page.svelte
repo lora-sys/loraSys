@@ -74,27 +74,27 @@
 
 	// Contents index doubles as navigation.
 	const contents = [
-		{ n: '01', cn: '己', title: 'The Self', note: 'who & why', href: '#self', total: 7 },
+		{ n: '01', cn: '己', title: '关于我', note: '我是谁', href: '#self', total: 7 },
 		{
 			n: '02',
 			cn: '技',
-			title: 'Skills',
-			note: 'what I build with',
+			title: '技艺',
+			note: '技术栈',
 			href: '#skills',
 			total: 7
 		},
-		{ n: '03', cn: '歷', title: 'Experience', note: 'work history', href: '#exp', total: 7 },
+		{ n: '03', cn: '歷', title: '经历', note: '工作经历', href: '#exp', total: 7 },
 		{
 			n: '04',
 			cn: '作',
-			title: 'Selected Work',
-			note: `${DATA.projects.length} projects`,
+			title: '精选作品',
+			note: `${DATA.projects.length} 个项目`,
 			href: '#work',
 			total: 7
 		},
-		{ n: '05', cn: '戰', title: 'Hackathons', note: 'ETH · Monad', href: '#hack', total: 7 },
-		{ n: '06', cn: '閒', title: 'Off Hours', note: 'anime & more', href: '#off', total: 7 },
-		{ n: '07', cn: '聯', title: 'Say Hello', note: '', href: '#contact', total: 7 }
+		{ n: '05', cn: '戰', title: '闯关记录', note: 'ETH · Monad', href: '#hack', total: 7 },
+		{ n: '06', cn: '閒', title: '闲余时光', note: '动漫 & 更多', href: '#off', total: 7 },
+		{ n: '07', cn: '聯', title: '打个招呼', note: '', href: '#contact', total: 7 }
 	];
 
 	// Skills grouped for the kinetic marquee (presentation grouping of flat DATA.skills).
@@ -347,9 +347,9 @@
 {/snippet}
 
 <svelte:head>
-	<title>{DATA.name} — Field Notes on Building</title>
+	<title>{DATA.name} — 在建造中记录</title>
 	<meta name="description" content={DATA.description} />
-	<meta property="og:title" content={`${DATA.name} — Field Notes on Building`} />
+	<meta property="og:title" content={`${DATA.name} — 在建造中记录`} />
 	<meta property="og:description" content={DATA.description} />
 	<meta property="og:type" content="website" />
 	<meta name="robots" content="index, follow" />
@@ -377,14 +377,14 @@
 			<span class="seal" aria-hidden="true">lora</span>
 		</a>
 		<p class="ed-line">
-			Field Notes on Building<br />
-			<b>Edition 2026 — <span class="count" data-count="103">103</span> Repositories</b>
+			在建造中记录<br />
+			<b>2026 版 — <span class="count" data-count="103">103</span> 个仓库</b>
 		</p>
 	</header>
 
 	<div class="band">
-		<span>Builder of Evolving Systems</span>
-		<span class="z">AI Agents · Full-Stack · Web3</span>
+		<span>进化的建造者</span>
+		<span class="z">AI Agents · 全栈 · Web3</span>
 		<a href={DATA.url}>github.com/lora-sys</a>
 	</div>
 
@@ -401,24 +401,24 @@
 					>
 				</div>
 				<h1>
-					I build<br /><span class="em">systems</span><br />that <span class="z">learn.</span>
+					构建<br /><span class="em">系统</span><br />让它<span class="z">进化。</span>
 				</h1>
 				<p class="dek">{DATA.description}</p>
 				<div class="hero-divider" aria-hidden="true"></div>
 				<ul class="hero-bullets">
 					<li>
-						<span class="arrow">→</span> Shipping <b>AI agents</b><span class="tag"
+						<span class="arrow">→</span> 构建 <b>AI 智能体</b><span class="tag"
 							>LangGraph · MCP</span
 						>
 					</li>
 					<li>
-						<span class="arrow">→</span> Built <b>Monad Blitz</b> prototype<span class="tag"
-							>48h sprint</span
+						<span class="arrow">→</span> 参与 <b>Monad Blitz</b> 原型<span class="tag"
+							>48 小时冲刺</span
 						>
 					</li>
 					<li>
-						<span class="arrow">→</span> <b>103 repos</b> &amp; counting<span class="tag"
-							>always shipping</span
+						<span class="arrow">→</span> <b>103 个仓库</b> 持续增长<span class="tag"
+							>一直在打造</span
 						>
 					</li>
 				</ul>
@@ -455,19 +455,19 @@
 					“Turning ambitious ideas into <b>reality</b> — always building, learning, and shipping.”
 				</p>
 				<a class="now-link" href={`${base}/now`}>
-					<span>Currently building — /now</span>
+					<span>持续建造中 — /now</span>
 					<span class="now-arrow" aria-hidden="true">→</span>
 				</a>
 			</nav>
 			<span class="hero-watermark" aria-hidden="true">Edition<br />2026</span>
 		</section>
 
-		<!-- 己 THE SELF -->
+		<!-- 己 关于我 -->
 		<section id="self" data-chapter="己" class="sec">
 			<div class="sec-head">
 				<span class="cn">己</span>
 				<div class="sec-title">
-					<h2>The Self</h2>
+					<h2>关于我</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -477,7 +477,7 @@
 			<div class="self-grid">
 				<div class="bio">{@html DATA.summaryHtml}</div>
 				<aside>
-					<p class="mini-h" id="education">Education</p>
+					<p class="mini-h" id="education">教育背景</p>
 					{#each DATA.education as e}
 						<div class="edu">
 							{#if e.logoUrl}<img
@@ -503,12 +503,12 @@
 			</div>
 		</section>
 
-		<!-- 技 SKILLS -->
+		<!-- 技 技艺 -->
 		<section id="skills" data-chapter="技" class="sec skills">
 			<div class="sec-head">
 				<span class="cn">技</span>
 				<div class="sec-title">
-					<h2>Skills</h2>
+					<h2>技艺</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -531,12 +531,12 @@
 			</div>
 		</section>
 
-		<!-- 歷 EXPERIENCE -->
+		<!-- 歷 经历 -->
 		<section id="exp" data-chapter="歷" class="sec">
 			<div class="sec-head">
 				<span class="cn">歷</span>
 				<div class="sec-title">
-					<h2>Experience</h2>
+					<h2>经历</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -581,45 +581,42 @@
 				<div class="exp-open">
 					<div class="exp-status">
 						<span class="status-dot" aria-hidden="true"></span>
-						<span class="status-label">Open to opportunities</span>
+						<span class="status-label">开放合作机会</span>
 					</div>
 					<div class="exp-grid">
 						<div class="exp-stat">
 							<span class="exp-num"><span class="count" data-count="103">103</span></span>
-							<span class="exp-cap">public repositories on GitHub</span>
+							<span class="exp-cap">GitHub 公开仓库</span>
 						</div>
 						<div class="exp-stat">
 							<span class="exp-num"><span class="count" data-count="4">4</span></span>
-							<span class="exp-cap">hackathons shipped (ETH Beijing · Monad ×2 · agent jams)</span>
+							<span class="exp-cap">完成的闯关（ETH Beijing · Monad ×2 · agent jams）</span>
 						</div>
 						<div class="exp-stat">
 							<span class="exp-num">∞</span>
-							<span class="exp-cap">side systems in flight</span>
+							<span class="exp-cap">持续进化的项目</span>
 						</div>
 					</div>
 					<div class="exp-actions">
-						<a class="exp-cta exp-cta-primary" href={`mailto:${DATA.contact.email}`}
-							>Get in touch →</a
-						>
+						<a class="exp-cta exp-cta-primary" href={`mailto:${DATA.contact.email}`}>联系我 →</a>
 						<a class="exp-cta" href={`${base}/resume.pdf`} target="_blank" rel="noreferrer"
-							>Download résumé ↓</a
+							>下载简历 ↓</a
 						>
 					</div>
 					<p class="exp-note">
-						Currently building at the seam of AI agents, Web3, and full-stack systems. The formal
-						work history starts when the right chapter opens — until then, the work above is the
-						record.
+						目前正专注于 AI 智能体、Web3 和全栈系统的交叉领域。正式的工作经历会在合适的时机开启 —
+						在此之前，上面的项目就是最好的记录。
 					</p>
 				</div>
 			{/if}
 		</section>
 
-		<!-- 作 SELECTED WORK -->
+		<!-- 作 精选作品 -->
 		<section id="work" data-chapter="作" class="sec">
 			<div class="sec-head">
 				<span class="cn">作</span>
 				<div class="sec-title">
-					<h2>Selected Work</h2>
+					<h2>精选作品</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -627,8 +624,8 @@
 				>
 			</div>
 			<div class="work-intro">
-				<p>Selected systems, shipped from first principle to working product.</p>
-				<span>2025—2026 · AI / WEB3 / FULL-STACK</span>
+				<p>从第一性原理到可运行产品的精选系统。</p>
+				<span>2025—2026 · AI / WEB3 / 全栈</span>
 			</div>
 			<ol class="work">
 				{#each DATA.projects as p, i}
@@ -675,7 +672,7 @@
 			<div class="sec-head">
 				<span class="cn">戰</span>
 				<div class="sec-title">
-					<h2>Hackathons &amp; Signals</h2>
+					<h2>闯关记录</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -710,12 +707,12 @@
 			</p>
 		</section>
 
-		<!-- 閒 OFF HOURS -->
+		<!-- 閒 闲余时光 -->
 		<section id="off" data-chapter="閒" class="sec">
 			<div class="sec-head">
 				<span class="cn">閒</span>
 				<div class="sec-title">
-					<h2>Off Hours</h2>
+					<h2>闲余时光</h2>
 					{@render brush()}
 				</div>
 				<span class="folio"
@@ -723,7 +720,7 @@
 				>
 			</div>
 			<div class="anime-head">
-				<p class="mini-h">Anime</p>
+				<p class="mini-h">动漫</p>
 				<div class="c-nav">
 					<button class="c-arrow" aria-label="Previous" onclick={() => animeScroll(-1)}>←</button>
 					<button class="c-arrow" aria-label="Next" onclick={() => animeScroll(1)}>→</button>
@@ -763,7 +760,7 @@
 								{/snippet}
 							</Lens>
 							<b class="card-name">{a.name}</b>
-							<span class="anime-meta">Archive · after hours</span>
+							<span class="anime-meta">存档 · 闲余时刻</span>
 						</a>
 					</li>
 				{/each}
@@ -772,19 +769,19 @@
 				<div class="track-bar">
 					<span class="track-bar-fill" style="transform: scaleX({animeProg})"></span>
 				</div>
-				<p class="drag-hint">↔ drag · hover to magnify</p>
+				<p class="drag-hint">↔ 拖拽 · 悬停放大</p>
 			</div>
-			<div class="off-manifesto" aria-label="Off-hours manifesto">
-				<span>Stories I carry</span>
-				<strong>long after the credits.</strong>
-				<em>閒 · curiosity is part of the work</em>
+			<div class="off-manifesto" aria-label="闲余手记">
+				<span>随身携带的故事</span>
+				<strong>长在片尾之后。</strong>
+				<em>閒 · 好奇心也是工作的一部分</em>
 			</div>
 			<div class="favorites-head">
 				<div>
-					<p class="mini-h">Favorites · 私藏</p>
-					<h3>A cabinet of<br />lasting signals.</h3>
+					<p class="mini-h">私藏</p>
+					<h3>长久回响的<br />信号陈列柜。</h3>
 				</div>
-				<p>Films, music, games and ideas that keep returning to the desk.</p>
+				<p>反复回到桌前的电影、音乐、游戏和想法。</p>
 			</div>
 			<ul class="favs-mosaic">
 				{#each DATA.favorites as f, i}
@@ -817,8 +814,8 @@
 		<!-- 聯 CONTACT -->
 		<section id="contact" data-chapter="聯" class="sec contact">
 			<span class="cn ghost" aria-hidden="true">聯</span>
-			<p class="c-tag">聯 · Say Hello</p>
-			<h2 class="say">Say hello.</h2>
+			<p class="c-tag">聯 · 打个招呼</p>
+			<h2 class="say">打个招呼。</h2>
 			<p class="email-wrap">
 				<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 			</p>
@@ -841,8 +838,8 @@
 	<footer class="colophon">
 		<div class="col-l">
 			<span class="col-mark">◆</span>
-			<span class="col-title">{DATA.name} — Field Notes on Building</span>
-			<span class="col-edition">Edition 2026</span>
+			<span class="col-title">{DATA.name} — 在建造中记录</span>
+			<span class="col-edition">2026 版</span>
 		</div>
 		<div class="col-c">
 			<p class="col-set">Set in <em>Fraunces</em> &amp; <em>Archivo</em></p>

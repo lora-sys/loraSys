@@ -1,14 +1,14 @@
 {
 	"name": "Lora Sys",
 	"short_name": "Lora",
-	"description": "Personal portfolio website of lora-sys",
+	"description": "Lora 的个人作品集 — AI Agent 开发者、全栈工程师",
 	"start_url": "/",
 	"display": "standalone",
 	"background_color": "#0f0f0f",
 	"theme_color": "#07070a",
 	"orientation": "portrait-primary",
 	"scope": "/",
-	"lang": "en-US",
+	"lang": "zh-CN",
 	"categories": ["portfolio", "personal", "developer"],
 	"icons": [
 		{

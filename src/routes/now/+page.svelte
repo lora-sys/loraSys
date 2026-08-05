@@ -5,45 +5,42 @@
 	const sections = [
 		{
 			n: '01',
-			title: 'Building',
+			title: '营造中',
 			items: [
-				{ t: 'Agent sandbox: MCP tools + LangGraph', m: 'building · weekly' },
-				{ t: 'Designing generative canvas + motion', m: 'exploring · weekly' }
+				{ t: 'Agent 沙盒：MCP 工具 + LangGraph', m: '构建中 · 每周' },
+				{ t: '设计生成式画布 + 运动系统', m: '探索中 · 每周' }
 			]
 		},
 		{
 			n: '02',
-			title: 'Learning',
+			title: '学习中',
 			items: [
-				{ t: 'Generative canvas + motion systems', m: 'ink · atmosphere' },
-				{ t: 'LangGraph + multi-agent systems', m: 'agents · coordination' }
+				{ t: '生成式画布 + 运动系统', m: '墨刊 · 氛围' },
+				{ t: 'LangGraph + 多智能体系统', m: '智能体 · 协作' }
 			]
 		},
 		{
 			n: '03',
-			title: 'Reading',
-			items: [{ t: 'Designing Data-Intensive Applications', m: 'book · systems' }]
+			title: '阅读中',
+			items: [{ t: 'Designing Data-Intensive Applications', m: '书籍 · 系统' }]
 		},
 		{
 			n: '04',
-			title: 'Vibing',
-			items: [{ t: 'Tame Impala — Currents', m: 'music · on repeat' }]
+			title: '共鸣中',
+			items: [{ t: 'Tame Impala — Currents', m: '音乐 · 单曲循环' }]
 		}
 	];
 </script>
 
 <svelte:head>
-	<title>/now — What Lora Sys Is Focused On Right Now</title>
+	<title>/now — Lora 当下的专注</title>
 	<meta
 		name="description"
-		content="Current focus of Lora Sys (Sikandar Bhide): what I'm shipping, learning, and exploring right now. The /now page is a living snapshot."
+		content="Lora 当前的专注：正在打造、学习和探索的方向。/now 页面是一个持续更新的快照。"
 	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content="/now — Lora Sys" />
-	<meta
-		property="og:description"
-		content="Current focus of Lora Sys — what I'm shipping, learning, and exploring right now."
-	/>
+	<meta property="og:description" content="Lora 当前的专注 — 正在打造、学习和探索的方向。" />
 </svelte:head>
 
 <main class="now">
@@ -54,13 +51,13 @@
 		<div class="head">
 			<h1>/now<span class="dim">.live()</span></h1>
 			<div class="head-side">
-				<div class="live-orbit" aria-hidden="true"><span></span><b>LIVE</b></div>
-				<p class="dek">A living snapshot — what I'm shipping, learning, and exploring right now.</p>
+				<div class="live-orbit" aria-hidden="true"><span></span><b>实时</b></div>
+				<p class="dek">一个持续更新的快照 — 正在打造、学习和探索的方向。</p>
 				<dl class="meta">
-					<dt>Updated</dt>
+					<dt>更新于</dt>
 					<dd>2026-07</dd>
-					<dt>Cadence</dt>
-					<dd>Monthly</dd>
+					<dt>频率</dt>
+					<dd>每月</dd>
 				</dl>
 			</div>
 		</div>
@@ -90,7 +87,7 @@
 		</div>
 
 		<div class="elsewhere">
-			<p class="elsewhere-tag">Elsewhere · 散</p>
+			<p class="elsewhere-tag">别处 · 散</p>
 			<div class="elsewhere-grid">
 				<a
 					href="https://peerlist.io/mierpiter"
@@ -101,7 +98,7 @@
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">PeerList</div>
-						<div class="it-m">dev community</div>
+						<div class="it-m">开发者社区</div>
 					</div>
 				</a>
 				<a
@@ -113,7 +110,7 @@
 					<span class="arrow">→</span>
 					<div>
 						<div class="it-t">YouTube</div>
-						<div class="it-m">videos · tech</div>
+						<div class="it-m">视频 · 技术</div>
 					</div>
 				</a>
 				<a
@@ -144,8 +141,8 @@
 		</div>
 
 		<div class="foot">
-			<a href={base + '/'} class="back">← Back to cover</a>
-			<span>04 sections · last updated 2026-07</span>
+			<a href={base + '/'} class="back">← 返回封面</a>
+			<span>04 个版块 · 更新于 2026-07</span>
 		</div>
 	</div>
 </main>

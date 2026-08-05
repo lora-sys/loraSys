@@ -6,35 +6,32 @@
 </script>
 
 <svelte:head>
-	<title>Blog — Lora Sys · Software Engineering, Indie Hacking, AI</title>
+	<title>写作·日志 — Lora Sys</title>
 	<meta
 		name="description"
-		content="Writing from Lora Sys (Sikandar Bhide) on software engineering, indie hacking, AI agents, and shipping products end-to-end."
+		content="Lora Sys 的写作 — 关于软件工程、AI 智能体、区块链和独立开发的技术博客。"
 	/>
 	<link rel="canonical" href="https://lora-sys.github.io/loraSys/blog" />
-	<link rel="alternate" type="application/rss+xml" title="lora's blog" href="{base}/api/rss.xml" />
+	<link rel="alternate" type="application/rss+xml" title="lora 的博客" href="{base}/api/rss.xml" />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content="Blog — Lora Sys" />
-	<meta
-		property="og:description"
-		content="Writing on software engineering, indie hacking, AI agents, and shipping products end-to-end."
-	/>
+	<meta property="og:title" content="写作·日志 — Lora Sys" />
+	<meta property="og:description" content="关于软件工程、AI 智能体、区块链和独立开发的写作。" />
 </svelte:head>
 
 <main class="blog">
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="writing-mark" aria-hidden="true">書</div>
 	<div class="wrap">
-		<p class="tag">書 · Writing</p>
+		<p class="tag">書 · 写作</p>
 
 		<div class="head">
-			<h1>Writing<span class="dim">.log</span></h1>
+			<h1>写作<span class="dim">·日志</span></h1>
 			<div class="head-side">
-				<p class="dek">On software engineering, AI agents, blockchain, and indie hacking.</p>
+				<p class="dek">关于软件工程、AI 智能体、区块链和独立开发。</p>
 				<dl class="meta">
-					<dt>Posts</dt>
+					<dt>文章</dt>
 					<dd>{data.posts.length}</dd>
-					<dt>Topics</dt>
+					<dt>主题</dt>
 					<dd>AI · Web3 · DX</dd>
 				</dl>
 			</div>
@@ -60,16 +57,16 @@
 								{#each post.categories as c}<span>{c}</span>{/each}
 							</div>
 						</div>
-						<span class="go">read →</span>
+						<span class="go">阅读 →</span>
 					</a>
 				</li>
 			{/each}
 		</ol>
 
 		<div class="foot">
-			<a href={base + '/'} class="back">← Back to cover</a>
+			<a href={base + '/'} class="back">← 返回封面</a>
 			<a href={base + '/api/rss.xml'} class="rss" target="_blank" rel="noreferrer">RSS ↗</a>
-			<span>{data.posts.length} entries</span>
+			<span>{data.posts.length} 篇</span>
 		</div>
 	</div>
 </main>

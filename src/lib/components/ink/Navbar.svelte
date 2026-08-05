@@ -6,15 +6,15 @@
 
 	type Link = { label: string; href: string; id?: string; route?: string };
 	const links: Link[] = [
-		{ label: 'Self', href: `${base}/#self`, id: 'self' },
-		{ label: 'Skills', href: `${base}/#skills`, id: 'skills' },
-		{ label: 'Experience', href: `${base}/#exp`, id: 'exp' },
-		{ label: 'Work', href: `${base}/#work`, id: 'work' },
-		{ label: 'Hackathons', href: `${base}/#hack`, id: 'hack' },
-		{ label: 'Off Hours', href: `${base}/#off`, id: 'off' },
-		{ label: 'Blog', href: `${base}/blog`, route: '/blog' },
-		{ label: 'Now', href: `${base}/now`, route: '/now' },
-		{ label: 'Contact', href: `${base}/#contact`, id: 'contact' }
+		{ label: '关于我', href: `${base}/#self`, id: 'self' },
+		{ label: '技艺', href: `${base}/#skills`, id: 'skills' },
+		{ label: '经历', href: `${base}/#exp`, id: 'exp' },
+		{ label: '作品', href: `${base}/#work`, id: 'work' },
+		{ label: '闯关', href: `${base}/#hack`, id: 'hack' },
+		{ label: '闲余', href: `${base}/#off`, id: 'off' },
+		{ label: '日志', href: `${base}/blog`, route: '/blog' },
+		{ label: '当下', href: `${base}/now`, route: '/now' },
+		{ label: '联络', href: `${base}/#contact`, id: 'contact' }
 	];
 
 	let active = $state('');
