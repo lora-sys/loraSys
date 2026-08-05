@@ -59,7 +59,6 @@
 	const contributions: ContributionData = $derived(data as ContributionData);
 	const total = $derived(contributions.totalContributions ?? 0);
 	const weeks = $derived(contributions.weeks ?? []);
-	const lastUpdated = $derived(contributions.lastUpdated ?? null);
 
 	let tooltipPos = $state<{ x: number; y: number; text: string } | null>(null);
 
@@ -88,18 +87,21 @@
 {#if weeks.length > 0}
 	<div class="contrib-wrap">
 		<div class="contrib-header">
-			<div class="contrib-title">
-				<span class="contrib-seal" aria-hidden="true">墨</span>
+			<div class="contrib-avatar">
+				<img src="https://github.com/lora-sys.png?size=80" alt="lora-sys" loading="lazy" />
 				<div>
-					<h3>贡献图谱</h3>
-					<p class="contrib-sub">过去一年 · {total} 次贡献</p>
+					<span class="contrib-username">lora-sys</span>
+					<span class="contrib-total">{total} 次贡献 · 过去一年</span>
 				</div>
 			</div>
-			{#if lastUpdated}
-				<span class="contrib-date">
-					{new Date(lastUpdated).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' })} 更新
-				</span>
-			{/if}
+			<a
+				href="https://github.com/lora-sys"
+				target="_blank"
+				rel="noreferrer"
+				class="contrib-gh-link"
+			>
+				在 GitHub 上查看 →
+			</a>
 		</div>
 
 		<div class="contrib-body">
@@ -173,57 +175,63 @@
 	.contrib-header {
 		display: flex;
 		justify-content: space-between;
-		align-items: flex-start;
+		align-items: center;
 		margin-bottom: 20px;
+		padding-bottom: 16px;
+		border-bottom: 1px solid var(--ink-line);
 	}
 
-	.contrib-title {
+	.contrib-avatar {
 		display: flex;
-		align-items: flex-start;
-		gap: 14px;
+		align-items: center;
+		gap: 12px;
 	}
 
-	.contrib-seal {
-		display: grid;
-		place-items: center;
+	.contrib-avatar img {
 		width: 40px;
 		height: 40px;
-		border: 1.5px solid var(--zhu);
-		color: var(--zhu);
-		font-family: var(--font-serif);
-		font-weight: 900;
-		font-size: 1.1rem;
-		line-height: 1;
-		transform: rotate(-3deg);
-		opacity: 0.85;
-		flex-shrink: 0;
+		border-radius: 50%;
+		border: 1.5px solid var(--ink-line-strong);
+		object-fit: cover;
 	}
 
-	.contrib-title h3 {
-		font-family: var(--font-serif);
-		font-weight: 900;
-		font-size: clamp(1.1rem, 2vw, 1.5rem);
-		letter-spacing: -0.02em;
-		margin: 0;
-		line-height: 1.2;
+	.contrib-username {
+		font-family: var(--font-label);
+		font-weight: 800;
+		font-size: 0.82rem;
+		letter-spacing: 0.04em;
+		color: var(--ink);
+		display: block;
+		line-height: 1.3;
 	}
 
-	.contrib-sub {
+	.contrib-total {
+		font-family: var(--font-label);
+		font-size: 0.66rem;
+		letter-spacing: 0.1em;
+		color: var(--ink-mute);
+		display: block;
+		margin-top: 2px;
+	}
+
+	.contrib-gh-link {
 		font-family: var(--font-label);
 		font-size: 0.68rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--ink-mute);
-		margin: 4px 0 0;
+		letter-spacing: 0.08em;
+		color: var(--zhu);
+		text-decoration: none;
+		white-space: nowrap;
+		padding: 5px 12px;
+		border: 1px solid var(--ink-line-strong);
+		border-radius: 2px;
+		transition:
+			background 0.2s ease,
+			color 0.2s ease;
 	}
 
-	.contrib-date {
-		font-family: var(--font-label);
-		font-size: 0.62rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--ink-mute);
-		white-space: nowrap;
+	.contrib-gh-link:hover {
+		background: var(--zhu);
+		color: var(--paper);
 	}
 
 	.contrib-body {
