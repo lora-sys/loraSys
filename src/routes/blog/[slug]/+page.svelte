@@ -512,7 +512,7 @@
 	/* Strip the Shiki wrapper — keep only the inner code element */
 	:global(.prose pre > div.shiki) {
 		margin: 0;
-		padding: 1.25rem 1.5rem;
+		padding: 1.25rem 1.5rem 1.25rem 0;
 		background: transparent !important;
 		border-radius: 0;
 		overflow-x: auto;
@@ -522,6 +522,27 @@
 		line-height: 1.7;
 		background: transparent !important;
 		padding: 0;
+	}
+	/* Line numbers via CSS counter on Shiki .line spans */
+	:global(.prose pre code) {
+		counter-reset: line;
+	}
+	:global(.prose pre code .line) {
+		counter-increment: line;
+		position: relative;
+		padding-left: 3.2rem;
+	}
+	:global(.prose pre code .line::before) {
+		content: counter(line);
+		position: absolute;
+		left: 0;
+		width: 2.5rem;
+		text-align: right;
+		font-family: var(--font-label, 'Archivo', sans-serif);
+		font-size: 0.65rem;
+		color: rgba(198, 65, 44, 0.25);
+		user-select: none;
+		pointer-events: none;
 	}
 	/* Language label */
 	:global(.prose pre .code-lang-label) {
