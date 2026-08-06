@@ -59,6 +59,20 @@
 		['GitHub', 'LinkedIn', 'X', 'email'].includes(s.name)
 	);
 
+	const personLdJson = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: DATA.name,
+		description: DATA.description,
+		url: 'https://lora-sys.github.io/loraSys/',
+		sameAs: [
+			DATA.contact.social.GitHub?.url,
+			DATA.contact.social.LinkedIn?.url,
+			DATA.contact.social.X?.url
+		].filter(Boolean),
+		knowsAbout: DATA.skills.slice(0, 10).map((s) => s.name)
+	});
+
 	// Graceful INK cover if an (external) project image 404s.
 	// Monogram style: large initial + title, vermilion accent.
 	function coverFallback(title: string): string {

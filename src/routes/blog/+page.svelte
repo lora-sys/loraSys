@@ -31,6 +31,19 @@
 		const words = text.split(/\s+/).length;
 		return Math.max(1, Math.round(words / 200));
 	}
+
+	const ldJson = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'ItemList',
+		name: 'Lora Sys Blog Posts',
+		description: '关于软件工程、AI 智能体、区块链和独立开发的写作。',
+		itemListElement: data.posts.map((post, i) => ({
+			'@type': 'ListItem',
+			position: i + 1,
+			url: `https://lora-sys.github.io/loraSys/blog/${post.slug}`,
+			name: post.title
+		}))
+	});
 </script>
 
 <svelte:head>
@@ -51,18 +64,9 @@
 	<meta name="twitter:title" content="写作·日志 — Lora Sys" />
 	<meta name="twitter:description" content="关于软件工程、AI 智能体、区块链和独立开发的写作。" />
 	<meta name="twitter:image" content="https://lora-sys.github.io/loraSys/og-cover.png" />
-	{@html `<script type="application/ld+json">${JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'ItemList',
-		name: 'Lora Sys Blog Posts',
-		description: '关于软件工程、AI 智能体、区块链和独立开发的写作。',
-		itemListElement: data.posts.map((post, i) => ({
-			'@type': 'ListItem',
-			position: i + 1,
-			url: `https://lora-sys.github.io/loraSys/blog/${post.slug}`,
-			name: post.title
-		}))
-	})}<\/script>`}
+	<script type="application/ld+json">
+		{JSON.stringify(JSON.parse(ldJson))}
+	</script>
 </svelte:head>
 
 <main class="blog">

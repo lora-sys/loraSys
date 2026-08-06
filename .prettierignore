@@ -16,3 +16,9 @@ node_modules/
 # Three.js typeface JSON — single-line delivery format, prettier reform breaks it
 static/fonts/*.json
 src/lib/data/contributions.json
+
+# JSON-LD script blocks use Svelte {JSON.stringify(...)} inside <script> tags,
+# which Prettier's HTML parser cannot handle
+src/routes/+page.svelte
+src/routes/blog/+page.svelte
+src/routes/blog/[slug]/+page.svelte
