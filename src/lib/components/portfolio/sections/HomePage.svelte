@@ -161,7 +161,7 @@
 		});
 
 		const magCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
-		gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
+		gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a').forEach((el) => {
 			const move = (e: MouseEvent) => {
 				const r = el.getBoundingClientRect();
 				gsap.to(el, { x: (e.clientX - (r.left + r.width / 2)) * 0.3, y: (e.clientY - (r.top + r.height / 2)) * 0.3, duration: 0.3 });
