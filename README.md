@@ -28,19 +28,19 @@
 
 ## 精选作品
 
-| # | 项目 | 描述 | 技术栈 |
-|---|------|------|--------|
-| 01 | **[TrandingOs](https://github.com/lora-sys/TrandingOs)** | AI 交易终端 · 40+ Agent 技能 · 记忆系统 · 玻璃拟态 UI | React · TypeScript · SQLite · Zustand |
-| 02 | **[ai-company-os](https://github.com/lora-sys/aicompanyos)** | 8 层 AI 执行引擎 · Writer-Critic 反馈循环 · 78 E2E 测试 | TypeScript · MCP · Zod · pnpm |
-| 03 | **[Daily-Rss](https://github.com/lora-sys/Daily-Rss)** | AI 新闻简报平台 · 多 RSS 聚合 · 邮件推送 | Next.js · Supabase · Inngest |
-| 04 | **[Newtube-clone](https://github.com/lora-sys/Newtube-clone)** | 全栈 YouTube 克隆 · 视频上传与流媒体 | Next.js · tRPC · Prisma · Clerk · Mux |
-| 05 | **[Moss](https://github.com/lora-sys/moss)** | Monad 协议 Agent 调用层 · discover → load → action → simulate | TypeScript · MCP · Web3 |
-| 06 | **[Emergence](https://github.com/lora-sys/hackthon-agent)** | 多 Agent 协作协议 · 实时辩论 · 证据链 · 投票系统 | TypeScript · Next.js · SSE |
-| 07 | **[Tarot Prediction DApp](https://github.com/lora-sys/demo_monad_hackthon)** | Web3 塔罗牌预测平台 · 3D 卡片 · TRGL 代币 | Solidity · React · Three.js · Hardhat |
-| 08 | **[MonadMon](https://github.com/lora-sys/monadmon)** | Monad 链上养成游戏 · Tamagotchi × Crypto | TypeScript · Monad · GameFi |
-| 09 | **[Second Brain](https://github.com/lora-sys/second-brain)** | 本地优先第二大脑 · Obsidian 同步 · 知识图谱 | JavaScript · Obsidian · Markdown |
-| 10 | **[Mianshiya-Next](https://github.com/lora-sys/mianshiya-next)** | 企业级刷题平台 · 全文搜索 · 日历追踪 | Next.js · Spring Boot · Elasticsearch |
-| 11 | **[nanochat-studay](https://github.com/lora-sys/nanochat-studay)** | LLM 训练流水线 · BPE 分词器 · Pretrain → SFT → RL | Python · PyTorch |
+| #   | 项目                                                                         | 描述                                                          | 技术栈                                |
+| --- | ---------------------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------- |
+| 01  | **[TrandingOs](https://github.com/lora-sys/TrandingOs)**                     | AI 交易终端 · 40+ Agent 技能 · 记忆系统 · 玻璃拟态 UI         | React · TypeScript · SQLite · Zustand |
+| 02  | **[ai-company-os](https://github.com/lora-sys/aicompanyos)**                 | 8 层 AI 执行引擎 · Writer-Critic 反馈循环 · 78 E2E 测试       | TypeScript · MCP · Zod · pnpm         |
+| 03  | **[Daily-Rss](https://github.com/lora-sys/Daily-Rss)**                       | AI 新闻简报平台 · 多 RSS 聚合 · 邮件推送                      | Next.js · Supabase · Inngest          |
+| 04  | **[Newtube-clone](https://github.com/lora-sys/Newtube-clone)**               | 全栈 YouTube 克隆 · 视频上传与流媒体                          | Next.js · tRPC · Prisma · Clerk · Mux |
+| 05  | **[Moss](https://github.com/lora-sys/moss)**                                 | Monad 协议 Agent 调用层 · discover → load → action → simulate | TypeScript · MCP · Web3               |
+| 06  | **[Emergence](https://github.com/lora-sys/hackthon-agent)**                  | 多 Agent 协作协议 · 实时辩论 · 证据链 · 投票系统              | TypeScript · Next.js · SSE            |
+| 07  | **[Tarot Prediction DApp](https://github.com/lora-sys/demo_monad_hackthon)** | Web3 塔罗牌预测平台 · 3D 卡片 · TRGL 代币                     | Solidity · React · Three.js · Hardhat |
+| 08  | **[MonadMon](https://github.com/lora-sys/monadmon)**                         | Monad 链上养成游戏 · Tamagotchi × Crypto                      | TypeScript · Monad · GameFi           |
+| 09  | **[Second Brain](https://github.com/lora-sys/second-brain)**                 | 本地优先第二大脑 · Obsidian 同步 · 知识图谱                   | JavaScript · Obsidian · Markdown      |
+| 10  | **[Mianshiya-Next](https://github.com/lora-sys/mianshiya-next)**             | 企业级刷题平台 · 全文搜索 · 日历追踪                          | Next.js · Spring Boot · Elasticsearch |
+| 11  | **[nanochat-studay](https://github.com/lora-sys/nanochat-studay)**           | LLM 训练流水线 · BPE 分词器 · Pretrain → SFT → RL             | Python · PyTorch                      |
 
 > [103 个公开仓库 →](https://github.com/lora-sys?tab=repositories)
 
@@ -48,26 +48,26 @@
 
 ## 闯关记录
 
-| 赛事 | 时间 · 地点 | 成果 |
-|------|-----------|------|
-| **ETH Beijing 2026** | 2026.06 · 北京 | AI Agent × Blockchain · 5 人团队 |
-| **Monad Hackathon** | 2026.01 · 线上 | Tarot Prediction DApp · 3D 卡片 + 代币经济 |
-| **Online AI Agent Hackathon** | 2026.02 · 线上 | Emergence · 多 Agent 辩论协议 |
-| **Monad Blitz Hackathon** | 2026 · 线上 | 48 小时原型冲刺 |
+| 赛事                          | 时间 · 地点    | 成果                                       |
+| ----------------------------- | -------------- | ------------------------------------------ |
+| **ETH Beijing 2026**          | 2026.06 · 北京 | AI Agent × Blockchain · 5 人团队           |
+| **Monad Hackathon**           | 2026.01 · 线上 | Tarot Prediction DApp · 3D 卡片 + 代币经济 |
+| **Online AI Agent Hackathon** | 2026.02 · 线上 | Emergence · 多 Agent 辩论协议              |
+| **Monad Blitz Hackathon**     | 2026 · 线上    | 48 小时原型冲刺                            |
 
 ---
 
 ## 技术栈
 
-| 类别 | 技术 |
-|------|------|
-| **框架** | SvelteKit 2 · Svelte 5 · Next.js · React |
-| **样式** | TailwindCSS 4 · shadcn-svelte (bits-ui) |
-| **动画** | svelte-motion · svelte-inview · embla-carousel |
-| **内容** | mdsvex · Shiki (vesper) · marked |
-| **图标** | Lucide Svelte · 自定义 SVG |
-| **部署** | Vercel (adapter-auto) |
-| **包管理** | pnpm |
+| 类别       | 技术                                           |
+| ---------- | ---------------------------------------------- |
+| **框架**   | SvelteKit 2 · Svelte 5 · Next.js · React       |
+| **样式**   | TailwindCSS 4 · shadcn-svelte (bits-ui)        |
+| **动画**   | svelte-motion · svelte-inview · embla-carousel |
+| **内容**   | mdsvex · Shiki (vesper) · marked               |
+| **图标**   | Lucide Svelte · 自定义 SVG                     |
+| **部署**   | Vercel (adapter-auto)                          |
+| **包管理** | pnpm                                           |
 
 ---
 
@@ -109,17 +109,17 @@ src/
 
 编辑 [`src/lib/data/resume.ts`](src/lib/data/resume.ts) 修改全部内容：
 
-| 字段 | 说明 |
-|------|------|
-| `name`, `description` | 个人资料 |
-| `summary` | 关于我 (Markdown) |
-| `skills` | 技能标签 |
-| `projects` | 项目卡片 (11 个) |
-| `anime` | 番剧收藏 (8 部) |
-| `favorites` | 精选收藏 (电影/音乐/游戏) |
-| `hackathons` | 闯关记录 (4 场) |
-| `social` | 社交链接 (GitHub / LinkedIn / X / Bilibili / YouTube / 知乎) |
-| `education` | 教育背景 |
+| 字段                  | 说明                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| `name`, `description` | 个人资料                                                     |
+| `summary`             | 关于我 (Markdown)                                            |
+| `skills`              | 技能标签                                                     |
+| `projects`            | 项目卡片 (11 个)                                             |
+| `anime`               | 番剧收藏 (8 部)                                              |
+| `favorites`           | 精选收藏 (电影/音乐/游戏)                                    |
+| `hackathons`          | 闯关记录 (4 场)                                              |
+| `social`              | 社交链接 (GitHub / LinkedIn / X / Bilibili / YouTube / 知乎) |
+| `education`           | 教育背景                                                     |
 
 ---
 
