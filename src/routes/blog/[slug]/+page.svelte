@@ -46,7 +46,6 @@
 			}
 		]
 	});
-	const ldJsonTag = '<script type="application/ld+json">' + ldJson + '<' + '/script>';
 
 	let toc = $state<Array<{ id: string; text: string; level: number }>>([]);
 	let activeHeading = $state('');
@@ -232,7 +231,7 @@
 	<meta name="twitter:title" content={data.meta?.title ?? ''} />
 	<meta name="twitter:description" content={data.meta?.description ?? ''} />
 	<meta name="twitter:image" content={`${siteUrl}/og-cover.png`} />
-	{@html ldJsonTag}
+	{@html `<script type="application/ld+json">${ldJson}<\/script>`}
 </svelte:head>
 
 <div class="blog-post-wrap relative mx-auto max-w-6xl px-4 py-12 lg:px-8">
