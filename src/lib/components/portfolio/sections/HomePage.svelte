@@ -8,6 +8,25 @@
 	import ContributionGraph from '$lib/components/portfolio/ContributionGraph.svelte';
 	import type { WorkItem } from '$lib/types';
 
+	// SmoothCursor state
+	let cursorVisible = $state(false);
+	let cursorX = $state(0);
+	let cursorY = $state(0);
+	let cursorScale = $state(0);
+	let targetX = 0;
+	let targetY = 0;
+	let cursorRaf: number;
+
+	function animateCursor() {
+		const dx = targetX - cursorX;
+		const dy = targetY - cursorY;
+		cursorX += dx * 0.22;
+		cursorY += dy * 0.22;
+		cursorScale += (1 - cursorScale) * 0.25;
+		cursorRaf = requestAnimationFrame(animateCursor);
+	}
+
+	// Shared helpers
 	function img(path: string): string {
 		if (!path.startsWith('/') || path.startsWith(base)) return path;
 		return base + path;
@@ -100,7 +119,7 @@
 
 	function killMotion() {
 		if (!gsapLib) return;
-		if (stLib) stLib.ScrollTrigger.getAll().forEach((s: any) => s.kill());
+		if (stLib?.ScrollTrigger) stLib.ScrollTrigger.getAll().forEach((s: any) => s.kill());
 		gsapLib.killTweensOf('.seal, .mast .word, .hero-left > *, .index-h, .index li, .pull, .sec-head, .brush path, .row, .hk, .card, .tl-item, .hx, .fav, .mrow, .count');
 		gsapLib.set('.seal', { clearProps: 'all' });
 		gsapLib.set('.mast .word', { clearProps: 'all' });
@@ -122,14 +141,10 @@
 		const gsap = gsapLib;
 		const ScrollTrigger = stLib?.ScrollTrigger;
 		if (!gsap) return;
-
-		gsap.fromTo('.seal', { scale: 2.8, opacity: 0, rotate: -30, filter: 'blur(8px)' }, {
-			scale: 1, opacity: 1, rotate: -4, filter: 'blur(0px)', duration: 0.8, ease: 'back.out(1.4)', delay: 0.1
-		});
+		gsap.fromTo('.seal', { scale: 2.8, opacity: 0, rotate: -30, filter: 'blur(8px)' }, { scale: 1, opacity: 1, rotate: -4, filter: 'blur(0px)', duration: 0.8, ease: 'back.out(1.4)', delay: 0.1 });
 		gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
 		gsap.from('.hero-left > *', { y: 26, opacity: 0, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
 		gsap.from('.index-h, .index li, .pull', { y: 16, opacity: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.35 });
-
 		gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
 			const head = sec.querySelector('.sec-head');
 			if (head) gsap.from(head, { y: 16, duration: 0.45, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%' } });
@@ -152,14 +167,8 @@
 		gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
 			const target = Number(el.dataset.count || '0');
 			const obj = { v: 0 };
-			if (ScrollTrigger) {
-				ScrollTrigger.create({
-					trigger: el, start: 'top 75%', once: true,
-					onEnter: () => gsap.to(obj, { v: target, duration: 1.0, ease: 'power2.out', onUpdate: () => (el.textContent = String(Math.round(obj.v))) })
-				});
-			}
+			if (ScrollTrigger) ScrollTrigger.create({ trigger: el, start: 'top 75%', once: true, onEnter: () => gsap.to(obj, { v: target, duration: 1.0, ease: 'power2.out', onUpdate: () => (el.textContent = String(Math.round(obj.v))) }) });
 		});
-
 		const magCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
 		gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a').forEach((el) => {
 			const move = (e: MouseEvent) => {
@@ -171,7 +180,6 @@
 			el.addEventListener('mouseleave', leave);
 			magCleanups.push({ el, move, leave });
 		});
-
 		if (ScrollTrigger) ScrollTrigger.refresh();
 		magCleanupsRef = magCleanups;
 	}
@@ -188,8 +196,7 @@
 		const probe = document.createElement('canvas');
 		show3d = Boolean(probe.getContext('webgl2') || probe.getContext('webgl'));
 		if (show3d) {
-			const loadSeal = () =>
-				void import('$lib/components/ink/LivingSealStage.svelte').then((module) => { SealStage = module.default; });
+			const loadSeal = () => void import('$lib/components/ink/LivingSealStage.svelte').then((m) => { SealStage = m.default; });
 			if ('requestIdleCallback' in window) window.requestIdleCallback(loadSeal, { timeout: 1200 });
 			else globalThis.setTimeout(loadSeal, 320);
 		}
@@ -198,9 +205,7 @@
 		autoOK = !reduce;
 		if (autoOK) animeAuto(true);
 
-		const onScroll = () => {
-			scrolled = document.documentElement.scrollTop > 600;
-		};
+		const onScroll = () => { scrolled = document.documentElement.scrollTop > 600; };
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
 
@@ -217,16 +222,24 @@
 		};
 		document.querySelectorAll('img').forEach(onImgLoad);
 
+		// SmoothCursor
+		if (desktop && !('ontouchstart' in window) && !reduce) {
+			cursorVisible = true;
+			cursorX = window.innerWidth / 2;
+			cursorY = window.innerHeight / 2;
+			cursorScale = 1;
+			animateCursor();
+			document.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
+		}
+
 		if (!reduce) {
 			(async () => {
 				try {
 					const gsapMod = await import('gsap');
 					const stMod = await import('gsap/dist/ScrollTrigger');
 					gsapLib = (gsapMod as any).gsap ?? (gsapMod as any).default;
-					stLib = (gsapMod as any).default ?? (gsapMod as any);
-					if ((stMod as any).ScrollTrigger) stLib = stMod;
+					stLib = (stMod as any).ScrollTrigger ? stMod : gsapMod;
 					gsapLib.registerPlugin(stLib.ScrollTrigger);
-
 					startMotion();
 					setTimeout(() => { animReady = true; }, 2200);
 				} catch (err) {
@@ -239,6 +252,9 @@
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
 			motionCleanup();
+			if (cursorRaf) cancelAnimationFrame(cursorRaf);
+			document.body.style.cursor = '';
+			cursorVisible = false;
 		};
 	});
 
@@ -248,9 +264,7 @@
 		requestAnimationFrame(() => {
 			motionCleanup();
 			killMotion();
-			requestAnimationFrame(() => {
-				startMotion();
-			});
+			requestAnimationFrame(() => { startMotion(); });
 		});
 	}
 
@@ -271,12 +285,22 @@
 			<span class="fallback-loop"></span>
 			<span class="fallback-body"><i></i><i></i><i></i></span>
 		</div>
-{/if}
+	{/if}
 	<a href="#main" class="skip-link">Skip to content</a>
 	<div class="scroll-progress" aria-hidden="true"></div>
 	<div class="paper-grain" aria-hidden="true"></div>
 	<div class="ink-wash" aria-hidden="true"></div>
 	{#if showWash}<InkWash />{/if}
+
+	<!-- SmoothCursor -->
+	{#if cursorVisible}
+		<div class="smooth-cursor" style="left: {cursorX}px; top: {cursorY}px; transform: scale({cursorScale}) translate(-50%, -50%);" aria-hidden="true">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>
+				<path d="M13 13l6 6"/>
+			</svg>
+		</div>
+	{/if}
 
 	<header class="mast">
 		<a class="logo" href="#top" aria-label="lora — home">
@@ -304,9 +328,7 @@
 					<span class="rule"></span>
 					<span class="folio">P.01<span class="folio-sep">/</span><span class="folio-total">07</span></span>
 				</div>
-				<h1>
-					构建<br /><span class="em">系统</span><br />让它<span class="z">进化。</span>
-				</h1>
+				<h1>构建<br /><span class="em">系统</span><br />让它<span class="z">进化。</span></h1>
 				<p class="dek">{DATA.description}</p>
 				<div class="hero-divider" aria-hidden="true"></div>
 				<ul class="hero-bullets">
@@ -409,9 +431,7 @@
 									</div>
 								</div>
 								{#if w.description}<p class="tl-desc">{w.description}</p>{/if}
-								{#if w.badges?.length}
-									<div class="tl-badges">{#each w.badges as b}<span>{b}</span>{/each}</div>
-								{/if}
+								{#if w.badges?.length}<div class="tl-badges">{#each w.badges as b}<span>{b}</span>{/each}</div>{/if}
 							</div>
 						</li>
 					{/each}
@@ -623,13 +643,8 @@
 		</svg>
 	</button>
 
-	<button
-		onclick={replayAnimations}
-		class="replay-btn"
-		class:visible={animReady}
-		aria-label="重播入场动画"
-		title="重播入场动画"
-	>
+	{#if animReady && !reduceMotion}
+		<button onclick={replayAnimations} class="replay-btn" class:visible={animReady} aria-label="重播入场动画" title="重播入场动画">
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 				<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
 				<path d="M21 3v5h-5" />
@@ -638,6 +653,7 @@
 			</svg>
 			<span>重播</span>
 		</button>
+	{/if}
 </div>
 
 <style>
@@ -670,6 +686,16 @@
 		display: block; border: 2px solid var(--ink);
 		background: linear-gradient(135deg, var(--zhu), rgba(198, 65, 44, 0.2));
 		box-shadow: 8px 8px 0 rgba(26, 24, 21, 0.22);
+	}
+
+	.smooth-cursor {
+		position: fixed;
+		z-index: 100;
+		pointer-events: none;
+		will-change: transform;
+		color: var(--zhu);
+		opacity: 0.6;
+		transition: opacity 0.3s;
 	}
 
 	.skip-link {
@@ -854,9 +880,7 @@
 	}
 
 	.self-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(24px, 4vw, 48px); }
-	.bio {
-		font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft);
-	}
+	.bio { font-size: 1.05rem; line-height: 1.7; color: var(--ink-soft); }
 	.bio :global(p) { margin-bottom: 1em; }
 	.bio :global(strong) { color: var(--ink); }
 	.bio :global(a) { color: var(--zhu); text-underline-offset: 3px; }
@@ -1199,12 +1223,8 @@
 			transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
 			background 0.25s, color 0.25s, border-color 0.25s;
 	}
-	.replay-btn.visible {
-		opacity: 1; transform: none; pointer-events: auto;
-	}
-	.replay-btn:hover {
-		background: var(--ink); color: var(--paper); border-color: var(--ink);
-	}
+	.replay-btn.visible { opacity: 1; transform: none; pointer-events: auto; }
+	.replay-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 	.replay-btn svg { flex: 0 0 auto; }
 
 	@media (prefers-reduced-motion: reduce) {
