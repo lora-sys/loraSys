@@ -128,10 +128,9 @@
 			nextPost = { title: posts[idx + 1].title, slug: posts[idx + 1].slug };
 	});
 
-	// Giscus — theme follows system preference
+	// Giscus — matches blog paper/ink light theme
 	onMount(() => {
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		const theme = prefersDark ? 'dark' : 'light';
+		const theme = 'light';
 
 		const script = document.createElement('script');
 		script.src = 'https://giscus.app/client.js';
