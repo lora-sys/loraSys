@@ -139,7 +139,8 @@
 		script.setAttribute('data-repo-id', 'R_kgDORZoeSQ');
 		script.setAttribute('data-category', 'Announcements');
 		script.setAttribute('data-category-id', 'DIC_kwDORZoeSc4C9UW6');
-		script.setAttribute('data-mapping', 'pathname');
+		script.setAttribute('data-mapping', 'title');
+		script.setAttribute('data-term', data.meta?.title ?? '');
 		script.setAttribute('data-strict', '0');
 		script.setAttribute('data-reactions-enabled', '1');
 		script.setAttribute('data-emit-metadata', '1');
