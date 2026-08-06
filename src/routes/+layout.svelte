@@ -1,8 +1,6 @@
 <script lang="ts">
 	import '../app.css';
 	import { base } from '$app/paths';
-	// INK EDITION fonts — Latin display self-hosted; CN uses system serif (blog is CN-heavy;
-	// self-hosting full CJK would be MBs). Fraunces 'standard' axis (wght+opsz) keeps payload light.
 	import '@fontsource-variable/fraunces/standard.css';
 	import '@fontsource-variable/fraunces/standard-italic.css';
 	import '@fontsource/archivo/500.css';
@@ -10,12 +8,24 @@
 	import '@fontsource/archivo/900.css';
 	import Navbar from '$lib/components/ink/Navbar.svelte';
 	import ResumeViewer from '$lib/components/ink/ResumeViewer.svelte';
+	import { beforeNavigate, afterNavigate } from '$app/navigation';
 
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
 
+	let transitioning = $state(false);
 	let { children }: Props = $props();
+
+	beforeNavigate(() => {
+		transitioning = true;
+	});
+
+	afterNavigate(() => {
+		setTimeout(() => {
+			transitioning = false;
+		}, 120);
+	});
 </script>
 
 <svelte:head>
@@ -35,6 +45,10 @@
 </div>
 <ResumeViewer />
 
+{#if transitioning}
+	<div class="page-transition" aria-hidden="true"></div>
+{/if}
+
 <style>
 	:global(html, body) {
 		margin: 0;
@@ -51,7 +65,6 @@
 	:global(::after) {
 		box-sizing: border-box;
 	}
-	/* Offset for the fixed navbar + anchor targets clear the nav */
 	:global(section[id]),
 	:global([id='top']) {
 		scroll-margin-top: 80px;
@@ -74,5 +87,19 @@
 	:global(.mermaid svg) {
 		max-width: 100%;
 		height: auto;
+	}
+
+	.page-transition {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		background: var(--ink);
+		pointer-events: none;
+		animation: pageFlash 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+	}
+	@keyframes pageFlash {
+		0% { opacity: 0; }
+		30% { opacity: 1; }
+		100% { opacity: 0; }
 	}
 </style>
