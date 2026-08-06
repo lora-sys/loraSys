@@ -8,6 +8,7 @@ export type Post = {
 	categories: string[];
 	published: boolean;
 	readingTime?: number;
+	year?: number;
 };
 
 /** Work experience entry — shared between resume data and page component */

@@ -5,15 +5,21 @@
 	let { data } = $props();
 
 	const allCategories = Array.from(new Set(data.posts.flatMap((p) => p.categories ?? []))).sort();
+	const allYears = [...new Set(data.posts.map((p) => new Date(p.date).getFullYear()))].sort((a, b) => b - a);
 
 	let searchQuery = $state('');
 	let activeCategory = $state<string | null>(null);
+	let activeYear = $state<number | null>(null);
 
 	const filtered = $derived.by(() => {
 		let posts = data.posts;
 		if (activeCategory !== null) {
 			const cat = activeCategory;
 			posts = posts.filter((p) => (p.categories ?? []).includes(cat));
+		}
+		if (activeYear !== null) {
+			const y = activeYear;
+			posts = posts.filter((p) => new Date(p.date).getFullYear() === y);
 		}
 		if (searchQuery.trim()) {
 			const q = searchQuery.toLowerCase();
@@ -113,6 +119,24 @@
 					</button>
 				{/each}
 			</div>
+			{#if allYears.length > 1}
+				<div class="year-pills" role="group" aria-label="年份筛选">
+					<button
+						class="pill {activeYear === null ? 'active' : ''}"
+						onclick={() => (activeYear = null)}
+					>
+						全部年份
+					</button>
+					{#each allYears as y}
+						<button
+							class="pill {activeYear === y ? 'active' : ''}"
+							onclick={() => (activeYear = activeYear === y ? null : y)}
+						>
+							{y}
+						</button>
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		{#if filtered.length === 0}
@@ -317,6 +341,14 @@
 		background: var(--zhu);
 		border-color: var(--zhu);
 		color: var(--paper);
+	}
+	.year-pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+		padding-top: 12px;
+		border-top: 1px solid var(--ink-line);
 	}
 
 	/* Card grid */

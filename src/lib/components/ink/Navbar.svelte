@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import ModeToggle from './ModeToggle.svelte';
+	import TerminalEasterEgg from './TerminalEasterEgg.svelte';
 
 	type Link = { label: string; href: string; id?: string; route?: string };
 	const links: Link[] = [
@@ -20,6 +21,7 @@
 	let active = $state('');
 	let scrolled = $state(false);
 	let menuOpen = $state(false);
+	let showTerminal = $state(false);
 
 	onMount(() => {
 		const onScroll = () => (scrolled = window.scrollY > 40);
@@ -63,6 +65,10 @@
 	onMount(() => {
 		const onKey = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' && menuOpen) closeMenu();
+			if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+				e.preventDefault();
+				showTerminal = true;
+			}
 		};
 		window.addEventListener('keydown', onKey);
 		return () => window.removeEventListener('keydown', onKey);
@@ -120,6 +126,11 @@
 		<ModeToggle />
 	</div>
 </nav>
+
+<!-- CLI Terminal Easter Egg (client-only) -->
+{#if typeof window !== 'undefined'}
+	<TerminalEasterEgg bind:visible={showTerminal} />
+{/if}
 
 <style>
 	.nav {

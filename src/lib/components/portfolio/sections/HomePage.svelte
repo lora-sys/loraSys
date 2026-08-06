@@ -6,6 +6,7 @@
 	import InkParticles from '$lib/components/ink/InkParticles.svelte';
 	import Lens from '$lib/components/magic/lens/lens.svelte';
 	import ContributionGraph from '$lib/components/portfolio/ContributionGraph.svelte';
+	import BackToTop from '$lib/components/ui/back-to-top/back-to-top.svelte';
 	import type { WorkItem } from '$lib/types';
 
 	// SmoothCursor state
@@ -671,11 +672,7 @@
 		</div>
 	</footer>
 
-	<button onclick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} class="back-to-top" aria-label="Back to top">
-		<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-			<path d="m18 15-6-6-6 6" />
-		</svg>
-	</button>
+	<BackToTop threshold={600} />
 
 	{#if animReady && !reduceMotion}
 		<button onclick={replayAnimations} class="replay-btn" class:visible={animReady} aria-label="重播入场动画" title="重播入场动画">
@@ -699,7 +696,7 @@
 		font-family: var(--font-serif);
 		color: var(--ink);
 	}
-	.mast, .band, main, .colophon, .back-to-top { position: relative; z-index: 2; }
+	.mast, .band, main, .colophon { position: relative; z-index: 2; }
 	.seal-fallback {
 		position: fixed; right: -4vw; top: 18vh; z-index: 1;
 		width: min(28vw, 360px); aspect-ratio: 0.72;
@@ -1285,16 +1282,6 @@
 	.col-r { text-align: right; }
 	.col-r a { color: var(--ink-soft); text-decoration: none; transition: color 0.25s; }
 	.col-r a:hover { color: var(--zhu); }
-
-	.back-to-top {
-		position: fixed; bottom: 24px; right: 24px; z-index: 40;
-		width: 42px; height: 42px; display: grid; place-items: center;
-		background: var(--ink); color: var(--paper); border: none; border-radius: 2px;
-		cursor: pointer; opacity: 0; transform: translateY(8px); pointer-events: none;
-		transition: opacity 0.35s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-	.back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
-	.back-to-top:hover { background: var(--zhu); }
 
 	.replay-btn {
 		position: fixed; bottom: 24px; left: 24px; z-index: 40;

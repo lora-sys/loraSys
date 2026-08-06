@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { reveal } from '$lib/actions/reveal';
+	import BackToTop from '$lib/components/ui/back-to-top/back-to-top.svelte';
 
 	const sections = [
 		{
@@ -152,6 +153,8 @@
 			<span>04 个版块 · 更新于 2026-07</span>
 		</div>
 	</div>
+
+	<BackToTop threshold={300} />
 </main>
 
 <style>

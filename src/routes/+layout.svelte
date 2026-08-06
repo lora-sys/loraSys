@@ -9,6 +9,9 @@
 	import Navbar from '$lib/components/ink/Navbar.svelte';
 	import ResumeViewer from '$lib/components/ink/ResumeViewer.svelte';
 	import { beforeNavigate, afterNavigate } from '$app/navigation';
+	import { page } from '$app/stores';
+	import { initLenis, destroyLenis } from '$lib/lenis';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		children?: import('svelte').Snippet;
@@ -25,6 +28,32 @@
 		setTimeout(() => {
 			transitioning = false;
 		}, 120);
+	});
+
+	// Lenis smooth scroll — only on non-HomePage routes.
+	// HomePage uses GSAP ScrollTrigger with native scroll for complex entry animations.
+	$effect(() => {
+		const path = $page.url.pathname;
+		destroyLenis();
+
+		if (path !== '/') {
+			try {
+				initLenis();
+			} catch {
+				// lenis import failed — native scroll fallback
+			}
+		}
+
+		return () => destroyLenis();
+	});
+
+	// View counter — fire once per session per page
+	onMount(() => {
+		if (typeof sessionStorage === 'undefined' || sessionStorage.getItem('vk')) return;
+		sessionStorage.setItem('vk', '1');
+		fetch(`/api/views?path=${encodeURIComponent($page.url.pathname)}`, { method: 'POST' }).catch(
+			() => {}
+		);
 	});
 </script>
 

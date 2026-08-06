@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Marquee from '$lib/components/magic/marquee/marquee.svelte';
+	import BackToTop from '$lib/components/ui/back-to-top/back-to-top.svelte';
 	import { formatDate } from '$lib/utils';
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
@@ -19,6 +20,21 @@
 	let nextPost: { title: string; slug: string } | null = $state(null);
 
 	onMount(() => {
+		// MediumZoom — click-to-zoom on article images (client only)
+		(async () => {
+			try {
+				// @ts-ignore
+				const mz = await import('medium-zoom');
+				const z = (mz.default ?? mz) as (selector: string, opts?: Record<string, unknown>) => void;
+				z('article img', {
+					background: 'var(--paper)',
+					container: 'article',
+					scrollOffset: 0
+				});
+			} catch {
+				/* medium-zoom not available */
+			}
+		})();
 		// TOC — use rAF chain for reliable heading detection (avoids async onMount)
 		const tocRaf = requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
@@ -369,6 +385,11 @@
 			<!-- Giscus comments -->
 			<Separator class="my-8 border-border/50" />
 			<div class="giscus"></div>
+
+			<!-- Back to top -->
+			<div class="mt-16">
+				<BackToTop threshold={300} />
+			</div>
 		</article>
 
 		<!-- Right-side fixed TOC (desktop only) -->
