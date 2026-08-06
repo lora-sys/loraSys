@@ -47,13 +47,14 @@
 	const contactSocials = socials.filter((s) => ['GitHub', 'LinkedIn', 'X', 'email'].includes(s.name));
 
 	const contents = [
-		{ n: '01', cn: '己', title: '关于我', note: '我是谁', href: '#self', total: 7 },
-		{ n: '02', cn: '技', title: '技艺', note: '技术栈', href: '#skills', total: 7 },
-		{ n: '03', cn: '歷', title: '经历', note: '工作经历', href: '#exp', total: 7 },
-		{ n: '04', cn: '作', title: '精选作品', note: `${DATA.projects.length} 个项目`, href: '#work', total: 7 },
-		{ n: '05', cn: '戰', title: '闯关记录', note: 'ETH · Monad', href: '#hack', total: 7 },
-		{ n: '06', cn: '閒', title: '闲余时光', note: '动漫 & 更多', href: '#off', total: 7 },
-		{ n: '07', cn: '聯', title: '打个招呼', note: '', href: '#contact', total: 7 }
+		{ n: '01', cn: '己', title: '关于我', note: '我是谁', href: '#self', total: 8 },
+		{ n: '02', cn: '技', title: '技艺', note: '技术栈', href: '#skills', total: 8 },
+		{ n: '03', cn: '歷', title: '经历', note: '工作经历', href: '#exp', total: 8 },
+		{ n: '04', cn: '作', title: '精选作品', note: `${DATA.projects.length} 个项目`, href: '#work', total: 8 },
+		{ n: '05', cn: '戰', title: '闯关记录', note: 'ETH · Monad', href: '#hack', total: 8 },
+		{ n: '06', cn: '閒', title: '闲余时光', note: '动漫 & 更多', href: '#off', total: 8 },
+		{ n: '07', cn: '記', title: '速记', note: '一手笔记', href: '#notes', total: 8 },
+		{ n: '08', cn: '聯', title: '打个招呼', note: '', href: '#contact', total: 8 }
 	];
 
 	const skillGroups = [
@@ -209,6 +210,10 @@
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
 
+		lastScrollY = document.documentElement.scrollTop;
+		lastScrollTime = Date.now();
+		progressRaf = requestAnimationFrame(updateProgressThickness);
+
 		const onImgLoad = (img: HTMLImageElement) => {
 			const mark = () => img.classList.add('loaded');
 			if (img.complete && img.naturalWidth > 0) mark();
@@ -253,6 +258,7 @@
 			clearInterval(animeTimer);
 			motionCleanup();
 			if (cursorRaf) cancelAnimationFrame(cursorRaf);
+			if (scrollBlurRaf) cancelAnimationFrame(scrollBlurRaf);
 			document.body.style.cursor = '';
 			cursorVisible = false;
 		};
@@ -326,7 +332,7 @@
 				<div class="hero-meta">
 					<span class="tag">Cover · 序</span>
 					<span class="rule"></span>
-					<span class="folio">P.01<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+					<span class="folio">P.01<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 				</div>
 				<h1>构建<br /><span class="em">系统</span><br />让它<span class="z">进化。</span></h1>
 				<p class="dek">{DATA.description}</p>
@@ -367,7 +373,7 @@
 			<div class="sec-head">
 				<span class="cn">己</span>
 				<div class="sec-title"><h2>关于我</h2>{@render brush()}</div>
-				<span class="folio">P.02<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.02<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			<div class="self-grid">
 				<div class="bio">{@html DATA.summaryHtml}</div>
@@ -392,7 +398,7 @@
 			<div class="sec-head">
 				<span class="cn">技</span>
 				<div class="sec-title"><h2>技艺</h2>{@render brush()}</div>
-				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			<div class="marquees">
 				{#each skillGroups as g, gi}
@@ -414,7 +420,7 @@
 			<div class="sec-head">
 				<span class="cn">歷</span>
 				<div class="sec-title"><h2>经历</h2>{@render brush()}</div>
-				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.03<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			{#if work.length}
 				<ol class="timeline">
@@ -472,7 +478,7 @@
 			<div class="sec-head">
 				<span class="cn">作</span>
 				<div class="sec-title"><h2>精选作品</h2>{@render brush()}</div>
-				<span class="folio">P.04<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.04<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			<div class="work-intro">
 				<p>从第一性原理到可运行产品的精选系统。</p>
@@ -505,7 +511,7 @@
 			<div class="sec-head">
 				<span class="cn">戰</span>
 				<div class="sec-title"><h2>闯关记录</h2>{@render brush()}</div>
-				<span class="folio">P.05<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.05<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			<ol class="hx-list">
 				{#each DATA.hackathons as h, i}
@@ -535,7 +541,7 @@
 			<div class="sec-head">
 				<span class="cn">閒</span>
 				<div class="sec-title"><h2>闲余时光</h2>{@render brush()}</div>
-				<span class="folio">P.06<span class="folio-sep">/</span><span class="folio-total">07</span></span>
+				<span class="folio">P.06<span class="folio-sep">/</span><span class="folio-total">08</span></span>
 			</div>
 			<div class="anime-head">
 				<p class="mini-h">动漫</p>
@@ -597,6 +603,34 @@
 					</li>
 				{/each}
 			</ul>
+		</section>
+
+		<!-- 速记 NOTES -->
+		<section id="notes" data-chapter="記" class="sec notes">
+			<div class="sec-head">
+				<span class="cn">記</span>
+				<div class="sec-title">
+					<h2>速记</h2>
+					{@render brush()}
+				</div>
+				<span class="folio">P.07<span class="folio-sep">/</span><span class="folio-total">08</span></span>
+			</div>
+			<p class="notes-dek">一手笔记 · 持续生长中</p>
+			<div class="notes-grid">
+				{#each DATA.notes as n, i}
+					<article class="note-card" style="--note-delay: {i * 0.06}s">
+						<div class="note-header">
+							<time class="note-date" datetime={n.date}>{n.date}</time>
+							<div class="note-tags">
+								{#each n.tags as t}<span class="note-tag">{t}</span>{/each}
+							</div>
+						</div>
+						<h3 class="note-title">{n.title}</h3>
+						<p class="note-summary">{n.summary}</p>
+						<div class="note-line" aria-hidden="true"></div>
+					</article>
+				{/each}
+			</div>
 		</section>
 
 		<section id="contact" data-chapter="聯" class="sec contact">
@@ -1148,6 +1182,61 @@
 	.fav.featured-fav .fav-img { aspect-ratio: 2.35 / 1; }
 	.fav.featured-fav .fav-cap { opacity: 1; background: linear-gradient(90deg, rgba(26, 24, 21, 0.55) 0%, transparent 70%); }
 	.fav.featured-fav .fav-cap b { font-size: clamp(1.2rem, 2.5vw, 1.8rem); }
+
+	.notes-dek {
+		font-family: var(--font-label); font-size: var(--type-label);
+		letter-spacing: 0.24em; text-transform: uppercase;
+		color: var(--ink-mute); margin: -20px 0 32px;
+	}
+	.notes-grid {
+		display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+	}
+	.note-card {
+		padding: 24px; border: 1px solid var(--ink-line); border-radius: 2px;
+		background: var(--paper);
+		transition: border-color 0.3s, box-shadow 0.3s;
+		opacity: 0; transform: translateY(12px);
+		animation: noteIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+		animation-delay: var(--note-delay, 0s);
+	}
+	@keyframes noteIn {
+		to { opacity: 1; transform: none; }
+	}
+	.note-card:hover {
+		border-color: var(--ink-line-strong);
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+	}
+	.note-header {
+		display: flex; justify-content: space-between; align-items: center;
+		margin-bottom: 12px;
+	}
+	.note-date {
+		font-family: var(--font-label); font-size: 0.65rem;
+		letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+	}
+	.note-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+	.note-tag {
+		font-family: var(--font-label); font-size: 0.58rem;
+		letter-spacing: 0.08em; text-transform: uppercase;
+		color: var(--zhu); border: 1px solid rgba(198, 65, 44, 0.2);
+		padding: 2px 8px; border-radius: 2px;
+	}
+	.note-title {
+		font-family: var(--font-serif); font-weight: 900;
+		font-size: 1.05rem; letter-spacing: -0.01em; margin: 0 0 8px;
+		line-height: 1.3;
+	}
+	.note-summary {
+		font-size: 0.82rem; line-height: 1.55; color: var(--ink-soft);
+		margin: 0;
+		display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+	}
+	.note-line {
+		height: 1px; background: var(--ink-line); margin-top: 14px;
+		transform: scaleX(0); transform-origin: left;
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.note-card:hover .note-line { transform: scaleX(1); }
 
 	.contact { display: grid; grid-template-columns: auto 1fr; gap: clamp(24px, 4vw, 48px); }
 	.contact .cn.ghost {

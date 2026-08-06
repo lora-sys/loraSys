@@ -584,5 +584,32 @@ export const DATA = {
 				}
 			]
 		}
+	],
+	notes: [
+		{
+			title: '多智能体系统的涌现行为',
+			date: '2025-12',
+			summary: '当多个 LLM 实例协作解决同一任务时，观察到了简单的规则如何导致复杂的群体行为。 swarm intelligence 在工程系统中的潜在应用。',
+			tags: ['AI Agents', 'Research']
+		},
+		{
+			title: 'Monad 并行 EVM 性能基准',
+			date: '2025-11',
+			summary: '测试了 Monad 的并行交易执行性能，与以太坊 L1 的对比显示 10x+ TPS 提升。关键瓶颈在于状态依赖分析。',
+			tags: ['Web3', 'Monad', 'Benchmark']
+		},
+		{
+			title: 'Vercel AI SDK v3 迁移经验',
+			date: '2025-10',
+			summary: '从 v2 迁移到 v3 的主要变化：useChat hook 重构、流式传输 API 变更、新的 tool calling 语法。迁移成本中等，文档仍在完善中。',
+			tags: ['Frontend', 'AI', 'Vercel']
+		},
+		{
+			title: 'Rust for AI Agents: 值得吗？',
+			date: '2025-09',
+			summary: '用 Rust 重写 agent runtime 的利弊分析。内存安全和高并发是优势，但生态和开发速度是瓶颈。结论：核心 runtime 用 Rust，应用层继续用 TypeScript。',
+			tags: ['Rust', 'AI Agents', 'Architecture']
+		}
 	]
 };
+
