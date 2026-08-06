@@ -231,9 +231,6 @@
 	<meta name="twitter:title" content={data.meta?.title ?? ''} />
 	<meta name="twitter:description" content={data.meta?.description ?? ''} />
 	<meta name="twitter:image" content={`${siteUrl}/og-cover.png`} />
-	<script type="application/ld+json">
-		{JSON.stringify(JSON.parse(ldJson))}
-	</script>
 </svelte:head>
 
 <div class="blog-post-wrap relative mx-auto max-w-6xl px-4 py-12 lg:px-8">

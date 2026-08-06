@@ -21,4 +21,4 @@ src/lib/data/contributions.json
 # which Prettier's HTML parser cannot handle
 src/routes/+page.svelte
 src/routes/blog/+page.svelte
-src/routes/blog/[slug]/+page.svelte
+src/routes/blog/\[slug\]/+page.svelte
