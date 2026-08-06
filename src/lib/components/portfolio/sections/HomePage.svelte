@@ -92,6 +92,94 @@
 	let showWash = $state(false);
 	let show3d = $state(false);
 	let SealStage: any = $state(undefined);
+	let animReady = $state(false);
+	let motionCleanup = () => {};
+	let magCleanupsRef: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
+	let gsapLib: any;
+	let stLib: any;
+
+	function killMotion() {
+		if (!gsapLib) return;
+		if (stLib) stLib.ScrollTrigger.getAll().forEach((s: any) => s.kill());
+		gsapLib.killTweensOf('.seal, .mast .word, .hero-left > *, .index-h, .index li, .pull, .sec-head, .brush path, .row, .hk, .card, .tl-item, .hx, .fav, .mrow, .count');
+		gsapLib.set('.seal', { clearProps: 'all' });
+		gsapLib.set('.mast .word', { clearProps: 'all' });
+		gsapLib.set('.hero-left > *', { clearProps: 'all' });
+		gsapLib.set('.index-h, .index li, .pull', { clearProps: 'all' });
+		gsapLib.set('.sec-head', { clearProps: 'all' });
+		gsapLib.set('.brush path', { clearProps: 'all' });
+		gsapLib.set('.row', { clearProps: 'all' });
+		gsapLib.set('.hk, .card, .tl-item, .hx, .fav', { clearProps: 'all' });
+		gsapLib.set('.mrow', { clearProps: 'all' });
+		gsapLib.set('.count', { clearProps: 'all' });
+		document.querySelectorAll('.brush path').forEach((p: SVGPathElement) => {
+			const len = p.getTotalLength();
+			gsapLib.set(p, { strokeDasharray: len, strokeDashoffset: len });
+		});
+	}
+
+	function initMotion() {
+		const gsap = gsapLib;
+		const ScrollTrigger = stLib?.ScrollTrigger;
+		if (!gsap) return;
+
+		gsap.fromTo('.seal', { scale: 2.8, opacity: 0, rotate: -30, filter: 'blur(8px)' }, {
+			scale: 1, opacity: 1, rotate: -4, filter: 'blur(0px)', duration: 0.8, ease: 'back.out(1.4)', delay: 0.1
+		});
+		gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
+		gsap.from('.hero-left > *', { y: 26, opacity: 0, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
+		gsap.from('.index-h, .index li, .pull', { y: 16, opacity: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.35 });
+
+		gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
+			const head = sec.querySelector('.sec-head');
+			if (head) gsap.from(head, { y: 16, duration: 0.45, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%' } });
+			const brush = sec.querySelector<SVGPathElement>('.brush path');
+			if (brush) {
+				const len = brush.getTotalLength();
+				gsap.set(brush, { strokeDasharray: len, strokeDashoffset: len });
+				gsap.to(brush, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', scrollTrigger: { trigger: sec, start: 'top 74%' } });
+			}
+		});
+		gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
+			gsap.from(row, { y: 12, duration: 0.35, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 90%' } });
+		});
+		gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
+			gsap.from(el, { y: 12, duration: 0.35, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true, onRefresh: (self: any) => self.animation.play() } });
+		});
+		gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
+			gsap.from(el, { xPercent: i % 2 ? 5 : -5, opacity: 0, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+		});
+		gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
+			const target = Number(el.dataset.count || '0');
+			const obj = { v: 0 };
+			if (ScrollTrigger) {
+				ScrollTrigger.create({
+					trigger: el, start: 'top 75%', once: true,
+					onEnter: () => gsap.to(obj, { v: target, duration: 1.0, ease: 'power2.out', onUpdate: () => (el.textContent = String(Math.round(obj.v))) })
+				});
+			}
+		});
+
+		const magCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
+		gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
+			const move = (e: MouseEvent) => {
+				const r = el.getBoundingClientRect();
+				gsap.to(el, { x: (e.clientX - (r.left + r.width / 2)) * 0.3, y: (e.clientY - (r.top + r.height / 2)) * 0.3, duration: 0.3 });
+			};
+			const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+			el.addEventListener('mousemove', move);
+			el.addEventListener('mouseleave', leave);
+			magCleanups.push({ el, move, leave });
+		});
+
+		if (ScrollTrigger) ScrollTrigger.refresh();
+		magCleanupsRef = magCleanups;
+	}
+
+	function startMotion() {
+		motionCleanup();
+		initMotion();
+	}
 
 	onMount(() => {
 		loadContributions();
@@ -110,7 +198,9 @@
 		autoOK = !reduce;
 		if (autoOK) animeAuto(true);
 
-		const onScroll = () => { scrolled = document.documentElement.scrollTop > 600; };
+		const onScroll = () => {
+			scrolled = document.documentElement.scrollTop > 600;
+		};
 		window.addEventListener('scroll', onScroll, { passive: true });
 		onScroll();
 
@@ -127,68 +217,18 @@
 		};
 		document.querySelectorAll('img').forEach(onImgLoad);
 
-		let cleanup = () => {};
 		if (!reduce) {
 			(async () => {
 				try {
 					const gsapMod = await import('gsap');
 					const stMod = await import('gsap/dist/ScrollTrigger');
-					const gsap = (gsapMod as any).gsap ?? (gsapMod as any).default;
-					const ScrollTrigger = (stMod as any).ScrollTrigger ?? (stMod as any).default;
-					gsap.registerPlugin(ScrollTrigger);
+					gsapLib = (gsapMod as any).gsap ?? (gsapMod as any).default;
+					stLib = (gsapMod as any).default ?? (gsapMod as any);
+					if ((stMod as any).ScrollTrigger) stLib = stMod;
+					gsapLib.registerPlugin(stLib.ScrollTrigger);
 
-					gsap.fromTo('.seal', { scale: 2.8, opacity: 0, rotate: -30, filter: 'blur(8px)' }, {
-						scale: 1, opacity: 1, rotate: -4, filter: 'blur(0px)', duration: 0.8, ease: 'back.out(1.4)', delay: 0.1
-					});
-					gsap.from('.mast .word', { yPercent: 24, opacity: 0, duration: 0.7, ease: 'power3.out' });
-					gsap.from('.hero-left > *', { y: 26, opacity: 0, duration: 0.7, stagger: 0.09, ease: 'power3.out', delay: 0.1 });
-					gsap.from('.index-h, .index li, .pull', { y: 16, opacity: 0, duration: 0.6, stagger: 0.05, ease: 'power2.out', delay: 0.35 });
-
-					gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
-						const head = sec.querySelector('.sec-head');
-						if (head) gsap.from(head, { y: 16, duration: 0.45, ease: 'power3.out', scrollTrigger: { trigger: sec, start: 'top 80%' } });
-						const brush = sec.querySelector<SVGPathElement>('.brush path');
-						if (brush) {
-							const len = brush.getTotalLength();
-							gsap.set(brush, { strokeDasharray: len, strokeDashoffset: len });
-							gsap.to(brush, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', scrollTrigger: { trigger: sec, start: 'top 74%' } });
-						}
-					});
-					gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
-						gsap.from(row, { y: 12, duration: 0.35, ease: 'power2.out', scrollTrigger: { trigger: row, start: 'top 90%' } });
-					});
-					gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
-						gsap.from(el, { y: 12, duration: 0.35, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%', once: true, onRefresh: (self: any) => self.animation.play() } });
-					});
-					gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
-						gsap.from(el, { xPercent: i % 2 ? 5 : -5, opacity: 0, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
-					});
-					gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
-						const target = Number(el.dataset.count || '0');
-						const obj = { v: 0 };
-						ScrollTrigger.create({
-							trigger: el, start: 'top 75%', once: true,
-							onEnter: () => gsap.to(obj, { v: target, duration: 1.0, ease: 'power2.out', onUpdate: () => (el.textContent = String(Math.round(obj.v))) })
-						});
-					});
-
-					const magCleanups: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> = [];
-					gsap.utils.toArray<HTMLElement>('.c-arrow, .socials a').forEach((el) => {
-						const move = (e: MouseEvent) => {
-							const r = el.getBoundingClientRect();
-							gsap.to(el, { x: (e.clientX - (r.left + r.width / 2)) * 0.3, y: (e.clientY - (r.top + r.height / 2)) * 0.3, duration: 0.3 });
-						};
-						const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-						el.addEventListener('mousemove', move);
-						el.addEventListener('mouseleave', leave);
-						magCleanups.push({ el, move, leave });
-					});
-
-					ScrollTrigger.refresh();
-					cleanup = () => {
-						magCleanups.forEach(({ el, move, leave }) => { el.removeEventListener('mousemove', move); el.removeEventListener('mouseleave', leave); });
-						ScrollTrigger.getAll().forEach((s: any) => s.kill());
-					};
+					startMotion();
+					setTimeout(() => { animReady = true; }, 2200);
 				} catch (err) {
 					console.warn('[ink] motion init failed, static fallback', err);
 				}
@@ -198,9 +238,21 @@
 		return () => {
 			window.removeEventListener('scroll', onScroll);
 			clearInterval(animeTimer);
-			cleanup();
+			motionCleanup();
 		};
 	});
+
+	function replayAnimations() {
+		if (!gsapLib) return;
+		window.scrollTo({ top: 0, behavior: 'instant' });
+		requestAnimationFrame(() => {
+			motionCleanup();
+			killMotion();
+			requestAnimationFrame(() => {
+				startMotion();
+			});
+		});
+	}
 
 	const builtDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 </script>
@@ -219,7 +271,7 @@
 			<span class="fallback-loop"></span>
 			<span class="fallback-body"><i></i><i></i><i></i></span>
 		</div>
-	{/if}
+{/if}
 	<a href="#main" class="skip-link">Skip to content</a>
 	<div class="scroll-progress" aria-hidden="true"></div>
 	<div class="paper-grain" aria-hidden="true"></div>
@@ -570,6 +622,22 @@
 			<path d="m18 15-6-6-6 6" />
 		</svg>
 	</button>
+
+	<button
+		onclick={replayAnimations}
+		class="replay-btn"
+		class:visible={animReady}
+		aria-label="重播入场动画"
+		title="重播入场动画"
+	>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+				<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+				<path d="M21 3v5h-5" />
+				<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+				<path d="M8 16H3v5" />
+			</svg>
+			<span>重播</span>
+		</button>
 </div>
 
 <style>
@@ -1114,6 +1182,30 @@
 	}
 	.back-to-top.visible { opacity: 1; transform: none; pointer-events: auto; }
 	.back-to-top:hover { background: var(--zhu); }
+
+	.replay-btn {
+		position: fixed; bottom: 24px; left: 24px; z-index: 40;
+		display: inline-flex; align-items: center; gap: 6px;
+		padding: 8px 14px;
+		background: var(--paper); color: var(--ink);
+		border: 1px solid var(--ink-line); border-radius: 100px;
+		font-family: var(--font-label); font-size: 0.68rem;
+		font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+		cursor: pointer; white-space: nowrap;
+		opacity: 0; transform: translateY(8px) scale(0.9);
+		pointer-events: none;
+		transition:
+			opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.25s, color 0.25s, border-color 0.25s;
+	}
+	.replay-btn.visible {
+		opacity: 1; transform: none; pointer-events: auto;
+	}
+	.replay-btn:hover {
+		background: var(--ink); color: var(--paper); border-color: var(--ink);
+	}
+	.replay-btn svg { flex: 0 0 auto; }
 
 	@media (prefers-reduced-motion: reduce) {
 		.mtrack { animation: none; }
