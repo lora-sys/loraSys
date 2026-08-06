@@ -12,45 +12,9 @@
 	const siteUrl = 'https://lora-sys.github.io/loraSys';
 	const postUrl = `${siteUrl}/blog/${slug}`;
 
-	const ldJson = JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'BlogPosting',
-		headline: data.meta?.title ?? '',
-		datePublished: data.meta?.date ?? '',
-		dateModified: data.meta?.date ?? '',
-		description: data.meta?.description ?? '',
-		keywords: data.meta?.categories?.join(', ') ?? '',
-		author: { '@type': 'Person', name: 'Lora Sys', url: siteUrl },
-		publisher: {
-			'@type': 'Person',
-			name: 'Lora Sys',
-			url: siteUrl
-		},
-		mainEntityOfPage: {
-			'@type': 'WebPage',
-			'@id': postUrl
-		},
-		url: postUrl,
-		image: `${siteUrl}/og-cover.png`,
-		inLanguage: 'zh-CN',
-		articleSection: data.meta?.categories?.[0] ?? 'Technology',
-		...(data.meta?.categories?.length ? { articleTag: data.meta.categories } : {}),
-		'@graph': [
-			{
-				'@type': 'BreadcrumbList',
-				itemListElement: [
-					{ '@type': 'ListItem', position: 1, name: '首页', item: `${siteUrl}/` },
-					{ '@type': 'ListItem', position: 2, name: '日志', item: `${siteUrl}/blog` },
-					{ '@type': 'ListItem', position: 3, name: data.meta?.title ?? '' }
-				]
-			}
-		]
-	});
-
 	let toc = $state<Array<{ id: string; text: string; level: number }>>([]);
 	let activeHeading = $state('');
 	let tocDrawerOpen = $state(false);
-	let readingProgress = $state(0);
 	let prevPost: { title: string; slug: string } | null = $state(null);
 	let nextPost: { title: string; slug: string } | null = $state(null);
 
@@ -90,7 +54,6 @@
 					const articleHeight = article.scrollHeight;
 					const scrolled = window.scrollY - articleTop + window.innerHeight * 0.3;
 					const progress = Math.min(1, Math.max(0, scrolled / articleHeight));
-					readingProgress = progress;
 					if (progressBar) {
 						progressBar.style.transform = `scaleX(${progress})`;
 					}
