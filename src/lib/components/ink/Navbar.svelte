@@ -19,6 +19,7 @@
 
 	let active = $state('');
 	let scrolled = $state(false);
+	let menuOpen = $state(false);
 
 	onMount(() => {
 		const onScroll = () => (scrolled = window.scrollY > 40);
@@ -49,18 +50,75 @@
 		if (l.route) return $page.url.pathname.startsWith(l.route);
 		return $page.url.pathname === '/' && active === l.id;
 	}
+
+	function toggleMenu() {
+		menuOpen = !menuOpen;
+	}
+
+	function closeMenu() {
+		menuOpen = false;
+	}
+
+	// Close mobile menu on Escape key
+	onMount(() => {
+		const onKey = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && menuOpen) closeMenu();
+		};
+		window.addEventListener('keydown', onKey);
+		return () => window.removeEventListener('keydown', onKey);
+	});
 </script>
 
 <nav class="nav" class:scrolled aria-label="Primary">
 	<a class="brand" href="{base}/" aria-label="lora — home">
 		lora<span class="seal-dot" aria-hidden="true"></span>
 	</a>
-	<div class="links">
+
+	<!-- Hamburger button (mobile only) -->
+	<button
+		class="hamburger"
+		class:open={menuOpen}
+		onclick={toggleMenu}
+		aria-label={menuOpen ? '关闭菜单' : '打开菜单'}
+		aria-expanded={menuOpen}
+		aria-controls="mobile-menu"
+	>
+		<span class="hamburger-line"></span>
+		<span class="hamburger-line"></span>
+		<span class="hamburger-line"></span>
+	</button>
+
+	<!-- Desktop links -->
+	<div class="links desktop-only">
 		{#each links as l}
-			<a href={l.href} class:on={isActive(l)}>{l.label}</a>
+			<a href={l.href} class:on={isActive(l)} onclick={closeMenu}>{l.label}</a>
 		{/each}
 	</div>
-	<ModeToggle />
+
+	<!-- Mobile menu -->
+	<div class="mobile-menu" id="mobile-menu" class:open={menuOpen} role="menu">
+		<div class="mobile-menu-inner">
+			{#each links as l}
+				<a
+					href={l.href}
+					class="mobile-link"
+					class:on={isActive(l)}
+					onclick={closeMenu}
+					role="menuitem"
+				>
+					{l.label}
+				</a>
+			{/each}
+			<div class="mobile-mode">
+				<ModeToggle />
+			</div>
+		</div>
+	</div>
+
+	<!-- Desktop mode toggle -->
+	<div class="desktop-mode">
+		<ModeToggle />
+	</div>
 </nav>
 
 <style>
@@ -166,6 +224,151 @@
 	@media (prefers-reduced-motion: reduce) {
 		.nav {
 			transition: none;
+		}
+	}
+
+	/* Hamburger button */
+	.hamburger {
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
+		width: 36px;
+		height: 36px;
+		padding: 6px;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		z-index: 50;
+	}
+	.hamburger-line {
+		display: block;
+		width: 100%;
+		height: 2px;
+		background: var(--ink);
+		border-radius: 1px;
+		transition:
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.2s ease;
+		transform-origin: center;
+	}
+	.hamburger.open .hamburger-line:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.hamburger.open .hamburger-line:nth-child(2) {
+		opacity: 0;
+	}
+	.hamburger.open .hamburger-line:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
+	/* Mobile menu panel */
+	.mobile-menu {
+		position: fixed;
+		top: 52px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 40;
+		background: color-mix(in srgb, var(--paper) 97%, transparent);
+		-webkit-backdrop-filter: blur(16px) saturate(1.2);
+		backdrop-filter: blur(16px) saturate(1.2);
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		padding-top: clamp(60px, 12vh, 100px);
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0.35s;
+	}
+	.mobile-menu.open {
+		opacity: 1;
+		visibility: visible;
+	}
+	.mobile-menu-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+	}
+	.mobile-link {
+		font-family: var(--font-serif);
+		font-weight: 900;
+		font-optical-sizing: auto;
+		font-size: clamp(2rem, 7vw, 3.5rem);
+		letter-spacing: -0.02em;
+		color: var(--ink-soft);
+		text-decoration: none;
+		line-height: 1.3;
+		padding: 10px 24px;
+		transition: color 0.25s ease;
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	.mobile-menu.open .mobile-link {
+		opacity: 1;
+		transform: none;
+		transition:
+			color 0.25s ease,
+			opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	/* Stagger each link */
+	.mobile-menu.open .mobile-link:nth-child(1) { transition-delay: 0.05s; }
+	.mobile-menu.open .mobile-link:nth-child(2) { transition-delay: 0.08s; }
+	.mobile-menu.open .mobile-link:nth-child(3) { transition-delay: 0.11s; }
+	.mobile-menu.open .mobile-link:nth-child(4) { transition-delay: 0.14s; }
+	.mobile-menu.open .mobile-link:nth-child(5) { transition-delay: 0.17s; }
+	.mobile-menu.open .mobile-link:nth-child(6) { transition-delay: 0.20s; }
+	.mobile-menu.open .mobile-link:nth-child(7) { transition-delay: 0.23s; }
+	.mobile-menu.open .mobile-link:nth-child(8) { transition-delay: 0.26s; }
+	.mobile-menu.open .mobile-link:nth-child(9) { transition-delay: 0.29s; }
+	.mobile-menu.open .mobile-link:nth-child(10) { transition-delay: 0.32s; }
+	.mobile-menu.open .mobile-link:nth-child(11) { transition-delay: 0.35s; }
+
+	.mobile-link:hover,
+	.mobile-link.on {
+		color: var(--zhu);
+	}
+	.mobile-mode {
+		margin-top: 32px;
+		opacity: 0;
+		transform: translateY(12px);
+		transition:
+			opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.35s,
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+	}
+	.mobile-menu.open .mobile-mode {
+		opacity: 1;
+		transform: none;
+	}
+
+	/* Visibility helpers */
+	.desktop-only {
+		display: flex;
+	}
+	.desktop-mode {
+		display: flex;
+	}
+
+	@media (max-width: 860px) {
+		.desktop-only {
+			display: none;
+		}
+		.desktop-mode {
+			display: none;
+		}
+		.hamburger {
+			display: flex;
+		}
+	}
+
+	@media (min-width: 861px) {
+		.mobile-menu {
+			display: none !important;
 		}
 	}
 </style>
