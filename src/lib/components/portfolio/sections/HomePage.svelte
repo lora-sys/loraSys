@@ -332,6 +332,15 @@
 		};
 		document.querySelectorAll('img').forEach(onImgLoad);
 
+		// Global listener for lazy-loaded images
+		const globalImgHandler = (e: Event) => {
+			const target = e.target as HTMLImageElement;
+			if (target.tagName === 'IMG' && !target.classList.contains('loaded')) {
+				target.classList.add('loaded');
+			}
+		};
+		document.addEventListener('load', globalImgHandler, true);
+
 		// SmoothCursor
 		if (desktop && !('ontouchstart' in window) && !reduce) {
 			cursorVisible = true;
@@ -360,6 +369,7 @@
 			if (cursorRaf) cancelAnimationFrame(cursorRaf);
 			document.body.style.cursor = '';
 			cursorVisible = false;
+			document.removeEventListener('load', globalImgHandler, true);
 		};
 	});
 
@@ -1976,13 +1986,20 @@
 		width: 100%;
 		height: 200px;
 		object-fit: cover;
-		filter: grayscale(15%) contrast(1.02);
+		filter: grayscale(15%) contrast(1.02) blur(8px);
+		opacity: 0.4;
 		transition:
-			filter 0.4s,
+			filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.4s ease,
 			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
+	.row-thumb img.loaded {
+		filter: grayscale(15%) contrast(1.02) blur(0px);
+		opacity: 1;
+	}
 	.row.featured:hover .row-thumb img {
-		filter: grayscale(0%) contrast(1);
+		filter: grayscale(0%) contrast(1) blur(0px);
+		opacity: 1;
 		transform: scale(1.06);
 	}
 	.row:not(.featured):last-child {
@@ -2248,6 +2265,13 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
+		opacity: 0;
+		transition:
+			opacity 0.5s ease,
+			transform 0.6s ease;
+	}
+	.frame img.loaded {
+		opacity: 1;
 	}
 	.anime-no {
 		position: absolute;
@@ -2391,7 +2415,16 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transition: transform 0.6s ease;
+		filter: blur(6px);
+		opacity: 0.5;
+		transition:
+			transform 0.6s ease,
+			filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.4s ease;
+	}
+	.fav-img img.loaded {
+		filter: blur(0);
+		opacity: 1;
 	}
 	.fav:hover .fav-img img {
 		transform: scale(1.04);

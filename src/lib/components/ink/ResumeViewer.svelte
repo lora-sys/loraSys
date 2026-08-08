@@ -9,7 +9,7 @@
 	let closeButton: HTMLButtonElement = $state()!;
 
 	const resumeUrl = `${base}/resume.pdf`;
-	const previewUrl = `${base}/images/resume-preview.png`;
+	const previewUrl = `${base}/images/resume-preview.webp`;
 
 	function showViewer() {
 		open = true;
