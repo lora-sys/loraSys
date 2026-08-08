@@ -243,15 +243,6 @@
 				}
 			});
 		});
-		(gsap.utils.toArray('.mrow') as HTMLElement[]).forEach((el, i) => {
-			gsap.from(el, {
-				xPercent: i % 2 ? 5 : -5,
-				opacity: 0,
-				duration: 0.6,
-				ease: 'power2.out',
-				scrollTrigger: { trigger: el, start: 'top 92%' }
-			});
-		});
 		(gsap.utils.toArray('.count') as HTMLElement[]).forEach((el) => {
 			const target = Number(el.dataset.count || '0');
 			const obj = { v: 0 };
@@ -1575,7 +1566,6 @@
 		align-items: center;
 		gap: 16px;
 		overflow: hidden;
-		opacity: 0;
 	}
 	.mrow.rev .mviewport {
 		direction: rtl;
