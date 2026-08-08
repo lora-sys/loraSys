@@ -37,19 +37,22 @@
 
 	function generatePost(): string {
 		const today = new Date().toISOString().slice(0, 10);
-		const cats = postCategories.split(',').map((c) => c.trim()).filter(Boolean);
+		const cats = postCategories
+			.split(',')
+			.map((c) => c.trim())
+			.filter(Boolean);
 		const catLines = cats.map((c) => '  - ' + c).join('\n') || '  - Uncategorized';
-		const imageLine = postImage.trim() ? '\nimage: \'' + postImage.trim() + '\'' : '';
+		const imageLine = postImage.trim() ? "\nimage: '" + postImage.trim() + "'" : '';
 		const title = postTitle;
 		const desc = postDesc;
 		return (
-			'---\ntitle: \'' +
+			"---\ntitle: '" +
 			title +
-			'\'\ndescription: \'' +
+			"'\ndescription: '" +
 			desc +
-			'\'\ndate: \'' +
+			"'\ndate: '" +
 			today +
-			'\'\ncategories:\n' +
+			"'\ncategories:\n" +
 			catLines +
 			'\npublished: false' +
 			imageLine +
@@ -58,17 +61,22 @@
 	}
 
 	function generateNoteEntry(): string {
-		const tags = noteTags.split(',').map((t) => t.trim()).filter(Boolean);
+		const tags = noteTags
+			.split(',')
+			.map((t) => t.trim())
+			.filter(Boolean);
 		const tagsJson = JSON.stringify(tags, null, 4);
-		return '	{\n\t\ttitle: \'' +
+		return (
+			"	{\n\t\ttitle: '" +
 			noteTitle +
-			'\',\n\t\tdate: \'' +
+			"',\n\t\tdate: '" +
 			noteDate +
-			'\',\n\t\tsummary: \'' +
+			"',\n\t\tsummary: '" +
 			noteSummary +
-			'\',\n\t\ttags: ' +
+			"',\n\t\ttags: " +
 			tagsJson +
-			'\n\t},';
+			'\n\t},'
+		);
 	}
 
 	async function copyPost() {
@@ -123,11 +131,13 @@
 			const res = await fetch(base + '/api/content');
 			if (res.ok) {
 				const posts = await res.json();
-				drafts = posts.filter((p: any) => !p.published).map((p: any) => ({
-					file: p.slug + '.md',
-					title: p.title,
-					published: p.published
-				}));
+				drafts = posts
+					.filter((p: any) => !p.published)
+					.map((p: any) => ({
+						file: p.slug + '.md',
+						title: p.title,
+						published: p.published
+					}));
 			}
 		} catch {
 			drafts = [];
@@ -155,7 +165,9 @@
 
 	async function runValidator() {
 		window.open('/wayfinder?tab=drafts', '_blank');
-		alert('请运行: node .claude/skills/blog-writer/scripts/validate.mjs src/content/\n\n或在 Claude Code 中说: blog check src/content/');
+		alert(
+			'请运行: node .claude/skills/blog-writer/scripts/validate.mjs src/content/\n\n或在 Claude Code 中说: blog check src/content/'
+		);
 	}
 
 	async function previewBuild() {
@@ -219,7 +231,8 @@
 
 					<div class="wf-field">
 						<label for="post-desc">描述（SEO / OG）</label>
-						<textarea id="post-desc" bind:value={postDesc} rows="2" placeholder="1-2 句话摘要..."></textarea>
+						<textarea id="post-desc" bind:value={postDesc} rows="2" placeholder="1-2 句话摘要..."
+						></textarea>
 					</div>
 
 					<div class="wf-row">
@@ -459,7 +472,9 @@
 		text-transform: uppercase;
 		color: var(--ink-mute);
 		white-space: nowrap;
-		transition: color 0.2s, border-color 0.2s;
+		transition:
+			color 0.2s,
+			border-color 0.2s;
 	}
 	.wf-tab:hover {
 		color: var(--ink);

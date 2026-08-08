@@ -1833,7 +1833,9 @@
 		height: 200px;
 		object-fit: cover;
 		filter: grayscale(15%) contrast(1.02);
-		transition: filter 0.4s, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		transition:
+			filter 0.4s,
+			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
 	.row.featured:hover .row-thumb img {
 		filter: grayscale(0%) contrast(1);
