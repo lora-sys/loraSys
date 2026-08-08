@@ -276,9 +276,11 @@
 			move: (e: MouseEvent) => void;
 			leave: () => void;
 		}> = [];
-		(gsap.utils.toArray(
-			'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
-		) as Element[]).forEach((el) => {
+		(
+			gsap.utils.toArray(
+				'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
+			) as Element[]
+		).forEach((el) => {
 			const node = el as HTMLElement;
 			const move = (e: MouseEvent) => {
 				const r = node.getBoundingClientRect();
