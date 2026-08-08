@@ -162,9 +162,10 @@
 		gsapLib.set('.hk, .card, .tl-item, .hx, .fav', { clearProps: 'all' });
 		gsapLib.set('.mrow', { clearProps: 'all' });
 		gsapLib.set('.count', { clearProps: 'all' });
-		document.querySelectorAll('.brush path').forEach((p: SVGPathElement) => {
-			const len = p.getTotalLength();
-			gsapLib.set(p, { strokeDasharray: len, strokeDashoffset: len });
+		document.querySelectorAll('.brush path').forEach((p) => {
+			const path = p as SVGPathElement;
+			const len = path.getTotalLength();
+			gsapLib.set(path, { strokeDasharray: len, strokeDashoffset: len });
 		});
 	}
 
@@ -202,7 +203,7 @@
 			ease: 'power2.out',
 			delay: 0.35
 		});
-		gsap.utils.toArray<HTMLElement>('.sec').forEach((sec) => {
+		(gsap.utils.toArray('.sec') as HTMLElement[]).forEach((sec) => {
 			const head = sec.querySelector('.sec-head');
 			if (head)
 				gsap.from(head, {
@@ -223,7 +224,7 @@
 				});
 			}
 		});
-		gsap.utils.toArray<HTMLElement>('.row').forEach((row) => {
+		(gsap.utils.toArray('.row') as HTMLElement[]).forEach((row) => {
 			gsap.from(row, {
 				y: 12,
 				duration: 0.35,
@@ -231,7 +232,7 @@
 				scrollTrigger: { trigger: row, start: 'top 90%' }
 			});
 		});
-		gsap.utils.toArray<HTMLElement>('.hk, .card, .tl-item, .hx, .fav').forEach((el) => {
+		(gsap.utils.toArray('.hk, .card, .tl-item, .hx, .fav') as HTMLElement[]).forEach((el) => {
 			gsap.from(el, {
 				y: 12,
 				duration: 0.35,
@@ -244,7 +245,7 @@
 				}
 			});
 		});
-		gsap.utils.toArray<HTMLElement>('.mrow').forEach((el, i) => {
+		(gsap.utils.toArray('.mrow') as HTMLElement[]).forEach((el, i) => {
 			gsap.from(el, {
 				xPercent: i % 2 ? 5 : -5,
 				opacity: 0,
@@ -253,7 +254,7 @@
 				scrollTrigger: { trigger: el, start: 'top 92%' }
 			});
 		});
-		gsap.utils.toArray<HTMLElement>('.count').forEach((el) => {
+		(gsap.utils.toArray('.count') as HTMLElement[]).forEach((el) => {
 			const target = Number(el.dataset.count || '0');
 			const obj = { v: 0 };
 			if (ScrollTrigger)
@@ -275,24 +276,23 @@
 			move: (e: MouseEvent) => void;
 			leave: () => void;
 		}> = [];
-		gsap.utils
-			.toArray<HTMLElement>(
-				'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
-			)
-			.forEach((el) => {
-				const move = (e: MouseEvent) => {
-					const r = el.getBoundingClientRect();
-					gsap.to(el, {
-						x: (e.clientX - (r.left + r.width / 2)) * 0.3,
-						y: (e.clientY - (r.top + r.height / 2)) * 0.3,
-						duration: 0.3
-					});
-				};
-				const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-				el.addEventListener('mousemove', move);
-				el.addEventListener('mouseleave', leave);
-				magCleanups.push({ el, move, leave });
-			});
+		(gsap.utils.toArray(
+			'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
+		) as Element[]).forEach((el) => {
+			const node = el as HTMLElement;
+			const move = (e: MouseEvent) => {
+				const r = node.getBoundingClientRect();
+				gsap.to(node, {
+					x: (e.clientX - (r.left + r.width / 2)) * 0.3,
+					y: (e.clientY - (r.top + r.height / 2)) * 0.3,
+					duration: 0.3
+				});
+			};
+			const leave = () => gsap.to(node, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+			node.addEventListener('mousemove', move);
+			node.addEventListener('mouseleave', leave);
+			magCleanups.push({ el: node, move, leave });
+		});
 		if (ScrollTrigger) ScrollTrigger.refresh();
 		magCleanupsRef = magCleanups;
 	}

@@ -58,22 +58,26 @@
 		if (!trimmed) return;
 		history.push(trimmed);
 		historyIdx = history.length;
-		if (trimmed === 'clear' || trimmed === 'cls') {
+		const [cmdName, ...cmdArgs] = trimmed.split(/\s+/);
+		const fn = commands[cmdName];
+		let result: string;
+		if (typeof fn === 'function') {
+			result = fn(cmdArgs.join(' '));
+		} else if (fn !== undefined) {
+			result = String(fn);
+		} else if (cmdName === 'clear' || cmdName === 'cls') {
 			lines = [{ text: '', isCmd: true }];
 			return;
-		}
-		if (trimmed === 'exit') {
+		} else if (cmdName === 'exit') {
 			visible = false;
 			return;
+		} else {
+			result = `命令未找到: ${cmdName}。输入 help 查看可用命令。`;
 		}
-		const [cmdName, ...cmdArgs] = trimmed.split(/\s+/);
-		let output = commands[cmdName];
-		if (typeof output === 'function') output = output(cmdArgs.join(' '));
-		if (output === undefined) output = `命令未找到: ${cmdName}。输入 help 查看可用命令。`;
 		lines = [
 			...lines,
 			{ text: `$ ${trimmed}`, isCmd: true },
-			{ text: String(output) },
+			{ text: result },
 			{ text: '', isCmd: true }
 		];
 	}
