@@ -15,6 +15,8 @@
 		{ label: '闲余', href: `${base}/#off`, id: 'off' },
 		{ label: '日志', href: `${base}/blog`, route: '/blog' },
 		{ label: '当下', href: `${base}/now`, route: '/now' },
+		{ label: '笔记', href: `${base}/notes`, route: '/notes' },
+		{ label: '创作', href: `${base}/wayfinder`, route: '/wayfinder' },
 		{ label: '联络', href: `${base}/#contact`, id: 'contact' }
 	];
 
