@@ -8,6 +8,8 @@
 	import ContributionGraph from '$lib/components/portfolio/ContributionGraph.svelte';
 	import BackToTop from '$lib/components/ui/back-to-top/back-to-top.svelte';
 	import type { WorkItem } from '$lib/types';
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	// SmoothCursor state
 	let cursorVisible = $state(false);
@@ -141,37 +143,33 @@
 	let motionCleanup = () => {};
 	let magCleanupsRef: Array<{ el: HTMLElement; move: (e: MouseEvent) => void; leave: () => void }> =
 		[];
-	let gsapLib: any;
-	let stLib: any;
 	let lastScrollY = 0;
 	let lastScrollTime = 0;
 
 	function killMotion() {
-		if (!gsapLib) return;
-		if (stLib?.ScrollTrigger) stLib.ScrollTrigger.getAll().forEach((s: any) => s.kill());
-		gsapLib.killTweensOf(
+		if (!gsap) return;
+		if (ScrollTrigger) ScrollTrigger.getAll().forEach((s: any) => s.kill());
+		gsap.killTweensOf(
 			'.seal, .mast .word, .hero-left > *, .index-h, .index li, .pull, .sec-head, .brush path, .row, .hk, .card, .tl-item, .hx, .fav, .mrow, .count'
 		);
-		gsapLib.set('.seal', { clearProps: 'all' });
-		gsapLib.set('.mast .word', { clearProps: 'all' });
-		gsapLib.set('.hero-left > *', { clearProps: 'all' });
-		gsapLib.set('.index-h, .index li, .pull', { clearProps: 'all' });
-		gsapLib.set('.sec-head', { clearProps: 'all' });
-		gsapLib.set('.brush path', { clearProps: 'all' });
-		gsapLib.set('.row', { clearProps: 'all' });
-		gsapLib.set('.hk, .card, .tl-item, .hx, .fav', { clearProps: 'all' });
-		gsapLib.set('.mrow', { clearProps: 'all' });
-		gsapLib.set('.count', { clearProps: 'all' });
+		gsap.set('.seal', { clearProps: 'all' });
+		gsap.set('.mast .word', { clearProps: 'all' });
+		gsap.set('.hero-left > *', { clearProps: 'all' });
+		gsap.set('.index-h, .index li, .pull', { clearProps: 'all' });
+		gsap.set('.sec-head', { clearProps: 'all' });
+		gsap.set('.brush path', { clearProps: 'all' });
+		gsap.set('.row', { clearProps: 'all' });
+		gsap.set('.hk, .card, .tl-item, .hx, .fav', { clearProps: 'all' });
+		gsap.set('.mrow', { clearProps: 'all' });
+		gsap.set('.count', { clearProps: 'all' });
 		document.querySelectorAll('.brush path').forEach((p) => {
 			const path = p as SVGPathElement;
 			const len = path.getTotalLength();
-			gsapLib.set(path, { strokeDasharray: len, strokeDashoffset: len });
+			gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
 		});
 	}
 
 	function initMotion() {
-		const gsap = gsapLib;
-		const ScrollTrigger = stLib?.ScrollTrigger;
 		if (!gsap) return;
 		gsap.fromTo(
 			'.seal',
@@ -357,21 +355,11 @@
 		}
 
 		if (!reduce) {
-			(async () => {
-				try {
-					const gsapMod = await import('gsap');
-					const stMod = await import('gsap/dist/ScrollTrigger');
-					gsapLib = (gsapMod as any).gsap ?? (gsapMod as any).default;
-					stLib = (stMod as any).ScrollTrigger ? stMod : gsapMod;
-					gsapLib.registerPlugin(stLib.ScrollTrigger);
-					startMotion();
-					setTimeout(() => {
-						animReady = true;
-					}, 2200);
-				} catch (err) {
-					console.warn('[ink] motion init failed, static fallback', err);
-				}
-			})();
+			gsap.registerPlugin(ScrollTrigger);
+			startMotion();
+			setTimeout(() => {
+				animReady = true;
+			}, 2200);
 		}
 
 		return () => {
@@ -385,7 +373,7 @@
 	});
 
 	function replayAnimations() {
-		if (!gsapLib) return;
+		if (!gsap) return;
 		window.scrollTo({ top: 0, behavior: 'instant' });
 		requestAnimationFrame(() => {
 			motionCleanup();
