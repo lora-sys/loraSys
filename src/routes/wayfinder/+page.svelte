@@ -2,8 +2,7 @@
 	import { base } from '$app/paths';
 	import BackToTop from '$lib/components/ui/back-to-top/back-to-top.svelte';
 
-	type Tab = 'new-post' | 'new-note' | 'drafts' | 'recent';
-	let activeTab = $state<Tab>('new-post');
+	let activeTab = $state('new-post');
 
 	let postTitle = $state('');
 	let postDesc = $state('');
@@ -38,55 +37,38 @@
 
 	function generatePost(): string {
 		const today = new Date().toISOString().slice(0, 10);
-		const cats = postCategories
-			.split(',')
-			.map((c) => c.trim())
-			.filter(Boolean);
-		const catLines = cats.map((c) => `  - ${c}`).join('\n') || '  - Uncategorized';
-		const imageLine = postImage.trim() ? `\nimage: '${postImage.trim()}'` : '';
-
-		return `---
-title: '${postTitle}'
-description: '${postDesc}'
-date: '${today}'
-categories:
-${catLines}
-published: false${imageLine}
----
-
-## 背景
-
-
-
-## 解决方案
-
-
-
-## 实践
-
-
-
-``````
-
-## 总结
-
-
-
-`;
+		const cats = postCategories.split(',').map((c) => c.trim()).filter(Boolean);
+		const catLines = cats.map((c) => '  - ' + c).join('\n') || '  - Uncategorized';
+		const imageLine = postImage.trim() ? '\nimage: \'' + postImage.trim() + '\'' : '';
+		const title = postTitle;
+		const desc = postDesc;
+		return (
+			'---\ntitle: \'' +
+			title +
+			'\'\ndescription: \'' +
+			desc +
+			'\'\ndate: \'' +
+			today +
+			'\'\ncategories:\n' +
+			catLines +
+			'\npublished: false' +
+			imageLine +
+			'\n---\n\n## 背景\n\n\n\n## 解决方案\n\n\n\n## 实践\n\n\n\n``````\n\n## 总结\n\n\n\n'
+		);
 	}
 
 	function generateNoteEntry(): string {
-		const tags = noteTags
-			.split(',')
-			.map((t) => t.trim())
-			.filter(Boolean);
+		const tags = noteTags.split(',').map((t) => t.trim()).filter(Boolean);
 		const tagsJson = JSON.stringify(tags, null, 4);
-		return `	{
-		title: '${noteTitle}',
-		date: '${noteDate}',
-		summary: '${noteSummary}',
-		tags: ${tagsJson}
-	},`;
+		return '	{\n\t\ttitle: \'' +
+			noteTitle +
+			'\',\n\t\tdate: \'' +
+			noteDate +
+			'\',\n\t\tsummary: \'' +
+			noteSummary +
+			'\',\n\t\ttags: ' +
+			tagsJson +
+			'\n\t},';
 	}
 
 	async function copyPost() {
@@ -101,12 +83,12 @@ published: false${imageLine}
 
 		const slug = deriveSlug(postTitle);
 		const content = generatePost();
-		const fullPath = `src/content/${slug}.md`;
+		const fullPath = 'src/content/' + slug + '.md';
 
 		postSlug = fullPath;
 		try {
 			await navigator.clipboard.writeText(content);
-			postSuccess = `已复制到剪贴板！请粘贴到 ${fullPath}`;
+			postSuccess = '已复制到剪贴板！请粘贴到 ' + fullPath;
 			postError = '';
 		} catch {
 			postSuccess = '生成完成，请手动复制下方内容到 ' + fullPath;
@@ -138,16 +120,14 @@ published: false${imageLine}
 	async function loadDrafts() {
 		draftsLoading = true;
 		try {
-			const res = await fetch(`${base}/api/content`);
+			const res = await fetch(base + '/api/content');
 			if (res.ok) {
 				const posts = await res.json();
-				drafts = posts
-					.filter((p: any) => !p.published)
-					.map((p: any) => ({
-						file: `${p.slug}.md`,
-						title: p.title,
-						published: p.published
-					}));
+				drafts = posts.filter((p: any) => !p.published).map((p: any) => ({
+					file: p.slug + '.md',
+					title: p.title,
+					published: p.published
+				}));
 			}
 		} catch {
 			drafts = [];
@@ -158,7 +138,7 @@ published: false${imageLine}
 	async function loadRecent() {
 		recentLoading = true;
 		try {
-			const res = await fetch(`${base}/api/content`);
+			const res = await fetch(base + '/api/content');
 			if (res.ok) {
 				const posts = await res.json();
 				recentPosts = posts.slice(0, 8).map((p: any) => ({
@@ -175,16 +155,13 @@ published: false${imageLine}
 
 	async function runValidator() {
 		window.open('/wayfinder?tab=drafts', '_blank');
-		alert(
-			'请运行: node .claude/skills/blog-writer/scripts/validate.mjs src/content/\n\n或在 Claude Code 中说: blog check src/content/'
-		);
+		alert('请运行: node .claude/skills/blog-writer/scripts/validate.mjs src/content/\n\n或在 Claude Code 中说: blog check src/content/');
 	}
 
 	async function previewBuild() {
 		alert('请运行: pnpm run build:github\n\n或在 Claude Code 中说: pnpm run build:github');
 	}
 
-	// Load data on mount
 	$effect(() => {
 		if (activeTab === 'drafts') loadDrafts();
 		if (activeTab === 'recent') loadRecent();
@@ -200,10 +177,10 @@ published: false${imageLine}
 	<div class="wrap">
 		<header class="wf-header">
 			<div class="wf-brand">
-				<span class="wf-compass" aria-hidden="true">✦</span>
+				<span class="wf-compass" aria-hidden="true">&#10022;</span>
 				<div>
 					<h1>Wayfinder</h1>
-					<p class="wf-tagline">创作入口 · 文章 / 笔记 / 草稿</p>
+					<p class="wf-tagline">创作入口 &#183; 文章 / 笔记 / 草稿</p>
 				</div>
 			</div>
 		</header>
@@ -215,7 +192,7 @@ published: false${imageLine}
 					aria-selected={activeTab === tab.id}
 					class="wf-tab"
 					class:on={activeTab === tab.id}
-					onclick={() => (activeTab = tab.id as Tab)}
+					onclick={() => (activeTab = tab.id)}
 				>
 					<span class="wf-tab-icon">{tab.icon}</span>
 					<span class="wf-tab-label">{tab.label}</span>
@@ -223,7 +200,6 @@ published: false${imageLine}
 			{/each}
 		</nav>
 
-		<!-- ─── New Post ─── -->
 		{#if activeTab === 'new-post'}
 			<section class="wf-panel">
 				<div class="wf-form">
@@ -243,7 +219,7 @@ published: false${imageLine}
 
 					<div class="wf-field">
 						<label for="post-desc">描述（SEO / OG）</label>
-						<textarea id="post-desc" bind:value={postDesc} rows="2" placeholder="1-2 句话摘要..." />
+						<textarea id="post-desc" bind:value={postDesc} rows="2" placeholder="1-2 句话摘要..."></textarea>
 					</div>
 
 					<div class="wf-row">
@@ -274,7 +250,7 @@ published: false${imageLine}
 							bind:value={postContent}
 							rows="6"
 							placeholder="可以先写一些正文内容..."
-						/>
+						></textarea>
 					</div>
 
 					{#if postError}
@@ -296,7 +272,6 @@ published: false${imageLine}
 			</section>
 		{/if}
 
-		<!-- ─── New Note ─── -->
 		{#if activeTab === 'new-note'}
 			<section class="wf-panel">
 				<div class="wf-form">
@@ -312,7 +287,7 @@ published: false${imageLine}
 							bind:value={noteSummary}
 							rows="3"
 							placeholder="一句话摘要..."
-						/>
+						></textarea>
 					</div>
 
 					<div class="wf-row">
@@ -350,23 +325,22 @@ published: false${imageLine}
 			</section>
 		{/if}
 
-		<!-- ─── Drafts ─── -->
 		{#if activeTab === 'drafts'}
 			<section class="wf-panel">
 				{#if draftsLoading}
 					<p class="wf-loading">加载中...</p>
 				{:else if drafts.length === 0}
-					<p class="wf-empty">🎉 没有草稿 — 所有文章都已发布！</p>
+					<p class="wf-empty">&#127881; 没有草稿 — 所有文章都已发布！</p>
 				{:else}
 					<div class="wf-list">
 						{#each drafts as d}
 							<a href="{base}/blog/{d.file.replace('.md', '')}" class="wf-list-item">
-								<span class="wf-list-icon">📝</span>
+								<span class="wf-list-icon">&#128220;</span>
 								<div>
 									<span class="wf-list-title">{d.title || d.file}</span>
 									<span class="wf-list-meta">{d.file}</span>
 								</div>
-								<span class="wf-list-arrow">→</span>
+								<span class="wf-list-arrow">&rarr;</span>
 							</a>
 						{/each}
 					</div>
@@ -374,7 +348,6 @@ published: false${imageLine}
 			</section>
 		{/if}
 
-		<!-- ─── Recent ─── -->
 		{#if activeTab === 'recent'}
 			<section class="wf-panel">
 				{#if recentLoading}
@@ -383,7 +356,7 @@ published: false${imageLine}
 					<div class="wf-list">
 						{#each recentPosts as p}
 							<a href="{base}/blog/{p.slug}" class="wf-list-item">
-								<span class="wf-list-arrow">→</span>
+								<span class="wf-list-arrow">&rarr;</span>
 								<div>
 									<span class="wf-list-title">{p.title}</span>
 									<span class="wf-list-meta">{p.date}</span>
@@ -395,17 +368,16 @@ published: false${imageLine}
 			</section>
 		{/if}
 
-		<!-- ─── Quick Actions ─── -->
 		<section class="wf-actions">
 			<h2 class="wf-actions-title">快捷操作</h2>
 			<div class="wf-actions-grid">
 				<button class="wf-action" onclick={runValidator}>
-					<span class="wf-action-icon">🔍</span>
+					<span class="wf-action-icon">&#128269;</span>
 					<span class="wf-action-label">运行博客校验</span>
 					<span class="wf-action-hint">检查 frontmatter、分类、格式</span>
 				</button>
 				<button class="wf-action" onclick={previewBuild}>
-					<span class="wf-action-icon">⚡</span>
+					<span class="wf-action-icon">&#9889;</span>
 					<span class="wf-action-label">预览 Build</span>
 					<span class="wf-action-hint">运行 build:github</span>
 				</button>
@@ -487,9 +459,7 @@ published: false${imageLine}
 		text-transform: uppercase;
 		color: var(--ink-mute);
 		white-space: nowrap;
-		transition:
-			color 0.2s,
-			border-color 0.2s;
+		transition: color 0.2s, border-color 0.2s;
 	}
 	.wf-tab:hover {
 		color: var(--ink);

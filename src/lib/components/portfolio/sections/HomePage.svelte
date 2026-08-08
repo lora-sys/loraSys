@@ -276,24 +276,22 @@
 			move: (e: MouseEvent) => void;
 			leave: () => void;
 		}> = [];
-		(
-			gsap.utils.toArray(
-				'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
-			) as Element[]
-		).forEach((el) => {
-			const node = el as HTMLElement;
+		const magEls = gsap.utils.toArray(
+			'.c-arrow, .socials a, .row-title, .row-links a, .seal-trigger, .now-link, .index li a'
+		);
+		(magEls as HTMLElement[]).forEach((el) => {
 			const move = (e: MouseEvent) => {
-				const r = node.getBoundingClientRect();
-				gsap.to(node, {
+				const r = el.getBoundingClientRect();
+				gsap.to(el, {
 					x: (e.clientX - (r.left + r.width / 2)) * 0.3,
 					y: (e.clientY - (r.top + r.height / 2)) * 0.3,
 					duration: 0.3
 				});
 			};
-			const leave = () => gsap.to(node, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-			node.addEventListener('mousemove', move);
-			node.addEventListener('mouseleave', leave);
-			magCleanups.push({ el: node, move, leave });
+			const leave = () => gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+			el.addEventListener('mousemove', move);
+			el.addEventListener('mouseleave', leave);
+			magCleanups.push({ el, move, leave });
 		});
 		if (ScrollTrigger) ScrollTrigger.refresh();
 		magCleanupsRef = magCleanups;
