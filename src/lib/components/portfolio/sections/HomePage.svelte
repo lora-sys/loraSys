@@ -519,6 +519,10 @@
 					<span>持续建造中 — /now</span>
 					<span class="now-arrow" aria-hidden="true">→</span>
 				</a>
+				<a class="hero-cta" href={`${base}/#work`}>
+					<span>查看作品</span>
+					<span aria-hidden="true">↓</span>
+				</a>
 			</nav>
 			<span class="hero-watermark" aria-hidden="true">Edition<br />2026</span>
 		</section>
@@ -908,6 +912,12 @@
 			<p class="email-wrap">
 				<a class="email" href={`mailto:${DATA.contact.email}`}>{DATA.contact.email}</a>
 			</p>
+			<div class="contact-cta">
+				<p>有项目想法或合作机会？<br /><em>让我们一起建造。</em></p>
+				<a class="cta-btn" href={`mailto:${DATA.contact.email}?subject=合作机会`}>
+					开始对话 <span aria-hidden="true">→</span>
+				</a>
+			</div>
 			<ul class="socials">
 				{#each contactSocials as s}
 					<li>
@@ -1450,6 +1460,32 @@
 		transition: transform 0.25s ease;
 	}
 	.now-link:hover .now-arrow {
+		transform: translateX(3px);
+	}
+	.hero-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 16px;
+		margin-left: 16px;
+		padding: 8px 20px;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--paper);
+		background: var(--ink);
+		border: 1.5px solid var(--ink);
+		text-decoration: none;
+		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.hero-cta:hover {
+		background: var(--zhu);
+		border-color: var(--zhu);
+		gap: 14px;
+	}
+	.now-link:hover .now-arrow {
 		transform: translateX(2px);
 	}
 	.hero-watermark {
@@ -1517,9 +1553,13 @@
 		font-size: 1.05rem;
 		line-height: 1.7;
 		color: var(--ink-soft);
+		max-width: 68ch;
 	}
 	.bio :global(p) {
 		margin-bottom: 1em;
+	}
+	.bio :global(p:last-child) {
+		margin-bottom: 0;
 	}
 	.bio :global(strong) {
 		color: var(--ink);
@@ -1594,6 +1634,9 @@
 		white-space: nowrap;
 		animation: marquee 30s linear infinite;
 	}
+	.mviewport:hover .mtrack {
+		animation-play-state: paused;
+	}
 	@keyframes marquee {
 		from {
 			transform: translateX(0);
@@ -1629,6 +1672,10 @@
 		padding: 22px 0 30px;
 		border-top: 2px solid var(--ink);
 		position: relative;
+		transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.tl-item:hover {
+		padding-left: 12px;
 	}
 	.tl-dot {
 		position: absolute;
@@ -1639,6 +1686,11 @@
 		background: var(--zhu);
 		border-radius: 50%;
 		transform: translate(-50%, -6px);
+		transition: transform 0.3s, box-shadow 0.3s;
+	}
+	.tl-item:hover .tl-dot {
+		transform: translate(-50%, -6px) scale(1.4);
+		box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.15);
 	}
 	.tl-date {
 		font-family: var(--font-label);
@@ -1806,6 +1858,27 @@
 		padding: 28px 0;
 		border-top: 1.5px solid var(--ink-line);
 		position: relative;
+		transition: padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.row:hover {
+		padding-left: 16px;
+	}
+	.row-title {
+		position: relative;
+		display: inline-block;
+	}
+	.row-title::after {
+		content: '';
+		position: absolute;
+		bottom: -1px;
+		left: 0;
+		width: 0;
+		height: 1.5px;
+		background: var(--zhu);
+		transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.row:hover .row-title::after {
+		width: 100%;
 	}
 	.row.featured {
 		grid-template-columns: 56px 1fr 320px;
@@ -2055,7 +2128,11 @@
 	.acard {
 		flex: 0 0 auto;
 		scroll-snap-align: start;
-		width: 260px;
+		width: 280px;
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.acard:hover {
+		transform: translateY(-6px);
 	}
 	.acard a {
 		text-decoration: none;
@@ -2438,6 +2515,44 @@
 	}
 	.email:hover {
 		color: var(--zhu);
+	}
+	.contact-cta {
+		margin-bottom: 32px;
+		padding: 24px 0;
+		border-top: 1px solid var(--ink-line);
+		border-bottom: 1px solid var(--ink-line);
+	}
+	.contact-cta p {
+		font-size: 1rem;
+		color: var(--ink-soft);
+		margin: 0 0 16px;
+		line-height: 1.6;
+	}
+	.contact-cta em {
+		font-style: normal;
+		color: var(--ink);
+		font-weight: 700;
+	}
+	.cta-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 24px;
+		font-family: var(--font-label);
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--paper);
+		background: var(--ink);
+		border: 1.5px solid var(--ink);
+		text-decoration: none;
+		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.cta-btn:hover {
+		background: var(--zhu);
+		border-color: var(--zhu);
+		gap: 18px;
 	}
 	.socials {
 		list-style: none;
