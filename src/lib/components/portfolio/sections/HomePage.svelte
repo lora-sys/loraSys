@@ -1469,6 +1469,11 @@
 	.now-link:hover .now-arrow {
 		transform: translateX(3px);
 	}
+	.now-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+	}
 	.hero-cta {
 		display: inline-flex;
 		align-items: center;
@@ -1581,6 +1586,10 @@
 		line-height: 0.82;
 		color: var(--ink);
 		letter-spacing: -0.04em;
+		transition: color 0.3s;
+	}
+	.sec-head:hover .cn {
+		color: var(--zhu);
 	}
 	.sec-title h2 {
 		font-family: var(--font-serif);
@@ -2081,6 +2090,13 @@
 		padding: 22px 0 30px;
 		border-top: 2px solid var(--ink);
 		position: relative;
+		transition:
+			padding-left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			background 0.3s;
+	}
+	.hx:hover {
+		padding-left: 12px;
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.04), transparent 40%);
 	}
 	.hx-idx {
 		font-family: var(--font-label);
@@ -2089,6 +2105,10 @@
 		letter-spacing: 0.14em;
 		color: var(--ink-mute);
 		padding-top: 6px;
+		transition: color 0.3s;
+	}
+	.hx:hover .hx-idx {
+		color: var(--zhu);
 	}
 	.hx-title {
 		font-family: var(--font-serif);
@@ -2143,6 +2163,9 @@
 	.repos .count {
 		color: var(--ink);
 		font-weight: 900;
+		display: inline-block;
+		min-width: 2ch;
+		transition: color 0.3s;
 	}
 
 	.anime-head {
@@ -2372,6 +2395,12 @@
 	}
 	.fav:hover .fav-img img {
 		transform: scale(1.04);
+	}
+	.fav {
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.fav:hover {
+		transform: translateY(-4px);
 	}
 	.fav-cap {
 		position: absolute;
