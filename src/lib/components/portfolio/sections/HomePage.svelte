@@ -693,7 +693,11 @@
 							<span class="row-date">{p.dates}</span>
 							<a class="row-title" href={p.href} target="_blank" rel="noreferrer">{p.title}</a>
 							<p class="row-desc">{p.description}</p>
-							<p class="row-tech">{p.technologies.join(' · ')}</p>
+							<p class="row-tech">
+								{#each p.technologies as t}
+									<span>{t}</span>
+								{/each}
+							</p>
 							<p class="row-links">
 								{#each p.links as l}<a href={l.href} target="_blank" rel="noreferrer">{l.type} →</a
 									>{/each}
@@ -1804,11 +1808,36 @@
 		position: relative;
 	}
 	.row.featured {
-		grid-template-columns: 56px 1fr 280px;
-		padding: 40px 44px 36px;
+		grid-template-columns: 56px 1fr 320px;
+		padding: 36px 40px;
 		border-top: 2px solid var(--ink);
 		border-bottom: 2px solid var(--ink);
-		background: linear-gradient(120deg, rgba(198, 65, 44, 0.06), transparent 60%);
+		background: linear-gradient(120deg, rgba(198, 65, 44, 0.04), transparent 60%);
+		transition: background 0.4s;
+	}
+	.row.featured:hover {
+		background: linear-gradient(120deg, rgba(198, 65, 44, 0.08), transparent 50%);
+	}
+	.row-thumb {
+		display: block;
+		overflow: hidden;
+		border-radius: 2px;
+		transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	}
+	.row.featured:hover .row-thumb {
+		transform: scale(1.03);
+	}
+	.row-thumb img {
+		display: block;
+		width: 100%;
+		height: 200px;
+		object-fit: cover;
+		filter: grayscale(15%) contrast(1.02);
+		transition: filter 0.4s, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	}
+	.row.featured:hover .row-thumb img {
+		filter: grayscale(0%) contrast(1);
+		transform: scale(1.06);
 	}
 	.row:not(.featured):last-child {
 		border-bottom: 1.5px solid var(--ink-line);
@@ -1842,11 +1871,26 @@
 	}
 	.row-tech {
 		font-family: var(--font-label);
-		font-size: 0.65rem;
-		letter-spacing: 0.1em;
+		font-size: 0.6rem;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--ink-mute);
-		margin: 8px 0 0;
+		margin: 10px 0 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+	.row-tech span {
+		padding: 2px 8px;
+		border: 1px solid var(--ink-line);
+		border-radius: 2px;
+		font-size: 0.58rem;
+		letter-spacing: 0.06em;
+		transition: all 0.2s;
+	}
+	.row.featured:hover .row-tech span {
+		border-color: var(--ink-soft);
+		color: var(--ink-soft);
 	}
 	.row-links {
 		display: flex;
