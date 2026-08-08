@@ -4,7 +4,8 @@
 	let { visible = $bindable(false) } = $props();
 
 	const commands: Record<string, (args?: string) => string> = {
-		help: () => '可用命令: whoami, skills, projects, blog, now, contact, theme <light|dark>, date, echo <text>, clear, cls, ls, exit',
+		help: () =>
+			'可用命令: whoami, skills, projects, blog, now, contact, theme <light|dark>, date, echo <text>, clear, cls, ls, exit',
 		whoami: () => 'lora — 全栈工程师 · AI 智能体爱好者 · 独立开发者',
 		skills: () => 'TypeScript · Svelte · React · Node.js · Python · LangGraph · MCP · Web3',
 		projects: () => 'GitHub: github.com/lora-sys — 持续更新中',
@@ -13,8 +14,11 @@
 		contact: () => 'lora@example.com · PeerList · YouTube · Bilibili · ZhiHu',
 		ls: () => 'about  contact  blog  now  skills  projects  help  clear',
 		date: () => {
-			try { return new Date().toLocaleString('zh-CN', { dateStyle: 'full', timeStyle: 'short' }); }
-			catch { return String(new Date()); }
+			try {
+				return new Date().toLocaleString('zh-CN', { dateStyle: 'full', timeStyle: 'short' });
+			} catch {
+				return String(new Date());
+			}
 		},
 		echo: (args?: string) => args ?? '',
 		theme: (args?: string) => {
@@ -27,9 +31,15 @@
 				} catch {}
 				return `切换至 ${mode} 模式。`;
 			}
-			return '用法: theme <light|dark> · 当前: ' + (document.documentElement.classList.contains('mode-dark') ? 'dark' : 'light');
+			return (
+				'用法: theme <light|dark> · 当前: ' +
+				(document.documentElement.classList.contains('mode-dark') ? 'dark' : 'light')
+			);
 		},
-		exit: () => { visible = false; return ''; }
+		exit: () => {
+			visible = false;
+			return '';
+		}
 	};
 
 	let input = $state('');
@@ -46,13 +56,24 @@
 		if (!trimmed) return;
 		history.push(trimmed);
 		historyIdx = history.length;
-		if (trimmed === 'clear' || trimmed === 'cls') { lines = [{ text: '', isCmd: true }]; return; }
-		if (trimmed === 'exit') { visible = false; return; }
+		if (trimmed === 'clear' || trimmed === 'cls') {
+			lines = [{ text: '', isCmd: true }];
+			return;
+		}
+		if (trimmed === 'exit') {
+			visible = false;
+			return;
+		}
 		const [cmdName, ...cmdArgs] = trimmed.split(/\s+/);
 		let output = commands[cmdName];
 		if (typeof output === 'function') output = output(cmdArgs.join(' '));
 		if (output === undefined) output = `命令未找到: ${cmdName}。输入 help 查看可用命令。`;
-		lines = [...lines, { text: `$ ${trimmed}`, isCmd: true }, { text: String(output) }, { text: '', isCmd: true }];
+		lines = [
+			...lines,
+			{ text: `$ ${trimmed}`, isCmd: true },
+			{ text: String(output) },
+			{ text: '', isCmd: true }
+		];
 	}
 
 	let mounted = $state(false);
@@ -63,16 +84,27 @@
 		mounted = true;
 		const onKey = (e: KeyboardEvent) => {
 			if (!visible) return;
-			if (e.key === 'Escape') { visible = false; return; }
+			if (e.key === 'Escape') {
+				visible = false;
+				return;
+			}
 			if (e.key === 'ArrowUp') {
 				e.preventDefault();
-				if (historyIdx > 0) { historyIdx--; input = history[historyIdx]; }
+				if (historyIdx > 0) {
+					historyIdx--;
+					input = history[historyIdx];
+				}
 				return;
 			}
 			if (e.key === 'ArrowDown') {
 				e.preventDefault();
-				if (historyIdx < history.length - 1) { historyIdx++; input = history[historyIdx]; }
-				else { historyIdx = history.length; input = ''; }
+				if (historyIdx < history.length - 1) {
+					historyIdx++;
+					input = history[historyIdx];
+				} else {
+					historyIdx = history.length;
+					input = '';
+				}
 				return;
 			}
 		};
@@ -93,12 +125,7 @@
 </script>
 
 {#if visible}
-	<div
-		class="term-overlay"
-		onclick={() => (visible = false)}
-		role="dialog"
-		aria-label="Terminal"
-	>
+	<div class="term-overlay" onclick={() => (visible = false)} role="dialog" aria-label="Terminal">
 		<div class="term-window" onclick={(e) => e.stopPropagation()}>
 			<div class="term-bar">
 				<span class="term-dots"><b></b><b></b><b></b></span>
@@ -116,7 +143,10 @@
 						type="text"
 						bind:value={input}
 						onkeydown={(e) => {
-							if (e.key === 'Enter') { exec(input); input = ''; }
+							if (e.key === 'Enter') {
+								exec(input);
+								input = '';
+							}
 						}}
 						spellcheck="false"
 						autocomplete="off"
@@ -172,9 +202,18 @@
 		opacity: 0.6;
 		display: block;
 	}
-	.term-dots b:first-child { background: #c0392b; opacity: 1; }
-	.term-dots b:nth-child(2) { background: #f39c12; opacity: 1; }
-	.term-dots b:nth-child(3) { background: #27ae60; opacity: 1; }
+	.term-dots b:first-child {
+		background: #c0392b;
+		opacity: 1;
+	}
+	.term-dots b:nth-child(2) {
+		background: #f39c12;
+		opacity: 1;
+	}
+	.term-dots b:nth-child(3) {
+		background: #27ae60;
+		opacity: 1;
+	}
 	.term-title {
 		font-family: var(--font-label);
 		font-size: 0.7rem;
@@ -198,7 +237,9 @@
 		display: grid;
 		place-items: center;
 	}
-	.term-bar button:hover { opacity: 1; }
+	.term-bar button:hover {
+		opacity: 1;
+	}
 
 	.term-body {
 		flex: 1;
@@ -215,8 +256,12 @@
 		white-space: pre-wrap;
 		word-break: break-word;
 	}
-	.term-line.is-cmd { color: var(--ink); }
-	.term-line.is-out { color: var(--ink-soft); }
+	.term-line.is-cmd {
+		color: var(--ink);
+	}
+	.term-line.is-out {
+		color: var(--ink-soft);
+	}
 
 	.term-input-row {
 		display: flex;
@@ -248,7 +293,13 @@
 		vertical-align: text-bottom;
 	}
 	@keyframes termBlink {
-		0%, 49% { opacity: 1; }
-		50%, 100% { opacity: 0; }
+		0%,
+		49% {
+			opacity: 1;
+		}
+		50%,
+		100% {
+			opacity: 0;
+		}
 	}
 </style>

@@ -34,12 +34,12 @@
 
 ## 精选作品
 
-| # | 项目 | 描述 |
-| -: | ---- | ---- |
-| 01 | **[TrandingOs](https://github.com/lora-sys/TrandingOs)** | AI 交易终端 · 40+ Agent 技能 · 记忆系统 · 玻璃拟态 UI |
-| 02 | **[ai-company-os](https://github.com/lora-sys/aicompanyos)** | 8 层 AI 执行引擎 · Writer-Critic 反馈循环 · 78 E2E 测试 |
-| 03 | **[Daily-Rss](https://github.com/lora-sys/Daily-Rss)** | AI 新闻简报平台 · 多 RSS 聚合 · 邮件推送 |
-| 04 | **[Moss](https://github.com/lora-sys/moss)** | Monad 协议 Agent 调用层 · discover → load → action → simulate |
+|   # | 项目                                                         | 描述                                                          |
+| --: | ------------------------------------------------------------ | ------------------------------------------------------------- |
+|  01 | **[TrandingOs](https://github.com/lora-sys/TrandingOs)**     | AI 交易终端 · 40+ Agent 技能 · 记忆系统 · 玻璃拟态 UI         |
+|  02 | **[ai-company-os](https://github.com/lora-sys/aicompanyos)** | 8 层 AI 执行引擎 · Writer-Critic 反馈循环 · 78 E2E 测试       |
+|  03 | **[Daily-Rss](https://github.com/lora-sys/Daily-Rss)**       | AI 新闻简报平台 · 多 RSS 聚合 · 邮件推送                      |
+|  04 | **[Moss](https://github.com/lora-sys/moss)**                 | Monad 协议 Agent 调用层 · discover → load → action → simulate |
 
 > [103 个公开仓库 →](https://github.com/lora-sys?tab=repositories)
 

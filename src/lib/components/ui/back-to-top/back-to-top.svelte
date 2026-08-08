@@ -79,24 +79,12 @@
 {#if visible}
 	<button
 		onclick={scrollToTop}
-		class={[
-			'back-to-top',
-			'visible',
-			className
-		]
-			.filter(Boolean)
-			.join(' ')}
+		class={['back-to-top', 'visible', className].filter(Boolean).join(' ')}
 		aria-label="回到顶部"
 		title="回到顶部"
 		{...rest}
 	>
-		<svg
-			class="back-to-top-ring"
-			viewBox="0 0 24 24"
-			width="44"
-			height="44"
-			aria-hidden="true"
-		>
+		<svg class="back-to-top-ring" viewBox="0 0 24 24" width="44" height="44" aria-hidden="true">
 			<circle
 				class="back-to-top-track"
 				cx="12"
@@ -185,7 +173,9 @@
 		opacity: 0.5;
 	}
 	.back-to-top-fill {
-		transition: stroke-dashoffset 0.1s linear, stroke 0.25s ease;
+		transition:
+			stroke-dashoffset 0.1s linear,
+			stroke 0.25s ease;
 	}
 	.back-to-top-arrow {
 		position: relative;

@@ -127,8 +127,14 @@
 		animation: pageFlash 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 	}
 	@keyframes pageFlash {
-		0% { opacity: 0; }
-		30% { opacity: 1; }
-		100% { opacity: 0; }
+		0% {
+			opacity: 0;
+		}
+		30% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
 	}
 </style>
