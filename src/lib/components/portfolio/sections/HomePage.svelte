@@ -525,6 +525,10 @@
 				</a>
 			</nav>
 			<span class="hero-watermark" aria-hidden="true">Edition<br />2026</span>
+			<a href="#self" class="scroll-hint" aria-label="Scroll down">
+				<span class="scroll-hint-line" aria-hidden="true"></span>
+				<span class="scroll-hint-text">Scroll</span>
+			</a>
 		</section>
 
 		<section id="self" data-chapter="己" class="sec">
@@ -891,15 +895,18 @@
 			<div class="notes-grid">
 				{#each DATA.notes as n, i}
 					<article class="note-card" style="--note-delay: {i * 0.06}s">
-						<div class="note-header">
-							<time class="note-date" datetime={n.date}>{n.date}</time>
-							<div class="note-tags">
-								{#each n.tags as t}<span class="note-tag">{t}</span>{/each}
+						<a href={`${base}/notes`} class="note-link" aria-label={`Read note: ${n.title}`}>
+							<div class="note-header">
+								<time class="note-date" datetime={n.date}>{n.date}</time>
+								<div class="note-tags">
+									{#each n.tags as t}<span class="note-tag">{t}</span>{/each}
+								</div>
 							</div>
-						</div>
-						<h3 class="note-title">{n.title}</h3>
-						<p class="note-summary">{n.summary}</p>
-						<div class="note-line" aria-hidden="true"></div>
+							<h3 class="note-title">{n.title}</h3>
+							<p class="note-summary">{n.summary}</p>
+							<span class="note-read">Read note <span aria-hidden="true">→</span></span>
+							<div class="note-line" aria-hidden="true"></div>
+						</a>
 					</article>
 				{/each}
 			</div>
@@ -1500,11 +1507,64 @@
 		pointer-events: none;
 		user-select: none;
 	}
+	.scroll-hint {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		padding-bottom: 28px;
+		text-decoration: none;
+		color: var(--ink-mute);
+		transition: color 0.3s;
+	}
+	.scroll-hint:hover {
+		color: var(--zhu);
+	}
+	.scroll-hint-line {
+		display: block;
+		width: 1px;
+		height: 32px;
+		background: linear-gradient(to bottom, transparent, var(--ink-mute));
+		animation: scrollHintPulse 2s ease-in-out infinite;
+	}
+	@keyframes scrollHintPulse {
+		0%,
+		100% {
+			opacity: 0.3;
+			transform: scaleY(0.6);
+		}
+		50% {
+			opacity: 1;
+			transform: scaleY(1);
+		}
+	}
+	.scroll-hint-text {
+		font-family: var(--font-label);
+		font-size: 0.58rem;
+		font-weight: 700;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+	}
 
 	.sec {
 		padding: clamp(60px, 10vh, 100px) 0;
 		border-top: 2px solid var(--ink);
 		position: relative;
+	}
+	.sec::before {
+		content: '';
+		position: absolute;
+		top: -1px;
+		left: 5%;
+		right: 5%;
+		height: 1px;
+		background: linear-gradient(to right, transparent, var(--ink-line-strong), transparent);
+		pointer-events: none;
+		z-index: 3;
 	}
 	.sec-head {
 		display: grid;
@@ -1919,6 +1979,9 @@
 	.row:not(.featured):last-child {
 		border-bottom: 1.5px solid var(--ink-line);
 	}
+	.row:not(.featured):hover {
+		background: linear-gradient(90deg, rgba(198, 65, 44, 0.04), transparent 50%);
+	}
 	.idx {
 		font-family: var(--font-label);
 		font-weight: 700;
@@ -2130,11 +2193,15 @@
 	.acard {
 		flex: 0 0 auto;
 		scroll-snap-align: start;
-		width: 280px;
-		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		width: 300px;
+		transition:
+			transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.4s;
+		filter: grayscale(8%);
 	}
 	.acard:hover {
-		transform: translateY(-6px);
+		transform: translateY(-8px);
+		filter: grayscale(0%);
 	}
 	.acard a {
 		text-decoration: none;
@@ -2144,9 +2211,14 @@
 	.frame {
 		position: relative;
 		overflow: hidden;
-		border-radius: 2px;
+		border-radius: 3px;
 		border: 1px solid var(--ink-line);
-		aspect-ratio: 280 / 373;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+		transition: box-shadow 0.4s;
+		aspect-ratio: 5 / 7;
+	}
+	.acard:hover .frame {
+		box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
 	}
 	.frame img {
 		width: 100%;
@@ -2397,11 +2469,16 @@
 		background: var(--paper);
 		transition:
 			border-color 0.3s,
-			box-shadow 0.3s;
+			box-shadow 0.3s,
+			transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 		opacity: 0;
 		transform: translateY(12px);
 		animation: noteIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 		animation-delay: var(--note-delay, 0s);
+		cursor: pointer;
+		text-decoration: none;
+		color: inherit;
+		display: block;
 	}
 	@keyframes noteIn {
 		to {
@@ -2411,7 +2488,12 @@
 	}
 	.note-card:hover {
 		border-color: var(--ink-line-strong);
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+		transform: translateY(-4px);
+	}
+	.note-card:active {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 	}
 	.note-header {
 		display: flex;
@@ -2469,6 +2551,32 @@
 	}
 	.note-card:hover .note-line {
 		transform: scaleX(1);
+	}
+	.note-link {
+		display: block;
+		text-decoration: none;
+		color: inherit;
+	}
+	.note-read {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		margin-top: 14px;
+		font-family: var(--font-label);
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--zhu);
+		opacity: 0;
+		transform: translateX(-6px);
+		transition:
+			opacity 0.3s,
+			transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.note-card:hover .note-read {
+		opacity: 1;
+		transform: translateX(0);
 	}
 
 	.contact {
