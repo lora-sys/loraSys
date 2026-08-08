@@ -143,6 +143,8 @@
 		[];
 	let gsapLib: any;
 	let stLib: any;
+	let lastScrollY = 0;
+	let lastScrollTime = 0;
 
 	function killMotion() {
 		if (!gsapLib) return;
@@ -327,7 +329,6 @@
 
 		lastScrollY = document.documentElement.scrollTop;
 		lastScrollTime = Date.now();
-		progressRaf = requestAnimationFrame(updateProgressThickness);
 
 		const onImgLoad = (img: HTMLImageElement) => {
 			const mark = () => img.classList.add('loaded');
@@ -378,7 +379,6 @@
 			clearInterval(animeTimer);
 			motionCleanup();
 			if (cursorRaf) cancelAnimationFrame(cursorRaf);
-			if (scrollBlurRaf) cancelAnimationFrame(scrollBlurRaf);
 			document.body.style.cursor = '';
 			cursorVisible = false;
 		};

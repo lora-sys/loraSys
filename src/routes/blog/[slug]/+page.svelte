@@ -23,7 +23,7 @@
 		// MediumZoom — click-to-zoom on article images (client only)
 		(async () => {
 			try {
-				// @ts-ignore
+				// @ts-expect-error medium-zoom types
 				const mz = await import('medium-zoom');
 				const z = (mz.default ?? mz) as (selector: string, opts?: Record<string, unknown>) => void;
 				z('article img', {

@@ -28,7 +28,9 @@
 					document.documentElement.classList.toggle('mode-dark', mode === 'dark');
 					document.documentElement.classList.toggle('dark', mode === 'dark');
 					localStorage.setItem('ink-mode', mode);
-				} catch {}
+				} catch {
+					/* localStorage unavailable */
+				}
 				return `切换至 ${mode} 模式。`;
 			}
 			return (
