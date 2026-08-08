@@ -1686,7 +1686,9 @@
 		background: var(--zhu);
 		border-radius: 50%;
 		transform: translate(-50%, -6px);
-		transition: transform 0.3s, box-shadow 0.3s;
+		transition:
+			transform 0.3s,
+			box-shadow 0.3s;
 	}
 	.tl-item:hover .tl-dot {
 		transform: translate(-50%, -6px) scale(1.4);
