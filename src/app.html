@@ -10,6 +10,19 @@
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
 		<link rel="alternate" type="application/rss+xml" title="Lora Sys Blog" href="/api/rss.xml" />
 		%sveltekit.head%
+		<script>
+			// Prevent dark-mode FOUC: apply class before first paint.
+			// mode-watcher will sync its reactive store on hydration.
+			(function () {
+				try {
+					var stored = localStorage.getItem('mode-watcher-mode');
+					var isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+					if (isDark) {
+						document.documentElement.classList.add('mode-dark');
+					}
+				} catch (e) {}
+			})();
+		</script>
 	</head>
 
 	<body data-sveltekit-preload-data="hover">

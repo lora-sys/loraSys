@@ -7,10 +7,15 @@
 	import { page } from '$app/stores';
 	import { initLenis, destroyLenis } from '$lib/lenis';
 	import { onMount } from 'svelte';
+	import { setMode } from 'mode-watcher';
 
 	interface Props {
 		children: import('svelte').Snippet;
 	}
+
+	// Force dark mode from first paint — avoids FOUC where light-mode colors
+	// make cards and text unreadable before ModeToggle hydrates.
+	setMode('dark');
 
 	let transitioning = $state(false);
 	let { children }: Props = $props();

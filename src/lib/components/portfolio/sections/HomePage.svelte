@@ -1986,10 +1986,10 @@
 		width: 100%;
 		height: 200px;
 		object-fit: cover;
-		filter: grayscale(15%) contrast(1.02) blur(8px);
-		opacity: 0.4;
+		filter: grayscale(15%) contrast(1.02) blur(4px);
+		opacity: 0.55;
 		transition:
-			filter 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+			filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
 			opacity 0.4s ease,
 			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
