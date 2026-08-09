@@ -116,3 +116,5 @@ Markdown 文件置于 [`src/content/`](src/content/)，YAML frontmatter 控制�
   <br/>
   <a href="https://lora-sys.github.io/loraSys">在建造中记录</a> · <a href="https://github.com/lora-sys/loraSys">Source</a> · <a href="mailto:lorasys@outlook.com">lorasys@outlook.com</a>
 </p>
+# trigger deploy
+# trigger redeploy — fix stale CDN cache

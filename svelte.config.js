@@ -90,7 +90,15 @@ const mdsvexOptions = {
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	extensions: ['.svelte', '.md'],
-	preprocess: [vitePreprocess(), mdsvex(mdsvexOptions)],
+	preprocess: [
+		vitePreprocess({
+			compilerOptions: {
+				// Svelte 5 compatibility: SvelteKit 2.x runtime uses `new Component()` (legacy API)
+				compatibility: { componentApi: 4 }
+			}
+		}),
+		mdsvex(mdsvexOptions)
+	],
 
 	kit: {
 		prerender: {
