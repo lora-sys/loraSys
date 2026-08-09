@@ -9,7 +9,7 @@
 	import { onMount } from 'svelte';
 
 	interface Props {
-		children?: import('svelte').Snippet;
+		children: import('svelte').Snippet;
 	}
 
 	let transitioning = $state(false);
