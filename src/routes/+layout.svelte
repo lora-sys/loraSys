@@ -69,3 +69,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:image" content="{base}/og-image.png" />
 </svelte:head>
+
+<Navbar />
+{@render children()}
+<ResumeViewer />
