@@ -9,6 +9,9 @@
 		<meta name="theme-color" content="#f4f1ec" />
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
 		<link rel="alternate" type="application/rss+xml" title="Lora Sys Blog" href="/api/rss.xml" />
+		<!-- Image reveal transitions — static file bypasses Tailwind JIT purging.
+		.loaded class is added by JS after images load. -->
+		<link rel="stylesheet" href="./image-reveal.css" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
