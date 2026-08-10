@@ -2262,7 +2262,9 @@
 		object-fit: cover;
 		display: block;
 		opacity: 0;
-		transition: opacity 0.5s ease, transform 0.6s ease;
+		transition:
+			opacity 0.5s ease,
+			transform 0.6s ease;
 	}
 	.anime-no {
 		position: absolute;
@@ -2408,7 +2410,10 @@
 		display: block;
 		filter: blur(6px);
 		opacity: 0.5;
-		transition: transform 0.6s ease, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+		transition:
+			transform 0.6s ease,
+			filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.4s ease;
 	}
 	.fav:hover .fav-img img {
 		transform: scale(1.04);
