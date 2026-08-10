@@ -1993,10 +1993,6 @@
 			opacity 0.4s ease,
 			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
-	.row-thumb img.loaded {
-		filter: grayscale(15%) contrast(1.02) blur(0px);
-		opacity: 1;
-	}
 	.row.featured:hover .row-thumb img {
 		filter: grayscale(0%) contrast(1) blur(0px);
 		opacity: 1;
@@ -2266,12 +2262,7 @@
 		object-fit: cover;
 		display: block;
 		opacity: 0;
-		transition:
-			opacity 0.5s ease,
-			transform 0.6s ease;
-	}
-	.frame img.loaded {
-		opacity: 1;
+		transition: opacity 0.5s ease, transform 0.6s ease;
 	}
 	.anime-no {
 		position: absolute;
@@ -2417,14 +2408,7 @@
 		display: block;
 		filter: blur(6px);
 		opacity: 0.5;
-		transition:
-			transform 0.6s ease,
-			filter 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-			opacity 0.4s ease;
-	}
-	.fav-img img.loaded {
-		filter: blur(0);
-		opacity: 1;
+		transition: transform 0.6s ease, filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
 	}
 	.fav:hover .fav-img img {
 		transform: scale(1.04);

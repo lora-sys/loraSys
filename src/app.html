@@ -9,23 +9,25 @@
 		<meta name="theme-color" content="#f4f1ec" />
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
 		<link rel="alternate" type="application/rss+xml" title="Lora Sys Blog" href="/api/rss.xml" />
-		<!-- Image reveal transitions — static file bypasses Tailwind JIT purging.
-		.loaded class is added by JS after images load. -->
-		<link rel="stylesheet" href="./image-reveal.css" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<script>
-			// Prevent dark-mode FOUC: inject CSS variables + add mode-dark class
-			// before first paint, before any lazy images load.
-			// mode-watcher will sync its reactive store on hydration later.
+			// Critical CSS injected before first paint — bypasses Tailwind JIT purging.
+			// 1) Dark-mode CSS variables (mode-watcher's onMount injection is too late).
+			// 2) Image reveal transitions (.loaded class is added by JS after images load,
+			//    so Tailwind purges these rules from the compiled CSS).
 			(function () {
 				var css =
-					'html.mode-dark,html.mode-dark :root{--ink:#f3efe6;--ink-soft:#b5afa6;--ink-mute:#8a857c;--paper:#1a1815;--paper-2:#24211c;--zhu:#e0473a;--ink-line:rgba(243,239,230,.12);--ink-line-strong:rgba(243,239,230,.25)}html.mode-dark body{background:var(--paper);color:var(--ink)}';
+					'html.mode-dark,html.mode-dark :root{--ink:#f3efe6;--ink-soft:#b5afa6;--ink-mute:#8a857c;--paper:#1a1815;--paper-2:#24211c;--zhu:#e0473a;--ink-line:rgba(243,239,230,.12);--ink-line-strong:rgba(243,239,230,.25)}html.mode-dark body{background:var(--paper);color:var(--ink)}' +
+					'.frame img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s ease,transform .6s ease}.frame img.loaded{opacity:1}' +
+					'.fav-img img{width:100%;height:100%;object-fit:cover;display:block;filter:blur(6px);opacity:.5;transition:transform .6s ease,filter .5s cubic-bezier(.16,1,.3,1),opacity .4s ease}.fav-img img.loaded{filter:blur(0);opacity:1}' +
+					'.row-thumb img{display:block;width:100%;height:200px;object-fit:cover;filter:grayscale(15%) contrast(1.02) blur(4px);opacity:.55;transition:filter .5s cubic-bezier(.16,1,.3,1),opacity .4s ease,transform .6s cubic-bezier(.25,.46,.45,.94)}.row-thumb img.loaded{filter:grayscale(15%) contrast(1.02) blur(0);opacity:1}';
 				var style = document.createElement('style');
-				style.id = 'ink-dark-mode-critical';
+				style.id = 'ink-critical-css';
 				style.textContent = css;
 				document.head.appendChild(style);
+				// Add mode-dark class based on localStorage / system preference
 				try {
 					var stored = localStorage.getItem('mode-watcher-mode');
 					var isDark =
