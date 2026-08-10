@@ -1,10 +1,10 @@
 ---
 title: Building a Full-Stack YouTube Clone with nextjs 15, trpc, and more web Technologies
 description: A deep dive into architecture, core features, and problem solving strategies
-date: '2026-3-10'
+date: '2026-03-10'
 categories:
-  - Nextjs
-  - Trpc
+  - Next.js
+  - TRPC
 published: true
 ---
 

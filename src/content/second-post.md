@@ -1,10 +1,10 @@
 ---
 title: Coding is Cool
 description: Second post.
-date: '2024-7-25'
+date: '2024-07-25'
 categories:
-  - sveltekit
-  - svelte
+  - SvelteKit
+  - Svelte
 published: true
 ---
 

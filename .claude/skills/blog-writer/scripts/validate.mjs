@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Blog content validator for loraSys.
+ * Blog content validator and formatter for loraSys.
  *
  * Usage:
  *   node validate.mjs <path-to-post.md>       Validate a single post
  *   node validate.mjs <path-to-dir>            Validate all .md files in directory
  *   node validate.mjs --list                    List drafts and published posts
  *   node validate.mjs --categories              Print known categories
+ *   node validate.mjs --fix <path-or-dir>       Auto-fix issues in place
+ *   node validate.mjs --fix-all                 Auto-fix all .md files in src/content/
  */
 
 import fs from 'fs';
@@ -59,7 +61,7 @@ const CANONICAL_CATEGORIES = new Set([
 	'沙箱'
 ]);
 
-// Legacy forms found in existing posts — accepted with a suggestion
+// Legacy forms found in existing posts -- accepted with a suggestion
 const LEGACY_CATEGORY_MAP = {
 	ai: 'AI',
 	agent: 'Agent',
@@ -169,7 +171,7 @@ function validateFrontmatter(frontmatter, filePath) {
 			const canonical = LEGACY_CATEGORY_MAP[cat];
 			if (canonical) {
 				warnings.push({
-					msg: `Category "${cat}" is legacy form — use "${canonical}" instead`,
+					msg: `Category "${cat}" is legacy form -- use "${canonical}" instead`,
 					file: filePath
 				});
 			} else {
@@ -183,7 +185,7 @@ function validateFrontmatter(frontmatter, filePath) {
 		});
 	}
 
-	// Check date format — accept YYYY-M-D and YYYY-MM-DD
+	// Check date format -- accept YYYY-M-D and YYYY-MM-DD
 	if (frontmatter.date && typeof frontmatter.date === 'string') {
 		if (!/^\d{4}-\d{1,2}-\d{1,2}$/.test(frontmatter.date)) {
 			warnings.push({
@@ -195,7 +197,7 @@ function validateFrontmatter(frontmatter, filePath) {
 			if (parts[1].length !== 2 || parts[2].length !== 2) {
 				const fixed = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
 				warnings.push({
-					msg: `Date should be zero-padded: "${frontmatter.date}" → "${fixed}"`,
+					msg: `Date should be zero-padded: "${frontmatter.date}" --> "${fixed}"`,
 					file: filePath
 				});
 			}
@@ -245,7 +247,7 @@ function validateBody(body, filePath) {
 			}
 			if (prevLevel > 0 && level > prevLevel + 1) {
 				errors.push({
-					msg: `Heading jump at line ${i + 1}: H${prevLevel} → H${level} ("${headingMatch[2]}")`,
+					msg: `Heading jump at line ${i + 1}: H${prevLevel} -> H${level} ("${headingMatch[2]}")`,
 					file: filePath
 				});
 			}
@@ -280,6 +282,178 @@ function validateFile(filePath) {
 	};
 }
 
+// ─── Auto-fix engine ─────────────────────────────────────────────
+
+function fixFrontmatterOrder(fmText) {
+	const lines = fmText.split('\n');
+	const fields = [];
+	let i = 0;
+
+	while (i < lines.length) {
+		const line = lines[i];
+
+		// Collect key-value pairs, including multi-line array values
+		const kvMatch = line.match(/^(\w[\w-]*)\s*:\s*(.*)/);
+		if (kvMatch) {
+			const key = kvMatch[1];
+			let value = kvMatch[2].trim();
+			const arrayItems = [];
+
+			// Check if next line(s) are array items
+			if (i + 1 < lines.length && (lines[i + 1].startsWith('  - ') || lines[i + 1].startsWith('   - '))) {
+				i++;
+				while (i < lines.length && (lines[i].startsWith('  - ') || lines[i].startsWith('   - '))) {
+					const item = lines[i].replace(/^ {2}- |^ {3}- /, '').trim();
+					if (key === 'categories' && LEGACY_CATEGORY_MAP[item]) {
+						arrayItems.push(LEGACY_CATEGORY_MAP[item]);
+					} else {
+						arrayItems.push(item);
+					}
+					i++;
+				}
+				fields.push({ key, value, arrayItems });
+				continue;
+			}
+
+			fields.push({ key, value, arrayItems: [] });
+			i++;
+			continue;
+		}
+
+		// Skip empty/comment lines
+		i++;
+	}
+
+	// Re-order fields by canonical order
+	const ordered = [];
+	const seen = new Set();
+	const fieldOrder = ['title', 'description', 'date', 'categories', 'published', 'image'];
+
+	for (const fieldName of fieldOrder) {
+		const found = fields.find((f) => f.key === fieldName);
+		if (found) {
+			ordered.push(found);
+			seen.add(found.key);
+		}
+	}
+	for (const f of fields) {
+		if (!seen.has(f.key)) ordered.push(f);
+	}
+
+	// Build output lines
+	const result = [];
+	for (const item of ordered) {
+		if (item.arrayItems.length > 0) {
+			result.push(`${item.key}:`);
+			for (const a of item.arrayItems) {
+				result.push(`  - ${a}`);
+			}
+		} else {
+			let val = item.value;
+			// Fix date zero-padding
+			if (item.key === 'date') {
+				const parts = val.match(/^['"]?(\d{4})-(\d{1,2})-(\d{1,2})['"]?$/);
+				if (parts) {
+					val = `'${parts[1]}-${String(parts[2]).padStart(2, '0')}-${String(parts[3]).padStart(2, '0')}'`;
+				}
+			}
+			// Fix boolean normalization
+			if (item.key === 'published') {
+				if (val === '"true"' || val === "'true'" || val === 'true') val = 'true';
+				if (val === '"false"' || val === "'false'" || val === 'false') val = 'false';
+			}
+			result.push(`${item.key}: ${val}`);
+		}
+	}
+
+	return result.join('\n');
+}
+
+function fixBody(body) {
+	let lines = body.split('\n');
+	let changed = false;
+	const fixedLines = [];
+	let prevLevel = 0;
+
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i];
+		const headingMatch = line.match(/^(#{1,6})\s+(.+)/);
+
+		// Fix code blocks missing language labels
+		const codeMatch = line.match(/^```(\s*)$/);
+		if (codeMatch && i + 1 < lines.length) {
+			const nextLine = lines[i + 1]?.trim();
+			if (nextLine) {
+				let lang = '';
+				if (/^(import |export |const |let |function |class |async |await |from ['"]|return )/.test(nextLine)) {
+					lang = 'typescript';
+				} else if (/^(<!DOCTYPE|<html|<head|<body|<div|<span|<script|<\w+)/.test(nextLine)) {
+					lang = 'html';
+				} else if (/^(\$ |bash|sh\$|npm |pnpm |yarn |pip |python |node )/.test(nextLine)) {
+					lang = 'bash';
+				} else if (/^(\{|\[|\})/.test(nextLine)) {
+					lang = 'json';
+				} else if (/^(# |## |### |- |\d\. )/.test(nextLine)) {
+					lang = 'markdown';
+				} else if (/^(\.\/|cd |mkdir |rm |git |echo |touch |ls |cat )/.test(nextLine)) {
+					lang = 'bash';
+				}
+				if (lang) {
+					fixedLines.push(`\`\`\`${lang}`);
+					changed = true;
+					continue;
+				}
+			}
+		}
+
+		// Fix heading jumps
+		if (headingMatch) {
+			const level = headingMatch[1].length;
+			if (prevLevel > 0 && level > prevLevel + 1 && prevLevel < 6) {
+				const newLevel = prevLevel + 1;
+				const placeholder = headingMatch[2].split(' ').slice(0, 4).join(' ');
+				fixedLines.push(`${'#'.repeat(newLevel)} ${placeholder}`);
+				changed = true;
+			}
+			prevLevel = level;
+		}
+
+		fixedLines.push(line);
+	}
+
+	return { body: fixedLines.join('\n'), changed };
+}
+
+function fixFile(filePath, dryRun = false) {
+	const content = fs.readFileSync(filePath, 'utf-8');
+
+	const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
+	if (!frontmatterMatch) {
+		return { fixed: false, changes: [] };
+	}
+
+	const originalFm = frontmatterMatch[1];
+	const fixedFm = fixFrontmatterOrder(originalFm);
+	const bodyContent = content.slice(frontmatterMatch[0].length);
+	const bodyResult = fixBody(bodyContent);
+
+	const changes = [];
+	if (originalFm !== fixedFm) changes.push('frontmatter');
+	if (bodyResult.changed) changes.push('body');
+
+	if (changes.length === 0) {
+		return { fixed: false, changes: [] };
+	}
+
+	const newContent = `---\n${fixedFm}\n---${bodyResult.body}`;
+
+	if (!dryRun) {
+		fs.writeFileSync(filePath, newContent, 'utf-8');
+	}
+
+	return { fixed: true, changes, dryRun };
+}
+
 // ─── List mode ───
 function listPosts() {
 	if (!fs.existsSync(CONTENT_DIR)) {
@@ -305,24 +479,24 @@ function listPosts() {
 		}
 	}
 
-	console.log('\n📝 Published Posts:');
+	console.log('\nPublished Posts:');
 	if (published.length === 0) {
 		console.log('  (none)');
 	} else {
 		for (const p of published) {
 			const title = p.frontmatter?.title || '(no title)';
 			const date = p.frontmatter?.date || 'no date';
-			console.log(`  ✅ ${p.file} — "${title}" (${date})`);
+			console.log(`  [OK] ${p.file} -- "${title}" (${date})`);
 		}
 	}
 
-	console.log('\n📄 Drafts:');
+	console.log('\nDrafts:');
 	if (drafts.length === 0) {
 		console.log('  (none)');
 	} else {
 		for (const d of drafts) {
 			const title = d.frontmatter?.title || '(no title)';
-			console.log(`  📝 ${d.file} — "${title}"`);
+			console.log(`  [DRAFT] ${d.file} -- "${title}"`);
 		}
 	}
 	console.log(`\nTotal: ${published.length} published, ${drafts.length} drafts\n`);
@@ -337,7 +511,7 @@ function printCategories() {
 	console.log(`\nTotal: ${CANONICAL_CATEGORIES.size} categories\n`);
 }
 
-// ─── Main ───
+// ─── Main ─────────────────────────────────────────────────────────
 function main() {
 	const args = process.argv.slice(2);
 
@@ -351,16 +525,86 @@ function main() {
 		return;
 	}
 
-	if (args.length === 0) {
-		console.log('Usage:');
-		console.log('  node validate.mjs <file-or-dir>   Validate content');
-		console.log('  node validate.mjs --list           List drafts and published posts');
-		console.log('  node validate.mjs --categories     Print known categories');
+	const fixIndex = args.indexOf('--fix');
+	const fixAll = args.includes('--fix-all');
+	const dryRun = args.includes('--dry-run');
+
+	if (fixAll) {
+		if (!fs.existsSync(CONTENT_DIR)) {
+			console.error('Content directory not found:', CONTENT_DIR);
+			process.exit(1);
+		}
+		const files = fs
+			.readdirSync(CONTENT_DIR)
+			.filter((f) => f.endsWith('.md'))
+			.sort()
+			.map((f) => path.join(CONTENT_DIR, f));
+
+		console.log(`\nFix-all mode: ${files.length} files${dryRun ? ' (dry run)' : ''}\n`);
+
+		let fixedCount = 0;
+		for (const file of files) {
+			const relPath = path.relative(process.cwd(), file);
+			const result = fixFile(file, dryRun);
+			if (result.fixed) {
+				console.log(`   ${relPath} -- fixed: ${result.changes.join(', ')}`);
+				fixedCount++;
+			} else {
+				console.log(`   ${relPath} -- no changes needed`);
+			}
+		}
+		console.log(`\n${'--'.repeat(40)}`);
+		console.log(`Fixed: ${fixedCount} / ${files.length} files\n`);
 		process.exit(0);
 	}
 
-	const target = args[0];
+	if (fixIndex !== -1) {
+		const remainingArgs = args.slice(fixIndex + 1).filter((a) => !a.startsWith('--'));
+		const target = remainingArgs[0];
+		if (!target) {
+			console.error('Usage: node validate.mjs --fix <file-or-dir> [--dry-run]');
+			process.exit(1);
+		}
+
+		let filesToFix = [];
+		if (fs.statSync(target).isDirectory()) {
+			filesToFix = fs
+				.readdirSync(target)
+				.filter((f) => f.endsWith('.md'))
+				.map((f) => path.join(target, f));
+		} else if (target.endsWith('.md')) {
+			filesToFix = [target];
+		}
+
+		console.log(`\nFix mode${dryRun ? ' (dry run)' : ''}: ${filesToFix.length} files\n`);
+
+		for (const file of filesToFix) {
+			const relPath = path.relative(process.cwd(), file);
+			const result = fixFile(file, dryRun);
+			if (result.fixed) {
+				console.log(`   ${relPath} -- fixed: ${result.changes.join(', ')}`);
+			} else {
+				console.log(`   ${relPath} -- no changes needed`);
+			}
+		}
+		console.log('');
+		process.exit(0);
+	}
+
+	if (args.length === 0) {
+		console.log('Usage:');
+		console.log('  node validate.mjs <file-or-dir>        Validate content');
+		console.log('  node validate.mjs --fix <path>          Auto-fix issues in file/dir');
+		console.log('  node validate.mjs --fix-all             Auto-fix all src/content/*.md');
+		console.log('  node validate.mjs --fix --dry-run       Show what would be fixed');
+		console.log('  node validate.mjs --list                List drafts and published posts');
+		console.log('  node validate.mjs --categories          Print known categories');
+		process.exit(0);
+	}
+
+	// Default: validate mode
 	let filesToCheck = [];
+	const target = args[0];
 
 	if (fs.statSync(target).isDirectory()) {
 		filesToCheck = fs
@@ -381,7 +625,7 @@ function main() {
 	for (const file of filesToCheck) {
 		const result = validateFile(file);
 		const relPath = path.relative(process.cwd(), file);
-		const icon = result.errors.length > 0 ? '❌' : '✅';
+		const icon = result.errors.length > 0 ? 'X' : 'OK';
 
 		console.log(`\n${icon} ${relPath}`);
 
@@ -393,29 +637,29 @@ function main() {
 		}
 
 		for (const e of result.errors) {
-			console.log(`   ❌ ${e.msg}`);
+			console.log(`   X ${e.msg}`);
 			totalErrors++;
 		}
 		for (const w of result.warnings) {
-			console.log(`   ⚠️  ${w.msg}`);
+			console.log(`   ! ${w.msg}`);
 			totalWarnings++;
 		}
 
 		if (result.errors.length === 0 && result.warnings.length === 0) {
-			console.log('   ✅ All checks passed');
+			console.log('   OK All checks passed');
 		}
 
 		if (result.errors.length > 0) exitCode = 1;
 	}
 
-	console.log(`\n${'─'.repeat(40)}`);
+	console.log(`\n${'--'.repeat(40)}`);
 	console.log(
 		`Files: ${filesToCheck.length} | Errors: ${totalErrors} | Warnings: ${totalWarnings}`
 	);
 	if (totalErrors === 0 && totalWarnings === 0) {
-		console.log('✅ All files passed validation');
+		console.log('All files passed validation');
 	} else if (totalErrors === 0) {
-		console.log('⚠️  No errors, but warnings need attention');
+		console.log('No errors, but warnings need attention');
 	}
 
 	process.exit(exitCode);

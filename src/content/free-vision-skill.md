@@ -477,6 +477,7 @@ Free Vision Skill 不绑定某个主模型，适合所有文本-only 的 Agent�
 npx skills add lora-sys/free-vision-skill
 ```
 
+## 🤖 Codex
 ### 🤖 Codex
 
 ```bash
@@ -484,6 +485,7 @@ npx skills add lora-sys/free-vision-skill
 curl -fsSL https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/installers/codex-install.sh | bash
 ```
 
+## 🤖 OpenCode
 ### 🤖 OpenCode
 
 ```json

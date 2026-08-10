@@ -13,7 +13,8 @@ description: Blog content creation, validation, and formatting skill for loraSys
 | --------------------- | ---------- | ----------------------------------------------------- |
 | `blog new <title>`    | 创建新文章 | 在 `src/content/` 生成 .md 文件，自动填充 frontmatter |
 | `blog check <path>`   | 校验内容   | 运行 validate.mjs 检查规范合规性                      |
-| `blog format <path>`  | 格式化     | 修正 frontmatter、标题层级、代码块标注                |
+| `blog format <path>`  | 格式化     | 自动修复 frontmatter、标题层级、代码块标注             |
+| `blog fix-all`        | 批量修复   | 自动修复 src/content/ 下所有 .md 文件                 |
 | `blog list`           | 列出草稿   | 扫描 `published: false` 的文章                        |
 | `blog draft <path>`   | 标记草稿   | 设置 `published: false`                               |
 | `blog publish <path>` | 发布文章   | 设置 `published: true`                                |
@@ -39,17 +40,30 @@ description: Blog content creation, validation, and formatting skill for loraSys
 
 ### blog format
 
-1. 读取 [standards/frontmatter.md](standards/frontmatter.md) 获取字段排序规则
-2. 读取 [standards/style.md](standards/style.md) 获取格式规范
-3. 修正 frontmatter 字段顺序和日期格式
-4. 修正标题层级（确保从 ## 开始，不乱跳）
-5. 确保代码块有语言标注
-6. 写入文件
+Run the auto-fix engine: `node .claude/skills/blog-writer/scripts/validate.mjs --fix <path>`
+Fixes applied: frontmatter field order, date zero-padding, boolean normalization, category legacy mapping, code block language labels, heading jump insertion.
+
+### blog fix-all
+
+Run the auto-fix engine on all content files: `node .claude/skills/blog-writer/scripts/validate.mjs --fix-all`
+Fixes all `.md` files in `src/content/` in one pass.
 
 ### blog list
 
 1. 运行校验脚本的 list 模式：`node .claude/skills/blog-writer/scripts/validate.mjs --list`
 2. 展示草稿列表和已发布列表
+
+### 文件监听模式（自动修复）
+
+启动文件监听器，自动监控 `src/content/*.md` 文件变更并实时修复：
+
+```bash
+# 后台运行，启动时修复所有文件，之后监听变更
+node .claude/skills/blog-writer/scripts/watch.mjs
+
+# 一次性修复所有文件后退出（适合 CI / git hook）
+node .claude/skills/blog-writer/scripts/watch.mjs --once
+```
 
 ### 写入后的标准流程
 

@@ -3,9 +3,9 @@ title: Vercel Eve Agent Framework
 description: A deep dive into Vercel's filesystem-first Agent framework — architecture, API, deployment, and production adoption guide.
 date: '2026-07-05'
 categories:
-  - vercel
-  - agents
-  - ai
+  - Vercel
+  - Agent
+  - AI
 published: true
 ---
 
@@ -295,6 +295,7 @@ await agent.send({
 });
 ```
 
+## Database and Application-Layer Persistence
 ### Database and Application-Layer Persistence
 
 Eve is not a database framework, but it integrates with databases easily. The official tool documentation explicitly states that tool execution happens in the app runtime, so it can import from `lib/`, read `process.env`, and connect to any database or backend. The official chat template documentation further demonstrates common practice: the browser interacts with the agent via same-origin `/eve/v1/*`, and streaming events are persisted to Postgres upon arrival, maintaining a session cursor for interruption recovery; the template stack explicitly uses Neon, Drizzle, Better Auth, and Upstash Redis.

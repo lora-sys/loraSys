@@ -377,6 +377,8 @@ cd ../myproject-worktree-17
 
 ---
 
+## Phase 3: Implementation →
+### Phase 3: Implementation →
 #### Phase 3: Implementation → Owner Agent
 
 **Owner Agent 职责**：
@@ -423,6 +425,8 @@ jobs:
 
 ---
 
+## Phase 5: Review →
+### Phase 5: Review →
 #### Phase 5: Review → Bug Hunter + Behavior Reviewer
 
 **Bug Hunter（冷启动）**：
@@ -477,6 +481,7 @@ jobs:
 
 ---
 
+### Phase 7: Merge →
 #### Phase 7: Merge → Coordinator
 
 **合并条件**：
@@ -503,6 +508,8 @@ jobs:
 
 ---
 
+## Phase 8: Memory →
+### Phase 8: Memory →
 #### Phase 8: Memory → Coordinator
 
 **Phase Summary**：
@@ -641,6 +648,7 @@ npx -y skills add lora-sys/ai-engineering-harness -g --all --full-depth
 
 ---
 
+## Step 2: Quick Scan（2
 ### Step 2: Quick Scan（2 分钟）
 
 ```bash
@@ -664,6 +672,7 @@ bash skills/dashboard/scripts/scan-to-issues.sh --create
 
 ---
 
+## Step 3: 接管（10 分钟）
 ### Step 3: 接管（10 分钟）
 
 ```bash
@@ -695,6 +704,7 @@ pieces; do not edit code yet.
 
 ---
 
+## Step 4: 推一个 Issue
 ### Step 4: 推一个 Issue 到 Done（10 分钟）
 
 ```bash
@@ -704,7 +714,7 @@ Use $ai-engineering-harness to take Issue #1 from Planning to Done.
 
 **完整闭环**：
 
-```
+```markdown
 1. 写 Plan → Issue #1 的 Implementation Plan
 2. Worktree → git worktree add ../proj-issue-1
 3. 分派 → Backend Agent 修密钥
@@ -721,6 +731,7 @@ Use $ai-engineering-harness to take Issue #1 from Planning to Done.
 
 ---
 
+## Step 5: 验证（3 分钟）
 ### Step 5: 验证（3 分钟）
 
 ```bash
@@ -763,6 +774,7 @@ npx -y skills add lora-sys/ai-engineering-harness -g -s ai-engineering-harness
 npx -y skills add lora-sys/ai-engineering-harness -g -a claude-code codex grok
 ```
 
+## 兼容 40 个 CLI
 ### 兼容 40 个 CLI Agent
 
 | Agent       | 安装路径                     |
@@ -790,6 +802,7 @@ Read memory/project-memory.md and sessions/<last-id>/summary.md, then continue.
 
 **Harness 的状态全部落盘**，聊天历史不会丢。
 
+## 并行开发
 ### 并行开发
 
 ```bash
@@ -805,6 +818,7 @@ for Issue #20 (frontend), #21 (backend), #22 (database).
 3. 并行推到 PR
 4. 冲突时 Conflict Resolver 处理
 
+## CI 自愈
 ### CI 自愈
 
 ```bash
@@ -819,6 +833,7 @@ CI is red on PR #23. Use $ai-engineering-harness to recover.
 3. 重新跑 CI
 4. 重新走 Reviewer
 
+## 30 秒拉起新项目
 ### 30 秒拉起新项目
 
 ```bash

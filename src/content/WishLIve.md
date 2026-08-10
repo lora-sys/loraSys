@@ -3,9 +3,9 @@ title: 'Building WishLive: A Multi-Agent Runtime with Real Economics'
 description: 'How I designed and built a runtime system where agents execute, negotiate, and settle — with Solidity smart contracts, Redis event streams, and graceful AI fallback.'
 date: '2026-06-14'
 categories:
-  - engineering
-  - hackathon
-  - agents
+  - Engineering
+  - Hackathon
+  - Agent
 published: true
 ---
 

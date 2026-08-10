@@ -164,6 +164,7 @@ MINIMAX_CN_API_KEY=eyJ...
 MINIMAX_API_KEY=eyJ...
 ```
 
+## 3. 启用插件
 ### 3. 启用插件
 
 编辑 `~/.hermes/config.yaml`：
