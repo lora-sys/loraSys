@@ -10,10 +10,19 @@
 		<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
 		<link rel="alternate" type="application/rss+xml" title="Lora Sys Blog" href="/api/rss.xml" />
 		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
 		<script>
-			// Prevent dark-mode FOUC: apply class before first paint.
-			// mode-watcher will sync its reactive store on hydration.
+			// Prevent dark-mode FOUC: inject CSS variables + add mode-dark class
+			// before first paint, before any lazy images load.
+			// mode-watcher will sync its reactive store on hydration later.
 			(function () {
+				var css =
+					'html.mode-dark,html.mode-dark :root{--ink:#f3efe6;--ink-soft:#b5afa6;--ink-mute:#8a857c;--paper:#1a1815;--paper-2:#24211c;--zhu:#e0473a;--ink-line:rgba(243,239,230,.12);--ink-line-strong:rgba(243,239,230,.25)}html.mode-dark body{background:var(--paper);color:var(--ink)}';
+				var style = document.createElement('style');
+				style.id = 'ink-dark-mode-critical';
+				style.textContent = css;
+				document.head.appendChild(style);
 				try {
 					var stored = localStorage.getItem('mode-watcher-mode');
 					var isDark =
@@ -25,9 +34,6 @@
 				} catch (e) {}
 			})();
 		</script>
-	</head>
-
-	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
