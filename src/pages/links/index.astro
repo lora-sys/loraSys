@@ -1,0 +1,10 @@
+---
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { friendLinks } from '../../data/links'
+---
+<PageLayout meta={{ title: 'Links', description: 'Friends and neighbors around the web.' }} highlightColor='#659EB9'>
+  <main class='mx-auto w-full max-w-4xl py-8 md:py-14'>
+    <header class='animate mb-10 max-w-2xl'><p class='mb-2 text-sm uppercase tracking-[.16em] text-muted-foreground'>Around the web</p><h1 class='text-3xl font-medium'>Friends & Links</h1><p class='mt-4 leading-7 text-muted-foreground'>A small directory of people and places I enjoy visiting. No invented entries: this list grows through real connections.</p></header>
+    {friendLinks.length ? <ul class='grid gap-4 sm:grid-cols-2'>{friendLinks.map(link => <li><a class='block rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4' href={link.url} target='_blank' rel='friend noreferrer'><h2 class='font-medium'>{link.name}</h2><p class='mt-2 text-sm text-muted-foreground'>{link.description}</p></a></li>)}</ul> : <section class='rounded-2xl border border-dashed bg-muted/30 p-7 md:p-10'><p class='text-sm uppercase tracking-[.14em] text-muted-foreground'>The first seat is open</p><h2 class='mt-2 text-xl font-medium'>欢迎交换友链</h2><p class='mt-3 max-w-xl leading-7 text-muted-foreground'>如果你也在认真记录、创造或研究有趣的东西，欢迎来认识我。请附上站点名称、链接、一句话介绍和头像；确认之后，我会把真实的你放在这里。</p><a class='mt-6 inline-flex rounded-full border bg-background px-4 py-2 text-sm font-medium transition hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4' href='mailto:lorasys@outlook.com?subject=Friend%20link'>Say hello →</a></section>}
+  </main>
+</PageLayout>

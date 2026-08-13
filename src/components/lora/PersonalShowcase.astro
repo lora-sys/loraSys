@@ -1,0 +1,11 @@
+---
+import ShowcaseCarousel from './ShowcaseCarousel.astro'
+import ContributionGraph from './ContributionGraph.astro'
+import { anime, favorites } from '../../data/showcase'
+---
+<div class='personal-showcase'>
+  <ContributionGraph />
+  <ShowcaseCarousel id='anime' title='Anime Archive' eyebrow='Stories that stay with me' items={anime} />
+  <ShowcaseCarousel id='favorites' title='Favorites' eyebrow='Books, films, music & ideas' items={favorites} />
+</div>
+<style>.personal-showcase{display:grid;gap:3.5rem;margin-block:1rem 2rem}</style>

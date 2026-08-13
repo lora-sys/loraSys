@@ -1,0 +1,17 @@
+---
+import data from '../../data/contributions.json'
+interface Day { date: string; contributionCount: number }
+interface Week { contributionDays: Day[] }
+const days = (data.weeks as Week[]).flatMap((w: Week) => w.contributionDays)
+const max = Math.max(1, ...days.map((d: Day) => d.contributionCount))
+const level = (n:number) => n === 0 ? 0 : Math.max(1, Math.ceil(n / max * 4))
+---
+<section class='contributions magic' aria-labelledby='contribution-title' data-magic>
+  <header><div><p>Open source rhythm</p><h2 id='contribution-title'>GitHub Contributions</h2></div><strong>{data.totalContributions.toLocaleString()}</strong></header>
+  {days.length ? <><div class='calendar' role='img' aria-label={`${data.totalContributions} GitHub contributions in the last year`}>
+    {days.map((day: Day) => <span class={`level-${level(day.contributionCount)}`} title={`${day.date}: ${day.contributionCount} contributions`}></span>)}
+  </div><footer><span>{data.lastUpdated ? `Updated ${new Date(data.lastUpdated).toLocaleDateString('en-US')}` : 'Stored snapshot'}</span><a href='https://github.com/lora-sys' target='_blank' rel='noreferrer'>View profile →</a></footer></> : <p class='empty'>Contribution history will appear after the first scheduled GitHub Pages build. The site remains deployable if GitHub’s API is unavailable.</p>}
+</section>
+<style>
+  .contributions{position:relative;overflow:hidden;border:1px solid hsl(var(--border));border-radius:1rem;padding:1.2rem;background:hsl(var(--card));display:grid;gap:1rem}.contributions header,.contributions footer{display:flex;justify-content:space-between;align-items:end;gap:1rem}.contributions header p{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:hsl(var(--muted-foreground));margin:0}.contributions h2{font-size:1.12rem;font-weight:600}.contributions strong{font-variant-numeric:tabular-nums;font-size:1.4rem}.calendar{display:grid;grid-template-rows:repeat(7,.65rem);grid-auto-flow:column;grid-auto-columns:.65rem;gap:.18rem;overflow-x:auto;padding:.15rem}.calendar span{border-radius:2px;background:hsl(var(--muted))}.calendar .level-1{background:hsl(var(--primary)/.25)}.calendar .level-2{background:hsl(var(--primary)/.45)}.calendar .level-3{background:hsl(var(--primary)/.68)}.calendar .level-4{background:hsl(var(--primary))}.contributions footer,.empty{font-size:.78rem;color:hsl(var(--muted-foreground))}.contributions a{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:3px}
+</style>
