@@ -45,7 +45,8 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
 const postIndex = posts.findIndex((entry) => entry.id === id)
 const previousPost = posts[postIndex - 1]
 const nextPost = posts[postIndex + 1]
-const blogBase = `${import.meta.env.BASE_URL}blog/`
+// Root-relative source paths are prefixed exactly once by the post-build GitHub Pages pass.
+const blogBase = '/blog/'
 ---
 
 <PageLayout
