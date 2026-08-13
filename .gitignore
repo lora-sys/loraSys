@@ -1,36 +1,41 @@
-node_modules
+### Astro ###
+dist/
+.astro/
 
-# Output
-.output
-.vercel
-/.svelte-kit
-/build
+### Vercel ###
+.vercel/
 
-# OS
-.DS_Store
-Thumbs.db
-./skills-lock.json
-# Env
+### Vim ###
+[._]*.un~
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Code workspace files
+*.code-workspace
+
+### Node ###
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# dependencies
+node_modules/
+
+# environment variables
 .env
-.env.*
-!.env.example
-!.env.test
-.playwright-cli
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+.env.production
 
-./codebuddy
-./claude
-./agents
-./iflow
-./qoder
-.atomcode
-.playwright-mcp
-screenshot*.png
-
-
-output/agent-browser-profile
-.codegraph
-cyber-dragon
-static/.views.json
+### Custom ###
+.DS_Store
+old_blog
+ignore.*
+bunfig.toml
+/src/content/blog/test.*
+/test/

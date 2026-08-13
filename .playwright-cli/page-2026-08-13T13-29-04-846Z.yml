@@ -1,0 +1,57 @@
+- generic [ref=f1e2]:
+  - generic [ref=f1e3]:
+    - link "Brand" [ref=f1e4] [cursor=pointer]:
+      - /url: /
+      - text: Astro Theme Pure
+    - generic [ref=f1e5]:
+      - generic [ref=f1e7]:
+        - link "Nav menu item" [ref=f1e8] [cursor=pointer]:
+          - /url: /blog
+          - text: Blog
+        - link "Nav menu item" [ref=f1e9] [cursor=pointer]:
+          - /url: /docs
+          - text: Docs
+        - link "Nav menu item" [ref=f1e10] [cursor=pointer]:
+          - /url: /projects
+          - text: Projects
+        - link "Nav menu item" [ref=f1e11] [cursor=pointer]:
+          - /url: /links
+          - text: Links
+        - link "Nav menu item" [ref=f1e12] [cursor=pointer]:
+          - /url: /about
+          - text: About
+        - link "Search" [ref=f1e14] [cursor=pointer]:
+          - /url: /search
+      - button "Dark Theme" [ref=f1e21] [cursor=pointer]
+  - main [ref=f1e28]:
+    - generic [ref=f1e29]:
+      - paragraph [ref=f1e30]: Around the web
+      - heading "Friends & Links" [level=1] [ref=f1e31]
+      - paragraph [ref=f1e32]: "A small directory of people and places I enjoy visiting. No invented entries: this list grows through real connections."
+    - generic [ref=f1e33]:
+      - paragraph [ref=f1e34]: The first seat is open
+      - heading "欢迎交换友链" [level=2] [ref=f1e35]
+      - paragraph [ref=f1e36]: 如果你也在认真记录、创造或研究有趣的东西，欢迎来认识我。请附上站点名称、链接、一句话介绍和头像；确认之后，我会把真实的你放在这里。
+      - link "Say hello →" [ref=f1e37] [cursor=pointer]:
+        - /url: mailto:lorasys@outlook.com?subject=Friend%20link
+  - contentinfo [ref=f1e38]:
+    - generic [ref=f1e40]:
+      - generic [ref=f1e41]:
+        - link "Moe ICP 114514" [ref=f1e43] [cursor=pointer]:
+          - /url: https://icp.gov.moe/?keyword=114514
+        - generic [ref=f1e44]:
+          - text: © 2026 Pure Lab &
+          - link "Site Policy" [ref=f1e47] [cursor=pointer]:
+            - /url: /terms
+        - generic [ref=f1e48]:
+          - link "Astro" [ref=f1e49] [cursor=pointer]:
+            - /url: https://github.com/withastro/astro
+          - text: "&"
+          - link "Pure" [ref=f1e50] [cursor=pointer]:
+            - /url: https://github.com/cworld1/astro-theme-pure
+          - text: theme powered
+      - generic [ref=f1e51]:
+        - link "GitHub" [ref=f1e52] [cursor=pointer]:
+          - /url: https://github.com/cworld1/astro-theme-pure
+        - link "RSS" [ref=f1e57] [cursor=pointer]:
+          - /url: /rss.xml

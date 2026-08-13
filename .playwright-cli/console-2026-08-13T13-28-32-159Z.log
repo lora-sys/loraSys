@@ -1,0 +1,4 @@
+[     202ms] [LOG] %c Astro Theme Pure %c https://github.com/cworld1/astro-theme-pure/ color:#fff;background:linear-gradient(90deg,#448bff,#44e9ff);padding:5px 0; color:#000;background:linear-gradient(90deg,#44e9ff,#ffffff);padding:5px 10px 5px 0px; @ http://127.0.0.1:4321/loraSys:0
+[     485ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4321/favicon/favicon.ico:0
+[     498ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4321/favicon/favicon-32x32.png:0
+[     547ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4321/favicon/favicon-16x16.png:0

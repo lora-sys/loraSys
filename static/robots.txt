@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://lora-sys.github.io/loraSys/sitemap.xml

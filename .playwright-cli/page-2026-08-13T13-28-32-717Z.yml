@@ -1,0 +1,696 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "Brand" [ref=e4] [cursor=pointer]:
+      - /url: /
+      - text: Astro Theme Pure
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - link "Nav menu item" [ref=e8] [cursor=pointer]:
+          - /url: /blog
+          - text: Blog
+        - link "Nav menu item" [ref=e9] [cursor=pointer]:
+          - /url: /docs
+          - text: Docs
+        - link "Nav menu item" [ref=e10] [cursor=pointer]:
+          - /url: /projects
+          - text: Projects
+        - link "Nav menu item" [ref=e11] [cursor=pointer]:
+          - /url: /links
+          - text: Links
+        - link "Nav menu item" [ref=e12] [cursor=pointer]:
+          - /url: /about
+          - text: About
+        - link "Search" [ref=e14] [cursor=pointer]:
+          - /url: /search
+      - button "Dark Theme" [ref=e21] [cursor=pointer]
+  - main [ref=e28]:
+    - generic [ref=e29]:
+      - img "Avatar" [ref=e30]
+      - generic [ref=e31]:
+        - heading "Pure Lab" [level=1] [ref=e32]
+        - generic [ref=e33]:
+          - paragraph [ref=e39]: Somewhere
+          - link [ref=e40] [cursor=pointer]:
+            - /url: https://github.com/cworld1/astro-theme-pure
+            - paragraph [ref=e45]: Source code
+      - link [ref=e46] [cursor=pointer]:
+        - /url: https://github.com/cworld1/astro-theme-pure
+        - paragraph [ref=e50]: Get Template
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - heading "About" [level=2] [ref=e54]
+        - generic [ref=e55]:
+          - paragraph [ref=e56]: Developer / Designer
+          - paragraph [ref=e57]: Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel, at eum oratio possit voluptatum.
+          - link [ref=e58] [cursor=pointer]:
+            - /url: /about
+            - paragraph [ref=e59]: More about me
+      - generic [ref=e62]:
+        - heading "Posts" [level=2] [ref=e64]
+        - generic [ref=e65]:
+          - list [ref=e66]:
+            - listitem
+            - listitem [ref=e67]:
+              - 'link "Aug 1, 2026 AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化" [ref=e68] [cursor=pointer]':
+                - /url: /blog/ai-engineering-harness
+                - generic [ref=e69]:
+                  - time [ref=e71]: Aug 1, 2026
+                  - generic [ref=e72]: "AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化"
+            - listitem
+            - listitem [ref=e76]:
+              - 'link "Jul 31, 2026 Free Vision Skill: 给文本模型装上一双按需调用的眼睛" [ref=e77] [cursor=pointer]':
+                - /url: /blog/free-vision-skill
+                - generic [ref=e78]:
+                  - time [ref=e80]: Jul 31, 2026
+                  - generic [ref=e81]: "Free Vision Skill: 给文本模型装上一双按需调用的眼睛"
+            - listitem
+            - listitem [ref=e85]:
+              - link "Jul 9, 2026 用 MiniMax 为 Hermes Agent 接入图片与视频生成" [ref=e86] [cursor=pointer]:
+                - /url: /blog/hermes-minimax-media
+                - generic [ref=e87]:
+                  - time [ref=e89]: Jul 9, 2026
+                  - generic [ref=e90]: 用 MiniMax 为 Hermes Agent 接入图片与视频生成
+            - listitem
+            - listitem [ref=e94]:
+              - link "Jul 9, 2026 用 StepFun 为 Hermes Agent 接入图片生成能力：零 GPU、零 ComfyUI、开箱即用" [ref=e95] [cursor=pointer]:
+                - /url: /blog/hermes-stepfun-imagegen
+                - generic [ref=e96]:
+                  - time [ref=e98]: Jul 9, 2026
+                  - generic [ref=e99]: 用 StepFun 为 Hermes Agent 接入图片生成能力：零 GPU、零 ComfyUI、开箱即用
+            - listitem
+            - listitem [ref=e103]:
+              - link "Jul 4, 2026 Vercel Eve Agent Framework" [ref=e104] [cursor=pointer]:
+                - /url: /blog/eve-agent
+                - generic [ref=e105]:
+                  - time [ref=e107]: Jul 4, 2026
+                  - generic [ref=e108]: Vercel Eve Agent Framework
+            - listitem
+            - listitem [ref=e112]:
+              - link "Jun 15, 2026 沙箱（Sandbox）技术完全指南" [ref=e113] [cursor=pointer]:
+                - /url: /blog/sandbox
+                - generic [ref=e114]:
+                  - time [ref=e116]: Jun 15, 2026
+                  - generic [ref=e117]: 沙箱（Sandbox）技术完全指南
+            - listitem
+            - listitem [ref=e121]:
+              - link "Jun 15, 2026 Loop Engineering Harness：AI Agent 架构中的迭代引擎" [ref=e122] [cursor=pointer]:
+                - /url: /blog/loop-engineering-harness
+                - generic [ref=e123]:
+                  - time [ref=e125]: Jun 15, 2026
+                  - generic [ref=e126]: Loop Engineering Harness：AI Agent 架构中的迭代引擎
+            - listitem
+            - listitem [ref=e130]:
+              - 'link "Jun 13, 2026 Building WishLive: A Multi-Agent Runtime" [ref=e131] [cursor=pointer]':
+                - /url: /blog/wishlive
+                - generic [ref=e132]:
+                  - time [ref=e134]: Jun 13, 2026
+                  - generic [ref=e135]: "Building WishLive: A Multi-Agent Runtime"
+            - listitem
+            - listitem [ref=e139]:
+              - link "Mar 9, 2026 Building a Full-Stack YouTube Clone with Next.js 15" [ref=e140] [cursor=pointer]:
+                - /url: /blog/newtube
+                - generic [ref=e141]:
+                  - time [ref=e143]: Mar 9, 2026
+                  - generic [ref=e144]: Building a Full-Stack YouTube Clone with Next.js 15
+          - link [ref=e148] [cursor=pointer]:
+            - /url: /blog
+            - paragraph [ref=e149]: More posts
+      - generic [ref=e152]:
+        - heading "Education" [level=2] [ref=e154]
+        - link [ref=e156] [cursor=pointer]:
+          - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+          - generic [ref=e158]:
+            - heading "Lorem ipsum" [level=2] [ref=e159]
+            - paragraph [ref=e160]: Lorem ipsum dolor sit amet, vidit suscipit at mei.
+            - paragraph [ref=e161]: August 2021 - July 2025
+      - generic [ref=e162]:
+        - heading "Website List" [level=2] [ref=e164]
+        - generic [ref=e166]:
+          - link [ref=e167] [cursor=pointer]:
+            - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+            - img "Lorem ipsum" [ref=e168]
+            - generic [ref=e169]:
+              - heading "Lorem ipsum" [level=2] [ref=e170]
+              - paragraph [ref=e171]: Do not go gentle into that good night
+          - link [ref=e172] [cursor=pointer]:
+            - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+            - img "Lorem ipsum" [ref=e173]
+            - generic [ref=e174]:
+              - heading "Lorem ipsum" [level=2] [ref=e175]
+              - paragraph [ref=e176]: Old age burn and rave at close of day
+          - link [ref=e177] [cursor=pointer]:
+            - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+            - img "Lorem ipsum" [ref=e178]
+            - generic [ref=e179]:
+              - heading "Lorem ipsum" [level=2] [ref=e180]
+              - paragraph [ref=e181]: Rage, rage against the dying of the light
+          - link [ref=e182] [cursor=pointer]:
+            - /url: /projects
+            - img "More projects" [ref=e183]
+            - generic [ref=e184]:
+              - heading "More projects" [level=2] [ref=e185]
+              - paragraph [ref=e186]: Check out more projects
+      - generic [ref=e187]:
+        - heading "Certifications" [level=2] [ref=e189]
+        - link [ref=e191] [cursor=pointer]:
+          - /url: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+          - generic [ref=e193]:
+            - heading "Lorem ipsum" [level=2] [ref=e194]
+            - paragraph [ref=e195]: Lorem ipsum dolor sit amet, vidit suscipit at mei. Quem denique mea id. Usu ei regione indoctum dissentiunt, cu meliore fuisset mei, vel quod voluptua ne. Ex dicat impedit mel, at eum oratio possit voluptatum. Dicat ceteros cu vim. Impetus fuisset ullamcorper pri cu, his posse iisque ad, aliquam honestatis usu id.
+            - paragraph [ref=e196]: July 2024
+      - generic [ref=e197]:
+        - heading "Skills" [level=2] [ref=e199]
+        - generic [ref=e200]:
+          - generic [ref=e201]:
+            - heading "Languages" [level=3] [ref=e202]
+            - generic [ref=e203]:
+              - button [ref=e204]:
+                - paragraph [ref=e205]: Html
+              - button [ref=e206]:
+                - paragraph [ref=e207]: JavaScript
+              - button [ref=e208]:
+                - paragraph [ref=e209]: CSS
+              - button [ref=e210]:
+                - paragraph [ref=e211]: Shell
+          - generic [ref=e212]:
+            - heading "Frontend" [level=3] [ref=e213]
+            - generic [ref=e214]:
+              - button [ref=e215]:
+                - paragraph [ref=e216]: TypeScript
+              - button [ref=e217]:
+                - paragraph [ref=e218]: Vite
+              - button [ref=e219]:
+                - paragraph [ref=e220]: Webpack
+              - button [ref=e221]:
+                - paragraph [ref=e222]: Astro
+          - generic [ref=e223]:
+            - heading "Backend" [level=3] [ref=e224]
+            - generic [ref=e225]:
+              - button [ref=e226]:
+                - paragraph [ref=e227]: Vercel
+              - button [ref=e228]:
+                - paragraph [ref=e229]: Waline
+      - generic [ref=e230]:
+        - region [ref=e231]:
+          - generic [ref=e232]:
+            - generic [ref=e233]:
+              - paragraph [ref=e234]: Open source rhythm
+              - heading "GitHub Contributions" [level=2] [ref=e235]
+            - strong [ref=e236]: 1,492
+          - img "1492 GitHub contributions in the last year" [ref=e237]:
+            - 'generic "2025-08-03: 0 contributions" [ref=e238]'
+            - 'generic "2025-08-04: 0 contributions" [ref=e239]'
+            - 'generic "2025-08-05: 0 contributions" [ref=e240]'
+            - 'generic "2025-08-06: 1 contributions" [ref=e241]'
+            - 'generic "2025-08-07: 9 contributions" [ref=e242]'
+            - 'generic "2025-08-08: 0 contributions" [ref=e243]'
+            - 'generic "2025-08-09: 0 contributions" [ref=e244]'
+            - 'generic "2025-08-10: 1 contributions" [ref=e245]'
+            - 'generic "2025-08-11: 3 contributions" [ref=e246]'
+            - 'generic "2025-08-12: 0 contributions" [ref=e247]'
+            - 'generic "2025-08-13: 0 contributions" [ref=e248]'
+            - 'generic "2025-08-14: 0 contributions" [ref=e249]'
+            - 'generic "2025-08-15: 0 contributions" [ref=e250]'
+            - 'generic "2025-08-16: 0 contributions" [ref=e251]'
+            - 'generic "2025-08-17: 0 contributions" [ref=e252]'
+            - 'generic "2025-08-18: 0 contributions" [ref=e253]'
+            - 'generic "2025-08-19: 0 contributions" [ref=e254]'
+            - 'generic "2025-08-20: 0 contributions" [ref=e255]'
+            - 'generic "2025-08-21: 0 contributions" [ref=e256]'
+            - 'generic "2025-08-22: 0 contributions" [ref=e257]'
+            - 'generic "2025-08-23: 0 contributions" [ref=e258]'
+            - 'generic "2025-08-24: 0 contributions" [ref=e259]'
+            - 'generic "2025-08-25: 0 contributions" [ref=e260]'
+            - 'generic "2025-08-26: 0 contributions" [ref=e261]'
+            - 'generic "2025-08-27: 0 contributions" [ref=e262]'
+            - 'generic "2025-08-28: 0 contributions" [ref=e263]'
+            - 'generic "2025-08-29: 0 contributions" [ref=e264]'
+            - 'generic "2025-08-30: 1 contributions" [ref=e265]'
+            - 'generic "2025-08-31: 0 contributions" [ref=e266]'
+            - 'generic "2025-09-01: 0 contributions" [ref=e267]'
+            - 'generic "2025-09-02: 1 contributions" [ref=e268]'
+            - 'generic "2025-09-03: 0 contributions" [ref=e269]'
+            - 'generic "2025-09-04: 0 contributions" [ref=e270]'
+            - 'generic "2025-09-05: 0 contributions" [ref=e271]'
+            - 'generic "2025-09-06: 0 contributions" [ref=e272]'
+            - 'generic "2025-09-07: 0 contributions" [ref=e273]'
+            - 'generic "2025-09-08: 0 contributions" [ref=e274]'
+            - 'generic "2025-09-09: 0 contributions" [ref=e275]'
+            - 'generic "2025-09-10: 2 contributions" [ref=e276]'
+            - 'generic "2025-09-11: 0 contributions" [ref=e277]'
+            - 'generic "2025-09-12: 0 contributions" [ref=e278]'
+            - 'generic "2025-09-13: 0 contributions" [ref=e279]'
+            - 'generic "2025-09-14: 0 contributions" [ref=e280]'
+            - 'generic "2025-09-15: 0 contributions" [ref=e281]'
+            - 'generic "2025-09-16: 0 contributions" [ref=e282]'
+            - 'generic "2025-09-17: 0 contributions" [ref=e283]'
+            - 'generic "2025-09-18: 0 contributions" [ref=e284]'
+            - 'generic "2025-09-19: 0 contributions" [ref=e285]'
+            - 'generic "2025-09-20: 1 contributions" [ref=e286]'
+            - 'generic "2025-09-21: 0 contributions" [ref=e287]'
+            - 'generic "2025-09-22: 0 contributions" [ref=e288]'
+            - 'generic "2025-09-23: 0 contributions" [ref=e289]'
+            - 'generic "2025-09-24: 0 contributions" [ref=e290]'
+            - 'generic "2025-09-25: 0 contributions" [ref=e291]'
+            - 'generic "2025-09-26: 0 contributions" [ref=e292]'
+            - 'generic "2025-09-27: 0 contributions" [ref=e293]'
+            - 'generic "2025-09-28: 0 contributions" [ref=e294]'
+            - 'generic "2025-09-29: 0 contributions" [ref=e295]'
+            - 'generic "2025-09-30: 0 contributions" [ref=e296]'
+            - 'generic "2025-10-01: 0 contributions" [ref=e297]'
+            - 'generic "2025-10-02: 0 contributions" [ref=e298]'
+            - 'generic "2025-10-03: 0 contributions" [ref=e299]'
+            - 'generic "2025-10-04: 0 contributions" [ref=e300]'
+            - 'generic "2025-10-05: 0 contributions" [ref=e301]'
+            - 'generic "2025-10-06: 0 contributions" [ref=e302]'
+            - 'generic "2025-10-07: 0 contributions" [ref=e303]'
+            - 'generic "2025-10-08: 0 contributions" [ref=e304]'
+            - 'generic "2025-10-09: 1 contributions" [ref=e305]'
+            - 'generic "2025-10-10: 0 contributions" [ref=e306]'
+            - 'generic "2025-10-11: 0 contributions" [ref=e307]'
+            - 'generic "2025-10-12: 2 contributions" [ref=e308]'
+            - 'generic "2025-10-13: 1 contributions" [ref=e309]'
+            - 'generic "2025-10-14: 0 contributions" [ref=e310]'
+            - 'generic "2025-10-15: 0 contributions" [ref=e311]'
+            - 'generic "2025-10-16: 3 contributions" [ref=e312]'
+            - 'generic "2025-10-17: 0 contributions" [ref=e313]'
+            - 'generic "2025-10-18: 5 contributions" [ref=e314]'
+            - 'generic "2025-10-19: 0 contributions" [ref=e315]'
+            - 'generic "2025-10-20: 0 contributions" [ref=e316]'
+            - 'generic "2025-10-21: 0 contributions" [ref=e317]'
+            - 'generic "2025-10-22: 0 contributions" [ref=e318]'
+            - 'generic "2025-10-23: 0 contributions" [ref=e319]'
+            - 'generic "2025-10-24: 2 contributions" [ref=e320]'
+            - 'generic "2025-10-25: 5 contributions" [ref=e321]'
+            - 'generic "2025-10-26: 0 contributions" [ref=e322]'
+            - 'generic "2025-10-27: 1 contributions" [ref=e323]'
+            - 'generic "2025-10-28: 1 contributions" [ref=e324]'
+            - 'generic "2025-10-29: 3 contributions" [ref=e325]'
+            - 'generic "2025-10-30: 3 contributions" [ref=e326]'
+            - 'generic "2025-10-31: 0 contributions" [ref=e327]'
+            - 'generic "2025-11-01: 0 contributions" [ref=e328]'
+            - 'generic "2025-11-02: 3 contributions" [ref=e329]'
+            - 'generic "2025-11-03: 0 contributions" [ref=e330]'
+            - 'generic "2025-11-04: 2 contributions" [ref=e331]'
+            - 'generic "2025-11-05: 1 contributions" [ref=e332]'
+            - 'generic "2025-11-06: 2 contributions" [ref=e333]'
+            - 'generic "2025-11-07: 2 contributions" [ref=e334]'
+            - 'generic "2025-11-08: 1 contributions" [ref=e335]'
+            - 'generic "2025-11-09: 1 contributions" [ref=e336]'
+            - 'generic "2025-11-10: 0 contributions" [ref=e337]'
+            - 'generic "2025-11-11: 2 contributions" [ref=e338]'
+            - 'generic "2025-11-12: 5 contributions" [ref=e339]'
+            - 'generic "2025-11-13: 18 contributions" [ref=e340]'
+            - 'generic "2025-11-14: 1 contributions" [ref=e341]'
+            - 'generic "2025-11-15: 1 contributions" [ref=e342]'
+            - 'generic "2025-11-16: 5 contributions" [ref=e343]'
+            - 'generic "2025-11-17: 2 contributions" [ref=e344]'
+            - 'generic "2025-11-18: 0 contributions" [ref=e345]'
+            - 'generic "2025-11-19: 3 contributions" [ref=e346]'
+            - 'generic "2025-11-20: 4 contributions" [ref=e347]'
+            - 'generic "2025-11-21: 0 contributions" [ref=e348]'
+            - 'generic "2025-11-22: 1 contributions" [ref=e349]'
+            - 'generic "2025-11-23: 6 contributions" [ref=e350]'
+            - 'generic "2025-11-24: 0 contributions" [ref=e351]'
+            - 'generic "2025-11-25: 0 contributions" [ref=e352]'
+            - 'generic "2025-11-26: 0 contributions" [ref=e353]'
+            - 'generic "2025-11-27: 0 contributions" [ref=e354]'
+            - 'generic "2025-11-28: 1 contributions" [ref=e355]'
+            - 'generic "2025-11-29: 0 contributions" [ref=e356]'
+            - 'generic "2025-11-30: 0 contributions" [ref=e357]'
+            - 'generic "2025-12-01: 0 contributions" [ref=e358]'
+            - 'generic "2025-12-02: 0 contributions" [ref=e359]'
+            - 'generic "2025-12-03: 0 contributions" [ref=e360]'
+            - 'generic "2025-12-04: 0 contributions" [ref=e361]'
+            - 'generic "2025-12-05: 0 contributions" [ref=e362]'
+            - 'generic "2025-12-06: 0 contributions" [ref=e363]'
+            - 'generic "2025-12-07: 0 contributions" [ref=e364]'
+            - 'generic "2025-12-08: 0 contributions" [ref=e365]'
+            - 'generic "2025-12-09: 0 contributions" [ref=e366]'
+            - 'generic "2025-12-10: 0 contributions" [ref=e367]'
+            - 'generic "2025-12-11: 0 contributions" [ref=e368]'
+            - 'generic "2025-12-12: 0 contributions" [ref=e369]'
+            - 'generic "2025-12-13: 0 contributions" [ref=e370]'
+            - 'generic "2025-12-14: 0 contributions" [ref=e371]'
+            - 'generic "2025-12-15: 0 contributions" [ref=e372]'
+            - 'generic "2025-12-16: 0 contributions" [ref=e373]'
+            - 'generic "2025-12-17: 0 contributions" [ref=e374]'
+            - 'generic "2025-12-18: 0 contributions" [ref=e375]'
+            - 'generic "2025-12-19: 8 contributions" [ref=e376]'
+            - 'generic "2025-12-20: 0 contributions" [ref=e377]'
+            - 'generic "2025-12-21: 1 contributions" [ref=e378]'
+            - 'generic "2025-12-22: 4 contributions" [ref=e379]'
+            - 'generic "2025-12-23: 5 contributions" [ref=e380]'
+            - 'generic "2025-12-24: 0 contributions" [ref=e381]'
+            - 'generic "2025-12-25: 3 contributions" [ref=e382]'
+            - 'generic "2025-12-26: 2 contributions" [ref=e383]'
+            - 'generic "2025-12-27: 7 contributions" [ref=e384]'
+            - 'generic "2025-12-28: 10 contributions" [ref=e385]'
+            - 'generic "2025-12-29: 1 contributions" [ref=e386]'
+            - 'generic "2025-12-30: 0 contributions" [ref=e387]'
+            - 'generic "2025-12-31: 0 contributions" [ref=e388]'
+            - 'generic "2026-01-01: 4 contributions" [ref=e389]'
+            - 'generic "2026-01-02: 8 contributions" [ref=e390]'
+            - 'generic "2026-01-03: 1 contributions" [ref=e391]'
+            - 'generic "2026-01-04: 0 contributions" [ref=e392]'
+            - 'generic "2026-01-05: 0 contributions" [ref=e393]'
+            - 'generic "2026-01-06: 0 contributions" [ref=e394]'
+            - 'generic "2026-01-07: 0 contributions" [ref=e395]'
+            - 'generic "2026-01-08: 3 contributions" [ref=e396]'
+            - 'generic "2026-01-09: 0 contributions" [ref=e397]'
+            - 'generic "2026-01-10: 3 contributions" [ref=e398]'
+            - 'generic "2026-01-11: 0 contributions" [ref=e399]'
+            - 'generic "2026-01-12: 2 contributions" [ref=e400]'
+            - 'generic "2026-01-13: 0 contributions" [ref=e401]'
+            - 'generic "2026-01-14: 0 contributions" [ref=e402]'
+            - 'generic "2026-01-15: 14 contributions" [ref=e403]'
+            - 'generic "2026-01-16: 1 contributions" [ref=e404]'
+            - 'generic "2026-01-17: 15 contributions" [ref=e405]'
+            - 'generic "2026-01-18: 16 contributions" [ref=e406]'
+            - 'generic "2026-01-19: 3 contributions" [ref=e407]'
+            - 'generic "2026-01-20: 1 contributions" [ref=e408]'
+            - 'generic "2026-01-21: 10 contributions" [ref=e409]'
+            - 'generic "2026-01-22: 9 contributions" [ref=e410]'
+            - 'generic "2026-01-23: 18 contributions" [ref=e411]'
+            - 'generic "2026-01-24: 4 contributions" [ref=e412]'
+            - 'generic "2026-01-25: 7 contributions" [ref=e413]'
+            - 'generic "2026-01-26: 4 contributions" [ref=e414]'
+            - 'generic "2026-01-27: 0 contributions" [ref=e415]'
+            - 'generic "2026-01-28: 1 contributions" [ref=e416]'
+            - 'generic "2026-01-29: 20 contributions" [ref=e417]'
+            - 'generic "2026-01-30: 3 contributions" [ref=e418]'
+            - 'generic "2026-01-31: 16 contributions" [ref=e419]'
+            - 'generic "2026-02-01: 12 contributions" [ref=e420]'
+            - 'generic "2026-02-02: 7 contributions" [ref=e421]'
+            - 'generic "2026-02-03: 5 contributions" [ref=e422]'
+            - 'generic "2026-02-04: 12 contributions" [ref=e423]'
+            - 'generic "2026-02-05: 0 contributions" [ref=e424]'
+            - 'generic "2026-02-06: 1 contributions" [ref=e425]'
+            - 'generic "2026-02-07: 0 contributions" [ref=e426]'
+            - 'generic "2026-02-08: 0 contributions" [ref=e427]'
+            - 'generic "2026-02-09: 0 contributions" [ref=e428]'
+            - 'generic "2026-02-10: 0 contributions" [ref=e429]'
+            - 'generic "2026-02-11: 1 contributions" [ref=e430]'
+            - 'generic "2026-02-12: 1 contributions" [ref=e431]'
+            - 'generic "2026-02-13: 0 contributions" [ref=e432]'
+            - 'generic "2026-02-14: 0 contributions" [ref=e433]'
+            - 'generic "2026-02-15: 0 contributions" [ref=e434]'
+            - 'generic "2026-02-16: 3 contributions" [ref=e435]'
+            - 'generic "2026-02-17: 1 contributions" [ref=e436]'
+            - 'generic "2026-02-18: 0 contributions" [ref=e437]'
+            - 'generic "2026-02-19: 0 contributions" [ref=e438]'
+            - 'generic "2026-02-20: 0 contributions" [ref=e439]'
+            - 'generic "2026-02-21: 0 contributions" [ref=e440]'
+            - 'generic "2026-02-22: 0 contributions" [ref=e441]'
+            - 'generic "2026-02-23: 0 contributions" [ref=e442]'
+            - 'generic "2026-02-24: 0 contributions" [ref=e443]'
+            - 'generic "2026-02-25: 0 contributions" [ref=e444]'
+            - 'generic "2026-02-26: 0 contributions" [ref=e445]'
+            - 'generic "2026-02-27: 5 contributions" [ref=e446]'
+            - 'generic "2026-02-28: 0 contributions" [ref=e447]'
+            - 'generic "2026-03-01: 0 contributions" [ref=e448]'
+            - 'generic "2026-03-02: 0 contributions" [ref=e449]'
+            - 'generic "2026-03-03: 0 contributions" [ref=e450]'
+            - 'generic "2026-03-04: 0 contributions" [ref=e451]'
+            - 'generic "2026-03-05: 0 contributions" [ref=e452]'
+            - 'generic "2026-03-06: 3 contributions" [ref=e453]'
+            - 'generic "2026-03-07: 9 contributions" [ref=e454]'
+            - 'generic "2026-03-08: 6 contributions" [ref=e455]'
+            - 'generic "2026-03-09: 8 contributions" [ref=e456]'
+            - 'generic "2026-03-10: 1 contributions" [ref=e457]'
+            - 'generic "2026-03-11: 2 contributions" [ref=e458]'
+            - 'generic "2026-03-12: 0 contributions" [ref=e459]'
+            - 'generic "2026-03-13: 5 contributions" [ref=e460]'
+            - 'generic "2026-03-14: 0 contributions" [ref=e461]'
+            - 'generic "2026-03-15: 1 contributions" [ref=e462]'
+            - 'generic "2026-03-16: 0 contributions" [ref=e463]'
+            - 'generic "2026-03-17: 0 contributions" [ref=e464]'
+            - 'generic "2026-03-18: 10 contributions" [ref=e465]'
+            - 'generic "2026-03-19: 0 contributions" [ref=e466]'
+            - 'generic "2026-03-20: 4 contributions" [ref=e467]'
+            - 'generic "2026-03-21: 13 contributions" [ref=e468]'
+            - 'generic "2026-03-22: 9 contributions" [ref=e469]'
+            - 'generic "2026-03-23: 15 contributions" [ref=e470]'
+            - 'generic "2026-03-24: 5 contributions" [ref=e471]'
+            - 'generic "2026-03-25: 2 contributions" [ref=e472]'
+            - 'generic "2026-03-26: 7 contributions" [ref=e473]'
+            - 'generic "2026-03-27: 0 contributions" [ref=e474]'
+            - 'generic "2026-03-28: 1 contributions" [ref=e475]'
+            - 'generic "2026-03-29: 0 contributions" [ref=e476]'
+            - 'generic "2026-03-30: 0 contributions" [ref=e477]'
+            - 'generic "2026-03-31: 1 contributions" [ref=e478]'
+            - 'generic "2026-04-01: 7 contributions" [ref=e479]'
+            - 'generic "2026-04-02: 0 contributions" [ref=e480]'
+            - 'generic "2026-04-03: 0 contributions" [ref=e481]'
+            - 'generic "2026-04-04: 0 contributions" [ref=e482]'
+            - 'generic "2026-04-05: 4 contributions" [ref=e483]'
+            - 'generic "2026-04-06: 6 contributions" [ref=e484]'
+            - 'generic "2026-04-07: 0 contributions" [ref=e485]'
+            - 'generic "2026-04-08: 0 contributions" [ref=e486]'
+            - 'generic "2026-04-09: 14 contributions" [ref=e487]'
+            - 'generic "2026-04-10: 0 contributions" [ref=e488]'
+            - 'generic "2026-04-11: 3 contributions" [ref=e489]'
+            - 'generic "2026-04-12: 6 contributions" [ref=e490]'
+            - 'generic "2026-04-13: 1 contributions" [ref=e491]'
+            - 'generic "2026-04-14: 1 contributions" [ref=e492]'
+            - 'generic "2026-04-15: 10 contributions" [ref=e493]'
+            - 'generic "2026-04-16: 21 contributions" [ref=e494]'
+            - 'generic "2026-04-17: 22 contributions" [ref=e495]'
+            - 'generic "2026-04-18: 24 contributions" [ref=e496]'
+            - 'generic "2026-04-19: 10 contributions" [ref=e497]'
+            - 'generic "2026-04-20: 22 contributions" [ref=e498]'
+            - 'generic "2026-04-21: 0 contributions" [ref=e499]'
+            - 'generic "2026-04-22: 12 contributions" [ref=e500]'
+            - 'generic "2026-04-23: 8 contributions" [ref=e501]'
+            - 'generic "2026-04-24: 2 contributions" [ref=e502]'
+            - 'generic "2026-04-25: 7 contributions" [ref=e503]'
+            - 'generic "2026-04-26: 3 contributions" [ref=e504]'
+            - 'generic "2026-04-27: 3 contributions" [ref=e505]'
+            - 'generic "2026-04-28: 3 contributions" [ref=e506]'
+            - 'generic "2026-04-29: 1 contributions" [ref=e507]'
+            - 'generic "2026-04-30: 5 contributions" [ref=e508]'
+            - 'generic "2026-05-01: 11 contributions" [ref=e509]'
+            - 'generic "2026-05-02: 2 contributions" [ref=e510]'
+            - 'generic "2026-05-03: 9 contributions" [ref=e511]'
+            - 'generic "2026-05-04: 4 contributions" [ref=e512]'
+            - 'generic "2026-05-05: 0 contributions" [ref=e513]'
+            - 'generic "2026-05-06: 0 contributions" [ref=e514]'
+            - 'generic "2026-05-07: 3 contributions" [ref=e515]'
+            - 'generic "2026-05-08: 7 contributions" [ref=e516]'
+            - 'generic "2026-05-09: 2 contributions" [ref=e517]'
+            - 'generic "2026-05-10: 0 contributions" [ref=e518]'
+            - 'generic "2026-05-11: 0 contributions" [ref=e519]'
+            - 'generic "2026-05-12: 0 contributions" [ref=e520]'
+            - 'generic "2026-05-13: 0 contributions" [ref=e521]'
+            - 'generic "2026-05-14: 21 contributions" [ref=e522]'
+            - 'generic "2026-05-15: 0 contributions" [ref=e523]'
+            - 'generic "2026-05-16: 1 contributions" [ref=e524]'
+            - 'generic "2026-05-17: 13 contributions" [ref=e525]'
+            - 'generic "2026-05-18: 12 contributions" [ref=e526]'
+            - 'generic "2026-05-19: 5 contributions" [ref=e527]'
+            - 'generic "2026-05-20: 14 contributions" [ref=e528]'
+            - 'generic "2026-05-21: 25 contributions" [ref=e529]'
+            - 'generic "2026-05-22: 6 contributions" [ref=e530]'
+            - 'generic "2026-05-23: 0 contributions" [ref=e531]'
+            - 'generic "2026-05-24: 0 contributions" [ref=e532]'
+            - 'generic "2026-05-25: 1 contributions" [ref=e533]'
+            - 'generic "2026-05-26: 33 contributions" [ref=e534]'
+            - 'generic "2026-05-27: 0 contributions" [ref=e535]'
+            - 'generic "2026-05-28: 0 contributions" [ref=e536]'
+            - 'generic "2026-05-29: 0 contributions" [ref=e537]'
+            - 'generic "2026-05-30: 2 contributions" [ref=e538]'
+            - 'generic "2026-05-31: 9 contributions" [ref=e539]'
+            - 'generic "2026-06-01: 1 contributions" [ref=e540]'
+            - 'generic "2026-06-02: 2 contributions" [ref=e541]'
+            - 'generic "2026-06-03: 3 contributions" [ref=e542]'
+            - 'generic "2026-06-04: 0 contributions" [ref=e543]'
+            - 'generic "2026-06-05: 12 contributions" [ref=e544]'
+            - 'generic "2026-06-06: 22 contributions" [ref=e545]'
+            - 'generic "2026-06-07: 1 contributions" [ref=e546]'
+            - 'generic "2026-06-08: 1 contributions" [ref=e547]'
+            - 'generic "2026-06-09: 14 contributions" [ref=e548]'
+            - 'generic "2026-06-10: 0 contributions" [ref=e549]'
+            - 'generic "2026-06-11: 6 contributions" [ref=e550]'
+            - 'generic "2026-06-12: 3 contributions" [ref=e551]'
+            - 'generic "2026-06-13: 4 contributions" [ref=e552]'
+            - 'generic "2026-06-14: 3 contributions" [ref=e553]'
+            - 'generic "2026-06-15: 6 contributions" [ref=e554]'
+            - 'generic "2026-06-16: 2 contributions" [ref=e555]'
+            - 'generic "2026-06-17: 1 contributions" [ref=e556]'
+            - 'generic "2026-06-18: 30 contributions" [ref=e557]'
+            - 'generic "2026-06-19: 8 contributions" [ref=e558]'
+            - 'generic "2026-06-20: 7 contributions" [ref=e559]'
+            - 'generic "2026-06-21: 2 contributions" [ref=e560]'
+            - 'generic "2026-06-22: 0 contributions" [ref=e561]'
+            - 'generic "2026-06-23: 0 contributions" [ref=e562]'
+            - 'generic "2026-06-24: 0 contributions" [ref=e563]'
+            - 'generic "2026-06-25: 5 contributions" [ref=e564]'
+            - 'generic "2026-06-26: 2 contributions" [ref=e565]'
+            - 'generic "2026-06-27: 0 contributions" [ref=e566]'
+            - 'generic "2026-06-28: 0 contributions" [ref=e567]'
+            - 'generic "2026-06-29: 0 contributions" [ref=e568]'
+            - 'generic "2026-06-30: 0 contributions" [ref=e569]'
+            - 'generic "2026-07-01: 0 contributions" [ref=e570]'
+            - 'generic "2026-07-02: 0 contributions" [ref=e571]'
+            - 'generic "2026-07-03: 0 contributions" [ref=e572]'
+            - 'generic "2026-07-04: 0 contributions" [ref=e573]'
+            - 'generic "2026-07-05: 14 contributions" [ref=e574]'
+            - 'generic "2026-07-06: 0 contributions" [ref=e575]'
+            - 'generic "2026-07-07: 0 contributions" [ref=e576]'
+            - 'generic "2026-07-08: 0 contributions" [ref=e577]'
+            - 'generic "2026-07-09: 17 contributions" [ref=e578]'
+            - 'generic "2026-07-10: 17 contributions" [ref=e579]'
+            - 'generic "2026-07-11: 48 contributions" [ref=e580]'
+            - 'generic "2026-07-12: 44 contributions" [ref=e581]'
+            - 'generic "2026-07-13: 37 contributions" [ref=e582]'
+            - 'generic "2026-07-14: 116 contributions" [ref=e583]'
+            - 'generic "2026-07-15: 38 contributions" [ref=e584]'
+            - 'generic "2026-07-16: 3 contributions" [ref=e585]'
+            - 'generic "2026-07-17: 1 contributions" [ref=e586]'
+            - 'generic "2026-07-18: 3 contributions" [ref=e587]'
+            - 'generic "2026-07-19: 23 contributions" [ref=e588]'
+            - 'generic "2026-07-20: 15 contributions" [ref=e589]'
+            - 'generic "2026-07-21: 9 contributions" [ref=e590]'
+            - 'generic "2026-07-22: 13 contributions" [ref=e591]'
+            - 'generic "2026-07-23: 2 contributions" [ref=e592]'
+            - 'generic "2026-07-24: 0 contributions" [ref=e593]'
+            - 'generic "2026-07-25: 0 contributions" [ref=e594]'
+            - 'generic "2026-07-26: 0 contributions" [ref=e595]'
+            - 'generic "2026-07-27: 1 contributions" [ref=e596]'
+            - 'generic "2026-07-28: 4 contributions" [ref=e597]'
+            - 'generic "2026-07-29: 34 contributions" [ref=e598]'
+            - 'generic "2026-07-30: 26 contributions" [ref=e599]'
+            - 'generic "2026-07-31: 14 contributions" [ref=e600]'
+            - 'generic "2026-08-01: 9 contributions" [ref=e601]'
+            - 'generic "2026-08-02: 30 contributions" [ref=e602]'
+            - 'generic "2026-08-03: 2 contributions" [ref=e603]'
+            - 'generic "2026-08-04: 0 contributions" [ref=e604]'
+            - 'generic "2026-08-05: 1 contributions" [ref=e605]'
+          - generic [ref=e606]:
+            - generic [ref=e607]: Updated 8/4/2026
+            - link "View profile →" [ref=e608] [cursor=pointer]:
+              - /url: https://github.com/lora-sys
+        - region [ref=e609]:
+          - generic [ref=e610]:
+            - generic [ref=e611]:
+              - paragraph [ref=e612]: Stories that stay with me
+              - heading "Anime Archive" [level=2] [ref=e613]
+            - generic [ref=e614]:
+              - button "Previous Anime Archive" [ref=e615] [cursor=pointer]: ←
+              - button "Next Anime Archive" [ref=e616] [cursor=pointer]: →
+          - generic "Anime Archive" [ref=e617]:
+            - article [ref=e618]:
+              - link "01 Made in Abyss Even if it costs my humanity, I want to see the truth of the Abyss." [ref=e619] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E4%BE%86%E8%87%AA%E6%B7%B1%E6%B7%B5
+                - generic [ref=e621]:
+                  - generic [ref=e622]: "01"
+                  - heading "Made in Abyss" [level=3] [ref=e623]
+                  - paragraph [ref=e624]: Even if it costs my humanity, I want to see the truth of the Abyss.
+            - article [ref=e625]:
+              - link "02 相聚一刻 即使在最平凡的日子里，也有人在默默守护着你。" [ref=e626] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E7%9B%B8%E8%81%9A%E4%B8%80%E5%88%BB
+                - generic [ref=e628]:
+                  - generic [ref=e629]: "02"
+                  - heading "相聚一刻" [level=3] [ref=e630]
+                  - paragraph [ref=e631]: 即使在最平凡的日子里，也有人在默默守护着你。
+            - article [ref=e632]:
+              - link "03 Steins;Gate No one knows what the future holds; its potential is infinite." [ref=e633] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E5%91%BD%E9%81%8B%E7%9F%B3%E4%B9%8B%E9%96%80
+                - generic [ref=e635]:
+                  - generic [ref=e636]: "03"
+                  - heading "Steins;Gate" [level=3] [ref=e637]
+                  - paragraph [ref=e638]: No one knows what the future holds; its potential is infinite.
+            - article [ref=e639]:
+              - link "04 Attack on Titan The world is merciless, and it is also very beautiful." [ref=e640] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA
+                - generic [ref=e642]:
+                  - generic [ref=e643]: "04"
+                  - heading "Attack on Titan" [level=3] [ref=e644]
+                  - paragraph [ref=e645]: The world is merciless, and it is also very beautiful.
+            - article [ref=e646]:
+              - link "05 Eureka Seven Freedom is something that you need to actively acquire." [ref=e647] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%93%8D%E8%AF%97%E7%AF%87
+                - generic [ref=e649]:
+                  - generic [ref=e650]: "05"
+                  - heading "Eureka Seven" [level=3] [ref=e651]
+                  - paragraph [ref=e652]: Freedom is something that you need to actively acquire.
+            - article [ref=e653]:
+              - link "06 Bakuman Work hard and make the thing you wish for your reality." [ref=e654] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E7%88%B6%E6%BC%AB%E7%8E%8B
+                - generic [ref=e656]:
+                  - generic [ref=e657]: "06"
+                  - heading "Bakuman" [level=3] [ref=e658]
+                  - paragraph [ref=e659]: Work hard and make the thing you wish for your reality.
+            - article [ref=e660]:
+              - link "07 Death Note A tense study of justice, power, and consequence." [ref=e661] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0
+                - generic [ref=e663]:
+                  - generic [ref=e664]: "07"
+                  - heading "Death Note" [level=3] [ref=e665]
+                  - paragraph [ref=e666]: A tense study of justice, power, and consequence.
+        - region [ref=e669]:
+          - generic [ref=e670]:
+            - generic [ref=e671]:
+              - paragraph [ref=e672]: Books, films, music & ideas
+              - heading "Favorites" [level=2] [ref=e673]
+            - generic [ref=e674]:
+              - button "Previous Favorites" [ref=e675] [cursor=pointer]: ←
+              - button "Next Favorites" [ref=e676] [cursor=pointer]: →
+          - generic "Favorites" [ref=e677]:
+            - article [ref=e678]:
+              - link "01 Frieren 葬送的芙莉莲 — a journey through memory and magic" [ref=e679] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E8%91%AC%E9%80%81%E7%9A%84%E8%8A%99%E8%8E%89%E8%8E%B2
+                - generic [ref=e681]:
+                  - generic [ref=e682]: "01"
+                  - heading "Frieren" [level=3] [ref=e683]
+                  - paragraph [ref=e684]: 葬送的芙莉莲 — a journey through memory and magic
+            - article [ref=e685]:
+              - link "02 The Shawshank Redemption Hope is a good thing, maybe the best of things." [ref=e686] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E
+                - generic [ref=e688]:
+                  - generic [ref=e689]: "02"
+                  - heading "The Shawshank Redemption" [level=3] [ref=e690]
+                  - paragraph [ref=e691]: Hope is a good thing, maybe the best of things.
+            - article [ref=e692]:
+              - link "03 Music The tracks that keep me company while I build." [ref=e693] [cursor=pointer]:
+                - /url: https://open.spotify.com/
+                - generic [ref=e695]:
+                  - generic [ref=e696]: "03"
+                  - heading "Music" [level=3] [ref=e697]
+                  - paragraph [ref=e698]: The tracks that keep me company while I build.
+            - article [ref=e699]:
+              - link "04 Bitcoin Digital scarcity, open networks, and programmable money." [ref=e700] [cursor=pointer]:
+                - /url: https://zh.wikipedia.org/wiki/%E6%AF%94%E7%89%B9%E5%B8%81
+                - generic [ref=e702]:
+                  - generic [ref=e703]: "04"
+                  - heading "Bitcoin" [level=3] [ref=e704]
+                  - paragraph [ref=e705]: Digital scarcity, open networks, and programmable money.
+            - article [ref=e706]:
+              - 'link "05 Black Myth: Wukong A Journey to the West reimagined." [ref=e707] [cursor=pointer]':
+                - /url: https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA
+                - generic [ref=e709]:
+                  - generic [ref=e710]: "05"
+                  - 'heading "Black Myth: Wukong" [level=3] [ref=e711]'
+                  - paragraph [ref=e712]: A Journey to the West reimagined.
+    - paragraph [ref=e720]: Loading...
+  - contentinfo [ref=e721]:
+    - generic [ref=e723]:
+      - generic [ref=e724]:
+        - link "Moe ICP 114514" [ref=e726] [cursor=pointer]:
+          - /url: https://icp.gov.moe/?keyword=114514
+        - generic [ref=e727]:
+          - text: © 2026 Pure Lab &
+          - link "Site Policy" [ref=e730] [cursor=pointer]:
+            - /url: /terms
+        - generic [ref=e731]:
+          - link "Astro" [ref=e732] [cursor=pointer]:
+            - /url: https://github.com/withastro/astro
+          - text: "&"
+          - link "Pure" [ref=e733] [cursor=pointer]:
+            - /url: https://github.com/cworld1/astro-theme-pure
+          - text: theme powered
+      - generic [ref=e734]:
+        - link "GitHub" [ref=e735] [cursor=pointer]:
+          - /url: https://github.com/cworld1/astro-theme-pure
+        - link "RSS" [ref=e740] [cursor=pointer]:
+          - /url: /rss.xml
