@@ -88,7 +88,7 @@ const blogBase = '/blog/'
   const renderMermaidDiagrams = async () => {
     const blocks = Array.from(
       document.querySelectorAll<HTMLElement>(
-        '.prose [data-language="mermaid"], .prose code.language-mermaid'
+        '.prose [data-language="mermaid"] pre code, .prose code.language-mermaid'
       )
     )
     if (!blocks.length) return
@@ -102,8 +102,8 @@ const blogBase = '/blog/'
     })
 
     for (const [index, block] of blocks.entries()) {
-      const container = block.closest('.astro-code') ?? block.closest('pre') ?? block
-      const sourceNode = block.matches('code') ? block : block.querySelector('pre > code')
+      const container = block.closest('[data-language="mermaid"]') ?? block.closest('pre') ?? block
+      const sourceNode = block
       // Read Shiki's source lines only. Its language label and collapse-button
       // text live in the same outer container and are not Mermaid syntax.
       const lines = sourceNode?.querySelectorAll<HTMLElement>('.line')
@@ -126,7 +126,11 @@ const blogBase = '/blog/'
     }
   }
 
-  void renderMermaidDiagrams()
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => void renderMermaidDiagrams(), { once: true })
+  } else {
+    void renderMermaidDiagrams()
+  }
 </script>
 
 <style is:global>
