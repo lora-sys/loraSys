@@ -1,0 +1,11 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+const notes=[
+ {title:'多智能体系统的涌现行为',date:'2025-12',summary:'当多个 LLM 实例协作解决同一任务时，简单规则会产生复杂群体行为。记录 swarm intelligence 在工程系统中的潜在应用。',tags:['AI Agents','Research']},
+ {title:'Monad 并行 EVM 性能基准',date:'2025-11',summary:'测试 Monad 的并行交易执行性能。相较以太坊 L1，关键提升与瓶颈都集中在状态依赖分析。',tags:['Web3','Monad','Benchmark']},
+ {title:'Vercel AI SDK v3 迁移经验',date:'2025-10',summary:'useChat 重构、流式传输 API 与 tool calling 语法变化。迁移成本中等，文档仍在完善。',tags:['Frontend','AI','Vercel']},
+ {title:'Rust for AI Agents：值得吗？',date:'2025-09',summary:'用 Rust 重写 agent runtime 的利弊：内存安全和高并发是优势，生态与开发速度是瓶颈。',tags:['Rust','AI Agents','Architecture']}
+]
+---
+<PageLayout title='Notes' headings={[]} view><p>未长成文章的观察、实验记录与工程判断。</p><div class='not-prose notes'>{notes.map(note=><article><time>{note.date}</time><h2>{note.title}</h2><p>{note.summary}</p><ul>{note.tags.map(tag=><li>{tag}</li>)}</ul></article>)}</div></PageLayout>
+<style>.notes{display:grid;gap:.8rem;margin-top:2rem}.notes article{border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem 1.1rem;background:hsl(var(--card))}.notes time{color:hsl(var(--muted-foreground));font-size:.72rem}.notes h2{margin:.25rem 0;font-size:1.05rem}.notes p{margin:.3rem 0;color:hsl(var(--muted-foreground));font-size:.88rem}.notes ul{display:flex;gap:.35rem;flex-wrap:wrap;margin:.8rem 0 0;padding:0;list-style:none}.notes li{border-radius:999px;background:hsl(var(--muted));padding:.18rem .5rem;font-size:.68rem}</style>

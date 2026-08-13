@@ -1,40 +1,36 @@
+export interface Link { type: 'source' | 'website'; href: string }
+export interface Project { title:string; dates:string; active:boolean; description:string; technologies:string[]; image:string; links:Link[]; featured?:boolean }
+
 export const profile = {
-  name: 'Lora',
-  role: 'AI Agent Developer & Full-stack Engineer',
-  location: "Xi'an, China",
-  email: 'lorasys@outlook.com',
-  summary:
-    '学生开发者，专注 AI Agent、全栈应用与 Agent 基础设施。我喜欢把大胆的想法快速做成可以运行、可以体验的产品，并探索能理解目标、规划任务、调用工具且持续进化的软件系统。',
-  skills: ['TypeScript', 'Python', 'React', 'Astro', 'Next.js', 'Node.js', 'PostgreSQL', 'Docker', 'AI Agents', 'Solidity'],
-  education: [{ school: "Xi'an Mingde Institute of Technology", degree: 'BSc Computer Science', period: '2022 — 2026', href: 'https://www.mdit.edu.cn' }],
-  social: [
-    ['GitHub', 'https://github.com/lora-sys'],
-    ['LinkedIn', 'https://www.linkedin.com/in/lora-sys/'],
-    ['X', 'https://x.com/MierPiter33280'],
-    ['PeerList', 'https://peerlist.io/mierpiter'],
-    ['YouTube', 'https://www.youtube.com/@MierPiter33280'],
-    ['Bilibili', 'https://space.bilibili.com/431821023'],
-    ['Zhihu', 'https://www.zhihu.com/people/lorry-23-28-30'],
-    ['Email', 'mailto:lorasys@outlook.com']
-  ]
+  name:'Lora', role:'AI Agent Developer & Full-stack Engineer', location:"Xi'an, China", email:'lorasys@outlook.com',
+  summary:[
+    '我是一名学生开发者，主要关注 AI Agent、全栈应用和 Agent 基础设施。比起只讨论概念，我更享受从产品设计、系统架构到开发验证，把大胆想法一步步变成可运行、可体验的产品。',
+    '在学校实验室，我担任科研软件组负责人，负责把研究想法转化为可用的软件系统，也参与项目规划、技术协作和开发规范建设。实验室之外，我是一名活跃的 Builder，经常参加黑客松、参与开源社区，与不同背景的开发者交换想法。',
+    '我喜欢黑客松文化：它不仅是一场比赛，也是快速学习、验证想法、认识优秀开发者并突破边界的环境。目前我在构建 AI Company OS、Multi-Agent Engineering Harness、Agent Arena，也在探索 AI Agent 与 Web3 的结合，包括 MOSS 和 MonadMon。',
+    '我的长期目标，是构建真正与用户共同成长的智能体：它不止回答问题，也逐渐理解用户的习惯、目标和工作方式，成为可靠、可持续进化的数字伙伴。希望和更多热爱技术、产品、开源和创造的人合作，做出真正有趣且有价值的东西。'
+  ],
+  skills:['TypeScript','Python','JavaScript','Java','Solidity','Next.js','React','Astro','Node.js','PostgreSQL','Tailwind CSS','Docker','AI Agents','Web3'],
+  education:[{school:"Xi'an Mingde Institute of Technology",degree:"Bachelor's Degree of Computer Science (Third Year)",period:'2022 — 2026',href:'https://www.mdit.edu.cn',logo:'/images/mingde.svg'}],
+  social:[['GitHub','https://github.com/lora-sys','github-circle'],['LinkedIn','https://www.linkedin.com/in/lora-sys/','linkedin'],['X','https://x.com/MierPiter33280','x'],['PeerList','https://peerlist.io/mierpiter','earth'],['YouTube','https://www.youtube.com/@MierPiter33280','youtube'],['Bilibili','https://space.bilibili.com/431821023','video'],['Zhihu','https://www.zhihu.com/people/lorry-23-28-30','document'],['Email','mailto:lorasys@outlook.com','email']] as const
 } as const
 
-export const projects = [
-  ['Newtube Clone', 'A full-stack YouTube clone with video upload, streaming, subscriptions and creator studio.', 'https://github.com/lora-sys/Newtube-clone', 'Next.js · tRPC · PostgreSQL'],
-  ['Daily RSS', 'Daily AI news briefings aggregated from RSS feeds and delivered by email.', 'https://github.com/lora-sys/Daily-Rss', 'Next.js · Supabase · Inngest'],
-  ['TradingOS', 'A personal AI-powered trading terminal with agent skills, backtests and a paper portfolio.', 'https://github.com/lora-sys/TrandingOs', 'React · Python · SQLite'],
-  ['AI Company OS', 'A loop-driven AI execution harness with Planner, Generator, Evaluator and Evolution agents.', 'https://github.com/lora-sys/aicompanyos', 'TypeScript · Zod · MCP'],
-  ['Nanochat Study', 'An end-to-end LLM training pipeline inspired by Karpathy’s nanochat.', 'https://github.com/lora-sys/nanochat-studay', 'Python · PyTorch · BPE'],
-  ['Emergence', 'A multi-agent collaboration protocol with real-time debate, evidence chains and voting.', 'https://github.com/lora-sys/hackthon-agent', 'Next.js · SSE · AI'],
-  ['Tarot Prediction DApp', 'A Web3 tarot prediction platform on Monad with interactive cards and prediction markets.', 'https://github.com/lora-sys/demo_monad_hackthon', 'Solidity · React · Three.js'],
-  ['MOSS', 'Agent-callable Monad capabilities for discovering, simulating and verifying transactions.', 'https://github.com/lora-sys/moss', 'TypeScript · Monad · MCP'],
-  ['Second Brain', 'A local-first Obsidian dashboard with knowledge graph, daily notes and tasks.', 'https://github.com/lora-sys/second-brain', 'JavaScript · Obsidian'],
-  ['MonadMon', 'On-chain creature raising and PvP: Tamagotchi meets Monad.', 'https://github.com/lora-sys/monadmon', 'TypeScript · Web3 · GameFi'],
-  ['Mianshiya Next', 'An interview platform with full-text search, authentication and practice history.', 'https://github.com/lora-sys/mianshiya-next', 'Next.js · Spring Boot · Elasticsearch']
-] as const
-export const hackathons = [
-  ['ETH Beijing 2026', 'June 5–7, 2026 · Beijing', 'Built an AI Agent × Blockchain project with a team of five.', 'https://github.com/lora-sys/Hackthon'],
-  ['Monad Blitz Hackathon', '2026 · Online', 'Shipped a working prototype in a 48-hour rapid iteration sprint.', ''],
-  ['Monad Hackathon', 'January 2026 · Online', 'Built a Web3 tarot prediction platform on Monad Testnet.', 'https://github.com/lora-sys/demo_monad_hackthon'],
-  ['Online AI Agent Hackathon', 'February 2026 · Online', 'Built Emergence, a resilient multi-agent collaboration protocol.', 'https://github.com/lora-sys/hackthon-agent']
-] as const
+const p=(title:string,dates:string,description:string,technologies:string[],image:string,source:string,website?:string,featured=false):Project=>({title,dates,active:true,description,technologies,image,featured,links:[{type:'source',href:source},...(website?[{type:'website' as const,href:website}]:[])]})
+export const projects:Project[]=[
+ p('Newtube Clone','Feb 2026 — Present','A full-stack YouTube clone with upload, streaming, subscriptions, comments, playlists and creator studio.',['Next.js','TypeScript','tRPC','PostgreSQL','Drizzle','Mux'],'newtube.webp','https://github.com/lora-sys/Newtube-clone',undefined,true),
+ p('Daily RSS','Dec 2025 — Jan 2026','Daily AI news briefings aggregated from multiple RSS feeds and delivered by email.',['Next.js','Supabase','Inngest','Resend'],'dailyrss.webp','https://github.com/lora-sys/Daily-Rss','https://daily-rss.vercel.app',true),
+ p('TradingOS','Jun 2026 — Present','A personal AI-powered trading terminal with 40+ agent skills, backtests, journal and paper portfolio.',['React','TypeScript','Python','SQLite'],'trandingos.webp','https://github.com/lora-sys/TrandingOs',undefined,true),
+ p('AI Company OS','Jun 2026 — Present','A loop-driven AI execution harness with an eight-layer architecture and Writer–Critic feedback loops.',['TypeScript','Zod','MCP','CLI/TUI'],'aicompanyos.webp','https://github.com/lora-sys/aicompanyos',undefined,true),
+ p('Nanochat Study','Mar 2026','An end-to-end LLM training pipeline—pretrain, SFT and RL—inspired by Karpathy’s nanochat.',['Python','PyTorch','BPE','LLM'],'nanochat.webp','https://github.com/lora-sys/nanochat-studay'),
+ p('Emergence','Feb 2026','A multi-agent collaboration protocol with real-time debate, evidence chains and voting.',['Next.js','TypeScript','SSE','OpenAI'],'emergence.webp','https://github.com/lora-sys/hackthon-agent'),
+ p('Tarot Prediction DApp','Jan 2026','A Web3 tarot prediction platform on Monad Testnet with interactive 3D cards and token rewards.',['Solidity','React','Three.js','Hardhat'],'tarot.webp','https://github.com/lora-sys/demo_monad_hackthon','https://demo-monad-hackthon.vercel.app'),
+ p('MOSS','2026','Agent-callable Monad capabilities for discovery, simulation and unsigned transaction verification.',['TypeScript','Monad','MCP','Web3'],'moss.webp','https://github.com/lora-sys/moss'),
+ p('Second Brain','2026','A local-first Obsidian dashboard with vault sync, knowledge graph, daily notes and tasks.',['JavaScript','Obsidian','Markdown'],'second-brain.webp','https://github.com/lora-sys/second-brain'),
+ p('MonadMon','2026','On-chain creature raising and PvP—Tamagotchi meets Monad.',['TypeScript','Monad','GameFi'],'monadmon.webp','https://github.com/lora-sys/monadmon'),
+ p('Mianshiya Next','2026','An interview platform with full-text search, authentication, rate limiting and practice history.',['Next.js','Spring Boot','Redis','Elasticsearch'],'mianshiya.webp','https://github.com/lora-sys/mianshiya-next')
+]
+export const hackathons=[
+ {title:'ETH Beijing 2026',date:'June 5–7, 2026',location:'Beijing · Kunlun Nest',content:'Built an AI Agent × Blockchain project with a team of five.',href:'https://github.com/lora-sys/Hackthon'},
+ {title:'Monad Blitz Hackathon',date:'2026',location:'Online',content:'Shipped a working prototype in a 48-hour rapid iteration sprint.',href:''},
+ {title:'Monad Hackathon',date:'January 2026',location:'Online',content:'Built a Web3 tarot prediction platform on Monad Testnet.',href:'https://github.com/lora-sys/demo_monad_hackthon'},
+ {title:'Online AI Agent Hackathon',date:'February 2026',location:'Online',content:'Built Emergence, a resilient multi-agent collaboration protocol.',href:'https://github.com/lora-sys/hackthon-agent'}
+]

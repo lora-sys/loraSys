@@ -1,5 +1,5 @@
 ---
-import { Button, Timeline } from 'astro-pure/user'
+import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import ContributionGraph from '@/components/lora/ContributionGraph.astro'
 import { hackathons, profile } from '@/data/profile'
@@ -14,16 +14,16 @@ const headings = [
 
 <PageLayout title='About' {headings}>
   <p class='text-lg font-medium'>{profile.role}</p>
-  <p>{profile.summary}</p>
+  {profile.summary.map(paragraph=><p>{paragraph}</p>)}
   <p>{profile.location} · <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
   <div class='not-prose flex flex-wrap gap-3 my-6'>
-    <Button title='Download résumé' href='/resume.pdf' target='_blank' variant='ahead' />
-    <Button title='View projects' href='/projects' variant='ahead' />
+    <Button title='Download résumé' href={`${import.meta.env.BASE_URL}resume.pdf`} target='_blank' variant='ahead' />
+    <Button title='View projects' href={`${import.meta.env.BASE_URL}projects`} variant='ahead' />
   </div>
   <div class='not-prose my-10'><ContributionGraph /></div>
 
   <h2 id='education'>Education</h2>
-  {profile.education.map((item) => <p><strong><a href={item.href} target='_blank'>{item.school}</a></strong><br />{item.degree} · {item.period}</p>)}
+  {profile.education.map((item) => <a class='not-prose education' href={item.href} target='_blank' rel='noopener noreferrer'><img src={`${import.meta.env.BASE_URL}${item.logo.slice(1)}`} alt={`${item.school} logo`} width='68' height='68'/><span><strong>{item.school}</strong><small>{item.degree}</small><small>{item.period}</small></span></a>)}
 
   <h2 id='skills'>Skills</h2>
   <div class='not-prose flex flex-wrap gap-2'>
@@ -31,9 +31,10 @@ const headings = [
   </div>
 
   <h2 id='hackathons'>Hackathons</h2>
-  <Timeline events={hackathons.map(([title, date, content, href]) => ({ date, content: `<strong>${title}</strong> — ${content}${href ? ` <a href="${href}" target="_blank">Source ↗</a>` : ''}` }))} />
+  <div class='not-prose timeline'>{hackathons.map(item=><article><div class='dot'></div><div><div class='event-meta'><time>{item.date}</time><span>{item.location}</span></div><h3>{item.title}</h3><p>{item.content}</p>{item.href&&<a href={item.href} target='_blank' rel='noopener noreferrer'>Source ↗</a>}</div></article>)}</div>
 
   <h2 id='social'>Elsewhere</h2>
-  <ul>{profile.social.map(([name, href]) => <li><a href={href} target='_blank'>{name} ↗</a></li>)}</ul>
+  <div class='not-prose social-grid'>{profile.social.map(([name,href,icon])=><a href={href} target='_blank' rel={href.startsWith('http')?'noopener noreferrer':undefined}><Icon name={icon as any} class='size-5'/><span>{name}</span><b>↗</b></a>)}</div>
   <p>This site is built with Astro and Astro Theme Pure, and deployed as a static GitHub Pages site.</p>
 </PageLayout>
+<style>.education{display:flex;align-items:center;gap:1rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;color:hsl(var(--foreground));text-decoration:none}.education img{border-radius:.8rem;object-fit:contain;background:white}.education span{display:grid;gap:.18rem}.education small{color:hsl(var(--muted-foreground))}.timeline{display:grid;gap:0}.timeline article{position:relative;display:grid;grid-template-columns:1.25rem 1fr;gap:.7rem;padding-bottom:1.7rem}.timeline article:before{content:'';position:absolute;left:.25rem;top:.75rem;bottom:-.2rem;width:1px;background:hsl(var(--border))}.timeline article:last-child:before{display:none}.dot{z-index:1;margin-top:.4rem;width:.55rem;height:.55rem;border-radius:50%;background:hsl(var(--primary));box-shadow:0 0 0 4px hsl(var(--background))}.event-meta{display:flex;justify-content:space-between;gap:1rem;color:hsl(var(--muted-foreground));font-size:.76rem}.timeline h3{margin:.22rem 0;font-size:1rem}.timeline p{margin:0;color:hsl(var(--muted-foreground));font-size:.88rem}.timeline a{font-size:.8rem}.social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}.social-grid a{display:flex;align-items:center;gap:.65rem;border:1px solid hsl(var(--border));border-radius:.75rem;padding:.7rem .8rem;color:hsl(var(--foreground));text-decoration:none;transition:background .2s,transform .2s}.social-grid a:hover{background:hsl(var(--muted));transform:translateY(-1px)}.social-grid b{margin-left:auto;font-weight:400;color:hsl(var(--muted-foreground))}@media(max-width:500px){.social-grid{grid-template-columns:1fr}.event-meta{display:grid;gap:0}}</style>
