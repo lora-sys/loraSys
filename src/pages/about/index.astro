@@ -17,13 +17,13 @@ const headings = [
   {profile.summary.map(paragraph=><p>{paragraph}</p>)}
   <p>{profile.location} · <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
   <div class='not-prose flex flex-wrap gap-3 my-6'>
-    <Button title='Download résumé' href={`${import.meta.env.BASE_URL}resume.pdf`} target='_blank' variant='ahead' />
-    <Button title='View projects' href={`${import.meta.env.BASE_URL}projects`} variant='ahead' />
+    <Button title='Download résumé' href='/resume.pdf' target='_blank' variant='ahead' />
+    <Button title='View projects' href='/projects' variant='ahead' />
   </div>
   <div class='not-prose my-10'><ContributionGraph /></div>
 
   <h2 id='education'>Education</h2>
-  {profile.education.map((item) => <a class='not-prose education' href={item.href} target='_blank' rel='noopener noreferrer'><img src={`${import.meta.env.BASE_URL}${item.logo.slice(1)}`} alt={`${item.school} logo`} width='68' height='68'/><span><strong>{item.school}</strong><small>{item.degree}</small><small>{item.period}</small></span></a>)}
+  {profile.education.map((item) => <a class='not-prose education' href={item.href} target='_blank' rel='noopener noreferrer'><img src={item.logo} alt={`${item.school} logo`} width='68' height='68'/><span><strong>{item.school}</strong><small>{item.degree}</small><small>{item.period}</small></span></a>)}
 
   <h2 id='skills'>Skills</h2>
   <div class='not-prose flex flex-wrap gap-2'>
