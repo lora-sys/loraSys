@@ -12,18 +12,20 @@ import '@/assets/styles/app.css'
 interface Props {
   meta: SiteMeta
   highlightColor?: string
+  noindex?: boolean
 }
 
 const {
   meta: { articleDate, description = config.description, ogImage, title },
   highlightColor,
+  noindex = false,
   ...props
 } = Astro.props
 ---
 
 <html lang={config.locale.lang}>
   <head>
-    <BaseHead {articleDate} {description} {ogImage} {title} />
+    <BaseHead {articleDate} {description} {noindex} {ogImage} {title} />
     <ThemeProvider />
   </head>
 

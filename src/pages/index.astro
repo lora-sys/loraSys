@@ -1,17 +1,17 @@
 ---
 import { Image } from 'astro:assets'
+import { profile, projects } from '@/data/profile'
 
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon, Label } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import ProjectSection from '@/components/projects/ProjectSection.astro'
 import Section from '@/components/home/Section.astro'
 import SkillLayout from '@/components/home/SkillLayout.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
 import config from '@/site-config'
-import { profile, projects } from '@/data/profile'
 
 const languages = ['TypeScript', 'Python', 'JavaScript', 'Java', 'Solidity']
 const frontend = ['Astro', 'React', 'Next.js', 'Tailwind CSS']
@@ -53,6 +53,7 @@ if (!images[imagePath])
             as='a'
             href='https://github.com/lora-sys'
             target='_blank'
+            rel='me noopener noreferrer'
           >
             <Icon name='github' class='size-5' slot='icon' />
           </Label>
@@ -61,7 +62,6 @@ if (!images[imagePath])
 
       <a
         href='mailto:lorasys@outlook.com'
-        target='_blank'
         class='flex flex-row items-center gap-x-3 rounded-full border bg-background px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
       >
         <span class='relative flex items-center justify-center'>
@@ -106,7 +106,7 @@ if (!images[imagePath])
       </Section>
 
       <Section title='Selected Projects'>
-        <ProjectSection projects={projects.filter(p=>p.featured)} compact />
+        <ProjectSection projects={projects.filter((p) => p.featured)} compact />
         <Button title='All projects' class='w-fit self-end' href='/projects' variant='ahead' />
       </Section>
 

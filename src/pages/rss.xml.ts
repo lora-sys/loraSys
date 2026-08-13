@@ -4,13 +4,14 @@ import type { CollectionEntry } from 'astro:content'
 import rss from '@astrojs/rss'
 import type { Root } from 'mdast'
 import rehypeStringify from 'rehype-stringify'
+import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import { unified } from 'unified'
 import { visit } from 'unist-util-visit'
+import config from 'virtual:config'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import config from 'virtual:config'
 
 // Get dynamic import of images as a map collection
 const imagesGlob = import.meta.glob<{ default: ImageMetadata }>(
@@ -27,13 +28,16 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
       const promises: Promise<void>[] = []
       visit(tree, 'image', (node) => {
         if (node.url.startsWith('/images')) {
-          node.url = `${site}${node.url.replace('/', '')}`
+          node.url = new URL(node.url.replace(/^\//, ''), site).href
         } else {
           const imagePathPrefix = `/src/content/blog/${post.id}/${node.url.replace('./', '')}`
           const promise = imagesGlob[imagePathPrefix]?.().then(async (res) => {
             const imagePath = res?.default
             if (imagePath) {
-              node.url = `${site}${(await getImage({ src: imagePath })).src.replace('/', '')}`
+              node.url = new URL(
+                (await getImage({ src: imagePath })).src.replace(/^\//, ''),
+                site
+              ).href
             }
           })
           if (promise) promises.push(promise)
@@ -45,6 +49,7 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
 
   const file = await unified()
     .use(remarkParse)
+    .use(remarkGfm)
     .use(remarkReplaceImageLink)
     .use(remarkRehype)
     .use(rehypeStringify)
@@ -55,24 +60,29 @@ const renderContent = async (post: CollectionEntry<'blog'>, site: URL) => {
 
 const GET = async (context: AstroGlobal) => {
   const allPostsByDate = sortMDByDate(await getBlogCollection()) as CollectionEntry<'blog'>[]
-  const siteUrl = context.site ?? new URL(import.meta.env.SITE)
+  const siteUrl = new URL(
+    import.meta.env.BASE_URL.replace(/\/?$/, '/'),
+    context.site ?? new URL(import.meta.env.SITE)
+  )
 
   return rss({
     // Basic configs
     trailingSlash: false,
     xmlns: { h: 'http://www.w3.org/TR/html4/' },
-    stylesheet: '/scripts/pretty-feed-v3.xsl',
+    stylesheet: `${import.meta.env.BASE_URL}scripts/pretty-feed-v3.xsl`,
 
     // Contents
     title: config.title,
     description: config.description,
-    site: import.meta.env.SITE,
+    site: siteUrl.href,
     items: await Promise.all(
       allPostsByDate.map(async (post) => ({
         pubDate: post.data.publishDate,
-        link: `/blog/${post.id}`,
-        customData: `<h:img src="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />
-          <enclosure url="${typeof post.data.heroImage?.src === 'string' ? post.data.heroImage?.src : post.data.heroImage?.src.src}" />`,
+        link: `blog/${post.id}`,
+        customData: post.data.heroImage
+          ? `<h:img src="${typeof post.data.heroImage.src === 'string' ? post.data.heroImage.src : post.data.heroImage.src.src}" />
+          <enclosure url="${typeof post.data.heroImage.src === 'string' ? post.data.heroImage.src : post.data.heroImage.src.src}" />`
+          : undefined,
         content: await renderContent(post, siteUrl),
         ...post.data
       }))

@@ -8,7 +8,7 @@ User-agent: Claude-Web
 User-agent: *
 Allow: /
 
-Sitemap: ${new URL('sitemap-index.xml', import.meta.env.SITE).href}
+Sitemap: ${new URL(`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}sitemap-index.xml`, import.meta.env.SITE).href}
 `.trim()
 
 export const GET: APIRoute = () =>

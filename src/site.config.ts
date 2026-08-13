@@ -9,7 +9,7 @@ export const theme: ThemeUserConfig = {
   /** Description metadata for your website. Can be used in page metadata. */
   description: 'AI Agent Developer & Full-stack Engineer',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/loraSys/favicon/favicon.ico',
+  favicon: '/loraSys/favicon/favicon-32x32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
   socialCard: '/loraSys/images/social-card.png',
   /** Specify the default language for this site. */
@@ -118,6 +118,11 @@ export const integ: IntegrationUserConfig = {
   },
   // [Search]
   pagefind: true,
+  // Keep the theme's quote slot deterministic and offline-friendly.
+  quote: {
+    server: 'data:application/json,%7B%22quote%22%3A%22Build%20systems%20that%20learn.%22%7D',
+    target: `(data) => data.quote`
+  },
   // [Typography]
   // https://unocss.dev/presets/typography
   typography: {
