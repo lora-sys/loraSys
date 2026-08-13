@@ -53,6 +53,7 @@ const blogBase = '/blog/'
   meta={{ articleDate, description, ogImage: socialImage, title }}
   highlightColor={primaryColor}
   back='/blog'
+  lang={data.language}
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
@@ -88,7 +89,7 @@ const blogBase = '/blog/'
   const renderMermaidDiagrams = async () => {
     const blocks = Array.from(
       document.querySelectorAll<HTMLElement>(
-        '.prose [data-language="mermaid"] pre code, .prose code.language-mermaid'
+        '[data-language="mermaid"] pre code, code.language-mermaid'
       )
     )
     if (!blocks.length) return
