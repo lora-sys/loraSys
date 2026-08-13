@@ -14,6 +14,7 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
       aria-label='Back to Top'
       class='relative size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 sm:size-12 opacity-0'
       id='to-top-btn'
+      tabindex='-1'
     >
       <div
         class='top-text absolute bottom-0 end-0 start-0 top-0 flex items-center justify-center group-[.ended]:opacity-0'
@@ -76,6 +77,8 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
         const observer = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             this.actionBtns.classList.toggle('show', !entry.isIntersecting)
+            this.scrollBtn.tabIndex = entry.isIntersecting ? -1 : 0
+            this.scrollBtn.setAttribute('aria-hidden', entry.isIntersecting.toString())
           })
         })
         observer.observe(this.targetHeader)

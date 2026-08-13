@@ -18,6 +18,7 @@ import { Icon } from '../user'
     {/* Menu links */}
     <div
       id='headerExpandContent'
+      aria-hidden='true'
       class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
     >
       <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
@@ -54,6 +55,8 @@ import { Icon } from '../user'
       </button>
       <button
         id='toggleMenu'
+        aria-expanded='false'
+        aria-controls='headerExpandContent'
         class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Menu</span>
@@ -100,7 +103,18 @@ import { Icon } from '../user'
       // Menu
       this.querySelector('#toggleMenu')?.addEventListener('click', () => {
         this.classList.toggle('expanded')
+        this.syncMenu()
       })
+      this.syncMenu()
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.classList.contains('expanded')) { this.classList.remove('expanded'); this.syncMenu(); (this.querySelector('#toggleMenu') as HTMLElement)?.focus() } })
+    }
+    syncMenu() {
+      const expanded = this.classList.contains('expanded')
+      const content = this.querySelector('#headerExpandContent') as HTMLElement
+      const toggle = this.querySelector('#toggleMenu') as HTMLElement
+      toggle?.setAttribute('aria-expanded', expanded.toString())
+      if (matchMedia('(max-width:640px)').matches) { content?.setAttribute('aria-hidden', (!expanded).toString()); if (content) content.inert = !expanded }
+      else { content?.setAttribute('aria-hidden','false'); if(content) content.inert=false }
     }
   }
 
