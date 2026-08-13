@@ -1,0 +1,23 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const headings = [
+  { depth: 2, slug: 'building', text: '营造中' },
+  { depth: 2, slug: 'learning', text: '学习中' },
+  { depth: 2, slug: 'reading', text: '阅读中' },
+  { depth: 2, slug: 'listening', text: '共鸣中' }
+]
+---
+
+<PageLayout title='/now' {headings}>
+  <p>一个持续更新的快照：我正在打造、学习和探索的方向。更新于 2026-07。</p>
+  <h2 id='building'>营造中</h2>
+  <ul><li>Agent 沙盒：MCP 工具 + LangGraph</li><li>设计生成式画布与运动系统</li></ul>
+  <h2 id='learning'>学习中</h2>
+  <ul><li>生成式画布与运动系统</li><li>LangGraph 与多智能体协作</li></ul>
+  <h2 id='reading'>阅读中</h2>
+  <p><em>Designing Data-Intensive Applications</em></p>
+  <h2 id='listening'>共鸣中</h2>
+  <p>Tame Impala — <em>Currents</em></p>
+  <p>也可以在 <a href='https://peerlist.io/mierpiter' target='_blank'>PeerList</a>、<a href='https://www.youtube.com/@MierPiter33280' target='_blank'>YouTube</a> 和 <a href='https://space.bilibili.com/431821023' target='_blank'>Bilibili</a> 找到我。</p>
+</PageLayout>

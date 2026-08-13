@@ -1,0 +1,14 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+import { projects } from '@/data/profile'
+
+const headings = [{ depth: 2, slug: 'projects', text: 'Projects' }]
+---
+
+<PageLayout title='Projects' {headings} view>
+  <p>Selected systems, experiments and open-source projects across AI agents, full-stack products and Web3.</p>
+  <h2 id='projects'>All projects</h2>
+  <ProjectSection projects={projects.map(([name, description, href, stack]) => ({ name, description: `${description} ${stack}`, links: [{ type: 'github', href }] }))} />
+  <p>Interested in collaborating? Reach me at <a href='mailto:lorasys@outlook.com'>lorasys@outlook.com</a>.</p>
+</PageLayout>
