@@ -69,7 +69,9 @@ const GET = async (context: AstroGlobal) => {
     // Basic configs
     trailingSlash: false,
     xmlns: { h: 'http://www.w3.org/TR/html4/' },
-    stylesheet: `${import.meta.env.BASE_URL}scripts/pretty-feed-v3.xsl`,
+    // `prefix-base.mjs` also rewrites root-relative XML assets after build.
+    // Keep this root-relative here so the project base is applied exactly once.
+    stylesheet: '/scripts/pretty-feed-v3.xsl',
 
     // Contents
     title: config.title,

@@ -92,7 +92,7 @@ export const theme: ThemeUserConfig = {
       properties: { style: 'user-select:none' }
     },
     /** Blog page size for pagination (optional) */
-    blogPageSize: 8,
+    blogPageSize: 12,
     /** Share buttons to show */
     // Currently support weibo, x, bluesky
     share: ['weibo', 'x', 'bluesky']

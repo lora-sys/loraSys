@@ -115,7 +115,7 @@ kind: backend
 
 > `a tiny red apple on a white plate, studio lighting, photorealistic`
 
-![Apple on plate](https://raw.githubusercontent.com/lora-sys/hermes-minimax-media/main/docs/assets/screenshot-apple.jpg)
+![Apple on plate](/images/blog/hermes-minimax-media/apple.jpg)
 
 单图 5 秒左右返回，~150KB。
 
@@ -123,17 +123,17 @@ kind: backend
 
 > `a cute cat astronaut floating in a colorful nebula, digital art, vibrant`
 
-![Cat astronaut](https://raw.githubusercontent.com/lora-sys/hermes-minimax-media/main/docs/assets/screenshot-cat-astronaut.png)
+![Cat astronaut](/images/blog/hermes-minimax-media/cat-astronaut.png)
 
 > `futuristic tokyo cityscape at night, neon lights, rain reflections, cyberpunk`
 
-![Cyberpunk city](https://raw.githubusercontent.com/lora-sys/hermes-minimax-media/main/docs/assets/screenshot-city.png)
+![Cyberpunk city](/images/blog/hermes-minimax-media/city.png)
 
 ### Hailuo-2.3 文生视频（6s @ 768P）
 
 > `a calico cat napping in a sunbeam, soft cinematic lighting, gentle breathing motion`
 
-![Demo GIF](https://raw.githubusercontent.com/lora-sys/hermes-minimax-media/main/docs/assets/demo.gif)
+> 视频演示 GIF 已从上游仓库移除；保留下方 MP4 原片链接作为可验证演示。
 
 [MP4 原片 (608KB)](https://github.com/lora-sys/hermes-minimax-media/blob/main/docs/assets/screenshot-cat-napping.mp4)
 

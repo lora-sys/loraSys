@@ -17,7 +17,8 @@ const languages = ['TypeScript', 'Python', 'JavaScript', 'Java', 'Solidity']
 const frontend = ['Astro', 'React', 'Next.js', 'Tailwind CSS']
 const systems = ['Node.js', 'PostgreSQL', 'Docker', 'AI Agents', 'Web3']
 
-const MAX_POSTS = 10
+// Keep the home page editorial rather than mirroring the complete archive.
+const MAX_POSTS = 5
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
