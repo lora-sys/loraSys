@@ -159,7 +159,6 @@ MINIMAX_CN_API_KEY=eyJ...
 MINIMAX_API_KEY=eyJ...
 ```
 
-## 3. 启用插件
 ### 3. 启用插件
 
 编辑 `~/.hermes/config.yaml`：
@@ -223,7 +222,7 @@ hermes gateway restart
 
 ## 和之前 StepFun 那篇的关系
 
-我之前写过一篇 [用 StepFun 给 Hermes 接入图片生成](https://github.com/lora-sys/loraSys/blob/main/src/content/hermes-stepfun-imagegen.md)，流程上是同构的（本地插件 → PyPI → CI → 博客），但这两个插件互补：
+我之前写过一篇 [用 StepFun 给 Hermes 接入图片生成](/blog/hermes-stepfun-imagegen)，流程上是同构的（本地插件 → PyPI → CI → 博客），但这两个插件互补：
 
 - **StepFun**：`step-image-edit-2` 极快（1-2 秒），适合对话中快速出图迭代；图编辑是它的强项
 - **MiniMax**：`image-01` 质量稳，**还多一个视频能力**；如果你需要"图"和"视频"同时在一个后端里，minimax 这套更划算

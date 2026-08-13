@@ -3,7 +3,7 @@ title: 'Building WishLive: A Multi-Agent Runtime'
 description: 'How I built agents that execute, negotiate, and settle with Solidity contracts, Redis event streams, and graceful AI fallback.'
 publishDate: '2026-06-14T00:00:00Z'
 tags: ['Engineering', 'Hackathon', 'Agent']
-language: 'zh-CN'
+language: 'en-US'
 draft: false
 ---
 
@@ -21,7 +21,8 @@ This is the story of building that system in 48 hours for a hackathon.
 
 The system is structured as six layers, each independently designed but communication-coupled through an event bus:
 
-<svg viewBox="0 0 720 860" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+<svg role="img" aria-labelledby="wishlive-architecture-title" viewBox="0 0 720 860" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+  <title id="wishlive-architecture-title">WishLive six-layer architecture connected by one event bus</title>
   <defs>
     <linearGradient id="busGrad" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#6366f1"/>
@@ -156,7 +157,8 @@ This is the core. `AgentRuntimeService.run()` creates a session, then executes i
 session started → agent thinks → tool execution → message → session completed
 ```
 
-<svg viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+<svg role="img" aria-labelledby="wishlive-runtime-title" viewBox="0 0 600 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+  <title id="wishlive-runtime-title">WishLive agent runtime execution flow</title>
   <defs>
     <linearGradient id="r1" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/>
@@ -251,7 +253,8 @@ create → propose → counter → accept → deal
 
 Each negotiation has a workflowId, conversationId, and tracks all proposals. The `runAutonomousNegotiation()` method runs the full pipeline automatically:
 
-<svg viewBox="0 0 620 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+<svg role="img" aria-labelledby="wishlive-negotiation-title" viewBox="0 0 620 480" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+  <title id="wishlive-negotiation-title">WishLive stateful agent negotiation flow</title>
   <defs>
     <linearGradient id="mBlue" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#6366f1"/>
@@ -351,7 +354,8 @@ Settlement is where execution becomes real. The system supports **dual settlemen
 - `localTxHash()` generates consistent 0x-prefixed hashes
 - Full simulation of the settlement flow without a blockchain
 
-<svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+<svg role="img" aria-labelledby="wishlive-settlement-title" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+  <title id="wishlive-settlement-title">WishLive payment settlement flow</title>
   <defs>
     <linearGradient id="s1" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/>
@@ -470,7 +474,8 @@ Event types include:
 - `settlement.events` — escrow creation, fund release, ticket minting
 - `wish.events` / `demand.events` / `matching.events` — workflow pipeline
 
-<svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+<svg role="img" aria-labelledby="wishlive-events-title" viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;margin:2rem auto;display:block;font-family:system-ui,-apple-system,sans-serif;">
+  <title id="wishlive-events-title">WishLive event observability streams</title>
   <defs>
     <linearGradient id="eBus" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#8b5cf6"/>

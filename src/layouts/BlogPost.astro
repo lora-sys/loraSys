@@ -58,7 +58,9 @@ const blogBase = '/blog/'
 
   <Hero {data} {remarkPluginFrontmatter} slot='header'>
     <Fragment slot='description'>
-      {!isDraft && enableComment && <PageInfo comment class='mt-1' />}
+      {!isDraft && enableComment && config.integ.waline.enable && (
+        <PageInfo comment class='mt-1' />
+      )}
     </Fragment>
   </Hero>
 
@@ -72,10 +74,76 @@ const blogBase = '/blog/'
       {nextPost && <a class='rounded-xl px-4 py-2 text-right no-underline transition-colors hover:bg-muted' href={`${blogBase}${nextPost.id}`}>{nextPost.data.title} →</a>}
     </nav>
     { /* Comment */
-    !isDraft && enableComment && <Comment class='mt-3 sm:mt-6' />}
+    !isDraft && enableComment && config.integ.waline.enable && (
+      <Comment class='mt-3 sm:mt-6' />
+    )}
   </Fragment>
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
 </PageLayout>
 
 {config.integ.mediumZoom.enable && <MediumZoom />}
+
+<script>
+  const renderMermaidDiagrams = async () => {
+    const blocks = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        '.prose [data-language="mermaid"], .prose code.language-mermaid'
+      )
+    )
+    if (!blocks.length) return
+
+    const { default: mermaid } = await import('mermaid')
+
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
+    })
+
+    for (const [index, block] of blocks.entries()) {
+      const container = block.closest('.astro-code') ?? block.closest('pre') ?? block
+      const sourceNode = block.matches('code') ? block : block.querySelector('pre > code')
+      // Read Shiki's source lines only. Its language label and collapse-button
+      // text live in the same outer container and are not Mermaid syntax.
+      const lines = sourceNode?.querySelectorAll<HTMLElement>('.line')
+      const source = lines?.length
+        ? Array.from(lines, (line) => line.textContent ?? '').join('\n').trim()
+        : sourceNode?.textContent?.trim()
+      if (!source) continue
+
+      try {
+        const { svg, bindFunctions } = await mermaid.render(`mermaid-${index}`, source)
+        const figure = document.createElement('figure')
+        figure.className = 'mermaid-diagram not-prose'
+        figure.setAttribute('aria-label', 'Architecture diagram')
+        figure.innerHTML = svg
+        container.replaceWith(figure)
+        bindFunctions?.(figure)
+      } catch (error) {
+        console.error('Unable to render Mermaid diagram', error)
+      }
+    }
+  }
+
+  void renderMermaidDiagrams()
+</script>
+
+<style is:global>
+  .mermaid-diagram {
+    margin-block: 2rem;
+    overflow-x: auto;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    background: hsl(var(--card));
+    padding: 1rem;
+  }
+
+  .mermaid-diagram svg {
+    display: block;
+    width: 100%;
+    min-width: 36rem;
+    height: auto;
+    margin-inline: auto;
+  }
+</style>

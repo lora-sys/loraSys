@@ -7,8 +7,6 @@ language: 'zh-CN'
 draft: false
 ---
 
-# Loop Engineering Harness：AI Agent 架构中的迭代引擎
-
 ## 一、概念定义：什么是 Loop Engineering Harness
 
 Loop Engineering Harness（循环工程 harness）是 AI Agent 架构中的**核心控制框架**，它定义了 Agent 在执行复杂任务时的迭代循环机制——从感知环境、制定计划、执行动作到评估结果的完整闭环。

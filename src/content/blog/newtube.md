@@ -3,19 +3,8 @@ title: 'Building a Full-Stack YouTube Clone with Next.js 15'
 description: 'A deep dive into architecture, core features, and problem solving strategies'
 publishDate: '2026-03-10T00:00:00Z'
 tags: ['Next.js', 'TRPC']
-language: 'zh-CN'
+language: 'en-US'
 draft: false
----
-
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Project Overview](#project-overview)
-3. [Architecture Deep Dive](#architecture-deep-dive)
-4. [Core Technologies and Features](#core-technologies-and-features)
-5. [Challenges and Solutions](#challenges-and-solutions)
-6. [Conclusion](#conclusion)
-
 ---
 
 ## Introduction
@@ -26,7 +15,7 @@ In this technical deep dive, I'll walk you through how I built **NewTube** - a f
 
 **GitHub Repository**: [NewTube Clone](https://github.com/lora-sys/Newtube-clone)
 
-**Live Demo**: Available in the repository
+**Source and setup instructions**: [NewTube Clone on GitHub](https://github.com/lora-sys/Newtube-clone). A hosted demo is not currently published.
 
 ---
 

@@ -7,24 +7,6 @@ language: 'zh-CN'
 draft: false
 ---
 
-# AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化
-
-## Table of Contents
-
-1. [背景：Vibe 之后，正式接管](#背景vibe-之后正式接管)
-2. [问题：AI 工程的四大痛点](#问题ai-工程的四大痛点)
-3. [解决方案：AI Engineering Harness](#解决方案ai-engineering-harness)
-4. [核心架构：18 类 Agent 的协作](#核心架构18-类-agent-的协作)
-5. [闭环流程：从 Issue 到 Merge](#闭环流程从-issue-到-merge)
-6. [关键技术：证据闸门](#关键技术证据闸门)
-7. [实战：接管一个失控的仓库](#实战接管一个失控的仓库)
-8. [安装与配置](#安装与配置)
-9. [进阶用法](#进阶用法)
-10. [效果展示](#效果展示)
-11. [总结](#总结)
-
----
-
 ## 背景：Vibe 之后，正式接管
 
 在 AI 编程助手的世界里，有一个新痛点：
@@ -290,7 +272,7 @@ docs/evidence/17/
 
 ### 完整流程图
 
-![Workflow](/loraSys/images/harness/section-workflow.svg)
+![AI Engineering Harness 从规划到合并的工作流](/images/harness/section-workflow.svg)
 
 ### 9 个 Phase 详解
 
@@ -373,8 +355,6 @@ cd ../myproject-worktree-17
 
 ---
 
-## Phase 3: Implementation →
-### Phase 3: Implementation →
 #### Phase 3: Implementation → Owner Agent
 
 **Owner Agent 职责**：
@@ -421,8 +401,6 @@ jobs:
 
 ---
 
-## Phase 5: Review →
-### Phase 5: Review →
 #### Phase 5: Review → Bug Hunter + Behavior Reviewer
 
 **Bug Hunter（冷启动）**：
@@ -477,7 +455,6 @@ jobs:
 
 ---
 
-### Phase 7: Merge →
 #### Phase 7: Merge → Coordinator
 
 **合并条件**：
@@ -504,8 +481,6 @@ jobs:
 
 ---
 
-## Phase 8: Memory →
-### Phase 8: Memory →
 #### Phase 8: Memory → Coordinator
 
 **Phase Summary**：
@@ -644,7 +619,6 @@ npx -y skills add lora-sys/ai-engineering-harness -g --all --full-depth
 
 ---
 
-## Step 2: Quick Scan（2
 ### Step 2: Quick Scan（2 分钟）
 
 ```bash
@@ -668,7 +642,6 @@ bash skills/dashboard/scripts/scan-to-issues.sh --create
 
 ---
 
-## Step 3: 接管（10 分钟）
 ### Step 3: 接管（10 分钟）
 
 ```bash
@@ -700,7 +673,6 @@ pieces; do not edit code yet.
 
 ---
 
-## Step 4: 推一个 Issue
 ### Step 4: 推一个 Issue 到 Done（10 分钟）
 
 ```bash
@@ -727,7 +699,6 @@ Use $ai-engineering-harness to take Issue #1 from Planning to Done.
 
 ---
 
-## Step 5: 验证（3 分钟）
 ### Step 5: 验证（3 分钟）
 
 ```bash
@@ -770,7 +741,6 @@ npx -y skills add lora-sys/ai-engineering-harness -g -s ai-engineering-harness
 npx -y skills add lora-sys/ai-engineering-harness -g -a claude-code codex grok
 ```
 
-## 兼容 40 个 CLI
 ### 兼容 40 个 CLI Agent
 
 | Agent       | 安装路径                     |
@@ -798,7 +768,6 @@ Read memory/project-memory.md and sessions/<last-id>/summary.md, then continue.
 
 **Harness 的状态全部落盘**，聊天历史不会丢。
 
-## 并行开发
 ### 并行开发
 
 ```bash
@@ -814,7 +783,6 @@ for Issue #20 (frontend), #21 (backend), #22 (database).
 3. 并行推到 PR
 4. 冲突时 Conflict Resolver 处理
 
-## CI 自愈
 ### CI 自愈
 
 ```bash
@@ -829,7 +797,6 @@ CI is red on PR #23. Use $ai-engineering-harness to recover.
 3. 重新跑 CI
 4. 重新走 Reviewer
 
-## 30 秒拉起新项目
 ### 30 秒拉起新项目
 
 ```bash
@@ -859,7 +826,7 @@ git add . && git commit -m "feat: init"
 
 ### 数据对比
 
-![Proof](/loraSys/images/harness/section-proof.svg)
+![AI Engineering Harness 证据交付结构](/images/harness/section-proof.svg)
 
 | 案例                             | Before → After       | 类型     |
 | -------------------------------- | -------------------- | -------- |
@@ -893,7 +860,7 @@ git add . && git commit -m "feat: init"
 
 ## 9 条运行原则
 
-![Operating Principles](/loraSys/images/harness/section-principles.svg)
+![AI Engineering Harness 运行原则](/images/harness/section-principles.svg)
 
 | #   | 原则                             | 为什么                                                  |
 | --- | -------------------------------- | ------------------------------------------------------- |
