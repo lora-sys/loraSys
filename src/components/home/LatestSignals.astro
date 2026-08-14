@@ -1,0 +1,103 @@
+---
+interface Signal {
+  type: string
+  date: string
+  title: string
+  href: string
+}
+
+interface Props {
+  signals: Signal[]
+}
+
+const { signals } = Astro.props
+---
+
+<ol class='signals' aria-label='Latest activity'>
+  {
+    signals.map((signal) => (
+      <li>
+        <a href={signal.href}>
+          <span class='kind'>{signal.type}</span>
+          <time>{signal.date}</time>
+          <strong>{signal.title}</strong>
+          <span class='arrow' aria-hidden='true'>
+            →
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .signals {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid hsl(var(--border));
+    list-style: none;
+  }
+  li {
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  a {
+    display: grid;
+    grid-template-columns: 6.2rem 5.4rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.82rem 0.2rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: padding 180ms ease;
+  }
+  a:hover,
+  a:focus-visible {
+    padding-inline: 0.55rem;
+    outline: none;
+  }
+  .kind {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+    font-weight: 650;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  time {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+  strong {
+    overflow: hidden;
+    font-size: 0.88rem;
+    font-weight: 520;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .arrow {
+    color: hsl(var(--muted-foreground));
+    transition: transform 180ms ease;
+  }
+  a:hover .arrow,
+  a:focus-visible .arrow {
+    transform: translateX(0.25rem);
+  }
+  @media (max-width: 620px) {
+    a {
+      grid-template-columns: 5.4rem minmax(0, 1fr) auto;
+    }
+    time {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a,
+    .arrow {
+      transition: none;
+    }
+    a:hover .arrow,
+    a:focus-visible .arrow {
+      transform: none;
+    }
+  }
+</style>

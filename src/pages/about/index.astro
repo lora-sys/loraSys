@@ -1,40 +1,400 @@
 ---
+import { hackathons, profile, projects } from '@/data/profile'
+import { socialLinks } from '@/data/social'
+
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
+import SocialGrid from '@/components/contact/SocialGrid.astro'
 import ContributionGraph from '@/components/lora/ContributionGraph.astro'
-import { hackathons, profile } from '@/data/profile'
 
 const headings = [
+  { depth: 2, slug: 'direction', text: 'Current direction' },
+  { depth: 2, slug: 'capabilities', text: 'Capabilities' },
+  { depth: 2, slug: 'open-source', text: 'Open source' },
   { depth: 2, slug: 'education', text: 'Education' },
-  { depth: 2, slug: 'skills', text: 'Skills' },
   { depth: 2, slug: 'hackathons', text: 'Hackathons' },
-  { depth: 2, slug: 'social', text: 'Elsewhere' }
+  { depth: 2, slug: 'contributions', text: 'Contributions' },
+  { depth: 2, slug: 'elsewhere', text: 'Elsewhere' }
 ]
+const capabilityGroups = [
+  {
+    label: 'Agent systems',
+    tools: 'Python · TypeScript · MCP',
+    description:
+      'Multi-agent workflows, context engineering, evaluation harnesses, and reliable tool execution.'
+  },
+  {
+    label: 'Product engineering',
+    tools: 'Astro · React · Next.js',
+    description:
+      'Taking an idea through interface design, application architecture, implementation, and deployment.'
+  },
+  {
+    label: 'Research to software',
+    tools: 'Prototypes · Systems · Validation',
+    description:
+      'Translating research questions into software that people can run, inspect, and improve.'
+  },
+  {
+    label: 'Open building',
+    tools: 'GitHub · Hackathons · Web3',
+    description:
+      'Learning through public projects, short feedback loops, technical collaboration, and shipped demos.'
+  }
+]
+const openSourceProjects = projects.slice(0, 6)
 ---
 
 <PageLayout title='About' {headings}>
-  <p class='text-lg font-medium'>{profile.role}</p>
-  {profile.summary.map(paragraph=><p>{paragraph}</p>)}
-  <p>{profile.location} · <a href={`mailto:${profile.email}`}>{profile.email}</a></p>
-  <div class='not-prose flex flex-wrap gap-3 my-6'>
-    <Button title='Download résumé' href='/resume.pdf' target='_blank' variant='ahead' />
-    <Button title='View projects' href='/projects' variant='ahead' />
+  <div class='not-prose about-lead'>
+    <span class='eyebrow'>{profile.role}</span>
+    <p>我喜欢把还停留在讨论里的想法，推进成可以运行、可以体验、也可以继续演化的系统。</p>
+    <div class='lead-meta'>
+      <span><Icon name='location' class='size-4' /> {profile.location}</span>
+      <a href='/now'><span class='status-dot'></span> What I&apos;m doing now</a>
+    </div>
   </div>
-  <div class='not-prose my-10'><ContributionGraph /></div>
+
+  <h2 id='direction'>Current direction</h2>
+  {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
+  <div class='not-prose about-actions'>
+    <Button title='Explore projects' href='/projects' variant='ahead' />
+    <Button title='Download résumé' href='/resume.pdf' target='_blank' variant='ahead' />
+    <Button title='Contact me' href='/contact' variant='ahead' />
+  </div>
+
+  <h2 id='capabilities'>Capabilities</h2>
+  <p>技术栈是手段。下面这些，是我目前真正持续投入并用项目验证的能力方向。</p>
+  <div class='not-prose capability-list'>
+    {
+      capabilityGroups.map((group, index) => (
+        <article>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <h3>{group.label}</h3>
+            <small>{group.tools}</small>
+          </div>
+          <p>{group.description}</p>
+        </article>
+      ))
+    }
+  </div>
+
+  <h2 id='open-source'>Open source</h2>
+  <p>这些项目记录了我最近的主要建设方向。完整项目、截图和可用链接都在 Projects 页面。</p>
+  <div class='not-prose project-index'>
+    {
+      openSourceProjects.map((project) => {
+        const source = project.links.find((link) => link.type === 'source')
+        return (
+          <a
+            href={source?.href || '/projects'}
+            target={source ? '_blank' : undefined}
+            rel={source ? 'noopener noreferrer' : undefined}
+          >
+            <span class:list={['project-status', { active: project.active }]} />
+            <strong>{project.title}</strong>
+            <small>{project.technologies.slice(0, 3).join(' · ')}</small>
+            <span aria-hidden='true'>↗</span>
+          </a>
+        )
+      })
+    }
+  </div>
+  <p><a href='/projects'>View the complete project archive →</a></p>
 
   <h2 id='education'>Education</h2>
-  {profile.education.map((item) => <a class='not-prose education' href={item.href} target='_blank' rel='noopener noreferrer'><img src={item.logo} alt={`${item.school} logo`} width='68' height='68'/><span><strong>{item.school}</strong><small>{item.degree}</small><small>{item.period}</small></span></a>)}
-
-  <h2 id='skills'>Skills</h2>
-  <div class='not-prose flex flex-wrap gap-2'>
-    {profile.skills.map((skill) => <span class='rounded-full border bg-background px-3 py-1 text-sm text-muted-foreground'>{skill}</span>)}
-  </div>
+  {
+    profile.education.map((item) => (
+      <a class='not-prose education' href={item.href} target='_blank' rel='noopener noreferrer'>
+        <img
+          src={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}${item.logo.replace(/^\//, '')}`}
+          alt={`${item.school} logo`}
+          width='68'
+          height='68'
+        />
+        <span>
+          <strong>{item.school}</strong>
+          <small>{item.degree}</small>
+          <small>{item.period}</small>
+        </span>
+        <b aria-hidden='true'>↗</b>
+      </a>
+    ))
+  }
 
   <h2 id='hackathons'>Hackathons</h2>
-  <div class='not-prose timeline'>{hackathons.map(item=><article><div class='dot'></div><div><div class='event-meta'><time>{item.date}</time><span>{item.location}</span></div><h3>{item.title}</h3><p>{item.content}</p>{item.href&&<a href={item.href} target='_blank' rel='noopener noreferrer'>Source ↗</a>}</div></article>)}</div>
+  <p>黑客松是我快速学习、验证产品假设并和不同背景的开发者协作的地方。</p>
+  <div class='not-prose timeline'>
+    {
+      hackathons.map((item) => (
+        <article>
+          <div class='dot' />
+          <div>
+            <div class='event-meta'>
+              <>
+                <time>{item.date}</time>
+                <span>{item.location}</span>
+              </>
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.content}</p>
+            {item.href && (
+              <a href={item.href} target='_blank' rel='noopener noreferrer'>
+                Source ↗
+              </a>
+            )}
+          </div>
+        </article>
+      ))
+    }
+  </div>
 
-  <h2 id='social'>Elsewhere</h2>
-  <div class='not-prose social-grid'>{profile.social.map(([name,href,icon])=><a href={href} target='_blank' rel={href.startsWith('http')?'noopener noreferrer':undefined}><Icon name={icon as any} class='size-5'/><span>{name}</span><b>↗</b></a>)}</div>
-  <p>This site is built with Astro and Astro Theme Pure, and deployed as a static GitHub Pages site.</p>
+  <h2 id='contributions'>Contributions</h2>
+  <p>持续提交比单次冲刺更接近我理解的建设过程：小步验证、留下证据、再继续推进。</p>
+  <div class='not-prose contribution-wrap'><ContributionGraph /></div>
+
+  <h2 id='elsewhere'>Elsewhere</h2>
+  <p>不同平台承载不同密度的内容，也可以直接通过 Contact 页面开始一段对话。</p>
+  <div class='not-prose social-wrap'><SocialGrid links={socialLinks} compact /></div>
+  <p>
+    This site is built with Astro and Astro Theme Pure, and deployed as a static GitHub Pages site.
+  </p>
 </PageLayout>
-<style>.education{display:flex;align-items:center;gap:1rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;color:hsl(var(--foreground));text-decoration:none}.education img{border-radius:.8rem;object-fit:contain;background:white}.education span{display:grid;gap:.18rem}.education small{color:hsl(var(--muted-foreground))}.timeline{display:grid;gap:0}.timeline article{position:relative;display:grid;grid-template-columns:1.25rem 1fr;gap:.7rem;padding-bottom:1.7rem}.timeline article:before{content:'';position:absolute;left:.25rem;top:.75rem;bottom:-.2rem;width:1px;background:hsl(var(--border))}.timeline article:last-child:before{display:none}.dot{z-index:1;margin-top:.4rem;width:.55rem;height:.55rem;border-radius:50%;background:hsl(var(--primary));box-shadow:0 0 0 4px hsl(var(--background))}.event-meta{display:flex;justify-content:space-between;gap:1rem;color:hsl(var(--muted-foreground));font-size:.76rem}.timeline h3{margin:.22rem 0;font-size:1rem}.timeline p{margin:0;color:hsl(var(--muted-foreground));font-size:.88rem}.timeline a{font-size:.8rem}.social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}.social-grid a{display:flex;align-items:center;gap:.65rem;border:1px solid hsl(var(--border));border-radius:.75rem;padding:.7rem .8rem;color:hsl(var(--foreground));text-decoration:none;transition:background .2s,transform .2s}.social-grid a:hover{background:hsl(var(--muted));transform:translateY(-1px)}.social-grid b{margin-left:auto;font-weight:400;color:hsl(var(--muted-foreground))}@media(max-width:500px){.social-grid{grid-template-columns:1fr}.event-meta{display:grid;gap:0}}</style>
+
+<style>
+  .about-lead {
+    margin-bottom: 3rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: clamp(1.3rem, 5vw, 2.2rem);
+  }
+  .eyebrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+    font-weight: 650;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .about-lead > p {
+    max-width: 20ch;
+    margin-top: 0.7rem;
+    font-size: clamp(1.7rem, 6vw, 3.15rem);
+    font-weight: 560;
+    letter-spacing: -0.05em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .lead-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1.1rem;
+    margin-top: 1.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.74rem;
+  }
+  .lead-meta span,
+  .lead-meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+  }
+  .lead-meta a {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .status-dot,
+  .project-status {
+    width: 0.43rem;
+    height: 0.43rem;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.12);
+  }
+  .about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-block: 1.4rem 3rem;
+  }
+  .capability-list {
+    margin-block: 1.3rem 3rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .capability-list article {
+    display: grid;
+    grid-template-columns: 2rem minmax(10rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 0.8rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: 1rem;
+  }
+  .capability-list article > span,
+  .capability-list small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .capability-list h3 {
+    font-size: 0.93rem;
+    font-weight: 620;
+  }
+  .capability-list article > div {
+    display: grid;
+    gap: 0.18rem;
+  }
+  .capability-list p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+  .project-index {
+    display: grid;
+    margin-block: 1.3rem 1rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .project-index a {
+    display: grid;
+    grid-template-columns: auto minmax(8rem, 0.7fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 0.78rem 0.2rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: padding 180ms ease;
+  }
+  .project-index a:hover,
+  .project-index a:focus-visible {
+    padding-inline: 0.55rem;
+    outline: none;
+  }
+  .project-index strong {
+    font-size: 0.82rem;
+    font-weight: 580;
+  }
+  .project-index small,
+  .project-index a > span:last-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .education {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    margin-block: 1.3rem 3rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  .education:hover,
+  .education:focus-visible {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+  .education img {
+    border-radius: 0.8rem;
+    background: white;
+    object-fit: contain;
+  }
+  .education > span {
+    display: grid;
+    gap: 0.18rem;
+  }
+  .education small,
+  .education b {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  .education b {
+    font-weight: 400;
+  }
+  .timeline {
+    display: grid;
+    gap: 0;
+    margin-block: 1.3rem 3rem;
+  }
+  .timeline article {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    gap: 0.7rem;
+    padding-bottom: 1.7rem;
+  }
+  .timeline article::before {
+    content: '';
+    position: absolute;
+    top: 0.75rem;
+    bottom: -0.2rem;
+    left: 0.25rem;
+    width: 1px;
+    background: hsl(var(--border));
+  }
+  .timeline article:last-child::before {
+    display: none;
+  }
+  .dot {
+    z-index: 1;
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-top: 0.4rem;
+    border-radius: 50%;
+    background: hsl(var(--primary));
+    box-shadow: 0 0 0 4px hsl(var(--background));
+  }
+  .event-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  .timeline h3 {
+    margin: 0.22rem 0;
+    font-size: 0.95rem;
+  }
+  .timeline p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+  }
+  .timeline a {
+    font-size: 0.76rem;
+  }
+  .contribution-wrap,
+  .social-wrap {
+    margin-block: 1.3rem 3rem;
+  }
+  @media (max-width: 600px) {
+    .capability-list article {
+      grid-template-columns: 1.5rem minmax(0, 1fr);
+    }
+    .capability-list article > p {
+      grid-column: 2;
+    }
+    .project-index a {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+    .project-index small {
+      display: none;
+    }
+    .event-meta {
+      display: grid;
+      gap: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .project-index a,
+    .education {
+      transition: none;
+    }
+    .education:hover,
+    .education:focus-visible {
+      transform: none;
+    }
+  }
+</style>

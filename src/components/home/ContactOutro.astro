@@ -1,0 +1,112 @@
+---
+import { Icon } from 'astro-pure/user'
+---
+
+<section class='contact-outro' aria-labelledby='contact-outro-title'>
+  <div>
+    <span class='eyebrow'>Open to thoughtful work</span>
+    <h2 id='contact-outro-title'>Let&apos;s build something ambitious.</h2>
+    <p>
+      Have an agent system, open-source idea, or product experiment worth exploring? Tell me what
+      you are trying to make real.
+    </p>
+  </div>
+  <div class='actions'>
+    <a class='primary' href='/contact'>Start a conversation <span aria-hidden='true'>→</span></a>
+    <a href='https://github.com/lora-sys' target='_blank' rel='me noopener noreferrer'>
+      <Icon name='github-circle' class='size-4' /> GitHub
+    </a>
+  </div>
+</section>
+
+<style>
+  .contact-outro {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 2rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1.2rem;
+    padding: clamp(1.25rem, 4vw, 2.4rem);
+    background:
+      radial-gradient(circle at 90% 10%, hsl(var(--primary) / 0.12), transparent 36%),
+      hsl(var(--card));
+  }
+  .eyebrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 15ch;
+    margin-top: 0.55rem;
+    font-size: clamp(1.65rem, 5vw, 2.6rem);
+    font-weight: 570;
+    letter-spacing: -0.04em;
+    line-height: 1.04;
+  }
+  p {
+    max-width: 38rem;
+    margin-top: 0.85rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.55rem;
+  }
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.62rem 0.9rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  a:hover,
+  a:focus-visible {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+  .primary {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  .primary:hover,
+  .primary:focus-visible {
+    background: hsl(var(--foreground) / 0.86);
+  }
+  @media (max-width: 700px) {
+    .contact-outro {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+    .actions {
+      justify-content: flex-start;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
+    a:hover,
+    a:focus-visible {
+      transform: none;
+    }
+  }
+</style>

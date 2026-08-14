@@ -1,123 +1,645 @@
 ---
 import { Image } from 'astro:assets'
 import { profile, projects } from '@/data/profile'
+import { anime, favorites } from '@/data/showcase'
+import { socialLinks } from '@/data/social'
 
 import { Quote } from 'astro-pure/advanced'
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
-import { Button, Card, Icon, Label } from 'astro-pure/user'
+import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import SocialIcon from '@/components/contact/SocialIcon.astro'
+import ContactOutro from '@/components/home/ContactOutro.astro'
+import LatestSignals from '@/components/home/LatestSignals.astro'
 import Section from '@/components/home/Section.astro'
-import SkillLayout from '@/components/home/SkillLayout.astro'
-import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
+import ContributionGraph from '@/components/lora/ContributionGraph.astro'
+import ShowcaseCarousel from '@/components/lora/ShowcaseCarousel.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import config from '@/site-config'
 
-const languages = ['TypeScript', 'Python', 'JavaScript', 'Java', 'Solidity']
-const frontend = ['Astro', 'React', 'Next.js', 'Tailwind CSS']
-const systems = ['Node.js', 'PostgreSQL', 'Docker', 'AI Agents', 'Web3']
-
-// Keep the home page editorial rather than mirroring the complete archive.
 const MAX_POSTS = 5
-const allPosts = await getBlogCollection()
-const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
+const allPosts = sortMDByDate(await getBlogCollection())
+const recentPosts = allPosts.slice(0, MAX_POSTS)
+const featuredProjects = projects.filter((project) => project.featured).slice(0, 4)
+const [leadProject, ...supportingProjects] = featuredProjects
 
-const imagePath = config.logo.src
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/*.{jpeg,jpg,png,gif,avif,webp}'
 )
-if (!images[imagePath])
-  throw new Error(
-    `"${imagePath}" does not exist in glob: "src/assets/*.{jpeg,jpg,png,gif,avif,webp}"`
-  )
+const projectImages = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/*.{jpeg,jpg,png,gif,avif,webp}'
+)
+const avatarSource = images[config.logo.src]
+if (!avatarSource) throw new Error(`Missing homepage avatar: ${config.logo.src}`)
+
+const leadImagePath = leadProject ? `/src/assets/projects/${leadProject.image}` : ''
+const leadImage = leadImagePath ? projectImages[leadImagePath] : undefined
+const leadSource = leadProject?.links.find((link) => link.type === 'source')
+const leadWebsite = leadProject?.links.find((link) => link.type === 'website')
+const latestPost = recentPosts[0]
+const signalDate = (date: Date) =>
+  new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', timeZone: 'UTC' }).format(date)
+const signals = [
+  ...(latestPost
+    ? [
+        {
+          type: 'Writing',
+          date: signalDate(latestPost.data.updatedDate ?? latestPost.data.publishDate),
+          title: latestPost.data.title,
+          href: `/blog/${latestPost.id}`
+        }
+      ]
+    : []),
+  {
+    type: 'Project',
+    date: 'Jun 2026',
+    title: 'Building TradingOS and an AI Company OS',
+    href: '/projects'
+  },
+  {
+    type: 'Note',
+    date: 'Dec 2025',
+    title: '多智能体系统的涌现行为',
+    href: '/notes'
+  },
+  {
+    type: 'Now',
+    date: 'Jul 2026',
+    title: 'Exploring reliable agent infrastructure',
+    href: '/now'
+  }
+]
+const heroSocials = socialLinks.filter((link) =>
+  ['GitHub', 'LinkedIn', 'X', 'Email'].includes(link.name)
+)
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
-  <main class='flex w-full flex-col items-center'>
-    <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
-      <Image
-        src={images[imagePath]()}
-        alt={config.logo.alt || 'Profile'}
-        class='h-28 w-auto rounded-full border p-1'
-        loading='eager'
-        fetchpriority='high'
-      />
-
-      <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-medium'>{config.author}</h1>
-        <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title={profile.location}>
-            <Icon name='location' class='size-5' slot='icon' />
-          </Label>
-          <Label
-            title='Source code'
-            as='a'
-            href='https://github.com/lora-sys'
-            target='_blank'
-            rel='me noopener noreferrer'
-          >
-            <Icon name='github' class='size-5' slot='icon' />
-          </Label>
-        </div>
-      </div>
-
-      <a
-        href='mailto:lorasys@outlook.com'
-        class='flex flex-row items-center gap-x-3 rounded-full border bg-background px-4 py-2 text-sm shadow-sm transition-shadow hover:shadow-md'
-      >
-        <span class='relative flex items-center justify-center'>
-          <span
-            class='absolute size-2 animate-ping rounded-full border border-green-400 bg-green-400 opacity-75'
-          ></span>
-          <span class='size-2 rounded-full bg-green-400'></span>
+  <main class='home-shell'>
+    <section class='hero animate' aria-labelledby='home-title'>
+      <div class='portrait-wrap'>
+        <Image
+          src={avatarSource()}
+          alt={config.logo.alt || 'Lora'}
+          class='portrait'
+          width={152}
+          height={152}
+          loading='eager'
+          fetchpriority='high'
+        />
+        <span class='availability' title='Open to thoughtful collaboration'>
+          <i></i> Open to collaborate
         </span>
-        <p class='font-medium text-muted-foreground'>Let&apos;s build something</p>
-      </a>
+      </div>
+      <div class='hero-copy'>
+        <span class='kicker'>{profile.role} · {profile.location}</span>
+        <h1 id='home-title'>Building evolving agents, tools, and ambitious systems.</h1>
+        <p>{profile.summary[0]}</p>
+        <div class='hero-actions'>
+          <a class='primary-action' href='/projects'
+            >Explore projects <span aria-hidden='true'>→</span></a
+          >
+          <a href='/contact'>Let&apos;s connect</a>
+        </div>
+        <nav class='social-rail' aria-label='Primary social profiles'>
+          {
+            heroSocials.map((link) => (
+              <a
+                href={link.href}
+                target={link.href.startsWith('http') ? '_blank' : undefined}
+                rel={link.href.startsWith('http') ? 'me noopener noreferrer' : undefined}
+                aria-label={`${link.name}: ${link.handle}`}
+                data-tooltip={link.name}
+                style={`--brand:${link.brand}`}
+              >
+                <SocialIcon name={link.icon} class='size-5' />
+              </a>
+            ))
+          }
+        </nav>
+      </div>
     </section>
 
-    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
-      <Section title='About'>
-        <p class='text-muted-foreground'>{profile.role}</p>
-        <p class='text-muted-foreground'>{profile.summary[0]}</p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+    <div id='content' class='animate content-flow'>
+      <Section title='Latest Signals'>
+        <LatestSignals {signals} />
       </Section>
+
       {
-        allPostsByDate.length > 0 && (
-          <Section title='Posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
-                </li>
-              ))}
-            </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+        leadProject && (
+          <Section title='Featured Project'>
+            <article class='featured-project'>
+              <div class='featured-visual'>
+                {leadImage && (
+                  <Image
+                    src={leadImage()}
+                    alt={`${leadProject.title} interface preview`}
+                    widths={[640, 960]}
+                    sizes='(min-width: 768px) 50vw, 92vw'
+                    loading='lazy'
+                  />
+                )}
+              </div>
+              <div class='featured-copy'>
+                <div class='project-meta'>
+                  <span>Featured · {leadProject.dates}</span>
+                  {leadProject.active && (
+                    <span class='active'>
+                      <i /> Active
+                    </span>
+                  )}
+                </div>
+                <h2>{leadProject.title}</h2>
+                <p>{leadProject.description}</p>
+                <ul aria-label='Technologies'>
+                  {leadProject.technologies.map((technology) => (
+                    <li>{technology}</li>
+                  ))}
+                </ul>
+                <div class='project-actions'>
+                  {leadSource && (
+                    <a href={leadSource.href} target='_blank' rel='noopener noreferrer'>
+                      <Icon name='github-circle' class='size-4' /> Source{' '}
+                      <span aria-hidden='true'>↗</span>
+                    </a>
+                  )}
+                  {leadWebsite && (
+                    <a href={leadWebsite.href} target='_blank' rel='noopener noreferrer'>
+                      <Icon name='earth' class='size-4' /> Website <span aria-hidden='true'>↗</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
           </Section>
         )
       }
 
-      <Section title='Education'>
-        <Card
-          as='a'
-          heading={profile.education[0].school}
-          subheading={profile.education[0].degree}
-          date={profile.education[0].period}
-          href={profile.education[0].href}
+      <Section title='Selected Projects'>
+        <ProjectSection projects={supportingProjects} compact />
+        <Button
+          title='Explore all projects'
+          class='w-fit self-end'
+          href='/projects'
+          variant='ahead'
         />
       </Section>
 
-      <Section title='Selected Projects'>
-        <ProjectSection projects={projects.filter((p) => p.featured)} compact />
-        <Button title='All projects' class='w-fit self-end' href='/projects' variant='ahead' />
+      {
+        recentPosts.length > 0 && (
+          <Section title='Latest Writing'>
+            <ul class='posts-list'>
+              {recentPosts.map((post) => (
+                <PostPreview post={post} />
+              ))}
+            </ul>
+            <Button
+              title='Browse all writing'
+              class='w-fit self-end'
+              href='/blog'
+              variant='ahead'
+            />
+          </Section>
+        )
+      }
+
+      <Section title='Open Source'>
+        <div class='footprint'>
+          <div><strong>{projects.length}</strong><span>projects documented</span></div>
+          <div><strong>{allPosts.length}</strong><span>technical essays</span></div>
+          <div>
+            <strong>{new Set(projects.flatMap((project) => project.technologies)).size}</strong
+            ><span>tools in practice</span>
+          </div>
+        </div>
+        <p class='section-copy'>
+          I build in public when I can: agent infrastructure, full-stack products, developer tools,
+          and experiments across AI and Web3.
+        </p>
       </Section>
 
-      <Section title='Skills'>
-        <SkillLayout title='Languages' skills={languages} />
-        <SkillLayout title='Frontend' skills={frontend} />
-        <SkillLayout title='Systems' skills={systems} />
+      <Section title='Contributions'>
+        <ContributionGraph compact />
       </Section>
-      <PersonalShowcase />
+
+      <Section title='Latest Notes'>
+        <div class='note-preview'>
+          <a href='/notes'
+            ><time>2025-12</time><strong>多智能体系统的涌现行为</strong><span
+              >AI Agents · Research</span
+            ></a
+          >
+          <a href='/notes'
+            ><time>2025-11</time><strong>Monad 并行 EVM 性能基准</strong><span
+              >Web3 · Benchmark</span
+            ></a
+          >
+          <a href='/notes'
+            ><time>2025-10</time><strong>Vercel AI SDK v3 迁移经验</strong><span>Frontend · AI</span
+            ></a
+          >
+        </div>
+        <Button title='Read all notes' class='w-fit self-end' href='/notes' variant='ahead' />
+      </Section>
+
+      <Section title='Beyond Code'>
+        <ShowcaseCarousel
+          id='anime'
+          title='Anime Archive'
+          eyebrow='Stories that stay with me'
+          items={anime}
+        />
+        <ShowcaseCarousel
+          id='favorites'
+          title='Favorites'
+          eyebrow='Books, films, music & ideas'
+          items={favorites}
+        />
+      </Section>
+
+      <ContactOutro />
     </div>
-    <Quote class='mt-12' />
+    <Quote class='mt-14' />
   </main>
 </PageLayout>
+
+<style>
+  .home-shell {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero {
+    display: grid;
+    width: min(100%, 58rem);
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1.5rem, 5vw, 3.5rem);
+    margin: 2.5rem auto 5rem;
+    padding-block: clamp(1rem, 4vw, 3rem);
+  }
+  .portrait-wrap {
+    position: relative;
+  }
+  :global(.portrait) {
+    width: clamp(7rem, 14vw, 9.5rem);
+    height: clamp(7rem, 14vw, 9.5rem);
+    border: 1px solid hsl(var(--border));
+    border-radius: 50%;
+    padding: 0.28rem;
+    object-fit: cover;
+    box-shadow: 0 24px 60px -42px hsl(var(--foreground) / 0.7);
+  }
+  .availability {
+    position: absolute;
+    bottom: -0.7rem;
+    left: 50%;
+    display: flex;
+    width: max-content;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.36rem 0.62rem;
+    background: hsl(var(--background));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    box-shadow: 0 8px 22px -18px hsl(var(--foreground));
+    transform: translateX(-50%);
+  }
+  .availability i,
+  .active i {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.12);
+  }
+  .hero-copy {
+    min-width: 0;
+  }
+  .kicker {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    font-weight: 620;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  h1 {
+    max-width: 17ch;
+    margin-top: 0.75rem;
+    font-size: clamp(2.1rem, 6vw, 4.15rem);
+    font-weight: 570;
+    letter-spacing: -0.055em;
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+  .hero-copy > p {
+    max-width: 42rem;
+    margin-top: 1.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .hero-actions,
+  .project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.3rem;
+  }
+  .hero-actions a,
+  .project-actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.58rem 0.85rem;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  .hero-actions a:hover,
+  .hero-actions a:focus-visible,
+  .project-actions a:hover,
+  .project-actions a:focus-visible {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+  .hero-actions .primary-action {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  .hero-actions .primary-action:hover,
+  .hero-actions .primary-action:focus-visible {
+    background: hsl(var(--foreground) / 0.86);
+  }
+  .social-rail {
+    display: flex;
+    gap: 0.42rem;
+    margin-top: 1rem;
+  }
+  .social-rail a {
+    position: relative;
+    display: grid;
+    width: 2.1rem;
+    height: 2.1rem;
+    place-items: center;
+    border-radius: 50%;
+    color: hsl(var(--muted-foreground));
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+  .social-rail a::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    left: 50%;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.4rem;
+    padding: 0.22rem 0.42rem;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-size: 0.62rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 0.2rem);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+  .social-rail a:hover,
+  .social-rail a:focus-visible {
+    background: color-mix(in srgb, var(--brand) 10%, transparent);
+    color: var(--brand);
+    outline: none;
+    transform: translateY(-1px);
+  }
+  .social-rail a:hover::after,
+  .social-rail a:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .content-flow {
+    display: flex;
+    width: min(100%, 58rem);
+    flex-direction: column;
+    gap: 5rem;
+  }
+  .posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .featured-project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(17rem, 0.88fr);
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1.1rem;
+    background: hsl(var(--card));
+  }
+  .featured-visual {
+    min-height: 20rem;
+    overflow: hidden;
+    background: hsl(var(--muted));
+  }
+  .featured-visual :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms ease;
+  }
+  .featured-project:hover .featured-visual :global(img) {
+    transform: scale(1.025);
+  }
+  .featured-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.2rem, 4vw, 2rem);
+  }
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+  .active {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .featured-copy h2 {
+    margin-top: 0.75rem;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 580;
+    letter-spacing: -0.035em;
+  }
+  .featured-copy > p,
+  .section-copy {
+    margin-top: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.86rem;
+    line-height: 1.65;
+  }
+  .featured-copy ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.36rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .featured-copy li {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+  }
+  .footprint {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-block: 1px solid hsl(var(--border));
+  }
+  .footprint div {
+    display: grid;
+    gap: 0.12rem;
+    padding: 1rem;
+    border-right: 1px solid hsl(var(--border));
+  }
+  .footprint div:last-child {
+    border-right: 0;
+  }
+  .footprint strong {
+    font-size: 1.55rem;
+    font-weight: 570;
+    font-variant-numeric: tabular-nums;
+  }
+  .footprint span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+  }
+  .note-preview {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .note-preview a {
+    display: grid;
+    gap: 0.35rem;
+    min-height: 8.6rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    padding: 0.9rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  .note-preview a:hover,
+  .note-preview a:focus-visible {
+    background: hsl(var(--muted));
+    transform: translateY(-2px);
+  }
+  .note-preview time,
+  .note-preview span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .note-preview strong {
+    font-size: 0.9rem;
+    font-weight: 580;
+    line-height: 1.45;
+  }
+  .note-preview span {
+    margin-top: auto;
+  }
+  @media (max-width: 780px) {
+    .featured-project {
+      grid-template-columns: 1fr;
+    }
+    .featured-visual {
+      min-height: 15rem;
+    }
+    .note-preview {
+      grid-template-columns: 1fr;
+    }
+    .note-preview a {
+      min-height: 0;
+    }
+  }
+  @media (max-width: 620px) {
+    .hero {
+      grid-template-columns: 1fr;
+      margin-block: 1.5rem 4rem;
+      text-align: center;
+    }
+    .portrait-wrap {
+      width: max-content;
+      margin-inline: auto;
+    }
+    h1 {
+      margin-inline: auto;
+    }
+    .hero-copy > p {
+      margin-inline: auto;
+    }
+    .hero-actions,
+    .social-rail {
+      justify-content: center;
+    }
+    .content-flow {
+      gap: 4rem;
+    }
+    .footprint {
+      grid-template-columns: 1fr;
+    }
+    .footprint div {
+      grid-template-columns: 3.5rem 1fr;
+      align-items: baseline;
+      border-right: 0;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+    .footprint div:last-child {
+      border-bottom: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-actions a,
+    .project-actions a,
+    .social-rail a,
+    .social-rail a::after,
+    .featured-visual :global(img),
+    .note-preview a {
+      transition: none;
+    }
+    .hero-actions a:hover,
+    .hero-actions a:focus-visible,
+    .project-actions a:hover,
+    .project-actions a:focus-visible,
+    .social-rail a:hover,
+    .social-rail a:focus-visible,
+    .featured-project:hover .featured-visual :global(img),
+    .note-preview a:hover,
+    .note-preview a:focus-visible {
+      transform: none;
+    }
+  }
+</style>

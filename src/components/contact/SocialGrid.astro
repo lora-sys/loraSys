@@ -1,0 +1,197 @@
+---
+import type { SocialLink } from '@/data/social'
+
+import SocialIcon from './SocialIcon.astro'
+
+interface Props {
+  links: SocialLink[]
+  compact?: boolean
+}
+
+const { links, compact = false } = Astro.props
+---
+
+<div class:list={['social-grid', { compact }]}>
+  {
+    links.map((link) => (
+      <a
+        class='social-card'
+        href={link.href}
+        target={link.href.startsWith('http') ? '_blank' : undefined}
+        rel={link.href.startsWith('http') ? 'me noopener noreferrer' : undefined}
+        style={`--brand:${link.brand}`}
+        aria-label={`${link.name}: ${link.handle}`}
+      >
+        <span class='icon-wrap'>
+          <SocialIcon name={link.icon} class='brand-icon' />
+        </span>
+        <span class='copy'>
+          <strong>{link.name}</strong>
+          <span class='handle'>{link.handle}</span>
+          {!compact && <span class='description'>{link.description}</span>}
+        </span>
+        <span class='arrow' aria-hidden='true'>
+          ↗
+        </span>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .social-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.8rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    padding: 1rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease,
+      box-shadow 180ms ease;
+  }
+  .social-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--brand) 8%, transparent),
+      transparent 48%
+    );
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+  .social-card:hover,
+  .social-card:focus-visible {
+    border-color: color-mix(in srgb, var(--brand) 50%, hsl(var(--border)));
+    box-shadow: 0 16px 36px -30px var(--brand);
+    transform: translateY(-2px);
+    outline: none;
+  }
+  .social-card:focus-visible {
+    box-shadow:
+      0 0 0 2px hsl(var(--background)),
+      0 0 0 4px var(--brand);
+  }
+  .social-card:hover::after,
+  .social-card:focus-visible::after {
+    opacity: 1;
+  }
+  .icon-wrap,
+  .copy,
+  .arrow {
+    position: relative;
+    z-index: 1;
+  }
+  .icon-wrap {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.68rem;
+    background: hsl(var(--background));
+    transition: color 180ms ease;
+  }
+  .social-card:hover .icon-wrap,
+  .social-card:focus-visible .icon-wrap {
+    color: var(--brand);
+  }
+  :global(.brand-icon) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.1rem;
+  }
+  strong {
+    font-size: 0.92rem;
+    font-weight: 650;
+  }
+  .handle {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .description {
+    margin-top: 0.4rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .arrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+  .social-card:hover .arrow,
+  .social-card:focus-visible .arrow {
+    color: var(--brand);
+    transform: translate(2px, -2px);
+  }
+  .compact {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .compact .social-card {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 0.75rem;
+  }
+  .compact .icon-wrap {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+  }
+  .compact .handle,
+  .compact .arrow {
+    display: none;
+  }
+  @media (max-width: 720px) {
+    .compact {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .social-grid {
+      grid-template-columns: 1fr;
+    }
+    .compact {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .social-card,
+    .social-card::after,
+    .icon-wrap,
+    .arrow {
+      transition: none;
+    }
+    .social-card:hover,
+    .social-card:focus-visible,
+    .social-card:hover .arrow,
+    .social-card:focus-visible .arrow {
+      transform: none;
+    }
+  }
+</style>
