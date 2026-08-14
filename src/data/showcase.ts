@@ -5,6 +5,7 @@ export interface ShowcaseItem {
   href: string
   cta?: string
   spotify?: boolean
+  artist?: string
 }
 
 // Details and poster artwork: https://kitsu.io/anime/kimagure-orange-road
@@ -86,6 +87,7 @@ export const favorites: ShowcaseItem[] = [
   },
   {
     name: 'Living Inside Of Your Love',
+    artist: 'Yutaka Yokokura',
     description: 'Yutaka Yokokura — a luminous jazz-fusion and city-pop favorite.',
     image: '/images/favorites/living-inside-of-your-love.jpg',
     href: 'https://open.spotify.com/embed/track/2RGoMak3qjAjMfR0duV2Dp?utm_source=generator&theme=0',
