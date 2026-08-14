@@ -1,0 +1,169 @@
+---
+import { appearances } from '@/data/talks'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const headings = [{ depth: 2, slug: 'appearances', text: 'Appearances' }]
+---
+
+<PageLayout title='Talks & Appearances' {headings} view>
+  <p>
+    公开构建、黑客松与项目展示记录。这里不会把参赛经历包装成演讲；只有真实存在的 Source、Video 或
+    Slides 才会显示对应入口。
+  </p>
+
+  <h2 id='appearances'>Appearances</h2>
+  <div class='not-prose appearances'>
+    <div class='legend' aria-hidden='true'>
+      <span>When / where</span><span>Appearance</span><span>Evidence</span>
+    </div>
+    {
+      appearances.map((appearance, index) => (
+        <article>
+          <div class='when'>
+            <time>{appearance.date}</time>
+            <span>{appearance.location}</span>
+          </div>
+          <div class='event'>
+            <p>{appearance.role}</p>
+            <h2>{appearance.title}</h2>
+            <strong>{appearance.project}</strong>
+            <span>{appearance.description}</span>
+          </div>
+          <div class='evidence'>
+            {appearance.source ? (
+              <a href={appearance.source} target='_blank' rel='noopener noreferrer'>
+                Source <span aria-hidden='true'>↗</span>
+              </a>
+            ) : (
+              <span class='recorded'>No public link</span>
+            )}
+            <small>{String(index + 1).padStart(2, '0')}</small>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</PageLayout>
+
+<style>
+  .appearances {
+    margin-top: 2rem;
+    border-top: 1px solid hsl(var(--foreground));
+  }
+  .legend,
+  .appearances article {
+    display: grid;
+    grid-template-columns: 10rem minmax(0, 1fr) 7rem;
+    gap: 1.2rem;
+  }
+  .legend {
+    padding: 0.65rem 0;
+    border-bottom: 1px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .appearances article {
+    position: relative;
+    padding: 1.45rem 0;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .when {
+    display: grid;
+    align-content: start;
+    gap: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  .when time {
+    color: hsl(var(--foreground));
+    font-variant-numeric: tabular-nums;
+  }
+  .event p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .event h2 {
+    margin: 0.25rem 0;
+    font-size: 1.08rem;
+    font-weight: 600;
+  }
+  .event strong {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.78rem;
+  }
+  .event > span {
+    display: block;
+    max-width: 33rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.55;
+  }
+  .evidence {
+    display: grid;
+    justify-items: end;
+    align-content: space-between;
+    gap: 1rem;
+  }
+  .evidence a {
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+  .evidence a span {
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .evidence a:hover span {
+    transform: translate(0.12rem, -0.12rem);
+  }
+  .recorded {
+    max-width: 6rem;
+    text-align: right;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+  }
+  .evidence small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+  }
+  @media (max-width: 640px) {
+    .legend {
+      display: none;
+    }
+    .appearances article {
+      grid-template-columns: 1fr auto;
+      gap: 0.8rem;
+    }
+    .when {
+      grid-column: 1/-1;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed hsl(var(--border));
+      padding-bottom: 0.55rem;
+    }
+    .event {
+      grid-column: 1;
+    }
+    .evidence {
+      grid-column: 2;
+    }
+    .recorded {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .evidence a span {
+      transition: none;
+    }
+    .evidence a:hover span {
+      transform: none;
+    }
+  }
+</style>

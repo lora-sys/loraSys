@@ -1,28 +1,426 @@
 ---
 import { Image } from 'astro:assets'
-import { Icon } from 'astro-pure/user'
+import githubSnapshot from '@/data/github-projects.json'
 import type { Project } from '@/data/profile'
-interface Props { projects: Project[]; compact?: boolean }
-const { projects, compact=false }=Astro.props
-const images=import.meta.glob<{default:ImageMetadata}>('/src/assets/projects/*.{avif,webp,png,jpg}')
+import {
+  getProjectCategories,
+  projectCategories,
+  type ProjectCategory
+} from '@/data/project-taxonomy'
+
+import { Icon } from 'astro-pure/user'
+
+interface Props {
+  projects: Project[]
+  compact?: boolean
+  filters?: boolean
+}
+const { projects, compact = false, filters = false } = Astro.props
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/projects/*.{avif,webp,png,jpg}'
+)
+const allFilters: readonly ('All' | ProjectCategory)[] = ['All', ...projectCategories]
+const repositoryFromProject = (project: Project) =>
+  project.links
+    .find((link) => link.type === 'source')
+    ?.href.match(/github\.com\/lora-sys\/([^/#?]+)/i)?.[1]
+    .toLowerCase()
+const githubForProject = (project: Project) => {
+  const repository = repositoryFromProject(project)
+  return repository
+    ? githubSnapshot.projects[repository as keyof typeof githubSnapshot.projects]
+    : undefined
+}
+const formatUpdate = (date?: string | null) =>
+  date
+    ? new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' }).format(new Date(date))
+    : null
 ---
-<div class:list={['projects', { compact }]}>
- {projects.map((project,i)=>{
-  const path=`/src/assets/projects/${project.image}`; const source=images[path]
-  return <article class:list={['project-card',{'project-card--stagger':i%2}]} data-project-card>
-   <div class='visual'>{source&&<Image src={source()} alt={`${project.title} project preview`} widths={[480,760]} sizes={compact?'(min-width:640px) 38vw, 90vw':'(min-width:640px) 42vw, 94vw'} loading='lazy' />}</div>
-   <div class='body'>
-    <div class='meta'><span>{project.dates}</span>{project.active&&<span class='active'><i></i>Active</span>}</div>
-    <h3>{project.title}</h3><p>{project.description}</p>
-    <ul aria-label='Technologies'>{project.technologies.map(t=><li>{t}</li>)}</ul>
-    <div class='actions'>{project.links.map(link=><a href={link.href} target='_blank' rel='noopener noreferrer'><Icon name={link.type==='source'?'github-circle':'earth'} class='size-4'/>{link.type==='source'?'Source':'Website'} <span>↗</span></a>)}</div>
-   </div>
-  </article>
- })}
+
+{
+  filters && (
+    <div class='filter-shell' data-project-filters>
+      <div class='filter-list' role='toolbar' aria-label='Filter projects by category'>
+        {allFilters.map((filter, index) => (
+          <button
+            type='button'
+            class:list={{ active: index === 0 }}
+            data-filter={filter}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+          >
+            <span>{filter}</span>
+            <small>
+              {filter === 'All'
+                ? projects.length
+                : projects.filter((project) =>
+                    getProjectCategories(project.title).includes(filter)
+                  ).length}
+            </small>
+          </button>
+        ))}
+      </div>
+      <p class='filter-status' aria-live='polite'>
+        Showing all {projects.length} projects
+      </p>
+    </div>
+  )
+}
+<div class:list={['projects', { compact }]} data-project-grid>
+  {
+    projects.map((project, i) => {
+      const path = `/src/assets/projects/${project.image}`
+      const source = images[path]
+      const categories = getProjectCategories(project.title)
+      const github = githubForProject(project)
+      const archived = github?.archived === true
+      const updated = formatUpdate(github?.updatedAt)
+      return (
+        <article
+          class:list={['project-card', { 'project-card--stagger': i % 2 }]}
+          data-project-card
+          data-categories={categories.join('|')}
+        >
+          <div class='visual'>
+            {source && (
+              <Image
+                src={source()}
+                alt={`${project.title} project preview`}
+                widths={[480, 760]}
+                sizes={compact ? '(min-width:640px) 38vw, 90vw' : '(min-width:640px) 42vw, 94vw'}
+                loading='lazy'
+              />
+            )}
+          </div>
+          <div class='body'>
+            <div class='meta'>
+              <span>{project.dates}</span>
+              {archived ? (
+                <span class='archived'>Archived</span>
+              ) : (
+                project.active && (
+                  <span class='active'>
+                    <i />
+                    Active
+                  </span>
+                )
+              )}
+            </div>
+            <>
+              <h3>{project.title}</h3>
+              <p>{project.description}</p>
+            </>
+            <ul aria-label='Technologies'>
+              {project.technologies.map((t) => (
+                <li>{t}</li>
+              ))}
+            </ul>
+            {github && (
+              <div class='github-meta' aria-label='GitHub repository metadata'>
+                <span>
+                  <Icon name='github-circle' class='size-3.5' />
+                  <span class='sr-only'>GitHub stars:</span>
+                  {github.stars} {github.stars === 1 ? 'star' : 'stars'}
+                </span>
+                {github.language && <span>{github.language}</span>}
+                {updated && <span>Updated {updated}</span>}
+              </div>
+            )}
+            <div class='actions'>
+              {project.links.map((link) => (
+                <a href={link.href} target='_blank' rel='noopener noreferrer'>
+                  <Icon name={link.type === 'source' ? 'github-circle' : 'earth'} class='size-4' />
+                  {link.type === 'source' ? 'Source' : 'Website'} <span>↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </article>
+      )
+    })
+  }
 </div>
 <script>
- if(matchMedia('(hover:hover)').matches) document.querySelectorAll<HTMLElement>('[data-project-card]').forEach(card=>card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--x',`${e.clientX-r.left}px`);card.style.setProperty('--y',`${e.clientY-r.top}px`)}))
+  if (matchMedia('(hover:hover)').matches)
+    document.querySelectorAll<HTMLElement>('[data-project-card]').forEach((card) =>
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect()
+        card.style.setProperty('--x', `${e.clientX - r.left}px`)
+        card.style.setProperty('--y', `${e.clientY - r.top}px`)
+      })
+    )
+  document.querySelectorAll<HTMLElement>('[data-project-filters]').forEach((shell) => {
+    const grid = shell.nextElementSibling
+    const cards = [...(grid?.querySelectorAll<HTMLElement>('[data-project-card]') ?? [])]
+    const status = shell.querySelector<HTMLElement>('.filter-status')
+    shell.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((button) =>
+      button.addEventListener('click', () => {
+        const filter = button.dataset.filter ?? 'All'
+        shell.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((item) => {
+          const selected = item === button
+          item.classList.toggle('active', selected)
+          item.setAttribute('aria-pressed', String(selected))
+        })
+        let visible = 0
+        cards.forEach((card) => {
+          const show =
+            filter === 'All' || (card.dataset.categories ?? '').split('|').includes(filter)
+          card.hidden = !show
+          if (show) visible += 1
+        })
+        if (status)
+          status.textContent =
+            filter === 'All'
+              ? `Showing all ${visible} projects`
+              : `Showing ${visible} ${filter} ${visible === 1 ? 'project' : 'projects'}`
+      })
+    )
+  })
 </script>
 <style>
-.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem}.project-card{position:relative;overflow:hidden;border:1px solid hsl(var(--border));border-radius:1rem;background:hsl(var(--card));transition:transform .28s,box-shadow .28s}.project-card:after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(360px circle at var(--x,-500px) var(--y,-500px),hsl(var(--primary)/.13),transparent 65%)}.project-card--stagger{transform:translateY(1.5rem)}.project-card:hover{box-shadow:0 20px 50px -35px hsl(var(--foreground)/.42)}.project-card--stagger:hover{transform:translateY(1.25rem)}.visual{aspect-ratio:16/9;overflow:hidden;background:hsl(var(--muted))}.visual img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.project-card:hover .visual img{transform:scale(1.025)}.body{position:relative;z-index:1;padding:1rem 1.1rem 1.15rem}.meta{display:flex;justify-content:space-between;gap:1rem;color:hsl(var(--muted-foreground));font-size:.72rem;letter-spacing:.04em}.active{display:flex;align-items:center;gap:.35rem}.active i{width:.42rem;height:.42rem;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgb(34 197 94/.12)}h3{margin:.55rem 0 .35rem;font-size:1.12rem;font-weight:650}p{min-height:3.9em;margin:0;color:hsl(var(--muted-foreground));font-size:.86rem;line-height:1.55}ul{display:flex;flex-wrap:wrap;gap:.35rem;margin:.85rem 0;padding:0;list-style:none}li{border:1px solid hsl(var(--border));border-radius:999px;padding:.18rem .5rem;color:hsl(var(--muted-foreground));font-size:.68rem}.actions{display:flex;gap:.55rem}.actions a{display:flex;align-items:center;gap:.35rem;border:1px solid hsl(var(--border));border-radius:.6rem;padding:.42rem .68rem;color:hsl(var(--foreground));font-size:.78rem;text-decoration:none;transition:background .2s,transform .2s}.actions a:hover{background:hsl(var(--muted));transform:translateY(-1px)}.compact{gap:1rem}.compact .body{padding:.8rem .9rem}.compact p{min-height:2.7em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}@media(max-width:640px){.projects{grid-template-columns:1fr}.project-card--stagger,.project-card--stagger:hover{transform:none}p{min-height:0}}@media(prefers-reduced-motion:reduce){.project-card,.visual img,.actions a{transition:none}.project-card:hover,.project-card--stagger:hover{transform:none}}
+  .filter-shell {
+    margin: 1.1rem 0 1.6rem;
+  }
+  .filter-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .filter-list button {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background));
+    padding: 0.44rem 0.72rem;
+    color: hsl(var(--muted-foreground));
+    font: inherit;
+    font-size: 0.76rem;
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background 0.2s,
+      color 0.2s,
+      transform 0.2s;
+  }
+  .filter-list button:hover {
+    transform: translateY(-1px);
+    color: hsl(var(--foreground));
+  }
+  .filter-list button:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+  .filter-list button.active {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  .filter-list small {
+    display: grid;
+    place-items: center;
+    min-width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 999px;
+    background: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+  }
+  .filter-list button.active small {
+    background: hsl(var(--background) / 0.18);
+    color: inherit;
+  }
+  .filter-status {
+    margin: 0.55rem 0 0;
+    min-height: 1.2em;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+  }
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.4rem;
+  }
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    background: hsl(var(--card));
+    transition:
+      transform 0.28s,
+      box-shadow 0.28s;
+  }
+  .project-card[hidden] {
+    display: none;
+  }
+  .project-card:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      360px circle at var(--x, -500px) var(--y, -500px),
+      hsl(var(--primary) / 0.13),
+      transparent 65%
+    );
+  }
+  .project-card--stagger {
+    transform: translateY(1.5rem);
+  }
+  .project-card:hover {
+    box-shadow: 0 20px 50px -35px hsl(var(--foreground) / 0.42);
+  }
+  .project-card--stagger:hover {
+    transform: translateY(1.25rem);
+  }
+  .visual {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: hsl(var(--muted));
+  }
+  .visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+  .project-card:hover .visual img {
+    transform: scale(1.025);
+  }
+  .body {
+    position: relative;
+    z-index: 1;
+    padding: 1rem 1.1rem 1.15rem;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+  .active {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .active i {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94/0.12);
+  }
+  .archived {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.08rem 0.4rem;
+  }
+  h3 {
+    margin: 0.55rem 0 0.35rem;
+    font-size: 1.12rem;
+    font-weight: 650;
+  }
+  p {
+    min-height: 3.9em;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.85rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.18rem 0.5rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .github-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: -0.15rem 0 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .github-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.22rem;
+  }
+  .github-meta span + span:before {
+    content: '·';
+    margin-right: 0.28rem;
+  }
+  .actions {
+    display: flex;
+    gap: 0.55rem;
+  }
+  .actions a {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.6rem;
+    padding: 0.42rem 0.68rem;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+  }
+  .actions a:hover {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+  .compact {
+    gap: 1rem;
+  }
+  .compact .body {
+    padding: 0.8rem 0.9rem;
+  }
+  .compact p {
+    min-height: 2.7em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  @media (max-width: 640px) {
+    .projects {
+      grid-template-columns: 1fr;
+    }
+    .project-card--stagger,
+    .project-card--stagger:hover {
+      transform: none;
+    }
+    p {
+      min-height: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .visual img,
+    .actions a,
+    .filter-list button {
+      transition: none;
+    }
+    .project-card:hover,
+    .project-card--stagger:hover,
+    .filter-list button:hover {
+      transform: none;
+    }
+  }
 </style>

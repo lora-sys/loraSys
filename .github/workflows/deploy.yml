@@ -34,6 +34,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           bun scripts/fetch-contributions.mjs
+          bun scripts/fetch-github-projects.mjs
           bun run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,11 +1,18 @@
 ---
+import { projects } from '@/data/profile'
+
 import PageLayout from '@/layouts/CommonPage.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import { projects } from '@/data/profile'
-const headings=[{depth:2,slug:'projects',text:'All projects'}]
+
+const headings = [{ depth: 2, slug: 'projects', text: 'All projects' }]
 ---
+
 <PageLayout title='Projects' {headings} view>
- <p>我构建的产品、实验与开源系统：从 AI Agent 基础设施和完整的全栈产品，到 Web3 世界中的智能体能力。</p>
- <h2 id='projects'>All projects</h2><div class='not-prose'><ProjectSection {projects}/></div>
- <p>想一起做点有趣的事？写信给 <a href='mailto:lorasys@outlook.com'>lorasys@outlook.com</a>。</p>
+  <p>
+    我构建的产品、实验与开源系统：从 AI Agent 基础设施和完整的全栈产品，到 Web3 世界中的智能体能力。
+  </p>
+  <h2 id='projects'>All projects</h2><div class='not-prose'>
+    <ProjectSection {projects} filters />
+  </div>
+  <p>想一起做点有趣的事？写信给 <a href='mailto:lorasys@outlook.com'>lorasys@outlook.com</a>。</p>
 </PageLayout>

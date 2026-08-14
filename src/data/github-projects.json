@@ -1,0 +1,82 @@
+{
+  "lastUpdated": "2026-08-14T11:30:46.156Z",
+  "projects": {
+    "newtube-clone": {
+      "stars": 1,
+      "updatedAt": "2026-03-28T15:11:55Z",
+      "language": "TypeScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/Newtube-clone"
+    },
+    "daily-rss": {
+      "stars": 1,
+      "updatedAt": "2026-01-10T12:43:23Z",
+      "language": "TypeScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/Daily-Rss"
+    },
+    "trandingos": {
+      "stars": 1,
+      "updatedAt": "2026-08-10T09:29:56Z",
+      "language": "TypeScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/TrandingOs"
+    },
+    "aicompanyos": {
+      "stars": 2,
+      "updatedAt": "2026-06-21T03:43:18Z",
+      "language": null,
+      "archived": false,
+      "url": "https://github.com/lora-sys/aicompanyos"
+    },
+    "nanochat-studay": {
+      "stars": 4,
+      "updatedAt": "2026-03-10T12:19:59Z",
+      "language": "Python",
+      "archived": false,
+      "url": "https://github.com/ACAMLab/nanochat-studay"
+    },
+    "hackthon-agent": {
+      "stars": 0,
+      "updatedAt": "2026-02-27T13:24:15Z",
+      "language": "TypeScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/hackthon-agent"
+    },
+    "demo_monad_hackthon": {
+      "stars": 0,
+      "updatedAt": "2026-01-24T07:51:47Z",
+      "language": "JavaScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/demo_monad_hackthon"
+    },
+    "moss": {
+      "stars": 0,
+      "updatedAt": "2026-07-20T13:32:08Z",
+      "language": "TypeScript",
+      "archived": true,
+      "url": "https://github.com/lora-sys/moss"
+    },
+    "second-brain": {
+      "stars": 1,
+      "updatedAt": "2026-07-16T15:58:04Z",
+      "language": "JavaScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/second-brain"
+    },
+    "monadmon": {
+      "stars": 1,
+      "updatedAt": "2026-07-14T08:27:17Z",
+      "language": "TypeScript",
+      "archived": false,
+      "url": "https://github.com/lora-sys/monadmon"
+    },
+    "mianshiya-next": {
+      "stars": 1,
+      "updatedAt": "2025-08-22T10:37:48Z",
+      "language": null,
+      "archived": true,
+      "url": "https://github.com/lora-sys/mianshiya-next"
+    }
+  }
+}

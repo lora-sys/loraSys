@@ -1,0 +1,117 @@
+---
+import { labEntries, type LabEntry } from '@/data/lab'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+
+export function getStaticPaths() {
+  return labEntries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }))
+}
+
+interface Props {
+  entry: LabEntry
+}
+const { entry } = Astro.props
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const headings = [
+  { depth: 2, slug: 'question', text: 'Question' },
+  { depth: 2, slug: 'result', text: 'What the experiment produced' },
+  { depth: 2, slug: 'inspect', text: 'Inspect the work' }
+]
+---
+
+<PageLayout title={entry.title} {headings} view>
+  <p class='eyebrow'>{entry.eyebrow} · {entry.project}</p>
+  <p class='lead'>{entry.summary}</p>
+
+  <h2 id='question'>Question</h2>
+  <blockquote>{entry.question}</blockquote>
+
+  <h2 id='result'>What the experiment produced</h2>
+  <p>{entry.result}</p>
+  <div class='not-prose technology-list' aria-label='Technologies used'>
+    {entry.technologies.map((technology) => <span>{technology}</span>)}
+  </div>
+
+  <h2 id='inspect'>Inspect the work</h2>
+  <p>
+    This is a documented slice of <strong>{entry.project}</strong>. The source repository is the
+    authoritative implementation.
+  </p>
+  <div class='not-prose actions'>
+    <a class='primary' href={entry.source} target='_blank' rel='noopener noreferrer'
+      >View source <span aria-hidden='true'>↗</span></a
+    >
+    {
+      entry.website && (
+        <a href={entry.website} target='_blank' rel='noopener noreferrer'>
+          Open live project <span aria-hidden='true'>↗</span>
+        </a>
+      )
+    }
+    <a href={`${base}/lab`}>Back to Lab</a>
+  </div>
+</PageLayout>
+
+<style>
+  .eyebrow {
+    margin-bottom: 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.73rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .lead {
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+  .technology-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: 1.25rem 0 2rem;
+  }
+  .technology-list span {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.25rem 0.62rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1.15rem;
+  }
+  .actions a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.65rem;
+    padding: 0.55rem 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+  }
+  .actions a:hover {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+  .actions .primary {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .actions a {
+      transition: none;
+    }
+    .actions a:hover {
+      transform: none;
+    }
+  }
+</style>

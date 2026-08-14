@@ -1,0 +1,180 @@
+---
+import { labEntries } from '@/data/lab'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const headings = [{ depth: 2, slug: 'experiments', text: 'Experiments' }]
+---
+
+<PageLayout title='Lab' {headings} view>
+  <p class='lab-intro'>
+    小型、可检查的工程实验。每一项都来自已经实现的项目；没有独立部署时，会明确链接到源代码，而不是伪装成在线
+    Demo。
+  </p>
+
+  <h2 id='experiments'>Experiments</h2>
+  <div class='not-prose lab-ledger' aria-label={`${labEntries.length} documented experiments`}>
+    <header>
+      <span>{String(labEntries.length).padStart(2, '0')} experiments</span>
+      <span>Question → implementation → result</span>
+    </header>
+    <div class='entries'>
+      {
+        labEntries.map((entry, index) => (
+          <article>
+            <div class='index' aria-hidden='true'>
+              {String(index + 1).padStart(2, '0')}
+            </div>
+            <div class='copy'>
+              <p class='eyebrow'>{entry.eyebrow}</p>
+              <h2>
+                <a href={`${base}/lab/${entry.slug}`}>{entry.title}</a>
+              </h2>
+              <p class='summary'>{entry.summary}</p>
+              <ul aria-label='Technologies'>
+                {entry.technologies.map((technology) => (
+                  <li>{technology}</li>
+                ))}
+              </ul>
+            </div>
+            <a class='open' href={`${base}/lab/${entry.slug}`} aria-label={`Open ${entry.title}`}>
+              <>
+                <span>Inspect</span>
+                <b aria-hidden='true'>↗</b>
+              </>
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</PageLayout>
+
+<style>
+  .lab-intro {
+    max-width: 42rem;
+  }
+  .lab-ledger {
+    margin-top: 2.25rem;
+    border-top: 1px solid hsl(var(--foreground));
+  }
+  .lab-ledger > header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.7rem 0.15rem;
+    border-bottom: 1px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .entries article {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.35rem 0.15rem;
+    border-bottom: 1px solid hsl(var(--border));
+    transition: background 0.2s;
+  }
+  .entries article:hover {
+    background: linear-gradient(90deg, hsl(var(--muted) / 0.55), transparent 70%);
+  }
+  .index {
+    padding-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .eyebrow {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .copy h2 {
+    margin: 0.25rem 0 0.4rem;
+    font-size: 1.12rem;
+    font-weight: 600;
+  }
+  .copy h2 a {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .copy h2 a:after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .summary {
+    max-width: 36rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+  .copy ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .copy li {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.15rem 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+  }
+  .entries article {
+    position: relative;
+  }
+  .open {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    text-decoration: none;
+  }
+  .open b {
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: transform 0.2s;
+  }
+  .entries article:hover .open b {
+    transform: translate(0.12rem, -0.12rem);
+  }
+  @media (max-width: 560px) {
+    .lab-ledger > header span:last-child {
+      display: none;
+    }
+    .entries article {
+      grid-template-columns: 1.8rem minmax(0, 1fr);
+    }
+    .open {
+      grid-column: 2;
+      margin-top: 0;
+    }
+    .open span {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .entries article,
+    .open b {
+      transition: none;
+    }
+    .entries article:hover .open b {
+      transform: none;
+    }
+  }
+</style>
