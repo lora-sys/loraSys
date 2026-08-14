@@ -42,6 +42,7 @@ const toc = generateToc(headings)
     headings: HTMLElement[] = []
     tocLinks: TOCLink[] = []
     headingProgress: Record<string, HeadingProgress> = {}
+    updateTimer?: number
 
     constructor() {
       super()
@@ -77,20 +78,25 @@ const toc = generateToc(headings)
       })
 
       this.tocLinks.forEach(({ element: el, progressBar: bar, slug }, i) => {
-        const { inView, progress } = this.headingProgress[slug]
-        if (this.headingProgress[slug]) {
-          el.classList.toggle('highlight', inView)
-          el.classList.toggle('highlight-bg-translucent', inView)
-          el.classList.toggle(
-            'rounded-t-2xl',
-            inView && (i === 0 || !this.headingProgress[this.tocLinks[i - 1]?.slug].inView)
-          )
-          el.classList.toggle(
-            'rounded-b-2xl',
-            inView &&
-              (i === this.tocLinks.length - 1 ||
-                !this.headingProgress[this.tocLinks[i + 1]?.slug].inView)
-          )
+        const current = this.headingProgress[slug]
+        if (!current) return
+
+        const { inView, progress } = current
+        const previousSlug = this.tocLinks[i - 1]?.slug
+        const nextSlug = this.tocLinks[i + 1]?.slug
+        const previousInView = previousSlug
+          ? Boolean(this.headingProgress[previousSlug]?.inView)
+          : false
+        const nextInView = nextSlug ? Boolean(this.headingProgress[nextSlug]?.inView) : false
+
+        el.classList.toggle('highlight', inView)
+        el.classList.toggle('highlight-bg-translucent', inView)
+        el.classList.toggle('rounded-t-2xl', inView && (i === 0 || !previousInView))
+        el.classList.toggle(
+          'rounded-b-2xl',
+          inView && (i === this.tocLinks.length - 1 || !nextInView)
+        )
+        if (bar) {
           bar.classList.toggle('is-read', !inView && progress === 1)
           bar.classList.toggle('highlight-bg', inView)
           bar.style.setProperty('height', `${progress * 90}%`)
@@ -120,8 +126,13 @@ const toc = generateToc(headings)
       })
 
       // Initial first and listen to scroll event
-      setInterval(this.updatePositionAndStyle, 100)
+      this.updateTimer = window.setInterval(this.updatePositionAndStyle, 100)
       window.addEventListener('scroll', this.updatePositionAndStyle)
+    }
+
+    disconnectedCallback() {
+      if (this.updateTimer) window.clearInterval(this.updateTimer)
+      window.removeEventListener('scroll', this.updatePositionAndStyle)
     }
   }
 

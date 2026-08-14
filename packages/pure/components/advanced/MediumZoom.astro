@@ -11,9 +11,15 @@ const { selector = config.integ.mediumZoom.selector, background = 'hsl(var(--bac
   Astro.props
 ---
 
-<script is:inline src={`${config.npmCDN}/medium-zoom/dist/pure/medium-zoom.min.umd.js`}></script>
-<script is:inline define:vars={{ selector, background }}>
-  mediumZoom(selector, { background })
+<i data-medium-zoom data-selector={selector} data-background={background} hidden></i>
+<script>
+  import mediumZoom from 'medium-zoom'
+
+  document.querySelectorAll<HTMLElement>('[data-medium-zoom]').forEach((config) => {
+    const selector = config.dataset.selector
+    if (!selector) return
+    mediumZoom(selector, { background: config.dataset.background })
+  })
 </script>
 <style is:global>
   .medium-zoom-overlay {

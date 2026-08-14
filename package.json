@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
-    "build": "astro-pure check && astro check && astro build && node scripts/prefix-base.mjs",
+    "build": "astro-pure check && astro check && astro build && node scripts/prefix-base.mjs && node scripts/audit-release.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "check": "astro check",
@@ -26,6 +26,7 @@
     "astro": "5.17.3",
     "astro-pure": "file:packages/pure",
     "katex": "^0.16.33",
+    "medium-zoom": "1.1.0",
     "mermaid": "^11.16.1",
     "rehype-katex": "^7.0.1",
     "remark-gfm": "^4.0.1",
