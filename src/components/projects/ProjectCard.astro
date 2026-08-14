@@ -1,0 +1,465 @@
+---
+import type { Project } from '@/data/projects'
+
+import { Icon } from 'astro-pure/user'
+
+import ProjectMedia from './ProjectMedia.astro'
+
+interface Props {
+  project: Project
+  variant?: 'lead' | 'featured' | 'grid'
+  priority?: boolean
+  lens?: boolean
+  filterable?: boolean
+}
+
+const {
+  project,
+  variant = 'grid',
+  priority = false,
+  lens = variant !== 'grid',
+  filterable = false
+} = Astro.props
+const source = project.links.find((link) => link.type === 'source')
+const website = project.links.find((link) => link.type === 'website')
+const statusLabel = {
+  building: 'Building',
+  active: 'Maintained',
+  archived: 'Archived'
+}[project.status]
+const primaryCategory =
+  project.categories.find((category) => !['Featured', 'Open Source'].includes(category)) ??
+  'Open Source'
+const visibleTechnologies = project.technologies.slice(0, 3)
+const technologyOverflow = Math.max(0, project.technologies.length - visibleTechnologies.length)
+const pushedAt = new Intl.DateTimeFormat('en', {
+  month: 'short',
+  year: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(project.pushedAt))
+const filterAttributes = filterable
+  ? {
+      'data-project-item': '',
+      'data-category': project.categories.join('|'),
+      'data-status': project.status,
+      'data-search': [
+        project.title,
+        project.repository,
+        project.description,
+        project.categories.join(' '),
+        project.technologies.join(' '),
+        project.language ?? ''
+      ]
+        .join(' ')
+        .toLocaleLowerCase()
+    }
+  : {}
+---
+
+<article
+  class:list={['project-card', `project-card--${variant}`, { 'project-card--magic': lens }]}
+  data-project-card
+  data-project-magic={lens ? '' : undefined}
+  {...filterAttributes}
+>
+  <ProjectMedia
+    {project}
+    {priority}
+    {lens}
+    sizes={variant === 'lead'
+      ? '(min-width: 1024px) 58vw, 94vw'
+      : '(min-width: 1024px) 35vw, (min-width: 640px) 46vw, 94vw'}
+  />
+  <div class='project-body'>
+    <div class='project-eyebrow'>
+      <span>{primaryCategory}</span>
+      <span class:list={['status', `status--${project.status}`]}>
+        <i aria-hidden='true'></i>{statusLabel}
+      </span>
+    </div>
+
+    <div class='project-heading'>
+      <h3>{project.title}</h3>
+      <span translate='no'>{project.repository}</span>
+    </div>
+    <p>{project.description || 'No description published yet.'}</p>
+
+    {
+      visibleTechnologies.length > 0 && (
+        <ul class='technologies' aria-label='Technologies'>
+          {visibleTechnologies.map((technology) => (
+            <li translate='no'>{technology}</li>
+          ))}
+          {technologyOverflow > 0 && (
+            <li aria-label={`${technologyOverflow} more technologies`}>+{technologyOverflow}</li>
+          )}
+        </ul>
+      )
+    }
+
+    <div class='project-foot'>
+      <div class='github-meta' aria-label='GitHub repository metadata'>
+        {
+          project.stars > 0 && (
+            <span>
+              <Icon name='github-circle' class='size-3.5' aria-hidden='true' />
+              {project.stars} {project.stars === 1 ? 'star' : 'stars'}
+            </span>
+          )
+        }
+        {project.language && <span translate='no'>{project.language}</span>}
+        <span>Updated {pushedAt}</span>
+      </div>
+
+      <div class='project-actions'>
+        {
+          website && (
+            <a class='primary' href={website.href} target='_blank' rel='noopener noreferrer'>
+              <Icon name='earth' class='size-4' aria-hidden='true' />
+              Visit website <span aria-hidden='true'>↗</span>
+            </a>
+          )
+        }
+        {
+          source && (
+            <a href={source.href} target='_blank' rel='noopener noreferrer'>
+              <Icon name='github-circle' class='size-4' aria-hidden='true' />
+              Source <span aria-hidden='true'>↗</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  const hoverCapable = matchMedia('(hover: hover) and (pointer: fine)')
+  let frame = 0
+  let pendingEvent: PointerEvent | undefined
+
+  const clearLens = (target: EventTarget | null) => {
+    const media =
+      target instanceof Element ? target.closest<HTMLElement>('[data-project-media]') : null
+    media?.removeAttribute('data-lens-active')
+  }
+
+  document.addEventListener('pointerout', (event) => {
+    if (!(event.target instanceof Element)) return
+    const media = event.target.closest<HTMLElement>('[data-project-media]')
+    if (!media || (event.relatedTarget instanceof Node && media.contains(event.relatedTarget)))
+      return
+    clearLens(event.target)
+  })
+
+  document.addEventListener('pointermove', (event) => {
+    if (reducedMotion.matches || !hoverCapable.matches) return
+    const target = event.target instanceof Element ? event.target : null
+    if (!target?.closest('[data-project-magic]')) return
+    pendingEvent = event
+    if (frame) return
+    frame = requestAnimationFrame(() => {
+      frame = 0
+      const current = pendingEvent
+      if (!current || !(current.target instanceof Element)) return
+      const card = current.target.closest<HTMLElement>('[data-project-magic]')
+      if (!card) return
+      const cardRect = card.getBoundingClientRect()
+      card.style.setProperty('--pointer-x', `${current.clientX - cardRect.left}px`)
+      card.style.setProperty('--pointer-y', `${current.clientY - cardRect.top}px`)
+
+      const media = current.target.closest<HTMLElement>('[data-project-media]')
+      const image = media?.querySelector<HTMLImageElement>('[data-project-poster]')
+      const lens = media?.querySelector<HTMLElement>('[data-project-lens]')
+      if (!media || !image || !lens || image.naturalWidth === 0) return
+      const mediaRect = media.getBoundingClientRect()
+      const x = Math.max(0, Math.min(mediaRect.width, current.clientX - mediaRect.left))
+      const y = Math.max(0, Math.min(mediaRect.height, current.clientY - mediaRect.top))
+      const xPercent = (x / mediaRect.width) * 100
+      const yPercent = (y / mediaRect.height) * 100
+      lens.style.left = `${x}px`
+      lens.style.top = `${y}px`
+      lens.style.setProperty('--lens-image', `url("${image.currentSrc}")`)
+      lens.style.setProperty('--lens-position', `${xPercent}% ${yPercent}%`)
+      media.setAttribute('data-lens-active', 'true')
+    })
+  })
+</script>
+
+<style>
+  .project-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    background: hsl(var(--card));
+    content-visibility: auto;
+    contain-intrinsic-size: auto 38rem;
+    transition:
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
+  }
+
+  .project-card[hidden] {
+    display: none !important;
+  }
+
+  .project-card--grid,
+  .project-card--featured {
+    flex-direction: column;
+  }
+
+  .project-card--lead {
+    display: grid;
+    grid-template-columns: minmax(0, 1.42fr) minmax(19rem, 0.78fr);
+  }
+
+  .project-card--magic::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: radial-gradient(
+      28rem circle at var(--pointer-x, -40rem) var(--pointer-y, -40rem),
+      hsl(var(--primary) / 0.12),
+      transparent 62%
+    );
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+
+  .project-card--magic:hover::after,
+  .project-card--magic:focus-within::after {
+    opacity: 1;
+  }
+
+  .project-card:hover,
+  .project-card:focus-within {
+    border-color: hsl(var(--foreground) / 0.24);
+    box-shadow: 0 24px 55px -42px hsl(var(--foreground) / 0.56);
+  }
+
+  .project-body {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    flex-direction: column;
+    padding: clamp(1rem, 2.5vw, 1.35rem);
+  }
+
+  .project-card--lead .project-body {
+    justify-content: center;
+    padding: clamp(1.35rem, 4vw, 2.25rem);
+  }
+
+  .project-eyebrow,
+  .project-heading,
+  .github-meta,
+  .project-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .project-eyebrow {
+    justify-content: space-between;
+    gap: 0.8rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+    font-weight: 620;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.38rem;
+    letter-spacing: 0.03em;
+  }
+
+  .status i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: hsl(var(--muted-foreground));
+  }
+
+  .status--building i {
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.12);
+  }
+
+  .status--active i {
+    background: #659eb9;
+    box-shadow: 0 0 0 3px rgb(101 158 185 / 0.12);
+  }
+
+  .project-heading {
+    min-width: 0;
+    justify-content: space-between;
+    gap: 0.85rem;
+    margin-top: 0.72rem;
+  }
+
+  .project-heading h3 {
+    min-width: 0;
+    margin: 0;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    font-weight: 620;
+    letter-spacing: -0.025em;
+    line-height: 1.18;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  .project-card--lead .project-heading h3 {
+    font-size: clamp(1.7rem, 4vw, 2.65rem);
+    letter-spacing: -0.045em;
+  }
+
+  .project-heading > span {
+    min-width: 0;
+    max-width: 40%;
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .project-body > p {
+    display: -webkit-box;
+    margin: 0.55rem 0 0;
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.62;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .project-card--lead .project-body > p {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 5;
+  }
+
+  .technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .technologies li {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+  }
+
+  .project-foot {
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+
+  .github-meta {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.52rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .github-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.22rem;
+  }
+
+  .github-meta span + span::before {
+    content: '·';
+    margin-right: 0.18rem;
+  }
+
+  .project-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+  }
+
+  .project-actions a {
+    display: inline-flex;
+    min-height: 2.3rem;
+    align-items: center;
+    gap: 0.34rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.45rem 0.72rem;
+    color: hsl(var(--foreground));
+    font-size: 0.72rem;
+    font-weight: 560;
+    text-decoration: none;
+    transition:
+      background 180ms ease,
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .project-actions a.primary {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .project-actions a:hover,
+  .project-actions a:focus-visible {
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+
+  .project-actions a.primary:hover,
+  .project-actions a.primary:focus-visible {
+    background: hsl(var(--foreground) / 0.84);
+  }
+
+  @media (max-width: 780px) {
+    .project-card--lead {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.28rem;
+    }
+
+    .project-heading > span {
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-card,
+    .project-card--magic::after,
+    .project-actions a {
+      transition: none;
+    }
+
+    .project-actions a:hover,
+    .project-actions a:focus-visible {
+      transform: none;
+    }
+  }
+</style>

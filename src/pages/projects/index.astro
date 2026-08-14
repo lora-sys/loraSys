@@ -1,18 +1,203 @@
 ---
-import { projects } from '@/data/profile'
+import { projects } from '@/data/projects'
 
-import PageLayout from '@/layouts/CommonPage.astro'
+import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 
-const headings = [{ depth: 2, slug: 'projects', text: 'All projects' }]
+const featuredCount = projects.filter((project) => project.featuredRank !== undefined).length
+const buildingCount = projects.filter((project) => project.status === 'building').length
+const maintainedCount = projects.filter((project) => project.status === 'active').length
 ---
 
-<PageLayout title='Projects' {headings} view>
-  <p>
-    我构建的产品、实验与开源系统：从 AI Agent 基础设施和完整的全栈产品，到 Web3 世界中的智能体能力。
-  </p>
-  <h2 id='projects'>All projects</h2><div class='not-prose'>
-    <ProjectSection {projects} filters />
-  </div>
-  <p>想一起做点有趣的事？写信给 <a href='mailto:lorasys@outlook.com'>lorasys@outlook.com</a>。</p>
+<PageLayout
+  meta={{
+    title: 'Projects',
+    description: 'Lora 的公开项目档案：AI Agent、开发者工具、全栈应用、研究实验与 Web3 构建。'
+  }}
+  highlightColor='#659EB9'
+>
+  <main class='projects-page' id='content'>
+    <header class='projects-hero'>
+      <p class='hero-kicker'>Public work / {projects.length.toString().padStart(2, '0')}</p>
+      <div class='hero-grid'>
+        <h1>Projects built to make ambitious systems tangible.</h1>
+        <div class='hero-copy'>
+          <p>
+            我构建的产品、实验与开源系统：从 AI Agent
+            基础设施和开发者工具，到完整的全栈产品、研究型原型与 Web3 实验。
+          </p>
+          <dl aria-label='Project overview'>
+            <div><dt>Featured</dt><dd>{featuredCount}</dd></div>
+            <div><dt>Building</dt><dd>{buildingCount}</dd></div>
+            <div><dt>Maintained</dt><dd>{maintainedCount}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </header>
+
+    <ProjectSection {projects} />
+
+    <aside class='project-outro' aria-labelledby='project-outro-title'>
+      <div>
+        <p>Open to thoughtful work</p>
+        <h2 id='project-outro-title'>Want to build the next one together?</h2>
+      </div>
+      <a href='/contact'>Start a conversation <span aria-hidden='true'>→</span></a>
+    </aside>
+  </main>
 </PageLayout>
+
+<style>
+  .projects-page {
+    display: flex;
+    width: min(100%, 68rem);
+    flex-direction: column;
+    gap: clamp(4rem, 9vw, 7rem);
+    margin: 0 auto;
+    padding-block: clamp(2rem, 7vw, 5.5rem) 2rem;
+  }
+
+  .projects-hero {
+    display: grid;
+    gap: 1.2rem;
+    padding-top: clamp(0.5rem, 3vw, 2rem);
+  }
+
+  .hero-kicker,
+  .project-outro p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.65fr);
+    align-items: end;
+    gap: clamp(2rem, 7vw, 6rem);
+  }
+
+  h1 {
+    max-width: 17ch;
+    margin: 0;
+    font-size: clamp(2.55rem, 7vw, 5.8rem);
+    font-weight: 560;
+    letter-spacing: -0.062em;
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .hero-copy > p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.72;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 1.5rem 0 0;
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  dl div {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.15rem;
+    padding: 0.85rem 0.3rem 0;
+  }
+
+  dt {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.61rem;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 570;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .project-outro {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .project-outro h2 {
+    max-width: 22ch;
+    margin: 0.35rem 0 0;
+    font-size: clamp(1.45rem, 4vw, 2.35rem);
+    font-weight: 580;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .project-outro a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    flex: none;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid hsl(var(--foreground));
+    border-radius: 999px;
+    padding: 0.58rem 0.9rem;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .project-outro a:hover,
+  .project-outro a:focus-visible {
+    opacity: 0.84;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 820px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: 2rem;
+    }
+
+    .hero-copy {
+      max-width: 38rem;
+    }
+  }
+
+  @media (max-width: 580px) {
+    h1 {
+      font-size: clamp(2.45rem, 14vw, 4rem);
+    }
+
+    .project-outro {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-outro a {
+      transition: none;
+    }
+
+    .project-outro a:hover,
+    .project-outro a:focus-visible {
+      transform: none;
+    }
+  }
+</style>
