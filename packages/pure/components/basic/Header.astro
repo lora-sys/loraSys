@@ -16,31 +16,32 @@ import { Icon } from '../user'
 
   <div class='flex items-center gap-x-2'>
     {/* Menu links */}
-    <div
+    <nav
       id='headerExpandContent'
       aria-hidden='true'
-      class='end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted max-sm:absolute max-sm:opacity-0 max-sm:group-[.not-top]:border-border max-sm:group-[.expanded.not-top]:bg-background max-sm:group-[.not-top]:px-4 max-sm:group-[.not-top]:py-2 sm:grid-rows-1'
+      aria-label='Primary navigation'
+      class='header-expand-content end-0 start-0 top-12 grid border border-transparent group-[.not-top]:rounded-xl group-[.expanded]:opacity-100 dark:group-[.expanded.not-top]:bg-muted'
     >
-      <div class='flex flex-col items-center justify-center overflow-hidden sm:flex-row'>
+      <div class='header-nav-content flex flex-col items-center justify-center overflow-hidden'>
         {
           config.header.menu.map((item) => (
             <a
               href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
+              class='header-nav-link w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary'
               aria-label='Nav menu item'
             >
               {item.title}
             </a>
           ))
         }
-        <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
-          <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
+        <div class='header-search flex w-full grow flex-row justify-end gap-x-3'>
+          <a class='header-search-link px-1 py-2 transition-none' href='/search' title='Search'>
             <span class='sr-only'>Search</span>
             <Icon name='search' class='size-5' />
           </a>
         </div>
       </div>
-    </div>
+    </nav>
 
     {/* buttons */}
     <div class='z-30 flex gap-x-4 group-[.not-top]:gap-x-2' style='transition:gap 0.3s'>
@@ -57,7 +58,7 @@ import { Icon } from '../user'
         id='toggleMenu'
         aria-expanded='false'
         aria-controls='headerExpandContent'
-        class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
+        class='header-menu-toggle rounded-md border p-1.5 transition-colors hover:bg-border group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Menu</span>
         <Icon class='size-5' name='menu' />
@@ -106,15 +107,26 @@ import { Icon } from '../user'
         this.syncMenu()
       })
       this.syncMenu()
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && this.classList.contains('expanded')) { this.classList.remove('expanded'); this.syncMenu(); (this.querySelector('#toggleMenu') as HTMLElement)?.focus() } })
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && this.classList.contains('expanded')) {
+          this.classList.remove('expanded')
+          this.syncMenu()
+          ;(this.querySelector('#toggleMenu') as HTMLElement)?.focus()
+        }
+      })
     }
     syncMenu() {
       const expanded = this.classList.contains('expanded')
       const content = this.querySelector('#headerExpandContent') as HTMLElement
       const toggle = this.querySelector('#toggleMenu') as HTMLElement
       toggle?.setAttribute('aria-expanded', expanded.toString())
-      if (matchMedia('(max-width:640px)').matches) { content?.setAttribute('aria-hidden', (!expanded).toString()); if (content) content.inert = !expanded }
-      else { content?.setAttribute('aria-hidden','false'); if(content) content.inert=false }
+      if (matchMedia('(max-width:1023px)').matches) {
+        content?.setAttribute('aria-hidden', (!expanded).toString())
+        if (content) content.inert = !expanded
+      } else {
+        content?.setAttribute('aria-hidden', 'false')
+        if (content) content.inert = false
+      }
     }
   }
 
@@ -147,7 +159,7 @@ import { Icon } from '../user'
       transform: translateY(-5rem);
     }
   }
-  @media (min-width: 800px) {
+  @media (min-width: 1024px) {
     header-component.not-top {
       margin-inline: 8%;
     }
@@ -157,14 +169,45 @@ import { Icon } from '../user'
   }
 
   /* header menu */
-  @media (max-width: 640px) {
-    #headerExpandContent {
+  @media (max-width: 1023px) {
+    .header-expand-content {
+      position: absolute;
       grid-template-rows: 0fr;
+      opacity: 0;
       transition:
         opacity 0.3s,
         padding 0.3s,
         border-color 0.15s,
         grid-template-rows 0.3s;
+    }
+    header-component.not-top .header-expand-content {
+      border-color: hsl(var(--border));
+      padding: 0.5rem 1rem;
+    }
+    header-component.expanded.not-top .header-expand-content {
+      background-color: hsl(var(--background));
+    }
+    :global(.dark) header-component.expanded.not-top .header-expand-content {
+      background-color: hsl(var(--muted));
+    }
+    .header-nav-content {
+      flex-direction: column;
+    }
+    .header-nav-link,
+    .header-search {
+      width: 100%;
+    }
+    .header-nav-link {
+      padding-inline: 0;
+    }
+    .header-search {
+      gap: 0.75rem;
+    }
+    .header-search-link {
+      padding-inline: 0.25rem;
+    }
+    .header-menu-toggle {
+      display: block;
     }
     .expanded #headerExpandContent {
       grid-template-rows: 1fr;
@@ -197,6 +240,31 @@ import { Icon } from '../user'
       opacity: 1;
       background-color: hsl(var(--muted) / var(--un-bg-opacity, 1));
       border-bottom-color: hsl(var(--border) / var(--un-border-opacity, 1));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .header-expand-content {
+      position: static;
+      grid-template-rows: 1fr;
+      opacity: 1;
+    }
+    .header-nav-content {
+      flex-direction: row;
+    }
+    .header-nav-link {
+      width: fit-content;
+      padding-inline: 0.75rem;
+    }
+    .header-search {
+      width: fit-content;
+      gap: 1.25rem;
+    }
+    .header-search-link {
+      padding-inline: 0.5rem;
+    }
+    .header-menu-toggle {
+      display: none;
     }
   }
 

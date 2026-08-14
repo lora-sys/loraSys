@@ -1,10 +1,419 @@
 ---
-import PageLayout from '@/layouts/BaseLayout.astro'
-import { friendLinks } from '../../data/links'
+import { friendLinks, linkApplication, linkApplicationText, type FriendLink } from '@/data/links'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+import FriendConstellation from '@/components/links/FriendConstellation.astro'
+
+const offlineLinks = friendLinks.filter((link) => link.status === 'offline')
+const retiredLinks = friendLinks.filter((link) => link.status === 'retired')
+const headings = [
+  { depth: 2, slug: 'friend-constellation', text: 'Friend constellation' },
+  { depth: 2, slug: 'link-status', text: 'Links with bad status' },
+  { depth: 2, slug: 'link-history', text: 'Link history book' },
+  { depth: 2, slug: 'apply-links', text: 'Apply links' }
+]
+
+const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
 ---
-<PageLayout meta={{ title: 'Links', description: 'Friends and neighbors around the web.' }} highlightColor='#659EB9'>
-  <main class='mx-auto w-full max-w-4xl py-8 md:py-14'>
-    <header class='animate mb-10 max-w-2xl'><p class='mb-2 text-sm uppercase tracking-[.16em] text-muted-foreground'>Around the web</p><h1 class='text-3xl font-medium'>Friends & Links</h1><p class='mt-4 leading-7 text-muted-foreground'>A small directory of people and places I enjoy visiting. No invented entries: this list grows through real connections.</p></header>
-    {friendLinks.length ? <ul class='grid gap-4 sm:grid-cols-2'>{friendLinks.map(link => <li><a class='block rounded-xl border bg-card p-5 transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4' href={link.url} target='_blank' rel='friend noreferrer'><h2 class='font-medium'>{link.name}</h2><p class='mt-2 text-sm text-muted-foreground'>{link.description}</p></a></li>)}</ul> : <section class='rounded-2xl border border-dashed bg-muted/30 p-7 md:p-10'><p class='text-sm uppercase tracking-[.14em] text-muted-foreground'>The first seat is open</p><h2 class='mt-2 text-xl font-medium'>欢迎交换友链</h2><p class='mt-3 max-w-xl leading-7 text-muted-foreground'>如果你也在认真记录、创造或研究有趣的东西，欢迎来认识我。请附上站点名称、链接、一句话介绍和头像；确认之后，我会把真实的你放在这里。</p><a class='mt-6 inline-flex rounded-full border bg-background px-4 py-2 text-sm font-medium transition hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4' href='mailto:lorasys@outlook.com?subject=Friend%20link'>Say hello →</a></section>}
-  </main>
+
+<PageLayout title='Links' {headings}>
+  <p>
+    朋友不是收藏夹里的网址，而是彼此认真阅读、偶尔回应的邻居。这张星图只记录真实关系；它会从空白开始，慢慢长大。
+  </p>
+
+  <div class='not-prose'>
+    <FriendConstellation links={friendLinks} />
+  </div>
+
+  <section class='not-prose link-ledgers' aria-label='Friend link status and history'>
+    <details id='link-status'>
+      <summary>
+        <span>
+          <small>Status ledger</small>
+          <strong>Links with bad status</strong>
+        </span>
+        <span class='count'>{offlineLinks.length.toString().padStart(2, '0')}</span>
+        <span class='arrow' aria-hidden='true'>↘</span>
+      </summary>
+      <div class='ledger-content'>
+        {
+          offlineLinks.length > 0 ? (
+            <ul>
+              {offlineLinks.map((link) => (
+                <li>
+                  <div>
+                    <strong>{link.name}</strong>
+                    <span>{link.description}</span>
+                  </div>
+                  <a href={link.url} target='_blank' rel='noopener noreferrer'>
+                    Check link ↗
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>暂时没有失联记录。未来出现无法访问的友链时，会先移动到这里，而不是悄悄删除。</p>
+          )
+        }
+      </div>
+    </details>
+
+    <details id='link-history'>
+      <summary>
+        <span>
+          <small>Archive ledger</small>
+          <strong>Link history book</strong>
+        </span>
+        <span class='count'>{retiredLinks.length.toString().padStart(2, '0')}</span>
+        <span class='arrow' aria-hidden='true'>↘</span>
+      </summary>
+      <div class='ledger-content'>
+        {
+          retiredLinks.length > 0 ? (
+            <ol>
+              {retiredLinks.map((link) => (
+                <li>
+                  <time>{formatLinkDate(link)}</time>
+                  <div>
+                    <strong>{link.name}</strong>
+                    <span>{link.note || link.description}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p>历史册还是空的。友链的加入、改名与退休会保留时间线，关系不会被无声覆盖。</p>
+          )
+        }
+      </div>
+    </details>
+  </section>
+
+  <section id='apply-links' class='not-prose apply-links'>
+    <header>
+      <div>
+        <p class='eyebrow'>Open protocol</p>
+        <h2>Apply links</h2>
+      </div>
+      <button class='copy-all' type='button' data-copy-value={linkApplicationText}>
+        Copy everything
+      </button>
+    </header>
+
+    <p class='intro'>
+      如果你也在持续写作、构建或研究，欢迎交换友链。复制下面的资料，并通过邮件附上你的对应信息。
+    </p>
+
+    <div class='site-card' aria-label='Lora site information'>
+      {
+        linkApplication.map(({ label, value }) => (
+          <div class='site-field'>
+            <span>{label}</span>
+            <code>{value}</code>
+            <button type='button' data-copy-value={value} aria-label={`Copy ${label}`}>
+              Copy
+            </button>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class='apply-footer'>
+      <div>
+        <strong>Before you send</strong>
+        <ul>
+          <li>你的网站可以正常访问，并有持续维护的原创内容；</li>
+          <li>请先在你的友链页面添加本站，再发送名称、简介、链接与头像；</li>
+          <li>不收录采集站、纯广告页或违反适用法律的内容。</li>
+        </ul>
+      </div>
+      <a
+        href='mailto:lorasys@outlook.com?subject=Friend%20link%20application'
+        aria-label='Apply for a friend link by email'
+      >
+        Send your coordinates <span aria-hidden='true'>↗</span>
+      </a>
+    </div>
+    <p class='copy-status' aria-live='polite'></p>
+  </section>
+
+  <script>
+    const status = document.querySelector<HTMLElement>('.copy-status')
+    const copyText = async (value: string) => {
+      if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable')
+      await navigator.clipboard.writeText(value)
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-copy-value]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const value = button.dataset.copyValue
+        if (!value) return
+        const initialLabel = button.textContent
+        try {
+          await copyText(value)
+          button.textContent = 'Copied'
+          if (status) status.textContent = 'Site information copied to the clipboard.'
+          window.setTimeout(() => {
+            button.textContent = initialLabel
+          }, 1600)
+        } catch {
+          if (status)
+            status.textContent = 'Copy is unavailable. Select the text and copy it manually.'
+        }
+      })
+    })
+  </script>
 </PageLayout>
+
+<style>
+  .link-ledgers {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0 0 4rem;
+  }
+  .link-ledgers details {
+    scroll-margin-top: 7rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .link-ledgers summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 4.2rem;
+    border-top: 1px solid hsl(var(--border));
+    cursor: pointer;
+    list-style: none;
+  }
+  .link-ledgers summary::-webkit-details-marker {
+    display: none;
+  }
+  .link-ledgers summary > span:first-child {
+    display: grid;
+    gap: 0.1rem;
+  }
+  .link-ledgers summary small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .link-ledgers summary strong {
+    font-size: 0.85rem;
+    font-weight: 570;
+  }
+  .link-ledgers .count {
+    color: hsl(var(--muted-foreground));
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.64rem;
+  }
+  .link-ledgers .arrow {
+    display: inline-grid;
+    width: 1.85rem;
+    height: 1.85rem;
+    place-items: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    font-size: 0.78rem;
+    transition:
+      transform 180ms ease,
+      background 180ms ease;
+  }
+  .link-ledgers details[open] .arrow {
+    background: hsl(var(--muted));
+    transform: rotate(90deg);
+  }
+  .ledger-content {
+    padding: 0 0 1.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.76rem;
+    line-height: 1.65;
+  }
+  .ledger-content > p {
+    max-width: 38rem;
+    margin: 0;
+    border-left: 1px solid hsl(var(--primary) / 0.55);
+    padding-left: 0.8rem;
+  }
+  .ledger-content ul,
+  .ledger-content ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ledger-content li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px dashed hsl(var(--border));
+    padding-block: 0.7rem;
+  }
+  .ledger-content li div {
+    display: grid;
+  }
+  .ledger-content li time {
+    min-width: 8rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .apply-links {
+    scroll-margin-top: 7rem;
+    margin-block: 2rem 3rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1.1rem;
+    padding: clamp(1.1rem, 4vw, 2rem);
+    background:
+      radial-gradient(circle at 88% 8%, hsl(var(--primary) / 0.12), transparent 28%),
+      hsl(var(--card));
+  }
+  .apply-links > header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .eyebrow {
+    margin: 0 0 0.3rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+  .apply-links h2 {
+    margin: 0;
+    font-size: clamp(1.45rem, 4vw, 2.2rem);
+    font-weight: 550;
+    letter-spacing: -0.04em;
+  }
+  .copy-all,
+  .site-field button {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 580;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease;
+  }
+  .copy-all {
+    padding: 0.52rem 0.75rem;
+  }
+  .copy-all:hover,
+  .copy-all:focus-visible,
+  .site-field button:hover,
+  .site-field button:focus-visible {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--muted));
+  }
+  .intro {
+    max-width: 38rem;
+    margin: 1.15rem 0 1.5rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  .site-card {
+    overflow: hidden;
+    border-block: 1px solid hsl(var(--border));
+  }
+  .site-field {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    gap: 0.8rem;
+    align-items: center;
+    min-height: 3.1rem;
+    border-bottom: 1px dashed hsl(var(--border));
+  }
+  .site-field:last-child {
+    border-bottom: 0;
+  }
+  .site-field > span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .site-field code {
+    overflow: hidden;
+    color: hsl(var(--foreground));
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.67rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .site-field button {
+    padding: 0.36rem 0.62rem;
+  }
+  .apply-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2rem;
+    align-items: end;
+    margin-top: 1.5rem;
+  }
+  .apply-footer strong {
+    font-size: 0.72rem;
+    font-weight: 620;
+  }
+  .apply-footer ul {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0.55rem 0 0;
+    padding-left: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    line-height: 1.55;
+  }
+  .apply-footer > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.62rem 0.85rem;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+  .apply-footer > a:hover,
+  .apply-footer > a:focus-visible {
+    color: hsl(var(--background));
+  }
+  .copy-status {
+    min-height: 1rem;
+    margin: 0.75rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    text-align: right;
+  }
+  @media (max-width: 620px) {
+    .apply-links > header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .site-field {
+      grid-template-columns: 3rem minmax(0, 1fr) auto;
+      gap: 0.5rem;
+    }
+    .site-field code {
+      font-size: 0.6rem;
+    }
+    .apply-footer {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .apply-footer > a {
+      width: fit-content;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .link-ledgers .arrow,
+    .copy-all,
+    .site-field button {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,348 @@
+---
+import type { FriendLink } from '@/data/links'
+
+import avatar from '@/assets/avatar.png'
+
+interface Props {
+  links: FriendLink[]
+}
+
+const { links } = Astro.props
+const activeLinks = links.filter((link) => link.status === 'active')
+const nodes = activeLinks.map((link, index) => {
+  const angle = (index / activeLinks.length) * Math.PI * 2 - Math.PI / 2
+  return {
+    link,
+    x: 50 + Math.cos(angle) * 39,
+    y: 50 + Math.sin(angle) * 36
+  }
+})
+---
+
+<section class='constellation' aria-labelledby='constellation-title'>
+  <div class='constellation-copy' id='friend-constellation'>
+    <div>
+      <p class='kicker'>Friend constellation</p>
+      <h2 id='constellation-title'>朋友是互联网上真实发光的坐标。</h2>
+    </div>
+    <p>把指针移到星点上，可以看到名字与来处。这里只收录真实、确认过的连接。</p>
+  </div>
+
+  <div class='sky' data-empty={activeLinks.length === 0}>
+    <svg class='orbits' viewBox='0 0 800 460' aria-hidden='true' preserveAspectRatio='none'>
+      <ellipse cx='400' cy='230' rx='280' ry='145'></ellipse>
+      <ellipse cx='400' cy='230' rx='180' ry='92'></ellipse>
+      {
+        nodes.map(({ x, y }) => (
+          <line x1='400' y1='230' x2={(x / 100) * 800} y2={(y / 100) * 460} />
+        ))
+      }
+    </svg>
+
+    <div class='open-stars' aria-hidden='true'>
+      <i style='--x: 13%; --y: 23%; --d: .1s'></i>
+      <i style='--x: 28%; --y: 77%; --d: .5s'></i>
+      <i style='--x: 75%; --y: 18%; --d: .8s'></i>
+      <i style='--x: 87%; --y: 64%; --d: .3s'></i>
+      <i style='--x: 63%; --y: 84%; --d: 1s'></i>
+    </div>
+
+    <div class='self' aria-label='Lora, constellation center'>
+      <span class='self-ring'><img src={avatar.src} alt='Lora 的 GitHub 头像' /></span>
+      <strong>Lora</strong>
+      <small>lora-sys</small>
+    </div>
+
+    {
+      nodes.length > 0 && (
+        <ul class='friend-stars' aria-label='Friend links'>
+          {nodes.map(({ link, x, y }) => (
+            <li style={`--x:${x}%;--y:${y}%`}>
+              <a href={link.url} target='_blank' rel='friend noopener noreferrer'>
+                {link.avatar ? (
+                  <img src={link.avatar} alt='' loading='lazy' referrerpolicy='no-referrer' />
+                ) : (
+                  <span aria-hidden='true'>{link.name.slice(0, 1).toUpperCase()}</span>
+                )}
+                <span class='star-label'>
+                  <strong>{link.name}</strong>
+                  <small>{link.description}</small>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      activeLinks.length === 0 && (
+        <div class='empty-sky'>
+          <span>0 linked stars</span>
+          <p>星图已经展开，等待第一条经过确认的友链。</p>
+          <a href='#apply-links'>
+            成为第一个坐标 <span aria-hidden='true'>↓</span>
+          </a>
+        </div>
+      )
+    }
+  </div>
+
+  <footer>
+    <span>{activeLinks.length.toString().padStart(2, '0')} stars</span>
+    <span aria-hidden='true'>·</span>
+    <span>open canvas</span>
+  </footer>
+</section>
+
+<style>
+  .constellation {
+    margin: 1.5rem 0 3rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: clamp(1.25rem, 4vw, 2rem) 0.8rem;
+  }
+  .constellation-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .kicker {
+    margin: 0 0 0.55rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .constellation-copy h2 {
+    max-width: 17ch;
+    margin: 0;
+    font-size: clamp(1.35rem, 3vw, 2.1rem);
+    font-weight: 550;
+    letter-spacing: -0.035em;
+    line-height: 1.15;
+  }
+  .constellation-copy > p {
+    max-width: 28rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.79rem;
+    line-height: 1.7;
+  }
+  .sky {
+    position: relative;
+    min-height: clamp(22rem, 53vw, 29rem);
+    margin-top: 1rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .orbits {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: hsl(var(--primary));
+    opacity: 0.22;
+  }
+  .orbits ellipse,
+  .orbits line {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+    stroke-dasharray: 4 8;
+  }
+  .open-stars i {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 0.32rem;
+    height: 0.32rem;
+    border: 1px solid hsl(var(--primary) / 0.5);
+    border-radius: 999px;
+    background: hsl(var(--background));
+    box-shadow: 0 0 0 0.35rem hsl(var(--primary) / 0.05);
+    animation: breathe 3.4s var(--d) ease-in-out infinite;
+  }
+  .self {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    display: grid;
+    justify-items: center;
+    transform: translate(-50%, -50%);
+  }
+  .self-ring {
+    display: grid;
+    width: clamp(5rem, 13vw, 6.5rem);
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid hsl(var(--primary) / 0.65);
+    border-radius: 999px;
+    background: hsl(var(--background));
+    box-shadow:
+      0 0 0 0.45rem hsl(var(--primary) / 0.08),
+      0 0 3rem hsl(var(--primary) / 0.15);
+  }
+  .self img {
+    width: calc(100% - 0.45rem);
+    height: calc(100% - 0.45rem);
+    border-radius: inherit;
+    object-fit: cover;
+  }
+  .self strong {
+    margin-top: 0.65rem;
+    font-size: 0.77rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+  }
+  .self small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.61rem;
+  }
+  .friend-stars {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .friend-stars li {
+    position: absolute;
+    z-index: 3;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(-50%, -50%);
+  }
+  .friend-stars a {
+    position: relative;
+    display: grid;
+    width: 3.25rem;
+    aspect-ratio: 1;
+    place-items: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    box-shadow: 0 0 0 0.3rem hsl(var(--background));
+    transition:
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+  .friend-stars a:hover,
+  .friend-stars a:focus-visible {
+    border-color: hsl(var(--primary));
+    transform: translateY(-0.2rem);
+  }
+  .friend-stars img,
+  .friend-stars a > span:first-child {
+    display: grid;
+    width: calc(100% - 0.35rem);
+    height: calc(100% - 0.35rem);
+    place-items: center;
+    border-radius: inherit;
+    object-fit: cover;
+    background: hsl(var(--muted));
+  }
+  .star-label {
+    position: absolute;
+    bottom: calc(100% + 0.6rem);
+    left: 50%;
+    display: grid;
+    min-width: 10rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.65rem;
+    padding: 0.6rem;
+    background: hsl(var(--background));
+    box-shadow: 0 0.7rem 2rem hsl(var(--foreground) / 0.08);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 0.25rem);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+  .friend-stars a:hover .star-label,
+  .friend-stars a:focus-visible .star-label {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .star-label strong {
+    font-size: 0.75rem;
+  }
+  .star-label small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+  }
+  .empty-sky {
+    position: absolute;
+    z-index: 2;
+    right: clamp(0rem, 5vw, 3rem);
+    bottom: clamp(1rem, 5vw, 3.25rem);
+    max-width: 14rem;
+    border-left: 1px solid hsl(var(--border));
+    padding-left: 0.9rem;
+  }
+  .empty-sky > span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.61rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .empty-sky p {
+    margin: 0.35rem 0 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    line-height: 1.55;
+  }
+  .empty-sky a {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .constellation footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.4rem;
+    color: hsl(var(--muted-foreground));
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+  }
+  @keyframes breathe {
+    50% {
+      opacity: 0.35;
+      transform: scale(0.8);
+    }
+  }
+  @media (max-width: 620px) {
+    .constellation-copy {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    .sky {
+      min-height: 23rem;
+    }
+    .orbits {
+      transform: scale(1.35);
+    }
+    .empty-sky {
+      right: 0.25rem;
+      bottom: 0.5rem;
+      max-width: 10rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .open-stars i {
+      animation: none;
+    }
+    .friend-stars a,
+    .star-label {
+      transition: none;
+    }
+    .friend-stars a:hover,
+    .friend-stars a:focus-visible {
+      transform: none;
+    }
+  }
+</style>

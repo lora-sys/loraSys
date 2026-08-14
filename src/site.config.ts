@@ -53,6 +53,10 @@ export const theme: ThemeUserConfig = {
       { title: 'Notes', link: '/notes' },
       { title: 'Projects', link: '/projects' },
       { title: 'Lab', link: '/lab' },
+      { title: 'Now', link: '/now' },
+      { title: 'Talks', link: '/talks' },
+      { title: 'Links', link: '/links' },
+      { title: 'Archives', link: '/archives' },
       { title: 'About', link: '/about' },
       { title: 'Contact', link: '/contact' }
     ]
@@ -95,7 +99,7 @@ export const theme: ThemeUserConfig = {
   }
 }
 
-/** Secondary destinations stay discoverable without crowding the primary navigation. */
+/** Key destinations are also repeated in the footer as a compact end-of-page index. */
 export const secondaryNavigation = [
   { title: 'Now', link: '/now' },
   { title: 'Talks', link: '/talks' },
