@@ -1,0 +1,182 @@
+---
+import { render, type CollectionEntry } from 'astro:content'
+
+import { FormattedDate, Icon } from 'astro-pure/user'
+
+import LanguageBadge from './LanguageBadge.astro'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props
+const { data, id } = post
+const { remarkPluginFrontmatter } = await render(post)
+const postDate = data.updatedDate ?? data.publishDate
+---
+
+<li class='post-card'>
+  <article>
+    <div class='post-meta'>
+      <FormattedDate date={postDate} />
+      <span aria-hidden='true'>·</span>
+      <span class='read-time'>
+        <Icon name='time' class='size-4' />
+        {remarkPluginFrontmatter.minutesRead}
+      </span>
+      <LanguageBadge language={data.language} compact />
+    </div>
+
+    <a class='post-link' href={`/blog/${id}`} data-astro-prefetch>
+      <span>
+        {data.draft && <span class='draft'>(Draft) </span>}
+        {data.title}
+      </span>
+      <svg aria-hidden='true' viewBox='0 0 24 24'>
+        <path d='M5 12h14M13 6l6 6-6 6'></path>
+      </svg>
+    </a>
+
+    <p>{data.description}</p>
+
+    {
+      !!data.tags.length && (
+        <ul class='tag-list' aria-label={`Tags for ${data.title}`}>
+          {data.tags.map((tag) => (
+            <li>
+              <a href={`/tags/${tag}`}>#{tag}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </article>
+</li>
+
+<style>
+  .post-card {
+    list-style: none;
+  }
+
+  article {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid hsl(var(--border));
+    padding: 1.35rem 0.2rem 1.6rem;
+  }
+
+  article::before {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 0;
+    height: 1px;
+    background: hsl(var(--foreground));
+    content: '';
+    transition: width 280ms ease;
+  }
+
+  article:focus-within::before,
+  article:hover::before {
+    width: 100%;
+  }
+
+  .post-meta,
+  .read-time {
+    display: flex;
+    align-items: center;
+  }
+
+  .post-meta {
+    min-height: 1.65rem;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+
+  .read-time {
+    gap: 0.25rem;
+  }
+
+  .post-link {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.7rem;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .post-link svg {
+    width: 1.15rem;
+    flex: none;
+    margin-top: 0.2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+    transform: translateX(-0.35rem);
+    opacity: 0;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .post-link:focus-visible {
+    border-radius: 0.2rem;
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 4px;
+  }
+
+  article:focus-within .post-link svg,
+  article:hover .post-link svg {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .draft {
+    color: hsl(var(--destructive));
+  }
+
+  article > p {
+    max-width: 66ch;
+    margin: 0.55rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.38rem 0.75rem;
+    margin: 0.85rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tag-list a {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+
+  .tag-list a:hover,
+  .tag-list a:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    article::before,
+    .post-link svg {
+      transition: none;
+    }
+  }
+</style>

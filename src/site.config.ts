@@ -51,10 +51,10 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: 'Blog', link: '/blog' },
       { title: 'Notes', link: '/notes' },
-      { title: 'Now', link: '/now' },
       { title: 'Projects', link: '/projects' },
-      { title: 'Links', link: '/links' },
-      { title: 'About', link: '/about' }
+      { title: 'Lab', link: '/lab' },
+      { title: 'About', link: '/about' },
+      { title: 'Contact', link: '/contact' }
     ]
   },
 
@@ -64,12 +64,6 @@ export const theme: ThemeUserConfig = {
     year: `© ${new Date().getFullYear()}`,
     // year: `© 2019 - ${new Date().getFullYear()}`,
     links: [
-      // Registration link
-      {
-        title: 'GitHub',
-        link: 'https://github.com/lora-sys',
-        style: 'text-sm' // Uno/TW CSS class
-      },
       // Privacy Policy link
       {
         title: 'Site Policy',
@@ -100,6 +94,14 @@ export const theme: ThemeUserConfig = {
     // imageCaption: true
   }
 }
+
+/** Secondary destinations stay discoverable without crowding the primary navigation. */
+export const secondaryNavigation = [
+  { title: 'Now', link: '/now' },
+  { title: 'Talks', link: '/talks' },
+  { title: 'Links', link: '/links' },
+  { title: 'Archives', link: '/archives' }
+] as const
 
 export const integ: IntegrationUserConfig = {
   // [Links]

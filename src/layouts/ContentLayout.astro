@@ -11,30 +11,43 @@ interface Props {
   highlightColor?: string
   back?: string
   lang?: string
+  showSidebar?: boolean
 }
 
-const { meta, highlightColor, back = '/', lang, ...props } = Astro.props
+const {
+  meta,
+  highlightColor,
+  back = '/',
+  lang,
+  showSidebar = Astro.slots.has('sidebar'),
+  ...props
+} = Astro.props
 ---
 
 <PageLayout {meta} {highlightColor} {lang} {...props}>
   <Button title='Back' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
-    <aside
-      class='animate top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
-      style='height:calc(100vh - 7rem);'
-      id='sidebar'
-      aria-hidden='true'
-      tabindex='-1'
-    >
-      <slot name='sidebar' />
-    </aside>
-    <div
-      id='sidebar-shade'
-      class='fixed top-0 start-0 w-full h-full'
-      style='display:none;background-color:#00000091;z-index:31'
-    >
-    </div>
+    {
+      showSidebar && (
+        <Fragment>
+          <aside
+            class='animate top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
+            style='height:calc(100vh - 7rem);'
+            id='sidebar'
+            aria-hidden='true'
+            tabindex='-1'
+          >
+            <slot name='sidebar' />
+          </aside>
+          <div
+            id='sidebar-shade'
+            class='fixed top-0 start-0 w-full h-full'
+            style='display:none;background-color:#00000091;z-index:31'
+          />
+        </Fragment>
+      )
+    }
 
     <article class='min-w-0 grow'>
       {/* Content header */}
@@ -66,16 +79,20 @@ const { meta, highlightColor, back = '/', lang, ...props } = Astro.props
   </div>
 
   <BackToTop header='content-header' content='content'>
-    <button
-      slot='other-icons'
-      aria-label='Toggle sidebar'
-      class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
-      id='sidebar-btn'
-      aria-expanded='false'
-      aria-controls='sidebar'
-    >
-      <Icon name='list' />
-    </button>
+    {
+      showSidebar && (
+        <button
+          slot='other-icons'
+          aria-label='Toggle sidebar'
+          class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
+          id='sidebar-btn'
+          aria-expanded='false'
+          aria-controls='sidebar'
+        >
+          <Icon name='list' />
+        </button>
+      )
+    }
   </BackToTop>
 </PageLayout>
 
@@ -95,16 +112,16 @@ const { meta, highlightColor, back = '/', lang, ...props } = Astro.props
     if (sidebar && sidebar.classList.contains('show')) {
       sidebar.classList.remove('show')
       sidebarShade.style.display = 'none'
-      sidebar.setAttribute('aria-hidden','true')
-      ;(sidebar as HTMLElement).inert=true
-      sidebarButton?.setAttribute('aria-expanded','false')
+      sidebar.setAttribute('aria-hidden', 'true')
+      ;(sidebar as HTMLElement).inert = true
+      sidebarButton?.setAttribute('aria-expanded', 'false')
       ;(sidebarButton as HTMLElement)?.focus()
     } else if (sidebar) {
       sidebar.classList.add('show')
       sidebarShade.style.display = 'block'
-      sidebar.setAttribute('aria-hidden','false')
-      ;(sidebar as HTMLElement).inert=false
-      sidebarButton?.setAttribute('aria-expanded','true')
+      sidebar.setAttribute('aria-hidden', 'false')
+      ;(sidebar as HTMLElement).inert = false
+      sidebarButton?.setAttribute('aria-expanded', 'true')
       ;(sidebar.querySelector('a,button,[tabindex]') as HTMLElement)?.focus()
     }
   }
@@ -112,8 +129,14 @@ const { meta, highlightColor, back = '/', lang, ...props } = Astro.props
   sidebarButton?.addEventListener('click', () => {
     toggleSidebar()
   })
-  if(sidebar) { const mobile=matchMedia('(max-width:769px)').matches; (sidebar as HTMLElement).inert=mobile; sidebar.setAttribute('aria-hidden',mobile.toString()) }
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&sidebar?.classList.contains('show'))toggleSidebar()})
+  if (sidebar) {
+    const mobile = matchMedia('(max-width:769px)').matches
+    ;(sidebar as HTMLElement).inert = mobile
+    sidebar.setAttribute('aria-hidden', mobile.toString())
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && sidebar?.classList.contains('show')) toggleSidebar()
+  })
 </script>
 <style>
   @media (min-width: 769px) {

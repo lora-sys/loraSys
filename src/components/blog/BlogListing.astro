@@ -1,0 +1,323 @@
+---
+import type { Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+import { Paginator } from 'astro-pure/components/pages'
+import { Button, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+
+import BlogPostCard from './BlogPostCard.astro'
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+  uniqueTags: string[]
+  collectionsCount: number
+  activeLanguage?: 'zh-CN' | 'en-US'
+}
+
+const { page, uniqueTags, collectionsCount, activeLanguage } = Astro.props
+const languageTitle =
+  activeLanguage === 'zh-CN'
+    ? '中文文章'
+    : activeLanguage === 'en-US'
+      ? 'English writing'
+      : 'All writing'
+const meta = {
+  description: activeLanguage
+    ? `${languageTitle} from Lora on agents, engineering and products.`
+    : 'Writing from Lora on AI agents, engineering, open source and products.',
+  title: activeLanguage ? `Blog · ${languageTitle}` : 'Blog'
+}
+const paginationProps = {
+  ...(page.url.prev && { prevUrl: { text: '← Previous Posts', url: page.url.prev } }),
+  ...(page.url.next && { nextUrl: { text: 'Next Posts →', url: page.url.next } })
+}
+const languageFilters = [
+  { title: 'All', href: '/blog', active: !activeLanguage },
+  {
+    title: '中文',
+    href: '/blog/language/zh-CN',
+    active: activeLanguage === 'zh-CN',
+    lang: 'zh-CN'
+  },
+  {
+    title: 'English',
+    href: '/blog/language/en-US',
+    active: activeLanguage === 'en-US',
+    lang: 'en-US'
+  }
+]
+---
+
+<PageLayout {meta} lang={activeLanguage}>
+  <Button title='Back' href='/' variant='back' />
+  <main class='blog-shell mt-6 lg:mt-10'>
+    <header id='content-header' class='animate editorial-header'>
+      <div>
+        <p class='eyebrow'>Writing / 写作</p>
+        <h1>Blog</h1>
+        <p class='intro'>关于 AI Agent、工程系统、开源实践与产品构建的长文记录。</p>
+      </div>
+      <span class='edition' aria-label={`${collectionsCount} posts in this view`}>
+        {String(collectionsCount).padStart(2, '0')}<small> posts</small>
+      </span>
+    </header>
+
+    <nav class='language-filter animate' aria-label='Filter posts by language'>
+      {
+        languageFilters.map(({ title, href, active, lang }) => (
+          <a href={href} lang={lang} aria-current={active ? 'page' : undefined}>
+            {title}
+          </a>
+        ))
+      }
+    </nav>
+
+    {
+      page.data.length === 0 ? (
+        <p class='empty-state'>No posts in this language yet.</p>
+      ) : (
+        <div class='content-grid'>
+          <section aria-label={`${languageTitle} post list`} class='animate' id='content'>
+            <div class='list-heading'>
+              <span>
+                Page {page.currentPage} · Showing {page.data.length} of {collectionsCount}
+              </span>
+              <a href='/archives' data-astro-prefetch>
+                Browse archives →
+              </a>
+            </div>
+            <ul class='post-list'>
+              {page.data.map((post) => (
+                <BlogPostCard {post} />
+              ))}
+            </ul>
+            <Paginator {...paginationProps} />
+          </section>
+
+          {!!uniqueTags.length && (
+            <aside class='animate tag-index' aria-labelledby='tag-index-title'>
+              <h2 id='tag-index-title'>
+                <Icon name='tag-2' /> Topics
+              </h2>
+              <ul>
+                {uniqueTags.slice(0, 50).map((tag) => (
+                  <li>
+                    <a href={`/tags/${tag}`}>{tag}</a>
+                  </li>
+                ))}
+              </ul>
+              <a class='all-tags' href='/tags' data-astro-prefetch>
+                All topics →
+              </a>
+            </aside>
+          )}
+        </div>
+      )
+    }
+  </main>
+</PageLayout>
+
+<style>
+  .editorial-header {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+    padding-block: 1rem 2rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .eyebrow {
+    margin: 0 0 0.55rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 7vw, 5.2rem);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.92;
+  }
+
+  .intro {
+    max-width: 42rem;
+    margin: 1.15rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  .edition {
+    display: flex;
+    align-items: baseline;
+    color: hsl(var(--foreground));
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.06em;
+  }
+
+  .edition small {
+    margin-left: 0.35rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .language-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-block: 1.25rem 2.8rem;
+  }
+
+  .language-filter a {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.42rem 0.85rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.74rem;
+    text-decoration: none;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease,
+      background 160ms ease;
+  }
+
+  .language-filter a:hover,
+  .language-filter a:focus-visible,
+  .language-filter a[aria-current='page'] {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .language-filter a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(9rem, 13rem);
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .list-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+
+  .list-heading a,
+  .all-tags {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+
+  .list-heading a:hover,
+  .all-tags:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  .post-list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .tag-index {
+    position: sticky;
+    top: 7rem;
+    align-self: start;
+  }
+
+  .tag-index h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .tag-index h2 :global(svg) {
+    width: 1rem;
+  }
+
+  .tag-index ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tag-index li a {
+    display: block;
+    border-bottom: 1px solid transparent;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+
+  .tag-index li a:hover,
+  .tag-index li a:focus-visible {
+    border-color: currentColor;
+    color: hsl(var(--foreground));
+  }
+
+  .all-tags {
+    display: inline-block;
+    margin-top: 1.2rem;
+    font-size: 0.72rem;
+  }
+
+  .empty-state {
+    border-top: 1px solid hsl(var(--border));
+    padding-block: 2rem;
+    color: hsl(var(--muted-foreground));
+  }
+
+  @media (max-width: 720px) {
+    .editorial-header {
+      align-items: start;
+    }
+
+    .edition {
+      font-size: 1.5rem;
+    }
+
+    .edition small {
+      display: none;
+    }
+
+    .content-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tag-index {
+      position: static;
+      order: -1;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .language-filter a {
+      transition: none;
+    }
+  }
+</style>

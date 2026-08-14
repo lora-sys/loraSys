@@ -1,0 +1,172 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+import { FormattedDate } from 'astro-pure/user'
+
+import LanguageBadge from './LanguageBadge.astro'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+  posts: CollectionEntry<'blog'>[]
+}
+
+const { post, posts } = Astro.props
+const currentTags = new Set(post.data.tags)
+const related = posts
+  .filter((candidate) => candidate.id !== post.id)
+  .map((candidate) => {
+    const sharedTags = candidate.data.tags.filter((tag) => currentTags.has(tag))
+    const sameLanguage = candidate.data.language === post.data.language
+    return {
+      candidate,
+      sharedTags,
+      score: sharedTags.length * 3 + (sameLanguage ? 4 : 0)
+    }
+  })
+  .filter(({ sharedTags }) => sharedTags.length > 0)
+  .sort(
+    (a, b) =>
+      b.score - a.score ||
+      b.candidate.data.publishDate.valueOf() - a.candidate.data.publishDate.valueOf()
+  )
+  .slice(0, 3)
+---
+
+{
+  !!related.length && (
+    <section class='related-reading not-prose' aria-labelledby='related-reading-title'>
+      <header>
+        <p>Continue exploring</p>
+        <h2 id='related-reading-title'>Related reading</h2>
+      </header>
+      <ul>
+        {related.map(({ candidate, sharedTags }) => (
+          <li>
+            <a href={`/blog/${candidate.id}`}>
+              <div class='meta'>
+                <FormattedDate date={candidate.data.updatedDate ?? candidate.data.publishDate} />
+                <LanguageBadge language={candidate.data.language} compact />
+              </div>
+              <h3>{candidate.data.title}</h3>
+              <p>{candidate.data.description}</p>
+              <span class='reason'>Shared: {sharedTags.slice(0, 2).join(' / ')}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+<style>
+  .related-reading {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  header p {
+    margin: 0 0 0.3rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 0;
+    color: hsl(var(--foreground));
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    border-left: 1px solid hsl(var(--border));
+  }
+
+  li:last-child {
+    border-right: 1px solid hsl(var(--border));
+  }
+
+  a {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 1rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: background 180ms ease;
+  }
+
+  a:hover,
+  a:focus-visible {
+    background: hsl(var(--muted) / 0.65);
+  }
+
+  a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: -2px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+
+  h3 {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+    font-weight: 550;
+    line-height: 1.45;
+  }
+
+  li p {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0.5rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.74rem;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .reason {
+    margin-top: auto;
+    padding-top: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.63rem;
+  }
+
+  @media (max-width: 700px) {
+    ul {
+      grid-template-columns: 1fr;
+    }
+
+    li,
+    li:last-child {
+      border-right: 0;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a {
+      transition: none;
+    }
+  }
+</style>

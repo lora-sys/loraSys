@@ -1,0 +1,45 @@
+---
+interface Props {
+  language?: string
+  compact?: boolean
+}
+
+const { language = 'zh-CN', compact = false } = Astro.props
+const isEnglish = language.toLowerCase().startsWith('en')
+const label = isEnglish ? 'English' : '中文'
+---
+
+<span
+  class:list={['language-badge', { compact }]}
+  lang={isEnglish ? 'en-US' : 'zh-CN'}
+  title={`Content language: ${language}`}
+  aria-label={`Content language: ${label}`}
+>
+  <span aria-hidden='true'>{isEnglish ? 'EN' : '中文'}</span>
+</span>
+
+<style>
+  .language-badge {
+    display: inline-flex;
+    min-height: 1.65rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--muted) / 0.58);
+    padding-inline: 0.58rem;
+    color: hsl(var(--foreground));
+    font-size: 0.66rem;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .language-badge.compact {
+    min-height: 1.4rem;
+    padding-inline: 0.45rem;
+    font-size: 0.6rem;
+  }
+</style>

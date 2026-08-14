@@ -5,10 +5,13 @@ import type { CollectionEntry } from 'astro:content'
 // Plugin styles
 import 'katex/dist/katex.min.css'
 
+import config from 'virtual:config'
+
 import { MediumZoom } from 'astro-pure/advanced'
 import { Copyright, Hero, TOC } from 'astro-pure/components/pages'
-import config from 'virtual:config'
 import PageLayout from '@/layouts/ContentLayout.astro'
+import LanguageBadge from '@/components/blog/LanguageBadge.astro'
+import RelatedReading from '@/components/blog/RelatedReading.astro'
 import { Comment, PageInfo } from '@/components/waline'
 
 interface Props {
@@ -54,14 +57,19 @@ const blogBase = '/blog/'
   highlightColor={primaryColor}
   back='/blog'
   lang={data.language}
+  showSidebar={!!headings.length}
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 
   <Hero {data} {remarkPluginFrontmatter} slot='header'>
     <Fragment slot='description'>
-      {!isDraft && enableComment && config.integ.waline.enable && (
-        <PageInfo comment class='mt-1' />
-      )}
+      <div class='mt-3 flex items-center gap-2 not-italic'>
+        <LanguageBadge language={data.language} />
+        <span class='text-xs text-muted-foreground'>
+          {data.language === 'en-US' ? 'Article in English' : '中文长文'}
+        </span>
+      </div>
+      {!isDraft && enableComment && config.integ.waline.enable && <PageInfo comment class='mt-1' />}
     </Fragment>
   </Hero>
 
@@ -70,14 +78,38 @@ const blogBase = '/blog/'
   <Fragment slot='bottom'>
     {/* Copyright */}
     <Copyright {data} />
-    <nav aria-label='Adjacent articles' class='mt-3 flex gap-3 max-sm:flex-col sm:mt-6 sm:justify-between'>
-      {previousPost ? <a class='rounded-xl px-4 py-2 no-underline transition-colors hover:bg-muted' href={`${blogBase}${previousPost.id}`}>← {previousPost.data.title}</a> : <span />}
-      {nextPost && <a class='rounded-xl px-4 py-2 text-right no-underline transition-colors hover:bg-muted' href={`${blogBase}${nextPost.id}`}>{nextPost.data.title} →</a>}
+    <RelatedReading post={Astro.props.post} {posts} />
+    <nav
+      aria-label='Adjacent articles'
+      class='mt-3 flex gap-3 max-sm:flex-col sm:mt-6 sm:justify-between'
+    >
+      {
+        previousPost ? (
+          <a
+            class='rounded-xl px-4 py-2 no-underline transition-colors hover:bg-muted'
+            href={`${blogBase}${previousPost.id}`}
+          >
+            ← {previousPost.data.title}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        nextPost && (
+          <a
+            class='rounded-xl px-4 py-2 text-right no-underline transition-colors hover:bg-muted'
+            href={`${blogBase}${nextPost.id}`}
+          >
+            {nextPost.data.title} →
+          </a>
+        )
+      }
     </nav>
-    { /* Comment */
-    !isDraft && enableComment && config.integ.waline.enable && (
-      <Comment class='mt-3 sm:mt-6' />
-    )}
+    {
+      /* Comment */
+      !isDraft && enableComment && config.integ.waline.enable && <Comment class='mt-3 sm:mt-6' />
+    }
   </Fragment>
 
   <slot name='bottom-sidebar' slot='bottom-sidebar' />
@@ -109,7 +141,9 @@ const blogBase = '/blog/'
       // text live in the same outer container and are not Mermaid syntax.
       const lines = sourceNode?.querySelectorAll<HTMLElement>('.line')
       const source = lines?.length
-        ? Array.from(lines, (line) => line.textContent ?? '').join('\n').trim()
+        ? Array.from(lines, (line) => line.textContent ?? '')
+            .join('\n')
+            .trim()
         : sourceNode?.textContent?.trim()
       if (!source) continue
 
@@ -128,7 +162,9 @@ const blogBase = '/blog/'
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => void renderMermaidDiagrams(), { once: true })
+    document.addEventListener('DOMContentLoaded', () => void renderMermaidDiagrams(), {
+      once: true
+    })
   } else {
     void renderMermaidDiagrams()
   }

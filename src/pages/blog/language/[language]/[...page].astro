@@ -1,0 +1,38 @@
+---
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
+import BlogListing from '@/components/blog/BlogListing.astro'
+import config from '@/site-config'
+
+export const prerender = true
+
+type SupportedLanguage = 'zh-CN' | 'en-US'
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const collections = sortMDByDate(await getBlogCollection())
+  const supportedLanguages = ['zh-CN', 'en-US'] as const
+
+  return supportedLanguages.flatMap((language) => {
+    const filtered = collections.filter((post) => post.data.language === language)
+    const uniqueTags = getUniqueTagsWithCount(filtered).map(([tag]) => tag)
+    return paginate(filtered, {
+      pageSize: config.content.blogPageSize,
+      params: { language },
+      props: { activeLanguage: language, uniqueTags, collectionsCount: filtered.length }
+    })
+  })
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+  uniqueTags: string[]
+  collectionsCount: number
+  activeLanguage: SupportedLanguage
+}
+
+const { page, uniqueTags, collectionsCount, activeLanguage } = Astro.props
+---
+
+<BlogListing {page} {uniqueTags} {collectionsCount} {activeLanguage} />

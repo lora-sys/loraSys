@@ -1,11 +1,343 @@
 ---
 import PageLayout from '@/layouts/CommonPage.astro'
-const notes=[
- {title:'多智能体系统的涌现行为',date:'2025-12',summary:'当多个 LLM 实例协作解决同一任务时，简单规则会产生复杂群体行为。记录 swarm intelligence 在工程系统中的潜在应用。',tags:['AI Agents','Research']},
- {title:'Monad 并行 EVM 性能基准',date:'2025-11',summary:'测试 Monad 的并行交易执行性能。相较以太坊 L1，关键提升与瓶颈都集中在状态依赖分析。',tags:['Web3','Monad','Benchmark']},
- {title:'Vercel AI SDK v3 迁移经验',date:'2025-10',summary:'useChat 重构、流式传输 API 与 tool calling 语法变化。迁移成本中等，文档仍在完善。',tags:['Frontend','AI','Vercel']},
- {title:'Rust for AI Agents：值得吗？',date:'2025-09',summary:'用 Rust 重写 agent runtime 的利弊：内存安全和高并发是优势，生态与开发速度是瓶颈。',tags:['Rust','AI Agents','Architecture']}
+import LanguageBadge from '@/components/blog/LanguageBadge.astro'
+
+const notes = [
+  {
+    title: '多智能体系统的涌现行为',
+    date: '2025-12-01',
+    dateLabel: 'Dec 2025',
+    summary:
+      '当多个 LLM 实例协作解决同一任务时，简单规则会产生复杂群体行为。记录 swarm intelligence 在工程系统中的潜在应用。',
+    tags: ['AI Agents', 'Research'],
+    related: {
+      href: '/blog/ai-engineering-harness',
+      label: '关联长文',
+      title: 'AI Engineering Harness'
+    }
+  },
+  {
+    title: 'Monad 并行 EVM 性能基准',
+    date: '2025-11-01',
+    dateLabel: 'Nov 2025',
+    summary: '测试 Monad 的并行交易执行性能。相较以太坊 L1，关键提升与瓶颈都集中在状态依赖分析。',
+    tags: ['Web3', 'Monad', 'Benchmark'],
+    related: { href: '/blog/wishlive', label: '关联构建', title: 'WishLive Multi-Agent Runtime' }
+  },
+  {
+    title: 'Vercel AI SDK v3 迁移经验',
+    date: '2025-10-01',
+    dateLabel: 'Oct 2025',
+    summary: 'useChat 重构、流式传输 API 与 tool calling 语法变化。迁移成本中等，文档仍在完善。',
+    tags: ['Frontend', 'AI', 'Vercel'],
+    related: { href: '/blog/eve-agent', label: '关联长文', title: 'Vercel Eve Agent Framework' }
+  },
+  {
+    title: 'Rust for AI Agents：值得吗？',
+    date: '2025-09-01',
+    dateLabel: 'Sep 2025',
+    summary: '用 Rust 重写 agent runtime 的利弊：内存安全和高并发是优势，生态与开发速度是瓶颈。',
+    tags: ['Rust', 'AI Agents', 'Architecture'],
+    related: {
+      href: '/blog/loop-engineering-harness',
+      label: '关联架构',
+      title: 'Loop Engineering Harness'
+    }
+  }
 ]
+
+const tags = [...new Set(notes.flatMap((note) => note.tags))]
 ---
-<PageLayout title='Notes' headings={[]} view><p>未长成文章的观察、实验记录与工程判断。</p><div class='not-prose notes'>{notes.map(note=><article><time>{note.date}</time><h2>{note.title}</h2><p>{note.summary}</p><ul>{note.tags.map(tag=><li>{tag}</li>)}</ul></article>)}</div></PageLayout>
-<style>.notes{display:grid;gap:.8rem;margin-top:2rem}.notes article{border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem 1.1rem;background:hsl(var(--card))}.notes time{color:hsl(var(--muted-foreground));font-size:.72rem}.notes h2{margin:.25rem 0;font-size:1.05rem}.notes p{margin:.3rem 0;color:hsl(var(--muted-foreground));font-size:.88rem}.notes ul{display:flex;gap:.35rem;flex-wrap:wrap;margin:.8rem 0 0;padding:0;list-style:none}.notes li{border-radius:999px;background:hsl(var(--muted));padding:.18rem .5rem;font-size:.68rem}</style>
+
+<PageLayout title='Notes' headings={[]}>
+  <div class='not-prose notes-intro'>
+    <p class='eyebrow'>Field notes / 随记</p>
+    <div class='intro-line'>
+      <p>未长成文章的观察、实验记录与工程判断。它们比 Blog 更短，但会保留问题的棱角。</p>
+      <span>{String(notes.length).padStart(2, '0')} notes</span>
+    </div>
+  </div>
+
+  <div class='not-prose note-filters' aria-label='Filter notes by topic'>
+    <button type='button' data-note-filter='all' aria-pressed='true'>All</button>
+    {
+      tags.map((tag) => (
+        <button type='button' data-note-filter={tag} aria-pressed='false'>
+          {tag}
+        </button>
+      ))
+    }
+  </div>
+  <p id='notes-filter-status' class='sr-only' aria-live='polite'></p>
+
+  <ol class='not-prose notes-grid' data-notes-list>
+    {
+      notes.map((note, index) => (
+        <li data-note data-tags={JSON.stringify(note.tags)}>
+          <article>
+            <header>
+              <span class='note-number' aria-hidden='true'>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div class='meta'>
+                <time datetime={note.date}>{note.dateLabel}</time>
+                <LanguageBadge language='zh-CN' compact />
+              </div>
+            </header>
+            <h2>{note.title}</h2>
+            <p>{note.summary}</p>
+            <footer>
+              <ul aria-label={`Tags for ${note.title}`}>
+                {note.tags.map((tag) => (
+                  <li>#{tag}</li>
+                ))}
+              </ul>
+              <a href={note.related.href}>
+                <small>{note.related.label}</small>
+                <span>{note.related.title} ↗</span>
+              </a>
+            </footer>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</PageLayout>
+
+<script>
+  const filterButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[data-note-filter]')
+  )
+  const noteCards = Array.from(document.querySelectorAll<HTMLElement>('[data-note]'))
+  const status = document.getElementById('notes-filter-status')
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.noteFilter ?? 'all'
+      let visible = 0
+
+      filterButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)))
+      noteCards.forEach((card) => {
+        const tags = JSON.parse(card.dataset.tags ?? '[]') as string[]
+        const show = selected === 'all' || tags.includes(selected)
+        card.hidden = !show
+        if (show) visible += 1
+      })
+
+      if (status) status.textContent = `${visible} notes shown for ${selected}`
+    })
+  })
+</script>
+
+<style>
+  .notes-intro {
+    margin-top: 0.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .eyebrow {
+    margin: 0 0 0.6rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  .intro-line {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  .intro-line p {
+    max-width: 48rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .intro-line span {
+    flex: none;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .note-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-block: 1.4rem 2rem;
+  }
+
+  .note-filters button {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: transparent;
+    padding: 0.36rem 0.72rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    cursor: pointer;
+    transition:
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease;
+  }
+
+  .note-filters button:hover,
+  .note-filters button:focus-visible,
+  .note-filters button[aria-pressed='true'] {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .note-filters button:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    margin: 0;
+    padding: 1px;
+    background: hsl(var(--border));
+    list-style: none;
+  }
+
+  .notes-grid > li {
+    min-width: 0;
+    background: hsl(var(--background));
+  }
+
+  .notes-grid > li[hidden] {
+    display: none;
+  }
+
+  article {
+    display: flex;
+    min-height: 21rem;
+    flex-direction: column;
+    padding: clamp(1.1rem, 3vw, 1.7rem);
+    transition: background 180ms ease;
+  }
+
+  article:hover,
+  article:focus-within {
+    background: hsl(var(--muted) / 0.48);
+  }
+
+  article > header,
+  .meta {
+    display: flex;
+    align-items: center;
+  }
+
+  article > header {
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .meta {
+    gap: 0.55rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+
+  .note-number {
+    color: hsl(var(--muted-foreground) / 0.58);
+    font-size: 2.1rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.07em;
+  }
+
+  h2 {
+    max-width: 16ch;
+    margin: 2.4rem 0 0;
+    font-size: clamp(1.2rem, 2.5vw, 1.65rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.28;
+  }
+
+  article > p {
+    margin: 0.85rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  article footer {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 2rem;
+  }
+
+  article footer ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.6rem;
+    margin: 0;
+    padding: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    list-style: none;
+  }
+
+  article footer a {
+    display: grid;
+    min-width: min(10rem, 48%);
+    gap: 0.18rem;
+    color: hsl(var(--foreground));
+    font-size: 0.72rem;
+    text-align: right;
+    text-decoration: none;
+  }
+
+  article footer a small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  article footer a:hover span,
+  article footer a:focus-visible span {
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .intro-line {
+      align-items: start;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .notes-grid {
+      grid-template-columns: 1fr;
+    }
+
+    article {
+      min-height: 19rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    article,
+    .note-filters button {
+      transition: none;
+    }
+  }
+</style>
