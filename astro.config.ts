@@ -31,7 +31,7 @@ export default defineConfig({
   base: '/loraSys',
   trailingSlash: 'never',
   // root: './my-project-directory',
-  server: { host: true },
+  server: { host: true, allowedHosts: ['.manus.computer'] },
 
   // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
