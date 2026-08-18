@@ -31,6 +31,7 @@ const maintainedCount = projects.filter((project) => project.status === 'active'
             <div><dt>Building</dt><dd>{buildingCount}</dd></div>
             <div><dt>Maintained</dt><dd>{maintainedCount}</dd></div>
           </dl>
+          <p class='story-note'>Some projects include a Story trail—follow the writing and channels behind the build.</p>
         </div>
       </div>
     </header>
@@ -109,6 +110,14 @@ const maintainedCount = projects.filter((project) => project.status === 'active'
     flex-direction: column-reverse;
     gap: 0.15rem;
     padding: 0.85rem 0.3rem 0;
+  }
+
+  .story-note {
+    max-width: 32rem;
+    margin: 1.25rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    line-height: 1.6;
   }
 
   dt {
