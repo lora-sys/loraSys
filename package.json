@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
     "build": "astro-pure check && astro check && astro build && node scripts/prefix-base.mjs && node scripts/audit-release.mjs",
+    "sync:github": "bun scripts/fetch-contributions.mjs && bun scripts/fetch-github-projects.mjs && bun scripts/fetch-external-contributions.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "check": "astro check",

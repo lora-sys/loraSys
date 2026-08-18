@@ -1,0 +1,135 @@
+---
+import contributionSnapshot from '@/data/external-contributions.json'
+
+const contributions = contributionSnapshot.contributions.slice(0, 4)
+const formatDate = (value: string | null) => {
+  if (!value) return ''
+  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(value))
+}
+const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merged' : state === 'OPEN' ? 'Open' : 'Closed')
+---
+
+<div class='external-contributions'>
+  <div class='contribution-heading'>
+    <span>Selected open-source work</span>
+    <small>Synced {formatDate(contributionSnapshot.lastUpdated)}</small>
+  </div>
+  <div class='contribution-list'>
+    {
+      contributions.map((contribution) => (
+        <article class='contribution-item'>
+          <div class='contribution-meta'>
+            <a href={contribution.repositoryUrl} target='_blank' rel='noopener noreferrer'>
+              {contribution.repository}
+            </a>
+            <span>{contribution.label}</span>
+          </div>
+          <p>{contribution.note}</p>
+          <div class='contribution-prs'>
+            {
+              contribution.pullRequests.slice(0, 2).map((pr) => (
+                <a href={pr.url} target='_blank' rel='noopener noreferrer'>
+                  <span class={`pr-state pr-${pr.mergedAt ? 'merged' : pr.state.toLowerCase()}`}>
+                    {stateLabel(pr.state, pr.mergedAt)}
+                  </span>
+                  <span>{pr.title}</span>
+                  <time datetime={pr.updatedAt}>{formatDate(pr.updatedAt)}</time>
+                </a>
+              ))
+            }
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .external-contributions {
+    display: grid;
+    gap: 1rem;
+  }
+  .contribution-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--c-text-2, #6b7280);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .contribution-heading small {
+    color: var(--c-text-3, #9ca3af);
+    font-size: 0.68rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .contribution-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .contribution-item {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+  }
+  .contribution-meta,
+  .contribution-prs a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .contribution-meta a {
+    color: inherit;
+    font-weight: 600;
+  }
+  .contribution-meta span {
+    color: var(--c-text-3, #9ca3af);
+    font-size: 0.8rem;
+  }
+  .contribution-item p {
+    margin: 0;
+    color: var(--c-text-2, #6b7280);
+    font-size: 0.9rem;
+  }
+  .contribution-prs {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .contribution-prs a {
+    min-width: 0;
+    color: inherit;
+    font-size: 0.8rem;
+  }
+  .contribution-prs a > span:nth-child(2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .contribution-prs time {
+    margin-left: auto;
+    flex: 0 0 auto;
+    color: var(--c-text-3, #9ca3af);
+    font-size: 0.72rem;
+  }
+  .pr-state {
+    flex: 0 0 auto;
+    border-radius: 999px;
+    padding: 0.15rem 0.45rem;
+    color: #fff;
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pr-merged { background: #2d8a62; }
+  .pr-open { background: #8a6a2d; }
+  .pr-closed { background: #78808a; }
+  @media (max-width: 640px) {
+    .contribution-heading { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+    .contribution-meta { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+    .contribution-prs a { align-items: flex-start; }
+    .contribution-prs time { display: none; }
+  }
+</style>

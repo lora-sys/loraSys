@@ -3,7 +3,10 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
 
-const owner = 'lora-sys'
+const sources = [
+  { owner: 'lora-sys', type: 'user' },
+  { owner: 'ACAMLab', type: 'org' }
+]
 const outputUrl = new URL('../src/data/github-projects.json', import.meta.url)
 const posterDirectory = new URL('../src/assets/projects/', import.meta.url)
 const token = process.env.GITHUB_TOKEN || readGhToken()
@@ -116,6 +119,7 @@ const headers = {
 }
 
 const stored = await readStoredSnapshot()
+const warnings = []
 
 async function readStoredSnapshot() {
   try {
@@ -131,11 +135,13 @@ async function fetchJson(url) {
   return response.json()
 }
 
-async function fetchPublicRepositories() {
+async function fetchPublicRepositories(source) {
   const repositories = []
   for (let page = 1; ; page += 1) {
+    const endpoint = source.type === 'org' ? 'orgs' : 'users'
+    const query = source.type === 'org' ? 'type=all' : 'type=owner'
     const batch = await fetchJson(
-      `https://api.github.com/users/${owner}/repos?type=owner&sort=pushed&direction=desc&per_page=100&page=${page}`
+      `https://api.github.com/${endpoint}/${source.owner}/repos?${query}&sort=pushed&direction=desc&per_page=100&page=${page}`
     )
     repositories.push(...batch)
     if (batch.length < 100) break
@@ -147,15 +153,18 @@ async function fetchLanguages(repository, fallback = {}) {
   try {
     return await fetchJson(repository.languages_url)
   } catch (error) {
-    console.warn(`Languages unavailable for ${repository.name}; keeping cache: ${error.message}`)
+    const message = `Languages unavailable for ${repository.name}; keeping cache: ${error.message}`
+    warnings.push(message)
+    console.warn(message)
     return fallback
   }
 }
 
 async function fetchReadme(repository) {
   try {
+    const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
     const response = await fetch(
-      `https://api.github.com/repos/${owner}/${encodeURIComponent(repository.name)}/readme`,
+      `https://api.github.com/repos/${repositoryOwner}/${encodeURIComponent(repository.name)}/readme`,
       { headers }
     )
     if (!response.ok) return null
@@ -213,6 +222,7 @@ function imageCandidates(markdown, repository, readmePath = 'README.md') {
 }
 
 function resolveImageUrl(source, repository, readmePath) {
+  const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
   const cleaned = source.replaceAll('&amp;', '&').replace(/^<|>$/g, '')
   if (/^https?:\/\//i.test(cleaned)) {
     return cleaned
@@ -221,7 +231,7 @@ function resolveImageUrl(source, repository, readmePath) {
   }
   const directory = path.posix.dirname(readmePath)
   const relative = path.posix.normalize(path.posix.join(directory, decodeURIComponent(cleaned)))
-  return `https://raw.githubusercontent.com/${owner}/${repository.name}/${repository.default_branch}/${relative}`
+  return `https://raw.githubusercontent.com/${repositoryOwner}/${repository.name}/${repository.default_branch}/${relative}`
 }
 
 function isBadgeOrTrackingImage(url) {
@@ -274,13 +284,14 @@ async function download(url) {
 }
 
 async function fetchOpenGraphImage(repository) {
+  const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
   const response = await fetch('https://api.github.com/graphql', {
     method: 'POST',
     headers: { ...headers, 'content-type': 'application/json' },
     body: JSON.stringify({
       query:
         'query PortfolioOpenGraph($owner: String!, $name: String!) { repository(owner: $owner, name: $name) { openGraphImageUrl } }',
-      variables: { owner, name: repository.name }
+      variables: { owner: repositoryOwner, name: repository.name }
     })
   })
   if (!response.ok) throw new Error(`GitHub GraphQL returned ${response.status}`)
@@ -397,14 +408,15 @@ async function renderRepositoryCard(repository, outputPath) {
       <text x="74" y="${titleLines.length > 1 ? 376 : 312}" fill="#b8bfca" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="27">${summarySvg}</text>
       <text x="74" y="570" fill="${accent}" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">${escapeXml(labels || 'SOURCE AVAILABLE')}</text>
       <line x1="72" y1="603" x2="1128" y2="603" stroke="#ffffff" stroke-opacity="0.12"/>
-      <text x="74" y="640" fill="#858e9d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19">github.com/lora-sys/${escapeXml(repository.name)}</text>
+      <text x="74" y="640" fill="#858e9d" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19">github.com/${escapeXml(repository.owner?.login ?? repository.owner?.name ?? repository.ownerName)}/${escapeXml(repository.name)}</text>
       <circle cx="1108" cy="630" r="10" fill="${accent}"/>
     </svg>`
   await sharp(Buffer.from(svg)).webp({ quality: 84, effort: 5 }).toFile(outputPath)
 }
 
 async function ensurePoster(repository, readme, cachedPoster) {
-  const slug = repository.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
+  const slug = `${repositoryOwner}-${repository.name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const localFile = `github-${slug}.webp`
   const outputPath = path.join(new URL(posterDirectory).pathname, localFile)
   if (
@@ -463,8 +475,11 @@ function categoriesFor(repository) {
 }
 
 function normalizedRepository(repository, languages) {
+  const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
   return {
     name: repository.name,
+    owner: repositoryOwner,
+    fullName: `${repositoryOwner}/${repository.name}`,
     description: repository.description || null,
     topics: repository.topics ?? [],
     homepage: repository.homepage || null,
@@ -479,7 +494,7 @@ function normalizedRepository(repository, languages) {
       null,
     createdAt: repository.created_at,
     pushedAt: repository.pushed_at,
-    updatedAt: repository.pushed_at ?? repository.updated_at,
+    updatedAt: repository.updated_at,
     defaultBranch: repository.default_branch,
     size: repository.size
   }
@@ -501,9 +516,11 @@ async function mapLimited(items, limit, callback) {
 
 let repositories
 try {
-  repositories = await fetchPublicRepositories()
+  repositories = (await Promise.all(sources.map((source) => fetchPublicRepositories(source)))).flat()
 } catch (error) {
-  console.warn(`GitHub inventory refresh failed; keeping stored snapshot: ${error.message}`)
+  const message = `GitHub inventory refresh failed; keeping stored snapshot: ${error.message}`
+  warnings.push(message)
+  console.warn(message)
   console.log(
     `GitHub project metadata: cached ${Object.keys(stored.projects ?? {}).length} projects from ${stored.lastUpdated ?? 'unknown date'}.`
   )
@@ -517,9 +534,13 @@ const exclusions = []
 let posterRecords = 0
 
 const enrichedRepositories = await mapLimited(repositories, 8, async (repository) => {
-  const key = repository.name.toLowerCase()
+  const nameKey = repository.name.toLowerCase()
+  const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
+  const key = `${repositoryOwner}/${repository.name}`.toLowerCase()
   const cached =
-    stored.projects?.[key] ?? stored.inventory?.find((item) => item.name.toLowerCase() === key)
+    stored.projects?.[key] ??
+    stored.projects?.[nameKey] ??
+    stored.inventory?.find((item) => item.fullName?.toLowerCase() === key || item.name.toLowerCase() === nameKey)
   const languages = await fetchLanguages(repository, cached?.languages ?? {})
   const normalized = normalizedRepository(repository, languages)
   const reason = exclusionReason(repository)
@@ -530,36 +551,39 @@ const enrichedRepositories = await mapLimited(repositories, 8, async (repository
     return null
   }
 
-  return { repository, key, cached, normalized }
+      return { repository, key, nameKey, cached, normalized }
+
 })
 
 const projectEntries = await mapLimited(enrichedRepositories.filter(Boolean), 4, async (entry) => {
-  const { repository, key, cached, normalized } = entry
+  const { repository, key, nameKey, cached, normalized } = entry
   const readme = await fetchReadme(repository)
   let poster = cached?.poster
   try {
     poster = await ensurePoster(repository, readme, poster)
     posterRecords += 1
   } catch (error) {
-    console.warn(`Poster refresh failed for ${repository.name}: ${error.message}`)
+    const message = `Poster refresh failed for ${repository.name}: ${error.message}`
+    warnings.push(message)
+    console.warn(message)
     if (!poster) throw new Error(`No cached poster for ${repository.name}`)
   }
 
-  const featuredRank = featuredRanks.get(key) ?? null
+  const featuredRank = featuredRanks.get(repository.name.toLowerCase()) ?? null
   return [
     key,
     {
       ...normalized,
       title: displayTitle(repository.name),
       summary:
-        summaryOverrides.get(key) ||
+        summaryOverrides.get(nameKey) ||
         repository.description ||
         extractReadmeSummary(readme?.text) ||
         'Repository documentation and source are available on GitHub.',
       kind: 'owned',
       status: repository.archived
         ? 'archived'
-        : buildingRepositories.has(key)
+        : buildingRepositories.has(nameKey)
           ? 'building'
           : 'active',
       categories: categoriesFor(repository),
@@ -578,10 +602,12 @@ const projects = Object.fromEntries(projectEntries)
 inventory.sort((a, b) => new Date(b.pushedAt).getTime() - new Date(a.pushedAt).getTime())
 
 const snapshot = {
+  syncVersion: 2,
   lastUpdated: new Date().toISOString(),
-  account: owner,
+  accounts: sources.map(({ owner, type }) => ({ owner, type })),
   totals: {
     publicRepositories: inventory.length,
+    sourceRepositories: sources.length,
     includedProjects: Object.keys(projects).length,
     excludedRepositories: exclusions.length,
     forks: inventory.filter((repository) => repository.fork).length
@@ -589,6 +615,7 @@ const snapshot = {
   mediaPolicy:
     'README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.',
   exclusions,
+  warnings,
   inventory,
   projects
 }

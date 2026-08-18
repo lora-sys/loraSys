@@ -1,0 +1,32 @@
+{
+  "nishuzumi/moss": {
+    "priority": 1,
+    "label": "Merged pull requests",
+    "note": "Contributed to the Monad on-chain game and agent ecosystem."
+  },
+  "portdeveloper/nad-agent": {
+    "priority": 2,
+    "label": "Agent infrastructure",
+    "note": "Contributed to an agent-oriented Monad ecosystem project."
+  },
+  "cloudwego/eino-examples": {
+    "priority": 3,
+    "label": "LLM framework examples",
+    "note": "Contributed an example to the Eino ecosystem."
+  },
+  "datawhalechina/vibe-blog": {
+    "priority": 4,
+    "label": "Documentation contribution",
+    "note": "Contributed deployment documentation to an open-source community project."
+  },
+  "public-apis/public-apis": {
+    "priority": 5,
+    "label": "Open-source contribution",
+    "note": "Contributed to a widely used public API directory."
+  },
+  "aymericzip/intlayer": {
+    "priority": 6,
+    "label": "Open-source contribution",
+    "note": "Contributed to the Intlayer developer tooling ecosystem."
+  }
+}
