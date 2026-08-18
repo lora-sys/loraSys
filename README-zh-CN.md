@@ -1,99 +1,122 @@
-# Astro Theme Pure
+<p align="center">
+  <a href="https://lora-sys.github.io/loraSys/"><img src="./assets/readme/hero.svg" width="100%" alt="loraSys：Lora 关于 AI Agent、工具、产品与实验的个人工程笔记"></a>
+</p>
 
-[English](./README.md) | 简体中文
+<p align="center">
+  <a href="./README.md">English</a> ·
+  <a href="https://lora-sys.github.io/loraSys/">在线网站</a> ·
+  <a href="https://lora-sys.github.io/loraSys/projects">项目集</a> ·
+  <a href="https://lora-sys.github.io/loraSys/blog">文章</a>
+</p>
 
-一个由 Astro 构建的，轻便简洁、快速强大的博客 & 文档主题。
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/lora-sys/loraSys/deploy.yml?branch=main&label=Pages" alt="GitHub Pages 部署状态">
+  <img src="https://img.shields.io/badge/Astro-5.17-FF5D01?logo=astro&logoColor=white" alt="Astro 5.17">
+  <img src="https://img.shields.io/badge/Bun-1.3.5-fbf0df?logo=bun&logoColor=14151a" alt="Bun 1.3.5">
+  <img src="https://img.shields.io/github/license/lora-sys/loraSys" alt="许可证">
+</p>
 
-[![GitHub deployments](https://img.shields.io/github/deployments/cworld1/astro-theme-pure/production?style=flat&logo=vercel&label=vercel)](https://astro-pure.js.org/)
-[![NPM Version](https://img.shields.io/npm/v/astro-pure?logo=npm&style=flat)](https://www.npmjs.com/package/astro-pure)
-[![GitHub Release](https://img.shields.io/github/v/release/cworld1/astro-theme-pure?include_prereleases&style=flat&label=template)](https://github.com/cworld1/astro-theme-pure/releases)
-[![GitHub License](https://img.shields.io/github/license/cworld1/astro-theme-pure?style=flat)](https://github.com/cworld1/astro-theme-pure/blob/main/LICENSE)
+`loraSys` 是 Lora 的个人工程笔记：以静态、编辑式的网站记录 AI Agent、全栈产品、开发者工具和 Web3 实验。
 
-![image](./.github/assets/header.webp)
-![image](./.github/assets/body.webp)
+这个站点坚持 **内容优先、构建期驱动**。文章与结构化项目数据一起维护，GitHub 项目元数据和贡献活动在构建前生成快照，最后输出为 GitHub Pages 上的静态网站。
 
-> [!NOTE]
-> 已知问题：Head 标签和自定义选项仍在开发中（已暴露模板用于修改）
+> Build systems that learn.
 
-## 简介
+## 建议从这里开始
 
-查看 [预览 →](https://astro-pure.js.org/)
+| 页面 | 内容 |
+| --- | --- |
+| [Projects](https://lora-sys.github.io/loraSys/projects) | 52 个自有公开仓库，包含海报、状态、技术栈、Stars、源码和线上链接。 |
+| [Blog](https://lora-sys.github.io/loraSys/blog) | 关于 Agent 基础设施、视觉证据、模型 API 和工程实验的文章。 |
+| [Lab](https://lora-sys.github.io/loraSys/lab) | 五篇项目导览，解释实际系统是怎么工作的。 |
+| [Notes](https://lora-sys.github.io/loraSys/notes) | 关于 Agent、前端系统、Web3 和研究的短笔记。 |
 
-### :fire: 特性
+## 精选项目
 
-- [x] :rocket: 快速高性能
-- [x] :star: 简单干净的设计
-- [x] :iphone: 响应式设计
-- [x] :mag: 使用 [pagefind](https://pagefind.app/) 构建的全站搜索
-- [x] :world_map: 站点地图和 RSS 订阅
-- [x] :spider_web: 友好的 SEO
-- [x] :book: 目录（table of contents）
-- [x] :framed_picture: 动态为文章生成可供三方媒体预览的分享图像
-- [x] :framed_picture: Mediumzoom 图像灯箱
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/github-glassbox-agent-harness.webp" alt="Glassbox Agent Harness 项目海报"></a>
+      <h3><a href="https://github.com/lora-sys/Glassbox-Agent-Harness">Glassbox Agent Harness</a></h3>
+      <p>面向 AI Agent 的可观测与评测实验室：把行动变成可检查的轨迹，让上下文可复现，让迭代拥有证据。</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/github-free-vision-skill.webp" alt="Free Vision Skill 项目海报"></a>
+      <h3><a href="https://github.com/lora-sys/free-vision-skill">Free Vision Skill</a></h3>
+      <p>低 token 的视觉证据编译器，把图片转换为文本模型和 Coding Agent 可以使用的紧凑证据包。</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://github.com/lora-sys/nano-vllm-interactive-guide"><img src="./src/assets/projects/github-nano-vllm-interactive-guide.webp" alt="nano-vLLM Interactive Guide 项目海报"></a>
+      <h3><a href="https://github.com/lora-sys/nano-vllm-interactive-guide">nano-vLLM Interactive Guide</a></h3>
+      <p>通过 13 个交互实验和中文教程理解 LLM 推理引擎的关键组成。</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://github.com/lora-sys/trustops"><img src="./src/assets/projects/github-trustops.webp" alt="TrustOps 项目海报"></a>
+      <h3><a href="https://github.com/lora-sys/trustops">TrustOps</a></h3>
+      <p>面向成长型 B2B SaaS 的可审计承诺层，连接政策、控制、审查与责任决策。</p>
+    </td>
+  </tr>
+</table>
 
-### :package: 组件
+## 网站是怎样构建的
 
-主题包含了许多组件，不仅可以在主题中使用，还可以在其他 Astro 项目中使用。
+<p align="center"><img src="./assets/readme/system-map.svg" width="100%" alt="Markdown 和结构化数据经过 Astro Pure 与构建期 GitHub 快照，最终发布到 GitHub Pages"></p>
 
-> 其他 Astro 项目使用需要 UnoCSS。更多详情请查阅 [Package README](https://github.com/cworld1/astro-theme-pure/blob/main/packages/pure/README.md#use-with-common-astro-project)。
+- **内容：** Markdown 文章、短笔记、个人资料、项目记录和本地媒体。
+- **组合：** Astro + [Pure 主题](https://github.com/cworld1/astro-theme-pure)。
+- **构建期快照：** 在发布前刷新 GitHub 项目、海报和贡献数据。
+- **交付：** 静态 `dist/`、Pagefind 搜索、RSS、sitemap，以及 `/loraSys` GitHub Pages 项目站。
 
-- 基础组件：`Aside`、`Tabs`、`Timeline`、`Steps`、`Spoiler`...
-- 高级组件：`GithubCard`、`LinkPreview`、`Quote`、`QRCode`...
+浏览器不依赖作品集 API 或数据库。GitHub 数据刷新失败时会继续使用上一次本地快照，保证网站仍然可以构建和发布。
 
-## :white_check_mark: Lighthouse 分数
+## 本地运行
 
-[![lighthouse-score](./.github/assets/lighthouse-score.png)](https://pagespeed.web.dev/analysis/https-cworld-top/o229zrt5o4?form_factor=mobile&hl=en)
+环境要求：[Bun 1.3.5](https://bun.sh/) 和 Git。
 
-## 文档
-
-[文档](https://astro-pure.js.org/docs) | [展示台](https://github.com/cworld1/astro-theme-pure/issues/10)
-
-## NPM 包
-
-在 NPM 上查看：[astro-theme-pure](https://www.npmjs.com/package/astro-pure)
-
-## 本地开发
-
-环境要求：
-
-- [Nodejs](https://nodejs.org/): 18.0.0+
-
-克隆存储库：
-
-```shell
-git clone https://github.com/cworld1/astro-theme-pure.git
-cd astro-theme-pure
-```
-
-有用的命令：
-
-```shell
-# Install dependencies
-bun install
-# Start the dev server
+```bash
+git clone https://github.com/lora-sys/loraSys.git
+cd loraSys
+bun install --frozen-lockfile
 bun dev
-# Build the project
-bun run build
-# Preview (after the build)
-bun preview
-# Create a new post
-bun pure new
 ```
 
-## 贡献
+常用检查：
 
-为了花更多时间编写代码，减少在空白上纠结的时间，本项目使用代码约定和样式来鼓励一致性。风格一致的代码更容易（且更不容易出错）进行审查、维护和理解。
+```bash
+bun run check       # Astro 类型和内容诊断
+bun run build       # 静态构建、base 路径和发布审计
+bun preview         # 预览生产构建
+```
 
-## 鸣谢
+## 仓库结构
 
-- [Astro Cactus](https://github.com/chrismwilliams/astro-theme-cactus)
-- [Astro Resume](https://github.com/srleom/astro-theme-resume)
-- [Starlight](https://github.com/withastro/starlight)
+```text
+src/content/              已发布文章
+src/data/                 个人资料、笔记、项目和快照
+src/pages/                blog、projects、lab、notes、now、talks、links
+src/components/           建立在 Pure 之上的个人组件
+packages/pure/             锁定版本的 Astro Theme Pure 源码
+assets/readme/             README 专用视觉资产
+.github/workflows/        GitHub Pages 部署和数据刷新
+```
 
-其他第三方参考资料在 [Docs#Contributions](https://astro-pure.js.org/docs/advanced/about) 上。感谢所有开源库。
+## 设计取舍
+
+- Pure 仍然是主要 UI 系统，个人内容只融入它的编辑式结构。
+- Projects 按证据策展，不把所有公开仓库伪装成同等重要。
+- 项目海报全部本地化为 WebP，优先使用 README 截图或 GitHub 预览图。
+- 动漫、收藏、贡献图和友链都采用静态数据配合轻量可访问交互，不引入运行时数据库。
+- 旧 Svelte/Wayfinder 已归档，不保留兼容层。
+
+## 链接
+
+- [在线网站](https://lora-sys.github.io/loraSys/)
+- [联系 Lora](https://lora-sys.github.io/loraSys/contact)
+- [RSS](https://lora-sys.github.io/loraSys/rss.xml)
+- [GitHub](https://github.com/lora-sys)
 
 ## 许可证
 
-本项目基于 Apache 2.0 许可证。
-
-[![Star History Chart](https://api.star-history.com/svg?repos=cworld1/astro-theme-pure&type=Date)](https://star-history.com/#cworld1/astro-theme-pure&Date)
+仓库和锁定的 Pure 主题基础采用 [Apache-2.0](./LICENSE)。文章、项目截图、Logo 和第三方媒体可能有单独的署名或许可证要求。
