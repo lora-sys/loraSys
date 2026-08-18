@@ -19,6 +19,7 @@ import ExternalContributions from '@/components/lora/ExternalContributions.astro
 import ShowcaseCarousel from '@/components/lora/ShowcaseCarousel.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import config from '@/site-config'
+import type { ContentFeedItem } from '@/data/content-feed'
 
 const MAX_POSTS = 5
 const allPosts = sortMDByDate(await getBlogCollection())
@@ -70,15 +71,15 @@ const heroSocials = socialLinks.filter((link) =>
 const creatorChannels = socialLinks.filter((link) =>
   ['Bilibili', '知乎', '小红书', 'YouTube'].includes(link.name)
 )
-const latestContent = [
+const latestContent: ContentFeedItem[] = [
   ...recentPosts.slice(0, 3).map((post) => ({
-    type: 'Writing' as const,
+    kind: 'Writing' as const,
     title: post.data.title,
     meta: signalDate(post.data.updatedDate ?? post.data.publishDate),
     href: `/blog/${post.id}`
   })),
   ...featuredProjects.slice(0, 2).map((project) => ({
-    type: 'Project' as const,
+    kind: 'Project' as const,
     title: project.title,
     meta: project.source,
     href: `/projects#${project.repository}`,

@@ -2,18 +2,12 @@
 import type { SocialLink } from '@/data/social'
 
 import SocialIcon from '@/components/contact/SocialIcon.astro'
-
-interface ContentItem {
-  type: 'Writing' | 'Project'
-  title: string
-  meta: string
-  href: string
-  relation?: string
-}
+import type { ContentFeedItem } from '@/data/content-feed'
+import { CONTENT_FEED_FILTERS } from '@/data/content-feed'
 
 interface Props {
   channels: SocialLink[]
-  items: ContentItem[]
+  items: ContentFeedItem[]
 }
 
 const { channels, items } = Astro.props
@@ -52,13 +46,25 @@ const { channels, items } = Astro.props
   </div>
 
   <div class='content-heading'>
-    <span class='eyebrow'>Latest Content</span>
-    <span>Selected from the site</span>
+    <div>
+      <span class='eyebrow'>Latest Content</span>
+      <span class='content-subtitle'>Selected from the site</span>
+    </div>
+    <div class='content-filters' aria-label='Content filters'>
+      {CONTENT_FEED_FILTERS.map((filter, index) => (
+        <button
+          type='button'
+          class:list={{ active: index === 0 }}
+          data-content-filter={filter}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+        >{filter}</button>
+      ))}
+    </div>
   </div>
-  <div class='content-list'>
+  <div class='content-list' data-content-list>
     {items.map((item) => (
-      <a class='content-item' href={item.href}>
-        <span class='content-type'>{item.type}</span>
+      <a class='content-item' href={item.href} data-content-kind={item.kind}>
+        <span class='content-type'>{item.kind}</span>
         <span class='content-copy'>
           <strong>{item.title}</strong>
           <span>{item.meta}{item.relation ? ` · ${item.relation}` : ''}</span>
@@ -68,6 +74,27 @@ const { channels, items } = Astro.props
     ))}
   </div>
 </div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.creator-hub').forEach((hub) => {
+    const filters = hub.querySelectorAll<HTMLButtonElement>('[data-content-filter]')
+    const items = hub.querySelectorAll<HTMLElement>('[data-content-kind]')
+
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        const selected = filter.dataset.contentFilter ?? 'All'
+        filters.forEach((button) => {
+          const active = button === filter
+          button.classList.toggle('active', active)
+          button.setAttribute('aria-pressed', String(active))
+        })
+        items.forEach((item) => {
+          item.hidden = selected !== 'All' && item.dataset.contentKind !== selected
+        })
+      })
+    })
+  })
+</script>
 
 <style>
   .creator-hub {
@@ -164,15 +191,46 @@ const { channels, items } = Astro.props
   }
   .content-heading {
     display: flex;
-    align-items: baseline;
+    align-items: end;
     justify-content: space-between;
     gap: 1rem;
     border-bottom: 1px solid hsl(var(--border));
     padding-bottom: 0.6rem;
   }
-  .content-heading > span:last-child {
+  .content-heading > div:first-child {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .content-subtitle {
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
+  }
+  .content-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.3rem;
+  }
+  .content-filters button {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.28rem 0.55rem;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.62rem;
+  }
+  .content-filters button.active,
+  .content-filters button:hover,
+  .content-filters button:focus-visible {
+    border-color: hsl(var(--foreground) / 0.45);
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    outline: none;
+  }
+  .content-item[hidden] {
+    display: none;
   }
   .content-list {
     display: grid;
@@ -232,6 +290,13 @@ const { channels, items } = Astro.props
   @media (max-width: 520px) {
     .channel-grid {
       grid-template-columns: 1fr;
+    }
+    .content-heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .content-filters {
+      justify-content: flex-start;
     }
     .content-item {
       grid-template-columns: 4.5rem minmax(0, 1fr) auto;
