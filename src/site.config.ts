@@ -7,7 +7,8 @@ export const theme: ThemeUserConfig = {
   /** Will be used in index page & copyright declaration */
   author: 'Lora',
   /** Description metadata for your website. Can be used in page metadata. */
-  description: 'AI Agent Developer & Full-stack Engineer',
+  description:
+    'AI Agent Developer & Full-stack Engineer building agent infrastructure, developer tools, full-stack products, and experiments in public.',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/loraSys/favicon/favicon-32x32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */

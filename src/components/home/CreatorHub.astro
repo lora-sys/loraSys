@@ -34,6 +34,8 @@ const { channels, items } = Astro.props
         rel='me noopener noreferrer'
         style={`--brand:${channel.brand}`}
         aria-label={`${channel.name}: ${channel.handle}`}
+        data-interaction='social_channel'
+        data-channel={channel.name}
       >
         <span class='channel-icon'><SocialIcon name={channel.icon} class='size-5' /></span>
         <span class='channel-copy'>
@@ -56,6 +58,7 @@ const { channels, items } = Astro.props
           type='button'
           class:list={{ active: index === 0 }}
           data-content-filter={filter}
+          data-interaction='content_filter'
           aria-pressed={index === 0 ? 'true' : 'false'}
         >{filter}</button>
       ))}
@@ -82,8 +85,14 @@ const { channels, items } = Astro.props
 
     filters.forEach((filter) => {
       filter.addEventListener('click', () => {
-        const selected = filter.dataset.contentFilter ?? 'All'
-        filters.forEach((button) => {
+                  const selected = filter.dataset.contentFilter ?? 'All'
+          window.dispatchEvent(
+            new CustomEvent('lora:interaction', {
+              detail: { event: 'content_filter', value: selected }
+            })
+          )
+          filters.forEach((button) => {
+
           const active = button === filter
           button.classList.toggle('active', active)
           button.setAttribute('aria-pressed', String(active))
@@ -91,6 +100,16 @@ const { channels, items } = Astro.props
         items.forEach((item) => {
           item.hidden = selected !== 'All' && item.dataset.contentKind !== selected
         })
+      })
+    })
+
+    hub.querySelectorAll<HTMLAnchorElement>('[data-interaction="social_channel"]').forEach((channel) => {
+      channel.addEventListener('click', () => {
+        window.dispatchEvent(
+          new CustomEvent('lora:interaction', {
+            detail: { event: 'social_channel', value: channel.dataset.channel }
+          })
+        )
       })
     })
   })
