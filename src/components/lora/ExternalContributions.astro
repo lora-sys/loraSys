@@ -1,5 +1,6 @@
 ---
 import contributionSnapshot from '@/data/external-contributions.json'
+import syncReport from '@/data/sync-report.json'
 
 const contributions = contributionSnapshot.contributions.slice(0, 4)
 const formatDate = (value: string | null) => {
@@ -12,7 +13,13 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
 <div class='external-contributions'>
   <div class='contribution-heading'>
     <span>Selected open-source work</span>
-    <small>Synced {formatDate(contributionSnapshot.lastUpdated)}</small>
+    <small>
+      <span class:list={['sync-status', `sync-status--${syncReport.status}`]}>
+        <i aria-hidden='true'></i>{syncReport.status === 'ok' ? 'In sync' : 'Synced with warnings'}
+      </span>
+      · {formatDate(syncReport.syncedAt ?? contributionSnapshot.lastUpdated)}
+      · {syncReport.sources.github.contributions} repos / {syncReport.sources.github.pullRequests} PRs
+    </small>
   </div>
   <div class='contribution-list'>
     {
@@ -60,11 +67,26 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
     text-transform: uppercase;
   }
   .contribution-heading small {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: var(--c-text-3, #9ca3af);
     font-size: 0.68rem;
     letter-spacing: 0;
     text-transform: none;
   }
+  .sync-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .sync-status i {
+    width: 0.38rem;
+    height: 0.38rem;
+    border-radius: 50%;
+    background: #2d8a62;
+  }
+  .sync-status--warning i { background: #b58136; }
   .contribution-list {
     display: grid;
     gap: 0.75rem;

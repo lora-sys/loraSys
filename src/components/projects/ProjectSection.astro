@@ -23,6 +23,8 @@ const maintainedRepositories = new Set(maintainedProjects.map((project) => proje
 const archiveProjects = unfeatured.filter(
   (project) => !maintainedRepositories.has(project.repository)
 )
+const sources = [...new Set(projects.map((project) => project.source))].sort()
+const sourceLabel = (source: string) => (source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys')
 const categories = [
   ...new Set(
     projects.flatMap((project) =>
@@ -43,7 +45,8 @@ const searchValue = (project: Project) =>
     project.description,
     project.categories.join(' '),
     project.technologies.join(' '),
-    project.language ?? ''
+    project.language ?? '',
+    project.source
   ]
     .join(' ')
     .toLocaleLowerCase()
@@ -88,6 +91,19 @@ const statusLabel = (status: Project['status']) =>
             categories.map((category) => (
               <button type='button' data-category-filter={category} aria-pressed='false'>
                 {category}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+      <div class='filter-group' role='group' aria-label='Filter projects by source'>
+        <span>Source</span>
+        <div>
+          <button type='button' data-source-filter='all' aria-pressed='true'>All</button>
+          {
+            sources.map((source) => (
+              <button type='button' data-source-filter={source} aria-pressed='false'>
+                {sourceLabel(source)}
               </button>
             ))
           }
@@ -182,13 +198,17 @@ const statusLabel = (status: Project['status']) =>
                 data-project-item
                 data-category={project.categories.join('|')}
                 data-status={project.status}
+                data-source={project.source}
                 data-search={searchValue(project)}
               >
                 <div class='archive-main'>
                   <span class:list={['archive-status', `archive-status--${project.status}`]}>
                     <i aria-hidden='true' /> {statusLabel(project.status)}
                   </span>
-                  <h3>{project.title}</h3>
+                  <div class='archive-title-row'>
+                    <h3>{project.title}</h3>
+                    <span class='archive-source'>{sourceLabel(project.source)}</span>
+                  </div>
                   <p>{project.description || 'No description published yet.'}</p>
                 </div>
                 <div class='archive-meta'>
@@ -233,16 +253,23 @@ const statusLabel = (status: Project['status']) =>
       ...browser.querySelectorAll<HTMLButtonElement>('[data-category-filter]')
     ]
     const statusButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-status-filter]')]
+    const sourceButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-source-filter]')]
     const reset = browser.querySelector<HTMLButtonElement>('[data-filter-reset]')
 
     const allowedCategories = new Set(
       categoryButtons.map((button) => button.dataset.categoryFilter)
     )
     const allowedStatuses = new Set(statusButtons.map((button) => button.dataset.statusFilter))
+    const allowedSources = new Set(sourceButtons.map((button) => button.dataset.sourceFilter))
     let category = 'all'
     let projectStatus = 'all'
+    let projectSource = 'all'
 
-    const setPressed = (buttons: HTMLButtonElement[], value: string, key: 'category' | 'status') =>
+    const setPressed = (
+      buttons: HTMLButtonElement[],
+      value: string,
+      key: 'category' | 'status' | 'source'
+    ) =>
       buttons.forEach((button) => {
         const selected = button.dataset[`${key}Filter`] === value
         button.setAttribute('aria-pressed', String(selected))
@@ -252,11 +279,14 @@ const statusLabel = (status: Project['status']) =>
       const params = new URLSearchParams(location.search)
       const nextCategory = params.get('category') ?? 'all'
       const nextStatus = params.get('status') ?? 'all'
+      const nextSource = params.get('source') ?? 'all'
       category = allowedCategories.has(nextCategory) ? nextCategory : 'all'
       projectStatus = allowedStatuses.has(nextStatus) ? nextStatus : 'all'
+      projectSource = allowedSources.has(nextSource) ? nextSource : 'all'
       if (search) search.value = params.get('q') ?? ''
       setPressed(categoryButtons, category, 'category')
       setPressed(statusButtons, projectStatus, 'status')
+      setPressed(sourceButtons, projectSource, 'source')
     }
 
     const writeUrl = (mode: 'push' | 'replace') => {
@@ -265,6 +295,7 @@ const statusLabel = (status: Project['status']) =>
       query ? params.set('q', query) : params.delete('q')
       category === 'all' ? params.delete('category') : params.set('category', category)
       projectStatus === 'all' ? params.delete('status') : params.set('status', projectStatus)
+      projectSource === 'all' ? params.delete('source') : params.set('source', projectSource)
       const next = `${location.pathname}${params.size ? `?${params}` : ''}${location.hash}`
       if (mode === 'push') history.pushState({}, '', next)
       else history.replaceState({}, '', next)
@@ -278,7 +309,8 @@ const statusLabel = (status: Project['status']) =>
         const matchesCategory =
           category === 'all' || (item.dataset.category ?? '').split('|').includes(category)
         const matchesStatus = projectStatus === 'all' || item.dataset.status === projectStatus
-        const show = matchesQuery && matchesCategory && matchesStatus
+        const matchesSource = projectSource === 'all' || item.dataset.source === projectSource
+        const show = matchesQuery && matchesCategory && matchesStatus && matchesSource
         item.hidden = !show
         item.style.display = show ? '' : 'none'
         if (show) visible += 1
@@ -302,9 +334,11 @@ const statusLabel = (status: Project['status']) =>
               : projectStatus === 'archived'
                 ? 'Archived'
                 : ''
+        const sourceName = projectSource === 'all' ? '' : projectSource
         const filters = [
           query && `“${search?.value.trim()}”`,
           category !== 'all' && category,
+          sourceName,
           statusName
         ]
           .filter(Boolean)
@@ -332,6 +366,14 @@ const statusLabel = (status: Project['status']) =>
         applyFilters()
       })
     )
+    sourceButtons.forEach((button) =>
+      button.addEventListener('click', () => {
+        projectSource = button.dataset.sourceFilter ?? 'all'
+        setPressed(sourceButtons, projectSource, 'source')
+        writeUrl('push')
+        applyFilters()
+      })
+    )
     search?.addEventListener('input', () => {
       writeUrl('replace')
       applyFilters()
@@ -339,9 +381,11 @@ const statusLabel = (status: Project['status']) =>
     reset?.addEventListener('click', () => {
       category = 'all'
       projectStatus = 'all'
+      projectSource = 'all'
       if (search) search.value = ''
       setPressed(categoryButtons, category, 'category')
       setPressed(statusButtons, projectStatus, 'status')
+      setPressed(sourceButtons, projectSource, 'source')
       writeUrl('push')
       applyFilters()
       search?.focus()
@@ -541,6 +585,21 @@ const statusLabel = (status: Project['status']) =>
     grid-template-columns: auto minmax(0, auto) minmax(7rem, 1fr);
     align-items: baseline;
     gap: 0.45rem 0.75rem;
+  }
+
+  .archive-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .archive-source {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.16rem 0.42rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
   }
 
   .archive-main h3 {

@@ -27,6 +27,7 @@ const statusLabel = {
   active: 'Maintained',
   archived: 'Archived'
 }[project.status]
+const sourceLabel = project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'
 const primaryCategory =
   project.categories.find((category) => !['Featured', 'Open Source'].includes(category)) ??
   'Open Source'
@@ -42,13 +43,15 @@ const filterAttributes = filterable
       'data-project-item': '',
       'data-category': project.categories.join('|'),
       'data-status': project.status,
+      'data-source': project.source,
       'data-search': [
         project.title,
         project.repository,
         project.description,
         project.categories.join(' '),
         project.technologies.join(' '),
-        project.language ?? ''
+        project.language ?? '',
+        project.source
       ]
         .join(' ')
         .toLocaleLowerCase()
@@ -73,6 +76,7 @@ const filterAttributes = filterable
   <div class='project-body'>
     <div class='project-eyebrow'>
       <span>{primaryCategory}</span>
+      <span class='project-source' title={`Source: ${project.source}`}>{sourceLabel}</span>
       <span class:list={['status', `status--${project.status}`]}>
         <i aria-hidden='true'></i>{statusLabel}
       </span>
@@ -275,6 +279,16 @@ const filterAttributes = filterable
     font-weight: 620;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+
+  .project-source {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.16rem 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: none;
   }
 
   .status {
