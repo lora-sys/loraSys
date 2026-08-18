@@ -1,16 +1,43 @@
 {
-  "lastUpdated": "2026-08-14T17:14:13.125Z",
-  "account": "lora-sys",
+  "syncVersion": 2,
+  "lastUpdated": "2026-08-18T15:08:29.971Z",
+  "accounts": [
+    {
+      "owner": "lora-sys",
+      "type": "user"
+    },
+    {
+      "owner": "ACAMLab",
+      "type": "org"
+    }
+  ],
   "totals": {
-    "publicRepositories": 127,
-    "includedProjects": 52,
-    "excludedRepositories": 75,
-    "forks": 67
+    "publicRepositories": 137,
+    "sourceRepositories": 2,
+    "includedProjects": 59,
+    "excludedRepositories": 78,
+    "forks": 69
   },
   "mediaPolicy": "README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.",
   "exclusions": [
     {
+      "name": "lora-sys",
+      "reason": "GitHub profile README; identity metadata rather than a software project."
+    },
+    {
       "name": "nad-agent",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "nanobot",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Vibe-Trading",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Radeon-hackathon-2026-07",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -22,23 +49,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "lora-sys",
-      "reason": "GitHub profile README; identity metadata rather than a software project."
-    },
-    {
       "name": "moss",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Radeon-hackathon-2026-07",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "loop-engineer-template",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "eino-examples",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -47,6 +62,10 @@
     },
     {
       "name": "nano-vllm",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "eino-examples",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -74,15 +93,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "langfuse",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "whale-whisper",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "argosbx",
+      "name": "langfuse",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -94,11 +109,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "opencode",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "cfnew",
+      "name": "argosbx",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -106,7 +117,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "PocketFlow",
+      "name": "opencode",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -118,11 +129,35 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "cfnew",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "PocketFlow",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "SubsTracker",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "sutskever-30-implementations",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "learn-toys",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
+      "name": "papers-we-love",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "jaaz",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "react-server-components",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -134,27 +169,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "learn-toys",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "astro",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "papers-we-love",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "react-server-components",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "deeplearning.ai",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "generative-ai",
+      "name": "astro",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -162,20 +181,16 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "generative-ai",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "mode-defect",
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "jaaz",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "Filehub",
-      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "generative-ai-for-beginners",
@@ -194,8 +209,16 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "Filehub",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "minnow",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "fastgithub",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "ai-town",
@@ -206,15 +229,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "fastgithub",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
       "name": "ml5-library",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "build-your-own-x",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -222,7 +237,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "build-your-own-x",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "linux-command",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -246,10 +269,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "calculator",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -258,8 +277,8 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cs50",
-      "reason": "Empty repository with no committed implementation."
+      "name": "hello-algo",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "30-Days-Of-Python",
@@ -270,23 +289,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "leetcodesolve-problem",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+      "name": "cs50",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "LeetCode-Go",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "leetcodesolve-problem",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "Getting-Started-with-Linux",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "CPlusPlusThings",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "hello-algo",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -295,6 +310,10 @@
     },
     {
       "name": "shareOI",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "CPlusPlusThings",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -308,11 +327,242 @@
     {
       "name": "HelloDjango-blog-tutorial",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Nanoagent-go",
+      "reason": "Empty repository with no committed implementation."
     }
   ],
+  "warnings": [],
   "inventory": [
     {
+      "name": "loraSys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Astro": 294166,
+        "TypeScript": 180474,
+        "XSLT": 80493,
+        "JavaScript": 55192,
+        "CSS": 6973,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-08-18T14:36:25Z",
+      "updatedAt": "2026-08-18T14:42:15Z",
+      "defaultBranch": "main",
+      "size": 118112,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "lora-sys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/lora-sys",
+      "description": "Lora Sys — personal profile README, pinned projects, contact links, and current focus.",
+      "topics": [
+        "lora-sys",
+        "portfolio",
+        "profile",
+        "readme"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/lora-sys",
+      "stars": 1,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2025-08-07T01:03:49Z",
+      "pushedAt": "2026-08-18T13:49:48Z",
+      "updatedAt": "2026-08-18T14:16:32Z",
+      "defaultBranch": "main",
+      "size": 5491,
+      "included": false,
+      "exclusionReason": "GitHub profile README; identity metadata rather than a software project."
+    },
+    {
+      "name": "nad-agent",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nad-agent",
+      "description": "100% local AI agent with a gasless self-custodial WDK wallet on Monad (QVAC + WDK)",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/nad-agent",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {
+        "JavaScript": 159940
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-07-30T14:31:57Z",
+      "pushedAt": "2026-08-18T13:24:47Z",
+      "updatedAt": "2026-08-18T13:28:13Z",
+      "defaultBranch": "main",
+      "size": 213,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "packify-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/packify-skill",
+      "description": "Turn the supplied image into one faithful, desirable, commercially believable physical collectible.",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/packify-skill",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-17T08:58:40Z",
+      "pushedAt": "2026-08-18T07:14:51Z",
+      "updatedAt": "2026-08-18T07:15:36Z",
+      "defaultBranch": "main",
+      "size": 51907,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "nanobot",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nanobot",
+      "description": "Ultra-lightweight, open-source, self-hosted personal AI agent framework in Python with WebUI, tools, memory, MCP, multi-agent workflows, automation, and chat apps",
+      "topics": [],
+      "homepage": "https://nanobot.wiki",
+      "url": "https://github.com/lora-sys/nanobot",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {
+        "Python": 9191446,
+        "TypeScript": 3492312,
+        "CSS": 21526,
+        "Shell": 20706,
+        "JavaScript": 11581,
+        "PowerShell": 11464,
+        "HTML": 6954,
+        "Dockerfile": 3275
+      },
+      "language": "Python",
+      "createdAt": "2026-08-18T01:05:30Z",
+      "pushedAt": "2026-08-17T19:21:02Z",
+      "updatedAt": "2026-08-18T01:05:30Z",
+      "defaultBranch": "main",
+      "size": 58132,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "TrandingOs",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/TrandingOs",
+      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "topics": [
+        "backtesting",
+        "finance",
+        "market-data",
+        "trading",
+        "trading-bot",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/TrandingOs",
+      "stars": 1,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 1362100,
+        "CSS": 4826,
+        "JavaScript": 1493,
+        "Dockerfile": 1105,
+        "HTML": 670
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-06-09T03:37:14Z",
+      "pushedAt": "2026-08-17T09:32:48Z",
+      "updatedAt": "2026-07-15T02:05:02Z",
+      "defaultBranch": "main",
+      "size": 20911,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "Vibe-Trading",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Vibe-Trading",
+      "description": "\"Vibe-Trading: Your Personal Trading Agent\"",
+      "topics": [],
+      "homepage": "https://vibetrading.wiki/",
+      "url": "https://github.com/lora-sys/Vibe-Trading",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {
+        "Python": 12594898,
+        "TypeScript": 1088018,
+        "HTML": 116024,
+        "JavaScript": 87862,
+        "CSS": 24541,
+        "PowerShell": 19041,
+        "Shell": 12779,
+        "Dockerfile": 5541,
+        "Jinja": 4741
+      },
+      "language": "Python",
+      "createdAt": "2026-08-18T00:46:46Z",
+      "pushedAt": "2026-08-17T09:22:40Z",
+      "updatedAt": "2026-08-18T00:46:53Z",
+      "defaultBranch": "main",
+      "size": 62880,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "nano-sglang-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-sglang-interactive-guide",
+      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 3968,
+        "Shell": 563
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-17T02:55:22Z",
+      "pushedAt": "2026-08-17T03:23:24Z",
+      "updatedAt": "2026-08-17T15:16:08Z",
+      "defaultBranch": "main",
+      "size": 96,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "MulitiModal",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MulitiModal",
       "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
       "topics": [
         "gradio",
@@ -337,7 +587,7 @@
       "language": "Python",
       "createdAt": "2026-01-01T12:56:57Z",
       "pushedAt": "2026-08-14T16:37:01Z",
-      "updatedAt": "2026-08-14T16:37:01Z",
+      "updatedAt": "2026-08-14T16:37:17Z",
       "defaultBranch": "main",
       "size": 208082,
       "included": true,
@@ -345,6 +595,8 @@
     },
     {
       "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
       "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
       "topics": [],
       "homepage": null,
@@ -356,100 +608,16 @@
       "language": null,
       "createdAt": "2026-08-14T11:35:56Z",
       "pushedAt": "2026-08-14T15:34:32Z",
-      "updatedAt": "2026-08-14T15:34:32Z",
+      "updatedAt": "2026-08-14T15:36:50Z",
       "defaultBranch": "main",
       "size": 11,
       "included": true,
       "exclusionReason": null
     },
     {
-      "name": "nad-agent",
-      "description": "100% local AI agent with a gasless self-custodial WDK wallet on Monad (QVAC + WDK)",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/nad-agent",
-      "stars": 0,
-      "fork": true,
-      "archived": false,
-      "languages": {
-        "JavaScript": 143343
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-07-30T14:31:57Z",
-      "pushedAt": "2026-08-14T13:25:23Z",
-      "updatedAt": "2026-08-14T13:25:23Z",
-      "defaultBranch": "main",
-      "size": 201,
-      "included": false,
-      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "TrandingOs",
-      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
-      "topics": [
-        "backtesting",
-        "finance",
-        "market-data",
-        "trading",
-        "trading-bot",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/TrandingOs",
-      "stars": 1,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 1362100,
-        "CSS": 4826,
-        "JavaScript": 1493,
-        "Dockerfile": 1105,
-        "HTML": 670
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-06-09T03:37:14Z",
-      "pushedAt": "2026-08-10T09:29:56Z",
-      "updatedAt": "2026-08-10T09:29:56Z",
-      "defaultBranch": "main",
-      "size": 20911,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Svelte": 398670,
-        "TypeScript": 51647,
-        "JavaScript": 33352,
-        "CSS": 11734,
-        "HTML": 3892,
-        "Shell": 2798
-      },
-      "language": "Svelte",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-10T05:51:44Z",
-      "updatedAt": "2026-08-10T05:51:44Z",
-      "defaultBranch": "main",
-      "size": 110248,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
       "name": "teaching-html-story-deck",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/teaching-html-story-deck",
       "description": "A reusable Agent Skill for producing polished standalone teaching HTML pages with content-specific SVG diagrams and advanced but restrained motion.",
       "topics": [],
       "homepage": null,
@@ -464,7 +632,7 @@
       "language": "Python",
       "createdAt": "2026-08-08T15:23:26Z",
       "pushedAt": "2026-08-08T15:29:21Z",
-      "updatedAt": "2026-08-08T15:29:21Z",
+      "updatedAt": "2026-08-08T15:29:25Z",
       "defaultBranch": "main",
       "size": 45,
       "included": true,
@@ -472,6 +640,8 @@
     },
     {
       "name": "mossguard",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mossguard",
       "description": "This is for monad hackthon playgraoud for moss onchain agent",
       "topics": [],
       "homepage": null,
@@ -488,7 +658,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-30T03:39:36Z",
       "pushedAt": "2026-08-08T08:53:08Z",
-      "updatedAt": "2026-08-08T08:53:08Z",
+      "updatedAt": "2026-08-08T08:53:12Z",
       "defaultBranch": "main",
       "size": 4122,
       "included": true,
@@ -496,6 +666,8 @@
     },
     {
       "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
       "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
       "topics": [
         "llm-inference",
@@ -505,7 +677,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 20,
+      "stars": 23,
       "fork": false,
       "archived": false,
       "languages": {
@@ -515,7 +687,7 @@
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
       "pushedAt": "2026-08-08T07:55:02Z",
-      "updatedAt": "2026-08-08T07:55:02Z",
+      "updatedAt": "2026-08-17T08:46:44Z",
       "defaultBranch": "main",
       "size": 136,
       "included": true,
@@ -523,6 +695,8 @@
     },
     {
       "name": "free-vision-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/free-vision-skill",
       "description": "A low-token visual evidence compiler for text-only coding agents. Convert images into compact Visual Evidence Packets (VEP) for DeepSeek, Codex, Claude Code, and other text-only models.",
       "topics": [
         "agent-skill",
@@ -552,7 +726,7 @@
       "language": "TypeScript",
       "createdAt": "2026-08-01T08:04:35Z",
       "pushedAt": "2026-08-07T08:02:59Z",
-      "updatedAt": "2026-08-07T08:02:59Z",
+      "updatedAt": "2026-08-13T09:50:42Z",
       "defaultBranch": "main",
       "size": 10637,
       "included": true,
@@ -560,6 +734,8 @@
     },
     {
       "name": "shape-up-project-shaping",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/shape-up-project-shaping",
       "description": "Shape Up Project Shaping — 把模糊想法塑形成值得下注、边界清楚、可验证的项目。基于 Basecamp Shape Up 方法论，适配 AI Agent 时代的项目塑形 Skill。",
       "topics": [
         "agent-skill",
@@ -584,7 +760,7 @@
       "language": "Python",
       "createdAt": "2026-08-05T18:20:00Z",
       "pushedAt": "2026-08-06T13:41:43Z",
-      "updatedAt": "2026-08-06T13:41:43Z",
+      "updatedAt": "2026-08-13T07:38:41Z",
       "defaultBranch": "main",
       "size": 1084,
       "included": true,
@@ -592,6 +768,8 @@
     },
     {
       "name": "trustops",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/trustops",
       "description": null,
       "topics": [],
       "homepage": null,
@@ -608,7 +786,7 @@
       "language": "Python",
       "createdAt": "2026-08-05T11:01:04Z",
       "pushedAt": "2026-08-06T03:22:07Z",
-      "updatedAt": "2026-08-06T03:22:07Z",
+      "updatedAt": "2026-08-12T10:36:23Z",
       "defaultBranch": "main",
       "size": 8693,
       "included": true,
@@ -616,6 +794,8 @@
     },
     {
       "name": "Radeon-hackathon-2026-07",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Radeon-hackathon-2026-07",
       "description": "Radeon hackathon on 2026-07",
       "topics": [],
       "homepage": null,
@@ -635,7 +815,7 @@
       "language": "Go",
       "createdAt": "2026-08-03T14:24:19Z",
       "pushedAt": "2026-08-03T16:59:15Z",
-      "updatedAt": "2026-08-03T16:59:15Z",
+      "updatedAt": "2026-08-05T14:58:51Z",
       "defaultBranch": "main",
       "size": 99935,
       "included": false,
@@ -643,6 +823,8 @@
     },
     {
       "name": "ai-engineering-harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ai-engineering-harness",
       "description": "AI-native software engineering harness — 18 agents, 9 workflows, one closed loop: Issue → Worktree → Plan → Build → Review → Evidence → Merge → Memory.",
       "topics": [
         "adr",
@@ -670,7 +852,7 @@
       "language": "Shell",
       "createdAt": "2026-07-11T02:31:47Z",
       "pushedAt": "2026-08-02T14:32:26Z",
-      "updatedAt": "2026-08-02T14:32:26Z",
+      "updatedAt": "2026-08-12T07:06:40Z",
       "defaultBranch": "main",
       "size": 2937,
       "included": true,
@@ -678,6 +860,8 @@
     },
     {
       "name": "qm",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/qm",
       "description": "Multiplayer agent harness for work",
       "topics": [],
       "homepage": "https://qm.ycombinator.com",
@@ -698,7 +882,7 @@
       "language": "TypeScript",
       "createdAt": "2026-08-01T15:04:02Z",
       "pushedAt": "2026-08-01T01:30:53Z",
-      "updatedAt": "2026-08-01T01:30:53Z",
+      "updatedAt": "2026-08-01T15:04:03Z",
       "defaultBranch": "main",
       "size": 5605,
       "included": false,
@@ -706,6 +890,8 @@
     },
     {
       "name": "mipland",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mipland",
       "description": "mips",
       "topics": [],
       "homepage": "https://mipland.com",
@@ -723,38 +909,16 @@
       "language": "TypeScript",
       "createdAt": "2026-07-30T14:33:57Z",
       "pushedAt": "2026-07-28T15:53:42Z",
-      "updatedAt": "2026-07-28T15:53:42Z",
+      "updatedAt": "2026-08-05T14:59:00Z",
       "defaultBranch": "master",
       "size": 1031,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "lora-sys",
-      "description": "Lora Sys — personal profile README, pinned projects, contact links, and current focus.",
-      "topics": [
-        "lora-sys",
-        "portfolio",
-        "profile",
-        "readme"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/lora-sys",
-      "stars": 1,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2025-08-07T01:03:49Z",
-      "pushedAt": "2026-07-28T11:33:41Z",
-      "updatedAt": "2026-07-28T11:33:41Z",
-      "defaultBranch": "main",
-      "size": 5484,
-      "included": false,
-      "exclusionReason": "GitHub profile README; identity metadata rather than a software project."
-    },
-    {
       "name": "moss",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/moss",
       "description": null,
       "topics": [],
       "homepage": null,
@@ -770,7 +934,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-14T12:33:40Z",
       "pushedAt": "2026-07-20T13:32:08Z",
-      "updatedAt": "2026-07-20T13:32:08Z",
+      "updatedAt": "2026-08-05T14:52:39Z",
       "defaultBranch": "main",
       "size": 359,
       "included": false,
@@ -778,6 +942,8 @@
     },
     {
       "name": "second-brain",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/second-brain",
       "description": "Personal second-brain dashboard — Obsidian vault sync, knowledge graph, daily notes, and task tracking in one local-first UI.",
       "topics": [
         "dashboard",
@@ -802,7 +968,7 @@
       "language": "JavaScript",
       "createdAt": "2026-07-11T05:37:27Z",
       "pushedAt": "2026-07-16T15:58:04Z",
-      "updatedAt": "2026-07-16T15:58:04Z",
+      "updatedAt": "2026-07-16T15:58:46Z",
       "defaultBranch": "main",
       "size": 36400,
       "included": true,
@@ -810,6 +976,8 @@
     },
     {
       "name": "monadmon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/monadmon",
       "description": "MonadMon — the first living creatures on Monad. On-chain creature-raising + PvP battle. Tamagotchi meets crypto.",
       "topics": [
         "blockchain",
@@ -836,7 +1004,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-11T09:17:29Z",
       "pushedAt": "2026-07-14T08:27:17Z",
-      "updatedAt": "2026-07-14T08:27:17Z",
+      "updatedAt": "2026-07-14T08:27:22Z",
       "defaultBranch": "main",
       "size": 15697,
       "included": true,
@@ -844,6 +1012,8 @@
     },
     {
       "name": "hermes-stepfun-imagegen",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hermes-stepfun-imagegen",
       "description": "StepFun image generation backend for Hermes Agent — step-image-edit-2, step-2x-large, step-1x-medium with pluggable API.",
       "topics": [
         "ai-plugin",
@@ -864,7 +1034,7 @@
       "language": "Python",
       "createdAt": "2026-07-10T02:41:03Z",
       "pushedAt": "2026-07-12T09:42:19Z",
-      "updatedAt": "2026-07-12T09:42:19Z",
+      "updatedAt": "2026-07-14T05:09:42Z",
       "defaultBranch": "main",
       "size": 14852,
       "included": true,
@@ -872,6 +1042,8 @@
     },
     {
       "name": "hermes-minimax-media",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hermes-minimax-media",
       "description": "MiniMax (海螺) image + video generation backends for Hermes Agent — image-01, Hailuo-2.3/02/S2V-01.",
       "topics": [
         "ai-art",
@@ -894,7 +1066,7 @@
       "language": "Python",
       "createdAt": "2026-07-10T09:22:37Z",
       "pushedAt": "2026-07-12T09:42:06Z",
-      "updatedAt": "2026-07-12T09:42:06Z",
+      "updatedAt": "2026-07-14T05:09:42Z",
       "defaultBranch": "main",
       "size": 8105,
       "included": true,
@@ -902,6 +1074,8 @@
     },
     {
       "name": "sysclean",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/sysclean",
       "description": "Global system cleanup and management TUI for Linux — services, Docker, Flatpak, disk usage, startup audit, all from one terminal.",
       "topics": [
         "arch-linux",
@@ -929,7 +1103,7 @@
       "language": "Shell",
       "createdAt": "2026-07-09T13:38:36Z",
       "pushedAt": "2026-07-09T15:19:41Z",
-      "updatedAt": "2026-07-09T15:19:41Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 127,
       "included": true,
@@ -937,6 +1111,8 @@
     },
     {
       "name": "skills-manager",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/skills-manager",
       "description": "Skills management dashboard for AI workflows — browse, install, version, and audit Claude/agent skills across projects.",
       "topics": [
         "ai-workflow",
@@ -958,7 +1134,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-05T06:36:15Z",
       "pushedAt": "2026-07-05T07:46:46Z",
-      "updatedAt": "2026-07-05T07:46:46Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 124,
       "included": true,
@@ -966,6 +1142,8 @@
     },
     {
       "name": "ui-aesthetic-improve",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ui-aesthetic-improve",
       "description": "UI aesthetic improvement workflow — opinionated Claude skill for taking functional UIs to portfolio-grade visual quality.",
       "topics": [
         "claude-skill",
@@ -991,7 +1169,7 @@
       "language": "TypeScript",
       "createdAt": "2026-06-25T18:42:22Z",
       "pushedAt": "2026-06-26T05:19:58Z",
-      "updatedAt": "2026-06-26T05:19:58Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 49,
       "included": true,
@@ -999,6 +1177,8 @@
     },
     {
       "name": "aicompanyos",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/aicompanyos",
       "description": "AI Company Operating System — concept for an autonomous org where agents own P&L, ship product, and serve users end-to-end.",
       "topics": [
         "agents",
@@ -1013,14 +1193,14 @@
       ],
       "homepage": null,
       "url": "https://github.com/lora-sys/aicompanyos",
-      "stars": 2,
+      "stars": 3,
       "fork": false,
       "archived": false,
       "languages": {},
       "language": null,
       "createdAt": "2026-06-15T14:01:39Z",
       "pushedAt": "2026-06-21T03:43:18Z",
-      "updatedAt": "2026-06-21T03:43:18Z",
+      "updatedAt": "2026-08-14T22:36:33Z",
       "defaultBranch": "main",
       "size": 5209,
       "included": true,
@@ -1028,6 +1208,8 @@
     },
     {
       "name": "Init-codebase",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Init-codebase",
       "description": "Init-codebase Claude skill — bootstraps any repo into a Claude-Code-ready workspace with rules, agents, and skills wired up.",
       "topics": [
         "ai-workflow",
@@ -1048,7 +1230,7 @@
       "language": "JavaScript",
       "createdAt": "2026-06-20T05:15:15Z",
       "pushedAt": "2026-06-20T05:31:55Z",
-      "updatedAt": "2026-06-20T05:31:55Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 36,
       "included": true,
@@ -1056,6 +1238,8 @@
     },
     {
       "name": "loop-engineer-template",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loop-engineer-template",
       "description": "Become top 1% AI builder",
       "topics": [
         "ai-agents",
@@ -1075,7 +1259,7 @@
       "language": "JavaScript",
       "createdAt": "2026-06-20T02:35:17Z",
       "pushedAt": "2026-06-18T13:59:12Z",
-      "updatedAt": "2026-06-18T13:59:12Z",
+      "updatedAt": "2026-08-05T14:58:53Z",
       "defaultBranch": "main",
       "size": 1218,
       "included": false,
@@ -1083,6 +1267,8 @@
     },
     {
       "name": "neetcode-submissions",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/neetcode-submissions",
       "description": "My NeetCode.io algorithm problem submissions — Python solutions with explanations, complexity, and test runs.",
       "topics": [
         "algorithms",
@@ -1103,7 +1289,7 @@
       "language": "Python",
       "createdAt": "2026-05-14T13:14:15Z",
       "pushedAt": "2026-06-18T12:36:47Z",
-      "updatedAt": "2026-06-18T12:36:47Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 11,
       "included": true,
@@ -1111,6 +1297,8 @@
     },
     {
       "name": "WishLive",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/WishLive",
       "description": "WishLive — 面向现场音乐生态的 AI Agent + Web3 协作平台。Live music AI agent + Web3 collaboration platform for artists, venues, and fans.",
       "topics": [
         "agent",
@@ -1130,7 +1318,7 @@
       "language": null,
       "createdAt": "2026-06-15T13:30:56Z",
       "pushedAt": "2026-06-15T13:30:56Z",
-      "updatedAt": "2026-06-15T13:30:56Z",
+      "updatedAt": "2026-07-14T05:09:45Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -1138,6 +1326,8 @@
     },
     {
       "name": "Hackthon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Hackthon",
       "description": "ETH Beijing hackathon entry — original submission archive with code, demo, and write-up.",
       "topics": [
         "eth-beijing",
@@ -1163,7 +1353,7 @@
       "language": "TypeScript",
       "createdAt": "2026-06-05T19:53:39Z",
       "pushedAt": "2026-06-07T04:31:01Z",
-      "updatedAt": "2026-06-07T04:31:01Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 32818,
       "included": true,
@@ -1171,6 +1361,8 @@
     },
     {
       "name": "JonLinker",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/JonLinker",
       "description": "Agent-to-agent job search — autonomous resume delivery, recruiter conversation, and follow-up across LinkedIn / email / IM.",
       "topics": [
         "agent",
@@ -1196,7 +1388,7 @@
       "language": "TypeScript",
       "createdAt": "2026-04-22T11:28:50Z",
       "pushedAt": "2026-06-03T04:22:03Z",
-      "updatedAt": "2026-06-03T04:22:03Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 178535,
       "included": true,
@@ -1204,6 +1396,8 @@
     },
     {
       "name": "lora-skills",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/lora-skills",
       "description": "Distilled Claude skills for Marvis — my personal toolbox of focused agent capabilities.",
       "topics": [
         "agents",
@@ -1220,7 +1414,7 @@
       "language": null,
       "createdAt": "2026-05-26T09:24:21Z",
       "pushedAt": "2026-05-26T14:37:06Z",
-      "updatedAt": "2026-05-26T14:37:06Z",
+      "updatedAt": "2026-07-14T05:09:45Z",
       "defaultBranch": "main",
       "size": 62,
       "included": true,
@@ -1228,6 +1422,8 @@
     },
     {
       "name": "eino-examples",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/eino-examples",
       "description": "Examples and demonstrations for using the Eino framework",
       "topics": [
         "ai-framework",
@@ -1252,14 +1448,75 @@
       "language": "Go",
       "createdAt": "2026-05-20T05:47:05Z",
       "pushedAt": "2026-05-25T08:39:29Z",
-      "updatedAt": "2026-05-25T08:39:29Z",
+      "updatedAt": "2026-08-05T14:51:07Z",
       "defaultBranch": "main",
       "size": 29352,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "NanoAgent",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/NanoAgent",
+      "description": "Custom Your Agent!!",
+      "topics": [
+        "agent",
+        "ai",
+        "python"
+      ],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/NanoAgent",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 495808,
+        "Shell": 64917,
+        "PowerShell": 24133
+      },
+      "language": "Python",
+      "createdAt": "2026-03-31T12:08:06Z",
+      "pushedAt": "2026-05-09T10:37:44Z",
+      "updatedAt": "2026-07-11T09:21:47Z",
+      "defaultBranch": "main",
+      "size": 2298,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "ResumeGenerator",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/ResumeGenerator",
+      "description": "LaTeX + KaTeX-based resume generator",
+      "topics": [
+        "katex",
+        "latex",
+        "resume",
+        "typescript"
+      ],
+      "homepage": "https://ai.studio/apps/e5acc2e6-30f6-4133-a7fb-d1ca1e738be9",
+      "url": "https://github.com/ACAMLab/ResumeGenerator",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 53363,
+        "CSS": 1002,
+        "HTML": 311
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-05-03T08:16:35Z",
+      "pushedAt": "2026-05-03T08:16:48Z",
+      "updatedAt": "2026-07-11T09:23:18Z",
+      "defaultBranch": "main",
+      "size": 69,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "RecruitDraft",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/RecruitDraft",
       "description": "RecruitDraft — 输入公司文化 + 职位描述，AI 生成 STAR 法则面试问题和 LinkedIn 职位帖。A recruiter's copilot for STAR-rule interview kits and LinkedIn job posts.",
       "topics": [
         "ai",
@@ -1282,14 +1539,45 @@
       "language": "TypeScript",
       "createdAt": "2026-05-03T07:51:30Z",
       "pushedAt": "2026-05-03T07:57:08Z",
-      "updatedAt": "2026-05-03T07:57:08Z",
+      "updatedAt": "2026-07-14T05:09:47Z",
       "defaultBranch": "main",
       "size": 501,
       "included": true,
       "exclusionReason": null
     },
     {
+      "name": "SCIDRAFT.AI",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/SCIDRAFT.AI",
+      "description": "Science-paper writing platform",
+      "topics": [
+        "science",
+        "typescript",
+        "writing"
+      ],
+      "homepage": "https://ai.studio/apps/0544f892-7d0c-468b-a806-e1660d6fc2b5",
+      "url": "https://github.com/ACAMLab/SCIDRAFT.AI",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 36579,
+        "CSS": 1762,
+        "HTML": 311
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-05-03T05:20:58Z",
+      "pushedAt": "2026-05-03T05:21:13Z",
+      "updatedAt": "2026-07-11T09:21:20Z",
+      "defaultBranch": "main",
+      "size": 74,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "MIscroservice",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MIscroservice",
       "description": "Microservice practice project — service decomposition, gRPC + REST gateways, observability, and deployment.",
       "topics": [
         "grpc",
@@ -1317,14 +1605,44 @@
       "language": "TypeScript",
       "createdAt": "2026-05-01T08:43:28Z",
       "pushedAt": "2026-05-01T12:18:21Z",
-      "updatedAt": "2026-05-01T12:18:21Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 109,
       "included": true,
       "exclusionReason": null
     },
     {
+      "name": "redis-go",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/redis-go",
+      "description": "Redis client/server implementation with RESP protocol and data persistence",
+      "topics": [
+        "database",
+        "go",
+        "redis",
+        "resp"
+      ],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/redis-go",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Go": 8662
+      },
+      "language": "Go",
+      "createdAt": "2026-04-29T14:37:41Z",
+      "pushedAt": "2026-04-29T14:38:20Z",
+      "updatedAt": "2026-07-11T09:21:34Z",
+      "defaultBranch": "main",
+      "size": 53,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "nano-vllm",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm",
       "description": "Nano vLLM",
       "topics": [],
       "homepage": null,
@@ -1338,7 +1656,7 @@
       "language": "Python",
       "createdAt": "2026-07-30T06:28:28Z",
       "pushedAt": "2026-04-26T05:10:12Z",
-      "updatedAt": "2026-04-26T05:10:12Z",
+      "updatedAt": "2026-08-05T14:54:44Z",
       "defaultBranch": "main",
       "size": 478,
       "included": false,
@@ -1346,6 +1664,8 @@
     },
     {
       "name": "research-assistant-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/research-assistant-skill",
       "description": "科研全流程 Claude skill — 文献检索、学术脉络梳理、论文写作润色、技术路线图生成。Full research workflow assistant.",
       "topics": [
         "academic-writing",
@@ -1362,7 +1682,7 @@
       "language": null,
       "createdAt": "2026-04-18T12:32:26Z",
       "pushedAt": "2026-04-18T12:42:13Z",
-      "updatedAt": "2026-04-18T12:42:13Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 254,
       "included": true,
@@ -1370,6 +1690,8 @@
     },
     {
       "name": "development-rules",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/development-rules",
       "description": "Shared development rules, conventions, and workflows for personal projects — coding standards, git, agents.",
       "topics": [
         "ai-agents",
@@ -1387,7 +1709,7 @@
       "language": null,
       "createdAt": "2026-04-18T02:40:19Z",
       "pushedAt": "2026-04-18T02:54:23Z",
-      "updatedAt": "2026-04-18T02:54:23Z",
+      "updatedAt": "2026-07-14T05:09:47Z",
       "defaultBranch": "main",
       "size": 8,
       "included": false,
@@ -1395,6 +1717,8 @@
     },
     {
       "name": "humanize-write",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/humanize-write",
       "description": "Humanize-write Claude skill — strips AI tells from generated text, returning natural, voice-preserving prose.",
       "topics": [
         "ai",
@@ -1414,14 +1738,41 @@
       "language": null,
       "createdAt": "2026-04-17T05:57:17Z",
       "pushedAt": "2026-04-17T13:21:07Z",
-      "updatedAt": "2026-04-17T13:21:07Z",
+      "updatedAt": "2026-07-14T05:09:47Z",
       "defaultBranch": "main",
       "size": 19,
       "included": true,
       "exclusionReason": null
     },
     {
+      "name": "Nanoagent-go",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/Nanoagent-go",
+      "description": "Go port of NanoAgent framework",
+      "topics": [
+        "agent",
+        "ai",
+        "go"
+      ],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/Nanoagent-go",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-04-15T08:53:37Z",
+      "pushedAt": "2026-04-16T08:39:24Z",
+      "updatedAt": "2026-07-11T09:23:25Z",
+      "defaultBranch": "main",
+      "size": 0,
+      "included": false,
+      "exclusionReason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "cloud-mail",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/cloud-mail",
       "description": "A Cloudflare-based email service  | 基于 Cloudflare 的邮箱服务  | Cloudflare Email 邮箱 Mail",
       "topics": [
         "cloudflare",
@@ -1443,7 +1794,7 @@
       "language": "JavaScript",
       "createdAt": "2026-04-27T05:41:26Z",
       "pushedAt": "2026-04-06T15:04:16Z",
-      "updatedAt": "2026-04-06T15:04:16Z",
+      "updatedAt": "2026-07-14T05:11:38Z",
       "defaultBranch": "main",
       "size": 28877,
       "included": false,
@@ -1451,6 +1802,8 @@
     },
     {
       "name": "claw-code",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/claw-code",
       "description": "Claude Code Snapshot for Research. All original source code is the property of Anthropic.",
       "topics": [
         "anthropic",
@@ -1470,7 +1823,7 @@
       "language": "TypeScript",
       "createdAt": "2026-03-31T10:47:28Z",
       "pushedAt": "2026-03-31T10:34:11Z",
-      "updatedAt": "2026-03-31T10:34:11Z",
+      "updatedAt": "2026-08-05T14:53:23Z",
       "defaultBranch": "main",
       "size": 9312,
       "included": false,
@@ -1478,6 +1831,8 @@
     },
     {
       "name": "Newtube-clone",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Newtube-clone",
       "description": "YouTube-style video clone with AI recommendations — full-stack Next.js + recommendation pipeline.",
       "topics": [
         "ai",
@@ -1502,7 +1857,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-11T00:53:20Z",
       "pushedAt": "2026-03-28T15:11:55Z",
-      "updatedAt": "2026-03-28T15:11:55Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 5192,
       "included": true,
@@ -1510,6 +1865,8 @@
     },
     {
       "name": "node-base",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/node-base",
       "description": "node-base — n8n-style AI workflow builder clone with node-graph editor and execution engine.",
       "topics": [
         "ai",
@@ -1532,14 +1889,39 @@
       "language": "TypeScript",
       "createdAt": "2026-03-18T07:44:12Z",
       "pushedAt": "2026-03-26T14:33:38Z",
-      "updatedAt": "2026-03-26T14:33:38Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 1642,
       "included": true,
       "exclusionReason": null
     },
     {
+      "name": "nanochat-studay",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/nanochat-studay",
+      "description": "This project is for learning the nanochat concept",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/nanochat-studay",
+      "stars": 4,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 13902
+      },
+      "language": "Python",
+      "createdAt": "2026-03-07T11:51:19Z",
+      "pushedAt": "2026-03-10T12:19:59Z",
+      "updatedAt": "2026-05-31T12:42:00Z",
+      "defaultBranch": "main",
+      "size": 1435,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "zchat-demo",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/zchat-demo",
       "description": "zchat-demo — modern chat UI demo built with Next.js, streaming responses, multi-model support.",
       "topics": [
         "ai-chat",
@@ -1562,7 +1944,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-12T15:56:13Z",
       "pushedAt": "2026-03-06T08:54:02Z",
-      "updatedAt": "2026-03-06T08:54:02Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 1733,
       "included": true,
@@ -1570,6 +1952,8 @@
     },
     {
       "name": "hackthon-agent",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hackthon-agent",
       "description": "Hackathon-tuned AI agent helper — optimized for time-boxed builds: scaffold fast, ship features, win.",
       "topics": [
         "ai-agent",
@@ -1591,7 +1975,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-17T07:21:58Z",
       "pushedAt": "2026-02-27T13:24:15Z",
-      "updatedAt": "2026-02-27T13:24:15Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 5889,
       "included": true,
@@ -1599,6 +1983,8 @@
     },
     {
       "name": "1",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/1",
       "description": "web",
       "topics": [
         "sandbox",
@@ -1616,7 +2002,7 @@
       "language": "HTML",
       "createdAt": "2026-02-16T07:08:07Z",
       "pushedAt": "2026-02-16T07:16:31Z",
-      "updatedAt": "2026-02-16T07:16:31Z",
+      "updatedAt": "2026-08-05T14:54:47Z",
       "defaultBranch": "main",
       "size": 183,
       "included": false,
@@ -1624,6 +2010,8 @@
     },
     {
       "name": "mianshihou-interview-website",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mianshihou-interview-website",
       "description": "Mianshihou (面试猴) — interview prep website backend with Node.js, question bank, mock interview, and progress tracking.",
       "topics": [
         "backend",
@@ -1646,7 +2034,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-24T14:32:02Z",
       "pushedAt": "2026-02-09T03:47:14Z",
-      "updatedAt": "2026-02-09T03:47:14Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 3196,
       "included": true,
@@ -1654,6 +2042,8 @@
     },
     {
       "name": "agenta",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/agenta",
       "description": "The open-source LLMOps platform: prompt playground, prompt management, LLM evaluation, and LLM observability all in one place.",
       "topics": [
         "evaluation",
@@ -1681,7 +2071,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-25T06:02:58Z",
       "pushedAt": "2026-02-09T02:10:19Z",
-      "updatedAt": "2026-02-09T02:10:19Z",
+      "updatedAt": "2026-08-05T14:52:54Z",
       "defaultBranch": "main",
       "size": 200163,
       "included": false,
@@ -1689,6 +2079,8 @@
     },
     {
       "name": "vibe-blog",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/vibe-blog",
       "description": "Vibe-Blog是一个基于Multi-Agent 架构的万字长文技术博客生成AI助手，支持深度调研、智能配图、Mermaid 图表、代码集成、专业排版的各种专业技术博客写作中所需要的能力, 真正做到了 \"输入一句话, 一键输出图文混合的万字技术长文, 轻轻松松做到日更万字长文技术博客\"，将晦涩的技术知识转化为通俗易懂的科普文章，让每个人都能轻松理解复杂技术,在 AI 时代扬帆起航.",
       "topics": [
         "blog-generator",
@@ -1714,7 +2106,7 @@
       "language": "Python",
       "createdAt": "2026-02-03T03:09:24Z",
       "pushedAt": "2026-02-04T14:25:08Z",
-      "updatedAt": "2026-02-04T14:25:08Z",
+      "updatedAt": "2026-08-05T14:51:16Z",
       "defaultBranch": "main",
       "size": 110247,
       "included": false,
@@ -1722,6 +2114,8 @@
     },
     {
       "name": "Lora-website",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Lora-website",
       "description": "Personal website — early version of lora-sys portfolio.",
       "topics": [
         "personal-site",
@@ -1742,7 +2136,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-14T16:50:35Z",
       "pushedAt": "2026-02-04T14:03:02Z",
-      "updatedAt": "2026-02-04T14:03:02Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 15430,
       "included": true,
@@ -1750,6 +2144,8 @@
     },
     {
       "name": "whale-whisper",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/whale-whisper",
       "description": null,
       "topics": [
         "audio",
@@ -1772,7 +2168,7 @@
       "language": "Vue",
       "createdAt": "2026-01-29T05:58:05Z",
       "pushedAt": "2026-01-29T11:06:36Z",
-      "updatedAt": "2026-01-29T11:06:36Z",
+      "updatedAt": "2026-08-05T14:51:10Z",
       "defaultBranch": "main",
       "size": 11551,
       "included": false,
@@ -1780,6 +2176,8 @@
     },
     {
       "name": "langfuse",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/langfuse",
       "description": "🪢 Open source LLM engineering platform: LLM Observability, metrics, evals, prompt management, playground, datasets. Integrates with OpenTelemetry, Langchain, OpenAI SDK, LiteLLM, and more. 🍊YC W23 ",
       "topics": [
         "evaluation",
@@ -1805,7 +2203,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-25T06:03:45Z",
       "pushedAt": "2026-01-24T17:42:53Z",
-      "updatedAt": "2026-01-24T17:42:53Z",
+      "updatedAt": "2026-08-05T14:51:45Z",
       "defaultBranch": "main",
       "size": 68455,
       "included": false,
@@ -1813,6 +2211,8 @@
     },
     {
       "name": "meme-Vibe-Casino",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/meme-Vibe-Casino",
       "description": "Meme Vibe Casino — vibe-coded casino game for hackathon, meme-token themed slots and mini-games.",
       "topics": [
         "casino",
@@ -1836,7 +2236,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-23T11:31:06Z",
       "pushedAt": "2026-01-24T14:14:19Z",
-      "updatedAt": "2026-01-24T14:14:19Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 2745,
       "included": true,
@@ -1844,6 +2244,8 @@
     },
     {
       "name": "demo_monad_hackthon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/demo_monad_hackthon",
       "description": "Monad hackathon demo project — quick prototype exploring Monad's parallel execution.",
       "topics": [
         "blockchain",
@@ -1867,7 +2269,7 @@
       "language": "JavaScript",
       "createdAt": "2026-01-19T08:29:32Z",
       "pushedAt": "2026-01-24T07:51:47Z",
-      "updatedAt": "2026-01-24T07:51:47Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 1005,
       "included": true,
@@ -1875,6 +2277,8 @@
     },
     {
       "name": "web3-frontend-ui-and-ux-reviewer",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/web3-frontend-ui-and-ux-reviewer",
       "description": "Web3 frontend UI/UX reviewer Claude skill — audits dApp interfaces for wallet flow, signing UX, and on-chain clarity.",
       "topics": [
         "claude-skill",
@@ -1892,7 +2296,7 @@
       "language": null,
       "createdAt": "2026-01-23T08:23:14Z",
       "pushedAt": "2026-01-23T08:24:04Z",
-      "updatedAt": "2026-01-23T08:24:04Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 13,
       "included": true,
@@ -1900,6 +2304,8 @@
     },
     {
       "name": "ui-design",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ui-design",
       "description": "ui-design Claude skill — generates component systems, color tokens, and typography scales from brief.",
       "topics": [
         "claude-skill",
@@ -1916,7 +2322,7 @@
       "language": null,
       "createdAt": "2026-01-22T15:22:01Z",
       "pushedAt": "2026-01-23T08:07:32Z",
-      "updatedAt": "2026-01-23T08:07:32Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 11,
       "included": true,
@@ -1924,6 +2330,8 @@
     },
     {
       "name": "better-auth-learn",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/better-auth-learn",
       "description": "Better-auth library learning project — auth patterns, session management, OAuth flows.",
       "topics": [
         "auth",
@@ -1945,7 +2353,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-29T04:12:05Z",
       "pushedAt": "2026-01-21T14:51:19Z",
-      "updatedAt": "2026-01-21T14:51:19Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 89,
       "included": true,
@@ -1953,6 +2361,8 @@
     },
     {
       "name": "go-project",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/go-project",
       "description": "Go learning sandbox — small projects exploring goroutines, channels, interfaces, and std lib.",
       "topics": [
         "go",
@@ -1977,7 +2387,7 @@
       "language": "Go",
       "createdAt": "2025-12-28T09:20:42Z",
       "pushedAt": "2026-01-19T14:06:35Z",
-      "updatedAt": "2026-01-19T14:06:35Z",
+      "updatedAt": "2026-07-14T05:09:50Z",
       "defaultBranch": "main",
       "size": 59,
       "included": true,
@@ -1985,6 +2395,8 @@
     },
     {
       "name": "mianshiya-next-lora",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mianshiya-next-lora",
       "description": "Mianshiya-next — interview practice platform clone (Java backend).",
       "topics": [
         "interview",
@@ -2007,7 +2419,7 @@
       "language": "Java",
       "createdAt": "2025-10-13T08:09:43Z",
       "pushedAt": "2026-01-18T12:04:00Z",
-      "updatedAt": "2026-01-18T12:04:00Z",
+      "updatedAt": "2026-07-14T05:09:50Z",
       "defaultBranch": "main",
       "size": 25768,
       "included": true,
@@ -2015,6 +2427,8 @@
     },
     {
       "name": "intlayer",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/intlayer",
       "description": "Per-component Internationalisation solution for JS application. Type-Safe. Translate with AI. Edit Visually.",
       "topics": [
         "i18n",
@@ -2041,7 +2455,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-17T08:40:10Z",
       "pushedAt": "2026-01-18T09:01:29Z",
-      "updatedAt": "2026-01-18T09:01:29Z",
+      "updatedAt": "2026-08-05T14:51:54Z",
       "defaultBranch": "main",
       "size": 498370,
       "included": false,
@@ -2049,6 +2463,8 @@
     },
     {
       "name": "argosbx",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/argosbx",
       "description": "小白自建代理神器！ArgoSBX一键无交互小钢炮脚本💣：Sing-box、Xray、Argo三内核自动搭配；支持VPS、Docker、容器多环境部署；套CDN的5大方案+套WARP的15种组合；已支持协议：AnyTLS、Any-reality、Vless-xhttp-reality-vision-enc、Vless-tcp-reality-vision、Vless-xhttp-vision-enc、Vless-ws-vision-enc、Shadowsocks-2022、Hysteria2、Tuic、Socks5、Vmess-ws、Argo临时/固定隧道",
       "topics": [
         "proxy",
@@ -2069,7 +2485,7 @@
       "language": "Shell",
       "createdAt": "2026-01-18T06:29:09Z",
       "pushedAt": "2026-01-18T06:11:55Z",
-      "updatedAt": "2026-01-18T06:11:55Z",
+      "updatedAt": "2026-08-05T14:53:08Z",
       "defaultBranch": "main",
       "size": 775,
       "included": false,
@@ -2077,6 +2493,8 @@
     },
     {
       "name": "GenerativeAIExamples",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/GenerativeAIExamples",
       "description": "Generative AI reference workflows optimized for accelerated infrastructure and microservice architecture.",
       "topics": [
         "examples",
@@ -2106,7 +2524,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2026-01-18T16:13:11Z",
       "pushedAt": "2026-01-16T22:56:08Z",
-      "updatedAt": "2026-01-16T22:56:08Z",
+      "updatedAt": "2026-08-05T14:52:06Z",
       "defaultBranch": "main",
       "size": 124287,
       "included": false,
@@ -2114,6 +2532,8 @@
     },
     {
       "name": "public-apis",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/public-apis",
       "description": "A collective list of free APIs",
       "topics": [
         "apis",
@@ -2133,7 +2553,7 @@
       "language": "Python",
       "createdAt": "2026-01-14T17:19:25Z",
       "pushedAt": "2026-01-14T18:20:55Z",
-      "updatedAt": "2026-01-14T18:20:55Z",
+      "updatedAt": "2026-08-05T14:51:32Z",
       "defaultBranch": "master",
       "size": 4957,
       "included": false,
@@ -2141,6 +2561,8 @@
     },
     {
       "name": "Daily-Rss",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Daily-Rss",
       "description": "Daily RSS — minimal daily RSS reader with smart summarization and topic clustering.",
       "topics": [
         "ai-summary",
@@ -2162,7 +2584,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-27T07:57:29Z",
       "pushedAt": "2026-01-10T12:43:23Z",
-      "updatedAt": "2026-01-10T12:43:23Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 186,
       "included": true,
@@ -2170,6 +2592,8 @@
     },
     {
       "name": "opencode",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/opencode",
       "description": "The open source coding agent.",
       "topics": [
         "ai-coding",
@@ -2197,7 +2621,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-25T08:55:12Z",
       "pushedAt": "2025-12-28T12:28:56Z",
-      "updatedAt": "2025-12-28T12:28:56Z",
+      "updatedAt": "2026-08-05T14:51:41Z",
       "defaultBranch": "dev",
       "size": 113068,
       "included": false,
@@ -2205,6 +2629,8 @@
     },
     {
       "name": "cfnew",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/cfnew",
       "description": null,
       "topics": [
         "cloudflare",
@@ -2220,7 +2646,7 @@
       "language": null,
       "createdAt": "2026-01-02T12:34:17Z",
       "pushedAt": "2025-12-27T16:26:04Z",
-      "updatedAt": "2025-12-27T16:26:04Z",
+      "updatedAt": "2026-08-05T14:53:20Z",
       "defaultBranch": "main",
       "size": 76339,
       "included": false,
@@ -2228,6 +2654,8 @@
     },
     {
       "name": "square-ui",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/square-ui",
       "description": "Collection of beautifully crafted open-source layouts UI built with shadcn/ui.",
       "topics": [
         "components",
@@ -2250,7 +2678,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-27T16:28:11Z",
       "pushedAt": "2025-12-25T23:47:38Z",
-      "updatedAt": "2025-12-25T23:47:38Z",
+      "updatedAt": "2026-08-05T14:51:23Z",
       "defaultBranch": "master",
       "size": 11755,
       "included": false,
@@ -2258,6 +2686,8 @@
     },
     {
       "name": "PocketFlow",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/PocketFlow",
       "description": "Pocket Flow: 100-line LLM framework. Let Agents build Agents!",
       "topics": [
         "agents",
@@ -2280,7 +2710,7 @@
       "language": "Python",
       "createdAt": "2026-01-29T14:19:21Z",
       "pushedAt": "2025-12-24T21:54:47Z",
-      "updatedAt": "2025-12-24T21:54:47Z",
+      "updatedAt": "2026-08-05T14:51:39Z",
       "defaultBranch": "main",
       "size": 49160,
       "included": false,
@@ -2288,6 +2718,8 @@
     },
     {
       "name": "ThreeJs-projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ThreeJs-projects",
       "description": "Interactive Sci-Fi Control Interface built with Three.js — WebGL experiments, shader work, scene composition.",
       "topics": [
         "3d",
@@ -2310,7 +2742,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-20T16:28:31Z",
       "pushedAt": "2025-12-23T15:23:02Z",
-      "updatedAt": "2025-12-23T15:23:02Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 91,
       "included": true,
@@ -2318,6 +2750,8 @@
     },
     {
       "name": "github-readme-stats",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/github-readme-stats",
       "description": ":zap: Dynamically generated stats for your github readmes",
       "topics": [
         "github",
@@ -2337,7 +2771,7 @@
       "language": "JavaScript",
       "createdAt": "2025-12-25T10:28:09Z",
       "pushedAt": "2025-12-22T18:03:51Z",
-      "updatedAt": "2025-12-22T18:03:51Z",
+      "updatedAt": "2026-08-05T14:52:02Z",
       "defaultBranch": "master",
       "size": 7043,
       "included": false,
@@ -2345,6 +2779,8 @@
     },
     {
       "name": "SubsTracker",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/SubsTracker",
       "description": "基于Cloudflare Workers的轻量级订阅管理系统，帮助您轻松跟踪各类订阅服务的到期时间，并通过Telegram发送及时提醒。",
       "topics": [
         "cloudflare-workers",
@@ -2363,7 +2799,7 @@
       "language": "JavaScript",
       "createdAt": "2026-01-02T05:24:45Z",
       "pushedAt": "2025-12-18T04:57:12Z",
-      "updatedAt": "2025-12-18T04:57:12Z",
+      "updatedAt": "2026-08-05T14:58:56Z",
       "defaultBranch": "master",
       "size": 192,
       "included": false,
@@ -2371,6 +2807,8 @@
     },
     {
       "name": "sutskever-30-implementations",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/sutskever-30-implementations",
       "description": "Sutskever 30 implementations inspired by https://papercode.vercel.app/",
       "topics": [
         "implementations",
@@ -2390,7 +2828,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2026-01-18T13:04:51Z",
       "pushedAt": "2025-12-10T12:48:55Z",
-      "updatedAt": "2025-12-10T12:48:55Z",
+      "updatedAt": "2026-08-05T14:51:19Z",
       "defaultBranch": "main",
       "size": 2733,
       "included": false,
@@ -2398,6 +2836,8 @@
     },
     {
       "name": "lora-bi",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/lora-bi",
       "description": "BI project — dashboards, metrics pipelines, and visualization experiments.",
       "topics": [
         "analytics",
@@ -2421,7 +2861,7 @@
       "language": "Java",
       "createdAt": "2025-11-13T10:55:01Z",
       "pushedAt": "2025-11-23T10:49:17Z",
-      "updatedAt": "2025-11-23T10:49:17Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 1347,
       "included": true,
@@ -2429,6 +2869,8 @@
     },
     {
       "name": "learn-toys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/learn-toys",
       "description": "Learning projects sandbox — small experiments across languages and frameworks.",
       "topics": [
         "experiments",
@@ -2444,7 +2886,7 @@
       "language": null,
       "createdAt": "2025-11-16T07:06:36Z",
       "pushedAt": "2025-11-16T07:06:36Z",
-      "updatedAt": "2025-11-16T07:06:36Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -2452,6 +2894,8 @@
     },
     {
       "name": "FreeDomain",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/FreeDomain",
       "description": "DigitalPlat FreeDomain: Free Domain For Everyone",
       "topics": [
         "dns",
@@ -2470,7 +2914,7 @@
       "language": "HTML",
       "createdAt": "2026-01-02T05:13:15Z",
       "pushedAt": "2025-11-12T18:13:46Z",
-      "updatedAt": "2025-11-12T18:13:46Z",
+      "updatedAt": "2026-08-05T14:59:06Z",
       "defaultBranch": "main",
       "size": 70,
       "included": false,
@@ -2478,6 +2922,8 @@
     },
     {
       "name": "jaaz",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/jaaz",
       "description": "The world's first open-source multimodal creative assistant  This is a substitute for Canva and Manus that prioritizes privacy and is usable locally.",
       "topics": [
         "ai-assistant",
@@ -2501,7 +2947,7 @@
       "language": "TypeScript",
       "createdAt": "2025-11-28T14:39:17Z",
       "pushedAt": "2025-11-10T04:51:06Z",
-      "updatedAt": "2025-11-10T04:51:06Z",
+      "updatedAt": "2026-08-05T14:51:48Z",
       "defaultBranch": "main",
       "size": 12398,
       "included": false,
@@ -2509,6 +2955,8 @@
     },
     {
       "name": "react-server-components",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/react-server-components",
       "description": null,
       "topics": [
         "nextjs",
@@ -2530,7 +2978,7 @@
       "language": "TypeScript",
       "createdAt": "2025-11-05T12:51:00Z",
       "pushedAt": "2025-10-21T03:40:06Z",
-      "updatedAt": "2025-10-21T03:40:06Z",
+      "updatedAt": "2026-08-05T14:51:30Z",
       "defaultBranch": "main",
       "size": 217,
       "included": false,
@@ -2538,6 +2986,8 @@
     },
     {
       "name": "papers-we-love",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/papers-we-love",
       "description": "Papers from the computer science community to read and discuss.",
       "topics": [
         "awesome-list",
@@ -2556,7 +3006,7 @@
       "language": "Shell",
       "createdAt": "2026-01-02T16:39:13Z",
       "pushedAt": "2025-10-10T15:35:14Z",
-      "updatedAt": "2025-10-10T15:35:14Z",
+      "updatedAt": "2026-08-05T14:50:47Z",
       "defaultBranch": "main",
       "size": 230837,
       "included": false,
@@ -2564,6 +3014,8 @@
     },
     {
       "name": "agentic-ai-public",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/agentic-ai-public",
       "description": "Research Agent service for the Agentic Workflow course ",
       "topics": [
         "agentic-workflow",
@@ -2584,7 +3036,7 @@
       "language": "Python",
       "createdAt": "2025-10-12T15:46:06Z",
       "pushedAt": "2025-10-08T19:36:38Z",
-      "updatedAt": "2025-10-08T19:36:38Z",
+      "updatedAt": "2026-08-05T14:52:52Z",
       "defaultBranch": "main",
       "size": 611,
       "included": false,
@@ -2592,6 +3044,8 @@
     },
     {
       "name": "deeplearning.ai",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/deeplearning.ai",
       "description": "Notes for courses by deeplearning.ai",
       "topics": [
         "course",
@@ -2617,7 +3071,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2025-10-09T10:44:08Z",
       "pushedAt": "2025-10-03T19:37:34Z",
-      "updatedAt": "2025-10-03T19:37:34Z",
+      "updatedAt": "2026-08-05T14:53:37Z",
       "defaultBranch": "main",
       "size": 374013,
       "included": false,
@@ -2625,6 +3079,8 @@
     },
     {
       "name": "demo",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/demo",
       "description": "Generic demo project — template for prototypes.",
       "topics": [
         "demo",
@@ -2644,7 +3100,7 @@
       "language": "JavaScript",
       "createdAt": "2025-09-20T07:46:01Z",
       "pushedAt": "2025-09-20T08:55:13Z",
-      "updatedAt": "2025-09-20T08:55:13Z",
+      "updatedAt": "2026-07-14T05:09:16Z",
       "defaultBranch": "lineage-tracing-system",
       "size": 517,
       "included": true,
@@ -2652,6 +3108,8 @@
     },
     {
       "name": "astro",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/astro",
       "description": "The web framework for content-driven websites. ⭐️ Star to support our work!",
       "topics": [
         "content-driven",
@@ -2680,7 +3138,7 @@
       "language": "TypeScript",
       "createdAt": "2025-08-30T00:32:43Z",
       "pushedAt": "2025-08-29T14:25:30Z",
-      "updatedAt": "2025-08-29T14:25:30Z",
+      "updatedAt": "2026-08-05T14:54:49Z",
       "defaultBranch": "main",
       "size": 199623,
       "included": false,
@@ -2688,6 +3146,8 @@
     },
     {
       "name": "generative-ai",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/generative-ai",
       "description": "Comprehensive resources on Generative AI, including a detailed roadmap, projects, use cases, interview preparation, and coding preparation.",
       "topics": [
         "generative-ai",
@@ -2711,7 +3171,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2025-09-02T10:35:13Z",
       "pushedAt": "2025-08-29T13:32:37Z",
-      "updatedAt": "2025-08-29T13:32:37Z",
+      "updatedAt": "2026-08-05T14:51:04Z",
       "defaultBranch": "main",
       "size": 95683,
       "included": false,
@@ -2719,6 +3179,8 @@
     },
     {
       "name": "mianshiya-next",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mianshiya-next",
       "description": "新项目，基于 Next.js + Spring Boot + Redis + MySQL + Elasticsearch 的面试刷题平台，运用 Druid + HotKey + Sa-Token +  Sentinel 提高了系统的性能和安全性。管理员可以创建题库、题目和题解；用户可以注册登录、分词检索题目、在线刷题并查看刷题记录日历图。  此外，系统使用数据库连接池、热 Key 探测、缓存、高级数据结构等来提升性能。通过流量控制、熔断、动态 IP 黑白名单过滤、同端登录冲突检测、分级反爬虫策略来提升系统和内容的安全性。从 0 到 1 的真实企业级项目设计开发，绝对让你收获满满！",
       "topics": [
         "elasticsearch",
@@ -2744,7 +3206,7 @@
       "language": "Java",
       "createdAt": "2025-10-12T03:00:43Z",
       "pushedAt": "2025-08-22T10:37:48Z",
-      "updatedAt": "2025-08-22T10:37:48Z",
+      "updatedAt": "2026-08-05T14:50:55Z",
       "defaultBranch": "master",
       "size": 20610,
       "included": false,
@@ -2752,6 +3214,8 @@
     },
     {
       "name": "mode-defect",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mode-defect",
       "description": "Mode defect — defect-detection experiments on manufacturing data.",
       "topics": [
         "defect-detection",
@@ -2767,7 +3231,7 @@
       "language": null,
       "createdAt": "2025-08-09T16:06:32Z",
       "pushedAt": "2025-08-09T16:06:32Z",
-      "updatedAt": "2025-08-09T16:06:32Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -2775,6 +3239,8 @@
     },
     {
       "name": "agents",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/agents",
       "description": "Repo for the Complete Agentic AI Engineering Course",
       "topics": [
         "agentic-ai",
@@ -2794,7 +3260,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2025-08-11T14:14:35Z",
       "pushedAt": "2025-08-09T12:28:35Z",
-      "updatedAt": "2025-08-09T12:28:35Z",
+      "updatedAt": "2026-08-05T14:52:50Z",
       "defaultBranch": "main",
       "size": 34701,
       "included": false,
@@ -2802,6 +3268,8 @@
     },
     {
       "name": "Filehub",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Filehub",
       "description": "Filehub — local private-cloud storage with sync, sharing, and access control.",
       "topics": [
         "private-cloud",
@@ -2818,7 +3286,7 @@
       "language": null,
       "createdAt": "2025-08-07T07:07:18Z",
       "pushedAt": "2025-08-07T07:07:18Z",
-      "updatedAt": "2025-08-07T07:07:18Z",
+      "updatedAt": "2026-07-14T05:09:53Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -2826,6 +3294,8 @@
     },
     {
       "name": "generative-ai-for-beginners",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/generative-ai-for-beginners",
       "description": "21 Lessons, Get Started Building with Generative AI  🔗 https://microsoft.github.io/generative-ai-for-beginners/",
       "topics": [
         "beginner",
@@ -2851,7 +3321,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2025-08-11T01:18:47Z",
       "pushedAt": "2025-08-05T20:03:32Z",
-      "updatedAt": "2025-08-05T20:03:32Z",
+      "updatedAt": "2026-08-05T14:52:10Z",
       "defaultBranch": "main",
       "size": 3891878,
       "included": false,
@@ -2859,6 +3329,8 @@
     },
     {
       "name": "ai-agents-for-beginners",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ai-agents-for-beginners",
       "description": "11 Lessons to Get Started Building AI Agents",
       "topics": [
         "ai-agents",
@@ -2879,7 +3351,7 @@
       "language": "Jupyter Notebook",
       "createdAt": "2025-08-11T01:48:02Z",
       "pushedAt": "2025-07-24T10:58:47Z",
-      "updatedAt": "2025-07-24T10:58:47Z",
+      "updatedAt": "2026-08-05T14:53:00Z",
       "defaultBranch": "main",
       "size": 2800825,
       "included": false,
@@ -2887,6 +3359,8 @@
     },
     {
       "name": "indiehackers-steps",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/indiehackers-steps",
       "description": "《独立开发者的艺术》打造最全的独立开发者指南，一人公司。",
       "topics": [
         "guide",
@@ -2903,7 +3377,7 @@
       "language": null,
       "createdAt": "2025-12-26T12:25:46Z",
       "pushedAt": "2025-07-21T02:20:05Z",
-      "updatedAt": "2025-07-21T02:20:05Z",
+      "updatedAt": "2026-08-05T14:58:59Z",
       "defaultBranch": "main",
       "size": 93,
       "included": false,
@@ -2911,6 +3385,8 @@
     },
     {
       "name": "note-app",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/note-app",
       "description": "Note-app — personal note-taking app with markdown, tags, and quick capture.",
       "topics": [
         "javascript",
@@ -2931,7 +3407,7 @@
       "language": "JavaScript",
       "createdAt": "2025-05-29T14:28:24Z",
       "pushedAt": "2025-07-20T00:29:08Z",
-      "updatedAt": "2025-07-20T00:29:08Z",
+      "updatedAt": "2026-07-14T05:09:17Z",
       "defaultBranch": "main",
       "size": 62,
       "included": true,
@@ -2939,6 +3415,8 @@
     },
     {
       "name": "ML-For-Beginners",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ML-For-Beginners",
       "description": "12 weeks, 26 lessons, 52 quizzes, classic Machine Learning for all",
       "topics": [
         "beginner",
@@ -2963,7 +3441,7 @@
       "language": "HTML",
       "createdAt": "2025-07-24T08:57:11Z",
       "pushedAt": "2025-07-18T01:57:08Z",
-      "updatedAt": "2025-07-18T01:57:08Z",
+      "updatedAt": "2026-08-05T14:52:35Z",
       "defaultBranch": "main",
       "size": 749306,
       "included": false,
@@ -2971,6 +3449,8 @@
     },
     {
       "name": "Dream-prop-generator",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Dream-prop-generator",
       "description": "Dream-prop random generator — spin up random D&D-style props, characters, and scenarios.",
       "topics": [
         "creativity",
@@ -2993,7 +3473,7 @@
       "language": "JavaScript",
       "createdAt": "2025-06-15T08:20:52Z",
       "pushedAt": "2025-06-18T13:57:30Z",
-      "updatedAt": "2025-06-18T13:57:30Z",
+      "updatedAt": "2026-07-14T05:09:53Z",
       "defaultBranch": "main",
       "size": 58,
       "included": true,
@@ -3001,6 +3481,8 @@
     },
     {
       "name": "REACT-PRACEISE",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/REACT-PRACEISE",
       "description": "React practice — components, hooks, state patterns, and small apps.",
       "topics": [
         "frontend",
@@ -3022,7 +3504,7 @@
       "language": "TypeScript",
       "createdAt": "2025-06-08T06:30:20Z",
       "pushedAt": "2025-06-11T05:39:48Z",
-      "updatedAt": "2025-06-11T05:39:48Z",
+      "updatedAt": "2026-07-14T05:09:20Z",
       "defaultBranch": "main",
       "size": 62408,
       "included": true,
@@ -3030,6 +3512,8 @@
     },
     {
       "name": "cpp-projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/cpp-projects",
       "description": "C++ practice projects — algorithms, systems, and small utilities.",
       "topics": [
         "algorithms",
@@ -3046,7 +3530,7 @@
       "language": null,
       "createdAt": "2025-05-20T03:44:15Z",
       "pushedAt": "2025-06-08T10:15:00Z",
-      "updatedAt": "2025-06-08T10:15:00Z",
+      "updatedAt": "2026-08-05T14:53:29Z",
       "defaultBranch": "master",
       "size": 1306,
       "included": true,
@@ -3054,6 +3538,8 @@
     },
     {
       "name": "automatic_compliments",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/automatic_compliments",
       "description": "Automatic Compliments (自动夸人小助手) — generates personalized compliments in Chinese and English.",
       "topics": [
         "ai",
@@ -3077,7 +3563,7 @@
       "language": "TeX",
       "createdAt": "2025-02-22T13:21:13Z",
       "pushedAt": "2025-06-07T07:25:01Z",
-      "updatedAt": "2025-06-07T07:25:01Z",
+      "updatedAt": "2026-07-14T05:09:54Z",
       "defaultBranch": "main",
       "size": 23319,
       "included": true,
@@ -3085,6 +3571,8 @@
     },
     {
       "name": "React-Projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/React-Projects",
       "description": "React projects — collection of React apps and components.",
       "topics": [
         "frontend",
@@ -3105,7 +3593,7 @@
       "language": "JavaScript",
       "createdAt": "2025-05-09T15:44:19Z",
       "pushedAt": "2025-06-06T12:49:37Z",
-      "updatedAt": "2025-06-06T12:49:37Z",
+      "updatedAt": "2026-07-14T05:09:56Z",
       "defaultBranch": "main",
       "size": 12128,
       "included": true,
@@ -3113,6 +3601,8 @@
     },
     {
       "name": "Snake",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Snake",
       "description": "Snake — a very interesting snake game in C++.",
       "topics": [
         "classic",
@@ -3131,7 +3621,7 @@
       "language": "C++",
       "createdAt": "2025-05-09T09:07:09Z",
       "pushedAt": "2025-05-10T06:45:52Z",
-      "updatedAt": "2025-05-10T06:45:52Z",
+      "updatedAt": "2026-07-14T05:09:55Z",
       "defaultBranch": "main",
       "size": 65519,
       "included": true,
@@ -3139,6 +3629,8 @@
     },
     {
       "name": "minnow",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/minnow",
       "description": "CS144 lab assignment",
       "topics": [
         "cs144",
@@ -3160,7 +3652,7 @@
       "language": "C++",
       "createdAt": "2025-03-14T08:06:57Z",
       "pushedAt": "2025-03-06T04:53:10Z",
-      "updatedAt": "2025-03-06T04:53:10Z",
+      "updatedAt": "2026-08-05T14:50:53Z",
       "defaultBranch": "main",
       "size": 121,
       "included": false,
@@ -3168,6 +3660,8 @@
     },
     {
       "name": "ai-town",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ai-town",
       "description": "A MIT-licensed, deployable starter kit for building and customizing your own version of AI town - a virtual town where AI characters live, chat and socialize.",
       "topics": [
         "agents",
@@ -3190,7 +3684,7 @@
       "language": "TypeScript",
       "createdAt": "2025-09-10T06:43:40Z",
       "pushedAt": "2025-02-13T07:25:22Z",
-      "updatedAt": "2025-02-13T07:25:22Z",
+      "updatedAt": "2026-08-05T14:53:05Z",
       "defaultBranch": "main",
       "size": 18683,
       "included": false,
@@ -3198,6 +3692,8 @@
     },
     {
       "name": "fastgithub",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/fastgithub",
       "description": "Fast GitHub utilities — CLI helpers to speed up common GitHub workflows.",
       "topics": [
         "cli",
@@ -3214,7 +3710,7 @@
       "language": null,
       "createdAt": "2025-01-28T15:01:58Z",
       "pushedAt": "2025-01-28T15:01:59Z",
-      "updatedAt": "2025-01-28T15:01:59Z",
+      "updatedAt": "2026-07-14T05:09:56Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -3222,6 +3718,8 @@
     },
     {
       "name": "developer-roadmap",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/developer-roadmap",
       "description": "Interactive roadmaps, guides and other educational content to help developers grow in their careers.",
       "topics": [
         "career",
@@ -3244,7 +3742,7 @@
       "language": "TypeScript",
       "createdAt": "2024-10-11T14:13:28Z",
       "pushedAt": "2024-10-11T14:12:40Z",
-      "updatedAt": "2024-10-11T14:12:40Z",
+      "updatedAt": "2026-08-05T14:52:30Z",
       "defaultBranch": "master",
       "size": 243202,
       "included": false,
@@ -3252,6 +3750,8 @@
     },
     {
       "name": "ml5-library",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ml5-library",
       "description": "Friendly machine learning for the web! 🤖 ",
       "topics": [
         "friendly-ml",
@@ -3271,7 +3771,7 @@
       "language": "JavaScript",
       "createdAt": "2025-01-26T14:29:09Z",
       "pushedAt": "2024-10-11T02:28:01Z",
-      "updatedAt": "2024-10-11T02:28:01Z",
+      "updatedAt": "2026-08-05T14:52:33Z",
       "defaultBranch": "main",
       "size": 381860,
       "included": false,
@@ -3279,6 +3779,8 @@
     },
     {
       "name": "EASTL",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/EASTL",
       "description": "EASTL stands for Electronic Arts Standard Template Library.  It is an extensive and robust implementation that has an emphasis on high performance.",
       "topics": [
         "cpp",
@@ -3300,7 +3802,7 @@
       "language": "C++",
       "createdAt": "2025-02-23T06:16:16Z",
       "pushedAt": "2024-09-09T06:09:23Z",
-      "updatedAt": "2024-09-09T06:09:23Z",
+      "updatedAt": "2026-08-05T14:53:39Z",
       "defaultBranch": "master",
       "size": 4649,
       "included": false,
@@ -3308,6 +3810,8 @@
     },
     {
       "name": "build-your-own-x",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/build-your-own-x",
       "description": "Master programming by recreating your favorite technologies from scratch.",
       "topics": [
         "awesome-list",
@@ -3325,7 +3829,7 @@
       "language": "Markdown",
       "createdAt": "2025-04-04T14:30:48Z",
       "pushedAt": "2024-09-03T14:39:35Z",
-      "updatedAt": "2024-09-03T14:39:35Z",
+      "updatedAt": "2026-08-05T14:53:14Z",
       "defaultBranch": "master",
       "size": 1058,
       "included": false,
@@ -3333,6 +3837,8 @@
     },
     {
       "name": "linux",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/linux",
       "description": "Linux kernel source tree",
       "topics": [
         "c",
@@ -3371,7 +3877,7 @@
       "language": "C",
       "createdAt": "2024-08-30T15:02:51Z",
       "pushedAt": "2024-08-30T02:43:29Z",
-      "updatedAt": "2024-08-30T02:43:29Z",
+      "updatedAt": "2026-08-05T14:52:15Z",
       "defaultBranch": "master",
       "size": 5157826,
       "included": false,
@@ -3379,6 +3885,8 @@
     },
     {
       "name": "linux-command",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/linux-command",
       "description": "Linux命令大全搜索工具，内容包含Linux命令手册、详解、学习、搜集。https://git.io/linux",
       "topics": [
         "cli",
@@ -3401,7 +3909,7 @@
       "language": "Markdown",
       "createdAt": "2024-08-30T15:04:36Z",
       "pushedAt": "2024-08-29T08:49:43Z",
-      "updatedAt": "2024-08-29T08:49:43Z",
+      "updatedAt": "2026-08-05T14:52:12Z",
       "defaultBranch": "master",
       "size": 2799218,
       "included": false,
@@ -3409,6 +3917,8 @@
     },
     {
       "name": "awesome-cpp",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/awesome-cpp",
       "description": "A curated list of awesome C++ (or C) frameworks, libraries, resources, and shiny things. Inspired by awesome-... stuff.",
       "topics": [
         "awesome-list",
@@ -3424,7 +3934,7 @@
       "language": null,
       "createdAt": "2024-08-27T13:03:01Z",
       "pushedAt": "2024-08-23T01:52:02Z",
-      "updatedAt": "2024-08-23T01:52:02Z",
+      "updatedAt": "2026-08-05T14:53:10Z",
       "defaultBranch": "master",
       "size": 2398,
       "included": false,
@@ -3432,6 +3942,8 @@
     },
     {
       "name": "C-Plus-Plus",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/C-Plus-Plus",
       "description": "Collection of various algorithms in mathematics, machine learning, computer science and physics implemented in C++ for educational purposes.",
       "topics": [
         "algorithms",
@@ -3453,7 +3965,7 @@
       "language": "C++",
       "createdAt": "2024-08-22T14:56:53Z",
       "pushedAt": "2024-08-21T12:53:18Z",
-      "updatedAt": "2024-08-21T12:53:18Z",
+      "updatedAt": "2026-08-05T14:53:15Z",
       "defaultBranch": "master",
       "size": 111676,
       "included": false,
@@ -3461,6 +3973,8 @@
     },
     {
       "name": "ai-getting-started",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ai-getting-started",
       "description": "A Javascript AI getting started stack for weekend projects, including image/text models, vector stores, auth, and deployment configs",
       "topics": [
         "ai",
@@ -3483,7 +3997,7 @@
       "language": "TypeScript",
       "createdAt": "2025-09-10T06:45:09Z",
       "pushedAt": "2024-08-21T12:35:18Z",
-      "updatedAt": "2024-08-21T12:35:18Z",
+      "updatedAt": "2026-07-14T05:11:55Z",
       "defaultBranch": "main",
       "size": 16138,
       "included": false,
@@ -3491,6 +4005,8 @@
     },
     {
       "name": "Web",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Web",
       "description": "千古前端图文教程，超详细的前端入门到进阶知识库。从零开始学前端，做一名精致优雅的前端工程师。",
       "topics": [
         "frontend",
@@ -3507,7 +4023,7 @@
       "language": null,
       "createdAt": "2024-08-30T00:56:41Z",
       "pushedAt": "2024-08-18T15:01:23Z",
-      "updatedAt": "2024-08-18T15:01:23Z",
+      "updatedAt": "2026-08-05T14:51:14Z",
       "defaultBranch": "master",
       "size": 7520,
       "included": false,
@@ -3515,6 +4031,8 @@
     },
     {
       "name": "project-based-learning",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/project-based-learning",
       "description": "Curated list of project-based tutorials",
       "topics": [
         "awesome-list",
@@ -3530,7 +4048,7 @@
       "language": null,
       "createdAt": "2024-08-17T13:29:22Z",
       "pushedAt": "2024-08-15T05:33:54Z",
-      "updatedAt": "2024-08-15T05:33:54Z",
+      "updatedAt": "2026-08-05T14:51:37Z",
       "defaultBranch": "master",
       "size": 438,
       "included": false,
@@ -3538,6 +4056,8 @@
     },
     {
       "name": "calculator",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/calculator",
       "description": "Windows Calculator: A simple yet powerful calculator that ships with Windows",
       "topics": [
         "calculator",
@@ -3560,7 +4080,7 @@
       "language": "C++",
       "createdAt": "2024-08-22T14:54:59Z",
       "pushedAt": "2024-08-13T01:52:39Z",
-      "updatedAt": "2024-08-13T01:52:39Z",
+      "updatedAt": "2026-08-05T14:53:17Z",
       "defaultBranch": "main",
       "size": 38809,
       "included": false,
@@ -3568,6 +4088,8 @@
     },
     {
       "name": "ExplorerPatcher",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ExplorerPatcher",
       "description": "This project aims to enhance the working environment on Windows",
       "topics": [
         "system-tweaks",
@@ -3588,7 +4110,7 @@
       "language": "C",
       "createdAt": "2024-08-20T14:38:25Z",
       "pushedAt": "2024-08-10T11:54:16Z",
-      "updatedAt": "2024-08-10T11:54:16Z",
+      "updatedAt": "2026-08-05T14:53:44Z",
       "defaultBranch": "master",
       "size": 8671,
       "included": false,
@@ -3596,6 +4118,8 @@
     },
     {
       "name": "hello-algo",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hello-algo",
       "description": "《Hello 算法》：动画图解、一键运行的数据结构与算法教程。支持 Python, Java, C++, C, C#, JS, Go, Swift, Rust, Ruby, Kotlin, TS, Dart 代码。简体版和繁体版同步更新，English version ongoing",
       "topics": [
         "algorithm",
@@ -3622,7 +4146,7 @@
       "language": "Java",
       "createdAt": "2024-08-07T14:28:59Z",
       "pushedAt": "2024-08-06T07:08:01Z",
-      "updatedAt": "2024-08-06T07:08:01Z",
+      "updatedAt": "2026-08-05T14:51:59Z",
       "defaultBranch": "main",
       "size": 345193,
       "included": false,
@@ -3630,6 +4154,8 @@
     },
     {
       "name": "cs50",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/cs50",
       "description": "CS50 coursework — problem sets, labs, and final project.",
       "topics": [
         "computer-science",
@@ -3646,7 +4172,7 @@
       "language": null,
       "createdAt": "2024-07-31T13:31:47Z",
       "pushedAt": "2024-07-31T13:31:48Z",
-      "updatedAt": "2024-07-31T13:31:48Z",
+      "updatedAt": "2026-07-14T05:09:56Z",
       "defaultBranch": "main",
       "size": 0,
       "included": false,
@@ -3654,6 +4180,8 @@
     },
     {
       "name": "30-Days-Of-Python",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/30-Days-Of-Python",
       "description": "30 days of Python programming challenge is a step-by-step guide to learn the Python programming language in 30 days. This challenge may take more than100 days, follow your own pace.  These videos may help too: https://www.youtube.com/channel/UC7PNRuno1rzYPb1xLa4yktw",
       "topics": [
         "30-days",
@@ -3675,7 +4203,7 @@
       "language": "Python",
       "createdAt": "2024-07-31T13:44:43Z",
       "pushedAt": "2024-07-31T03:08:32Z",
-      "updatedAt": "2024-07-31T03:08:32Z",
+      "updatedAt": "2026-08-05T14:52:40Z",
       "defaultBranch": "master",
       "size": 29771,
       "included": false,
@@ -3683,6 +4211,8 @@
     },
     {
       "name": "REKCARC-TSC-UHT",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/REKCARC-TSC-UHT",
       "description": "清华大学计算机系课程攻略 Guidance for courses in Department of Computer Science and Technology, Tsinghua University",
       "topics": [
         "computer-science",
@@ -3731,7 +4261,7 @@
       "language": "HTML",
       "createdAt": "2024-08-17T09:23:46Z",
       "pushedAt": "2024-07-23T16:09:42Z",
-      "updatedAt": "2024-07-23T16:09:42Z",
+      "updatedAt": "2026-08-05T14:51:29Z",
       "defaultBranch": "master",
       "size": 4644354,
       "included": false,
@@ -3739,6 +4269,8 @@
     },
     {
       "name": "leetcodesolve-problem",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/leetcodesolve-problem",
       "description": "LeetCode Solutions: A Record of My Problem Solving Journey.( leetcode题解，记录自己的leetcode解题之路。)",
       "topics": [
         "interview",
@@ -3759,7 +4291,7 @@
       "language": "JavaScript",
       "createdAt": "2024-07-31T13:53:43Z",
       "pushedAt": "2024-06-30T16:50:35Z",
-      "updatedAt": "2024-06-30T16:50:35Z",
+      "updatedAt": "2026-08-05T14:52:19Z",
       "defaultBranch": "master",
       "size": 126502,
       "included": false,
@@ -3767,6 +4299,8 @@
     },
     {
       "name": "LeetCode-Go",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/LeetCode-Go",
       "description": "✅ Solutions to LeetCode by Go, 100% test coverage, runtime beats 100% / LeetCode 题解",
       "topics": [
         "go",
@@ -3791,7 +4325,7 @@
       "language": "Go",
       "createdAt": "2024-07-31T13:48:08Z",
       "pushedAt": "2024-06-22T07:06:36Z",
-      "updatedAt": "2024-06-22T07:06:36Z",
+      "updatedAt": "2026-08-05T14:52:23Z",
       "defaultBranch": "master",
       "size": 19276,
       "included": false,
@@ -3799,6 +4333,8 @@
     },
     {
       "name": "CPlusPlusThings",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/CPlusPlusThings",
       "description": "C++那些事",
       "topics": [
         "c-things",
@@ -3818,7 +4354,7 @@
       "language": "C++",
       "createdAt": "2024-08-20T04:48:54Z",
       "pushedAt": "2024-06-14T01:58:36Z",
-      "updatedAt": "2024-06-14T01:58:36Z",
+      "updatedAt": "2026-08-05T14:53:25Z",
       "defaultBranch": "master",
       "size": 1322,
       "included": false,
@@ -3826,6 +4362,8 @@
     },
     {
       "name": "Getting-Started-with-Linux",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Getting-Started-with-Linux",
       "description": "mjj版的linux入门教程",
       "topics": [
         "beginner",
@@ -3842,7 +4380,7 @@
       "language": null,
       "createdAt": "2024-08-30T15:07:45Z",
       "pushedAt": "2024-06-11T06:25:04Z",
-      "updatedAt": "2024-06-11T06:25:04Z",
+      "updatedAt": "2026-08-05T14:52:04Z",
       "defaultBranch": "main",
       "size": 1403,
       "included": false,
@@ -3850,6 +4388,8 @@
     },
     {
       "name": "awesome-security-weixin-official-accounts",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/awesome-security-weixin-official-accounts",
       "description": "网络安全类公众号推荐，欢迎大家推荐",
       "topics": [
         "awesome-list",
@@ -3865,7 +4405,7 @@
       "language": null,
       "createdAt": "2024-08-04T09:06:59Z",
       "pushedAt": "2024-05-19T19:12:16Z",
-      "updatedAt": "2024-05-19T19:12:16Z",
+      "updatedAt": "2026-08-05T14:53:11Z",
       "defaultBranch": "master",
       "size": 24526,
       "included": false,
@@ -3873,6 +4413,8 @@
     },
     {
       "name": "shareOI",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/shareOI",
       "description": "算法竞赛课件分享",
       "topics": [
         "competitive-programming",
@@ -3887,7 +4429,7 @@
       "language": null,
       "createdAt": "2024-08-19T13:01:40Z",
       "pushedAt": "2024-04-16T14:00:49Z",
-      "updatedAt": "2024-04-16T14:00:49Z",
+      "updatedAt": "2026-08-05T14:51:25Z",
       "defaultBranch": "master",
       "size": 142455,
       "included": false,
@@ -3895,6 +4437,8 @@
     },
     {
       "name": "Learn-Web-Hacking",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Learn-Web-Hacking",
       "description": "Study Notes For Web Hacking / Web安全学习笔记",
       "topics": [
         "hacking",
@@ -3915,7 +4459,7 @@
       "language": "Python",
       "createdAt": "2024-08-02T08:38:36Z",
       "pushedAt": "2024-01-23T14:00:14Z",
-      "updatedAt": "2024-01-23T14:00:14Z",
+      "updatedAt": "2026-08-05T14:52:27Z",
       "defaultBranch": "master",
       "size": 1582,
       "included": false,
@@ -3923,6 +4467,8 @@
     },
     {
       "name": "CS61A",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/CS61A",
       "description": null,
       "topics": [
         "berkeley",
@@ -3946,7 +4492,7 @@
       "language": "JavaScript",
       "createdAt": "2024-09-16T10:20:57Z",
       "pushedAt": "2024-01-11T07:32:35Z",
-      "updatedAt": "2024-01-11T07:32:35Z",
+      "updatedAt": "2026-08-05T14:53:31Z",
       "defaultBranch": "master",
       "size": 12749,
       "included": false,
@@ -3954,6 +4500,8 @@
     },
     {
       "name": "HelloDjango-blog-tutorial",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/HelloDjango-blog-tutorial",
       "description": "免费带你学 django 全栈！基于 django 2.2 的个人博客，初学者绝对不能错过的 django 教程！｡◕ᴗ◕｡",
       "topics": [
         "blog",
@@ -3977,7 +4525,7 @@
       "language": "Python",
       "createdAt": "2024-08-20T04:49:45Z",
       "pushedAt": "2023-06-22T10:51:01Z",
-      "updatedAt": "2023-06-22T10:51:01Z",
+      "updatedAt": "2026-08-05T14:55:17Z",
       "defaultBranch": "master",
       "size": 5680,
       "included": false,
@@ -3985,8 +4533,181 @@
     }
   ],
   "projects": {
-    "mulitimodal": {
+    "lora-sys/lorasys": {
+      "name": "loraSys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Astro": 294166,
+        "TypeScript": 180474,
+        "XSLT": 80493,
+        "JavaScript": 55192,
+        "CSS": 6973,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-08-18T14:36:25Z",
+      "updatedAt": "2026-08-18T14:42:15Z",
+      "defaultBranch": "main",
+      "size": 118112,
+      "title": "LoraSys",
+      "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
+        "localFile": "github-lora-sys-lorasys.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/packify-skill": {
+      "name": "packify-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/packify-skill",
+      "description": "Turn the supplied image into one faithful, desirable, commercially believable physical collectible.",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/packify-skill",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-17T08:58:40Z",
+      "pushedAt": "2026-08-18T07:14:51Z",
+      "updatedAt": "2026-08-18T07:15:36Z",
+      "defaultBranch": "main",
+      "size": 51907,
+      "title": "Packify Skill",
+      "summary": "Turn the supplied image into one faithful, desirable, commercially believable physical collectible.",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Tools"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/331b414112a8e5b223d6c574dd69a00a82f26913f6c42d98c9763492239d29e4/lora-sys/packify-skill",
+        "localFile": "github-lora-sys-packify-skill.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/trandingos": {
+      "name": "TrandingOs",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/TrandingOs",
+      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "topics": [
+        "backtesting",
+        "finance",
+        "market-data",
+        "trading",
+        "trading-bot",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/TrandingOs",
+      "stars": 1,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 1362100,
+        "CSS": 4826,
+        "JavaScript": 1493,
+        "Dockerfile": 1105,
+        "HTML": 670
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-06-09T03:37:14Z",
+      "pushedAt": "2026-08-17T09:32:48Z",
+      "updatedAt": "2026-07-15T02:05:02Z",
+      "defaultBranch": "main",
+      "size": 20911,
+      "title": "TradingOS",
+      "summary": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Open Source",
+        "Tools",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/TrandingOs/main/images/mvp.png",
+        "localFile": "github-lora-sys-trandingos.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/nano-sglang-interactive-guide": {
+      "name": "nano-sglang-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-sglang-interactive-guide",
+      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 3968,
+        "Shell": 563
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-17T02:55:22Z",
+      "pushedAt": "2026-08-17T03:23:24Z",
+      "updatedAt": "2026-08-17T15:16:08Z",
+      "defaultBranch": "main",
+      "size": 96,
+      "title": "Nano Sglang Interactive Guide",
+      "summary": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Learning"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/nano-sglang-interactive-guide/main/assets/readme/hero.svg",
+        "localFile": "github-lora-sys-nano-sglang-interactive-guide.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/mulitimodal": {
       "name": "MulitiModal",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MulitiModal",
       "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
       "topics": [
         "gradio",
@@ -4011,7 +4732,7 @@
       "language": "Python",
       "createdAt": "2026-01-01T12:56:57Z",
       "pushedAt": "2026-08-14T16:37:01Z",
-      "updatedAt": "2026-08-14T16:37:01Z",
+      "updatedAt": "2026-08-14T16:37:17Z",
       "defaultBranch": "main",
       "size": 208082,
       "title": "MultiModal Health Intelligence",
@@ -4026,14 +4747,16 @@
       "featuredRank": 5,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/8fbba728a41797f7173b3a0497d882fcb1d50359e85b01c2ce19749c6cbe77ee/lora-sys/MulitiModal",
-        "localFile": "github-mulitimodal.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d76c897e745ca047dd29f26e192749d51afa96633db06810b9c21201c956b47f/lora-sys/MulitiModal",
+        "localFile": "github-lora-sys-mulitimodal.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "glassbox-agent-harness": {
+    "lora-sys/glassbox-agent-harness": {
       "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
       "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
       "topics": [],
       "homepage": null,
@@ -4045,7 +4768,7 @@
       "language": null,
       "createdAt": "2026-08-14T11:35:56Z",
       "pushedAt": "2026-08-14T15:34:32Z",
-      "updatedAt": "2026-08-14T15:34:32Z",
+      "updatedAt": "2026-08-14T15:36:50Z",
       "defaultBranch": "main",
       "size": 11,
       "title": "Glassbox Agent Harness",
@@ -4061,108 +4784,16 @@
       "featuredRank": 1,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/95f09c1a17e60c74b0562b32dc4057106413707329e5d70f14dd936f531bebda/lora-sys/Glassbox-Agent-Harness",
-        "localFile": "github-glassbox-agent-harness.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5ff6236a8bd893c0b1a59b2b061cf9a0f85d8c5a51f744cfafa946b10f065a5c/lora-sys/Glassbox-Agent-Harness",
+        "localFile": "github-lora-sys-glassbox-agent-harness.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "trandingos": {
-      "name": "TrandingOs",
-      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
-      "topics": [
-        "backtesting",
-        "finance",
-        "market-data",
-        "trading",
-        "trading-bot",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/TrandingOs",
-      "stars": 1,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 1362100,
-        "CSS": 4826,
-        "JavaScript": 1493,
-        "Dockerfile": 1105,
-        "HTML": 670
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-06-09T03:37:14Z",
-      "pushedAt": "2026-08-10T09:29:56Z",
-      "updatedAt": "2026-08-10T09:29:56Z",
-      "defaultBranch": "main",
-      "size": 20911,
-      "title": "TradingOS",
-      "summary": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Open Source",
-        "Tools",
-        "Apps"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/55cf806a891063cff5608124cc98ea68aed4806d23bc42ae5d7c3dd644df5dec/lora-sys/TrandingOs",
-        "localFile": "github-trandingos.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lorasys": {
-      "name": "loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Svelte": 398670,
-        "TypeScript": 51647,
-        "JavaScript": 33352,
-        "CSS": 11734,
-        "HTML": 3892,
-        "Shell": 2798
-      },
-      "language": "Svelte",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-10T05:51:44Z",
-      "updatedAt": "2026-08-10T05:51:44Z",
-      "defaultBranch": "main",
-      "size": 110248,
-      "title": "LoraSys",
-      "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Apps"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
-        "localFile": "github-lorasys.webp",
-        "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "teaching-html-story-deck": {
+    "lora-sys/teaching-html-story-deck": {
       "name": "teaching-html-story-deck",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/teaching-html-story-deck",
       "description": "A reusable Agent Skill for producing polished standalone teaching HTML pages with content-specific SVG diagrams and advanced but restrained motion.",
       "topics": [],
       "homepage": null,
@@ -4177,7 +4808,7 @@
       "language": "Python",
       "createdAt": "2026-08-08T15:23:26Z",
       "pushedAt": "2026-08-08T15:29:21Z",
-      "updatedAt": "2026-08-08T15:29:21Z",
+      "updatedAt": "2026-08-08T15:29:25Z",
       "defaultBranch": "main",
       "size": 45,
       "title": "Teaching HTML Story Deck",
@@ -4193,13 +4824,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/teaching-html-story-deck/main/assets/readme/hero.svg",
-        "localFile": "github-teaching-html-story-deck.webp",
+        "localFile": "github-lora-sys-teaching-html-story-deck.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "mossguard": {
+    "lora-sys/mossguard": {
       "name": "mossguard",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mossguard",
       "description": "This is for monad hackthon playgraoud for moss onchain agent",
       "topics": [],
       "homepage": null,
@@ -4216,7 +4849,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-30T03:39:36Z",
       "pushedAt": "2026-08-08T08:53:08Z",
-      "updatedAt": "2026-08-08T08:53:08Z",
+      "updatedAt": "2026-08-08T08:53:12Z",
       "defaultBranch": "main",
       "size": 4122,
       "title": "MossGuard",
@@ -4231,14 +4864,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/7fe7cd007d0f8b4b40172da91aabb7900b0d6655b54661558e279053f777de54/lora-sys/mossguard",
-        "localFile": "github-mossguard.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/40c8a1f00f520dc6d7b762979b19f2bb00f504c5a2cf888499a306cbe1d77119/lora-sys/mossguard",
+        "localFile": "github-lora-sys-mossguard.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "nano-vllm-interactive-guide": {
+    "lora-sys/nano-vllm-interactive-guide": {
       "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
       "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
       "topics": [
         "llm-inference",
@@ -4248,7 +4883,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 20,
+      "stars": 23,
       "fork": false,
       "archived": false,
       "languages": {
@@ -4258,7 +4893,7 @@
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
       "pushedAt": "2026-08-08T07:55:02Z",
-      "updatedAt": "2026-08-08T07:55:02Z",
+      "updatedAt": "2026-08-17T08:46:44Z",
       "defaultBranch": "main",
       "size": 136,
       "title": "nano-vLLM Interactive Guide",
@@ -4274,14 +4909,16 @@
       "featuredRank": 3,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6ce3ad6e0e44f6ff6fd21fd3906964a9f9e6fa8aeda60b3e717f79c5c07f5ec4/lora-sys/nano-vllm-interactive-guide",
-        "localFile": "github-nano-vllm-interactive-guide.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
+        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "free-vision-skill": {
+    "lora-sys/free-vision-skill": {
       "name": "free-vision-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/free-vision-skill",
       "description": "A low-token visual evidence compiler for text-only coding agents. Convert images into compact Visual Evidence Packets (VEP) for DeepSeek, Codex, Claude Code, and other text-only models.",
       "topics": [
         "agent-skill",
@@ -4311,7 +4948,7 @@
       "language": "TypeScript",
       "createdAt": "2026-08-01T08:04:35Z",
       "pushedAt": "2026-08-07T08:02:59Z",
-      "updatedAt": "2026-08-07T08:02:59Z",
+      "updatedAt": "2026-08-13T09:50:42Z",
       "defaultBranch": "main",
       "size": 10637,
       "title": "Free Vision Skill",
@@ -4328,13 +4965,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/assets/readme/hero.svg",
-        "localFile": "github-free-vision-skill.webp",
+        "localFile": "github-lora-sys-free-vision-skill.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "shape-up-project-shaping": {
+    "lora-sys/shape-up-project-shaping": {
       "name": "shape-up-project-shaping",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/shape-up-project-shaping",
       "description": "Shape Up Project Shaping — 把模糊想法塑形成值得下注、边界清楚、可验证的项目。基于 Basecamp Shape Up 方法论，适配 AI Agent 时代的项目塑形 Skill。",
       "topics": [
         "agent-skill",
@@ -4359,7 +4998,7 @@
       "language": "Python",
       "createdAt": "2026-08-05T18:20:00Z",
       "pushedAt": "2026-08-06T13:41:43Z",
-      "updatedAt": "2026-08-06T13:41:43Z",
+      "updatedAt": "2026-08-13T07:38:41Z",
       "defaultBranch": "main",
       "size": 1084,
       "title": "Shape Up Project Shaping",
@@ -4375,13 +5014,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/shape-up-project-shaping/main/assets/readme/hero.svg",
-        "localFile": "github-shape-up-project-shaping.webp",
+        "localFile": "github-lora-sys-shape-up-project-shaping.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "trustops": {
+    "lora-sys/trustops": {
       "name": "trustops",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/trustops",
       "description": null,
       "topics": [],
       "homepage": null,
@@ -4398,7 +5039,7 @@
       "language": "Python",
       "createdAt": "2026-08-05T11:01:04Z",
       "pushedAt": "2026-08-06T03:22:07Z",
-      "updatedAt": "2026-08-06T03:22:07Z",
+      "updatedAt": "2026-08-12T10:36:23Z",
       "defaultBranch": "main",
       "size": 8693,
       "title": "TrustOps",
@@ -4413,13 +5054,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/trustops/main/assets/readme/01-hero-context.png",
-        "localFile": "github-trustops.webp",
+        "localFile": "github-lora-sys-trustops.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "ai-engineering-harness": {
+    "lora-sys/ai-engineering-harness": {
       "name": "ai-engineering-harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ai-engineering-harness",
       "description": "AI-native software engineering harness — 18 agents, 9 workflows, one closed loop: Issue → Worktree → Plan → Build → Review → Evidence → Merge → Memory.",
       "topics": [
         "adr",
@@ -4447,7 +5090,7 @@
       "language": "Shell",
       "createdAt": "2026-07-11T02:31:47Z",
       "pushedAt": "2026-08-02T14:32:26Z",
-      "updatedAt": "2026-08-02T14:32:26Z",
+      "updatedAt": "2026-08-12T07:06:40Z",
       "defaultBranch": "main",
       "size": 2937,
       "title": "AI Engineering Harness",
@@ -4464,13 +5107,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/ai-engineering-harness/main/assets/architecture.svg",
-        "localFile": "github-ai-engineering-harness.webp",
+        "localFile": "github-lora-sys-ai-engineering-harness.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "second-brain": {
+    "lora-sys/second-brain": {
       "name": "second-brain",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/second-brain",
       "description": "Personal second-brain dashboard — Obsidian vault sync, knowledge graph, daily notes, and task tracking in one local-first UI.",
       "topics": [
         "dashboard",
@@ -4495,7 +5140,7 @@
       "language": "JavaScript",
       "createdAt": "2026-07-11T05:37:27Z",
       "pushedAt": "2026-07-16T15:58:04Z",
-      "updatedAt": "2026-07-16T15:58:04Z",
+      "updatedAt": "2026-07-16T15:58:46Z",
       "defaultBranch": "main",
       "size": 36400,
       "title": "Second Brain",
@@ -4510,13 +5155,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/second-brain/main/docs/screenshots/01-dashboard.png",
-        "localFile": "github-second-brain.webp",
+        "localFile": "github-lora-sys-second-brain.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "monadmon": {
+    "lora-sys/monadmon": {
       "name": "monadmon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/monadmon",
       "description": "MonadMon — the first living creatures on Monad. On-chain creature-raising + PvP battle. Tamagotchi meets crypto.",
       "topics": [
         "blockchain",
@@ -4543,7 +5190,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-11T09:17:29Z",
       "pushedAt": "2026-07-14T08:27:17Z",
-      "updatedAt": "2026-07-14T08:27:17Z",
+      "updatedAt": "2026-07-14T08:27:22Z",
       "defaultBranch": "main",
       "size": 15697,
       "title": "Monadmon",
@@ -4558,14 +5205,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/9a9448b76c9917ba4aeaad3d231e83ab990bd8ef36367b1e6c50c16367e0dd1e/lora-sys/monadmon",
-        "localFile": "github-monadmon.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/46c46e75e1721e16c61ee1492c55694f092f7a40c41cb1f681bd8f2a65b82659/lora-sys/monadmon",
+        "localFile": "github-lora-sys-monadmon.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "hermes-stepfun-imagegen": {
+    "lora-sys/hermes-stepfun-imagegen": {
       "name": "hermes-stepfun-imagegen",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hermes-stepfun-imagegen",
       "description": "StepFun image generation backend for Hermes Agent — step-image-edit-2, step-2x-large, step-1x-medium with pluggable API.",
       "topics": [
         "ai-plugin",
@@ -4586,7 +5235,7 @@
       "language": "Python",
       "createdAt": "2026-07-10T02:41:03Z",
       "pushedAt": "2026-07-12T09:42:19Z",
-      "updatedAt": "2026-07-12T09:42:19Z",
+      "updatedAt": "2026-07-14T05:09:42Z",
       "defaultBranch": "main",
       "size": 14852,
       "title": "Hermes StepFun Image Generation",
@@ -4601,13 +5250,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/hermes-stepfun-imagegen/main/docs/assets/demo-optimized.gif",
-        "localFile": "github-hermes-stepfun-imagegen.webp",
+        "localFile": "github-lora-sys-hermes-stepfun-imagegen.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "hermes-minimax-media": {
+    "lora-sys/hermes-minimax-media": {
       "name": "hermes-minimax-media",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hermes-minimax-media",
       "description": "MiniMax (海螺) image + video generation backends for Hermes Agent — image-01, Hailuo-2.3/02/S2V-01.",
       "topics": [
         "ai-art",
@@ -4630,7 +5281,7 @@
       "language": "Python",
       "createdAt": "2026-07-10T09:22:37Z",
       "pushedAt": "2026-07-12T09:42:06Z",
-      "updatedAt": "2026-07-12T09:42:06Z",
+      "updatedAt": "2026-07-14T05:09:42Z",
       "defaultBranch": "main",
       "size": 8105,
       "title": "Hermes MiniMax Media",
@@ -4645,13 +5296,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/hermes-minimax-media/main/docs/assets/screenshot-apple.jpg",
-        "localFile": "github-hermes-minimax-media.webp",
+        "localFile": "github-lora-sys-hermes-minimax-media.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "sysclean": {
+    "lora-sys/sysclean": {
       "name": "sysclean",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/sysclean",
       "description": "Global system cleanup and management TUI for Linux — services, Docker, Flatpak, disk usage, startup audit, all from one terminal.",
       "topics": [
         "arch-linux",
@@ -4679,7 +5332,7 @@
       "language": "Shell",
       "createdAt": "2026-07-09T13:38:36Z",
       "pushedAt": "2026-07-09T15:19:41Z",
-      "updatedAt": "2026-07-09T15:19:41Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 127,
       "title": "SysClean",
@@ -4693,14 +5346,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/sysclean",
-        "localFile": "github-sysclean.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/b8e8e891d02160eb33d6da285272fc7f6509fabc9b9b9d70274295369f541a98/lora-sys/sysclean",
+        "localFile": "github-lora-sys-sysclean.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "skills-manager": {
+    "lora-sys/skills-manager": {
       "name": "skills-manager",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/skills-manager",
       "description": "Skills management dashboard for AI workflows — browse, install, version, and audit Claude/agent skills across projects.",
       "topics": [
         "ai-workflow",
@@ -4722,7 +5377,7 @@
       "language": "TypeScript",
       "createdAt": "2026-07-05T06:36:15Z",
       "pushedAt": "2026-07-05T07:46:46Z",
-      "updatedAt": "2026-07-05T07:46:46Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 124,
       "title": "Skills Manager",
@@ -4738,14 +5393,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/skills-manager",
-        "localFile": "github-skills-manager.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/b8e8e891d02160eb33d6da285272fc7f6509fabc9b9b9d70274295369f541a98/lora-sys/skills-manager",
+        "localFile": "github-lora-sys-skills-manager.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "ui-aesthetic-improve": {
+    "lora-sys/ui-aesthetic-improve": {
       "name": "ui-aesthetic-improve",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ui-aesthetic-improve",
       "description": "UI aesthetic improvement workflow — opinionated Claude skill for taking functional UIs to portfolio-grade visual quality.",
       "topics": [
         "claude-skill",
@@ -4771,7 +5428,7 @@
       "language": "TypeScript",
       "createdAt": "2026-06-25T18:42:22Z",
       "pushedAt": "2026-06-26T05:19:58Z",
-      "updatedAt": "2026-06-26T05:19:58Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 49,
       "title": "UI Aesthetic Improve",
@@ -4786,14 +5443,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/ui-aesthetic-improve",
-        "localFile": "github-ui-aesthetic-improve.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/b8e8e891d02160eb33d6da285272fc7f6509fabc9b9b9d70274295369f541a98/lora-sys/ui-aesthetic-improve",
+        "localFile": "github-lora-sys-ui-aesthetic-improve.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "aicompanyos": {
+    "lora-sys/aicompanyos": {
       "name": "aicompanyos",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/aicompanyos",
       "description": "AI Company Operating System — concept for an autonomous org where agents own P&L, ship product, and serve users end-to-end.",
       "topics": [
         "agents",
@@ -4808,14 +5467,14 @@
       ],
       "homepage": null,
       "url": "https://github.com/lora-sys/aicompanyos",
-      "stars": 2,
+      "stars": 3,
       "fork": false,
       "archived": false,
       "languages": {},
       "language": null,
       "createdAt": "2026-06-15T14:01:39Z",
       "pushedAt": "2026-06-21T03:43:18Z",
-      "updatedAt": "2026-06-21T03:43:18Z",
+      "updatedAt": "2026-08-14T22:36:33Z",
       "defaultBranch": "main",
       "size": 5209,
       "title": "AI Company OS",
@@ -4830,14 +5489,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/aicompanyos",
-        "localFile": "github-aicompanyos.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/c5e0a8d73b7182230611d456f48bcdfe4c670e3e0e09cf71c0848886d9134d4f/lora-sys/aicompanyos",
+        "localFile": "github-lora-sys-aicompanyos.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "init-codebase": {
+    "lora-sys/init-codebase": {
       "name": "Init-codebase",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Init-codebase",
       "description": "Init-codebase Claude skill — bootstraps any repo into a Claude-Code-ready workspace with rules, agents, and skills wired up.",
       "topics": [
         "ai-workflow",
@@ -4858,7 +5519,7 @@
       "language": "JavaScript",
       "createdAt": "2026-06-20T05:15:15Z",
       "pushedAt": "2026-06-20T05:31:55Z",
-      "updatedAt": "2026-06-20T05:31:55Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 36,
       "title": "Init Codebase",
@@ -4873,14 +5534,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/Init-codebase",
-        "localFile": "github-init-codebase.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/b8e8e891d02160eb33d6da285272fc7f6509fabc9b9b9d70274295369f541a98/lora-sys/Init-codebase",
+        "localFile": "github-lora-sys-init-codebase.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "neetcode-submissions": {
+    "lora-sys/neetcode-submissions": {
       "name": "neetcode-submissions",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/neetcode-submissions",
       "description": "My NeetCode.io algorithm problem submissions — Python solutions with explanations, complexity, and test runs.",
       "topics": [
         "algorithms",
@@ -4901,7 +5564,7 @@
       "language": "Python",
       "createdAt": "2026-05-14T13:14:15Z",
       "pushedAt": "2026-06-18T12:36:47Z",
-      "updatedAt": "2026-06-18T12:36:47Z",
+      "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 11,
       "title": "NeetCode Submissions",
@@ -4915,14 +5578,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/6e101b0fd5e6fce95abea87ee926ac3f5971b14b7d6bb7d677a200157c185a65/lora-sys/neetcode-submissions",
-        "localFile": "github-neetcode-submissions.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/b8e8e891d02160eb33d6da285272fc7f6509fabc9b9b9d70274295369f541a98/lora-sys/neetcode-submissions",
+        "localFile": "github-lora-sys-neetcode-submissions.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "hackthon": {
+    "lora-sys/hackthon": {
       "name": "Hackthon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Hackthon",
       "description": "ETH Beijing hackathon entry — original submission archive with code, demo, and write-up.",
       "topics": [
         "eth-beijing",
@@ -4948,7 +5613,7 @@
       "language": "TypeScript",
       "createdAt": "2026-06-05T19:53:39Z",
       "pushedAt": "2026-06-07T04:31:01Z",
-      "updatedAt": "2026-06-07T04:31:01Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 32818,
       "title": "ETH Beijing Hackathon",
@@ -4963,14 +5628,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/9aba5b8fe6a9215274d64807b9d3ce3329791dfbf278351afe471311c1aa6dcc/lora-sys/Hackthon",
-        "localFile": "github-hackthon.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5504a45d4b8e673231da1494fc90eceecfcd5c05e3157c421cd6ff464efea5af/lora-sys/Hackthon",
+        "localFile": "github-lora-sys-hackthon.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "jonlinker": {
+    "lora-sys/jonlinker": {
       "name": "JonLinker",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/JonLinker",
       "description": "Agent-to-agent job search — autonomous resume delivery, recruiter conversation, and follow-up across LinkedIn / email / IM.",
       "topics": [
         "agent",
@@ -4996,7 +5663,7 @@
       "language": "TypeScript",
       "createdAt": "2026-04-22T11:28:50Z",
       "pushedAt": "2026-06-03T04:22:03Z",
-      "updatedAt": "2026-06-03T04:22:03Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 178535,
       "title": "JonLinker",
@@ -5010,14 +5677,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/9aba5b8fe6a9215274d64807b9d3ce3329791dfbf278351afe471311c1aa6dcc/lora-sys/JonLinker",
-        "localFile": "github-jonlinker.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5504a45d4b8e673231da1494fc90eceecfcd5c05e3157c421cd6ff464efea5af/lora-sys/JonLinker",
+        "localFile": "github-lora-sys-jonlinker.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "lora-skills": {
+    "lora-sys/lora-skills": {
       "name": "lora-skills",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/lora-skills",
       "description": "Distilled Claude skills for Marvis — my personal toolbox of focused agent capabilities.",
       "topics": [
         "agents",
@@ -5034,7 +5703,7 @@
       "language": null,
       "createdAt": "2026-05-26T09:24:21Z",
       "pushedAt": "2026-05-26T14:37:06Z",
-      "updatedAt": "2026-05-26T14:37:06Z",
+      "updatedAt": "2026-07-14T05:09:45Z",
       "defaultBranch": "main",
       "size": 62,
       "title": "Lora Skills",
@@ -5049,14 +5718,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/5063d351c2607cc047dbd5b1ddc9a8743fc52bd961281dd3e6ecc3b8ba3f8db0/lora-sys/lora-skills",
-        "localFile": "github-lora-skills.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/55b44ad62d402d67e0b025f844582bef97c5b6fb4aa136604431e93dba24b2a5/lora-sys/lora-skills",
+        "localFile": "github-lora-sys-lora-skills.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "recruitdraft": {
+    "lora-sys/recruitdraft": {
       "name": "RecruitDraft",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/RecruitDraft",
       "description": "RecruitDraft — 输入公司文化 + 职位描述，AI 生成 STAR 法则面试问题和 LinkedIn 职位帖。A recruiter's copilot for STAR-rule interview kits and LinkedIn job posts.",
       "topics": [
         "ai",
@@ -5079,7 +5750,7 @@
       "language": "TypeScript",
       "createdAt": "2026-05-03T07:51:30Z",
       "pushedAt": "2026-05-03T07:57:08Z",
-      "updatedAt": "2026-05-03T07:57:08Z",
+      "updatedAt": "2026-07-14T05:09:47Z",
       "defaultBranch": "main",
       "size": 501,
       "title": "RecruitDraft",
@@ -5092,14 +5763,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/4b258043f6d4617d7ed0b2a489144bb97001d73f3c2d270f1bfe32dd9e1f06d8/lora-sys/RecruitDraft",
-        "localFile": "github-recruitdraft.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5f8dbcaecd85928ed7f80265d7283aa68df44c4c8d646cc4693355d898dba2fd/lora-sys/RecruitDraft",
+        "localFile": "github-lora-sys-recruitdraft.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "miscroservice": {
+    "lora-sys/miscroservice": {
       "name": "MIscroservice",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MIscroservice",
       "description": "Microservice practice project — service decomposition, gRPC + REST gateways, observability, and deployment.",
       "topics": [
         "grpc",
@@ -5127,7 +5800,7 @@
       "language": "TypeScript",
       "createdAt": "2026-05-01T08:43:28Z",
       "pushedAt": "2026-05-01T12:18:21Z",
-      "updatedAt": "2026-05-01T12:18:21Z",
+      "updatedAt": "2026-07-14T05:09:46Z",
       "defaultBranch": "main",
       "size": 109,
       "title": "Microservice Practice",
@@ -5141,14 +5814,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/9aba5b8fe6a9215274d64807b9d3ce3329791dfbf278351afe471311c1aa6dcc/lora-sys/MIscroservice",
-        "localFile": "github-miscroservice.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5504a45d4b8e673231da1494fc90eceecfcd5c05e3157c421cd6ff464efea5af/lora-sys/MIscroservice",
+        "localFile": "github-lora-sys-miscroservice.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "research-assistant-skill": {
+    "lora-sys/research-assistant-skill": {
       "name": "research-assistant-skill",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/research-assistant-skill",
       "description": "科研全流程 Claude skill — 文献检索、学术脉络梳理、论文写作润色、技术路线图生成。Full research workflow assistant.",
       "topics": [
         "academic-writing",
@@ -5165,7 +5840,7 @@
       "language": null,
       "createdAt": "2026-04-18T12:32:26Z",
       "pushedAt": "2026-04-18T12:42:13Z",
-      "updatedAt": "2026-04-18T12:42:13Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 254,
       "title": "Research Assistant Skill",
@@ -5179,14 +5854,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/b48b386601dbcde0705308b62876eb4a6a4bdab7c68fbbea34370be278777ed9/lora-sys/research-assistant-skill",
-        "localFile": "github-research-assistant-skill.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d40aae18819c7e098dc93b48622b542cb1da3e04e84efa5c18e3a4ddc522381c/lora-sys/research-assistant-skill",
+        "localFile": "github-lora-sys-research-assistant-skill.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "humanize-write": {
+    "lora-sys/humanize-write": {
       "name": "humanize-write",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/humanize-write",
       "description": "Humanize-write Claude skill — strips AI tells from generated text, returning natural, voice-preserving prose.",
       "topics": [
         "ai",
@@ -5206,7 +5883,7 @@
       "language": null,
       "createdAt": "2026-04-17T05:57:17Z",
       "pushedAt": "2026-04-17T13:21:07Z",
-      "updatedAt": "2026-04-17T13:21:07Z",
+      "updatedAt": "2026-07-14T05:09:47Z",
       "defaultBranch": "main",
       "size": 19,
       "title": "Humanize Write",
@@ -5221,14 +5898,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/4b258043f6d4617d7ed0b2a489144bb97001d73f3c2d270f1bfe32dd9e1f06d8/lora-sys/humanize-write",
-        "localFile": "github-humanize-write.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5f8dbcaecd85928ed7f80265d7283aa68df44c4c8d646cc4693355d898dba2fd/lora-sys/humanize-write",
+        "localFile": "github-lora-sys-humanize-write.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "newtube-clone": {
+    "lora-sys/newtube-clone": {
       "name": "Newtube-clone",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Newtube-clone",
       "description": "YouTube-style video clone with AI recommendations — full-stack Next.js + recommendation pipeline.",
       "topics": [
         "ai",
@@ -5253,7 +5932,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-11T00:53:20Z",
       "pushedAt": "2026-03-28T15:11:55Z",
-      "updatedAt": "2026-03-28T15:11:55Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 5192,
       "title": "Newtube Clone",
@@ -5267,14 +5946,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/b48b386601dbcde0705308b62876eb4a6a4bdab7c68fbbea34370be278777ed9/lora-sys/Newtube-clone",
-        "localFile": "github-newtube-clone.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d40aae18819c7e098dc93b48622b542cb1da3e04e84efa5c18e3a4ddc522381c/lora-sys/Newtube-clone",
+        "localFile": "github-lora-sys-newtube-clone.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "node-base": {
+    "lora-sys/node-base": {
       "name": "node-base",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/node-base",
       "description": "node-base — n8n-style AI workflow builder clone with node-graph editor and execution engine.",
       "topics": [
         "ai",
@@ -5297,7 +5978,7 @@
       "language": "TypeScript",
       "createdAt": "2026-03-18T07:44:12Z",
       "pushedAt": "2026-03-26T14:33:38Z",
-      "updatedAt": "2026-03-26T14:33:38Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 1642,
       "title": "Node Base",
@@ -5312,14 +5993,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/b48b386601dbcde0705308b62876eb4a6a4bdab7c68fbbea34370be278777ed9/lora-sys/node-base",
-        "localFile": "github-node-base.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d40aae18819c7e098dc93b48622b542cb1da3e04e84efa5c18e3a4ddc522381c/lora-sys/node-base",
+        "localFile": "github-lora-sys-node-base.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "zchat-demo": {
+    "lora-sys/zchat-demo": {
       "name": "zchat-demo",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/zchat-demo",
       "description": "zchat-demo — modern chat UI demo built with Next.js, streaming responses, multi-model support.",
       "topics": [
         "ai-chat",
@@ -5342,7 +6025,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-12T15:56:13Z",
       "pushedAt": "2026-03-06T08:54:02Z",
-      "updatedAt": "2026-03-06T08:54:02Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 1733,
       "title": "ZChat Demo",
@@ -5358,13 +6041,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/zchat-demo/main/app/(chat)/opengraph-image.png",
-        "localFile": "github-zchat-demo.webp",
+        "localFile": "github-lora-sys-zchat-demo.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "hackthon-agent": {
+    "lora-sys/hackthon-agent": {
       "name": "hackthon-agent",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/hackthon-agent",
       "description": "Hackathon-tuned AI agent helper — optimized for time-boxed builds: scaffold fast, ship features, win.",
       "topics": [
         "ai-agent",
@@ -5386,7 +6071,7 @@
       "language": "TypeScript",
       "createdAt": "2026-02-17T07:21:58Z",
       "pushedAt": "2026-02-27T13:24:15Z",
-      "updatedAt": "2026-02-27T13:24:15Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 5889,
       "title": "Hackathon Agent",
@@ -5400,14 +6085,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/b48b386601dbcde0705308b62876eb4a6a4bdab7c68fbbea34370be278777ed9/lora-sys/hackthon-agent",
-        "localFile": "github-hackthon-agent.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d40aae18819c7e098dc93b48622b542cb1da3e04e84efa5c18e3a4ddc522381c/lora-sys/hackthon-agent",
+        "localFile": "github-lora-sys-hackthon-agent.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "mianshihou-interview-website": {
+    "lora-sys/mianshihou-interview-website": {
       "name": "mianshihou-interview-website",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mianshihou-interview-website",
       "description": "Mianshihou (面试猴) — interview prep website backend with Node.js, question bank, mock interview, and progress tracking.",
       "topics": [
         "backend",
@@ -5430,7 +6117,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-24T14:32:02Z",
       "pushedAt": "2026-02-09T03:47:14Z",
-      "updatedAt": "2026-02-09T03:47:14Z",
+      "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 3196,
       "title": "Mianshihou Interview Website",
@@ -5444,14 +6131,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/b48b386601dbcde0705308b62876eb4a6a4bdab7c68fbbea34370be278777ed9/lora-sys/mianshihou-interview-website",
-        "localFile": "github-mianshihou-interview-website.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/d40aae18819c7e098dc93b48622b542cb1da3e04e84efa5c18e3a4ddc522381c/lora-sys/mianshihou-interview-website",
+        "localFile": "github-lora-sys-mianshihou-interview-website.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "lora-website": {
+    "lora-sys/lora-website": {
       "name": "Lora-website",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Lora-website",
       "description": "Personal website — early version of lora-sys portfolio.",
       "topics": [
         "personal-site",
@@ -5472,7 +6161,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-14T16:50:35Z",
       "pushedAt": "2026-02-04T14:03:02Z",
-      "updatedAt": "2026-02-04T14:03:02Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 15430,
       "title": "Lora Website",
@@ -5486,14 +6175,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/e61e530416d303a3249ae4a9af078068f64df03224a19cf67a80526453339057/lora-sys/Lora-website",
-        "localFile": "github-lora-website.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/a7b3e7d6f1deda3a9350eee47d051922f8943072d37143707a0106057a3592d2/lora-sys/Lora-website",
+        "localFile": "github-lora-sys-lora-website.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "meme-vibe-casino": {
+    "lora-sys/meme-vibe-casino": {
       "name": "meme-Vibe-Casino",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/meme-Vibe-Casino",
       "description": "Meme Vibe Casino — vibe-coded casino game for hackathon, meme-token themed slots and mini-games.",
       "topics": [
         "casino",
@@ -5517,7 +6208,7 @@
       "language": "TypeScript",
       "createdAt": "2026-01-23T11:31:06Z",
       "pushedAt": "2026-01-24T14:14:19Z",
-      "updatedAt": "2026-01-24T14:14:19Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 2745,
       "title": "Meme Vibe Casino",
@@ -5532,14 +6223,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/e61e530416d303a3249ae4a9af078068f64df03224a19cf67a80526453339057/lora-sys/meme-Vibe-Casino",
-        "localFile": "github-meme-vibe-casino.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/a7b3e7d6f1deda3a9350eee47d051922f8943072d37143707a0106057a3592d2/lora-sys/meme-Vibe-Casino",
+        "localFile": "github-lora-sys-meme-vibe-casino.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "demo_monad_hackthon": {
+    "lora-sys/demo_monad_hackthon": {
       "name": "demo_monad_hackthon",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/demo_monad_hackthon",
       "description": "Monad hackathon demo project — quick prototype exploring Monad's parallel execution.",
       "topics": [
         "blockchain",
@@ -5563,7 +6256,7 @@
       "language": "JavaScript",
       "createdAt": "2026-01-19T08:29:32Z",
       "pushedAt": "2026-01-24T07:51:47Z",
-      "updatedAt": "2026-01-24T07:51:47Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 1005,
       "title": "Monad Hackathon Demo",
@@ -5577,14 +6270,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/e61e530416d303a3249ae4a9af078068f64df03224a19cf67a80526453339057/lora-sys/demo_monad_hackthon",
-        "localFile": "github-demo-monad-hackthon.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/a7b3e7d6f1deda3a9350eee47d051922f8943072d37143707a0106057a3592d2/lora-sys/demo_monad_hackthon",
+        "localFile": "github-lora-sys-demo-monad-hackthon.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "web3-frontend-ui-and-ux-reviewer": {
+    "lora-sys/web3-frontend-ui-and-ux-reviewer": {
       "name": "web3-frontend-ui-and-ux-reviewer",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/web3-frontend-ui-and-ux-reviewer",
       "description": "Web3 frontend UI/UX reviewer Claude skill — audits dApp interfaces for wallet flow, signing UX, and on-chain clarity.",
       "topics": [
         "claude-skill",
@@ -5602,7 +6297,7 @@
       "language": null,
       "createdAt": "2026-01-23T08:23:14Z",
       "pushedAt": "2026-01-23T08:24:04Z",
-      "updatedAt": "2026-01-23T08:24:04Z",
+      "updatedAt": "2026-07-14T05:09:49Z",
       "defaultBranch": "main",
       "size": 13,
       "title": "Web3 Frontend UI/UX Reviewer",
@@ -5618,14 +6313,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/e61e530416d303a3249ae4a9af078068f64df03224a19cf67a80526453339057/lora-sys/web3-frontend-ui-and-ux-reviewer",
-        "localFile": "github-web3-frontend-ui-and-ux-reviewer.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/a7b3e7d6f1deda3a9350eee47d051922f8943072d37143707a0106057a3592d2/lora-sys/web3-frontend-ui-and-ux-reviewer",
+        "localFile": "github-lora-sys-web3-frontend-ui-and-ux-reviewer.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "ui-design": {
+    "lora-sys/ui-design": {
       "name": "ui-design",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ui-design",
       "description": "ui-design Claude skill — generates component systems, color tokens, and typography scales from brief.",
       "topics": [
         "claude-skill",
@@ -5642,7 +6339,7 @@
       "language": null,
       "createdAt": "2026-01-22T15:22:01Z",
       "pushedAt": "2026-01-23T08:07:32Z",
-      "updatedAt": "2026-01-23T08:07:32Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 11,
       "title": "UI Design",
@@ -5657,14 +6354,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/663c1c32a026574af544c6219ee5cdcc1e8b3e8b77e37560861f5d1ba3b6b37c/lora-sys/ui-design",
-        "localFile": "github-ui-design.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/439ae07ec50146339b1f34c0dca266ab9d4ffb9b34e5471d4c379bc25be68f63/lora-sys/ui-design",
+        "localFile": "github-lora-sys-ui-design.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "better-auth-learn": {
+    "lora-sys/better-auth-learn": {
       "name": "better-auth-learn",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/better-auth-learn",
       "description": "Better-auth library learning project — auth patterns, session management, OAuth flows.",
       "topics": [
         "auth",
@@ -5686,7 +6385,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-29T04:12:05Z",
       "pushedAt": "2026-01-21T14:51:19Z",
-      "updatedAt": "2026-01-21T14:51:19Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 89,
       "title": "Better Auth Learning",
@@ -5700,14 +6399,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/749ba03bbf078929f3996c88c210f18e7b6b871a07e43b6508ca39be8782ecfd/lora-sys/better-auth-learn",
-        "localFile": "github-better-auth-learn.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/396cd3143075574c00833e56287006c443ae6128df0b1840a320e7b2a50ce34a/lora-sys/better-auth-learn",
+        "localFile": "github-lora-sys-better-auth-learn.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "go-project": {
+    "lora-sys/go-project": {
       "name": "go-project",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/go-project",
       "description": "Go learning sandbox — small projects exploring goroutines, channels, interfaces, and std lib.",
       "topics": [
         "go",
@@ -5732,7 +6433,7 @@
       "language": "Go",
       "createdAt": "2025-12-28T09:20:42Z",
       "pushedAt": "2026-01-19T14:06:35Z",
-      "updatedAt": "2026-01-19T14:06:35Z",
+      "updatedAt": "2026-07-14T05:09:50Z",
       "defaultBranch": "main",
       "size": 59,
       "title": "Go Projects",
@@ -5746,14 +6447,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/f8fb28074fa56575837be69f2ced2d314d05c028b8c35bc7174d9c32dbe75011/lora-sys/go-project",
-        "localFile": "github-go-project.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/a874e88bce1fb20661e2f56cc9b047746157481c87ecf2f473e0c0ce9770520c/lora-sys/go-project",
+        "localFile": "github-lora-sys-go-project.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "mianshiya-next-lora": {
+    "lora-sys/mianshiya-next-lora": {
       "name": "mianshiya-next-lora",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/mianshiya-next-lora",
       "description": "Mianshiya-next — interview practice platform clone (Java backend).",
       "topics": [
         "interview",
@@ -5776,7 +6479,7 @@
       "language": "Java",
       "createdAt": "2025-10-13T08:09:43Z",
       "pushedAt": "2026-01-18T12:04:00Z",
-      "updatedAt": "2026-01-18T12:04:00Z",
+      "updatedAt": "2026-07-14T05:09:50Z",
       "defaultBranch": "main",
       "size": 25768,
       "title": "Mianshiya Next",
@@ -5792,13 +6495,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/mianshiya-next-lora/main/images/core_dev_process_20251016195150.png",
-        "localFile": "github-mianshiya-next-lora.webp",
+        "localFile": "github-lora-sys-mianshiya-next-lora.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "daily-rss": {
+    "lora-sys/daily-rss": {
       "name": "Daily-Rss",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Daily-Rss",
       "description": "Daily RSS — minimal daily RSS reader with smart summarization and topic clustering.",
       "topics": [
         "ai-summary",
@@ -5820,7 +6525,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-27T07:57:29Z",
       "pushedAt": "2026-01-10T12:43:23Z",
-      "updatedAt": "2026-01-10T12:43:23Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 186,
       "title": "Daily RSS",
@@ -5836,13 +6541,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/Daily-Rss/main/public/Snipaste_2025-12-28_16-28-54.png",
-        "localFile": "github-daily-rss.webp",
+        "localFile": "github-lora-sys-daily-rss.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "threejs-projects": {
+    "lora-sys/threejs-projects": {
       "name": "ThreeJs-projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ThreeJs-projects",
       "description": "Interactive Sci-Fi Control Interface built with Three.js — WebGL experiments, shader work, scene composition.",
       "topics": [
         "3d",
@@ -5865,7 +6572,7 @@
       "language": "TypeScript",
       "createdAt": "2025-12-20T16:28:31Z",
       "pushedAt": "2025-12-23T15:23:02Z",
-      "updatedAt": "2025-12-23T15:23:02Z",
+      "updatedAt": "2026-07-14T05:09:51Z",
       "defaultBranch": "main",
       "size": 91,
       "title": "Three.js Projects",
@@ -5879,14 +6586,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/749ba03bbf078929f3996c88c210f18e7b6b871a07e43b6508ca39be8782ecfd/lora-sys/ThreeJs-projects",
-        "localFile": "github-threejs-projects.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/396cd3143075574c00833e56287006c443ae6128df0b1840a320e7b2a50ce34a/lora-sys/ThreeJs-projects",
+        "localFile": "github-lora-sys-threejs-projects.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "lora-bi": {
+    "lora-sys/lora-bi": {
       "name": "lora-bi",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/lora-bi",
       "description": "BI project — dashboards, metrics pipelines, and visualization experiments.",
       "topics": [
         "analytics",
@@ -5910,7 +6619,7 @@
       "language": "Java",
       "createdAt": "2025-11-13T10:55:01Z",
       "pushedAt": "2025-11-23T10:49:17Z",
-      "updatedAt": "2025-11-23T10:49:17Z",
+      "updatedAt": "2026-07-14T05:09:52Z",
       "defaultBranch": "main",
       "size": 1347,
       "title": "Lora BI",
@@ -5925,13 +6634,15 @@
       "poster": {
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/lora-bi/main/Snipaste_2025-11-23_18-46-17.png",
-        "localFile": "github-lora-bi.webp",
+        "localFile": "github-lora-sys-lora-bi.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
     },
-    "demo": {
+    "lora-sys/demo": {
       "name": "demo",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/demo",
       "description": "Generic demo project — template for prototypes.",
       "topics": [
         "demo",
@@ -5951,7 +6662,7 @@
       "language": "JavaScript",
       "createdAt": "2025-09-20T07:46:01Z",
       "pushedAt": "2025-09-20T08:55:13Z",
-      "updatedAt": "2025-09-20T08:55:13Z",
+      "updatedAt": "2026-07-14T05:09:16Z",
       "defaultBranch": "lineage-tracing-system",
       "size": 517,
       "title": "Demo",
@@ -5964,14 +6675,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/63f107bd0b2d9c4a5eec2225dd30f3f01443d240c43db752f7f99270fc5a1af0/lora-sys/demo",
-        "localFile": "github-demo.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/610b6e9e2489e544ab56a6325656a937ed6264962af7f055c2ce738d7ac4d442/lora-sys/demo",
+        "localFile": "github-lora-sys-demo.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "note-app": {
+    "lora-sys/note-app": {
       "name": "note-app",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/note-app",
       "description": "Note-app — personal note-taking app with markdown, tags, and quick capture.",
       "topics": [
         "javascript",
@@ -5992,7 +6705,7 @@
       "language": "JavaScript",
       "createdAt": "2025-05-29T14:28:24Z",
       "pushedAt": "2025-07-20T00:29:08Z",
-      "updatedAt": "2025-07-20T00:29:08Z",
+      "updatedAt": "2026-07-14T05:09:17Z",
       "defaultBranch": "main",
       "size": 62,
       "title": "Note App",
@@ -6006,14 +6719,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/355840661bed5110ca59d748f103997b5bbac7f3eb769796591af7f64e2072a0/lora-sys/note-app",
-        "localFile": "github-note-app.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/1c4c8df90ac960042d56ded9ee2cf48dcb0e25ce940eeeb9eadc338611a0a146/lora-sys/note-app",
+        "localFile": "github-lora-sys-note-app.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "dream-prop-generator": {
+    "lora-sys/dream-prop-generator": {
       "name": "Dream-prop-generator",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Dream-prop-generator",
       "description": "Dream-prop random generator — spin up random D&D-style props, characters, and scenarios.",
       "topics": [
         "creativity",
@@ -6036,7 +6751,7 @@
       "language": "JavaScript",
       "createdAt": "2025-06-15T08:20:52Z",
       "pushedAt": "2025-06-18T13:57:30Z",
-      "updatedAt": "2025-06-18T13:57:30Z",
+      "updatedAt": "2026-07-14T05:09:53Z",
       "defaultBranch": "main",
       "size": 58,
       "title": "Dream Prop Generator",
@@ -6049,14 +6764,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/e6ec491eec44f4109c8b2ec6049b87f37df604f2cd08190cc143701b7a11f0eb/lora-sys/Dream-prop-generator",
-        "localFile": "github-dream-prop-generator.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/31b074c0e9cfc4a3ae7b5b1efffd2e7f6ce15f7ef2971ed03ced00e6564e4262/lora-sys/Dream-prop-generator",
+        "localFile": "github-lora-sys-dream-prop-generator.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "react-praceise": {
+    "lora-sys/react-praceise": {
       "name": "REACT-PRACEISE",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/REACT-PRACEISE",
       "description": "React practice — components, hooks, state patterns, and small apps.",
       "topics": [
         "frontend",
@@ -6078,7 +6795,7 @@
       "language": "TypeScript",
       "createdAt": "2025-06-08T06:30:20Z",
       "pushedAt": "2025-06-11T05:39:48Z",
-      "updatedAt": "2025-06-11T05:39:48Z",
+      "updatedAt": "2026-07-14T05:09:20Z",
       "defaultBranch": "main",
       "size": 62408,
       "title": "React Practice",
@@ -6093,14 +6810,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/463fbcb06e7c2769f27cca2686ef1148ee8ce550d3b5913be3192a33c02494a9/lora-sys/REACT-PRACEISE",
-        "localFile": "github-react-praceise.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5f57102431023f4bf919056144034d278329928199a080fa6a0d5a35b91dedac/lora-sys/REACT-PRACEISE",
+        "localFile": "github-lora-sys-react-praceise.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "cpp-projects": {
+    "lora-sys/cpp-projects": {
       "name": "cpp-projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/cpp-projects",
       "description": "C++ practice projects — algorithms, systems, and small utilities.",
       "topics": [
         "algorithms",
@@ -6117,7 +6836,7 @@
       "language": null,
       "createdAt": "2025-05-20T03:44:15Z",
       "pushedAt": "2025-06-08T10:15:00Z",
-      "updatedAt": "2025-06-08T10:15:00Z",
+      "updatedAt": "2026-08-05T14:53:29Z",
       "defaultBranch": "master",
       "size": 1306,
       "title": "C++ Projects",
@@ -6132,14 +6851,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/9a934e04e83fd9e63d9abf7aace69413b9e446a32074d8e2f97337b97405a1fd/lora-sys/cpp-projects",
-        "localFile": "github-cpp-projects.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/2642496d40aa30d676ee4d974a6624a75eacf2ffac34c6227f6918dc911e29f7/lora-sys/cpp-projects",
+        "localFile": "github-lora-sys-cpp-projects.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "automatic_compliments": {
+    "lora-sys/automatic_compliments": {
       "name": "automatic_compliments",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/automatic_compliments",
       "description": "Automatic Compliments (自动夸人小助手) — generates personalized compliments in Chinese and English.",
       "topics": [
         "ai",
@@ -6163,7 +6884,7 @@
       "language": "TeX",
       "createdAt": "2025-02-22T13:21:13Z",
       "pushedAt": "2025-06-07T07:25:01Z",
-      "updatedAt": "2025-06-07T07:25:01Z",
+      "updatedAt": "2026-07-14T05:09:54Z",
       "defaultBranch": "main",
       "size": 23319,
       "title": "Automatic Compliments",
@@ -6176,14 +6897,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/40361265256c88f8ebc0f3e5354495c7e7de6062fc62be009d383b5e44e68a13/lora-sys/automatic_compliments",
-        "localFile": "github-automatic-compliments.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/425e7d5773de7867b9a730b2857a2386ca4a68d43b8e788c965acfb76ee72240/lora-sys/automatic_compliments",
+        "localFile": "github-lora-sys-automatic-compliments.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "react-projects": {
+    "lora-sys/react-projects": {
       "name": "React-Projects",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/React-Projects",
       "description": "React projects — collection of React apps and components.",
       "topics": [
         "frontend",
@@ -6204,7 +6927,7 @@
       "language": "JavaScript",
       "createdAt": "2025-05-09T15:44:19Z",
       "pushedAt": "2025-06-06T12:49:37Z",
-      "updatedAt": "2025-06-06T12:49:37Z",
+      "updatedAt": "2026-07-14T05:09:56Z",
       "defaultBranch": "main",
       "size": 12128,
       "title": "React Projects",
@@ -6219,14 +6942,16 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/00c28b3add4d2d4e61577326d0bd38d081ca4233acca8322e68519a9be444e55/lora-sys/React-Projects",
-        "localFile": "github-react-projects.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/5bd8f417620769c304d991e0a80e50c550380c31a3c7b20f231db212b123df1b/lora-sys/React-Projects",
+        "localFile": "github-lora-sys-react-projects.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
     },
-    "snake": {
+    "lora-sys/snake": {
       "name": "Snake",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Snake",
       "description": "Snake — a very interesting snake game in C++.",
       "topics": [
         "classic",
@@ -6245,7 +6970,7 @@
       "language": "C++",
       "createdAt": "2025-05-09T09:07:09Z",
       "pushedAt": "2025-05-10T06:45:52Z",
-      "updatedAt": "2025-05-10T06:45:52Z",
+      "updatedAt": "2026-07-14T05:09:55Z",
       "defaultBranch": "main",
       "size": 65519,
       "title": "Snake",
@@ -6259,8 +6984,216 @@
       "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/d6f39cfdb35870d15a077f921cbbd61bd781ad3730b57f8ab4f88de8f7b66626/lora-sys/Snake",
-        "localFile": "github-snake.webp",
+        "sourceUrl": "https://opengraph.githubassets.com/bae853343a6d851985799ce37c0b144a79b66152dc28c41d1fe87f33d14c4482/lora-sys/Snake",
+        "localFile": "github-lora-sys-snake.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "acamlab/nanoagent": {
+      "name": "NanoAgent",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/NanoAgent",
+      "description": "Custom Your Agent!!",
+      "topics": [
+        "agent",
+        "ai",
+        "python"
+      ],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/NanoAgent",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 495808,
+        "Shell": 64917,
+        "PowerShell": 24133
+      },
+      "language": "Python",
+      "createdAt": "2026-03-31T12:08:06Z",
+      "pushedAt": "2026-05-09T10:37:44Z",
+      "updatedAt": "2026-07-11T09:21:47Z",
+      "defaultBranch": "main",
+      "size": 2298,
+      "title": "NanoAgent",
+      "summary": "Custom Your Agent!!",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "AI Agents"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/e016b5341b7999ab8fbbd8e38238455e926c1b05ce39a9567a60dd5c57fc89d6/ACAMLab/NanoAgent",
+        "localFile": "github-acamlab-nanoagent.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "acamlab/resumegenerator": {
+      "name": "ResumeGenerator",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/ResumeGenerator",
+      "description": "LaTeX + KaTeX-based resume generator",
+      "topics": [
+        "katex",
+        "latex",
+        "resume",
+        "typescript"
+      ],
+      "homepage": "https://ai.studio/apps/e5acc2e6-30f6-4133-a7fb-d1ca1e738be9",
+      "url": "https://github.com/ACAMLab/ResumeGenerator",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 53363,
+        "CSS": 1002,
+        "HTML": 311
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-05-03T08:16:35Z",
+      "pushedAt": "2026-05-03T08:16:48Z",
+      "updatedAt": "2026-07-11T09:23:18Z",
+      "defaultBranch": "main",
+      "size": 69,
+      "title": "ResumeGenerator",
+      "summary": "LaTeX + KaTeX-based resume generator",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/e11eea8e3aa359d81e2fdbcbdfcfc4ac4f87a653f4907c154099a18197c280e2/ACAMLab/ResumeGenerator",
+        "localFile": "github-acamlab-resumegenerator.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "acamlab/scidraft.ai": {
+      "name": "SCIDRAFT.AI",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/SCIDRAFT.AI",
+      "description": "Science-paper writing platform",
+      "topics": [
+        "science",
+        "typescript",
+        "writing"
+      ],
+      "homepage": "https://ai.studio/apps/0544f892-7d0c-468b-a806-e1660d6fc2b5",
+      "url": "https://github.com/ACAMLab/SCIDRAFT.AI",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 36579,
+        "CSS": 1762,
+        "HTML": 311
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-05-03T05:20:58Z",
+      "pushedAt": "2026-05-03T05:21:13Z",
+      "updatedAt": "2026-07-11T09:21:20Z",
+      "defaultBranch": "main",
+      "size": 74,
+      "title": "SCIDRAFT.AI",
+      "summary": "Science-paper writing platform",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "repository-card",
+        "sourceUrl": "https://github.com/ACAMLab/SCIDRAFT.AI",
+        "localFile": "github-acamlab-scidraft-ai.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "acamlab/redis-go": {
+      "name": "redis-go",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/redis-go",
+      "description": "Redis client/server implementation with RESP protocol and data persistence",
+      "topics": [
+        "database",
+        "go",
+        "redis",
+        "resp"
+      ],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/redis-go",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Go": 8662
+      },
+      "language": "Go",
+      "createdAt": "2026-04-29T14:37:41Z",
+      "pushedAt": "2026-04-29T14:38:20Z",
+      "updatedAt": "2026-07-11T09:21:34Z",
+      "defaultBranch": "main",
+      "size": 53,
+      "title": "Redis Go",
+      "summary": "Redis client/server implementation with RESP protocol and data persistence",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Tools"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/cb0b5c33fc97ba1df667983e95a6c96a933dfefe4a34b49fa28fc874f887fb14/ACAMLab/redis-go",
+        "localFile": "github-acamlab-redis-go.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "acamlab/nanochat-studay": {
+      "name": "nanochat-studay",
+      "owner": "ACAMLab",
+      "fullName": "ACAMLab/nanochat-studay",
+      "description": "This project is for learning the nanochat concept",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/ACAMLab/nanochat-studay",
+      "stars": 4,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 13902
+      },
+      "language": "Python",
+      "createdAt": "2026-03-07T11:51:19Z",
+      "pushedAt": "2026-03-10T12:19:59Z",
+      "updatedAt": "2026-05-31T12:42:00Z",
+      "defaultBranch": "main",
+      "size": 1435,
+      "title": "Nanochat Studay",
+      "summary": "This project is for learning the nanochat concept",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Learning",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/59eba6ceb4014e50097662f6b1dadafee7bd31d00cffe5724d8a270ca0be63f0/ACAMLab/nanochat-studay",
+        "localFile": "github-acamlab-nanochat-studay.webp",
         "fit": "cover",
         "objectPosition": "center"
       }

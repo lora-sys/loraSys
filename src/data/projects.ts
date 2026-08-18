@@ -23,6 +23,7 @@ export interface Project {
   posterFit: 'cover' | 'contain'
   objectPosition: string
   repository: string
+  source: string
   homepage?: string
   pushedAt: string
   language?: string
@@ -50,6 +51,8 @@ interface GitHubProjectRecord {
     fit: 'cover' | 'contain'
     objectPosition: string
   }
+  owner?: string
+  source?: string
 }
 
 const topicLabels: Record<string, string> = {
@@ -133,6 +136,7 @@ export const projects: Project[] = records
     posterFit: project.poster.fit,
     objectPosition: project.poster.objectPosition,
     repository: project.name,
+    source: project.source ?? project.owner ?? 'lora-sys',
     homepage: project.homepage ?? undefined,
     pushedAt: project.pushedAt,
     language: Object.keys(project.languages)[0],
