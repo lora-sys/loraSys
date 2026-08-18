@@ -4,6 +4,7 @@ import type { Project } from '@/data/projects'
 import { Icon } from 'astro-pure/user'
 
 import ProjectMedia from './ProjectMedia.astro'
+import { getProjectStories } from '@/data/project-stories'
 
 interface Props {
   project: Project
@@ -33,6 +34,7 @@ const primaryCategory =
   'Open Source'
 const visibleTechnologies = project.technologies.slice(0, 3)
 const technologyOverflow = Math.max(0, project.technologies.length - visibleTechnologies.length)
+const stories = getProjectStories(project.repository)
 const pushedAt = new Intl.DateTimeFormat('en', {
   month: 'short',
   year: 'numeric',
@@ -98,6 +100,26 @@ const filterAttributes = filterable
             <li aria-label={`${technologyOverflow} more technologies`}>+{technologyOverflow}</li>
           )}
         </ul>
+      )
+    }
+
+    {
+      stories.length > 0 && (
+        <div class='project-stories' aria-label='Related project stories'>
+          <span class='project-stories-label'>Story</span>
+          <div class='project-story-links'>
+            {stories.map((story) => (
+              <a
+                href={story.href}
+                target={story.external ? '_blank' : undefined}
+                rel={story.external ? 'noopener noreferrer' : undefined}
+              >
+                {story.kind} · {story.label}
+                <span aria-hidden='true'>↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
       )
     }
 
@@ -379,6 +401,45 @@ const filterAttributes = filterable
     padding: 0.2rem 0.5rem;
     color: hsl(var(--muted-foreground));
     font-size: 0.65rem;
+  }
+
+  .project-stories {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+
+  .project-stories-label {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.61rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .project-story-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.55rem;
+  }
+
+  .project-story-links a {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    gap: 0.28rem;
+    color: hsl(var(--foreground));
+    font-size: 0.68rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+
+  .project-story-links a:hover,
+  .project-story-links a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
   }
 
   .project-foot {
