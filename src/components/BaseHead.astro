@@ -3,6 +3,7 @@ import { Font } from 'astro:assets'
 import config from 'virtual:config'
 
 import type { SiteMeta } from 'astro-pure/types'
+import { socialLinks } from '@/data/social'
 
 type Props = SiteMeta & { noindex?: boolean }
 
@@ -12,6 +13,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/')
 const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
+const socialProfiles = socialLinks
+  .filter((link) => link.href.startsWith('http'))
+  .map((link) => link.href)
+const twitterCreator = socialLinks.find((link) => link.name === 'X')?.handle
+const profileJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: config.author,
+  url: canonicalURL.origin + baseUrl,
+  jobTitle: config.description,
+  description: config.description,
+  sameAs: socialProfiles
+}
 ---
 
 <meta charset='utf-8' />
@@ -45,11 +59,13 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
 <meta content={config.author} name='author' />
-{noindex && <meta name='robots' content='noindex, nofollow' />}
+  <meta name='robots' content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+  <meta name='referrer' content='strict-origin-when-cross-origin' />
 
-{/* Theme Color */}
-{/* <meta content='' name='theme-color' /> */}
-<meta name='color-scheme' content='light dark' />
+  {/* Theme Color */}
+  <meta name='theme-color' media='(prefers-color-scheme: light)' content='#edf4f7' />
+  <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#11151b' />
+  <meta name='color-scheme' content='light dark' />
 
 {/* Open Graph / Facebook */}
 <meta content={articleDate ? 'article' : 'website'} property='og:type' />
@@ -59,7 +75,9 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={config.title} property='og:site_name' />
 <meta content={config.locale.attrs} property='og:locale' />
 <meta content={socialImageURL} property='og:image' />
-<meta content='1200' property='og:image:width' />
+  <meta content={`${config.title} — ${description}`} property='og:image:alt' />
+  <meta content='1200' property='og:image:width' />
+
 <meta content='630' property='og:image:height' />
 {
   articleDate && (
@@ -76,8 +94,13 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 <meta content={title} property='twitter:title' />
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
+  {twitterCreator && <meta content={twitterCreator} property='twitter:creator' />}
 
-{/* Sitemap */}
+  {/* Person profile for search engines and link previews */}
+  <script type='application/ld+json' set:html={JSON.stringify(profileJsonLd)} />
+
+  {/* Sitemap */}
+
 <link href={`${baseUrl}sitemap-index.xml`} rel='sitemap' />
 
 {/* RSS auto-discovery */}
