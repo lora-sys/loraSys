@@ -1,0 +1,252 @@
+---
+import type { SocialLink } from '@/data/social'
+
+import SocialIcon from '@/components/contact/SocialIcon.astro'
+
+interface ContentItem {
+  type: 'Writing' | 'Project'
+  title: string
+  meta: string
+  href: string
+  relation?: string
+}
+
+interface Props {
+  channels: SocialLink[]
+  items: ContentItem[]
+}
+
+const { channels, items } = Astro.props
+---
+
+<div class='creator-hub'>
+  <div class='hub-intro'>
+    <div>
+      <span class='eyebrow'>Content & Channels</span>
+      <h3>Build in public, share the process.</h3>
+    </div>
+    <p>
+      Projects, technical writing, videos, and short-form notes—one home for the ideas I am building
+      and the places where I share them.
+    </p>
+  </div>
+
+  <div class='channel-grid' aria-label='Creator channels'>
+    {channels.map((channel) => (
+      <a
+        class='channel-card'
+        href={channel.href}
+        target='_blank'
+        rel='me noopener noreferrer'
+        style={`--brand:${channel.brand}`}
+        aria-label={`${channel.name}: ${channel.handle}`}
+      >
+        <span class='channel-icon'><SocialIcon name={channel.icon} class='size-5' /></span>
+        <span class='channel-copy'>
+          <strong>{channel.name}</strong>
+          <span>{channel.handle}</span>
+        </span>
+        <span class='channel-arrow' aria-hidden='true'>↗</span>
+      </a>
+    ))}
+  </div>
+
+  <div class='content-heading'>
+    <span class='eyebrow'>Latest Content</span>
+    <span>Selected from the site</span>
+  </div>
+  <div class='content-list'>
+    {items.map((item) => (
+      <a class='content-item' href={item.href}>
+        <span class='content-type'>{item.type}</span>
+        <span class='content-copy'>
+          <strong>{item.title}</strong>
+          <span>{item.meta}{item.relation ? ` · ${item.relation}` : ''}</span>
+        </span>
+        <span class='content-arrow' aria-hidden='true'>→</span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<style>
+  .creator-hub {
+    display: grid;
+    gap: 1.4rem;
+  }
+  .hub-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.8fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .eyebrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h3 {
+    max-width: 18ch;
+    margin-top: 0.55rem;
+    font-size: clamp(1.6rem, 4vw, 2.55rem);
+    font-weight: 570;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+  }
+  .hub-intro p {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+  .channel-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .channel-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.8rem;
+    padding: 0.72rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      border-color 180ms ease,
+      background 180ms ease,
+      transform 180ms ease;
+  }
+  .channel-card:hover,
+  .channel-card:focus-visible {
+    border-color: color-mix(in srgb, var(--brand) 55%, hsl(var(--border)));
+    background: color-mix(in srgb, var(--brand) 5%, hsl(var(--card)));
+    outline: none;
+    transform: translateY(-2px);
+  }
+  .channel-icon {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 0.58rem;
+    background: hsl(var(--background));
+    color: var(--brand);
+  }
+  .channel-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.1rem;
+  }
+  .channel-copy strong {
+    overflow: hidden;
+    font-size: 0.8rem;
+    font-weight: 650;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .channel-copy span {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .channel-arrow,
+  .content-arrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+  }
+  .content-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 0.6rem;
+  }
+  .content-heading > span:last-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .content-list {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .content-item {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.8rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 0.75rem 0;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+  .content-item:hover,
+  .content-item:focus-visible {
+    color: hsl(var(--primary));
+    outline: none;
+  }
+  .content-type {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .content-copy {
+    display: grid;
+    min-width: 0;
+    gap: 0.15rem;
+  }
+  .content-copy strong {
+    overflow: hidden;
+    font-size: 0.86rem;
+    font-weight: 580;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .content-copy span {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @media (max-width: 780px) {
+    .hub-intro {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .channel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .channel-grid {
+      grid-template-columns: 1fr;
+    }
+    .content-item {
+      grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    }
+    .content-copy strong {
+      white-space: normal;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .channel-card {
+      transition: none;
+    }
+    .channel-card:hover,
+    .channel-card:focus-visible {
+      transform: none;
+    }
+  }
+</style>
