@@ -6,6 +6,7 @@ export type SocialIcon =
   | 'youtube'
   | 'bilibili'
   | 'zhihu'
+  | 'xiaohongshu'
   | 'email'
 
 export interface SocialLink {
@@ -85,6 +86,14 @@ export const socialLinks: SocialLink[] = [
     href: 'https://www.zhihu.com/people/lorry-23-28-30',
     icon: 'zhihu',
     brand: '#0084ff'
+  },
+  {
+    name: '小红书',
+    handle: '63887411156',
+    description: '中文内容、项目记录与创作日常。',
+    href: 'https://www.xiaohongshu.com/user/profile/63887411156',
+    icon: 'xiaohongshu',
+    brand: '#ff2442'
   }
 ]
 
