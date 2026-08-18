@@ -11,6 +11,7 @@ import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import SocialIcon from '@/components/contact/SocialIcon.astro'
 import ContactOutro from '@/components/home/ContactOutro.astro'
+import CreatorHub from '@/components/home/CreatorHub.astro'
 import LatestSignals from '@/components/home/LatestSignals.astro'
 import Section from '@/components/home/Section.astro'
 import ContributionGraph from '@/components/lora/ContributionGraph.astro'
@@ -66,6 +67,24 @@ const signals = [
 const heroSocials = socialLinks.filter((link) =>
   ['GitHub', 'LinkedIn', 'X', 'Email'].includes(link.name)
 )
+const creatorChannels = socialLinks.filter((link) =>
+  ['Bilibili', '知乎', '小红书', 'YouTube'].includes(link.name)
+)
+const latestContent = [
+  ...recentPosts.slice(0, 3).map((post) => ({
+    type: 'Writing' as const,
+    title: post.data.title,
+    meta: signalDate(post.data.updatedDate ?? post.data.publishDate),
+    href: `/blog/${post.id}`
+  })),
+  ...featuredProjects.slice(0, 2).map((project) => ({
+    type: 'Project' as const,
+    title: project.title,
+    meta: project.source,
+    href: `/projects#${project.repository}`,
+    relation: project.status === 'building' ? 'Building now' : 'Selected project'
+  }))
+]
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#659EB9'>
@@ -156,6 +175,10 @@ const heroSocials = socialLinks.filter((link) =>
           </Section>
         )
       }
+
+      <Section title='Creator Hub'>
+        <CreatorHub channels={creatorChannels} items={latestContent} />
+      </Section>
 
       <Section title='Open Source'>
         <div class='footprint'>
