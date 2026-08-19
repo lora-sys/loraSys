@@ -1,11 +1,13 @@
 ---
 import type { ThemeRoadmapItem } from '@/data/theme-roadmap'
+import { socialLinks } from '@/data/social'
 
 interface Props {
   themes: ThemeRoadmapItem[]
 }
 
 const { themes } = Astro.props
+const channelsByName = new Map(socialLinks.map((channel) => [channel.name, channel]))
 ---
 
 <section id='theme-roadmap' class='theme-roadmap' aria-labelledby='theme-roadmap-title'>
@@ -48,7 +50,24 @@ const { themes } = Astro.props
         </div>
 
         <div class='theme-footer'>
-          <span>{theme.channelNames.join(' · ')}</span>
+          <span class='theme-channels' aria-label={`${theme.title} channels`}>
+            {theme.channelNames.map((channelName) => {
+              const channel = channelsByName.get(channelName)
+              return channel ? (
+                <a
+                  href={channel.href}
+                  target='_blank'
+                  rel='me noopener noreferrer'
+                  data-interaction='theme_channel'
+                  data-theme={theme.slug}
+                  data-channel={channel.name}
+                  aria-label={`${channel.name}: ${channel.handle}`}
+                >{channel.name}<span aria-hidden='true'>↗</span></a>
+              ) : (
+                <span>{channelName}</span>
+              )
+            })}
+          </span>
           <span>Next: {theme.nextFormat}</span>
         </div>
       </article>
@@ -111,6 +130,21 @@ const { themes } = Astro.props
     gap: 1rem;
     color: hsl(var(--muted-foreground));
     font-size: 0.66rem;
+  }
+  .theme-channels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.55rem;
+  }
+  .theme-channels a {
+    color: hsl(var(--muted-foreground));
+    text-decoration: none;
+  }
+  .theme-channels a:hover,
+  .theme-channels a:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
   }
   .theme-index {
     color: hsl(var(--foreground));
@@ -192,6 +226,10 @@ const { themes } = Astro.props
     }
     .theme-description {
       min-height: 0;
+    }
+    .theme-footer {
+      align-items: flex-start;
+      flex-direction: column;
     }
   }
 </style>
