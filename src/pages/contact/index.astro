@@ -45,6 +45,13 @@ const headings = [
     </button>
     <span id='copy-status' class='sr-only' aria-live='polite'></span>
   </div>
+  <div class='not-prose subscribe-card'>
+    <div>
+      <span class='eyebrow'>Keep up with the work</span>
+      <strong>Read new writing and project notes when they ship.</strong>
+    </div>
+    <a href='/rss.xml' data-interaction='subscribe_feed'>Subscribe via RSS <span aria-hidden='true'>↗</span></a>
+  </div>
 
   <h2 id='good-conversations'>Good conversations</h2>
   <div class='not-prose conversation-grid'>
@@ -218,6 +225,39 @@ const headings = [
     gap: 0.75rem;
     margin-block: 1.35rem 2rem;
   }
+  .subscribe-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    padding: 1rem;
+    background: hsl(var(--card));
+  }
+  .subscribe-card > div {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .subscribe-card .eyebrow {
+    font-size: 0.62rem;
+  }
+  .subscribe-card strong {
+    font-size: 0.84rem;
+    font-weight: 580;
+  }
+  .subscribe-card a {
+    flex: none;
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+  .subscribe-card a:hover,
+  .subscribe-card a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
   .conversation-grid article {
     border-top: 1px solid hsl(var(--border));
     padding-top: 0.85rem;
@@ -244,6 +284,10 @@ const headings = [
       gap: 1.25rem;
     }
     .email-copy {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .subscribe-card {
       align-items: flex-start;
       flex-direction: column;
     }

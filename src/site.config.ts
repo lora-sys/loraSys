@@ -105,7 +105,8 @@ export const secondaryNavigation = [
   { title: 'Now', link: '/now' },
   { title: 'Talks', link: '/talks' },
   { title: 'Links', link: '/links' },
-  { title: 'Archives', link: '/archives' }
+  { title: 'Archives', link: '/archives' },
+  { title: 'RSS', link: '/rss.xml' }
 ] as const
 
 export const integ: IntegrationUserConfig = {
