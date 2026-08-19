@@ -110,10 +110,16 @@ const latestContent: ContentFeedItem[] = [
         <h1 id='home-title'>Building evolving agents, tools, and ambitious systems.</h1>
         <p>{profile.summary[0]}</p>
         <div class='hero-actions'>
-          <a class='primary-action' href='/projects'
+          <a
+            class='primary-action'
+            href='/projects'
+            data-interaction='primary_cta'
+            data-destination='projects'
             >Explore projects <span aria-hidden='true'>→</span></a
           >
-          <a href='/contact'>Let&apos;s connect</a>
+          <a href='/contact' data-interaction='primary_cta' data-destination='contact'>
+            Let&apos;s connect
+          </a>
         </div>
         <nav class='social-rail' aria-label='Primary social profiles'>
           {
@@ -121,6 +127,8 @@ const latestContent: ContentFeedItem[] = [
               <a
                 href={link.href}
                 target={link.href.startsWith('http') ? '_blank' : undefined}
+                data-interaction='social_profile'
+                data-destination={link.name}
                 rel={link.href.startsWith('http') ? 'me noopener noreferrer' : undefined}
                 aria-label={`${link.name}: ${link.handle}`}
                 data-tooltip={link.name}
@@ -394,7 +402,6 @@ const latestContent: ContentFeedItem[] = [
   .social-rail a:focus-visible {
     background: color-mix(in srgb, var(--brand) 10%, transparent);
     color: var(--brand);
-    outline: none;
     transform: translateY(-1px);
   }
   .social-rail a:hover::after,

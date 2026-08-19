@@ -113,6 +113,8 @@ const filterAttributes = filterable
                 href={story.href}
                 target={story.external ? '_blank' : undefined}
                 rel={story.external ? 'noopener noreferrer' : undefined}
+                data-interaction='project_story'
+                data-destination={story.kind}
               >
                 {story.kind} · {story.label}
                 <span aria-hidden='true'>↗</span>
@@ -140,7 +142,14 @@ const filterAttributes = filterable
       <div class='project-actions'>
         {
           website && (
-            <a class='primary' href={website.href} target='_blank' rel='noopener noreferrer'>
+            <a
+              class='primary'
+              href={website.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              data-interaction='project_website'
+              data-destination={project.repository}
+            >
               <Icon name='earth' class='size-4' aria-hidden='true' />
               Visit website <span aria-hidden='true'>↗</span>
             </a>
@@ -148,7 +157,13 @@ const filterAttributes = filterable
         }
         {
           source && (
-            <a href={source.href} target='_blank' rel='noopener noreferrer'>
+            <a
+              href={source.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              data-interaction='project_source'
+              data-destination={project.repository}
+            >
               <Icon name='github-circle' class='size-4' aria-hidden='true' />
               Source <span aria-hidden='true'>↗</span>
             </a>

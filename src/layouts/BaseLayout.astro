@@ -41,12 +41,13 @@ const {
         />
       )
     }
+    <a class='skip-link' href='#main-content'>Skip to content</a>
     <div
       id='main-container'
       class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
     >
       <Header />
-      <div class='flex-1 w-full'>
+      <div id='main-content' class='flex-1 w-full' tabindex='-1'>
         <slot />
       </div>
       <div class='site-footer'>
@@ -105,6 +106,27 @@ const {
         }
       }
 
+      .skip-link {
+        position: fixed;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 50;
+        border: 1px solid hsl(var(--foreground));
+        border-radius: 999px;
+        padding: 0.55rem 0.8rem;
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-size: 0.75rem;
+        font-weight: 650;
+        text-decoration: none;
+        transform: translateY(-180%);
+        transition: transform 160ms ease;
+      }
+
+      .skip-link:focus-visible {
+        transform: translateY(0);
+      }
+
       .secondary-navigation {
         display: flex;
         align-items: center;
@@ -148,6 +170,12 @@ const {
 
       :global(.site-footer footer) {
         margin-top: 1.5rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .skip-link {
+          transition: none;
+        }
       }
 
       @media (max-width: 560px) {
