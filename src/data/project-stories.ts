@@ -68,3 +68,8 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
 }
 
 export const getProjectStories = (repository: string) => projectStories[repository] ?? []
+
+export const getProjectsForStory = (href: string) =>
+  Object.entries(projectStories)
+    .filter(([, stories]) => stories.some((story) => story.href === href))
+    .map(([repository]) => repository)

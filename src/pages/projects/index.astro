@@ -2,11 +2,14 @@
 import { projects } from '@/data/projects'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import ContentGraph from '@/components/projects/ContentGraph.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
+import { getProjectStories } from '@/data/project-stories'
 
 const featuredCount = projects.filter((project) => project.featuredRank !== undefined).length
 const buildingCount = projects.filter((project) => project.status === 'building').length
 const maintainedCount = projects.filter((project) => project.status === 'active').length
+const graphProjects = projects.filter((project) => getProjectStories(project.repository).length > 0)
 ---
 
 <PageLayout
@@ -36,6 +39,7 @@ const maintainedCount = projects.filter((project) => project.status === 'active'
       </div>
     </header>
 
+    <ContentGraph projects={graphProjects} />
     <ProjectSection {projects} />
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>

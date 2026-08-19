@@ -6,6 +6,8 @@ import type { CollectionEntry } from 'astro:content'
 import 'katex/dist/katex.min.css'
 
 import config from 'virtual:config'
+import { projects } from '@/data/projects'
+import { getProjectsForStory } from '@/data/project-stories'
 
 import { MediumZoom } from 'astro-pure/advanced'
 import { Copyright, Hero, TOC } from 'astro-pure/components/pages'
@@ -50,6 +52,8 @@ const previousPost = posts[postIndex - 1]
 const nextPost = posts[postIndex + 1]
 // Root-relative source paths are prefixed exactly once by the post-build GitHub Pages pass.
 const blogBase = '/blog/'
+const linkedRepositories = getProjectsForStory(`${blogBase}${id}`)
+const linkedProjects = projects.filter((project) => linkedRepositories.includes(project.repository))
 ---
 
 <PageLayout
@@ -78,6 +82,23 @@ const blogBase = '/blog/'
   <Fragment slot='bottom'>
     {/* Copyright */}
     <Copyright {data} />
+    {
+      linkedProjects.length > 0 && (
+        <aside class='build-context' aria-labelledby='build-context-title'>
+          <p class='build-context-eyebrow'>Build context</p>
+          <h2 id='build-context-title'>This article is part of the project trail.</h2>
+          <div class='build-context-list'>
+            {linkedProjects.map((project) => (
+              <a href={`/projects#${project.repository}`} data-interaction='article_project_link'>
+                <span>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>
+                {project.title}
+                <span aria-hidden='true'>↗</span>
+              </a>
+            ))}
+          </div>
+        </aside>
+      )
+    }
     <RelatedReading post={Astro.props.post} {posts} />
     <nav
       aria-label='Adjacent articles'
@@ -171,6 +192,57 @@ const blogBase = '/blog/'
 </script>
 
 <style is:global>
+  .build-context {
+    margin-block: 2rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 1.2rem;
+  }
+
+  .build-context-eyebrow {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .build-context h2 {
+    margin: 0.45rem 0 0.8rem;
+    font-size: clamp(1.25rem, 3vw, 1.7rem);
+    font-weight: 560;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  .build-context-list {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .build-context-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: hsl(var(--foreground));
+    font-size: 0.82rem;
+    text-decoration: none;
+  }
+
+  .build-context-list a:hover,
+  .build-context-list a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .build-context-list a span:first-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .mermaid-diagram {
     margin-block: 2rem;
     overflow-x: auto;
