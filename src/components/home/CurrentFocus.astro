@@ -1,0 +1,115 @@
+---
+import type { CurrentFocus as CurrentFocusData } from '@/data/current-focus'
+
+interface Props {
+  focus: CurrentFocusData
+}
+
+const { focus } = Astro.props
+---
+
+<section class='current-focus' aria-labelledby='current-focus-title'>
+  <div class='focus-copy'>
+    <p class='eyebrow'>{focus.eyebrow}</p>
+    <h2 id='current-focus-title'>{focus.title}</h2>
+    <p class='focus-description'>{focus.description}</p>
+    <a
+      class='focus-primary'
+      href={focus.primaryHref}
+      data-interaction='current_focus'
+      data-destination='project'
+    >{focus.primaryLabel} <span aria-hidden='true'>→</span></a>
+  </div>
+
+  <div class='focus-route' aria-label='Current focus route'>
+    <a href={focus.themeHref} data-interaction='current_focus' data-destination='theme'>
+      <span>Theme</span>{focus.themeTitle}<span aria-hidden='true'>↗</span>
+    </a>
+    <a href={focus.projectHref} data-interaction='current_focus' data-destination='project'>
+      <span>Project</span>{focus.projectTitle}<span aria-hidden='true'>↗</span>
+    </a>
+    <a href={focus.writingHref} data-interaction='current_focus' data-destination='writing'>
+      <span>Writing</span>{focus.writingTitle}<span aria-hidden='true'>↗</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .current-focus {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+    gap: 2rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: clamp(1.2rem, 3vw, 2rem);
+  }
+  .focus-copy,
+  .focus-route {
+    display: grid;
+    align-content: start;
+    gap: 0.8rem;
+  }
+  .eyebrow,
+  .focus-route a > span:first-child {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .focus-copy h2 {
+    max-width: 30rem;
+    margin: 0;
+    font-size: clamp(1.45rem, 3.2vw, 2.35rem);
+    letter-spacing: -0.045em;
+    line-height: 1.02;
+  }
+  .focus-description {
+    max-width: 34rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+  .focus-primary {
+    width: fit-content;
+    color: hsl(var(--foreground));
+    font-size: 0.76rem;
+    font-weight: 620;
+    text-underline-offset: 0.2rem;
+  }
+  .focus-primary:hover,
+  .focus-primary:focus-visible {
+    text-decoration: underline;
+  }
+  .focus-route {
+    border-left: 1px solid hsl(var(--border));
+    padding-left: 1.2rem;
+  }
+  .focus-route a {
+    display: grid;
+    grid-template-columns: 4.2rem minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    align-items: baseline;
+    min-width: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+  .focus-route a:hover,
+  .focus-route a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
+  }
+  @media (max-width: 680px) {
+    .current-focus {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    .focus-route {
+      border-left: 0;
+      border-top: 1px solid hsl(var(--border));
+      padding: 1rem 0 0;
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+<nav class='project-navigation' aria-label='Project exploration paths'>
+  <a href='#theme-roadmap' data-interaction='project_navigation' data-destination='theme'>
+    <span>01 · Explore by theme</span>
+    Understand the long-term threads <span aria-hidden='true'>↓</span>
+  </a>
+  <a href='#content-graph' data-interaction='project_navigation' data-destination='story'>
+    <span>02 · Follow a story</span>
+    See projects become writing <span aria-hidden='true'>↓</span>
+  </a>
+  <a href='#content-directory' data-interaction='project_navigation' data-destination='directory'>
+    <span>03 · Browse the directory</span>
+    Search projects, writing, and channels <span aria-hidden='true'>↓</span>
+  </a>
+</nav>
+
+<style>
+  .project-navigation {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-block: 1px solid hsl(var(--border));
+  }
+  .project-navigation a {
+    display: grid;
+    gap: 0.55rem;
+    min-width: 0;
+    padding: 0.9rem 1rem;
+    color: hsl(var(--foreground));
+    font-size: 0.76rem;
+    line-height: 1.35;
+    text-decoration: none;
+  }
+  .project-navigation a + a {
+    border-left: 1px solid hsl(var(--border));
+  }
+  .project-navigation a:hover,
+  .project-navigation a:focus-visible {
+    background: hsl(var(--muted) / 0.45);
+  }
+  .project-navigation a > span:first-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.63rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-navigation a > span:last-child {
+    justify-self: end;
+    color: hsl(var(--muted-foreground));
+  }
+  @media (max-width: 680px) {
+    .project-navigation {
+      grid-template-columns: 1fr;
+    }
+    .project-navigation a + a {
+      border-top: 1px solid hsl(var(--border));
+      border-left: 0;
+    }
+  }
+</style>

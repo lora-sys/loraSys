@@ -5,6 +5,7 @@ import { socialLinks } from '@/data/social'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
 import ContentGraph from '@/components/projects/ContentGraph.astro'
+import ProjectNavigation from '@/components/projects/ProjectNavigation.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import ThemeRoadmap from '@/components/projects/ThemeRoadmap.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
@@ -85,6 +86,8 @@ const directoryItems: DirectoryItem[] = [
       </div>
     </header>
 
+    <ProjectNavigation />
+
     <ContentGraph projects={graphProjects} />
     <ContentDirectory items={directoryItems} opportunities={contentOpportunities} />
     <ThemeRoadmap themes={themeRoadmap} />
@@ -108,6 +111,12 @@ const directoryItems: DirectoryItem[] = [
     gap: clamp(4rem, 9vw, 7rem);
     margin: 0 auto;
     padding-block: clamp(2rem, 7vw, 5.5rem) 2rem;
+  }
+
+  :global(#content-graph),
+  :global(#content-directory),
+  :global(#theme-roadmap) {
+    scroll-margin-top: 1.5rem;
   }
 
   .projects-hero {
