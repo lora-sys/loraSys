@@ -1,0 +1,197 @@
+---
+import type { ThemeRoadmapItem } from '@/data/theme-roadmap'
+
+interface Props {
+  themes: ThemeRoadmapItem[]
+}
+
+const { themes } = Astro.props
+---
+
+<section id='theme-roadmap' class='theme-roadmap' aria-labelledby='theme-roadmap-title'>
+  <div class='roadmap-intro'>
+    <div>
+      <p class='eyebrow'>Theme Roadmap</p>
+      <h2 id='theme-roadmap-title'>The threads behind the work.</h2>
+    </div>
+    <p>
+      A curated view of the technical themes connecting projects, writing, and the channels where the process is shared.
+    </p>
+  </div>
+
+  <div class='theme-grid'>
+    {themes.map((theme, index) => (
+      <article class='theme-card' data-theme={theme.slug}>
+        <div class='theme-card-head'>
+          <span class='theme-index'>{String(index + 1).padStart(2, '0')}</span>
+          <span class='theme-format'>{theme.nextFormat}</span>
+        </div>
+        <h3>{theme.title}</h3>
+        <p class='theme-description'>{theme.description}</p>
+
+        <div class='theme-counts' aria-label={`${theme.title} coverage`}>
+          <span><strong>{theme.projects.length}</strong> projects</span>
+          <span><strong>{theme.writings.length}</strong> writings</span>
+        </div>
+
+        <div class='theme-links'>
+          {theme.projects.slice(0, 2).map((project) => (
+            <a href={`/projects#${project.repository}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='project'>
+              <span>Project</span>{project.title}<span aria-hidden='true'>↗</span>
+            </a>
+          ))}
+          {theme.writings.slice(0, 2).map((writing) => (
+            <a href={`/blog/${writing.id}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='writing'>
+              <span>Writing</span>{writing.title}<span aria-hidden='true'>↗</span>
+            </a>
+          ))}
+        </div>
+
+        <div class='theme-footer'>
+          <span>{theme.channelNames.join(' · ')}</span>
+          <span>Next: {theme.nextFormat}</span>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .theme-roadmap {
+    display: grid;
+    gap: 1.5rem;
+    scroll-margin-top: 1.5rem;
+  }
+  .roadmap-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(16rem, 0.9fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .eyebrow {
+    margin: 0 0 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 24rem;
+    margin: 0;
+    font-size: clamp(1.55rem, 3vw, 2.45rem);
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+  }
+  .roadmap-intro > p {
+    max-width: 25rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .theme-card {
+    display: grid;
+    gap: 0.85rem;
+    min-width: 0;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.8rem;
+    padding: 1rem;
+    background: hsl(var(--card));
+  }
+  .theme-card-head,
+  .theme-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+  }
+  .theme-index {
+    color: hsl(var(--foreground));
+    font-weight: 650;
+  }
+  .theme-format {
+    border-radius: 999px;
+    padding: 0.16rem 0.45rem;
+    background: hsl(var(--muted));
+  }
+  .theme-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    letter-spacing: -0.025em;
+  }
+  .theme-description {
+    min-height: 2.7rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.76rem;
+    line-height: 1.55;
+  }
+  .theme-counts {
+    display: flex;
+    gap: 1rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.7rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .theme-counts strong {
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    font-weight: 560;
+  }
+  .theme-links {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .theme-links a {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+    gap: 0.45rem;
+    align-items: baseline;
+    min-width: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.72rem;
+    text-decoration: none;
+  }
+  .theme-links a:hover,
+  .theme-links a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
+  }
+  .theme-links a > span:first-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    text-transform: uppercase;
+  }
+  .theme-links a:not(:has(> span:nth-child(3))) {
+    grid-template-columns: 3.2rem minmax(0, 1fr);
+  }
+  .theme-links a:not(:has(> span:nth-child(3))) > span:last-child {
+    display: none;
+  }
+  .theme-footer {
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.7rem;
+  }
+  @media (max-width: 780px) {
+    .roadmap-intro {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+  @media (max-width: 520px) {
+    .theme-grid {
+      grid-template-columns: 1fr;
+    }
+    .theme-description {
+      min-height: 0;
+    }
+  }
+</style>
