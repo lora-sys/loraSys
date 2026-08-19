@@ -1,0 +1,184 @@
+---
+interface Props {
+  writingCount: number
+  projectCount: number
+  linkedProjectCount: number
+  channelCount: number
+  syncedAt: string
+  githubProjects: number
+  githubPullRequests: number
+}
+
+const {
+  writingCount,
+  projectCount,
+  linkedProjectCount,
+  channelCount,
+  syncedAt,
+  githubProjects,
+  githubPullRequests
+} = Astro.props
+
+const syncDate = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: '2-digit',
+  year: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(syncedAt))
+---
+
+<div class='content-pulse'>
+  <div class='pulse-intro'>
+    <div>
+      <span class='eyebrow'>Content Intelligence</span>
+      <h3>What is moving right now.</h3>
+    </div>
+    <p>
+      A small operating view of the writing, projects, channels, and open-source activity behind this site.
+    </p>
+  </div>
+
+  <div class='pulse-grid' aria-label='Content operations summary'>
+    <a href='/blog' class='pulse-card' data-interaction='content_summary' data-destination='writing'>
+      <span class='pulse-value'>{writingCount}</span>
+      <span class='pulse-label'>technical essays</span>
+      <span class='pulse-link'>Read writing <span aria-hidden='true'>↗</span></span>
+    </a>
+    <a href='/projects' class='pulse-card' data-interaction='content_summary' data-destination='projects'>
+      <span class='pulse-value'>{projectCount}</span>
+      <span class='pulse-label'>featured projects</span>
+      <span class='pulse-link'>Explore work <span aria-hidden='true'>↗</span></span>
+    </a>
+    <a href='/projects' class='pulse-card' data-interaction='content_summary' data-destination='stories'>
+      <span class='pulse-value'>{linkedProjectCount}</span>
+      <span class='pulse-label'>projects with stories</span>
+      <span class='pulse-link'>Follow the trail <span aria-hidden='true'>↗</span></span>
+    </a>
+    <a href='/contact' class='pulse-card' data-interaction='content_summary' data-destination='channels'>
+      <span class='pulse-value'>{channelCount}</span>
+      <span class='pulse-label'>content channels</span>
+      <span class='pulse-link'>Find the channels <span aria-hidden='true'>↗</span></span>
+    </a>
+  </div>
+
+  <div class='pulse-sync'>
+    <span><i aria-hidden='true'></i> GitHub sync {syncDate}</span>
+    <span>{githubProjects} repos · {githubPullRequests} PRs</span>
+  </div>
+</div>
+
+<style>
+  .content-pulse {
+    display: grid;
+    gap: 1.3rem;
+  }
+  .pulse-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.8fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .eyebrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h3 {
+    max-width: 18ch;
+    margin-top: 0.55rem;
+    font-size: clamp(1.6rem, 4vw, 2.55rem);
+    font-weight: 570;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+  }
+  .pulse-intro p {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+  .pulse-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+  .pulse-card {
+    display: grid;
+    gap: 0.25rem;
+    min-height: 8.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.8rem;
+    padding: 0.85rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+  .pulse-card:hover,
+  .pulse-card:focus-visible {
+    border-color: hsl(var(--foreground) / 0.35);
+    background: hsl(var(--muted));
+    transform: translateY(-2px);
+  }
+  .pulse-value {
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+  .pulse-label {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .pulse-link {
+    align-self: end;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .pulse-sync {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.7rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+  }
+  .pulse-sync i {
+    display: inline-block;
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-right: 0.3rem;
+    border-radius: 999px;
+    background: #36c77b;
+  }
+  @media (max-width: 780px) {
+    .pulse-intro {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .pulse-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .pulse-grid {
+      grid-template-columns: 1fr;
+    }
+    .pulse-sync {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-card {
+      transition: none;
+    }
+    .pulse-card:hover,
+    .pulse-card:focus-visible {
+      transform: none;
+    }
+  }
+</style>
