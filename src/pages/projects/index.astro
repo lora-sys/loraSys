@@ -1,15 +1,52 @@
 ---
 import { projects } from '@/data/projects'
+import { socialLinks } from '@/data/social'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
 import ContentGraph from '@/components/projects/ContentGraph.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { getProjectStories } from '@/data/project-stories'
 
 const featuredCount = projects.filter((project) => project.featuredRank !== undefined).length
 const buildingCount = projects.filter((project) => project.status === 'building').length
 const maintainedCount = projects.filter((project) => project.status === 'active').length
 const graphProjects = projects.filter((project) => getProjectStories(project.repository).length > 0)
+const unlinkedProjects = projects
+  .filter((project) => getProjectStories(project.repository).length === 0)
+  .sort((left, right) => new Date(right.pushedAt).getTime() - new Date(left.pushedAt).getTime())
+  .slice(0, 6)
+const allPosts = sortMDByDate(await getBlogCollection())
+const creatorChannels = socialLinks.filter((link) => ['YouTube', 'Bilibili', '知乎', '小红书'].includes(link.name))
+const formatDirectoryDate = (date: Date) =>
+  new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
+const directoryItems: DirectoryItem[] = [
+  ...allPosts.map((post) => ({
+    kind: 'Writing' as const,
+    title: post.data.title,
+    meta: formatDirectoryDate(post.data.updatedDate ?? post.data.publishDate),
+    href: `/blog/${post.id}`,
+    source: 'lora-sys' as const,
+    detail: post.data.language === 'zh-CN' ? '中文长文' : 'English essay'
+  })),
+  ...creatorChannels.map((channel) => ({
+    kind: 'Channel' as const,
+    title: channel.name,
+    meta: channel.handle,
+    href: channel.href,
+    source: 'External' as const,
+    detail: channel.description
+  })),
+  ...graphProjects.map((project) => ({
+    kind: 'Project' as const,
+    title: project.title,
+    meta: project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys',
+    href: `/projects#${project.repository}`,
+    source: project.source === 'ACAMLab' ? ('ACAMLab' as const) : ('lora-sys' as const),
+    detail: `${project.status} · ${getProjectStories(project.repository).length} Story links`
+  }))
+]
 ---
 
 <PageLayout
@@ -40,6 +77,15 @@ const graphProjects = projects.filter((project) => getProjectStories(project.rep
     </header>
 
     <ContentGraph projects={graphProjects} />
+    <ContentDirectory
+      items={directoryItems}
+      unlinkedProjects={unlinkedProjects.map((project) => ({
+        title: project.title,
+        repository: project.repository,
+        source: project.source,
+        status: project.status
+      }))}
+    />
     <ProjectSection {projects} />
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>
