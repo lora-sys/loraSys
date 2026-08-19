@@ -1,7 +1,7 @@
 ---
 import type { ContentOpportunity } from '@/data/content-intelligence'
 
-export type DirectoryKind = 'Writing' | 'Channel' | 'Project'
+export type DirectoryKind = 'Writing' | 'Channel' | 'Project' | 'Contribution'
 
 export interface DirectoryItem {
   kind: DirectoryKind
@@ -27,7 +27,7 @@ const { items, opportunities } = Astro.props
       <h2 id='content-directory-title'>Make the publishing surface visible.</h2>
     </div>
     <p>
-      Browse the writing, channels, and projects that currently have a clear path into the public story.
+      Browse the writing, channels, projects, and selected external contributions that currently have a clear path into the public story.
     </p>
   </div>
 
@@ -43,12 +43,14 @@ const { items, opportunities } = Astro.props
         <button type='button' data-kind-filter='Writing' aria-pressed='false'>Writing</button>
         <button type='button' data-kind-filter='Channel' aria-pressed='false'>Channel</button>
         <button type='button' data-kind-filter='Project' aria-pressed='false'>Project</button>
+        <button type='button' data-kind-filter='Contribution' aria-pressed='false'>Contribution</button>
       </div>
       <div>
         <span>Owner</span>
         <button type='button' data-owner-filter='all' aria-pressed='true'>All</button>
         <button type='button' data-owner-filter='lora-sys' aria-pressed='false'>lora-sys</button>
         <button type='button' data-owner-filter='ACAMLab' aria-pressed='false'>ACAMLab</button>
+        <button type='button' data-owner-filter='External' aria-pressed='false'>External</button>
       </div>
     </div>
     <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>

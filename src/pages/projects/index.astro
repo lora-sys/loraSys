@@ -1,6 +1,7 @@
 ---
 import { projects } from '@/data/projects'
 import { socialLinks } from '@/data/social'
+import contributionSnapshot from '@/data/external-contributions.json'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
@@ -29,6 +30,10 @@ const themeRoadmap = getThemeRoadmap(
   allPosts.map((post) => ({ id: post.id, title: post.data.title }))
 )
 const creatorChannels = socialLinks.filter((link) => ['YouTube', 'Bilibili', '知乎', '小红书'].includes(link.name))
+const contributionAllowlist = new Set((contributionSnapshot.allowlist ?? []).map((repository) => repository.toLowerCase()))
+const selectedContributions = contributionSnapshot.contributions.filter(
+  (contribution) => contributionAllowlist.size === 0 || contributionAllowlist.has(contribution.repository.toLowerCase())
+)
 const formatDirectoryDate = (date: Date) =>
   new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
 const directoryItems: DirectoryItem[] = [
@@ -47,6 +52,14 @@ const directoryItems: DirectoryItem[] = [
     href: channel.href,
     source: 'External' as const,
     detail: channel.description
+  })),
+  ...selectedContributions.map((contribution) => ({
+    kind: 'Contribution' as const,
+    title: contribution.repository,
+    meta: contribution.label,
+    href: contribution.repositoryUrl,
+    source: 'External' as const,
+    detail: `${contribution.pullRequests.length} PR${contribution.pullRequests.length === 1 ? '' : 's'} · ${contribution.note}`
   })),
   ...graphProjects.map((project) => ({
     kind: 'Project' as const,
