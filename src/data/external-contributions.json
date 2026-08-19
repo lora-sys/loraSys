@@ -1,7 +1,15 @@
 {
-  "syncVersion": 1,
+  "syncVersion": 2,
   "lastUpdated": "2026-08-18T14:21:23.696Z",
   "source": "GitHub GraphQL / user:lora-sys",
+  "allowlist": [
+    "nishuzumi/moss",
+    "portdeveloper/nad-agent",
+    "cloudwego/eino-examples",
+    "datawhalechina/vibe-blog",
+    "public-apis/public-apis",
+    "aymericzip/intlayer"
+  ],
   "contributions": [
     {
       "repository": "nishuzumi/moss",

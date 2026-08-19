@@ -2,7 +2,12 @@
 import contributionSnapshot from '@/data/external-contributions.json'
 import syncReport from '@/data/sync-report.json'
 
-const contributions = contributionSnapshot.contributions.slice(0, 4)
+const allowlist = (contributionSnapshot.allowlist ?? []).map((repository) => repository.toLowerCase())
+const contributions = contributionSnapshot.contributions
+  .filter((contribution) => allowlist.length === 0 || allowlist.includes(contribution.repository.toLowerCase()))
+  .slice(0, 4)
+const warningCount = (syncReport.warnings?.length ?? 0) + (contributionSnapshot.warnings?.length ?? 0)
+const lastSync = syncReport.snapshots?.contributions ?? contributionSnapshot.lastUpdated
 const formatDate = (value: string | null) => {
   if (!value) return ''
   return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(value))
@@ -17,9 +22,17 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
       <span class:list={['sync-status', `sync-status--${syncReport.status}`]}>
         <i aria-hidden='true'></i>{syncReport.status === 'ok' ? 'In sync' : 'Synced with warnings'}
       </span>
-      · {formatDate(syncReport.syncedAt ?? contributionSnapshot.lastUpdated)}
-      · {syncReport.sources.github.contributions} repos / {syncReport.sources.github.pullRequests} PRs
+              · {formatDate(lastSync)}
+        · {syncReport.sources.github.contributions} repos / {syncReport.sources.github.pullRequests} PRs
+
     </small>
+  </div>
+  <div class='contribution-audit' aria-label='Contribution sync audit'>
+    <span><strong>Source</strong> {contributionSnapshot.source}</span>
+    <span><strong>Allowlist</strong> {allowlist.length || contributions.length} repositories</span>
+    <span class:list={['audit-warning', { 'audit-warning--active': warningCount > 0 }]}>
+      <strong>Status</strong> {warningCount > 0 ? `${warningCount} sync warning${warningCount === 1 ? '' : 's'}` : 'No sync warnings'}
+    </span>
   </div>
   <div class='contribution-list'>
     {
@@ -87,6 +100,24 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
     background: #2d8a62;
   }
   .sync-status--warning i { background: #b58136; }
+  .contribution-audit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 1rem;
+    color: var(--c-text-3, #9ca3af);
+    font-size: 0.7rem;
+  }
+  .contribution-audit span {
+    display: inline-flex;
+    gap: 0.3rem;
+  }
+  .contribution-audit strong {
+    color: var(--c-text-2, #6b7280);
+    font-weight: 600;
+  }
+  .audit-warning--active {
+    color: #9d6628;
+  }
   .contribution-list {
     display: grid;
     gap: 0.75rem;
@@ -150,6 +181,7 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
   .pr-closed { background: #78808a; }
   @media (max-width: 640px) {
     .contribution-heading { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
+    .contribution-audit { display: grid; gap: 0.35rem; }
     .contribution-meta { align-items: flex-start; flex-direction: column; gap: 0.2rem; }
     .contribution-prs a { align-items: flex-start; }
     .contribution-prs time { display: none; }

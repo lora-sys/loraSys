@@ -11,7 +11,7 @@ async function readSnapshot() {
   try {
     return JSON.parse(await readFile(output, 'utf8'))
   } catch {
-    return { syncVersion: 1, lastUpdated: null, contributions: [], warnings: [] }
+    return { syncVersion: 2, lastUpdated: null, source: `GitHub GraphQL / user:${login}`, allowlist: Object.keys(overrides), contributions: [], warnings: [] }
   }
 }
 
@@ -88,9 +88,10 @@ try {
     .map((item) => ({ ...item, pullRequests: item.pullRequests.slice(0, 3) }))
     .sort((left, right) => left.priority - right.priority)
   const snapshot = {
-    syncVersion: 1,
+    syncVersion: 2,
     lastUpdated: new Date().toISOString(),
     source: `GitHub GraphQL / user:${login}`,
+    allowlist: Object.keys(overrides),
     contributions,
     warnings: []
   }

@@ -46,10 +46,15 @@ for (const project of projects) {
 }
 
 const contributions = contributionsSnapshot?.contributions ?? []
+const allowlist = contributionsSnapshot?.allowlist ?? []
+const allowlistKeys = new Set(allowlist.map((key) => String(key).toLowerCase()))
+if (!Array.isArray(contributionsSnapshot?.allowlist)) warnings.push('external-contributions.json: missing explicit allowlist')
+if (allowlistKeys.size !== allowlist.length) failures.push('external-contributions.json: duplicate allowlist repository')
 const contributionKeys = new Set()
 for (const contribution of contributions) {
   const key = contribution.repository
   if (!key) failures.push('contribution: missing repository')
+  if (allowlistKeys.size && !allowlistKeys.has(String(key).toLowerCase())) failures.push(`contribution ${key}: repository is not in allowlist`)
   if (contributionKeys.has(key)) failures.push(`contribution: duplicate repository ${key}`)
   contributionKeys.add(key)
   if (!isGithubUrl(contribution.repositoryUrl)) failures.push(`contribution ${key}: invalid repository URL`)
