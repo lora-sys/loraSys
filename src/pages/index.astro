@@ -11,6 +11,7 @@ import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import SocialIcon from '@/components/contact/SocialIcon.astro'
 import ContactOutro from '@/components/home/ContactOutro.astro'
+import CurrentFocus from '@/components/home/CurrentFocus.astro'
 import ContentPulse from '@/components/home/ContentPulse.astro'
 import CreatorHub from '@/components/home/CreatorHub.astro'
 import LatestSignals from '@/components/home/LatestSignals.astro'
@@ -21,6 +22,7 @@ import ShowcaseCarousel from '@/components/lora/ShowcaseCarousel.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import config from '@/site-config'
 import type { ContentFeedItem } from '@/data/content-feed'
+import { currentFocus } from '@/data/current-focus'
 import { getContentIntelligenceSummary } from '@/data/content-intelligence'
 import { getProjectStories } from '@/data/project-stories'
 import syncReport from '@/data/sync-report.json'
@@ -162,6 +164,8 @@ const latestContent: ContentFeedItem[] = [
       <Section title='Latest Signals'>
         <LatestSignals {signals} />
       </Section>
+
+      <CurrentFocus focus={currentFocus} />
 
       {
         leadProject && (
