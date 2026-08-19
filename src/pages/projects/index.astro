@@ -8,15 +8,18 @@ import ContentGraph from '@/components/projects/ContentGraph.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { getProjectStories } from '@/data/project-stories'
+import { getContentOpportunities } from '@/data/content-intelligence'
 
 const featuredCount = projects.filter((project) => project.featuredRank !== undefined).length
 const buildingCount = projects.filter((project) => project.status === 'building').length
 const maintainedCount = projects.filter((project) => project.status === 'active').length
 const graphProjects = projects.filter((project) => getProjectStories(project.repository).length > 0)
-const unlinkedProjects = projects
-  .filter((project) => getProjectStories(project.repository).length === 0)
-  .sort((left, right) => new Date(right.pushedAt).getTime() - new Date(left.pushedAt).getTime())
-  .slice(0, 6)
+const linkedRepositories = new Set(
+  projects
+    .filter((project) => getProjectStories(project.repository).length > 0)
+    .map((project) => project.repository)
+)
+const contentOpportunities = getContentOpportunities({ projects, linkedRepositories })
 const allPosts = sortMDByDate(await getBlogCollection())
 const creatorChannels = socialLinks.filter((link) => ['YouTube', 'Bilibili', '知乎', '小红书'].includes(link.name))
 const formatDirectoryDate = (date: Date) =>
@@ -77,15 +80,7 @@ const directoryItems: DirectoryItem[] = [
     </header>
 
     <ContentGraph projects={graphProjects} />
-    <ContentDirectory
-      items={directoryItems}
-      unlinkedProjects={unlinkedProjects.map((project) => ({
-        title: project.title,
-        repository: project.repository,
-        source: project.source,
-        status: project.status
-      }))}
-    />
+    <ContentDirectory items={directoryItems} opportunities={contentOpportunities} />
     <ProjectSection {projects} />
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>

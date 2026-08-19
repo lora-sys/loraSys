@@ -3,12 +3,16 @@ interface Props {
   writingCount: number
   projectCount: number
   linkedProjectCount: number
+  storyGapCount: number
   storyCoveragePercent: number
   personalProjectCount: number
   labProjectCount: number
   latestWritingDate: string
   latestProjectDate: string
   channelCount: number
+  nextStoryTitle: string
+  nextStoryFormat: string
+  nextStoryHref: string
   syncedAt: string
   githubProjects: number
   githubPullRequests: number
@@ -18,12 +22,16 @@ const {
   writingCount,
   projectCount,
   linkedProjectCount,
+  storyGapCount,
   storyCoveragePercent,
   personalProjectCount,
   labProjectCount,
   latestWritingDate,
   latestProjectDate,
   channelCount,
+  nextStoryTitle,
+  nextStoryFormat,
+  nextStoryHref,
   syncedAt,
   githubProjects,
   githubPullRequests
@@ -89,6 +97,14 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       <strong>{personalProjectCount} <small>lora-sys</small> · {labProjectCount} <small>ACAMLab</small></strong>
     </div>
   </div>
+
+  <a class='pulse-opportunity' href={nextStoryHref} data-interaction='content_opportunity' data-destination='project'>
+    <span>
+      <span class='detail-label'>Next content opportunity</span>
+      <strong>{nextStoryTitle}</strong>
+    </span>
+    <span class='pulse-opportunity-meta'>{nextStoryFormat} · {storyGapCount} projects need a Story <span aria-hidden='true'>↗</span></span>
+  </a>
 
   <div class='pulse-sync'>
     <span><i aria-hidden='true'></i> GitHub sync {syncDate}</span>
@@ -189,6 +205,36 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     font-size: 0.62rem;
     font-weight: 450;
   }
+  .pulse-opportunity {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.7rem;
+    padding: 0.8rem 0.9rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .pulse-opportunity:hover,
+  .pulse-opportunity:focus-visible {
+    border-color: hsl(var(--foreground) / 0.35);
+    background: hsl(var(--muted));
+  }
+  .pulse-opportunity > span:first-child {
+    display: grid;
+    gap: 0.28rem;
+  }
+  .pulse-opportunity strong {
+    font-size: 0.82rem;
+    font-weight: 560;
+  }
+  .pulse-opportunity-meta {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    text-align: right;
+  }
   .pulse-sync {
     display: flex;
     justify-content: space-between;
@@ -217,6 +263,13 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     }
   }
   @media (max-width: 520px) {
+    .pulse-opportunity {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .pulse-opportunity-meta {
+      text-align: left;
+    }
     .pulse-grid,
     .pulse-details {
       grid-template-columns: 1fr;
@@ -228,7 +281,8 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .pulse-card {
+    .pulse-card,
+    .pulse-opportunity {
       transition: none;
     }
     .pulse-card:hover,
