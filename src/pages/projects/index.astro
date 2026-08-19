@@ -6,9 +6,11 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
 import ContentGraph from '@/components/projects/ContentGraph.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
+import ThemeRoadmap from '@/components/projects/ThemeRoadmap.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { getProjectStories } from '@/data/project-stories'
 import { getContentOpportunities } from '@/data/content-intelligence'
+import { getThemeRoadmap } from '@/data/theme-roadmap'
 
 const featuredCount = projects.filter((project) => project.featuredRank !== undefined).length
 const buildingCount = projects.filter((project) => project.status === 'building').length
@@ -21,6 +23,10 @@ const linkedRepositories = new Set(
 )
 const contentOpportunities = getContentOpportunities({ projects, linkedRepositories })
 const allPosts = sortMDByDate(await getBlogCollection())
+const themeRoadmap = getThemeRoadmap(
+  projects,
+  allPosts.map((post) => ({ id: post.id, title: post.data.title }))
+)
 const creatorChannels = socialLinks.filter((link) => ['YouTube', 'Bilibili', '知乎', '小红书'].includes(link.name))
 const formatDirectoryDate = (date: Date) =>
   new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
@@ -81,6 +87,7 @@ const directoryItems: DirectoryItem[] = [
 
     <ContentGraph projects={graphProjects} />
     <ContentDirectory items={directoryItems} opportunities={contentOpportunities} />
+    <ThemeRoadmap themes={themeRoadmap} />
     <ProjectSection {projects} />
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>
