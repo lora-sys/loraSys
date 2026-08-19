@@ -11,6 +11,7 @@ import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import SocialIcon from '@/components/contact/SocialIcon.astro'
 import ContactOutro from '@/components/home/ContactOutro.astro'
+import ContentPulse from '@/components/home/ContentPulse.astro'
 import CreatorHub from '@/components/home/CreatorHub.astro'
 import LatestSignals from '@/components/home/LatestSignals.astro'
 import Section from '@/components/home/Section.astro'
@@ -20,6 +21,8 @@ import ShowcaseCarousel from '@/components/lora/ShowcaseCarousel.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import config from '@/site-config'
 import type { ContentFeedItem } from '@/data/content-feed'
+import { getProjectStories } from '@/data/project-stories'
+import syncReport from '@/data/sync-report.json'
 
 const MAX_POSTS = 5
 const allPosts = sortMDByDate(await getBlogCollection())
@@ -71,6 +74,7 @@ const heroSocials = socialLinks.filter((link) =>
 const creatorChannels = socialLinks.filter((link) =>
   ['Bilibili', '知乎', '小红书', 'YouTube'].includes(link.name)
 )
+const linkedProjectCount = projects.filter((project) => getProjectStories(project.repository).length > 0).length
 const latestContent: ContentFeedItem[] = [
   ...recentPosts.slice(0, 3).map((post) => ({
     kind: 'Writing' as const,
@@ -188,6 +192,20 @@ const latestContent: ContentFeedItem[] = [
       <Section title='Creator Hub'>
         <CreatorHub channels={creatorChannels} items={latestContent} />
       </Section>
+
+      <div id='content-pulse'>
+        <Section title='Content Pulse'>
+          <ContentPulse
+            writingCount={allPosts.length}
+            projectCount={featuredProjects.length}
+            linkedProjectCount={Math.min(linkedProjectCount, featuredProjects.length)}
+            channelCount={creatorChannels.length}
+            syncedAt={syncReport.syncedAt}
+            githubProjects={syncReport.sources.github.projects}
+            githubPullRequests={syncReport.sources.github.pullRequests}
+          />
+        </Section>
+      </div>
 
       <Section title='Open Source'>
         <div class='footprint'>
