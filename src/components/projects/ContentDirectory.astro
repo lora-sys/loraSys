@@ -15,9 +15,22 @@ export interface DirectoryItem {
 interface Props {
   items: DirectoryItem[]
   opportunities: ContentOpportunity[]
+  audit: {
+    status: string
+    syncedAt: string
+    allowlistCount: number
+    contributionCount: number
+    warningCount: number
+  }
 }
 
-const { items, opportunities } = Astro.props
+const { items, opportunities, audit } = Astro.props
+const syncDate = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(audit.syncedAt))
 ---
 
 <section id='content-directory' class='content-directory' aria-labelledby='content-directory-title'>
@@ -26,9 +39,15 @@ const { items, opportunities } = Astro.props
       <p class='eyebrow'>Content Directory</p>
       <h2 id='content-directory-title'>Make the publishing surface visible.</h2>
     </div>
-    <p>
-      Browse the writing, channels, projects, and selected external contributions that currently have a clear path into the public story.
-    </p>
+    <div>
+      <p>
+        Browse the writing, channels, projects, and selected external contributions that currently have a clear path into the public story.
+      </p>
+      <p class='directory-audit' aria-label='Content directory sync status'>
+        <span class:list={['audit-dot', { 'audit-dot--warning': audit.warningCount > 0 }]} aria-hidden='true'></span>
+        GitHub sync {syncDate} · {audit.contributionCount}/{audit.allowlistCount} allowlisted contributions · {audit.warningCount > 0 ? `${audit.warningCount} warning${audit.warningCount === 1 ? '' : 's'}` : 'no warnings'}
+      </p>
+    </div>
   </div>
 
   <div class='directory-controls' data-content-browser>
@@ -169,12 +188,29 @@ const { items, opportunities } = Astro.props
     letter-spacing: -0.05em;
     line-height: 1.02;
   }
-  .directory-heading > p,
+  .directory-heading > div > p,
   .coverage-panel > p {
     margin: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.8rem;
     line-height: 1.65;
+  }
+  .directory-audit {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem !important;
+    font-size: 0.66rem !important;
+  }
+  .audit-dot {
+    width: 0.42rem;
+    height: 0.42rem;
+    flex: 0 0 auto;
+    border-radius: 999px;
+    background: #36c77b;
+  }
+  .audit-dot--warning {
+    background: #e3a227;
   }
   .directory-controls {
     display: grid;

@@ -2,6 +2,7 @@
 import { projects } from '@/data/projects'
 import { socialLinks } from '@/data/social'
 import contributionSnapshot from '@/data/external-contributions.json'
+import syncReport from '@/data/sync-report.json'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
@@ -34,6 +35,8 @@ const contributionAllowlist = new Set((contributionSnapshot.allowlist ?? []).map
 const selectedContributions = contributionSnapshot.contributions.filter(
   (contribution) => contributionAllowlist.size === 0 || contributionAllowlist.has(contribution.repository.toLowerCase())
 )
+const contributionSyncDate = syncReport.snapshots?.contributions ?? contributionSnapshot.lastUpdated
+const contributionWarningCount = (syncReport.warnings?.length ?? 0) + (contributionSnapshot.warnings?.length ?? 0)
 const formatDirectoryDate = (date: Date) =>
   new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
 const directoryItems: DirectoryItem[] = [
@@ -102,7 +105,17 @@ const directoryItems: DirectoryItem[] = [
     <ProjectNavigation />
 
     <ContentGraph projects={graphProjects} />
-    <ContentDirectory items={directoryItems} opportunities={contentOpportunities} />
+    <ContentDirectory
+      items={directoryItems}
+      opportunities={contentOpportunities}
+      audit={{
+        status: syncReport.status,
+        syncedAt: contributionSyncDate,
+        allowlistCount: contributionAllowlist.size,
+        contributionCount: selectedContributions.length,
+        warningCount: contributionWarningCount
+      }}
+    />
     <ThemeRoadmap themes={themeRoadmap} />
     <ProjectSection {projects} />
 
