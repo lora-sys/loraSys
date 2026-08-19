@@ -52,6 +52,9 @@ const { channels, items } = Astro.props
       <span class='eyebrow'>Latest Content</span>
       <span class='content-subtitle'>Selected from the site</span>
     </div>
+    <a class='feed-link' href='/rss.xml' data-interaction='subscribe_feed'>
+      Subscribe via RSS <span aria-hidden='true'>↗</span>
+    </a>
     <div class='content-filters' aria-label='Content filters'>
       {CONTENT_FEED_FILTERS.map((filter, index) => (
         <button
@@ -224,6 +227,21 @@ const { channels, items } = Astro.props
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
   }
+  .feed-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .feed-link:hover,
+  .feed-link:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
   .content-filters {
     display: flex;
     flex-wrap: wrap;
@@ -313,6 +331,9 @@ const { channels, items } = Astro.props
     .content-heading {
       align-items: flex-start;
       flex-direction: column;
+    }
+    .feed-link {
+      white-space: normal;
     }
     .content-filters {
       justify-content: flex-start;
