@@ -1,4 +1,6 @@
 ---
+import type { ContentOpportunity } from '@/data/content-intelligence'
+
 export type DirectoryKind = 'Writing' | 'Channel' | 'Project'
 
 export interface DirectoryItem {
@@ -12,10 +14,10 @@ export interface DirectoryItem {
 
 interface Props {
   items: DirectoryItem[]
-  unlinkedProjects: { title: string; repository: string; source: string; status: string }[]
+  opportunities: ContentOpportunity[]
 }
 
-const { items, unlinkedProjects } = Astro.props
+const { items, opportunities } = Astro.props
 ---
 
 <section id='content-directory' class='content-directory' aria-labelledby='content-directory-title'>
@@ -78,13 +80,14 @@ const { items, unlinkedProjects } = Astro.props
 
     <aside class='coverage-panel' aria-labelledby='coverage-title'>
       <p class='eyebrow'>Publishing status</p>
-      <h3 id='coverage-title'>{unlinkedProjects.length} projects still need a Story.</h3>
-      <p>These are the next candidates for a build note, technical essay, or channel update.</p>
+      <h3 id='coverage-title'>{opportunities.length} projects still need a Story.</h3>
+      <p>Prioritized candidates for a build note, technical essay, or channel update.</p>
       <ul>
-        {unlinkedProjects.map((project) => (
+        {opportunities.slice(0, 6).map((opportunity) => (
           <li>
-            <a href={`/projects#${project.repository}`}>{project.title}<span aria-hidden='true'>↗</span></a>
-            <small>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'} · {project.status}</small>
+            <a href={`/projects#${opportunity.repository}`}>{opportunity.title}<span aria-hidden='true'>↗</span></a>
+            <small><strong>{opportunity.priority}</strong> · {opportunity.format} · {opportunity.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</small>
+            <small>{opportunity.reason}</small>
           </li>
         ))}
       </ul>
