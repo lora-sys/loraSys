@@ -46,8 +46,10 @@ const report = {
     github: {
       projects: projectItems.length,
       projectBreakdown: sourceCounts,
-      contributions: contributionItems.length,
-      pullRequests: contributionItems.reduce((total, item) => total + (item.pullRequests?.length ?? 0), 0)
+                contributions: contributionItems.length,
+          contributionAllowlist: contributions?.allowlist?.length ?? contributionItems.length,
+          pullRequests: contributionItems.reduce((total, item) => total + (item.pullRequests?.length ?? 0), 0)
+
     }
   },
   warnings,
