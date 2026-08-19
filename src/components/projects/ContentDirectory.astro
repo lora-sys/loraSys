@@ -1,0 +1,352 @@
+---
+export type DirectoryKind = 'Writing' | 'Channel' | 'Project'
+
+export interface DirectoryItem {
+  kind: DirectoryKind
+  title: string
+  meta: string
+  href: string
+  source: 'lora-sys' | 'ACAMLab' | 'External'
+  detail?: string
+}
+
+interface Props {
+  items: DirectoryItem[]
+  unlinkedProjects: { title: string; repository: string; source: string; status: string }[]
+}
+
+const { items, unlinkedProjects } = Astro.props
+---
+
+<section id='content-directory' class='content-directory' aria-labelledby='content-directory-title'>
+  <div class='directory-heading'>
+    <div>
+      <p class='eyebrow'>Content Directory</p>
+      <h2 id='content-directory-title'>Make the publishing surface visible.</h2>
+    </div>
+    <p>
+      Browse the writing, channels, and projects that currently have a clear path into the public story.
+    </p>
+  </div>
+
+  <div class='directory-controls' data-content-browser>
+    <div class='directory-search'>
+      <label for='content-directory-search'>Search content</label>
+      <input id='content-directory-search' type='search' placeholder='Search writing, projects, or channels…' autocomplete='off' data-content-search />
+    </div>
+    <div class='directory-filters' role='group' aria-label='Filter content directory'>
+      <div>
+        <span>Type</span>
+        <button type='button' data-kind-filter='all' aria-pressed='true'>All</button>
+        <button type='button' data-kind-filter='Writing' aria-pressed='false'>Writing</button>
+        <button type='button' data-kind-filter='Channel' aria-pressed='false'>Channel</button>
+        <button type='button' data-kind-filter='Project' aria-pressed='false'>Project</button>
+      </div>
+      <div>
+        <span>Owner</span>
+        <button type='button' data-owner-filter='all' aria-pressed='true'>All</button>
+        <button type='button' data-owner-filter='lora-sys' aria-pressed='false'>lora-sys</button>
+        <button type='button' data-owner-filter='ACAMLab' aria-pressed='false'>ACAMLab</button>
+      </div>
+    </div>
+    <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>
+  </div>
+
+  <div class='directory-layout'>
+    <div class='directory-list' data-content-list>
+      {items.map((item) => (
+        <a
+          class='directory-item'
+          href={item.href}
+          data-content-item
+          data-content-kind={item.kind}
+          data-content-owner={item.source}
+          data-content-search={`${item.title} ${item.meta} ${item.detail ?? ''}`.toLocaleLowerCase()}
+          data-interaction='content_directory_item'
+          data-destination={item.kind}
+        >
+          <span class='directory-kind'>{item.kind}</span>
+          <span class='directory-main'>
+            <strong>{item.title}</strong>
+            <small>{item.meta}{item.detail ? ` · ${item.detail}` : ''}</small>
+          </span>
+          <span aria-hidden='true'>↗</span>
+        </a>
+      ))}
+      <p class='directory-empty' hidden data-content-empty>No matching content entries.</p>
+    </div>
+
+    <aside class='coverage-panel' aria-labelledby='coverage-title'>
+      <p class='eyebrow'>Publishing status</p>
+      <h3 id='coverage-title'>{unlinkedProjects.length} projects still need a Story.</h3>
+      <p>These are the next candidates for a build note, technical essay, or channel update.</p>
+      <ul>
+        {unlinkedProjects.map((project) => (
+          <li>
+            <a href={`/projects#${project.repository}`}>{project.title}<span aria-hidden='true'>↗</span></a>
+            <small>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'} · {project.status}</small>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-content-browser]').forEach((browser) => {
+    const search = browser.querySelector<HTMLInputElement>('[data-content-search]')
+    const items = [...document.querySelectorAll<HTMLElement>('[data-content-item]')]
+    const status = browser.querySelector<HTMLElement>('[data-content-status]')
+    const empty = document.querySelector<HTMLElement>('[data-content-empty]')
+    const kindButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-kind-filter]')]
+    const ownerButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-owner-filter]')]
+    let kind = 'all'
+    let owner = 'all'
+
+    const setPressed = (buttons: HTMLButtonElement[], key: string, value: string) => {
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset[key] === value)))
+    }
+    const apply = () => {
+      const query = search?.value.trim().toLocaleLowerCase() ?? ''
+      let visible = 0
+      items.forEach((item) => {
+        const show =
+          (kind === 'all' || item.dataset.contentKind === kind) &&
+          (owner === 'all' || item.dataset.contentOwner === owner) &&
+          (!query || (item.dataset.contentSearch ?? '').includes(query))
+        item.hidden = !show
+        if (show) visible += 1
+      })
+      if (status) status.textContent = `Showing ${visible} of ${items.length} entries`
+      if (empty) empty.hidden = visible !== 0
+    }
+    kindButtons.forEach((button) => button.addEventListener('click', () => {
+      kind = button.dataset.kindFilter ?? 'all'
+      setPressed(kindButtons, 'kindFilter', kind)
+      apply()
+    }))
+    ownerButtons.forEach((button) => button.addEventListener('click', () => {
+      owner = button.dataset.ownerFilter ?? 'all'
+      setPressed(ownerButtons, 'ownerFilter', owner)
+      apply()
+    }))
+    search?.addEventListener('input', apply)
+    apply()
+  })
+</script>
+
+<style>
+  .content-directory {
+    display: grid;
+    gap: 1.35rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 1.4rem;
+  }
+  .directory-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .eyebrow {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 21ch;
+    margin: 0.45rem 0 0;
+    font-size: clamp(1.55rem, 4vw, 2.6rem);
+    font-weight: 560;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+  }
+  .directory-heading > p,
+  .coverage-panel > p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .directory-controls {
+    display: grid;
+    gap: 0.8rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1rem;
+  }
+  .directory-search {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .directory-search label,
+  .directory-filters span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .directory-search input {
+    width: 100%;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.45rem;
+    padding: 0.7rem 0.75rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font: inherit;
+    font-size: 0.78rem;
+  }
+  .directory-search input:focus-visible,
+  .directory-filters button:focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 2px;
+  }
+  .directory-filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .directory-filters > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .directory-filters span {
+    width: 100%;
+  }
+  .directory-filters button {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.38rem 0.62rem;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.68rem;
+  }
+  .directory-filters button:hover,
+  .directory-filters button[aria-pressed='true'] {
+    border-color: hsl(var(--foreground));
+    color: hsl(var(--foreground));
+  }
+  .directory-status {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .directory-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.75fr);
+    gap: 1.4rem;
+    align-items: start;
+  }
+  .directory-list {
+    display: grid;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .directory-item {
+    display: grid;
+    grid-template-columns: 4.2rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    align-items: center;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 0.72rem 0;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .directory-item[hidden] {
+    display: none;
+  }
+  .directory-item:hover,
+  .directory-item:focus-visible {
+    background: hsl(var(--muted) / 0.45);
+  }
+  .directory-kind {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.61rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .directory-main {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+  .directory-main strong {
+    overflow: hidden;
+    font-size: 0.78rem;
+    font-weight: 540;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .directory-main small,
+  .coverage-panel small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+  }
+  .directory-empty {
+    margin: 1rem 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+  }
+  .coverage-panel {
+    display: grid;
+    gap: 0.6rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.7rem;
+    padding: 1rem;
+    background: hsl(var(--card));
+  }
+  .coverage-panel h3 {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 560;
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+  }
+  .coverage-panel ul {
+    display: grid;
+    gap: 0.7rem;
+    margin: 0.35rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .coverage-panel li {
+    display: grid;
+    gap: 0.18rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.6rem;
+  }
+  .coverage-panel li a {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+  .coverage-panel li a:hover,
+  .coverage-panel li a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  @media (max-width: 760px) {
+    .directory-heading,
+    .directory-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .directory-filters {
+      grid-template-columns: 1fr;
+    }
+    .directory-item {
+      grid-template-columns: 3.6rem minmax(0, 1fr) auto;
+    }
+  }
+</style>
