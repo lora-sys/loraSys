@@ -1,0 +1,167 @@
+---
+import type { Project } from '@/data/projects'
+import { getProjectStories } from '@/data/project-stories'
+
+interface Props {
+  projects: Project[]
+}
+
+const { projects } = Astro.props
+---
+
+<section id='content-graph' class='content-graph' aria-labelledby='content-graph-title'>
+  <div class='graph-heading'>
+    <div>
+      <p class='eyebrow'>Content Graph</p>
+      <h2 id='content-graph-title'>Follow the work beyond the repository.</h2>
+    </div>
+    <p>
+      A curated trail from shipped projects to the writing and channels that explain how they were made.
+    </p>
+  </div>
+
+  <div class='graph-list'>
+    {projects.map((project) => {
+      const stories = getProjectStories(project.repository)
+      return (
+        <article class='graph-node'>
+          <div class='node-meta'>
+            <span>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>
+            <span>{project.status}</span>
+            <span>Updated {new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}</span>
+          </div>
+          <div class='node-main'>
+            <a class='node-title' href={`/projects#${project.repository}`}>{project.title}<span aria-hidden='true'>↗</span></a>
+            <div class='node-links' aria-label={`Content links for ${project.title}`}>
+              {stories.map((story) => (
+                <a
+                  href={story.href}
+                  target={story.external ? '_blank' : undefined}
+                  rel={story.external ? 'noopener noreferrer' : undefined}
+                  data-interaction='content_graph_link'
+                  data-destination={story.kind}
+                >
+                  <span>{story.kind}</span> {story.label} <span aria-hidden='true'>↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </article>
+      )
+    })}
+  </div>
+</section>
+
+<style>
+  .content-graph {
+    display: grid;
+    gap: 1.4rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 1.4rem;
+  }
+  .graph-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.8fr);
+    gap: 2rem;
+    align-items: end;
+  }
+  .eyebrow {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 20ch;
+    margin: 0.45rem 0 0;
+    font-size: clamp(1.55rem, 4vw, 2.6rem);
+    font-weight: 560;
+    letter-spacing: -0.05em;
+    line-height: 1.02;
+  }
+  .graph-heading > p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .graph-list {
+    display: grid;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .graph-node {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.36fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 0.95rem 0;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .node-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 0.38rem 0.7rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    text-transform: uppercase;
+  }
+  .node-meta span:first-child {
+    color: hsl(var(--foreground));
+    font-weight: 650;
+  }
+  .node-main {
+    display: grid;
+    gap: 0.55rem;
+  }
+  .node-title {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.35rem;
+    color: hsl(var(--foreground));
+    font-size: 0.95rem;
+    font-weight: 550;
+    text-decoration: none;
+  }
+  .node-title:hover,
+  .node-title:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .node-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.75rem;
+  }
+  .node-links a {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    line-height: 1.5;
+    text-decoration: none;
+  }
+  .node-links a:hover,
+  .node-links a:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .node-links a span:first-child {
+    color: hsl(var(--foreground));
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 720px) {
+    .graph-heading {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+    .graph-node {
+      grid-template-columns: 1fr;
+      gap: 0.45rem;
+    }
+  }
+</style>
