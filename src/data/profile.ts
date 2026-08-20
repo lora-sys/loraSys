@@ -77,5 +77,20 @@ export const hackathons = [
     location: 'Online',
     content: 'Built Emergence, a resilient multi-agent collaboration protocol.',
     href: 'https://github.com/lora-sys/hackthon-agent'
+  },
+  {
+    title: 'Horizon Startup Hackathon',
+    date: 'Date to be confirmed',
+    location: 'Beijing · details to be confirmed',
+    content: 'Built Agent Arena, an evidence-centered AI Agent team arena for proposal, attack, defense, verification, and replayable verdicts.',
+    href: 'https://github.com/lora-sys/AgentArena'
+  },
+  {
+    title: 'AMD AI DevMaster Hackathon 2026',
+    date: '2026 · PR open',
+    location: 'Track 1 · Multimodal Content Creation Tools',
+    content: 'Contributed to StagePoster, an AI-native music event poster engine running on AMD Radeon PRO W7900 + ROCm.',
+    href: 'https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71',
+    project: 'https://github.com/Ripped-sys/StagePoster'
   }
 ]

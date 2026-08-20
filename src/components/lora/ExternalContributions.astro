@@ -5,7 +5,7 @@ import syncReport from '@/data/sync-report.json'
 const allowlist = (contributionSnapshot.allowlist ?? []).map((repository) => repository.toLowerCase())
 const contributions = contributionSnapshot.contributions
   .filter((contribution) => allowlist.length === 0 || allowlist.includes(contribution.repository.toLowerCase()))
-  .slice(0, 4)
+  .slice(0, 5)
 const warningCount = (syncReport.warnings?.length ?? 0) + (contributionSnapshot.warnings?.length ?? 0)
 const lastSync = syncReport.snapshots?.contributions ?? contributionSnapshot.lastUpdated
 const formatDate = (value: string | null) => {
@@ -45,6 +45,13 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
             <span>{contribution.label}</span>
           </div>
           <p>{contribution.note}</p>
+          {
+            contribution.projectUrl && (
+              <a class='contribution-project' href={contribution.projectUrl} target='_blank' rel='noopener noreferrer'>
+                Related project: StagePoster ↗
+              </a>
+            )
+          }
           <div class='contribution-prs'>
             {
               contribution.pullRequests.slice(0, 2).map((pr) => (
@@ -146,6 +153,11 @@ const stateLabel = (state: string, mergedAt: string | null) => (mergedAt ? 'Merg
     margin: 0;
     color: var(--c-text-2, #6b7280);
     font-size: 0.9rem;
+  }
+  .contribution-project {
+    color: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
   }
   .contribution-prs {
     display: grid;

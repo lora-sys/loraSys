@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-18T14:21:23.696Z",
+  "lastUpdated": "2026-08-20T06:13:46.785Z",
   "source": "GitHub GraphQL / user:lora-sys",
   "allowlist": [
     "nishuzumi/moss",
@@ -8,7 +8,8 @@
     "cloudwego/eino-examples",
     "datawhalechina/vibe-blog",
     "public-apis/public-apis",
-    "aymericzip/intlayer"
+    "aymericzip/intlayer",
+    "amd-dev-contest/radeon-hackathon-2026-07"
   ],
   "contributions": [
     {
@@ -18,6 +19,8 @@
       "label": "Merged pull requests",
       "note": "Contributed to the Monad on-chain game and agent ecosystem.",
       "priority": 1,
+      "prUrl": null,
+      "projectUrl": null,
       "pullRequests": [
         {
           "title": "docs: add FAQ addressing #16",
@@ -49,13 +52,15 @@
       "label": "Agent infrastructure",
       "note": "Contributed to an agent-oriented Monad ecosystem project.",
       "priority": 2,
+      "prUrl": null,
+      "projectUrl": null,
       "pullRequests": [
         {
           "title": "feat: multi-account support (issue #12)",
           "url": "https://github.com/portdeveloper/nad-agent/pull/49",
-          "state": "OPEN",
-          "mergedAt": null,
-          "updatedAt": "2026-08-18T13:24:48Z"
+          "state": "MERGED",
+          "mergedAt": "2026-08-18T18:56:40Z",
+          "updatedAt": "2026-08-18T18:56:41Z"
         },
         {
           "title": "feat: add send_token action for ERC-20 transfers",
@@ -80,6 +85,8 @@
       "label": "LLM framework examples",
       "note": "Contributed an example to the Eino ecosystem.",
       "priority": 3,
+      "prUrl": null,
+      "projectUrl": null,
       "pullRequests": [
         {
           "title": "fix(adk): resolve path duplication, empty plan.md, and file escape in excel-agent",
@@ -97,6 +104,8 @@
       "label": "Documentation contribution",
       "note": "Contributed deployment documentation to an open-source community project.",
       "priority": 4,
+      "prUrl": null,
+      "projectUrl": null,
       "pullRequests": [
         {
           "title": "docs: add Docker deployment guide to README",
@@ -104,6 +113,25 @@
           "state": "MERGED",
           "mergedAt": "2026-02-04T16:10:29Z",
           "updatedAt": "2026-02-04T16:10:29Z"
+        }
+      ]
+    },
+    {
+      "repository": "AMD-DEV-CONTEST/Radeon-hackathon-2026-07",
+      "repositoryUrl": "https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07",
+      "description": "Radeon hackathon on 2026-07",
+      "label": "AMD Hackathon · Track 1",
+      "note": "Contributed to StagePoster for the AMD AI DevMaster Hackathon 2026; PR #71 links the submission to the multimodal content creation track.",
+      "priority": 7,
+      "prUrl": "https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71",
+      "projectUrl": "https://github.com/Ripped-sys/StagePoster",
+      "pullRequests": [
+        {
+          "title": "Track 1, Waiwang-Chantou(外网穿透) ,StagePoster",
+          "url": "https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71",
+          "state": "OPEN",
+          "mergedAt": null,
+          "updatedAt": "2026-08-06T11:06:00Z"
         }
       ]
     }

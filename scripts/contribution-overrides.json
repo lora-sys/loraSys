@@ -28,5 +28,12 @@
     "priority": 6,
     "label": "Open-source contribution",
     "note": "Contributed to the Intlayer developer tooling ecosystem."
+  },
+  "amd-dev-contest/radeon-hackathon-2026-07": {
+    "priority": 7,
+    "label": "AMD Hackathon · Track 1",
+    "note": "Contributed to StagePoster for the AMD AI DevMaster Hackathon 2026; PR #71 links the submission to the multimodal content creation track.",
+    "prUrl": "https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71",
+    "projectUrl": "https://github.com/Ripped-sys/StagePoster"
   }
 }
