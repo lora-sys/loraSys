@@ -34,11 +34,12 @@ export const themeDefinitions: ThemeDefinition[] = [
       'Glassbox-Agent-Harness',
       'nano-vllm-interactive-guide',
       'nano-vLLM',
-      'trustops'
+      'trustops',
+      'AgentArena'
     ],
     writingIds: ['ai-engineering-harness', 'loop-engineering-harness', 'sandbox'],
     channelNames: ['Bilibili', '知乎'],
-    nextFormat: 'Build note'
+    nextFormat: 'Evidence-first build note'
   },
   {
     slug: 'multimodal-vision',

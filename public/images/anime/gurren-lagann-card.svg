@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">天元突破收藏卡</title>
+  <desc id="desc">以红色螺旋和向上的几何光束表达突破边界的原创视觉卡片。</desc>
+  <defs><linearGradient id="bg" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#120b18"/><stop offset=".55" stop-color="#681c2b"/><stop offset="1" stop-color="#f4a340"/></linearGradient><linearGradient id="beam" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#ff5c35"/><stop offset="1" stop-color="#ffe8a3"/></linearGradient></defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <path d="M600 760 C420 650 430 500 600 420 C770 340 780 180 600 70" fill="none" stroke="#ff5634" stroke-width="34" opacity=".9"/>
+  <path d="M600 760 C760 650 750 500 600 420 C450 340 440 180 600 70" fill="none" stroke="#ffcf67" stroke-width="10" opacity=".8"/>
+  <path d="M600 650 L530 790 L600 735 L670 790 Z" fill="url(#beam)" opacity=".85"/>
+  <circle cx="600" cy="410" r="48" fill="#ffe5a0"/><circle cx="600" cy="410" r="22" fill="#6b1830"/>
+  <text x="72" y="112" fill="#fff4da" font-family="sans-serif" font-size="34" letter-spacing="8">ANIME ARCHIVE / 01</text>
+  <text x="72" y="670" fill="#fff4da" font-family="sans-serif" font-size="66" font-weight="700">天元突破</text>
+  <text x="76" y="730" fill="#ffd27b" font-family="sans-serif" font-size="27" letter-spacing="4">从地底钻出自己的天空。</text>
+</svg>

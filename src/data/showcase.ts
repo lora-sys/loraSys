@@ -67,6 +67,18 @@ export const anime: ShowcaseItem[] = [
     image: '/images/anime/death-note.webp',
     href: 'https://zh.wikipedia.org/wiki/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0',
   },
+  {
+    name: '天元突破红莲螺岩',
+    description: '从地底钻出自己的天空。',
+    image: '/images/anime/gurren-lagann-card.svg',
+    href: 'https://zh.wikipedia.org/wiki/%E5%A4%A9%E5%85%83%E7%AA%81%E7%A0%B4_%E7%BA%A2%E8%8E%B2%E8%9E%BA%E5%B2%A9',
+  },
+  {
+    name: '四月是你的谎言',
+    description: '有些旋律，会把青春重新点亮。',
+    image: '/images/anime/your-lie-in-april-card.svg',
+    href: 'https://zh.wikipedia.org/wiki/%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80',
+  },
 ]
 
 // Spotify verified track: Living Inside Of Your Love — Yutaka Yokokura

@@ -72,6 +72,8 @@ try {
       label: override.label,
       note: override.note,
       priority: override.priority,
+      prUrl: override.prUrl ?? null,
+      projectUrl: override.projectUrl ?? null,
       pullRequests: []
     }
     current.pullRequests.push({

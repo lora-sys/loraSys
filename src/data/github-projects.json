@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-18T15:08:29.971Z",
+  "lastUpdated": "2026-08-20T06:50:54.691Z",
   "accounts": [
     {
       "owner": "lora-sys",
@@ -12,14 +12,22 @@
     }
   ],
   "totals": {
-    "publicRepositories": 137,
+    "publicRepositories": 141,
     "sourceRepositories": 2,
-    "includedProjects": 59,
-    "excludedRepositories": 78,
-    "forks": 69
+    "includedProjects": 61,
+    "excludedRepositories": 80,
+    "forks": 71
   },
   "mediaPolicy": "README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.",
   "exclusions": [
+    {
+      "name": "awesome-LLM-resources",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Awesome-LLM",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
     {
       "name": "lora-sys",
       "reason": "GitHub profile README; identity metadata rather than a software project."
@@ -41,11 +49,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "qm",
+      "name": "mipland",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "mipland",
+      "name": "qm",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -61,11 +69,15 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
+      "name": "eino-examples",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "nano-vllm",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "eino-examples",
+      "name": "claw-code",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -74,10 +86,6 @@
     },
     {
       "name": "cloud-mail",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "claw-code",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -93,11 +101,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "whale-whisper",
+      "name": "langfuse",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "langfuse",
+      "name": "whale-whisper",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -121,15 +129,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "square-ui",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "github-readme-stats",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "cfnew",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "square-ui",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -145,19 +149,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "github-readme-stats",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "learn-toys",
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "papers-we-love",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "jaaz",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "react-server-components",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -165,7 +165,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "react-server-components",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "agentic-ai-public",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "papers-we-love",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -185,16 +193,20 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "mode-defect",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
       "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "mode-defect",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "generative-ai-for-beginners",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Filehub",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "ai-agents-for-beginners",
@@ -209,11 +221,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Filehub",
-      "reason": "Empty repository with no committed implementation."
+      "name": "minnow",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "minnow",
+      "name": "ai-town",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -221,15 +233,7 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "ai-town",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "developer-roadmap",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "ml5-library",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -237,15 +241,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "ml5-library",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "build-your-own-x",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux-command",
+      "name": "linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux",
+      "name": "linux-command",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -257,10 +265,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ai-getting-started",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "Web",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -269,8 +273,16 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "ai-getting-started",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "calculator",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "cs50",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "ExplorerPatcher",
@@ -289,10 +301,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cs50",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
       "name": "LeetCode-Go",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -301,11 +309,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Getting-Started-with-Linux",
+      "name": "CPlusPlusThings",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "awesome-security-weixin-official-accounts",
+      "name": "Getting-Started-with-Linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -313,7 +321,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "CPlusPlusThings",
+      "name": "awesome-security-weixin-official-accounts",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -336,6 +344,72 @@
   "warnings": [],
   "inventory": [
     {
+      "name": "Awesome-LLM",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Awesome-LLM",
+      "description": "Awesome-LLM: a curated list of Large Language Model",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Awesome-LLM",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-20T06:17:59Z",
+      "pushedAt": "2026-08-20T06:18:27Z",
+      "updatedAt": "2026-08-20T06:17:59Z",
+      "defaultBranch": "main",
+      "size": 14528,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "awesome-LLM-resources",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/awesome-LLM-resources",
+      "description": "🧑‍🚀 全世界最好的LLM资料总结（多模态生成、Agent、辅助编程、AI审稿、数据处理、模型训练、模型推理、o1 模型、MCP、小语言模型、视觉语言模型） | Summary of the world's best LLM resources. ",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/awesome-LLM-resources",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-20T06:17:04Z",
+      "pushedAt": "2026-08-20T06:17:44Z",
+      "updatedAt": "2026-08-20T06:17:04Z",
+      "defaultBranch": "main",
+      "size": 68531,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "nano-sglang-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-sglang-interactive-guide",
+      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 3968,
+        "Shell": 563
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-17T02:55:22Z",
+      "pushedAt": "2026-08-20T04:21:07Z",
+      "updatedAt": "2026-08-20T04:21:34Z",
+      "defaultBranch": "main",
+      "size": 28139,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "loraSys",
       "owner": "lora-sys",
       "fullName": "lora-sys/loraSys",
@@ -354,19 +428,48 @@
       "fork": false,
       "archived": false,
       "languages": {
-        "Astro": 294166,
-        "TypeScript": 180474,
+        "Astro": 361783,
+        "TypeScript": 190519,
         "XSLT": 80493,
-        "JavaScript": 55192,
-        "CSS": 6973,
+        "JavaScript": 64112,
+        "CSS": 7362,
         "MDX": 2857
       },
       "language": "Astro",
       "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-18T14:36:25Z",
-      "updatedAt": "2026-08-18T14:42:15Z",
+      "pushedAt": "2026-08-20T02:47:49Z",
+      "updatedAt": "2026-08-20T02:47:54Z",
       "defaultBranch": "main",
-      "size": 118112,
+      "size": 120061,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
+      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "topics": [
+        "llm-inference",
+        "nano-vllm",
+        "tutorial",
+        "vllm"
+      ],
+      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
+      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
+      "stars": 25,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 18621,
+        "Shell": 1277
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-02T14:49:28Z",
+      "pushedAt": "2026-08-20T02:12:02Z",
+      "updatedAt": "2026-08-20T02:12:35Z",
+      "defaultBranch": "main",
+      "size": 39377,
       "included": true,
       "exclusionReason": null
     },
@@ -536,30 +639,6 @@
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "nano-sglang-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-sglang-interactive-guide",
-      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 3968,
-        "Shell": 563
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-17T02:55:22Z",
-      "pushedAt": "2026-08-17T03:23:24Z",
-      "updatedAt": "2026-08-17T15:16:08Z",
-      "defaultBranch": "main",
-      "size": 96,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
       "name": "MulitiModal",
       "owner": "lora-sys",
       "fullName": "lora-sys/MulitiModal",
@@ -661,35 +740,6 @@
       "updatedAt": "2026-08-08T08:53:12Z",
       "defaultBranch": "main",
       "size": 4122,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "nano-vllm-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-vllm-interactive-guide",
-      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "topics": [
-        "llm-inference",
-        "nano-vllm",
-        "tutorial",
-        "vllm"
-      ],
-      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
-      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 23,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 18621,
-        "Shell": 1277
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-08T07:55:02Z",
-      "updatedAt": "2026-08-17T08:46:44Z",
-      "defaultBranch": "main",
-      "size": 136,
       "included": true,
       "exclusionReason": null
     },
@@ -916,6 +966,42 @@
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "AgentArena",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/AgentArena",
+      "description": "Agent Arena — 让 Agent 在真实任务中比赛、被裁判审查、留下证据、积累声誉的智能体竞技场。Real-task evaluation harness for LLM agents with judge review and reputation.",
+      "topics": [
+        "agent-arena",
+        "ai-agents",
+        "benchmark",
+        "evaluation",
+        "llm",
+        "multi-agent",
+        "reputation",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/AgentArena",
+      "stars": 1,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 618603,
+        "CSS": 59347,
+        "HTML": 28033,
+        "JavaScript": 6189,
+        "Shell": 2951
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-07-03T16:24:19Z",
+      "pushedAt": "2026-07-25T19:26:05Z",
+      "updatedAt": "2026-08-20T05:49:45Z",
+      "defaultBranch": "main",
+      "size": 223569,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "moss",
       "owner": "lora-sys",
       "fullName": "lora-sys/moss",
@@ -971,6 +1057,43 @@
       "updatedAt": "2026-07-16T15:58:46Z",
       "defaultBranch": "main",
       "size": 36400,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "ecomatrix",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ecomatrix",
+      "description": "Autonomous multi-agent economic sandbox — A2A protocol agents compete, trade, and govern inside a simulated economy with a God's Eye observability dashboard.",
+      "topics": [
+        "a2a",
+        "agent-protocol",
+        "autonomous-agents",
+        "economics",
+        "multi-agent",
+        "python",
+        "simulation"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/ecomatrix",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 148428,
+        "Go": 144647,
+        "TypeScript": 98537,
+        "Shell": 6541,
+        "CSS": 4074,
+        "Makefile": 3423,
+        "JavaScript": 224
+      },
+      "language": "Python",
+      "createdAt": "2026-07-13T02:07:04Z",
+      "pushedAt": "2026-07-14T08:46:40Z",
+      "updatedAt": "2026-08-20T05:51:07Z",
+      "defaultBranch": "main",
+      "size": 13496,
       "included": true,
       "exclusionReason": null
     },
@@ -4533,6 +4656,44 @@
     }
   ],
   "projects": {
+    "lora-sys/nano-sglang-interactive-guide": {
+      "name": "nano-sglang-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-sglang-interactive-guide",
+      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 3968,
+        "Shell": 563
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-17T02:55:22Z",
+      "pushedAt": "2026-08-20T04:21:07Z",
+      "updatedAt": "2026-08-20T04:21:34Z",
+      "defaultBranch": "main",
+      "size": 28139,
+      "title": "Nano Sglang Interactive Guide",
+      "summary": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Learning"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/nano-sglang-interactive-guide/main/assets/readme/hero.svg",
+        "localFile": "github-lora-sys-nano-sglang-interactive-guide.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
     "lora-sys/lorasys": {
       "name": "loraSys",
       "owner": "lora-sys",
@@ -4552,19 +4713,19 @@
       "fork": false,
       "archived": false,
       "languages": {
-        "Astro": 294166,
-        "TypeScript": 180474,
+        "Astro": 361783,
+        "TypeScript": 190519,
         "XSLT": 80493,
-        "JavaScript": 55192,
-        "CSS": 6973,
+        "JavaScript": 64112,
+        "CSS": 7362,
         "MDX": 2857
       },
       "language": "Astro",
       "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-18T14:36:25Z",
-      "updatedAt": "2026-08-18T14:42:15Z",
+      "pushedAt": "2026-08-20T02:47:49Z",
+      "updatedAt": "2026-08-20T02:47:54Z",
       "defaultBranch": "main",
-      "size": 118112,
+      "size": 120061,
       "title": "LoraSys",
       "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
       "kind": "owned",
@@ -4579,6 +4740,51 @@
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
         "localFile": "github-lora-sys-lorasys.webp",
         "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/nano-vllm-interactive-guide": {
+      "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
+      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "topics": [
+        "llm-inference",
+        "nano-vllm",
+        "tutorial",
+        "vllm"
+      ],
+      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
+      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
+      "stars": 25,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 18621,
+        "Shell": 1277
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-02T14:49:28Z",
+      "pushedAt": "2026-08-20T02:12:02Z",
+      "updatedAt": "2026-08-20T02:12:35Z",
+      "defaultBranch": "main",
+      "size": 39377,
+      "title": "nano-vLLM Interactive Guide",
+      "summary": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Featured",
+        "Open Source",
+        "AI Agents",
+        "Learning"
+      ],
+      "featuredRank": 3,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
+        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -4662,44 +4868,6 @@
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/TrandingOs/main/images/mvp.png",
         "localFile": "github-lora-sys-trandingos.webp",
-        "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/nano-sglang-interactive-guide": {
-      "name": "nano-sglang-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-sglang-interactive-guide",
-      "description": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/nano-sglang-interactive-guide",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 3968,
-        "Shell": 563
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-17T02:55:22Z",
-      "pushedAt": "2026-08-17T03:23:24Z",
-      "updatedAt": "2026-08-17T15:16:08Z",
-      "defaultBranch": "main",
-      "size": 96,
-      "title": "Nano Sglang Interactive Guide",
-      "summary": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Learning"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/nano-sglang-interactive-guide/main/assets/readme/hero.svg",
-        "localFile": "github-lora-sys-nano-sglang-interactive-guide.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
@@ -4866,51 +5034,6 @@
         "kind": "github-opengraph",
         "sourceUrl": "https://opengraph.githubassets.com/40c8a1f00f520dc6d7b762979b19f2bb00f504c5a2cf888499a306cbe1d77119/lora-sys/mossguard",
         "localFile": "github-lora-sys-mossguard.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/nano-vllm-interactive-guide": {
-      "name": "nano-vllm-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-vllm-interactive-guide",
-      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "topics": [
-        "llm-inference",
-        "nano-vllm",
-        "tutorial",
-        "vllm"
-      ],
-      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
-      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 23,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 18621,
-        "Shell": 1277
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-08T07:55:02Z",
-      "updatedAt": "2026-08-17T08:46:44Z",
-      "defaultBranch": "main",
-      "size": 136,
-      "title": "nano-vLLM Interactive Guide",
-      "summary": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "AI Agents",
-        "Learning"
-      ],
-      "featuredRank": 3,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
-        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5112,6 +5235,57 @@
         "objectPosition": "center"
       }
     },
+    "lora-sys/agentarena": {
+      "name": "AgentArena",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/AgentArena",
+      "description": "Agent Arena — 让 Agent 在真实任务中比赛、被裁判审查、留下证据、积累声誉的智能体竞技场。Real-task evaluation harness for LLM agents with judge review and reputation.",
+      "topics": [
+        "agent-arena",
+        "ai-agents",
+        "benchmark",
+        "evaluation",
+        "llm",
+        "multi-agent",
+        "reputation",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/AgentArena",
+      "stars": 1,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 618603,
+        "CSS": 59347,
+        "HTML": 28033,
+        "JavaScript": 6189,
+        "Shell": 2951
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-07-03T16:24:19Z",
+      "pushedAt": "2026-07-25T19:26:05Z",
+      "updatedAt": "2026-08-20T05:49:45Z",
+      "defaultBranch": "main",
+      "size": 223569,
+      "title": "AgentArena",
+      "summary": "Agent Arena — 让 Agent 在真实任务中比赛、被裁判审查、留下证据、积累声誉的智能体竞技场。Real-task evaluation harness for LLM agents with judge review and reputation.",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "AI Agents",
+        "Tools"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/AgentArena/main/docs/qa/visual-baselines/v052-home-desktop-20260725.png",
+        "localFile": "github-lora-sys-agentarena.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
     "lora-sys/second-brain": {
       "name": "second-brain",
       "owner": "lora-sys",
@@ -5156,6 +5330,58 @@
         "kind": "readme",
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/second-brain/main/docs/screenshots/01-dashboard.png",
         "localFile": "github-lora-sys-second-brain.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/ecomatrix": {
+      "name": "ecomatrix",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/ecomatrix",
+      "description": "Autonomous multi-agent economic sandbox — A2A protocol agents compete, trade, and govern inside a simulated economy with a God's Eye observability dashboard.",
+      "topics": [
+        "a2a",
+        "agent-protocol",
+        "autonomous-agents",
+        "economics",
+        "multi-agent",
+        "python",
+        "simulation"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/ecomatrix",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 148428,
+        "Go": 144647,
+        "TypeScript": 98537,
+        "Shell": 6541,
+        "CSS": 4074,
+        "Makefile": 3423,
+        "JavaScript": 224
+      },
+      "language": "Python",
+      "createdAt": "2026-07-13T02:07:04Z",
+      "pushedAt": "2026-07-14T08:46:40Z",
+      "updatedAt": "2026-08-20T05:51:07Z",
+      "defaultBranch": "main",
+      "size": 13496,
+      "title": "Ecomatrix",
+      "summary": "Autonomous multi-agent economic sandbox — A2A protocol agents compete, trade, and govern inside a simulated economy with a God's Eye observability dashboard.",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "AI Agents",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/ecomatrix/main/docs/design/ISSUE-FRONTEND/before/dashboard-desktop.png",
+        "localFile": "github-lora-sys-ecomatrix.webp",
         "fit": "contain",
         "objectPosition": "center"
       }
@@ -7111,8 +7337,8 @@
       ],
       "featuredRank": null,
       "poster": {
-        "kind": "repository-card",
-        "sourceUrl": "https://github.com/ACAMLab/SCIDRAFT.AI",
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/499f2cd695d59aa04da1d655cf5dcebf24b649cb2de0c49a0043a69d604750ad/ACAMLab/SCIDRAFT.AI",
         "localFile": "github-acamlab-scidraft-ai.webp",
         "fit": "cover",
         "objectPosition": "center"
