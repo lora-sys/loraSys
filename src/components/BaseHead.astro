@@ -17,6 +17,23 @@ const socialProfiles = socialLinks
   .filter((link) => link.href.startsWith('http'))
   .map((link) => link.href)
 const twitterCreator = socialLinks.find((link) => link.name === 'X')?.handle
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: config.title,
+  url: canonicalURL.origin + baseUrl,
+  description: config.description,
+  publisher: { '@type': 'Person', name: config.author }
+}
+const webPageJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: canonicalURL.href,
+  isPartOf: { '@type': 'WebSite', name: config.title, url: canonicalURL.origin + baseUrl },
+  inLanguage: config.locale.lang
+}
 const profileJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -74,6 +91,7 @@ const profileJsonLd = {
 <meta content={canonicalURL} property='og:url' />
 <meta content={config.title} property='og:site_name' />
 <meta content={config.locale.attrs} property='og:locale' />
+<meta content='image/webp' property='og:image:type' />
 <meta content={socialImageURL} property='og:image' />
   <meta content={`${config.title} — ${description}`} property='og:image:alt' />
   <meta content='1200' property='og:image:width' />
@@ -94,10 +112,17 @@ const profileJsonLd = {
 <meta content={title} property='twitter:title' />
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
-  {twitterCreator && <meta content={twitterCreator} property='twitter:creator' />}
+  {twitterCreator && (
+    <>
+      <meta content={twitterCreator} property='twitter:creator' />
+      <meta content={twitterCreator} property='twitter:site' />
+    </>
+  )}
 
-  {/* Person profile for search engines and link previews */}
-  <script type='application/ld+json' set:html={JSON.stringify(profileJsonLd)} />
+  {/* Site, page, and person entities for search engines */}
+  <script is:inline type='application/ld+json' set:html={JSON.stringify(websiteJsonLd)} />
+  <script is:inline type='application/ld+json' set:html={JSON.stringify(webPageJsonLd)} />
+  <script is:inline type='application/ld+json' set:html={JSON.stringify(profileJsonLd)} />
 
   {/* Sitemap */}
 

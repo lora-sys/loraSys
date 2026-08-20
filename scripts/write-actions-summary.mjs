@@ -11,6 +11,10 @@ if (!summaryPath) {
 
 const github = report.sources.github
 const warnings = report.warnings ?? []
+const projectBreakdown = github.projectBreakdown ?? {}
+const allowlistCount = github.contributionAllowlist ?? contributionSnapshot.allowlist?.length ?? github.contributions
+const curatedCount = github.contributions ?? contributionSnapshot.contributions?.length ?? 0
+const coverage = allowlistCount ? `${curatedCount}/${allowlistCount}` : 'n/a'
 const snapshotRows = [
   ['Projects', report.snapshots.projects],
   ['External contributions', report.snapshots.contributions],
@@ -26,8 +30,11 @@ const lines = [
   `| Sync version | ${report.syncVersion} |`,
   `| Latest sync | ${report.syncedAt ?? 'n/a'} |`,
   `| Projects | ${github.projects} |`,
-  `| Allowlisted contribution repos | ${github.contributionAllowlist ?? contributionSnapshot.allowlist?.length ?? github.contributions} |`,
-  `| Curated contribution repos in snapshot | ${github.contributions} |`,
+  `| lora-sys projects | ${projectBreakdown['lora-sys'] ?? 'n/a'} |`,
+  `| ACAMLab projects | ${projectBreakdown.ACAMLab ?? 'n/a'} |`,
+  `| Allowlisted contribution repos | ${allowlistCount} |`,
+  `| Curated contribution repos in snapshot | ${curatedCount} |`,
+  `| Allowlist coverage | ${coverage} |`,
   `| Pull requests | ${github.pullRequests} |`,
   '',
   '### Snapshot sources',

@@ -38,8 +38,8 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
 
         <div class='theme-links'>
           {theme.projects.slice(0, 2).map((project) => (
-            <a href={`/projects#${project.repository}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='project'>
-              <span>Project</span>{project.title}<span aria-hidden='true'>↗</span>
+            <a href={`/projects#${project.repository}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='project' aria-label={`${project.title} project, ${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}`}>
+              <span>Project · {project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>{project.title}<span aria-hidden='true'>↗</span>
             </a>
           ))}
           {theme.writings.slice(0, 2).map((writing) => (
@@ -186,7 +186,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
   }
   .theme-links a {
     display: grid;
-    grid-template-columns: 3.2rem minmax(0, 1fr) auto;
+    grid-template-columns: 7.1rem minmax(0, 1fr) auto;
     gap: 0.45rem;
     align-items: baseline;
     min-width: 0;
@@ -201,11 +201,11 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
   }
   .theme-links a > span:first-child {
     color: hsl(var(--muted-foreground));
-    font-size: 0.62rem;
+    font-size: 0.58rem;
     text-transform: uppercase;
   }
   .theme-links a:not(:has(> span:nth-child(3))) {
-    grid-template-columns: 3.2rem minmax(0, 1fr);
+    grid-template-columns: 7.1rem minmax(0, 1fr);
   }
   .theme-links a:not(:has(> span:nth-child(3))) > span:last-child {
     display: none;
