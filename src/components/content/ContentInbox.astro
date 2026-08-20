@@ -56,6 +56,7 @@ import {
         <button type='button' class='secondary' id='inbox-clear'>Clear local drafts</button>
       </div>
       <p id='inbox-status' class='inbox-status' aria-live='polite'>Candidates stay in this browser until you download or clear them.</p>
+      <p class='inbox-review-rule'><strong>Review gate:</strong> every candidate remains unpublished until a human assigns ownership, confirms the source boundary, and chooses a migration target.</p>
     </form>
 
     <aside class='inbox-guide' aria-label='Content routing guide'>
@@ -90,7 +91,7 @@ import {
         <h3>{item.title}</h3>
         <p>{item.summary}</p>
         <footer>
-          <span>{contentSourceLabels[item.source]} · {contentKindLabels[item.kind]}</span>
+          <span>{contentSourceLabels[item.source]} · {contentKindLabels[item.kind]} · {item.ownership}</span>
           {item.sourceUrl && <a href={item.sourceUrl} target='_blank' rel='noopener noreferrer'>Source ↗</a>}
         </footer>
       </article>
@@ -122,7 +123,7 @@ import {
     drafts.forEach((draft) => {
       const card = document.createElement('article')
       card.className = 'inbox-card inbox-card--local'
-      card.innerHTML = `<div class='card-topline'><span>Candidate · local</span><time>${escapeHtml(draft.createdAt)}</time></div><h3>${escapeHtml(draft.title)}</h3><p>${escapeHtml(draft.summary)}</p><footer><span>${escapeHtml(draft.sourceLabel)} · ${escapeHtml(draft.kind)}</span>${draft.sourceUrl ? `<a href='${escapeHtml(draft.sourceUrl)}' target='_blank' rel='noopener noreferrer'>Source ↗</a>` : ''}</footer>`
+      card.innerHTML = `<div class='card-topline'><span>Needs review · ${escapeHtml(draft.ownership ?? 'External')}</span><time>${escapeHtml(draft.createdAt)}</time></div><h3>${escapeHtml(draft.title)}</h3><p>${escapeHtml(draft.summary)}</p><p class='review-meta'>${escapeHtml(draft.reviewNote ?? 'Manual review required.')} → ${escapeHtml(draft.migrationTarget ?? 'content-inbox/review')}</p><footer><span>${escapeHtml(draft.sourceLabel)} · ${escapeHtml(draft.kind)}</span>${draft.sourceUrl ? `<a href='${escapeHtml(draft.sourceUrl)}' target='_blank' rel='noopener noreferrer'>Source ↗</a>` : ''}</footer>`
       items?.prepend(card)
     })
     if (count) count.textContent = `${drafts.length + document.querySelectorAll('[data-seeded-card]').length} total`
@@ -137,17 +138,20 @@ import {
     const source = String(data.get('source') ?? 'public-url')
     const kind = String(data.get('kind') ?? 'note')
     const project = String(data.get('project') ?? '').trim()
+    const ownership = source === 'notion' ? 'External' : 'lora-sys'
+    const migrationTarget = kind === 'blog' ? 'src/content/blog' : kind === 'project-update' ? 'src/content/projects' : 'src/content/notes'
+    const reviewNote = source === 'notion' ? '公开 Notion 只读导入候选；人工确认版权、归属和发布形态后再迁移。' : '待人工确认内容边界后迁移。'
     const fileBody = file && file.size ? await file.text() : ''
     const finalBody = body || fileBody
     const title = (project || (sourceUrl ? sourceUrl.split('/').filter(Boolean).pop() : '') || 'Untitled content candidate').trim()
     const summary = (finalBody || `Candidate from ${sourceUrl || 'local input'}`).replace(/\s+/g, ' ').slice(0, 220)
     const createdAt = new Date().toISOString().slice(0, 10)
-    const draft = { title, sourceUrl, sourceLabel: source, kind, project, summary, createdAt }
+    const draft = { title, sourceUrl, sourceLabel: source, kind, project, summary, createdAt, ownership, status: 'needs-review', reviewNote, migrationTarget }
     const drafts = readDrafts()
     drafts.unshift(draft)
     localStorage.setItem(storageKey, JSON.stringify(drafts.slice(0, 12)))
 
-    const markdown = `---\ntitle: "${title.replace(/"/g, '\\"')}"\nsourceUrl: "${sourceUrl}"\nsourceType: "${source}"\ncontentType: "${kind}"\nstatus: "candidate"\nproject: "${project}"\ncreatedAt: "${createdAt}"\n---\n\n${finalBody || summary}\n`
+    const markdown = `---\ntitle: "${title.replace(/"/g, '\\"')}"\nsourceUrl: "${sourceUrl}"\nsourceType: "${source}"\ncontentType: "${kind}"\nstatus: "needs-review"\nownership: "${ownership}"\nproject: "${project}"\nmigrationTarget: "${migrationTarget}"\nreviewNote: "${reviewNote}"\ncreatedAt: "${createdAt}"\n---\n\n${finalBody || summary}\n`
     const download = document.createElement('a')
     download.href = URL.createObjectURL(new Blob([markdown], { type: 'text/markdown;charset=utf-8' }))
     download.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'content-candidate'}.md`
@@ -186,7 +190,9 @@ import {
   .inbox-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
   .inbox-actions button { min-height: 2.5rem; border: 1px solid hsl(var(--foreground)); border-radius: 999px; background: hsl(var(--foreground)); padding: .55rem 1rem; color: hsl(var(--background)); cursor: pointer; font: inherit; font-size: .75rem; font-weight: 650; }
   .inbox-actions button.secondary { background: transparent; color: hsl(var(--foreground)); }
-  .inbox-status { margin: 0; color: hsl(var(--muted-foreground)); font-size: .75rem; line-height: 1.55; }
+  .inbox-status, .inbox-review-rule, .review-meta { margin: 0; color: hsl(var(--muted-foreground)); font-size: .75rem; line-height: 1.55; }
+  .inbox-review-rule { border-left: 2px solid hsl(var(--foreground)); padding-left: .75rem; }
+  .review-meta { font-size: .72rem; }
   .inbox-guide h3 { margin: 0 0 .8rem; font-size: 1.2rem; }
   .inbox-guide > p:not(.eyebrow) { color: hsl(var(--muted-foreground)); font-size: .86rem; line-height: 1.65; }
   dl { display: grid; gap: .75rem; margin: 1.5rem 0 0; }

@@ -10,6 +10,7 @@
     "sync:github": "bun scripts/fetch-contributions.mjs && bun scripts/fetch-github-projects.mjs && bun scripts/fetch-external-contributions.mjs && bun run validate:sync && bun run report:sync",
     "validate:sync": "bun scripts/validate-sync-data.mjs",
     "report:sync": "bun scripts/generate-sync-report.mjs",
+    "notion:import": "bun scripts/import-public-notion.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "check": "astro check",

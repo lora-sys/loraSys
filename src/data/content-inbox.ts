@@ -16,6 +16,11 @@ export interface ContentInboxItem {
   summary: string
   createdAt: string
   publishTarget?: string
+  ownership: 'lora-sys' | 'ACAMLab' | 'External'
+  reviewedAt?: string
+  reviewer?: string
+  reviewNote?: string
+  migrationTarget?: string
 }
 
 export const contentSourceLabels: Record<ContentSource, string> = {
@@ -53,7 +58,10 @@ export const seededInboxItems: ContentInboxItem[] = [
     tags: ['ai-agents', 'evaluation', 'multi-agent', 'hackathon'],
     summary: '把 Agent Arena 的证据绑定评分、Battle Replay、Champion Passport 和诚实降级整理为一篇项目笔记。',
     createdAt: '2026-08-20',
-    publishTarget: '/notes'
+    publishTarget: '/notes',
+    ownership: 'lora-sys',
+    reviewNote: '保持为个人项目候选；审核通过后再迁移到 Notes。',
+    migrationTarget: 'src/content/notes'
   },
   {
     id: 'notion-agent-loop-pending',
@@ -66,7 +74,10 @@ export const seededInboxItems: ContentInboxItem[] = [
     tags: ['agent-loop', 'notion-import'],
     summary: '页面链接已登记，但 Notion 连接器当前返回 403/连接超时；恢复后先做只读提取，再决定 Blog 或 Note 映射。',
     createdAt: '2026-08-20',
-    publishTarget: '/notes'
+    publishTarget: '/notes',
+    ownership: 'External',
+    reviewNote: 'Notion 外部页面只读导入；未取得编辑权前不得直接发布。',
+    migrationTarget: 'content-inbox/review'
   }
 ]
 
