@@ -52,7 +52,6 @@ export const theme: ThemeUserConfig = {
     menu: [
       { title: 'Blog', link: '/blog' },
       { title: 'Notes', link: '/notes' },
-      { title: 'Inbox', link: '/inbox' },
       { title: 'Projects', link: '/projects' },
       { title: 'Lab', link: '/lab' },
       { title: 'Now', link: '/now' },
@@ -104,7 +103,6 @@ export const theme: ThemeUserConfig = {
 /** Key destinations are also repeated in the footer as a compact end-of-page index. */
 export const secondaryNavigation = [
   { title: 'Now', link: '/now' },
-  { title: 'Inbox', link: '/inbox' },
   { title: 'Talks', link: '/talks' },
   { title: 'Links', link: '/links' },
   { title: 'Archives', link: '/archives' },

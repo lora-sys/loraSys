@@ -2,6 +2,7 @@ import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
+import sitemap from '@astrojs/sitemap'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
 
@@ -102,7 +103,7 @@ export default defineConfig({
   // [Integrations]
   integrations: [
     // astro-pure will automatically add sitemap, mdx & unocss
-    // sitemap(),
+    sitemap({ filter: (page) => !page.includes('/inbox') }),
     // mdx(),
     AstroPureIntegration(config)
   ],

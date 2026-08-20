@@ -1,8 +1,24 @@
 ---
 import ContentInbox from '@/components/content/ContentInbox.astro'
 import PageLayout from '@/layouts/CommonPage.astro'
+
+const internalInboxEnabled = import.meta.env.DEV
 ---
 
-<PageLayout title='Content Inbox' headings={[]}>
-  <ContentInbox />
-</PageLayout>
+{internalInboxEnabled ? (
+  <PageLayout title='Content Inbox' headings={[]}>
+    <ContentInbox />
+  </PageLayout>
+) : (
+  <PageLayout title='Not found' headings={[]}>
+    <main data-pagefind-ignore class='internal-route-blocked'>
+      <h1>Not found</h1>
+      <p>This internal route is available only in local development.</p>
+    </main>
+  </PageLayout>
+)}
+
+<style>
+  .internal-route-blocked { min-height: 40vh; padding: 4rem 0; }
+  .internal-route-blocked p { color: hsl(var(--muted-foreground)); }
+</style>
