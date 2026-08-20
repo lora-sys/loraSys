@@ -224,6 +224,7 @@ const latestContent: ContentFeedItem[] = [
           channelCount={creatorChannels.length}
           nextStoryTitle={contentSummary.topOpportunity?.title ?? 'No open Story gap'}
           nextStoryFormat={contentSummary.topOpportunity?.format ?? '—'}
+          nextStorySource={contentSummary.topOpportunity?.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}
           nextStoryHref={contentSummary.topOpportunity ? `/projects#${contentSummary.topOpportunity.repository}` : '/projects'}
           syncedAt={syncReport.syncedAt}
           githubProjects={syncReport.sources.github.projects}

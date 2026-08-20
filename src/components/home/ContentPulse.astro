@@ -12,6 +12,7 @@ interface Props {
   channelCount: number
   nextStoryTitle: string
   nextStoryFormat: string
+  nextStorySource: string
   nextStoryHref: string
   syncedAt: string
   githubProjects: number
@@ -31,6 +32,7 @@ const {
   channelCount,
   nextStoryTitle,
   nextStoryFormat,
+  nextStorySource,
   nextStoryHref,
   syncedAt,
   githubProjects,
@@ -103,7 +105,7 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       <span class='detail-label'>Next content opportunity</span>
       <strong>{nextStoryTitle}</strong>
     </span>
-    <span class='pulse-opportunity-meta'>{nextStoryFormat} · {storyGapCount} projects need a Story <span aria-hidden='true'>↗</span></span>
+    <span class='pulse-opportunity-meta'>Create {nextStoryFormat} · {nextStorySource} · {storyGapCount} projects need a Story <span aria-hidden='true'>↗</span></span>
   </a>
 
   <div class='pulse-sync'>
