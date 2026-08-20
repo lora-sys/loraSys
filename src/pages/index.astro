@@ -119,9 +119,9 @@ const latestContent: ContentFeedItem[] = [
           loading='eager'
           fetchpriority='high'
         />
-        <span class='availability' title='Open to thoughtful collaboration'>
+        <button class='availability' type='button' title='Open to thoughtful collaboration' data-agent-trace-trigger>
           <i></i> Open to collaborate
-        </span>
+        </button>
       </div>
       <div class='hero-copy'>
         <span class='kicker'>{profile.role} · {profile.location}</span>
@@ -157,6 +157,15 @@ const latestContent: ContentFeedItem[] = [
             ))
           }
         </nav>
+      </div>
+    </section>
+
+    <section class='trail-picker' aria-labelledby='trail-title'>
+      <div class='trail-heading'><span class='kicker'>Choose a trail</span><h2 id='trail-title'>Start where your curiosity is.</h2><p>Three short paths into the work, the thinking, or a possible collaboration.</p></div>
+      <div class='trail-grid'>
+        <a href='/projects' class='trail-card'><span>01 · Build</span><strong>See what I&apos;m building</strong><small>Projects, themes, sources, and evidence.</small><b aria-hidden='true'>→</b></a>
+        <a href='/blog/ai-engineering-harness' class='trail-card'><span>02 · Think</span><strong>Read a representative story</strong><small>How AI work becomes verifiable engineering.</small><b aria-hidden='true'>→</b></a>
+        <a href='/contact' class='trail-card'><span>03 · Connect</span><strong>Start a thoughtful collaboration</strong><small>Tell me what you are trying to make.</small><b aria-hidden='true'>→</b></a>
       </div>
     </section>
 
@@ -295,6 +304,16 @@ const latestContent: ContentFeedItem[] = [
     </div>
     <Quote class='mt-14' />
   </main>
+  <dialog class='agent-trace' data-agent-trace aria-labelledby='agent-trace-title'>
+    <button type='button' class='trace-close' data-agent-trace-close aria-label='Close Agent Trace'>×</button>
+    <span class='kicker'>Hidden protocol · 03</span><h2 id='agent-trace-title'>A small trace of how I build.</h2>
+    <div class='trace-steps'><span>Observe</span><i>→</i><span>Plan</span><i>→</i><span>Build</span><i>→</i><span>Verify</span></div>
+    <p>Good systems do not stop at “it works”. They leave evidence behind.</p>
+  </dialog>
+  <script>
+    const traceTrigger=document.querySelector<HTMLButtonElement>('[data-agent-trace-trigger]');const trace=document.querySelector<HTMLDialogElement>('[data-agent-trace]');const closeTrace=document.querySelector<HTMLButtonElement>('[data-agent-trace-close]');let taps=0;let reset:number|undefined;
+    traceTrigger?.addEventListener('click',()=>{taps+=1;clearTimeout(reset);reset=window.setTimeout(()=>{taps=0},900);if(taps>=3){trace?.showModal();taps=0}});closeTrace?.addEventListener('click',()=>trace?.close());trace?.addEventListener('click',event=>{if(event.target===trace)trace.close()});
+  </script>
 </PageLayout>
 
 <style>
@@ -325,7 +344,7 @@ const latestContent: ContentFeedItem[] = [
     object-fit: cover;
     box-shadow: 0 24px 60px -42px hsl(var(--foreground) / 0.7);
   }
-  .availability {
+  .trail-picker{display:grid;gap:1rem;border-block:1px solid hsl(var(--border));padding-block:1.5rem}.trail-heading{display:grid;gap:.35rem;max-width:38rem}.trail-heading h2{margin:0;font-size:clamp(1.4rem,3.2vw,2.2rem);letter-spacing:-.05em}.trail-heading p{margin:0;color:hsl(var(--muted-foreground));font-size:.84rem;line-height:1.6}.trail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.65rem}.trail-card{position:relative;display:grid;gap:.35rem;min-height:8.5rem;border:1px solid hsl(var(--border));border-radius:.85rem;padding:1rem;color:hsl(var(--foreground));text-decoration:none;background:hsl(var(--card));transition:transform 180ms cubic-bezier(.23,1,.32,1),border-color 180ms ease,background 180ms ease}.trail-card:hover,.trail-card:focus-visible{transform:translateY(-3px);border-color:hsl(var(--foreground)/.45);background:hsl(var(--muted)/.5);outline:2px solid hsl(var(--ring));outline-offset:2px}.trail-card span{color:hsl(var(--muted-foreground));font-size:.65rem;letter-spacing:.1em;text-transform:uppercase}.trail-card strong{max-width:20ch;font-size:.94rem;font-weight:600}.trail-card small{max-width:26ch;color:hsl(var(--muted-foreground));font-size:.72rem;line-height:1.45}.trail-card b{position:absolute;right:1rem;bottom:1rem;font-weight:400}.availability{
     position: absolute;
     bottom: -0.7rem;
     left: 50%;
@@ -342,7 +361,7 @@ const latestContent: ContentFeedItem[] = [
     box-shadow: 0 8px 22px -18px hsl(var(--foreground));
     transform: translateX(-50%);
   }
-  .availability i {
+  .availability:active{transform:translateX(-50%) scale(.97)}.availability:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}.availability i {
     width: 0.42rem;
     height: 0.42rem;
     border-radius: 50%;
@@ -548,7 +567,7 @@ const latestContent: ContentFeedItem[] = [
       min-height: 0;
     }
   }
-  @media (max-width: 620px) {
+  .agent-trace{width:min(92vw,32rem);border:1px solid hsl(var(--border));border-radius:1rem;padding:1.25rem;background:hsl(var(--background));color:hsl(var(--foreground));box-shadow:0 24px 80px hsl(var(--foreground)/.2)}.agent-trace::backdrop{background:hsl(var(--foreground)/.5);backdrop-filter:blur(4px)}.trace-close{float:right;border:0;background:transparent;color:inherit;font-size:1.4rem;cursor:pointer}.agent-trace h2{margin:.5rem 0;font-size:1.5rem;letter-spacing:-.04em}.agent-trace p{color:hsl(var(--muted-foreground));line-height:1.6}.trace-steps{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:1.2rem 0}.trace-steps span{border:1px solid hsl(var(--border));border-radius:999px;padding:.4rem .65rem;font-size:.72rem}.trace-steps i{color:hsl(var(--muted-foreground));font-style:normal}@media (max-width:760px){.trail-grid{grid-template-columns:1fr}.trail-card{min-height:auto;padding-right:2.5rem}}@media (max-width: 620px) {
     .hero {
       grid-template-columns: 1fr;
       margin-block: 1.5rem 4rem;
@@ -591,7 +610,8 @@ const latestContent: ContentFeedItem[] = [
     .hero-actions a,
     .social-rail a,
     .social-rail a::after,
-    .note-preview a {
+    .note-preview a,
+    .trail-card {
       transition: none;
     }
     .hero-actions a:hover,
@@ -599,7 +619,9 @@ const latestContent: ContentFeedItem[] = [
     .social-rail a:hover,
     .social-rail a:focus-visible,
     .note-preview a:hover,
-    .note-preview a:focus-visible {
+    .note-preview a:focus-visible,
+    .trail-card:hover,
+    .trail-card:focus-visible {
       transform: none;
     }
   }

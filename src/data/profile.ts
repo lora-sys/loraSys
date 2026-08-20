@@ -80,8 +80,8 @@ export const hackathons = [
   },
   {
     title: 'Horizon Startup Hackathon',
-    date: 'Date to be confirmed',
-    location: 'Beijing · details to be confirmed',
+    date: 'Planned · date pending',
+    location: 'Beijing · Startup Hackathon',
     content: 'Built Agent Arena, an evidence-centered AI Agent team arena for proposal, attack, defense, verification, and replayable verdicts.',
     href: 'https://github.com/lora-sys/AgentArena'
   },

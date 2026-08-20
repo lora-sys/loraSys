@@ -21,7 +21,7 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
     朋友不是收藏夹里的网址，而是彼此认真阅读、偶尔回应的邻居。这张星图只记录真实关系；它会从空白开始，慢慢长大。
   </p>
 
-  <div class='not-prose'>
+  <div class='not-prose first-star-surface'>
     <FriendConstellation links={friendLinks} />
   </div>
 
@@ -134,11 +134,11 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
         Send your coordinates <span aria-hidden='true'>↗</span>
       </a>
     </div>
-    <p class='copy-status' aria-live='polite'></p>
+    <p class='copy-status' aria-live='polite'></p><div class='copy-toast' data-copy-toast role='status' aria-live='polite' hidden>Copied — ready to share</div>
   </section>
 
   <script>
-    const status = document.querySelector<HTMLElement>('.copy-status')
+    const status = document.querySelector<HTMLElement>('.copy-status'); const toast = document.querySelector<HTMLElement>('[data-copy-toast]'); let toastTimer:number|undefined
     const copyText = async (value: string) => {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable')
       await navigator.clipboard.writeText(value)
@@ -152,7 +152,7 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
         try {
           await copyText(value)
           button.textContent = 'Copied'
-          if (status) status.textContent = 'Site information copied to the clipboard.'
+          if (status) status.textContent = 'Site information copied to the clipboard.'; if (toast) { toast.hidden=false; clearTimeout(toastTimer); toastTimer=window.setTimeout(()=>{toast.hidden=true},1800) }
           window.setTimeout(() => {
             button.textContent = initialLabel
           }, 1600)
@@ -163,9 +163,13 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
       })
     })
   </script>
+  <script>
+    const firstStarLink=document.querySelector<HTMLAnchorElement>('.empty-sky a[href="#apply-links"]'); const starSurface=document.querySelector<HTMLElement>('.first-star-surface'); firstStarLink?.addEventListener('click',()=>{starSurface?.classList.add('first-star-pulse');window.setTimeout(()=>starSurface?.classList.remove('first-star-pulse'),700)})
+  </script>
 </PageLayout>
 
 <style>
+  .first-star-surface{border-radius:1rem}.first-star-pulse{animation:first-star-pulse 700ms cubic-bezier(.23,1,.32,1)}@keyframes first-star-pulse{50%{filter:drop-shadow(0 0 18px hsl(var(--primary)/.35))}}
   .link-ledgers {
     display: grid;
     gap: 0.6rem;
@@ -382,7 +386,7 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
   .apply-footer > a:focus-visible {
     color: hsl(var(--background));
   }
-  .copy-status {
+  .copy-toast{position:fixed;right:1rem;bottom:1rem;z-index:20;border:1px solid hsl(var(--border));border-radius:999px;padding:.55rem .75rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.72rem;box-shadow:0 12px 30px hsl(var(--foreground)/.18)}.copy-status {
     min-height: 1rem;
     margin: 0.75rem 0 0;
     color: hsl(var(--muted-foreground));
@@ -409,7 +413,8 @@ const formatLinkDate = (link: FriendLink) => link.since || 'Date not recorded'
       width: fit-content;
     }
   }
-  @media (prefers-reduced-motion: reduce) {
+  @media (prefers-reduced-motion: reduce) {.first-star-pulse{animation:none}
+
     .link-ledgers .arrow,
     .copy-all,
     .site-field button {

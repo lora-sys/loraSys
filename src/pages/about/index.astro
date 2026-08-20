@@ -59,7 +59,7 @@ const openSourceProjects = projects.slice(0, 6)
   {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
   <div class='not-prose about-actions'>
     <Button title='Explore projects' href='/projects' variant='ahead' />
-    <Button title='Download résumé' href='/resume.pdf' target='_blank' variant='ahead' />
+    <a class='about-resume' href='/resume.pdf' target='_blank' rel='noopener noreferrer'>Download résumé <span aria-hidden='true'>↗</span></a>
     <Button title='Contact me' href='/contact' variant='ahead' />
   </div>
 
@@ -216,6 +216,7 @@ const openSourceProjects = projects.slice(0, 6)
     gap: 0.55rem;
     margin-block: 1.4rem 3rem;
   }
+  .about-resume{display:inline-flex;align-items:center;gap:.35rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.58rem .85rem;color:hsl(var(--foreground));font-size:.78rem;text-decoration:none;transition:background 180ms ease,transform 180ms ease}.about-resume:hover,.about-resume:focus-visible{background:hsl(var(--muted));transform:translateY(-1px);outline:none}
   .capability-list {
     margin-block: 1.3rem 3rem;
     border-top: 1px solid hsl(var(--border));
@@ -389,11 +390,14 @@ const openSourceProjects = projects.slice(0, 6)
   }
   @media (prefers-reduced-motion: reduce) {
     .project-index a,
-    .education {
+    .education,
+    .about-resume {
       transition: none;
     }
     .education:hover,
-    .education:focus-visible {
+    .education:focus-visible,
+    .about-resume:hover,
+    .about-resume:focus-visible {
       transform: none;
     }
   }

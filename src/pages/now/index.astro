@@ -1,16 +1,19 @@
 ---
 import PageLayout from '@/layouts/CommonPage.astro'
+const lastUpdated = '2026-08-20'
 const sections=[
- {id:'building',title:'营造中',status:'In progress',frequency:'Daily',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
- {id:'learning',title:'学习中',status:'Exploring',frequency:'Weekly',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
+ {id:'building',title:'营造中',status:'In progress',frequency:'As I build',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
+ {id:'learning',title:'学习中',status:'Exploring',frequency:'When it clicks',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
  {id:'reading',title:'阅读中',status:'On my desk',frequency:'Slowly',category:'Reading',items:['Designing Data-Intensive Applications']},
  {id:'listening',title:'共鸣中',status:'On repeat',frequency:'Often',category:'Listening',items:['Tame Impala — Currents']}
 ]
 const headings=sections.map(s=>({depth:2,slug:s.id,text:s.title}))
 ---
 <PageLayout title='/now' {headings}>
- <p>一个关于此刻的持续快照，而不是履历。最后更新于 <time datetime='2026-07'>2026 年 7 月</time>，每月整理。</p>
+ <p>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>2026 年 8 月 20 日</time>，完成重要变化时更新。</p>
+ <div class='now-recent' data-now-visit><strong>最近完成</strong><span>把 loraSys 升级为个人品牌与内容中心：项目同步、Notion 候选审核和静态发布边界已经建立。</span><small data-now-return>欢迎回来，继续看看最近的构建。</small></div>
  <div class='not-prose now-grid'>{sections.map(section=><section id={section.id}><header><span>{section.category}</span><div><i></i>{section.status}</div></header><h2>{section.title}</h2><ul>{section.items.map(item=><li>{item}</li>)}</ul><footer>更新频率 · {section.frequency}</footer></section>)}</div>
  <p>也可以在 <a href='https://peerlist.io/mierpiter' target='_blank' rel='noopener noreferrer'>PeerList</a>、<a href='https://www.youtube.com/@MierPiter33280' target='_blank' rel='noopener noreferrer'>YouTube</a> 和 <a href='https://space.bilibili.com/431821023' target='_blank' rel='noopener noreferrer'>Bilibili</a> 找到我。</p>
 </PageLayout>
-<style>.now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.now-grid section{border:1px solid hsl(var(--border));border-radius:1rem;padding:1.1rem;background:hsl(var(--card))}.now-grid header{display:flex;justify-content:space-between;color:hsl(var(--muted-foreground));font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.now-grid header div{display:flex;align-items:center;gap:.35rem;text-transform:none;letter-spacing:0}.now-grid i{width:.4rem;height:.4rem;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgb(34 197 94/.12)}.now-grid h2{margin:.8rem 0 .5rem;font-size:1.15rem}.now-grid ul{margin:0;padding-left:1.2rem;color:hsl(var(--muted-foreground));font-size:.88rem}.now-grid footer{margin-top:1rem;padding-top:.7rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem}@media(max-width:600px){.now-grid{grid-template-columns:1fr}}</style>
+<style>.now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.now-grid section{border:1px solid hsl(var(--border));border-radius:1rem;padding:1.1rem;background:hsl(var(--card))}.now-grid header{display:flex;justify-content:space-between;color:hsl(var(--muted-foreground));font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.now-grid header div{display:flex;align-items:center;gap:.35rem;text-transform:none;letter-spacing:0}.now-grid i{width:.4rem;height:.4rem;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgb(34 197 94/.12)}.now-grid h2{margin:.8rem 0 .5rem;font-size:1.15rem}.now-grid ul{margin:0;padding-left:1.2rem;color:hsl(var(--muted-foreground));font-size:.88rem}.now-grid footer{margin-top:1rem;padding-top:.7rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem}.now-recent{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.45));font-size:.84rem}.now-recent strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}.now-recent span,.now-recent small{color:hsl(var(--muted-foreground));line-height:1.55}.now-recent small{font-size:.7rem}@media(max-width:600px){.now-grid{grid-template-columns:1fr}}</style>
+ <script>const visitKey='lora:now:last-visit';const marker=document.querySelector<HTMLElement>('[data-now-return]');if(marker){const previous=localStorage.getItem(visitKey);marker.textContent=previous?'欢迎回来，看看这次有什么变化。':'第一次来？从 Building 区开始。';localStorage.setItem(visitKey,new Date().toISOString())}</script>

@@ -43,7 +43,7 @@ const headings = [
       <Icon name='document' class='size-4' />
       <span>Copy email</span>
     </button>
-    <span id='copy-status' class='sr-only' aria-live='polite'></span>
+    <span id='copy-status' class='sr-only' aria-live='polite'></span><span class='copy-toast' data-copy-toast role='status' aria-live='polite' hidden>Copied — ready to share</span>
   </div>
   <div class='not-prose subscribe-card'>
     <div>
@@ -90,7 +90,7 @@ const headings = [
 
   <script>
     const copyButton = document.querySelector<HTMLButtonElement>('[data-copy-email]')
-    const copyStatus = document.querySelector<HTMLElement>('#copy-status')
+    const copyStatus = document.querySelector<HTMLElement>('#copy-status'); const copyToast = document.querySelector<HTMLElement>('[data-copy-toast]'); let copyToastTimer:number|undefined
     copyButton?.addEventListener('click', async () => {
       const email = copyButton.dataset.copyEmail
       if (!email) return
@@ -98,7 +98,7 @@ const headings = [
         await navigator.clipboard.writeText(email)
         const label = copyButton.querySelector('span')
         if (label) label.textContent = 'Copied'
-        if (copyStatus) copyStatus.textContent = `Copied ${email} to clipboard`
+        if (copyStatus) copyStatus.textContent = `Copied ${email} to clipboard`; if (copyToast) { copyToast.hidden=false; clearTimeout(copyToastTimer); copyToastTimer=window.setTimeout(()=>{copyToast.hidden=true},1800) }
         window.setTimeout(() => {
           if (label) label.textContent = 'Copy email'
         }, 1800)
@@ -110,6 +110,7 @@ const headings = [
 </PageLayout>
 
 <style>
+  .copy-toast{position:fixed;right:1rem;bottom:1rem;z-index:20;border:1px solid hsl(var(--border));border-radius:999px;padding:.55rem .75rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.72rem;box-shadow:0 12px 30px hsl(var(--foreground)/.18)}
   .contact-intro {
     position: relative;
     overflow: hidden;

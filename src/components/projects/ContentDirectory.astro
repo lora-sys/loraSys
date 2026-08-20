@@ -74,7 +74,8 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     </div>
     <div class='directory-status-row'>
       <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>
-      <button type='button' class='directory-reset' data-content-reset hidden>Reset filters</button>
+      <span class='directory-filter-summary' data-content-filter-summary hidden></span>
+      <button type='button' class='directory-receipt' data-content-receipt hidden>Copy exploration receipt</button><button type='button' class='directory-reset' data-content-reset hidden>Reset filters</button>
     </div>
   </div>
 
@@ -128,8 +129,13 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     const kindButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-kind-filter]')]
     const ownerButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-owner-filter]')]
     const reset = browser.querySelector<HTMLButtonElement>('[data-content-reset]')
-    let kind = 'all'
-    let owner = 'all'
+    const params = new URLSearchParams(window.location.search)
+    let kind = params.get('type') || 'all'
+    let owner = params.get('owner') || 'all'
+    if (!['all', 'Writing', 'Channel', 'Project', 'Contribution'].includes(kind)) kind = 'all'
+    if (!['all', 'lora-sys', 'ACAMLab', 'External'].includes(owner)) owner = 'all'
+    if (search && params.get('q')) search.value = params.get('q') || ''
+    const summary = browser.querySelector<HTMLElement>('[data-content-filter-summary]'); const receipt = browser.querySelector<HTMLButtonElement>('[data-content-receipt]')
 
     const setPressed = (buttons: HTMLButtonElement[], key: string, value: string) => {
       buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset[key] === value)))
@@ -149,29 +155,36 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       const ownerLabel = owner === 'all' ? '' : ` · owner: ${owner}`
       const hasFilters = kind !== 'all' || owner !== 'all' || Boolean(query)
       if (status) status.textContent = `Showing ${visible} of ${items.length} entries${kindLabel}${ownerLabel}`
+      if (summary) { summary.hidden = !hasFilters; summary.textContent = [kind !== 'all' ? `Type: ${kind}` : '', owner !== 'all' ? `Owner: ${owner}` : '', query ? `Search: ${query}` : ''].filter(Boolean).join(' · ') }
       if (reset) reset.hidden = !hasFilters
+      if (receipt) receipt.hidden = !hasFilters
       if (empty) empty.hidden = visible !== 0
     }
+    const syncUrl = () => { const next = new URL(window.location.href); kind === 'all' ? next.searchParams.delete('type') : next.searchParams.set('type', kind); owner === 'all' ? next.searchParams.delete('owner') : next.searchParams.set('owner', owner); const query = search?.value.trim() ?? ''; query ? next.searchParams.set('q', query) : next.searchParams.delete('q'); window.history.replaceState({}, '', next) }
     kindButtons.forEach((button) => button.addEventListener('click', () => {
       kind = button.dataset.kindFilter ?? 'all'
       setPressed(kindButtons, 'kindFilter', kind)
-      apply()
+      syncUrl(); apply()
     }))
     ownerButtons.forEach((button) => button.addEventListener('click', () => {
       owner = button.dataset.ownerFilter ?? 'all'
       setPressed(ownerButtons, 'ownerFilter', owner)
-      apply()
+      syncUrl(); apply()
     }))
-    search?.addEventListener('input', apply)
+    search?.addEventListener('input', () => { syncUrl(); apply() })
+    receipt?.addEventListener('click', async () => { const text = `loraSys exploration receipt\n${summary?.textContent || 'All content'}\n${visibleLabel()}`; try { await navigator.clipboard.writeText(text); receipt.textContent='Receipt copied'; window.setTimeout(()=>{receipt.textContent='Copy exploration receipt'},1600) } catch { receipt.textContent='Select and copy manually' } })
+    const visibleLabel = () => status?.textContent || 'Exploration complete'
     reset?.addEventListener('click', () => {
       kind = 'all'
       owner = 'all'
       if (search) search.value = ''
       setPressed(kindButtons, 'kindFilter', kind)
       setPressed(ownerButtons, 'ownerFilter', owner)
-      apply()
+      syncUrl(); apply()
       search?.focus()
     })
+    setPressed(kindButtons, 'kindFilter', kind)
+    setPressed(ownerButtons, 'ownerFilter', owner)
     apply()
   })
 </script>
@@ -298,12 +311,12 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     justify-content: space-between;
     gap: 0.75rem;
   }
-  .directory-status {
+  .directory-filter-summary{display:inline-flex;align-items:center;border:1px solid hsl(var(--border));border-radius:999px;padding:.28rem .55rem;color:hsl(var(--foreground));font-size:.63rem;white-space:nowrap}.directory-status {
     margin: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
   }
-  .directory-reset {
+  .directory-receipt,.directory-reset {
     border: 0;
     padding: 0.25rem 0;
     background: transparent;

@@ -5,7 +5,7 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import { integ } from '@/site-config'
 
 const meta = {
-  description: 'Search relative posts of the whole blog',
+  description: 'Search projects, writing, notes, lab work, and the public story.',
   title: 'Search'
 }
 ---
@@ -21,8 +21,9 @@ const meta = {
       {
         integ.pagefind ? (
           <>
-            <p>Enter a search term or phrase to search the blog.</p>
-            <PFSearch />
+            <p class='search-intro'>Search the site for projects, writing, notes, lab work, contributions, and the ideas connecting them.</p>
+            <div class='search-shell'><PFSearch /></div>
+            <div class='search-help'><span>No luck?</span><a href='/projects'>Explore projects</a><a href='/contact'>Start a conversation</a></div>
           </>
         ) : (
           <p>Pagefind is disabled.</p>
@@ -31,3 +32,4 @@ const meta = {
     </div>
   </main>
 </PageLayout>
+<style>.search-intro{max-width:38rem;color:hsl(var(--muted-foreground));line-height:1.7}.search-shell{margin-top:1.25rem}.search-help{display:flex;flex-wrap:wrap;gap:.6rem 1rem;margin-top:1.2rem;color:hsl(var(--muted-foreground));font-size:.75rem}.search-help a{color:hsl(var(--foreground));text-underline-offset:.2em}.search-shell :global(.pagefind-ui__search-input){border-radius:.6rem}.search-shell :global(.pagefind-ui__result){transition:transform 160ms cubic-bezier(.23,1,.32,1),background 160ms ease}.search-shell :global(.pagefind-ui__result:hover){transform:translateX(3px);background:hsl(var(--muted)/.45)}@media(prefers-reduced-motion:reduce){.search-shell :global(.pagefind-ui__result){transition:none}.search-shell :global(.pagefind-ui__result:hover){transform:none}}</style>
