@@ -53,7 +53,7 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
   <div class='directory-controls' data-content-browser>
     <div class='directory-search'>
       <label for='content-directory-search'>Search content</label>
-      <input id='content-directory-search' type='search' placeholder='Search writing, projects, or channels…' autocomplete='off' data-content-search />
+      <input id='content-directory-search' type='search' placeholder='Search writing, projects, channels, or contributions…' autocomplete='off' data-content-search />
     </div>
     <div class='directory-filters' role='group' aria-label='Filter content directory'>
       <div>
@@ -72,7 +72,10 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
         <button type='button' data-owner-filter='External' aria-pressed='false'>External</button>
       </div>
     </div>
-    <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>
+    <div class='directory-status-row'>
+      <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>
+      <button type='button' class='directory-reset' data-content-reset hidden>Reset filters</button>
+    </div>
   </div>
 
   <div class='directory-layout'>
@@ -124,6 +127,7 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     const empty = document.querySelector<HTMLElement>('[data-content-empty]')
     const kindButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-kind-filter]')]
     const ownerButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-owner-filter]')]
+    const reset = browser.querySelector<HTMLButtonElement>('[data-content-reset]')
     let kind = 'all'
     let owner = 'all'
 
@@ -141,7 +145,11 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
         item.hidden = !show
         if (show) visible += 1
       })
-      if (status) status.textContent = `Showing ${visible} of ${items.length} entries`
+      const kindLabel = kind === 'all' ? '' : ` · type: ${kind}`
+      const ownerLabel = owner === 'all' ? '' : ` · owner: ${owner}`
+      const hasFilters = kind !== 'all' || owner !== 'all' || Boolean(query)
+      if (status) status.textContent = `Showing ${visible} of ${items.length} entries${kindLabel}${ownerLabel}`
+      if (reset) reset.hidden = !hasFilters
       if (empty) empty.hidden = visible !== 0
     }
     kindButtons.forEach((button) => button.addEventListener('click', () => {
@@ -155,6 +163,15 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       apply()
     }))
     search?.addEventListener('input', apply)
+    reset?.addEventListener('click', () => {
+      kind = 'all'
+      owner = 'all'
+      if (search) search.value = ''
+      setPressed(kindButtons, 'kindFilter', kind)
+      setPressed(ownerButtons, 'ownerFilter', owner)
+      apply()
+      search?.focus()
+    })
     apply()
   })
 </script>
@@ -262,7 +279,8 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
   .directory-filters button {
     border: 1px solid hsl(var(--border));
     border-radius: 999px;
-    padding: 0.38rem 0.62rem;
+    min-height: 2.25rem;
+    padding: 0.45rem 0.7rem;
     background: transparent;
     color: hsl(var(--muted-foreground));
     cursor: pointer;
@@ -274,10 +292,31 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     border-color: hsl(var(--foreground));
     color: hsl(var(--foreground));
   }
+  .directory-status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
   .directory-status {
     margin: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
+  }
+  .directory-reset {
+    border: 0;
+    padding: 0.25rem 0;
+    background: transparent;
+    color: hsl(var(--foreground));
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.68rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .directory-reset:focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 3px;
   }
   .directory-layout {
     display: grid;
