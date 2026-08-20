@@ -25,13 +25,13 @@ const { projects } = Astro.props
       const stories = getProjectStories(project.repository)
       return (
         <article class='graph-node'>
-          <div class='node-meta'>
+          <div class='node-meta' aria-label={`${project.title} project context`}>
             <span>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>
             <span>{project.status}</span>
             <span>Updated {new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}</span>
           </div>
           <div class='node-main'>
-            <a class='node-title' href={`/projects#${project.repository}`}>{project.title}<span aria-hidden='true'>↗</span></a>
+            <a class='node-title' href={`/projects#${project.repository}`} aria-label={`${project.title}, ${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'} project`}>{project.title}<span aria-hidden='true'>↗</span></a>
             <div class='node-links' aria-label={`Content links for ${project.title}`}>
               {stories.map((story) => (
                 <a

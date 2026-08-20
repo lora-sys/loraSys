@@ -134,3 +134,9 @@ assets/readme/             README-native visual system
 ## License
 
 The repository and the pinned Pure theme foundation are distributed under [Apache-2.0](./LICENSE). Individual articles, project screenshots, logos, and third-party media may carry their own attribution or license terms.
+
+## Sync and ownership contract
+
+The public directory keeps three surfaces distinct: **lora-sys** is personal work, **ACAMLab** is lab work, and **External** contains only manually allowlisted open-source contributions. GitHub snapshots are refreshed in Actions before the verified site is built; the quality gate records snapshot dates, project ownership breakdown, contribution allowlist coverage, pull requests, and warnings in the Actions summary.
+
+Review screenshots and local audit notes are intentionally kept outside commits. A feature branch must pass `bun run check`, `bun run build`, and desktop plus 390×844 browser review before it can be merged into `main`.

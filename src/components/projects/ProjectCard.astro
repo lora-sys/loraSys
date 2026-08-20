@@ -78,7 +78,7 @@ const filterAttributes = filterable
   <div class='project-body'>
     <div class='project-eyebrow'>
       <span>{primaryCategory}</span>
-      <span class='project-source' title={`Source: ${project.source}`}>{sourceLabel}</span>
+      <span class='project-source' title={`Source: ${project.source}`} aria-label={`Project source: ${sourceLabel}`}>{sourceLabel}</span>
       <span class:list={['status', `status--${project.status}`]}>
         <i aria-hidden='true'></i>{statusLabel}
       </span>

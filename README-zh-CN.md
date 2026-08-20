@@ -117,6 +117,12 @@ assets/readme/             README 专用视觉资产
 - [RSS](https://lora-sys.github.io/loraSys/rss.xml)
 - [GitHub](https://github.com/lora-sys)
 
+## 同步与归属契约
+
+公开目录明确区分三类内容：**lora-sys** 是个人项目，**ACAMLab** 是实验室项目，**External** 只包含人工 allowlist 允许的外部开源贡献。GitHub 快照会在 Actions 中先刷新，再由 verified site 构建；质量门会在 Actions summary 中记录快照时间、项目归属分组、贡献 allowlist 覆盖率、PR 数量和 warning。
+
+review 截图和本地审计记录不会进入提交。任何特性分支都必须通过 `bun run check`、`bun run build`，并完成桌面端与 390×844 浏览器审查后，才允许合并到 `main`。
+
 ## 许可证
 
 仓库和锁定的 Pure 主题基础采用 [Apache-2.0](./LICENSE)。文章、项目截图、Logo 和第三方媒体可能有单独的署名或许可证要求。
