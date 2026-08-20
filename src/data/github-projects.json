@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-20T06:14:17.316Z",
+  "lastUpdated": "2026-08-20T06:50:54.691Z",
   "accounts": [
     {
       "owner": "lora-sys",
@@ -12,16 +12,20 @@
     }
   ],
   "totals": {
-    "publicRepositories": 139,
+    "publicRepositories": 141,
     "sourceRepositories": 2,
     "includedProjects": 61,
-    "excludedRepositories": 78,
-    "forks": 69
+    "excludedRepositories": 80,
+    "forks": 71
   },
   "mediaPolicy": "README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.",
   "exclusions": [
     {
-      "name": "nanobot",
+      "name": "awesome-LLM-resources",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Awesome-LLM",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -30,6 +34,10 @@
     },
     {
       "name": "nad-agent",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "nanobot",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -69,7 +77,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cloud-mail",
+      "name": "claw-code",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -77,11 +85,7 @@
       "reason": "Shared conventions and configuration only; no standalone software or experiment."
     },
     {
-      "name": "claw-code",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "agenta",
+      "name": "cloud-mail",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -89,11 +93,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "vibe-blog",
+      "name": "agenta",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "whale-whisper",
+      "name": "vibe-blog",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -101,11 +105,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "intlayer",
+      "name": "whale-whisper",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "argosbx",
+      "name": "intlayer",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -113,15 +117,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "argosbx",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "public-apis",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cfnew",
+      "name": "opencode",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "opencode",
+      "name": "cfnew",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -133,10 +141,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "github-readme-stats",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "SubsTracker",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -145,19 +149,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "learn-toys",
-      "reason": "Empty repository with no committed implementation."
+      "name": "github-readme-stats",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "FreeDomain",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+      "name": "learn-toys",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "jaaz",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "agentic-ai-public",
+      "name": "FreeDomain",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -165,7 +169,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "deeplearning.ai",
+      "name": "agentic-ai-public",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -173,11 +177,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "astro",
+      "name": "deeplearning.ai",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "generative-ai",
+      "name": "astro",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -185,20 +189,24 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "mode-defect",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "Filehub",
-      "reason": "Empty repository with no committed implementation."
+      "name": "generative-ai",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "mode-defect",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "generative-ai-for-beginners",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Filehub",
+      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "ai-agents-for-beginners",
@@ -213,19 +221,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ai-town",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "minnow",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ml5-library",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "developer-roadmap",
+      "name": "ai-town",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -233,7 +233,15 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
+      "name": "developer-roadmap",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "EASTL",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "ml5-library",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -241,15 +249,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "awesome-cpp",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "linux",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "C-Plus-Plus",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -257,7 +257,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ai-getting-started",
+      "name": "awesome-cpp",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "C-Plus-Plus",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -269,15 +273,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "ai-getting-started",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "calculator",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "hello-algo",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "ExplorerPatcher",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -285,15 +285,23 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
+      "name": "ExplorerPatcher",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "hello-algo",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "30-Days-Of-Python",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "LeetCode-Go",
+      "name": "REKCARC-TSC-UHT",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "REKCARC-TSC-UHT",
+      "name": "LeetCode-Go",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -309,7 +317,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "shareOI",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "awesome-security-weixin-official-accounts",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Learn-Web-Hacking",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -317,15 +333,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "shareOI",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "HelloDjango-blog-tutorial",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "Learn-Web-Hacking",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -335,6 +343,48 @@
   ],
   "warnings": [],
   "inventory": [
+    {
+      "name": "Awesome-LLM",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Awesome-LLM",
+      "description": "Awesome-LLM: a curated list of Large Language Model",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Awesome-LLM",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-20T06:17:59Z",
+      "pushedAt": "2026-08-20T06:18:27Z",
+      "updatedAt": "2026-08-20T06:17:59Z",
+      "defaultBranch": "main",
+      "size": 14528,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "awesome-LLM-resources",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/awesome-LLM-resources",
+      "description": "🧑‍🚀 全世界最好的LLM资料总结（多模态生成、Agent、辅助编程、AI审稿、数据处理、模型训练、模型推理、o1 模型、MCP、小语言模型、视觉语言模型） | Summary of the world's best LLM resources. ",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/awesome-LLM-resources",
+      "stars": 0,
+      "fork": true,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-20T06:17:04Z",
+      "pushedAt": "2026-08-20T06:17:44Z",
+      "updatedAt": "2026-08-20T06:17:04Z",
+      "defaultBranch": "main",
+      "size": 68531,
+      "included": false,
+      "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
     {
       "name": "nano-sglang-interactive-guide",
       "owner": "lora-sys",
