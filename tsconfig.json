@@ -23,6 +23,7 @@
       "@/plugins/*": ["src/plugins/*"],
       "@/pages/*": ["src/pages/*"],
       "@/data/*": ["src/data/*"],
+      "@/i18n/*": ["src/i18n/*"],
       "@/types": ["src/types/index.ts"],
       "@/site-config": ["src/site.config.ts"]
     }

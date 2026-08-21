@@ -1,0 +1,12 @@
+---
+import PageLayout from '@/layouts/BaseLayout.astro'
+import FriendConstellation from '@/components/links/FriendConstellation.astro'
+import { friendLinks } from '@/data/links'
+
+const active = friendLinks.filter((link) => link.status === 'active')
+---
+
+<PageLayout lang='en-US' meta={{ title: 'Links', description: 'A small constellation of verified, reciprocal connections around Lora’s work.' }} highlightColor='#54c7b7'>
+  <main class='links-page'><header><p>LINKS</p><h1>People are not bookmarks. They are neighbors who occasionally read and answer back.</h1><span>This constellation keeps only real, confirmed connections. It can begin empty and grow honestly.</span></header><FriendConstellation links={friendLinks} /><section><div><small>STATUS</small><strong>{active.length.toString().padStart(2, '0')} verified coordinates</strong></div><p>Friend links are intentionally curated. When a connection changes, its history remains visible instead of being silently overwritten.</p><a href='mailto:lorasys@outlook.com?subject=Friend%20link%20application'>Send your coordinates ↗</a></section><a class='back' href='/links'>查看中文友链页 ↗</a></main>
+</PageLayout>
+<style>.links-page{display:grid;gap:clamp(2rem,5vw,4rem)}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p,small{color:hsl(173 60% 38%);font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{max-width:18ch;margin:0;font-size:clamp(2.4rem,6vw,5.5rem);font-weight:580;letter-spacing:-.068em;line-height:.93}header span{max-width:57ch;color:hsl(var(--muted-foreground));line-height:1.7}section{display:grid;grid-template-columns:auto 1fr auto;gap:2rem;align-items:end;border-block:1px solid hsl(var(--border));padding:1rem 0}section div{display:grid;gap:.3rem}section strong{font-size:.85rem}section p{max-width:44ch;margin:0;color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.6}section a,.back{color:hsl(var(--foreground));font-size:.72rem}@media(max-width:700px){section{grid-template-columns:1fr;gap:1rem}}</style>

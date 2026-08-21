@@ -48,7 +48,7 @@ const nodes = activeLinks.map((link, index) => {
     </div>
 
     <div class='self' aria-label='Lora, constellation center'>
-      <span class='self-ring'><img src={avatar.src} alt='Lora 的 GitHub 头像' /></span>
+      <span class='self-ring'><img src={avatar.src} alt='Lora 的 GitHub 头像' width={96} height={96} decoding='async' /></span>
       <strong>Lora</strong>
       <small>lora-sys</small>
     </div>
@@ -60,7 +60,10 @@ const nodes = activeLinks.map((link, index) => {
             <li style={`--x:${x}%;--y:${y}%`}>
               <a href={link.url} target='_blank' rel='friend noopener noreferrer'>
                 {link.avatar ? (
-                  <img src={link.avatar} alt='' loading='lazy' referrerpolicy='no-referrer' />
+                  <>
+                    <img src={link.avatar} alt='' width={48} height={48} loading='lazy' decoding='async' referrerpolicy='no-referrer' data-friend-avatar />
+                    <span class='avatar-fallback' aria-hidden='true'>{link.name.slice(0, 1).toUpperCase()}</span>
+                  </>
                 ) : (
                   <span aria-hidden='true'>{link.name.slice(0, 1).toUpperCase()}</span>
                 )}
@@ -94,6 +97,12 @@ const nodes = activeLinks.map((link, index) => {
     <span>open canvas</span>
   </footer>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLImageElement>('[data-friend-avatar]').forEach((image) => {
+    image.addEventListener('error', () => image.classList.add('avatar-failed'), { once: true })
+  })
+</script>
 
 <style>
   .constellation {
@@ -130,6 +139,9 @@ const nodes = activeLinks.map((link, index) => {
     font-size: 0.79rem;
     line-height: 1.7;
   }
+  .avatar-fallback { display: none; }
+  .friend-stars a:has(img.avatar-failed) .avatar-fallback { display: grid; }
+  .friend-stars a:has(img.avatar-failed) img { display: none; }
   .sky {
     position: relative;
     min-height: clamp(22rem, 53vw, 29rem);

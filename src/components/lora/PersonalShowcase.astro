@@ -1,11 +1,94 @@
 ---
 import ShowcaseCarousel from './ShowcaseCarousel.astro'
-import ContributionGraph from './ContributionGraph.astro'
 import { anime, favorites } from '../../data/showcase'
+
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+}
+
+const { locale = 'zh-CN' } = Astro.props
+const isEnglish = locale === 'en-US'
+const copy = isEnglish
+  ? {
+      eyebrow: 'Personal signals',
+      title: 'The stories and objects that keep my curiosity alive.',
+      intro: 'Systems are not built in a vacuum. These are the worlds, melodies, and ideas that keep showing up in how I think.',
+      animeTitle: 'Anime Archive',
+      animeEyebrow: 'Stories that stay with me',
+      favoritesTitle: 'Favorites',
+      favoritesEyebrow: 'Films, music, games & ideas'
+    }
+  : {
+      eyebrow: 'Personal Signals · 私人坐标',
+      title: '除了系统与项目，也保留那些让我持续构建的故事。',
+      intro: '它们不是装饰，而是我理解勇气、时间、秩序与热爱的另一条线索。',
+      animeTitle: 'Anime Archive · 动漫档案',
+      animeEyebrow: '一直留在心里的故事',
+      favoritesTitle: 'Favorites · 私藏',
+      favoritesEyebrow: '电影、音乐、游戏与想法'
+    }
 ---
-<div class='personal-showcase'>
-  <ContributionGraph compact />
-  <ShowcaseCarousel id='anime' title='Anime Archive' eyebrow='Stories that stay with me' items={anime} />
-  <ShowcaseCarousel id='favorites' title='Favorites' eyebrow='Books, films, music & ideas' items={favorites} />
-</div>
-<style>.personal-showcase{display:grid;gap:3.5rem;margin-block:1rem 2rem}</style>
+
+<section class='personal-showcase' aria-labelledby='personal-signals-title'>
+  <header class='personal-heading'>
+    <p>{copy.eyebrow}</p>
+    <h2 id='personal-signals-title'>{copy.title}</h2>
+    <span>{copy.intro}</span>
+  </header>
+  <ShowcaseCarousel
+    id='anime'
+    title={copy.animeTitle}
+    eyebrow={copy.animeEyebrow}
+    items={anime}
+    locale={locale}
+  />
+  <ShowcaseCarousel
+    id='favorites'
+    title={copy.favoritesTitle}
+    eyebrow={copy.favoritesEyebrow}
+    items={favorites}
+    locale={locale}
+  />
+</section>
+
+<style>
+  .personal-showcase {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    scroll-margin-top: 5rem;
+  }
+
+  .personal-heading {
+    display: grid;
+    max-width: 48rem;
+    gap: 0.65rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1.1rem;
+  }
+
+  .personal-heading p {
+    margin: 0;
+    color: hsl(173 60% 40%);
+    font-size: 0.67rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .personal-heading h2 {
+    max-width: 20ch;
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 3.1rem);
+    font-weight: 570;
+    letter-spacing: -0.055em;
+    line-height: 1.04;
+    text-wrap: balance;
+  }
+
+  .personal-heading span {
+    max-width: 58ch;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+</style>

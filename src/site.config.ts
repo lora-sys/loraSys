@@ -50,10 +50,11 @@ export const theme: ThemeUserConfig = {
   /** Configure the header of your site. */
   header: {
     menu: [
-      { title: '作品 Work', link: '/projects' },
-      { title: '笔记 Writing', link: '/blog' },
-      { title: '关于 About', link: '/about' },
-      { title: '联系 Connect', link: '/contact' }
+      { title: '作品', link: '/projects' },
+      { title: '写作', link: '/blog' },
+      { title: '正在构建', link: '/now' },
+      { title: '友链', link: '/links' },
+      { title: '关于', link: '/about' }
     ]
   },
 
@@ -96,9 +97,8 @@ export const theme: ThemeUserConfig = {
 
 /** Key destinations are also repeated in the footer as a compact end-of-page index. */
 export const secondaryNavigation = [
-  { title: 'Now / 正在构建', link: '/now' },
+  { title: '短笔记 Notes', link: '/notes' },
   { title: 'Lab', link: '/lab' },
-  { title: 'Links', link: '/links' },
   { title: 'Archive', link: '/archives' },
   { title: 'RSS', link: '/rss.xml' }
 ] as const

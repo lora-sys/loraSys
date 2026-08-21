@@ -1,8 +1,10 @@
 ---
-import { Footer, Header, ThemeProvider } from 'astro-pure/components/basic'
+import { Footer, ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
-import config, { secondaryNavigation } from '@/site-config'
+import config from '@/site-config'
+import SiteHeader from '@/components/layout/SiteHeader.astro'
+import { footerNavigation, localizedPath, type SiteLocale } from '@/i18n/site'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -23,11 +25,16 @@ const {
   lang = config.locale.lang,
   ...props
 } = Astro.props
+const locale: SiteLocale = lang === 'en-US' ? 'en-US' : 'zh-CN'
+const localPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
+const alternatePath = localizedPath(localPath, locale === 'zh-CN' ? 'en-US' : 'zh-CN')
+const footerItems = footerNavigation(locale)
+const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 ---
 
 <html {lang}>
   <head>
-    <BaseHead {articleDate} {description} {noindex} {ogImage} {title} />
+    <BaseHead {articleDate} {description} {noindex} {ogImage} {title} locale={locale} {alternatePath} />
     <ThemeProvider />
   </head>
 
@@ -46,18 +53,18 @@ const {
       id='main-container'
       class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
     >
-      <Header />
+      <SiteHeader />
       <div id='main-content' class='flex-1 w-full' tabindex='-1'>
         <slot />
       </div>
       <div class='site-footer'>
         <nav class='secondary-navigation' aria-label='Secondary navigation'>
-          <span>Explore</span>
+          <span>{footerLabel}</span>
           <ul>
             {
-              secondaryNavigation.map((item) => (
+              footerItems.map((item) => (
                 <li>
-                  <a href={item.link}>{item.title}</a>
+                  <a href={item.href}>{item.title}</a>
                 </li>
               ))
             }

@@ -1,0 +1,16 @@
+---
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { currentFocus } from '@/data/current-focus'
+
+const sections = [
+  { label: 'BUILDING', title: currentFocus.title, text: currentFocus.description },
+  { label: 'LEARNING', title: 'Reliable agent evaluation', text: 'Making runs observable, reviewing evidence, and turning experiments into reusable practice.' },
+  { label: 'READING', title: 'Systems that leave a trail', text: 'Agent architecture, tool-use reliability, and the craft of building in public.' },
+  { label: 'LISTENING', title: 'Room for curiosity', text: 'The music and stories that make long build sessions feel less mechanical.' }
+]
+---
+
+<PageLayout lang='en-US' meta={{ title: 'Now', description: 'What Lora is building, learning, reading, and listening to now.' }} highlightColor='#54c7b7'>
+  <main class='now-page'><header><p>NOW</p><h1>A public snapshot of where my attention is going.</h1><span>Updated as the work changes; this is deliberately shorter than an archive.</span></header><section>{sections.map((item, index) => <article><span>0{index + 1} · {item.label}</span><h2>{item.title}</h2><p>{item.text}</p></article>)}</section><a class='back' href='/now'>查看中文 Now ↗</a></main>
+</PageLayout>
+<style>.now-page{display:grid;gap:2rem}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p,article>span{color:hsl(173 60% 38%);font-size:.67rem;font-weight:680;letter-spacing:.12em}h1{max-width:16ch;margin:0;font-size:clamp(2.6rem,6vw,5.7rem);font-weight:580;letter-spacing:-.07em;line-height:.92}header span{max-width:52ch;color:hsl(var(--muted-foreground));line-height:1.7}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid hsl(var(--border))}article{min-height:14rem;border-right:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));padding:1.35rem}article:nth-child(even){border-right:0}h2{margin:1.1rem 0 .6rem;font-size:1.2rem}article p{max-width:35ch;margin:0;color:hsl(var(--muted-foreground));font-size:.8rem;line-height:1.65}.back{width:max-content;color:hsl(var(--foreground));font-size:.75rem}@media(max-width:640px){section{grid-template-columns:1fr}article,article:nth-child(even){border-right:0}}</style>

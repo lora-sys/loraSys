@@ -1,0 +1,17 @@
+---
+import { projects } from '@/data/profile'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import ProjectCard from '@/components/projects/ProjectCard.astro'
+
+const featured = projects.filter((project) => project.featured)
+---
+
+<PageLayout lang='en-US' meta={{ title: 'Work', description: 'Selected AI agent systems, developer tools, and public experiments by Lora.' }} highlightColor='#54c7b7'>
+  <main class='work-page'>
+    <header><p>SELECTED WORK</p><h1>Not a project database. A small set of systems I am willing to stand behind.</h1><span>Every case keeps its real repository, public writing, or contribution evidence visible.</span></header>
+    <section aria-label='Selected work'>{featured.map((project, index) => <div class:list={['case', { lead: index === 0 }]}><ProjectCard {project} variant={index === 0 ? 'lead' : 'featured'} lens /></div>)}</section>
+    <aside><strong>Looking for the Chinese project archive?</strong><a href='/projects'>查看完整项目档案 ↗</a></aside>
+  </main>
+</PageLayout>
+
+<style>.work-page{display:grid;gap:clamp(2.5rem,6vw,5rem)}header{display:grid;max-width:70rem;gap:.8rem;padding-block:clamp(1rem,4vw,3rem)}header p{margin:0;color:hsl(173 60% 38%);font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{max-width:15ch;margin:0;font-size:clamp(2.6rem,7vw,6rem);font-weight:580;letter-spacing:-.07em;line-height:.9}header span{max-width:48ch;color:hsl(var(--muted-foreground));line-height:1.7}section{display:grid;gap:1rem}.case:not(.lead){max-width:58rem;margin-left:auto}aside{display:flex;justify-content:space-between;gap:1rem;border-block:1px solid hsl(var(--border));padding:1rem 0;font-size:.78rem}aside a{color:hsl(var(--foreground));text-decoration:none}aside a:hover{text-decoration:underline}@media(max-width:640px){aside{flex-direction:column}}</style>

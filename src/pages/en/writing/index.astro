@@ -1,0 +1,17 @@
+---
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import PageLayout from '@/layouts/BaseLayout.astro'
+
+const posts = sortMDByDate(await getBlogCollection()).filter((post) => post.data.language === 'en-US')
+---
+
+<PageLayout lang='en-US' meta={{ title: 'Writing', description: 'English build notes on agent systems, tools, and building in public.' }} highlightColor='#54c7b7'>
+  <main class='writing-page'>
+    <header><p>WRITING</p><h1>Notes on systems I am building, checking, and learning from.</h1><span>English originals live here. Chinese long-form writing remains available in its original language rather than being auto-translated.</span></header>
+    <nav aria-label='Writing languages'><a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'>中文原文与长文 ↗</a></nav>
+    <section aria-label='English writing'>{posts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time><h2><a href={`/en/writing/${post.id}`}>{post.data.title}</a></h2><p>{post.data.description}</p><div>{post.data.tags.slice(0, 4).map((tag) => <span>#{tag}</span>)}</div><a class='read' href={`/en/writing/${post.id}`}>Read note ↗</a></article>)}</section>
+    {posts.length === 0 && <p class='empty'>English notes are being prepared. The Chinese Writing archive remains available from the language switcher.</p>}
+  </main>
+</PageLayout>
+
+<style>.writing-page{display:grid;gap:1.25rem}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p{margin:0;color:hsl(173 60% 38%);font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{max-width:17ch;margin:0;font-size:clamp(2.5rem,6vw,5.5rem);font-weight:580;letter-spacing:-.068em;line-height:.93}header span{max-width:60ch;color:hsl(var(--muted-foreground));font-size:.88rem;line-height:1.7}nav{display:flex;gap:.5rem;border-bottom:1px solid hsl(var(--border));padding-bottom:1rem}nav a{border:1px solid hsl(var(--border));border-radius:999px;padding:.45rem .7rem;color:hsl(var(--foreground));font-size:.7rem;text-decoration:none}nav a[aria-current]{border-color:hsl(173 60% 38%);background:hsl(173 60% 38%);color:#fff}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}article{display:grid;min-height:17rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1.25rem;background:linear-gradient(145deg,hsl(var(--card)),hsl(var(--muted)/.4))}time{color:hsl(var(--muted-foreground));font-size:.65rem}h2{max-width:21ch;margin:.8rem 0 0;font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.15}h2 a,.read{color:hsl(var(--foreground));text-decoration:none}p{color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.65}article div{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:auto}article span{color:hsl(173 60% 34%);font-size:.64rem}.read{margin-top:1rem;font-size:.7rem;font-weight:640}.read:hover,h2 a:hover{text-decoration:underline}.empty{border-left:2px solid hsl(173 60% 38%);padding-left:.9rem}@media(max-width:700px){section{grid-template-columns:1fr}}</style>

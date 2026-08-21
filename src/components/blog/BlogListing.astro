@@ -96,6 +96,12 @@ const languageFilters = [
       }
     </nav>
 
+    <nav class='reading-paths animate' aria-label='Writing destinations'>
+      <a href='/en/writing' hreflang='en-US'>English originals ↗</a>
+      <a href='/notes'>短笔记 Notes ↗</a>
+      <a href='/archives'>完整归档 Archive ↗</a>
+    </nav>
+
     {
       featuredForView.length > 0 && (
         <section class='featured-writing animate' aria-labelledby='featured-writing-title'>
@@ -245,7 +251,7 @@ const languageFilters = [
     gap: 1rem;
   }
 
-  .language-filter {
+  .reading-paths{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.75rem}.reading-paths a{border:1px solid hsl(var(--border));border-radius:999px;padding:.4rem .62rem;color:hsl(var(--muted-foreground));font-size:.67rem;text-decoration:none;transition:background 160ms ease,color 160ms ease}.reading-paths a:hover,.reading-paths a:focus-visible{background:hsl(var(--muted));color:hsl(var(--foreground))}.language-filter{
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;

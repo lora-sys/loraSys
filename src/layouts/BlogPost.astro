@@ -22,13 +22,17 @@ interface Props {
   posts: CollectionEntry<'blog'>[]
   headings: MarkdownHeading[]
   remarkPluginFrontmatter: Record<string, unknown>
+  basePath?: string
+  lang?: string
 }
 
 const {
   post: { id, data },
   posts,
   headings,
-  remarkPluginFrontmatter
+  remarkPluginFrontmatter,
+  basePath = '/blog',
+  lang = data.language
 } = Astro.props
 
 const {
@@ -52,7 +56,7 @@ const postIndex = posts.findIndex((entry) => entry.id === id)
 const previousPost = posts[postIndex - 1]
 const nextPost = posts[postIndex + 1]
 // Root-relative source paths are prefixed exactly once by the post-build GitHub Pages pass.
-const blogBase = '/blog/'
+const blogBase = `${basePath.replace(/\/$/, '')}/`
 const linkedRepositories = getProjectsForStory(`${blogBase}${id}`)
 const linkedProjects = projects.filter((project) => linkedRepositories.includes(project.repository))
 ---
@@ -60,8 +64,8 @@ const linkedProjects = projects.filter((project) => linkedRepositories.includes(
 <PageLayout
   meta={{ articleDate, description, ogImage: socialImage, title }}
   highlightColor={primaryColor}
-  back='/blog'
-  lang={data.language}
+  back={basePath}
+  lang={lang}
   showSidebar={!!headings.length}
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}

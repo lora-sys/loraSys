@@ -1,0 +1,18 @@
+---
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { profile, hackathons } from '@/data/profile'
+
+const skills = profile.skills
+const education = profile.education
+---
+
+<PageLayout lang='en-US' meta={{ title: 'About', description: 'About Lora, an AI agent developer and full-stack engineer building in public.' }} highlightColor='#54c7b7'>
+  <main class='about-page'>
+    <header><p>ABOUT</p><h1>{profile.name}</h1><span>{profile.role} · {profile.location}</span><strong>{profile.summary[0]}</strong></header>
+    <section><h2>Direction</h2><p>I build agent infrastructure, developer tools, and full-stack products where the work can be inspected rather than merely announced.</p></section>
+    <section><h2>Capabilities</h2><div class='chips'>{skills.map((skill) => <span>{skill}</span>)}</div></section>
+    <section><h2>Education & hackathons</h2><div class='timeline'>{education.map((item) => <article><strong>{item.school}</strong><span>{item.degree} · {item.period}</span></article>)}{hackathons.map((item) => <article><strong>{item.title}</strong><span>{item.content}</span></article>)}</div></section>
+    <a href='/about'>查看中文关于页 ↗</a>
+  </main>
+</PageLayout>
+<style>.about-page{display:grid;gap:clamp(2rem,5vw,4rem)}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p{margin:0;color:hsl(173 60% 38%);font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{margin:0;font-size:clamp(3rem,8vw,7rem);font-weight:580;letter-spacing:-.075em;line-height:.88}header span,header strong{max-width:58ch;color:hsl(var(--muted-foreground));font-size:.9rem;font-weight:400;line-height:1.7}header strong{color:hsl(var(--foreground))}section{display:grid;grid-template-columns:13rem 1fr;gap:2rem;border-top:1px solid hsl(var(--border));padding-top:1.25rem}h2{margin:0;font-size:.8rem;text-transform:uppercase;letter-spacing:.1em}section p{max-width:58ch;margin:0;color:hsl(var(--muted-foreground));line-height:1.75}.chips{display:flex;flex-wrap:wrap;gap:.45rem}.chips span{border:1px solid hsl(var(--border));border-radius:999px;padding:.42rem .62rem;font-size:.72rem}.timeline{display:grid;gap:.7rem}.timeline article{display:grid;gap:.2rem;border-left:1px solid hsl(173 60% 40%);padding-left:.8rem}.timeline span{color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.55}.about-page>a{color:hsl(var(--foreground));font-size:.75rem}@media(max-width:640px){section{grid-template-columns:1fr;gap:.8rem}}</style>
