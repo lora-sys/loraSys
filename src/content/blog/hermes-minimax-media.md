@@ -115,7 +115,7 @@ kind: backend
 
 > `a tiny red apple on a white plate, studio lighting, photorealistic`
 
-![Apple on plate](/images/blog/hermes-minimax-media/apple.jpg)
+![Apple on plate](/images/blog/hermes-minimax-media/apple.webp)
 
 单图 5 秒左右返回，~150KB。
 
@@ -123,11 +123,11 @@ kind: backend
 
 > `a cute cat astronaut floating in a colorful nebula, digital art, vibrant`
 
-![Cat astronaut](/images/blog/hermes-minimax-media/cat-astronaut.png)
+![Cat astronaut](/images/blog/hermes-minimax-media/cat-astronaut.webp)
 
 > `futuristic tokyo cityscape at night, neon lights, rain reflections, cyberpunk`
 
-![Cyberpunk city](/images/blog/hermes-minimax-media/city.png)
+![Cyberpunk city](/images/blog/hermes-minimax-media/city.webp)
 
 ### Hailuo-2.3 文生视频（6s @ 768P）
 

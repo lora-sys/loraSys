@@ -41,6 +41,7 @@ bunfig.toml
 /test/
 .playwright-cli/
 
-# Private Notion review candidates — local-only until a human approves a migration to src/content.
-/content-inbox/review/agent-loop-notion-candidate.md
-/content-inbox/review/tau-architecture-notion-candidate.md
+# Local HTML/MDX conversion candidates — never commit or deploy until a human approves a migration to src/content.
+/content-drafts/review/*.md
+/content-drafts/review/*.mdx
+!content-drafts/review/README.md

@@ -10,7 +10,7 @@
     "sync:github": "bun scripts/fetch-contributions.mjs && bun scripts/fetch-github-projects.mjs && bun scripts/fetch-external-contributions.mjs && bun run validate:sync && bun run report:sync",
     "validate:sync": "bun scripts/validate-sync-data.mjs",
     "report:sync": "bun scripts/generate-sync-report.mjs",
-    "notion:import": "bun scripts/import-public-notion.mjs",
+    "article:import": "bun scripts/import-article-html.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "check": "astro check",
@@ -36,6 +36,8 @@
     "remark-gfm": "^4.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.5",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
     "typescript": "^5.9.3",
     "zod": "3.25.76"
   },

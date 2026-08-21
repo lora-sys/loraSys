@@ -103,7 +103,7 @@ export default defineConfig({
   // [Integrations]
   integrations: [
     // astro-pure will automatically add sitemap, mdx & unocss
-    sitemap({ filter: (page) => !page.includes('/inbox') }),
+    sitemap(),
     // mdx(),
     AstroPureIntegration(config)
   ],
