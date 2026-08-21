@@ -40,3 +40,7 @@ bunfig.toml
 /src/content/blog/test.*
 /test/
 .playwright-cli/
+
+# Private Notion review candidates — local-only until a human approves a migration to src/content.
+/content-inbox/review/agent-loop-notion-candidate.md
+/content-inbox/review/tau-architecture-notion-candidate.md

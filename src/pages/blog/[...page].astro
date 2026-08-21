@@ -11,9 +11,13 @@ export const prerender = true
 export const getStaticPaths = (async ({ paginate }) => {
   const collections = sortMDByDate(await getBlogCollection())
   const uniqueTags = getUniqueTagsWithCount(collections).map(([tag]) => tag)
+  const featuredIds = ['ai-engineering-harness', 'free-vision-skill', 'eve-agent', 'wishlive']
+  const featuredPosts = featuredIds
+    .map((id) => collections.find((post) => post.id === id))
+    .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
   return paginate(collections, {
     pageSize: config.content.blogPageSize,
-    props: { uniqueTags, collectionsCount: collections.length }
+    props: { uniqueTags, collectionsCount: collections.length, featuredPosts }
   })
 }) satisfies GetStaticPaths
 
@@ -21,9 +25,10 @@ interface Props {
   page: Page<CollectionEntry<'blog'>>
   uniqueTags: string[]
   collectionsCount: number
+  featuredPosts: CollectionEntry<'blog'>[]
 }
 
-const { page, uniqueTags, collectionsCount } = Astro.props
+const { page, uniqueTags, collectionsCount, featuredPosts } = Astro.props
 ---
 
-<BlogListing {page} {uniqueTags} {collectionsCount} />
+<BlogListing {page} {uniqueTags} {collectionsCount} {featuredPosts} />

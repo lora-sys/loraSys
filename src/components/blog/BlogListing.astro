@@ -7,15 +7,38 @@ import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 import BlogPostCard from './BlogPostCard.astro'
+import FeaturedWriting from './FeaturedWriting.astro'
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>
   uniqueTags: string[]
   collectionsCount: number
+  featuredPosts: CollectionEntry<'blog'>[]
   activeLanguage?: 'zh-CN' | 'en-US'
 }
 
-const { page, uniqueTags, collectionsCount, activeLanguage } = Astro.props
+const { page, uniqueTags, collectionsCount, featuredPosts, activeLanguage } = Astro.props
+const curation: Record<string, { theme: string; whyRead: string }> = {
+  'ai-engineering-harness': {
+    theme: 'Agent Systems',
+    whyRead: '看一套 Agent 工程如何从“能跑”走到可验证、可审查、可持续迭代。'
+  },
+  'free-vision-skill': {
+    theme: 'Multimodal Tools',
+    whyRead: '理解文本型 Agent 如何用更小的上下文成本获得足够可靠的视觉证据。'
+  },
+  'eve-agent': {
+    theme: 'Agent Systems',
+    whyRead: '用 filesystem-first 的视角，拆解一个可落地 Agent 框架的架构与生产边界。'
+  },
+  wishlive: {
+    theme: 'Building in Public',
+    whyRead: '从一次多智能体运行时构建，看产品原型、事件流和链上结算如何真正接起来。'
+  }
+}
+const featuredForView = featuredPosts
+  .filter((post) => !activeLanguage || post.data.language === activeLanguage)
+  .map((post) => ({ post, ...(curation[post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' }) }))
 const languageTitle =
   activeLanguage === 'zh-CN'
     ? '中文文章'
@@ -55,8 +78,8 @@ const languageFilters = [
     <header id='content-header' class='animate editorial-header'>
       <div>
         <p class='eyebrow'>Writing / 写作</p>
-        <h1>Blog</h1>
-        <p class='intro'>关于 AI Agent、工程系统、开源实践与产品构建的长文记录。</p>
+        <h1>把正在构建的东西，写成可复查的笔记。</h1>
+        <p class='intro'>这里不是资讯流，而是关于 Agent Systems、多模态工具与公开构建的长期思考记录。</p>
       </div>
       <span class='edition' aria-label={`${collectionsCount} posts in this view`}>
         {String(collectionsCount).padStart(2, '0')}<small> posts</small>
@@ -74,6 +97,20 @@ const languageFilters = [
     </nav>
 
     {
+      featuredForView.length > 0 && (
+        <section class='featured-writing animate' aria-labelledby='featured-writing-title'>
+          <header class='featured-heading'>
+            <div><p class='eyebrow'>Selected notes · 精选笔记</p><h2 id='featured-writing-title'>先从这几篇读起</h2></div>
+            <p>三条主线：Agent Systems · Multimodal Tools · Building in Public</p>
+          </header>
+          <div class='featured-grid'>
+            {featuredForView.map(({ post, theme, whyRead }) => <FeaturedWriting {post} {theme} {whyRead} />)}
+          </div>
+        </section>
+      )
+    }
+
+    {
       page.data.length === 0 ? (
         <p class='empty-state'>No posts in this language yet.</p>
       ) : (
@@ -81,7 +118,7 @@ const languageFilters = [
           <section aria-label={`${languageTitle} post list`} class='animate' id='content'>
             <div class='list-heading'>
               <span>
-                Page {page.currentPage} · Showing {page.data.length} of {collectionsCount}
+                More notes · Page {page.currentPage} · Showing {page.data.length} of {collectionsCount}
               </span>
               <a href='/archives' data-astro-prefetch>
                 Browse archives →
@@ -98,7 +135,7 @@ const languageFilters = [
           {!!uniqueTags.length && (
             <aside class='animate tag-index' aria-labelledby='tag-index-title'>
               <h2 id='tag-index-title'>
-                <Icon name='tag-2' /> Topics
+                <Icon name='tag-2' /> Archive themes
               </h2>
               <ul>
                 {uniqueTags.slice(0, 50).map((tag) => (
@@ -169,6 +206,43 @@ const languageFilters = [
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+  }
+
+  .featured-writing {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(3.5rem, 8vw, 6rem);
+  }
+
+  .featured-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .featured-heading .eyebrow { margin-bottom: 0.35rem; }
+
+  .featured-heading h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 3.5vw, 2.45rem);
+    font-weight: 570;
+    letter-spacing: -0.05em;
+  }
+
+  .featured-heading > p {
+    max-width: 28rem;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
   }
 
   .language-filter {
@@ -291,6 +365,10 @@ const languageFilters = [
   }
 
   @media (max-width: 720px) {
+    .featured-heading { align-items: start; flex-direction: column; }
+    .featured-heading > p { text-align: left; }
+    .featured-grid { grid-template-columns: 1fr; }
+
     .editorial-header {
       align-items: start;
     }

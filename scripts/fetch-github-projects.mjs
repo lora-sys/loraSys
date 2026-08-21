@@ -23,10 +23,20 @@ const explicitlyExcluded = new Map([
 const featuredRanks = new Map([
   ['glassbox-agent-harness', 1],
   ['free-vision-skill', 2],
-  ['nano-vllm-interactive-guide', 3],
+  ['agentarena', 3],
   ['trustops', 4],
   ['mulitimodal', 5],
   ['ai-engineering-harness', 6]
+])
+
+/** Human-curated V2 visuals. These are original local assets and must never be replaced by remote preview images. */
+const curatedPosters = new Map([
+  ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://selected-glassbox.webp', localFile: 'selected-glassbox.webp' }],
+  ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://selected-free-vision.webp', localFile: 'selected-free-vision.webp' }],
+  ['agentarena', { kind: 'generated', sourceUrl: 'local://selected-agentarena.webp', localFile: 'selected-agentarena.webp' }],
+  ['trustops', { kind: 'generated', sourceUrl: 'local://selected-trustops.webp', localFile: 'selected-trustops.webp' }],
+  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://selected-multimodal.webp', localFile: 'selected-multimodal.webp' }],
+  ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://selected-engineering-harness.webp', localFile: 'selected-engineering-harness.webp' }]
 ])
 
 const buildingRepositories = new Set([
@@ -415,6 +425,11 @@ async function renderRepositoryCard(repository, outputPath) {
 }
 
 async function ensurePoster(repository, readme, cachedPoster) {
+  const curatedPoster = curatedPosters.get(repository.name.toLowerCase())
+  if (curatedPoster) {
+    const curatedPath = path.join(new URL(posterDirectory).pathname, curatedPoster.localFile)
+    if (await fileExists(curatedPath)) return curatedPoster
+  }
   const repositoryOwner = repository.owner?.login ?? repository.owner?.name ?? repository.ownerName
   const slug = `${repositoryOwner}-${repository.name}`.toLowerCase().replace(/[^a-z0-9]+/g, '-')
   const localFile = `github-${slug}.webp`

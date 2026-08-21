@@ -17,10 +17,14 @@ export const getStaticPaths = (async ({ paginate }) => {
   return supportedLanguages.flatMap((language) => {
     const filtered = collections.filter((post) => post.data.language === language)
     const uniqueTags = getUniqueTagsWithCount(filtered).map(([tag]) => tag)
+    const featuredIds = ['ai-engineering-harness', 'free-vision-skill', 'eve-agent', 'wishlive']
+    const featuredPosts = featuredIds
+      .map((id) => filtered.find((post) => post.id === id))
+      .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
     return paginate(filtered, {
       pageSize: config.content.blogPageSize,
       params: { language },
-      props: { activeLanguage: language, uniqueTags, collectionsCount: filtered.length }
+      props: { activeLanguage: language, uniqueTags, collectionsCount: filtered.length, featuredPosts }
     })
   })
 }) satisfies GetStaticPaths
@@ -29,10 +33,11 @@ interface Props {
   page: Page<CollectionEntry<'blog'>>
   uniqueTags: string[]
   collectionsCount: number
+  featuredPosts: CollectionEntry<'blog'>[]
   activeLanguage: SupportedLanguage
 }
 
-const { page, uniqueTags, collectionsCount, activeLanguage } = Astro.props
+const { page, uniqueTags, collectionsCount, featuredPosts, activeLanguage } = Astro.props
 ---
 
-<BlogListing {page} {uniqueTags} {collectionsCount} {activeLanguage} />
+<BlogListing {page} {uniqueTags} {collectionsCount} {featuredPosts} {activeLanguage} />

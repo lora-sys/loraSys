@@ -4779,7 +4779,7 @@
         "AI Agents",
         "Learning"
       ],
-      "featuredRank": 3,
+      "featuredRank": null,
       "poster": {
         "kind": "github-opengraph",
         "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
@@ -4914,9 +4914,9 @@
       ],
       "featuredRank": 5,
       "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/d76c897e745ca047dd29f26e192749d51afa96633db06810b9c21201c956b47f/lora-sys/MulitiModal",
-        "localFile": "github-lora-sys-mulitimodal.webp",
+        "kind": "generated",
+        "sourceUrl": "local://selected-multimodal.webp",
+        "localFile": "selected-multimodal.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -4951,9 +4951,9 @@
       ],
       "featuredRank": 1,
       "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/5ff6236a8bd893c0b1a59b2b061cf9a0f85d8c5a51f744cfafa946b10f065a5c/lora-sys/Glassbox-Agent-Harness",
-        "localFile": "github-lora-sys-glassbox-agent-harness.webp",
+        "kind": "generated",
+        "sourceUrl": "local://selected-glassbox.webp",
+        "localFile": "selected-glassbox.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5086,10 +5086,10 @@
       ],
       "featuredRank": 2,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/assets/readme/hero.svg",
-        "localFile": "github-lora-sys-free-vision-skill.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://selected-free-vision.webp",
+        "localFile": "selected-free-vision.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5175,10 +5175,10 @@
       ],
       "featuredRank": 4,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/trustops/main/assets/readme/01-hero-context.png",
-        "localFile": "github-lora-sys-trustops.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://selected-trustops.webp",
+        "localFile": "selected-trustops.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5228,10 +5228,10 @@
       ],
       "featuredRank": 6,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/ai-engineering-harness/main/assets/architecture.svg",
-        "localFile": "github-lora-sys-ai-engineering-harness.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://selected-engineering-harness.webp",
+        "localFile": "selected-engineering-harness.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5277,12 +5277,12 @@
         "AI Agents",
         "Tools"
       ],
-      "featuredRank": null,
+      "featuredRank": 3,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/AgentArena/main/docs/qa/visual-baselines/v052-home-desktop-20260725.png",
-        "localFile": "github-lora-sys-agentarena.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://selected-agentarena.webp",
+        "localFile": "selected-agentarena.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },

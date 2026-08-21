@@ -67,6 +67,7 @@ const filterAttributes = filterable
   data-project-magic={lens ? '' : undefined}
   {...filterAttributes}
 >
+  {lens && <span class='open-case-label' aria-hidden='true'>OPEN CASE</span>}
   <ProjectMedia
     {project}
     {priority}
@@ -184,6 +185,9 @@ const filterAttributes = filterable
     const media =
       target instanceof Element ? target.closest<HTMLElement>('[data-project-media]') : null
     media?.removeAttribute('data-lens-active')
+    const card = target instanceof Element ? target.closest<HTMLElement>('[data-project-magic]') : null
+    card?.style.setProperty('--tilt-x', '0deg')
+    card?.style.setProperty('--tilt-y', '0deg')
   }
 
   document.addEventListener('pointerout', (event) => {
@@ -207,8 +211,14 @@ const filterAttributes = filterable
       const card = current.target.closest<HTMLElement>('[data-project-magic]')
       if (!card) return
       const cardRect = card.getBoundingClientRect()
-      card.style.setProperty('--pointer-x', `${current.clientX - cardRect.left}px`)
-      card.style.setProperty('--pointer-y', `${current.clientY - cardRect.top}px`)
+      const localX = current.clientX - cardRect.left
+      const localY = current.clientY - cardRect.top
+      const tiltX = ((localX / cardRect.width) - 0.5) * 1.6
+      const tiltY = ((localY / cardRect.height) - 0.5) * -1.2
+      card.style.setProperty('--pointer-x', `${localX}px`)
+      card.style.setProperty('--pointer-y', `${localY}px`)
+      card.style.setProperty('--tilt-x', `${tiltX.toFixed(2)}deg`)
+      card.style.setProperty('--tilt-y', `${tiltY.toFixed(2)}deg`)
 
       const media = current.target.closest<HTMLElement>('[data-project-media]')
       const image = media?.querySelector<HTMLImageElement>('[data-project-poster]')
@@ -259,6 +269,25 @@ const filterAttributes = filterable
     grid-template-columns: minmax(0, 1.42fr) minmax(19rem, 0.78fr);
   }
 
+  .open-case-label {
+    position: absolute;
+    z-index: 5;
+    top: 0.8rem;
+    left: 0.8rem;
+    border: 1px solid hsl(var(--background) / 0.65);
+    border-radius: 999px;
+    padding: 0.22rem 0.42rem;
+    background: hsl(var(--foreground) / 0.72);
+    color: hsl(var(--background));
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-0.35rem);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
   .project-card--magic::after {
     content: '';
     position: absolute;
@@ -277,6 +306,24 @@ const filterAttributes = filterable
   .project-card--magic:hover::after,
   .project-card--magic:focus-within::after {
     opacity: 1;
+  }
+
+  .project-card--magic:hover .open-case-label,
+  .project-card--magic:focus-within .open-case-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card--magic {
+      transform: perspective(960px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
+      transform-style: preserve-3d;
+    }
+
+    .project-card--magic:hover,
+    .project-card--magic:focus-within {
+      transform: perspective(960px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)) translateY(-4px);
+    }
   }
 
   .project-card:hover,
@@ -543,12 +590,15 @@ const filterAttributes = filterable
   @media (prefers-reduced-motion: reduce) {
     .project-card,
     .project-card--magic::after,
+    .open-case-label,
     .project-actions a {
       transition: none;
     }
 
     .project-actions a:hover,
-    .project-actions a:focus-visible {
+    .project-actions a:focus-visible,
+    .project-card--magic:hover,
+    .project-card--magic:focus-within {
       transform: none;
     }
   }

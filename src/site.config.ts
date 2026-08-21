@@ -50,16 +50,10 @@ export const theme: ThemeUserConfig = {
   /** Configure the header of your site. */
   header: {
     menu: [
-      { title: 'Blog', link: '/blog' },
-      { title: 'Notes', link: '/notes' },
-      { title: 'Projects', link: '/projects' },
-      { title: 'Lab', link: '/lab' },
-      { title: 'Now', link: '/now' },
-      { title: 'Talks', link: '/talks' },
-      { title: 'Links', link: '/links' },
-      { title: 'Archives', link: '/archives' },
-      { title: 'About', link: '/about' },
-      { title: 'Contact', link: '/contact' }
+      { title: '作品 Work', link: '/projects' },
+      { title: '笔记 Writing', link: '/blog' },
+      { title: '关于 About', link: '/about' },
+      { title: '联系 Connect', link: '/contact' }
     ]
   },
 
@@ -102,10 +96,10 @@ export const theme: ThemeUserConfig = {
 
 /** Key destinations are also repeated in the footer as a compact end-of-page index. */
 export const secondaryNavigation = [
-  { title: 'Now', link: '/now' },
-  { title: 'Talks', link: '/talks' },
+  { title: 'Now / 正在构建', link: '/now' },
+  { title: 'Lab', link: '/lab' },
   { title: 'Links', link: '/links' },
-  { title: 'Archives', link: '/archives' },
+  { title: 'Archive', link: '/archives' },
   { title: 'RSS', link: '/rss.xml' }
 ] as const
 
