@@ -1,7 +1,7 @@
 import githubSnapshot from './github-projects.json'
 
 export interface Link {
-  type: 'source' | 'website'
+  type: 'source' | 'website' | 'contribution'
   href: string
 }
 
@@ -35,6 +35,7 @@ interface GitHubProjectRecord {
   title: string
   summary: string
   homepage: string | null
+  contributionUrl?: string
   url: string
   stars: number
   archived: boolean
@@ -143,6 +144,9 @@ export const projects: Project[] = records
     stars: project.stars,
     links: [
       { type: 'source', href: project.url },
+      ...(project.contributionUrl
+        ? [{ type: 'contribution' as const, href: project.contributionUrl }]
+        : []),
       ...(project.homepage && project.homepage !== project.url
         ? [{ type: 'website' as const, href: project.homepage }]
         : [])

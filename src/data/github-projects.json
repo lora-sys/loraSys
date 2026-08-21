@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-20T06:50:54.691Z",
+  "lastUpdated": "2026-08-21T08:25:19.543Z",
   "accounts": [
     {
       "owner": "lora-sys",
@@ -14,12 +14,16 @@
   "totals": {
     "publicRepositories": 141,
     "sourceRepositories": 2,
-    "includedProjects": 61,
+    "includedProjects": 62,
     "excludedRepositories": 80,
     "forks": 71
   },
   "mediaPolicy": "README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.",
   "exclusions": [
+    {
+      "name": "lora-sys",
+      "reason": "GitHub profile README; identity metadata rather than a software project."
+    },
     {
       "name": "awesome-LLM-resources",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
@@ -27,10 +31,6 @@
     {
       "name": "Awesome-LLM",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "lora-sys",
-      "reason": "GitHub profile README; identity metadata rather than a software project."
     },
     {
       "name": "nad-agent",
@@ -49,11 +49,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "mipland",
+      "name": "qm",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "qm",
+      "name": "mipland",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -77,15 +77,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "claw-code",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "development-rules",
       "reason": "Shared conventions and configuration only; no standalone software or experiment."
     },
     {
       "name": "cloud-mail",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "claw-code",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -101,11 +101,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "langfuse",
+      "name": "whale-whisper",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "whale-whisper",
+      "name": "langfuse",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -113,11 +113,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "GenerativeAIExamples",
+      "name": "argosbx",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "argosbx",
+      "name": "GenerativeAIExamples",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -133,19 +133,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "square-ui",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "PocketFlow",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "SubsTracker",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "sutskever-30-implementations",
+      "name": "square-ui",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -153,11 +145,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "SubsTracker",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "learn-toys",
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "jaaz",
+      "name": "sutskever-30-implementations",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -169,19 +165,23 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "agentic-ai-public",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "papers-we-love",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "deeplearning.ai",
+      "name": "jaaz",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "agentic-ai-public",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "astro",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "deeplearning.ai",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -193,20 +193,20 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "agents",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "mode-defect",
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "generative-ai-for-beginners",
+      "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "Filehub",
       "reason": "Empty repository with no committed implementation."
+    },
+    {
+      "name": "generative-ai-for-beginners",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "ai-agents-for-beginners",
@@ -225,10 +225,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ai-town",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "fastgithub",
       "reason": "Empty repository with no committed implementation."
     },
@@ -237,7 +233,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "EASTL",
+      "name": "ai-town",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -253,11 +249,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux-command",
+      "name": "EASTL",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "awesome-cpp",
+      "name": "linux-command",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -265,7 +261,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Web",
+      "name": "ai-getting-started",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -273,16 +269,16 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "ai-getting-started",
+      "name": "Web",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "awesome-cpp",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "calculator",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "cs50",
-      "reason": "Empty repository with no committed implementation."
     },
     {
       "name": "ExplorerPatcher",
@@ -293,7 +289,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "cs50",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "30-Days-Of-Python",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "leetcodesolve-problem",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -305,23 +309,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "leetcodesolve-problem",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "CPlusPlusThings",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Getting-Started-with-Linux",
+      "name": "awesome-security-weixin-official-accounts",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "shareOI",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "awesome-security-weixin-official-accounts",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -330,6 +326,10 @@
     },
     {
       "name": "CS61A",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Getting-Started-with-Linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -344,6 +344,96 @@
   "warnings": [],
   "inventory": [
     {
+      "name": "loraSys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Astro": 429557,
+        "TypeScript": 197542,
+        "XSLT": 80493,
+        "JavaScript": 67910,
+        "CSS": 7362,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-08-21T07:28:08Z",
+      "updatedAt": "2026-08-21T07:28:45Z",
+      "defaultBranch": "main",
+      "size": 120725,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
+      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-14T11:35:56Z",
+      "pushedAt": "2026-08-21T07:02:14Z",
+      "updatedAt": "2026-08-21T07:02:42Z",
+      "defaultBranch": "main",
+      "size": 32,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "MulitiModal",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MulitiModal",
+      "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
+      "topics": [
+        "gradio",
+        "healthcare-ai",
+        "massage",
+        "multimodal",
+        "pretrained-model",
+        "pytorch",
+        "tcm"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/MulitiModal",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 642180,
+        "HTML": 21205,
+        "TeX": 12570,
+        "Shell": 10833
+      },
+      "language": "Python",
+      "createdAt": "2026-01-01T12:56:57Z",
+      "pushedAt": "2026-08-21T01:11:10Z",
+      "updatedAt": "2026-08-21T01:12:44Z",
+      "defaultBranch": "main",
+      "size": 372040,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
       "name": "Awesome-LLM",
       "owner": "lora-sys",
       "fullName": "lora-sys/Awesome-LLM",
@@ -357,10 +447,10 @@
       "languages": {},
       "language": null,
       "createdAt": "2026-08-20T06:17:59Z",
-      "pushedAt": "2026-08-20T06:18:27Z",
+      "pushedAt": "2026-08-20T07:21:17Z",
       "updatedAt": "2026-08-20T06:17:59Z",
       "defaultBranch": "main",
-      "size": 14528,
+      "size": 14473,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -378,12 +468,48 @@
       "languages": {},
       "language": null,
       "createdAt": "2026-08-20T06:17:04Z",
-      "pushedAt": "2026-08-20T06:17:44Z",
+      "pushedAt": "2026-08-20T07:20:26Z",
       "updatedAt": "2026-08-20T06:17:04Z",
       "defaultBranch": "main",
-      "size": 68531,
+      "size": 68533,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
+      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "topics": [
+        "chinese",
+        "continuous-batching",
+        "interactive-tutorial",
+        "kv-cache",
+        "llm-inference",
+        "llm-serving",
+        "nano-vllm",
+        "pagedattention",
+        "tutorial",
+        "vllm"
+      ],
+      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
+      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
+      "stars": 25,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 18621,
+        "Shell": 1277,
+        "Python": 368
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-02T14:49:28Z",
+      "pushedAt": "2026-08-20T07:13:46Z",
+      "updatedAt": "2026-08-20T07:14:59Z",
+      "defaultBranch": "main",
+      "size": 39503,
+      "included": true,
+      "exclusionReason": null
     },
     {
       "name": "nano-sglang-interactive-guide",
@@ -406,70 +532,6 @@
       "updatedAt": "2026-08-20T04:21:34Z",
       "defaultBranch": "main",
       "size": 28139,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "loraSys",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Astro": 361783,
-        "TypeScript": 190519,
-        "XSLT": 80493,
-        "JavaScript": 64112,
-        "CSS": 7362,
-        "MDX": 2857
-      },
-      "language": "Astro",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-20T02:47:49Z",
-      "updatedAt": "2026-08-20T02:47:54Z",
-      "defaultBranch": "main",
-      "size": 120061,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "nano-vllm-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-vllm-interactive-guide",
-      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "topics": [
-        "llm-inference",
-        "nano-vllm",
-        "tutorial",
-        "vllm"
-      ],
-      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
-      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 25,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 18621,
-        "Shell": 1277
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-20T02:12:02Z",
-      "updatedAt": "2026-08-20T02:12:35Z",
-      "defaultBranch": "main",
-      "size": 39377,
       "included": true,
       "exclusionReason": null
     },
@@ -637,61 +699,6 @@
       "size": 62880,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "MulitiModal",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/MulitiModal",
-      "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
-      "topics": [
-        "gradio",
-        "healthcare-ai",
-        "massage",
-        "multimodal",
-        "pretrained-model",
-        "pytorch",
-        "tcm"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/MulitiModal",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 629640,
-        "HTML": 21205,
-        "TeX": 12570,
-        "Shell": 9260
-      },
-      "language": "Python",
-      "createdAt": "2026-01-01T12:56:57Z",
-      "pushedAt": "2026-08-14T16:37:01Z",
-      "updatedAt": "2026-08-14T16:37:17Z",
-      "defaultBranch": "main",
-      "size": 208082,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "Glassbox-Agent-Harness",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/Glassbox-Agent-Harness",
-      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2026-08-14T11:35:56Z",
-      "pushedAt": "2026-08-14T15:34:32Z",
-      "updatedAt": "2026-08-14T15:36:50Z",
-      "defaultBranch": "main",
-      "size": 11,
-      "included": true,
-      "exclusionReason": null
     },
     {
       "name": "teaching-html-story-deck",
@@ -4656,6 +4663,192 @@
     }
   ],
   "projects": {
+    "lora-sys/lorasys": {
+      "name": "loraSys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Astro": 429557,
+        "TypeScript": 197542,
+        "XSLT": 80493,
+        "JavaScript": 67910,
+        "CSS": 7362,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-08-21T07:28:08Z",
+      "updatedAt": "2026-08-21T07:28:45Z",
+      "defaultBranch": "main",
+      "size": 120725,
+      "title": "LoraSys",
+      "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
+        "localFile": "github-lora-sys-lorasys.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/glassbox-agent-harness": {
+      "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
+      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {},
+      "language": null,
+      "createdAt": "2026-08-14T11:35:56Z",
+      "pushedAt": "2026-08-21T07:02:14Z",
+      "updatedAt": "2026-08-21T07:02:42Z",
+      "defaultBranch": "main",
+      "size": 32,
+      "title": "Glassbox Agent Harness",
+      "summary": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Featured",
+        "Open Source",
+        "AI Agents",
+        "Tools"
+      ],
+      "featuredRank": 1,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://product-glassbox.webp",
+        "localFile": "product-glassbox.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/mulitimodal": {
+      "name": "MulitiModal",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/MulitiModal",
+      "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
+      "topics": [
+        "gradio",
+        "healthcare-ai",
+        "massage",
+        "multimodal",
+        "pretrained-model",
+        "pytorch",
+        "tcm"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/MulitiModal",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Python": 642180,
+        "HTML": 21205,
+        "TeX": 12570,
+        "Shell": 10833
+      },
+      "language": "Python",
+      "createdAt": "2026-01-01T12:56:57Z",
+      "pushedAt": "2026-08-21T01:11:10Z",
+      "updatedAt": "2026-08-21T01:12:44Z",
+      "defaultBranch": "main",
+      "size": 372040,
+      "title": "MultiModal Health Intelligence",
+      "summary": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Featured",
+        "Open Source",
+        "AI Agents"
+      ],
+      "featuredRank": 7,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://product-multimodal-health.webp",
+        "localFile": "product-multimodal-health.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/nano-vllm-interactive-guide": {
+      "name": "nano-vllm-interactive-guide",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/nano-vllm-interactive-guide",
+      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "topics": [
+        "chinese",
+        "continuous-batching",
+        "interactive-tutorial",
+        "kv-cache",
+        "llm-inference",
+        "llm-serving",
+        "nano-vllm",
+        "pagedattention",
+        "tutorial",
+        "vllm"
+      ],
+      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
+      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
+      "stars": 25,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 18621,
+        "Shell": 1277,
+        "Python": 368
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-02T14:49:28Z",
+      "pushedAt": "2026-08-20T07:13:46Z",
+      "updatedAt": "2026-08-20T07:14:59Z",
+      "defaultBranch": "main",
+      "size": 39503,
+      "title": "nano-vLLM Interactive Guide",
+      "summary": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Open Source",
+        "AI Agents",
+        "Learning"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "github-opengraph",
+        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
+        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
     "lora-sys/nano-sglang-interactive-guide": {
       "name": "nano-sglang-interactive-guide",
       "owner": "lora-sys",
@@ -4691,100 +4884,6 @@
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/nano-sglang-interactive-guide/main/assets/readme/hero.svg",
         "localFile": "github-lora-sys-nano-sglang-interactive-guide.webp",
         "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/lorasys": {
-      "name": "loraSys",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Astro": 361783,
-        "TypeScript": 190519,
-        "XSLT": 80493,
-        "JavaScript": 64112,
-        "CSS": 7362,
-        "MDX": 2857
-      },
-      "language": "Astro",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-20T02:47:49Z",
-      "updatedAt": "2026-08-20T02:47:54Z",
-      "defaultBranch": "main",
-      "size": 120061,
-      "title": "LoraSys",
-      "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Apps"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
-        "localFile": "github-lora-sys-lorasys.webp",
-        "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/nano-vllm-interactive-guide": {
-      "name": "nano-vllm-interactive-guide",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/nano-vllm-interactive-guide",
-      "description": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "topics": [
-        "llm-inference",
-        "nano-vllm",
-        "tutorial",
-        "vllm"
-      ],
-      "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
-      "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 25,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "JavaScript": 18621,
-        "Shell": 1277
-      },
-      "language": "JavaScript",
-      "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-20T02:12:02Z",
-      "updatedAt": "2026-08-20T02:12:35Z",
-      "defaultBranch": "main",
-      "size": 39377,
-      "title": "nano-vLLM Interactive Guide",
-      "summary": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "AI Agents",
-        "Learning"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
-        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
-        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -4869,92 +4968,6 @@
         "sourceUrl": "https://raw.githubusercontent.com/lora-sys/TrandingOs/main/images/mvp.png",
         "localFile": "github-lora-sys-trandingos.webp",
         "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/mulitimodal": {
-      "name": "MulitiModal",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/MulitiModal",
-      "description": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
-      "topics": [
-        "gradio",
-        "healthcare-ai",
-        "massage",
-        "multimodal",
-        "pretrained-model",
-        "pytorch",
-        "tcm"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/MulitiModal",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 629640,
-        "HTML": 21205,
-        "TeX": 12570,
-        "Shell": 9260
-      },
-      "language": "Python",
-      "createdAt": "2026-01-01T12:56:57Z",
-      "pushedAt": "2026-08-14T16:37:01Z",
-      "updatedAt": "2026-08-14T16:37:17Z",
-      "defaultBranch": "main",
-      "size": 208082,
-      "title": "MultiModal Health Intelligence",
-      "summary": "多模态人体状态感知 → 中医体质分析 → 智能按摩方案推荐 | OPLRI + TCM + EEG pretrained models · Gradio demo",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "AI Agents"
-      ],
-      "featuredRank": 5,
-      "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://selected-multimodal.webp",
-        "localFile": "selected-multimodal.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/glassbox-agent-harness": {
-      "name": "Glassbox-Agent-Harness",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/Glassbox-Agent-Harness",
-      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2026-08-14T11:35:56Z",
-      "pushedAt": "2026-08-14T15:34:32Z",
-      "updatedAt": "2026-08-14T15:36:50Z",
-      "defaultBranch": "main",
-      "size": 11,
-      "title": "Glassbox Agent Harness",
-      "summary": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "AI Agents",
-        "Tools"
-      ],
-      "featuredRank": 1,
-      "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://selected-glassbox.webp",
-        "localFile": "selected-glassbox.webp",
-        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5084,11 +5097,11 @@
         "AI Agents",
         "Tools"
       ],
-      "featuredRank": 2,
+      "featuredRank": 4,
       "poster": {
         "kind": "generated",
-        "sourceUrl": "local://selected-free-vision.webp",
-        "localFile": "selected-free-vision.webp",
+        "sourceUrl": "local://product-free-vision.webp",
+        "localFile": "product-free-vision.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5170,15 +5183,14 @@
       "kind": "owned",
       "status": "building",
       "categories": [
-        "Featured",
         "Open Source"
       ],
-      "featuredRank": 4,
+      "featuredRank": null,
       "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://selected-trustops.webp",
-        "localFile": "selected-trustops.webp",
-        "fit": "cover",
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/trustops/main/assets/readme/01-hero-context.png",
+        "localFile": "github-lora-sys-trustops.webp",
+        "fit": "contain",
         "objectPosition": "center"
       }
     },
@@ -5226,11 +5238,11 @@
         "AI Agents",
         "Tools"
       ],
-      "featuredRank": 6,
+      "featuredRank": 3,
       "poster": {
         "kind": "generated",
-        "sourceUrl": "local://selected-engineering-harness.webp",
-        "localFile": "selected-engineering-harness.webp",
+        "sourceUrl": "local://product-engineering-harness.webp",
+        "localFile": "product-engineering-harness.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5273,15 +5285,16 @@
       "kind": "owned",
       "status": "active",
       "categories": [
+        "Featured",
         "Open Source",
         "AI Agents",
         "Tools"
       ],
-      "featuredRank": 3,
+      "featuredRank": 2,
       "poster": {
         "kind": "generated",
-        "sourceUrl": "local://selected-agentarena.webp",
-        "localFile": "selected-agentarena.webp",
+        "sourceUrl": "local://product-agentarena.webp",
+        "localFile": "product-agentarena.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5322,15 +5335,16 @@
       "kind": "owned",
       "status": "active",
       "categories": [
+        "Featured",
         "Open Source",
         "Apps"
       ],
-      "featuredRank": null,
+      "featuredRank": 6,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/second-brain/main/docs/screenshots/01-dashboard.png",
-        "localFile": "github-lora-sys-second-brain.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://product-second-brain.webp",
+        "localFile": "product-second-brain.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5373,16 +5387,17 @@
       "kind": "owned",
       "status": "active",
       "categories": [
+        "Featured",
         "Open Source",
         "AI Agents",
         "Apps"
       ],
-      "featuredRank": null,
+      "featuredRank": 5,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/ecomatrix/main/docs/design/ISSUE-FRONTEND/before/dashboard-desktop.png",
-        "localFile": "github-lora-sys-ecomatrix.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://product-ecomatrix.webp",
+        "localFile": "product-ecomatrix.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -7420,6 +7435,52 @@
         "kind": "github-opengraph",
         "sourceUrl": "https://opengraph.githubassets.com/59eba6ceb4014e50097662f6b1dadafee7bd31d00cffe5724d8a270ca0be63f0/ACAMLab/nanochat-studay",
         "localFile": "github-acamlab-nanochat-studay.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "external/ripped-sys-stageposter": {
+      "name": "StagePoster",
+      "owner": "Ripped-sys",
+      "fullName": "Ripped-sys/StagePoster",
+      "description": "AI-native live-event poster engine contributed to the AMD AI DevMaster Hackathon 2026 multimodal content creation track.",
+      "topics": [
+        "multimodal",
+        "image-generation",
+        "video-generation",
+        "hackathon"
+      ],
+      "homepage": null,
+      "url": "https://github.com/Ripped-sys/StagePoster",
+      "contributionUrl": "https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 1
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-08-06T11:06:00Z",
+      "pushedAt": "2026-08-06T11:06:00Z",
+      "updatedAt": "2026-08-06T11:06:00Z",
+      "defaultBranch": "main",
+      "size": 0,
+      "title": "StagePoster",
+      "summary": "AMD Hackathon contribution: an AI-native live-event poster engine that combines music rhythm, stage lighting, and real-time visual composition.",
+      "kind": "owned",
+      "source": "External",
+      "status": "active",
+      "categories": [
+        "Featured",
+        "Contribution",
+        "Hackathon",
+        "Multimodal"
+      ],
+      "featuredRank": 8,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://product-stageposter.webp",
+        "localFile": "product-stageposter.webp",
         "fit": "cover",
         "objectPosition": "center"
       }

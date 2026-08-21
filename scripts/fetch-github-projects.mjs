@@ -22,22 +22,56 @@ const explicitlyExcluded = new Map([
 
 const featuredRanks = new Map([
   ['glassbox-agent-harness', 1],
-  ['free-vision-skill', 2],
-  ['agentarena', 3],
-  ['trustops', 4],
-  ['mulitimodal', 5],
-  ['ai-engineering-harness', 6]
+  ['agentarena', 2],
+  ['ai-engineering-harness', 3],
+  ['free-vision-skill', 4],
+  ['ecomatrix', 5],
+  ['second-brain', 6],
+  ['mulitimodal', 7]
 ])
 
-/** Human-curated V2 visuals. These are original local assets and must never be replaced by remote preview images. */
+/** Human-curated product visuals. These original local assets must never be replaced by remote preview images. */
 const curatedPosters = new Map([
-  ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://selected-glassbox.webp', localFile: 'selected-glassbox.webp' }],
-  ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://selected-free-vision.webp', localFile: 'selected-free-vision.webp' }],
-  ['agentarena', { kind: 'generated', sourceUrl: 'local://selected-agentarena.webp', localFile: 'selected-agentarena.webp' }],
-  ['trustops', { kind: 'generated', sourceUrl: 'local://selected-trustops.webp', localFile: 'selected-trustops.webp' }],
-  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://selected-multimodal.webp', localFile: 'selected-multimodal.webp' }],
-  ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://selected-engineering-harness.webp', localFile: 'selected-engineering-harness.webp' }]
+  ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://product-glassbox.webp', localFile: 'product-glassbox.webp' }],
+  ['agentarena', { kind: 'generated', sourceUrl: 'local://product-agentarena.webp', localFile: 'product-agentarena.webp' }],
+  ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://product-engineering-harness.webp', localFile: 'product-engineering-harness.webp' }],
+  ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://product-free-vision.webp', localFile: 'product-free-vision.webp' }],
+  ['ecomatrix', { kind: 'generated', sourceUrl: 'local://product-ecomatrix.webp', localFile: 'product-ecomatrix.webp' }],
+  ['second-brain', { kind: 'generated', sourceUrl: 'local://product-second-brain.webp', localFile: 'product-second-brain.webp' }],
+  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://product-multimodal-health.webp', localFile: 'product-multimodal-health.webp' }]
 ])
+
+/** Explicitly curated external contribution. It is marked as External rather than being represented as a lora-sys-owned repository. */
+const curatedExternalProjects = {
+  'external/ripped-sys-stageposter': {
+    name: 'StagePoster',
+    owner: 'Ripped-sys',
+    fullName: 'Ripped-sys/StagePoster',
+    description: 'AI-native live-event poster engine contributed to the AMD AI DevMaster Hackathon 2026 multimodal content creation track.',
+    topics: ['multimodal', 'image-generation', 'video-generation', 'hackathon'],
+    homepage: null,
+    url: 'https://github.com/Ripped-sys/StagePoster',
+    contributionUrl: 'https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71',
+    stars: 0,
+    fork: false,
+    archived: false,
+    languages: { TypeScript: 1 },
+    language: 'TypeScript',
+    createdAt: '2026-08-06T11:06:00Z',
+    pushedAt: '2026-08-06T11:06:00Z',
+    updatedAt: '2026-08-06T11:06:00Z',
+    defaultBranch: 'main',
+    size: 0,
+    title: 'StagePoster',
+    summary: 'AMD Hackathon contribution: an AI-native live-event poster engine that combines music rhythm, stage lighting, and real-time visual composition.',
+    kind: 'owned',
+    source: 'External',
+    status: 'active',
+    categories: ['Featured', 'Contribution', 'Hackathon', 'Multimodal'],
+    featuredRank: 8,
+    poster: { kind: 'generated', sourceUrl: 'local://product-stageposter.webp', localFile: 'product-stageposter.webp', fit: 'cover', objectPosition: 'center' }
+  }
+}
 
 const buildingRepositories = new Set([
   'glassbox-agent-harness',
@@ -612,7 +646,7 @@ const projectEntries = await mapLimited(enrichedRepositories.filter(Boolean), 4,
   ]
 })
 
-const projects = Object.fromEntries(projectEntries)
+const projects = { ...Object.fromEntries(projectEntries), ...curatedExternalProjects }
 
 inventory.sort((a, b) => new Date(b.pushedAt).getTime() - new Date(a.pushedAt).getTime())
 

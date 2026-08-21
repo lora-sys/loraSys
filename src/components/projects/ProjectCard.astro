@@ -23,12 +23,23 @@ const {
 } = Astro.props
 const source = project.links.find((link) => link.type === 'source')
 const website = project.links.find((link) => link.type === 'website')
+const contribution = project.links.find((link) => link.type === 'contribution')
+const interactionLabel = {
+  'Glassbox-Agent-Harness': 'TRACE RUN',
+  AgentArena: 'JUDGE VERDICT',
+  'ai-engineering-harness': 'MERGE LOOP',
+  'free-vision-skill': 'COMPILE VEP',
+  ecomatrix: 'SIMULATION VIEW',
+  'second-brain': 'LOCAL VAULT',
+  MulitiModal: 'SIGNAL FLOW',
+  StagePoster: 'LIVE COMPOSE'
+}[project.repository] ?? 'VIEW CASE'
 const statusLabel = {
   building: 'Building',
   active: 'Maintained',
   archived: 'Archived'
 }[project.status]
-const sourceLabel = project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'
+const sourceLabel = project.source === 'External' ? 'External contribution' : project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'
 const primaryCategory =
   project.categories.find((category) => !['Featured', 'Open Source'].includes(category)) ??
   'Open Source'
@@ -67,7 +78,7 @@ const filterAttributes = filterable
   data-project-magic={lens ? '' : undefined}
   {...filterAttributes}
 >
-  {lens && <span class='open-case-label' aria-hidden='true'>OPEN CASE</span>}
+  {lens && <span class='open-case-label' aria-hidden='true'>{interactionLabel}</span>}
   <ProjectMedia
     {project}
     {priority}
@@ -157,6 +168,20 @@ const filterAttributes = filterable
           )
         }
         {
+          contribution && (
+            <a
+              class='contribution-action'
+              href={contribution.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              data-interaction='project_contribution'
+              data-destination={project.repository}
+            >
+              Contribution PR <span aria-hidden='true'>↗</span>
+            </a>
+          )
+        }
+        {
           source && (
             <a
               href={source.href}
@@ -166,7 +191,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='github-circle' class='size-4' aria-hidden='true' />
-              Source <span aria-hidden='true'>↗</span>
+              {project.source === 'External' ? 'Project' : 'Source'} <span aria-hidden='true'>↗</span>
             </a>
           )
         }
@@ -197,6 +222,24 @@ const filterAttributes = filterable
       return
     clearLens(event.target)
   })
+
+  if (!reducedMotion.matches) {
+    document.documentElement.dataset.projectReveal = 'true'
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.setAttribute('data-card-revealed', '')
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.14 }
+    )
+    document.querySelectorAll<HTMLElement>('[data-project-card]').forEach((card, index) => {
+      card.style.setProperty('--reveal-delay', `${Math.min(index, 6) * 45}ms`)
+      revealObserver.observe(card)
+    })
+  }
 
   document.addEventListener('pointermove', (event) => {
     if (reducedMotion.matches || !hoverCapable.matches) return
@@ -259,6 +302,21 @@ const filterAttributes = filterable
     display: none !important;
   }
 
+  :global(html[data-project-reveal]) .project-card[data-project-card] {
+    opacity: 0;
+    transform: translateY(0.8rem);
+  }
+
+  :global(html[data-project-reveal]) .project-card[data-project-card][data-card-revealed] {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 260ms cubic-bezier(0.23, 1, 0.32, 1) var(--reveal-delay, 0ms),
+      transform 260ms cubic-bezier(0.23, 1, 0.32, 1) var(--reveal-delay, 0ms),
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
   .project-card--grid,
   .project-card--featured {
     flex-direction: column;
@@ -312,6 +370,20 @@ const filterAttributes = filterable
   .project-card--magic:focus-within .open-case-label {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card--magic .project-actions {
+      opacity: 0.68;
+      transform: translateY(0.3rem);
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .project-card--magic:hover .project-actions,
+    .project-card--magic:focus-within .project-actions {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -569,6 +641,17 @@ const filterAttributes = filterable
     background: hsl(var(--foreground) / 0.84);
   }
 
+  .project-actions .contribution-action {
+    border-color: hsl(30 92% 48% / 0.36);
+    color: hsl(24 86% 42%);
+  }
+
+  .project-actions .contribution-action:hover,
+  .project-actions .contribution-action:focus-visible {
+    border-color: hsl(30 92% 44% / 0.7);
+    background: hsl(30 92% 48% / 0.1);
+  }
+
   @media (max-width: 780px) {
     .project-card--lead {
       grid-template-columns: 1fr;
@@ -591,8 +674,13 @@ const filterAttributes = filterable
     .project-card,
     .project-card--magic::after,
     .open-case-label,
+    .project-actions,
     .project-actions a {
       transition: none;
+    }
+
+    :global(html[data-project-reveal]) .project-card[data-project-card] {
+      opacity: 1;
     }
 
     .project-actions a:hover,

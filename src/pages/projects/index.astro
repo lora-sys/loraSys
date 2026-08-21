@@ -83,10 +83,10 @@ const directoryItems: DirectoryItem[] = [
     <header class='work-hero'>
       <p class='eyebrow'>Selected Work · 精选作品</p>
       <div class='hero-grid'>
-        <h1>不是项目数据库。<br />是几次我愿意拿出来讲的构建。</h1>
+        <h1>Agent 系统、开发者工具与公开实验。</h1>
         <div class='hero-copy'>
-          <p>从 Agent 基础设施、开发者工具到黑客松原型，我更在意一件事：能否把一个模糊想法变成别人可以体验、复查和继续迭代的系统。</p>
-          <p class='hero-note'>每个案例都保留真实的 GitHub、站点或贡献证据；其余同步记录仍在 Archive 中按需查阅。</p>
+          <p>这里收录可直接查看的 Agent 基础设施、开发者工具、产品原型与开源实验。</p>
+          <p class='hero-note'>每个案例都提供产品说明、仓库、站点或贡献记录；完整同步目录仍可在 Archive 中按需查阅。</p>
         </div>
       </div>
     </header>
@@ -94,13 +94,13 @@ const directoryItems: DirectoryItem[] = [
     <section class='selected-work' aria-labelledby='selected-work-title'>
       <header class='section-heading'>
         <div><p class='eyebrow'>01 — 0{selectedWork.length}</p><h2 id='selected-work-title'>Selected Work</h2></div>
-        <span>系统、证据与下一步</span>
+        <span>产品、仓库与相关记录</span>
       </header>
       {
         leadProject && (
           <div class='lead-work'>
             <ProjectCard project={leadProject} variant='lead' priority lens />
-            <p>从可运行原型到可审查的系统边界：这是一种我反复使用的构建方式。</p>
+            <p>从这里开始：查看产品能力、运行记录、仓库与关联笔记。</p>
           </div>
         )
       }
@@ -110,9 +110,9 @@ const directoryItems: DirectoryItem[] = [
     </section>
 
     <aside class='work-principle'>
-      <span>BUILDING PRINCIPLE</span>
-      <p>少而准的案例，比一长串技术标签更能说明我如何取舍、验证和交付。</p>
-      <a href='/blog'>Read the thinking behind the work <span aria-hidden='true'>→</span></a>
+      <span>CASE GUIDE</span>
+      <p>每个案例从一个具体产品问题出发：可观测性、评测、视觉证据、工程协作或多智能体模拟。</p>
+      <a href='/blog'>查看相关笔记 <span aria-hidden='true'>→</span></a>
     </aside>
 
     <details class='work-archive' id='archive'>
