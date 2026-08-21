@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-21T08:25:19.543Z",
+  "lastUpdated": "2026-08-21T17:14:18.372Z",
   "accounts": [
     {
       "owner": "lora-sys",
@@ -45,10 +45,6 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Radeon-hackathon-2026-07",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "qm",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -57,16 +53,20 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "moss",
+      "name": "Radeon-hackathon-2026-07",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "loop-engineer-template",
+      "name": "moss",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "WishLive",
       "reason": "Empty repository with no committed implementation."
+    },
+    {
+      "name": "loop-engineer-template",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "eino-examples",
@@ -129,15 +129,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cfnew",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "PocketFlow",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "square-ui",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "cfnew",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -145,7 +141,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "PocketFlow",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "SubsTracker",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "sutskever-30-implementations",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -153,7 +157,7 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "sutskever-30-implementations",
+      "name": "jaaz",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -165,19 +169,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "papers-we-love",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "jaaz",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "agentic-ai-public",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "astro",
+      "name": "papers-we-love",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -185,19 +181,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "mianshiya-next",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "generative-ai",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "mode-defect",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "agents",
+      "name": "astro",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -205,11 +189,27 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "generative-ai-for-beginners",
+      "name": "mode-defect",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
+      "name": "generative-ai",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "mianshiya-next",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "ai-agents-for-beginners",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "generative-ai-for-beginners",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -225,27 +225,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "fastgithub",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "developer-roadmap",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "ai-town",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "fastgithub",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "ml5-library",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "build-your-own-x",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -253,23 +241,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux-command",
+      "name": "developer-roadmap",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "C-Plus-Plus",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "ai-getting-started",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "project-based-learning",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "Web",
+      "name": "build-your-own-x",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -277,7 +253,31 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "linux-command",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "linux",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Web",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "ai-getting-started",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "C-Plus-Plus",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "calculator",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "project-based-learning",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -305,11 +305,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "CPlusPlusThings",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "LeetCode-Go",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "CPlusPlusThings",
+      "name": "Getting-Started-with-Linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -325,15 +329,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "CS61A",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "Getting-Started-with-Linux",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "HelloDjango-blog-tutorial",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "CS61A",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -362,19 +362,19 @@
       "fork": false,
       "archived": false,
       "languages": {
-        "Astro": 429557,
-        "TypeScript": 197542,
+        "Astro": 420909,
+        "TypeScript": 194441,
         "XSLT": 80493,
-        "JavaScript": 67910,
+        "JavaScript": 71539,
         "CSS": 7362,
         "MDX": 2857
       },
       "language": "Astro",
       "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-21T07:28:08Z",
-      "updatedAt": "2026-08-21T07:28:45Z",
+      "pushedAt": "2026-08-21T08:57:30Z",
+      "updatedAt": "2026-08-21T08:59:35Z",
       "defaultBranch": "main",
-      "size": 120725,
+      "size": 122477,
       "included": true,
       "exclusionReason": null
     },
@@ -494,7 +494,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 25,
+      "stars": 26,
       "fork": false,
       "archived": false,
       "languages": {
@@ -505,7 +505,7 @@
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
       "pushedAt": "2026-08-20T07:13:46Z",
-      "updatedAt": "2026-08-20T07:14:59Z",
+      "updatedAt": "2026-08-21T12:22:45Z",
       "defaultBranch": "main",
       "size": 39503,
       "included": true,
@@ -4682,19 +4682,19 @@
       "fork": false,
       "archived": false,
       "languages": {
-        "Astro": 429557,
-        "TypeScript": 197542,
+        "Astro": 420909,
+        "TypeScript": 194441,
         "XSLT": 80493,
-        "JavaScript": 67910,
+        "JavaScript": 71539,
         "CSS": 7362,
         "MDX": 2857
       },
       "language": "Astro",
       "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-21T07:28:08Z",
-      "updatedAt": "2026-08-21T07:28:45Z",
+      "pushedAt": "2026-08-21T08:57:30Z",
+      "updatedAt": "2026-08-21T08:59:35Z",
       "defaultBranch": "main",
-      "size": 120725,
+      "size": 122477,
       "title": "LoraSys",
       "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
       "kind": "owned",
@@ -4817,7 +4817,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 25,
+      "stars": 26,
       "fork": false,
       "archived": false,
       "languages": {
@@ -4828,23 +4828,24 @@
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
       "pushedAt": "2026-08-20T07:13:46Z",
-      "updatedAt": "2026-08-20T07:14:59Z",
+      "updatedAt": "2026-08-21T12:22:45Z",
       "defaultBranch": "main",
       "size": 39503,
       "title": "nano-vLLM Interactive Guide",
-      "summary": "面向开发者与初学者的 nano-vLLM 交互式源码教程 - 通过 13 个 HTML 互动实验 + 13 章中文教程理解大模型推理引擎",
+      "summary": "An interactive Chinese source-code guide to LLM inference: 13 browser experiments make continuous batching, KV cache, paged attention and scheduling visible.",
       "kind": "owned",
       "status": "building",
       "categories": [
+        "Featured",
         "Open Source",
         "AI Agents",
         "Learning"
       ],
-      "featuredRank": null,
+      "featuredRank": 9,
       "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/5fa9f60df3c032baf753dc40c53cefd58448318c7b453c4c9ffbb1c5de4048c5/lora-sys/nano-vllm-interactive-guide",
-        "localFile": "github-lora-sys-nano-vllm-interactive-guide.webp",
+        "kind": "generated",
+        "sourceUrl": "local://product-nano-vllm.webp",
+        "localFile": "product-nano-vllm.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -4906,18 +4907,19 @@
       "defaultBranch": "main",
       "size": 51907,
       "title": "Packify Skill",
-      "summary": "Turn the supplied image into one faithful, desirable, commercially believable physical collectible.",
+      "summary": "An image-to-collectible skill that turns a supplied subject into a faithful, commercially believable packaged object.",
       "kind": "owned",
       "status": "active",
       "categories": [
+        "Featured",
         "Open Source",
         "Tools"
       ],
-      "featuredRank": null,
+      "featuredRank": 11,
       "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/331b414112a8e5b223d6c574dd69a00a82f26913f6c42d98c9763492239d29e4/lora-sys/packify-skill",
-        "localFile": "github-lora-sys-packify-skill.webp",
+        "kind": "generated",
+        "sourceUrl": "local://product-packify.webp",
+        "localFile": "product-packify.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -4954,20 +4956,21 @@
       "defaultBranch": "main",
       "size": 20911,
       "title": "TradingOS",
-      "summary": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "summary": "A personal trading operations dashboard that brings market data, positions, backtests and execution checks into one TypeScript workspace.",
       "kind": "owned",
       "status": "building",
       "categories": [
+        "Featured",
         "Open Source",
         "Tools",
         "Apps"
       ],
-      "featuredRank": null,
+      "featuredRank": 10,
       "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/TrandingOs/main/images/mvp.png",
-        "localFile": "github-lora-sys-trandingos.webp",
-        "fit": "contain",
+        "kind": "generated",
+        "sourceUrl": "local://product-trading-os.webp",
+        "localFile": "product-trading-os.webp",
+        "fit": "cover",
         "objectPosition": "center"
       }
     },
@@ -5034,19 +5037,20 @@
       "defaultBranch": "main",
       "size": 4122,
       "title": "MossGuard",
-      "summary": "A Monad on-chain AI Agent intent-verification layer with deterministic evidence checks and a fail-closed human signing gate.",
+      "summary": "On-chain agent intent verification for a Monad hackathon: deterministic evidence checks followed by a fail-closed human signing gate.",
       "kind": "owned",
       "status": "active",
       "categories": [
+        "Featured",
         "Open Source",
         "AI Agents",
         "Web3"
       ],
-      "featuredRank": null,
+      "featuredRank": 12,
       "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://opengraph.githubassets.com/40c8a1f00f520dc6d7b762979b19f2bb00f504c5a2cf888499a306cbe1d77119/lora-sys/mossguard",
-        "localFile": "github-lora-sys-mossguard.webp",
+        "kind": "generated",
+        "sourceUrl": "local://product-mossguard.webp",
+        "localFile": "product-mossguard.webp",
         "fit": "cover",
         "objectPosition": "center"
       }

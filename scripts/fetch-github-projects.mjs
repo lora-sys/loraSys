@@ -27,7 +27,11 @@ const featuredRanks = new Map([
   ['free-vision-skill', 4],
   ['ecomatrix', 5],
   ['second-brain', 6],
-  ['mulitimodal', 7]
+  ['mulitimodal', 7],
+  ['nano-vllm-interactive-guide', 9],
+  ['trandingos', 10],
+  ['packify-skill', 11],
+  ['mossguard', 12]
 ])
 
 /** Human-curated product visuals. These original local assets must never be replaced by remote preview images. */
@@ -38,7 +42,11 @@ const curatedPosters = new Map([
   ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://product-free-vision.webp', localFile: 'product-free-vision.webp' }],
   ['ecomatrix', { kind: 'generated', sourceUrl: 'local://product-ecomatrix.webp', localFile: 'product-ecomatrix.webp' }],
   ['second-brain', { kind: 'generated', sourceUrl: 'local://product-second-brain.webp', localFile: 'product-second-brain.webp' }],
-  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://product-multimodal-health.webp', localFile: 'product-multimodal-health.webp' }]
+  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://product-multimodal-health.webp', localFile: 'product-multimodal-health.webp' }],
+  ['nano-vllm-interactive-guide', { kind: 'generated', sourceUrl: 'local://product-nano-vllm.webp', localFile: 'product-nano-vllm.webp' }],
+  ['trandingos', { kind: 'generated', sourceUrl: 'local://product-trading-os.webp', localFile: 'product-trading-os.webp' }],
+  ['packify-skill', { kind: 'generated', sourceUrl: 'local://product-packify.webp', localFile: 'product-packify.webp' }],
+  ['mossguard', { kind: 'generated', sourceUrl: 'local://product-mossguard.webp', localFile: 'product-mossguard.webp' }]
 ])
 
 /** Explicitly curated external contribution. It is marked as External rather than being represented as a lora-sys-owned repository. */
@@ -89,7 +97,19 @@ const summaryOverrides = new Map([
   ],
   [
     'mossguard',
-    'A Monad on-chain AI Agent intent-verification layer with deterministic evidence checks and a fail-closed human signing gate.'
+    'On-chain agent intent verification for a Monad hackathon: deterministic evidence checks followed by a fail-closed human signing gate.'
+  ],
+  [
+    'nano-vllm-interactive-guide',
+    'An interactive Chinese source-code guide to LLM inference: 13 browser experiments make continuous batching, KV cache, paged attention and scheduling visible.'
+  ],
+  [
+    'trandingos',
+    'A personal trading operations dashboard that brings market data, positions, backtests and execution checks into one TypeScript workspace.'
+  ],
+  [
+    'packify-skill',
+    'An image-to-collectible skill that turns a supplied subject into a faithful, commercially believable packaged object.'
   ]
 ])
 
