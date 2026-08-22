@@ -81,12 +81,13 @@ const articleJsonLd = {
   isPartOf: { '@type': 'Blog', name: 'Writing', url: blogIndexUrl.href },
   url: canonicalUrl.href
 }
+const breadcrumbLabels = lang === 'en-US' ? { home: 'Home', writing: 'Writing' } : { home: '首页', writing: '写作' }
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: '首页', item: siteUrl.href },
-    { '@type': 'ListItem', position: 2, name: '写作', item: blogIndexUrl.href },
+    { '@type': 'ListItem', position: 1, name: breadcrumbLabels.home, item: siteUrl.href },
+    { '@type': 'ListItem', position: 2, name: breadcrumbLabels.writing, item: blogIndexUrl.href },
     { '@type': 'ListItem', position: 3, name: title, item: canonicalUrl.href }
   ]
 }
@@ -140,6 +141,8 @@ const articleFieldNote = {
 
 <PageLayout
   meta={{ articleDate, description, ogImage: socialImage, title }}
+  articlePublishedAt={publishDate.toISOString()}
+  articleModifiedAt={updatedDate?.toISOString()}
   highlightColor={primaryColor}
   back={basePath}
   lang={lang}

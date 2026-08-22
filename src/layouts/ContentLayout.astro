@@ -8,6 +8,8 @@ import { integ } from '@/site-config'
 
 interface Props {
   meta: SiteMeta
+  articlePublishedAt?: string
+  articleModifiedAt?: string
   highlightColor?: string
   back?: string
   lang?: string
@@ -16,6 +18,8 @@ interface Props {
 
 const {
   meta,
+  articlePublishedAt,
+  articleModifiedAt,
   highlightColor,
   back = '/',
   lang,
@@ -24,7 +28,7 @@ const {
 } = Astro.props
 ---
 
-<PageLayout {meta} {highlightColor} {lang} {...props}>
+<PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {...props}>
   <slot name='head' slot='head' />
   <Button title='Back' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>

@@ -9,12 +9,14 @@ import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import SocialGrid from '@/components/contact/SocialGrid.astro'
 import ContributionGraph from '@/components/lora/ContributionGraph.astro'
+import CredentialsArchive from '@/components/about/CredentialsArchive.astro'
 
 const headings = [
   { depth: 2, slug: 'direction', text: 'Current direction' },
   { depth: 2, slug: 'capabilities', text: 'Capabilities' },
   { depth: 2, slug: 'open-source', text: 'Open source' },
   { depth: 2, slug: 'education', text: 'Education' },
+  { depth: 2, slug: 'credentials-title', text: 'Credentials' },
   { depth: 2, slug: 'hackathons', text: 'Hackathons' },
   { depth: 2, slug: 'contributions', text: 'Contributions' },
   { depth: 2, slug: 'elsewhere', text: 'Elsewhere' }
@@ -128,6 +130,8 @@ const openSourceProjects = projects.slice(0, 6)
     ))
   }
 
+  <CredentialsArchive />
+
   <h2 id='hackathons'>Hackathons</h2>
   <div class='not-prose hackathon-intro'>
     <p>黑客松是我快速学习、验证产品假设并和不同背景的开发者协作的地方。</p>
@@ -136,7 +140,7 @@ const openSourceProjects = projects.slice(0, 6)
   <div class='not-prose timeline'>
     {
       hackathons.map((item) => (
-        <article>
+        <article class:list={{ planned: item.status === 'planned' }}>
           <div class='dot' />
           <div>
             <div class='event-meta'>
@@ -146,6 +150,7 @@ const openSourceProjects = projects.slice(0, 6)
               </>
             </div>
             <h3>{item.title}</h3>
+            {item.status === 'planned' && <span class='event-status'>即将参加</span>}
             <p>{item.content}</p>
             {item.href && (
               <a href={item.href} target='_blank' rel='noopener noreferrer'>
@@ -393,6 +398,11 @@ const openSourceProjects = projects.slice(0, 6)
     background: hsl(var(--primary));
     box-shadow: 0 0 0 4px hsl(var(--background));
   }
+  .timeline article.planned .dot {
+    border: 1px solid hsl(173 60% 42%);
+    background: hsl(var(--background));
+    box-shadow: 0 0 0 4px hsl(var(--background)), 0 0 0 5px hsl(173 60% 42% / 0.18);
+  }
   .event-meta {
     display: flex;
     justify-content: space-between;
@@ -403,6 +413,17 @@ const openSourceProjects = projects.slice(0, 6)
   .timeline h3 {
     margin: 0.22rem 0;
     font-size: 0.95rem;
+  }
+  .event-status {
+    display: inline-flex;
+    margin: 0.1rem 0 0.34rem;
+    border: 1px solid hsl(173 60% 42% / 0.45);
+    border-radius: 999px;
+    padding: 0.16rem 0.4rem;
+    color: hsl(173 60% 30%);
+    font-size: 0.6rem;
+    font-weight: 680;
+    letter-spacing: 0.05em;
   }
   .timeline p {
     margin: 0;

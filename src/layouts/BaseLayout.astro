@@ -13,6 +13,8 @@ import '@/assets/styles/app.css'
 
 interface Props {
   meta: SiteMeta
+  articlePublishedAt?: string
+  articleModifiedAt?: string
   highlightColor?: string
   noindex?: boolean
   lang?: string
@@ -20,6 +22,8 @@ interface Props {
 
 const {
   meta: { articleDate, description = config.description, ogImage, title },
+  articlePublishedAt,
+  articleModifiedAt,
   highlightColor,
   noindex = false,
   lang = config.locale.lang,
@@ -34,7 +38,17 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 
 <html {lang}>
   <head>
-    <BaseHead {articleDate} {description} {noindex} {ogImage} {title} locale={locale} {alternatePath} />
+    <BaseHead
+      {articleDate}
+      {articlePublishedAt}
+      {articleModifiedAt}
+      {description}
+      {noindex}
+      {ogImage}
+      {title}
+      locale={locale}
+      {alternatePath}
+    />
     <slot name='head' />
     <ThemeProvider />
   </head>

@@ -6,9 +6,25 @@ import type { SiteMeta } from 'astro-pure/types'
 import { socialLinks } from '@/data/social'
 import { localeMeta, type SiteLocale } from '@/i18n/site'
 
-type Props = SiteMeta & { noindex?: boolean; locale?: SiteLocale; alternatePath?: string }
+type Props = SiteMeta & {
+  noindex?: boolean
+  locale?: SiteLocale
+  alternatePath?: string
+  articlePublishedAt?: string
+  articleModifiedAt?: string
+}
 
-const { articleDate, description, noindex = false, ogImage, title, locale = 'zh-CN', alternatePath } = Astro.props
+const {
+  articleDate,
+  articlePublishedAt,
+  articleModifiedAt,
+  description,
+  noindex = false,
+  ogImage,
+  title,
+  locale = 'zh-CN',
+  alternatePath
+} = Astro.props
 const localeInfo = localeMeta(locale)
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/')
 
@@ -107,7 +123,8 @@ const profileJsonLd = {
   articleDate && (
     <>
       <meta content={config.author} property='article:author' />
-      <meta content={articleDate} property='article:published_time' />
+      <meta content={articlePublishedAt ?? articleDate} property='article:published_time' />
+      {articleModifiedAt && <meta content={articleModifiedAt} property='article:modified_time' />}
     </>
   )
 }

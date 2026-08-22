@@ -51,39 +51,61 @@ export const profile = {
 
 export const hackathons = [
   {
+    title: '知乎黑客松',
+    date: 'September 13, 2026',
+    location: 'Upcoming · venue pending',
+    content: '计划参加。具体项目、协作信息与现场记录将在活动结束后补充。',
+    href: '',
+    status: 'planned'
+  },
+  {
+    title: '世界人工智能开源大赛 · Agent Infra',
+    date: 'August 22, 2026',
+    location: 'Datawhale × 阿里云 · Online',
+    content: '完成 2026 Datawhale AI 夏令营第二期全部学习，获得结营证书。',
+    href: '',
+    status: 'completed',
+    certificateId: 'goai-agent-infra-2026'
+  },
+  {
     title: 'ETH Beijing 2026',
     date: 'June 5–7, 2026',
     location: 'Beijing · Kunlun Nest',
     content: 'Built an AI Agent × Blockchain project with a team of five.',
-    href: 'https://github.com/lora-sys/Hackthon'
+    href: 'https://github.com/lora-sys/Hackthon',
+    status: 'completed'
   },
   {
     title: 'Monad Blitz Hackathon',
     date: '2026',
     location: 'Online',
     content: 'Shipped a working prototype in a 48-hour rapid iteration sprint.',
-    href: ''
+    href: '',
+    status: 'completed'
   },
   {
     title: 'Monad Hackathon',
     date: 'January 2026',
     location: 'Online',
     content: 'Built a Web3 tarot prediction platform on Monad Testnet.',
-    href: 'https://github.com/lora-sys/demo_monad_hackthon'
+    href: 'https://github.com/lora-sys/demo_monad_hackthon',
+    status: 'completed'
   },
   {
     title: 'Online AI Agent Hackathon',
     date: 'February 2026',
     location: 'Online',
     content: 'Built Emergence, a resilient multi-agent collaboration protocol.',
-    href: 'https://github.com/lora-sys/hackthon-agent'
+    href: 'https://github.com/lora-sys/hackthon-agent',
+    status: 'completed'
   },
   {
     title: 'Horizon Startup Hackathon',
     date: 'Planned · date pending',
     location: 'Beijing · Startup Hackathon',
     content: 'Built Agent Arena, an evidence-centered AI Agent team arena for proposal, attack, defense, verification, and replayable verdicts.',
-    href: 'https://github.com/lora-sys/AgentArena'
+    href: 'https://github.com/lora-sys/AgentArena',
+    status: 'planned'
   },
   {
     title: 'AMD AI DevMaster Hackathon 2026',
@@ -91,6 +113,7 @@ export const hackathons = [
     location: 'Track 1 · Multimodal Content Creation Tools',
     content: 'Contributed to StagePoster, an AI-native music event poster engine running on AMD Radeon PRO W7900 + ROCm.',
     href: 'https://github.com/AMD-DEV-CONTEST/Radeon-hackathon-2026-07/pull/71',
-    project: 'https://github.com/Ripped-sys/StagePoster'
+    project: 'https://github.com/Ripped-sys/StagePoster',
+    status: 'completed'
   }
 ]
