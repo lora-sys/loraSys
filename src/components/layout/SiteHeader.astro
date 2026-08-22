@@ -22,7 +22,7 @@ const search = locale === 'en-US' ? '/search' : '/search'
     <a class='contact-cta tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
     <a class='locale-toggle' href={alternate} hreflang={locale === 'en-US' ? 'zh-CN' : 'en-US'} lang={locale === 'en-US' ? 'zh-CN' : 'en-US'}>{copy.switchLabel}</a>
     <a class='search-link' href={search} title={copy.searchLabel} aria-label={copy.searchLabel}><Icon name='search' class='size-4' /></a>
-    <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Toggle dark theme' : '切换深色主题'}>
+    <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Toggle dark theme' : '切换深色主题'} aria-pressed='false'>
       <Icon class='system size-4' name='computer' />
       <Icon class='light hidden size-4' name='sun' />
       <Icon class='dark hidden size-4' name='moon' />
@@ -41,7 +41,12 @@ const search = locale === 'en-US' ? '/search' : '/search'
 
 <script is:inline>
   const themeButton = document.getElementById('toggleDarkMode')
-  if (themeButton) themeButton.dataset.theme = localStorage.getItem('theme') || 'system'
+  if (themeButton) {
+    const savedTheme = localStorage.getItem('theme') || 'system'
+    themeButton.dataset.theme = savedTheme
+    const appliedTheme = savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : savedTheme
+    themeButton.setAttribute('aria-pressed', String(appliedTheme === 'dark'))
+  }
 </script>
 <script>
   import { setTheme } from 'astro-pure/utils'
@@ -77,7 +82,36 @@ const search = locale === 'en-US' ? '/search' : '/search'
   updateScrollState()
 
   themeButton?.addEventListener('click', () => {
-    themeButton.dataset.theme = setTheme(undefined, true)
+    const root = document.documentElement
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const rect = themeButton.getBoundingClientRect()
+    root.style.setProperty('--theme-origin-x', `${rect.left + rect.width / 2}px`)
+    root.style.setProperty('--theme-origin-y', `${rect.top + rect.height / 2}px`)
+
+    const applyTheme = () => {
+      const nextTheme = setTheme(undefined, true)
+      themeButton.dataset.theme = nextTheme
+      const appliedTheme = nextTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : nextTheme
+      themeButton.setAttribute('aria-pressed', String(appliedTheme === 'dark'))
+    }
+
+    const finish = () => {
+      window.setTimeout(() => {
+        root.removeAttribute('data-theme-transition')
+        root.style.removeProperty('--theme-origin-x')
+        root.style.removeProperty('--theme-origin-y')
+      }, 300)
+    }
+
+    if (reducedMotion || !document.startViewTransition) {
+      root.setAttribute('data-theme-transition', 'true')
+      applyTheme()
+      finish()
+      return
+    }
+
+    root.setAttribute('data-theme-transition', 'true')
+    document.startViewTransition(applyTheme).finished.finally(finish)
   })
 </script>
 

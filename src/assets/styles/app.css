@@ -60,6 +60,10 @@ html.dark {
 }
 
 html {
+  color-scheme: light;
+}
+
+html {
   scroll-behavior: smooth;
   scroll-padding-top: 1rem;
 }
@@ -70,6 +74,50 @@ body {
   background-image:
     radial-gradient(circle at 12% 8%, hsl(var(--field-teal) / 0.028), transparent 28rem),
     radial-gradient(circle at 88% 78%, hsl(var(--field-clay) / 0.025), transparent 24rem);
+}
+
+/* Field Notes assets remain tactile in either scheme rather than becoming bright paper blocks in the dark. */
+.field-asset {
+  box-shadow: var(--field-shadow);
+  transition: filter var(--motion-story) ease, opacity var(--motion-story) ease;
+}
+
+html.dark .field-asset {
+  filter: brightness(0.76) saturate(0.78) contrast(1.04);
+}
+
+html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
+  transition:
+    background-color var(--motion-story) ease,
+    color var(--motion-story) ease,
+    border-color var(--motion-story) ease,
+    box-shadow var(--motion-story) ease,
+    filter var(--motion-story) ease;
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--motion-story);
+    animation-timing-function: var(--motion-spring);
+  }
+
+  html[data-theme-transition='true']::view-transition-old(root) {
+    animation-name: theme-fade-out;
+  }
+
+  html[data-theme-transition='true']::view-transition-new(root) {
+    animation-name: theme-reveal;
+    clip-path: circle(0 at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%));
+  }
+
+  @keyframes theme-fade-out {
+    to { opacity: 0; }
+  }
+
+  @keyframes theme-reveal {
+    to { clip-path: circle(150vmax at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%)); }
+  }
 }
 
 a {
@@ -117,8 +165,15 @@ a {
   }
 
   a,
-  .tactile-action {
+  .tactile-action,
+  .field-asset,
+  html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
     transition: none;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 
   .tactile-action:active {

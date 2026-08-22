@@ -1,46 +1,391 @@
 ---
 import type { ShowcaseItem } from '../../data/showcase'
-interface Props { id: string; title: string; eyebrow: string; items: ShowcaseItem[]; locale?: 'zh-CN' | 'en-US' }
+
+interface Props {
+  id: string
+  title: string
+  eyebrow: string
+  items: ShowcaseItem[]
+  locale?: 'zh-CN' | 'en-US'
+}
+
 const { id, title, eyebrow, items, locale = 'zh-CN' } = Astro.props
 const isEnglish = locale === 'en-US'
 const labels = isEnglish
-  ? { previous: `Previous ${title}`, next: `Next ${title}`, more: 'Learn more', close: 'Close music player', listening: 'Listening with Lora' }
-  : { previous: `上一张：${title}`, next: `下一张：${title}`, more: '查看详情', close: '关闭音乐播放器', listening: 'Lora 正在聆听' }
+  ? {
+      previous: `Previous ${title}`,
+      next: `Next ${title}`,
+      more: 'Learn more',
+      close: 'Close music player',
+      listening: 'Listening with Lora',
+      pause: 'Pause drift',
+      resume: 'Play archive',
+    }
+  : {
+      previous: `上一张：${title}`,
+      next: `下一张：${title}`,
+      more: '查看详情',
+      close: '关闭音乐播放器',
+      listening: 'Lora 正在聆听',
+      pause: '暂停巡游',
+      resume: '播放档案',
+    }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const autoplayDelay = id === 'anime' ? 7000 : 8000
 ---
-<section class='showcase' aria-labelledby={`${id}-title`} data-carousel data-item-count={items.length}>
-  <header><div><p>{eyebrow}</p><h2 id={`${id}-title`}>{title}</h2></div><div class='controls'><button class='tactile-action' type='button' data-prev aria-label={labels.previous}>←</button><button class='tactile-action' type='button' data-next aria-label={labels.next}>→</button></div></header>
+
+<section
+  class='showcase'
+  aria-labelledby={`${id}-title`}
+  data-carousel
+  data-item-count={items.length}
+  data-autoplay-delay={autoplayDelay}
+>
+  <header>
+    <div>
+      <p>{eyebrow}</p>
+      <h2 id={`${id}-title`}>{title}</h2>
+    </div>
+    <div class='controls' aria-label={isEnglish ? `${title} controls` : `${title} 控制`}>
+      <button class='tactile-action' type='button' data-prev aria-label={labels.previous}>←</button>
+      <button class='tactile-action' type='button' data-next aria-label={labels.next}>→</button>
+      <button
+        class='tactile-action playback'
+        type='button'
+        data-playback
+        data-pause-label={labels.pause}
+        data-resume-label={labels.resume}
+        aria-pressed='false'
+      >
+        <span data-playback-label>{labels.resume}</span>
+      </button>
+    </div>
+  </header>
   <div class='track' tabindex='0' data-track aria-label={title}>
-    {items.map((item, i) => <article class:list={['magic-card', { stagger: i % 2 }]} data-magic>
-      <a href={item.spotify ? '#spotify-player' : item.href} target={item.spotify ? undefined : '_blank'} rel='noopener noreferrer' class='lens' data-lens data-spotify={item.spotify ? item.href : undefined} data-spotify-title={item.spotify ? [item.name, item.artist].filter(Boolean).join(' — ') : undefined} aria-label={`${item.name}: ${item.description}`}>
-        <img src={`${base}${item.image}`} alt={`${item.name} — ${item.description}`} width='600' height='840' loading='lazy' decoding='async' />
-        <span class='lens-pane' aria-hidden='true'></span><span class='lens-glass' aria-hidden='true'></span>
-        <div class='copy'><span>{String(i + 1).padStart(2, '0')}</span><h3>{item.name}</h3><p>{item.description}</p><b>{item.cta || labels.more} ↗</b></div>
-      </a>
-    </article>)}
+    {
+      items.map((item, i) => (
+        <article class:list={['magic-card', { stagger: i % 2 }]} data-magic>
+          <a
+            href={item.spotify ? '#spotify-player' : item.href}
+            target={item.spotify ? undefined : '_blank'}
+            rel='noopener noreferrer'
+            class='lens'
+            data-lens
+            data-spotify={item.spotify ? item.href : undefined}
+            data-spotify-title={
+              item.spotify ? [item.name, item.artist].filter(Boolean).join(' — ') : undefined
+            }
+            aria-label={`${item.name}: ${item.description}`}
+          >
+            <img
+              src={`${base}${item.image}`}
+              alt={`${item.name} — ${item.description}`}
+              width='600'
+              height='840'
+              loading='lazy'
+              decoding='async'
+            />
+            <span class='lens-pane' aria-hidden='true'></span>
+            <span class='lens-glass' aria-hidden='true'></span>
+            <div class='copy'>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+              <b>{item.cta || labels.more} ↗</b>
+            </div>
+          </a>
+        </article>
+      ))
+    }
   </div>
-  <div class='carousel-meta'><p data-index aria-live='polite'>1 / {items.length}</p><div class='progress' aria-hidden='true'><i data-progress></i></div></div>
-  {items.some(i=>i.spotify)&&<dialog data-spotify-dialog data-default-title={labels.listening}><button type='button' data-close aria-label={labels.close}>×</button><h3 data-spotify-heading>{labels.listening}</h3><iframe title='Lora’s favorite Spotify track' loading='lazy' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'></iframe></dialog>}
+  <div class='carousel-meta'>
+    <p data-index aria-live='polite'>1 / {items.length}</p>
+    <div class='progress' aria-hidden='true'><i data-progress></i></div>
+  </div>
+  {
+    items.some((item) => item.spotify) && (
+      <dialog data-spotify-dialog data-default-title={labels.listening}>
+        <button type='button' data-close aria-label={labels.close}>×</button>
+        <h3 data-spotify-heading>{labels.listening}</h3>
+        <iframe
+          title='Lora’s favorite Spotify track'
+          loading='lazy'
+          allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'
+        ></iframe>
+      </dialog>
+    )
+  }
 </section>
+
 <script>
   document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
-    const track = root.querySelector<HTMLElement>('[data-track]')!; const bar = root.querySelector<HTMLElement>('[data-progress]')!; const index = root.querySelector<HTMLElement>('[data-index]')!
+    const track = root.querySelector<HTMLElement>('[data-track]')!
+    const bar = root.querySelector<HTMLElement>('[data-progress]')!
+    const index = root.querySelector<HTMLElement>('[data-index]')!
     const itemCount = Number(root.dataset.itemCount || 1)
-    const prev=root.querySelector<HTMLButtonElement>('[data-prev]')!;const next=root.querySelector<HTMLButtonElement>('[data-next]')!;const move = (n:number) => track.scrollBy({ left: n * Math.min(track.clientWidth * .82, 420), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
-    root.querySelector('[data-prev]')?.addEventListener('click', () => move(-1)); root.querySelector('[data-next]')?.addEventListener('click', () => move(1))
-    track.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1) } if (e.key === 'ArrowRight') { e.preventDefault(); move(1) } })
-    const update = () => { const max = track.scrollWidth - track.clientWidth; const ratio = max ? track.scrollLeft / max : 0; bar.style.transform = `scaleX(${max ? ratio : 1})`;prev.disabled=track.scrollLeft<2;next.disabled=track.scrollLeft>=max-2; index.textContent = `${Math.min(itemCount, Math.max(1, Math.round(ratio * (itemCount - 1)) + 1))} / ${itemCount}` }; track.addEventListener('scroll', update, { passive: true });new ResizeObserver(update).observe(track); update()
-    let startX = 0; let startLeft = 0; let dragged = false
-    track.addEventListener('pointerdown', (event) => { if (event.pointerType !== 'mouse' || matchMedia('(prefers-reduced-motion: reduce)').matches) return; startX = event.clientX; startLeft = track.scrollLeft; dragged = false; track.setPointerCapture(event.pointerId); track.dataset.dragging = 'true' })
-    track.addEventListener('pointermove', (event) => { if (!track.dataset.dragging) return; const delta = event.clientX - startX; if (Math.abs(delta) > 4) dragged = true; track.scrollLeft = startLeft - delta })
-    const stopDragging = (event: PointerEvent) => { if (!track.dataset.dragging) return; track.releasePointerCapture?.(event.pointerId); delete track.dataset.dragging; window.setTimeout(() => { dragged = false }, 0) }
-    track.addEventListener('pointerup', stopDragging); track.addEventListener('pointercancel', stopDragging)
-    track.addEventListener('click', (event) => { if (!dragged) return; event.preventDefault(); event.stopPropagation() }, true)
+    const delay = Number(root.dataset.autoplayDelay || 7000)
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!
+    const next = root.querySelector<HTMLButtonElement>('[data-next]')!
+    const playback = root.querySelector<HTMLButtonElement>('[data-playback]')!
+    const playbackLabel = root.querySelector<HTMLElement>('[data-playback-label]')!
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
+    const dialog = root.querySelector<HTMLDialogElement>('[data-spotify-dialog]')
+    const labels = {
+      pause: playback.dataset.pauseLabel || 'Pause drift',
+      resume: playback.dataset.resumeLabel || 'Play archive',
+    }
+    let inViewport = false
+    let userPaused = !finePointer.matches || reducedMotion.matches
+    let timer: number | undefined
+    let startX = 0
+    let startLeft = 0
+    let dragged = false
+
+    const move = (direction: number, behavior: ScrollBehavior = reducedMotion.matches ? 'auto' : 'smooth') => {
+      track.scrollBy({ left: direction * Math.min(track.clientWidth * 0.82, 420), behavior })
+    }
+
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth
+      const ratio = max ? track.scrollLeft / max : 0
+      bar.style.transform = `scaleX(${max ? ratio : 1})`
+      prev.disabled = track.scrollLeft < 2
+      next.disabled = track.scrollLeft >= max - 2
+      index.textContent = `${Math.min(itemCount, Math.max(1, Math.round(ratio * (itemCount - 1)) + 1))} / ${itemCount}`
+    }
+
+    const canDrift = () => itemCount > 1 && finePointer.matches && !reducedMotion.matches && inViewport && !document.hidden && !userPaused
+
+    const updatePlaybackControl = () => {
+      const active = canDrift()
+      playback.disabled = itemCount < 2 || reducedMotion.matches
+      playback.setAttribute('aria-pressed', String(active))
+      playbackLabel.textContent = active ? labels.pause : labels.resume
+      playback.dataset.state = active ? 'playing' : 'paused'
+    }
+
+    const stopDrift = () => {
+      if (timer) window.clearTimeout(timer)
+      timer = undefined
+      updatePlaybackControl()
+    }
+
+    const queueDrift = () => {
+      stopDrift()
+      if (!canDrift()) return
+      timer = window.setTimeout(() => {
+        const max = track.scrollWidth - track.clientWidth
+        if (track.scrollLeft >= max - 2) {
+          track.scrollTo({ left: 0, behavior: 'auto' })
+        } else {
+          move(1)
+        }
+        queueDrift()
+      }, delay)
+      updatePlaybackControl()
+    }
+
+    const pauseForInput = () => {
+      userPaused = true
+      stopDrift()
+    }
+
+    const resumeDrift = () => {
+      userPaused = false
+      queueDrift()
+    }
+
+    playback.addEventListener('click', () => {
+      if (playback.dataset.state === 'playing') pauseForInput()
+      else resumeDrift()
+    })
+
+    prev.addEventListener('click', () => {
+      pauseForInput()
+      move(-1)
+    })
+    next.addEventListener('click', () => {
+      pauseForInput()
+      move(1)
+    })
+    track.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault()
+        pauseForInput()
+        move(-1)
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault()
+        pauseForInput()
+        move(1)
+      }
+    })
+    track.addEventListener('scroll', update, { passive: true })
+    new ResizeObserver(update).observe(track)
+
+    root.addEventListener('focusin', pauseForInput)
+    root.addEventListener('pointerenter', () => {
+      if (finePointer.matches) pauseForInput()
+    })
+    root.addEventListener('touchstart', pauseForInput, { passive: true })
+
+    track.addEventListener('pointerdown', (event) => {
+      pauseForInput()
+      if (event.pointerType !== 'mouse' || reducedMotion.matches) return
+      startX = event.clientX
+      startLeft = track.scrollLeft
+      dragged = false
+      track.setPointerCapture(event.pointerId)
+      track.dataset.dragging = 'true'
+    })
+    track.addEventListener('pointermove', (event) => {
+      if (!track.dataset.dragging) return
+      const delta = event.clientX - startX
+      if (Math.abs(delta) > 4) dragged = true
+      track.scrollLeft = startLeft - delta
+    })
+    const stopDragging = (event: PointerEvent) => {
+      if (!track.dataset.dragging) return
+      track.releasePointerCapture?.(event.pointerId)
+      delete track.dataset.dragging
+      window.setTimeout(() => {
+        dragged = false
+      }, 0)
+    }
+    track.addEventListener('pointerup', stopDragging)
+    track.addEventListener('pointercancel', stopDragging)
+    track.addEventListener(
+      'click',
+      (event) => {
+        if (!dragged) return
+        event.preventDefault()
+        event.stopPropagation()
+      },
+      true
+    )
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewport = entry.isIntersecting
+        queueDrift()
+      },
+      { threshold: 0.28 }
+    )
+    observer.observe(root)
+    document.addEventListener('visibilitychange', queueDrift)
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) userPaused = true
+      queueDrift()
+    })
+    finePointer.addEventListener('change', () => {
+      if (!finePointer.matches) userPaused = true
+      queueDrift()
+    })
+
+    root.querySelectorAll<HTMLElement>('[data-spotify]').forEach((trigger) =>
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault()
+        pauseForInput()
+        if (!dialog) return
+        dialog.querySelector('iframe')!.src = trigger.dataset.spotify!
+        dialog.querySelector('[data-spotify-heading]')!.textContent =
+          trigger.dataset.spotifyTitle || dialog.dataset.defaultTitle || 'Listening with Lora'
+        dialog.showModal()
+      })
+    )
+    dialog?.querySelector('[data-close]')?.addEventListener('click', () => dialog.close())
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+
+    update()
+    updatePlaybackControl()
   })
-  if (matchMedia('(hover:hover)').matches) document.querySelectorAll<HTMLElement>('[data-magic]').forEach(card => {let frame=0;card.addEventListener('pointermove', e => {cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const r=card.getBoundingClientRect(); card.style.setProperty('--mx', `${e.clientX-r.left}px`); card.style.setProperty('--my', `${e.clientY-r.top}px`)})})})
-  if (matchMedia('(hover:hover) and (prefers-reduced-motion: no-preference)').matches) document.querySelectorAll<HTMLElement>('[data-lens]').forEach(lens => {let frame=0;lens.addEventListener('pointermove', e => {cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const r=lens.getBoundingClientRect(); lens.style.setProperty('--lx', `${(e.clientX-r.left)/r.width*100}%`); lens.style.setProperty('--ly', `${(e.clientY-r.top)/r.height*100}%`);const glass=lens.querySelector<HTMLElement>('.lens-glass');const image=lens.querySelector<HTMLImageElement>('img');if(glass&&image&&!glass.dataset.lensLoaded&&image.currentSrc){glass.style.setProperty('--lens-image',`url("${image.currentSrc}")`);glass.dataset.lensLoaded='true'}})})})
-  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(root=>{const dialog=root.querySelector<HTMLDialogElement>('[data-spotify-dialog]');root.querySelectorAll<HTMLElement>('[data-spotify]').forEach(trigger=>trigger.addEventListener('click',e=>{e.preventDefault();if(dialog){dialog.querySelector('iframe')!.src=trigger.dataset.spotify!;dialog.querySelector('[data-spotify-heading]')!.textContent=trigger.dataset.spotifyTitle || dialog.dataset.defaultTitle || 'Listening with Lora';dialog.showModal()}}));dialog?.querySelector('[data-close]')?.addEventListener('click',()=>dialog.close());dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close()})})
+
+  if (matchMedia('(hover: hover)').matches)
+    document.querySelectorAll<HTMLElement>('[data-magic]').forEach((card) => {
+      let frame = 0
+      card.addEventListener('pointermove', (event) => {
+        cancelAnimationFrame(frame)
+        frame = requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect()
+          card.style.setProperty('--mx', `${event.clientX - rect.left}px`)
+          card.style.setProperty('--my', `${event.clientY - rect.top}px`)
+        })
+      })
+    })
+
+  if (matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches)
+    document.querySelectorAll<HTMLElement>('[data-lens]').forEach((lens) => {
+      let frame = 0
+      lens.addEventListener('pointermove', (event) => {
+        cancelAnimationFrame(frame)
+        frame = requestAnimationFrame(() => {
+          const rect = lens.getBoundingClientRect()
+          lens.style.setProperty('--lx', `${((event.clientX - rect.left) / rect.width) * 100}%`)
+          lens.style.setProperty('--ly', `${((event.clientY - rect.top) / rect.height) * 100}%`)
+          const glass = lens.querySelector<HTMLElement>('.lens-glass')
+          const image = lens.querySelector<HTMLImageElement>('img')
+          if (glass && image && !glass.dataset.lensLoaded && image.currentSrc) {
+            glass.style.setProperty('--lens-image', `url("${image.currentSrc}")`)
+            glass.dataset.lensLoaded = 'true'
+          }
+        })
+      })
+    })
 </script>
+
 <style>
-  .showcase{display:grid;gap:1rem}.showcase header{display:flex;align-items:end;justify-content:space-between}.showcase header p{margin:0;color:hsl(var(--muted-foreground));font-size:.75rem;text-transform:uppercase;letter-spacing:.14em}.showcase h2{font-size:1.25rem;font-weight:600}.controls{display:flex;gap:.4rem}.controls button{width:2.25rem;height:2.25rem;border:1px solid hsl(var(--border));border-radius:999px;background:hsl(var(--background));transition:background .2s,transform .16s cubic-bezier(.23,1,.32,1)}.controls button:hover,.controls button:focus-visible{background:hsl(var(--muted));outline:2px solid hsl(var(--ring));outline-offset:2px;transform:translateY(-1px)}.controls button:active{transform:scale(.93)}.controls button:disabled{opacity:.35;cursor:not-allowed;transform:none}  .track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(15rem,42%);gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:.5rem .2rem 1rem;scrollbar-width:none;cursor:grab}.track[data-dragging]{cursor:grabbing;scroll-snap-type:none;user-select:none}.track::-webkit-scrollbar{display:none}.magic-card{position:relative;scroll-snap-align:start;border:1px solid hsl(var(--border));border-radius:1rem;overflow:hidden;background:hsl(var(--card));min-height:22rem}.magic-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(240px circle at var(--mx,-100px) var(--my,-100px),hsl(var(--primary)/.13),transparent 70%)}.lens{display:block;position:absolute;inset:0;color:white}.lens img{width:100%;height:100%;object-fit:cover}.lens-pane{position:absolute;inset:0;background:linear-gradient(transparent 35%,rgb(0 0 0/.84))}.lens-glass{position:absolute;z-index:2;left:var(--lx,50%);top:var(--ly,50%);width:7rem;height:7rem;border:2px solid rgb(255 255 255/.8);border-radius:50%;transform:translate(-50%,-50%) scale(.85);opacity:0;pointer-events:none;background-image:var(--lens-image);background-size:calc(100% * 3.2) calc(100% * 3.2);background-position:var(--lx,50%) var(--ly,50%);background-repeat:no-repeat;box-shadow:0 8px 28px rgb(0 0 0/.35),inset 0 0 0 1px rgb(0 0 0/.2);transition:opacity .18s,transform .18s}.lens:hover .lens-glass,.lens:focus-visible .lens-glass{opacity:1;transform:translate(-50%,-50%) scale(1)}.lens:focus-visible{outline:2px solid hsl(173 60% 54%);outline-offset:-3px}.copy{position:absolute;inset:auto 1.1rem 1.1rem;display:grid;gap:.3rem}.copy span{font-size:.7rem;letter-spacing:.15em;opacity:.75}.copy h3{font-size:1.12rem;font-weight:600}.copy p{font-size:.84rem;line-height:1.45;color:rgb(255 255 255/.76)}.copy b{font-size:.72rem;font-weight:500}  .carousel-meta{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:.75rem}.carousel-meta p{margin:0;color:hsl(var(--muted-foreground));font-size:.63rem;font-variant-numeric:tabular-nums}.progress{height:2px;background:hsl(var(--border));overflow:hidden}.progress i{display:block;height:100%;background:hsl(var(--foreground));transform:scaleX(0);transform-origin:left}.stagger{transform:translateY(1rem)}dialog{width:min(92vw,480px);border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:hsl(var(--background));color:hsl(var(--foreground))}dialog::backdrop{background:rgb(0 0 0/.55);backdrop-filter:blur(5px)}dialog button{float:right;font-size:1.4rem}dialog h3{margin:.4rem 0 1rem}dialog iframe{width:100%;height:152px;border:0;border-radius:.75rem}@media(max-width:640px){.track{grid-auto-columns:82%;cursor:auto}.stagger{transform:none}.lens-glass{display:none}}@media(prefers-reduced-motion:reduce){.lens-glass,.controls button{transition:none}.track{cursor:auto}.controls button:hover,.controls button:focus-visible,.controls button:active{transform:none}.lens-glass{display:none}}
+  .showcase { display: grid; gap: 1rem; }
+  .showcase header { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+  .showcase header p { margin: 0; color: hsl(var(--muted-foreground)); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; }
+  .showcase h2 { font-size: 1.25rem; font-weight: 600; }
+  .controls { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.4rem; }
+  .controls button { min-height: 2.25rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); padding-inline: 0.68rem; transition: background 0.2s, transform 0.16s cubic-bezier(0.23, 1, 0.32, 1); }
+  .controls button[data-prev], .controls button[data-next] { width: 2.25rem; padding: 0; }
+  .controls button:hover, .controls button:focus-visible { background: hsl(var(--muted)); outline: 2px solid hsl(var(--ring)); outline-offset: 2px; transform: translateY(-1px); }
+  .controls button:active { transform: scale(0.93); }
+  .controls button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+  .playback { color: hsl(var(--muted-foreground)); font-size: 0.67rem; font-weight: 600; }
+  .playback[data-state='playing'] { border-color: hsl(var(--field-teal) / 0.55); color: hsl(var(--foreground)); }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(15rem, 42%); gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0.2rem 1rem; scrollbar-width: none; cursor: grab; }
+  .track[data-dragging] { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+  .track::-webkit-scrollbar { display: none; }
+  .magic-card { position: relative; min-height: 22rem; overflow: hidden; border: 1px solid hsl(var(--border)); border-radius: 1rem; background: hsl(var(--card)); scroll-snap-align: start; }
+  .magic-card::after { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(240px circle at var(--mx, -100px) var(--my, -100px), hsl(var(--primary) / 0.13), transparent 70%); content: ''; }
+  .lens { position: absolute; inset: 0; display: block; color: white; }
+  .lens img { width: 100%; height: 100%; object-fit: cover; }
+  .lens-pane { position: absolute; inset: 0; background: linear-gradient(transparent 35%, rgb(0 0 0 / 0.84)); }
+  .lens-glass { position: absolute; z-index: 2; left: var(--lx, 50%); top: var(--ly, 50%); width: 7rem; height: 7rem; transform: translate(-50%, -50%) scale(0.85); border: 2px solid rgb(255 255 255 / 0.8); border-radius: 50%; opacity: 0; pointer-events: none; background-image: var(--lens-image); background-position: var(--lx, 50%) var(--ly, 50%); background-size: calc(100% * 3.2) calc(100% * 3.2); background-repeat: no-repeat; box-shadow: 0 8px 28px rgb(0 0 0 / 0.35), inset 0 0 0 1px rgb(0 0 0 / 0.2); transition: opacity 0.18s, transform 0.18s; }
+  .lens:hover .lens-glass, .lens:focus-visible .lens-glass { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  .lens:focus-visible { outline: 2px solid hsl(173 60% 54%); outline-offset: -3px; }
+  .copy { position: absolute; inset: auto 1.1rem 1.1rem; display: grid; gap: 0.3rem; }
+  .copy span { font-size: 0.7rem; letter-spacing: 0.15em; opacity: 0.75; }
+  .copy h3 { font-size: 1.12rem; font-weight: 600; }
+  .copy p { color: rgb(255 255 255 / 0.76); font-size: 0.84rem; line-height: 1.45; }
+  .copy b { font-size: 0.72rem; font-weight: 500; }
+  .carousel-meta { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.75rem; }
+  .carousel-meta p { margin: 0; color: hsl(var(--muted-foreground)); font-size: 0.63rem; font-variant-numeric: tabular-nums; }
+  .progress { height: 2px; overflow: hidden; background: hsl(var(--border)); }
+  .progress i { display: block; height: 100%; transform: scaleX(0); transform-origin: left; background: hsl(var(--foreground)); }
+  .stagger { transform: translateY(1rem); }
+  dialog { width: min(92vw, 480px); border: 1px solid hsl(var(--border)); border-radius: 1rem; padding: 1rem; background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  dialog::backdrop { background: rgb(0 0 0 / 0.55); backdrop-filter: blur(5px); }
+  dialog button { float: right; font-size: 1.4rem; }
+  dialog h3 { margin: 0.4rem 0 1rem; }
+  dialog iframe { width: 100%; height: 152px; border: 0; border-radius: 0.75rem; }
+  @media (max-width: 640px) {
+    .showcase header { align-items: start; flex-direction: column; }
+    .controls { justify-content: start; }
+    .track { grid-auto-columns: 82%; cursor: auto; }
+    .stagger { transform: none; }
+    .lens-glass { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lens-glass, .controls button { transition: none; }
+    .track { cursor: auto; }
+    .controls button:hover, .controls button:focus-visible, .controls button:active { transform: none; }
+    .lens-glass { display: none; }
+  }
 </style>

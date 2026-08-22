@@ -1,6 +1,8 @@
 ---
+import { Image } from 'astro:assets'
 import PageLayout from '@/layouts/CommonPage.astro'
 import LanguageBadge from '@/components/blog/LanguageBadge.astro'
+import notesFieldStrip from '@/assets/field-notes/expansion-2/notes-field-strip.webp'
 
 const notes = [
   {
@@ -56,6 +58,16 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
       <p>未长成文章的观察、实验记录与工程判断。它们比 Blog 更短，但会保留问题的棱角。</p>
       <span>{String(notes.length).padStart(2, '0')} notes</span>
     </div>
+    <Image
+      src={notesFieldStrip}
+      alt=''
+      aria-hidden='true'
+      class='field-asset notes-field-strip'
+      widths={[560, 880, 1280]}
+      sizes='(min-width: 1024px) 42rem, 100vw'
+      loading='lazy'
+      decoding='async'
+    />
   </div>
 
   <div class='not-prose note-filters' aria-label='Filter notes by topic'>
@@ -134,6 +146,16 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
     margin-top: 0.5rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .notes-field-strip {
+    display: block;
+    width: min(100%, 46rem);
+    height: auto;
+    margin-top: 1.35rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
   }
 
   .eyebrow {
