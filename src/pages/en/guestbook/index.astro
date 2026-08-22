@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import GiscusGuestbook from '@/components/community/GiscusGuestbook.astro'
+import ResumePreview from '@/components/resume/ResumePreview.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+---
+
+<BaseLayout
+  lang='en-US'
+  meta={{
+    title: 'Guestbook · Lora',
+    description: 'Leave a public note about AI Agents, open-source building, projects, or writing. Messages are managed through GitHub Discussions.'
+  }}
+>
+  <Fragment slot='head'><CollectionPageJsonLd name='Guestbook · Lora' description='Leave a public note about AI Agents, open-source building, projects, or writing.' inLanguage='en-US' /></Fragment>
+  <main class='guestbook-page'>
+    <section class='guestbook-hero'>
+      <p>Field correspondence · Public guestbook</p>
+      <h1>A small note can still start the next build.</h1>
+      <p>This is a public space for responses to projects, writing, Agent systems, and current work. Sign in with GitHub to join the conversation.</p>
+      <div class='guestbook-links'>
+        <a href='/en/work'>Explore work <span aria-hidden='true'>↗</span></a>
+        <a href='/en/writing'>Read writing <span aria-hidden='true'>↗</span></a>
+        <ResumePreview lang='en-US' triggerLabel='Preview résumé' />
+      </div>
+    </section>
+    <GiscusGuestbook lang='en-US' />
+  </main>
+</BaseLayout>
+
+<style>
+  .guestbook-page { max-width: 58rem; margin: 0 auto; padding: clamp(2rem, 7vw, 5rem) 0 2rem; }
+  .guestbook-hero { max-width: 48rem; padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .guestbook-hero > p:first-child { margin: 0; color: hsl(var(--muted-foreground)); font-size: .62rem; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
+  .guestbook-hero h1 { margin: .8rem 0 0; font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: -.065em; line-height: .94; text-wrap: balance; }
+  .guestbook-hero > p:last-of-type { max-width: 58ch; margin: 1rem 0 0; color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .guestbook-links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.3rem; }
+  .guestbook-links > a { display: inline-flex; min-height: 2.35rem; align-items: center; gap: .35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .48rem .78rem; color: hsl(var(--foreground)); font-size: .76rem; font-weight: 630; text-decoration: none; }
+</style>

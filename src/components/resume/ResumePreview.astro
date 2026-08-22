@@ -1,0 +1,212 @@
+---
+interface Props {
+  lang?: 'zh-CN' | 'en-US'
+  triggerLabel?: string
+  triggerClass?: string
+}
+
+const { lang = 'zh-CN', triggerLabel, triggerClass = '' } = Astro.props
+const copy = lang === 'en-US'
+  ? {
+      trigger: triggerLabel ?? 'Preview résumé',
+      dialogLabel: 'Résumé preview',
+      close: 'Close preview',
+      open: 'Open PDF in a new tab',
+      download: 'Download PDF',
+      loading: 'The résumé will load only when this preview is opened.',
+      fallback: 'Your browser cannot embed PDFs. Open or download the original file instead.'
+    }
+  : {
+      trigger: triggerLabel ?? '在线预览简历',
+      dialogLabel: '简历在线预览',
+      close: '关闭预览',
+      open: '在新标签页打开 PDF',
+      download: '下载 PDF',
+      loading: '简历仅在打开预览后加载，不影响首页速度。',
+      fallback: '当前浏览器无法内嵌显示 PDF，可在新标签页打开或下载原件。'
+    }
+---
+
+<button class:list={['resume-preview-trigger', triggerClass]} type='button' data-resume-trigger aria-haspopup='dialog' aria-controls='resume-preview-dialog'>
+  {copy.trigger} <span aria-hidden='true'>↗</span>
+</button>
+
+<dialog id='resume-preview-dialog' class='resume-preview-dialog' aria-label={copy.dialogLabel} data-resume-dialog>
+  <div class='resume-preview-shell'>
+    <header>
+      <p>{copy.loading}</p>
+      <div class='resume-preview-actions'>
+        <a href='/resume.pdf' target='_blank' rel='noopener noreferrer'>{copy.open} <span aria-hidden='true'>↗</span></a>
+        <a href='/resume.pdf' download>{copy.download} <span aria-hidden='true'>↓</span></a>
+        <button type='button' data-resume-close>{copy.close} <span aria-hidden='true'>×</span></button>
+      </div>
+    </header>
+    <div class='resume-pdf-wrap'>
+      <iframe title={copy.dialogLabel} data-resume-pdf data-resume-pdf-src={`${import.meta.env.BASE_URL.replace(/\/?$/, '/') }resume.pdf`} loading='lazy'></iframe>
+      <p>{copy.fallback}</p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-resume-dialog]')
+  const trigger = document.querySelector<HTMLButtonElement>('[data-resume-trigger]')
+  const close = dialog?.querySelector<HTMLButtonElement>('[data-resume-close]')
+  const frame = dialog?.querySelector<HTMLIFrameElement>('[data-resume-pdf]')
+
+  trigger?.addEventListener('click', () => {
+    if (!dialog) return
+    if (frame && !frame.src) frame.src = `${frame.dataset.resumePdfSrc || '/resume.pdf'}#view=FitH`
+    dialog.showModal()
+    close?.focus()
+  })
+
+  close?.addEventListener('click', () => dialog?.close())
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close()
+  })
+  dialog?.addEventListener('close', () => trigger?.focus())
+</script>
+
+<style>
+  .resume-preview-trigger {
+    display: inline-flex;
+    min-height: 2.35rem;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.48rem 0.78rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font: inherit;
+    font-size: 0.76rem;
+    font-weight: 630;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 170ms ease, transform 170ms ease, background 170ms ease;
+  }
+
+  .resume-preview-trigger:hover,
+  .resume-preview-trigger:focus-visible {
+    border-color: hsl(var(--foreground) / 0.4);
+    background: hsl(var(--muted));
+    transform: translateY(-1px);
+  }
+
+  .resume-preview-dialog {
+    width: min(94vw, 72rem);
+    max-width: none;
+    height: min(92dvh, 58rem);
+    max-height: none;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 0;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    box-shadow: 0 32px 100px -44px hsl(var(--foreground) / 0.86);
+  }
+
+  .resume-preview-dialog::backdrop {
+    background: hsl(var(--foreground) / 0.52);
+    backdrop-filter: blur(5px);
+  }
+
+  .resume-preview-shell {
+    display: grid;
+    height: 100%;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .resume-preview-shell header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .resume-preview-shell header > p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+
+  .resume-preview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.35rem;
+  }
+
+  .resume-preview-actions a,
+  .resume-preview-actions button {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    gap: 0.25rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.32rem 0.55rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font: inherit;
+    font-size: 0.67rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .resume-preview-actions button {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+
+  .resume-pdf-wrap {
+    position: relative;
+    min-height: 0;
+    background: hsl(var(--muted));
+  }
+
+  .resume-pdf-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .resume-pdf-wrap p {
+    display: none;
+  }
+
+  @media (max-width: 680px) {
+    .resume-preview-dialog {
+      width: 100vw;
+      height: 100dvh;
+      border: 0;
+      border-radius: 0;
+    }
+
+    .resume-preview-shell header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .resume-preview-actions {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .resume-preview-trigger {
+      transition: none;
+    }
+
+    .resume-preview-trigger:hover,
+    .resume-preview-trigger:focus-visible {
+      transform: none;
+    }
+  }
+</style>

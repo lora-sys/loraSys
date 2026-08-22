@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import GiscusGuestbook from '@/components/community/GiscusGuestbook.astro'
+import ResumePreview from '@/components/resume/ResumePreview.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+---
+
+<BaseLayout
+  lang='zh-CN'
+  meta={{
+    title: '留言板 · Lora',
+    description: '在 Lora 的公开留言板留下对 AI Agent、开源构建、作品或文章的想法。留言通过 GitHub Discussions 公开管理。'
+  }}
+>
+  <Fragment slot='head'><CollectionPageJsonLd name='留言板 · Lora' description='在 Lora 的公开留言板留下对 AI Agent、开源构建、作品或文章的想法。' /></Fragment>
+  <main class='guestbook-page'>
+    <section class='guestbook-hero'>
+      <p>Field correspondence · 公开来信</p>
+      <h1>留言不必宏大，<br />但可以成为下一次构建的起点。</h1>
+      <p>这里保留对作品、文章、Agent 系统和正在构建内容的公开回应。使用 GitHub 登录后即可参与。</p>
+      <div class='guestbook-links'>
+        <a href='/projects'>浏览作品 <span aria-hidden='true'>↗</span></a>
+        <a href='/blog'>阅读写作 <span aria-hidden='true'>↗</span></a>
+        <ResumePreview triggerLabel='在线预览简历' />
+      </div>
+    </section>
+    <GiscusGuestbook />
+  </main>
+</BaseLayout>
+
+<style>
+  .guestbook-page { max-width: 58rem; margin: 0 auto; padding: clamp(2rem, 7vw, 5rem) 0 2rem; }
+  .guestbook-hero { max-width: 48rem; padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .guestbook-hero > p:first-child { margin: 0; color: hsl(var(--muted-foreground)); font-size: .62rem; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
+  .guestbook-hero h1 { margin: .8rem 0 0; font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: -.065em; line-height: .94; text-wrap: balance; }
+  .guestbook-hero > p:last-of-type { max-width: 58ch; margin: 1rem 0 0; color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .guestbook-links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.3rem; }
+  .guestbook-links > a { display: inline-flex; min-height: 2.35rem; align-items: center; gap: .35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .48rem .78rem; color: hsl(var(--foreground)); font-size: .76rem; font-weight: 630; text-decoration: none; }
+</style>

@@ -12,7 +12,9 @@ const zhToEn: Record<string, string> = {
   '/now': '/en/now',
   '/links': '/en/links',
   '/about': '/en/about',
-  '/contact': '/en/contact'
+  '/contact': '/en/contact',
+  '/guestbook': '/en/guestbook',
+  '/resume': '/en/resume'
 }
 
 const enToZh = Object.fromEntries(Object.entries(zhToEn).map(([zh, en]) => [en.replace(/\/$/, ''), zh]))
@@ -58,12 +60,16 @@ export const footerNavigation = (locale: SiteLocale) =>
         { title: 'Notes', href: '/notes' },
         { title: 'Lab', href: '/lab' },
         { title: 'Archive', href: '/archives' },
+        { title: 'Guestbook', href: '/en/guestbook' },
+        { title: 'Résumé', href: '/en/resume' },
         { title: 'RSS', href: '/rss.xml' }
       ]
     : [
         { title: '短笔记', href: '/notes' },
         { title: '实验室', href: '/lab' },
         { title: '归档', href: '/archives' },
+        { title: '留言板', href: '/guestbook' },
+        { title: '简历', href: '/resume' },
         { title: 'RSS', href: '/rss.xml' }
       ]
 

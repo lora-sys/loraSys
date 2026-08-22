@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import ResumePreview from '@/components/resume/ResumePreview.astro'
+import { resumeData } from '@/data/resume'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+
+const resume = resumeData.en
+---
+
+<BaseLayout
+  lang='en-US'
+  meta={{
+    title: 'Zhao Yanbing · AI Agent / LLM Application Engineering Résumé',
+    description: 'Résumé of Zhao Yanbing: AI Agent, LLM application, and full-stack engineering experience with verifiable public projects.'
+  }}
+>
+  <Fragment slot='head'><CollectionPageJsonLd name='Zhao Yanbing · AI Agent / LLM Application Engineering Résumé' description='Résumé of Zhao Yanbing: AI Agent, LLM application, and full-stack engineering experience with verifiable public projects.' inLanguage='en-US' /></Fragment>
+  <main class='resume-page'>
+    <section class='resume-hero' aria-labelledby='resume-title'>
+      <p>Candidate file · 2026</p>
+      <h1 id='resume-title'>{resume.name}</h1>
+      <p class='resume-title'>{resume.title}</p>
+      <p class='resume-summary'>{resume.summary}</p>
+      <ul class='resume-meta' aria-label='Contact details'>
+        <li>{resume.contact.location}</li>
+        <li><a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a></li>
+        <li>{resume.contact.availability}</li>
+      </ul>
+      <div class='resume-actions'>
+        <ResumePreview lang='en-US' triggerLabel='Preview PDF résumé' />
+        <a href='/resume.pdf' download>Download PDF <span aria-hidden='true'>↓</span></a>
+        <a href='/en/work'>Explore work <span aria-hidden='true'>↗</span></a>
+      </div>
+    </section>
+
+    <section aria-labelledby='resume-highlights'>
+      <p class='section-kicker'>Selected profile</p>
+      <h2 id='resume-highlights'>Engineering work with evidence.</h2>
+      <div class='resume-grid'>
+        <article class='resume-card'><h3>AI Agent applications</h3><p>Agent workflows, event contracts, evidence review, human approval, and transparent degradation paths for unreliable external model runs.</p></article>
+        <article class='resume-card'><h3>Full-stack systems</h3><p>TypeScript, React/Next.js, Go, Python, PostgreSQL, SSE/WebSocket, Docker, continuous checks, and end-to-end regression practice.</p></article>
+        <article class='resume-card'><h3>Public project evidence</h3><p>Agent Arena, TrustOps, and EcoMatrix connect implementation to tests, documentation, project source, and explicitly stated limits.</p></article>
+      </div>
+    </section>
+
+    <section aria-labelledby='resume-original'>
+      <p class='section-kicker'>Original file</p>
+      <h2 id='resume-original'>Read the full Chinese résumé.</h2>
+      <p class='resume-summary'>The official two-page PDF contains complete education, skills, internship experience, project records, competition honours, and direct links.</p>
+      <div class='resume-actions'>
+        <ResumePreview lang='en-US' triggerLabel='Open the original PDF' />
+        <a href='/resume.pdf' download>Download the original PDF <span aria-hidden='true'>↓</span></a>
+        <a href='/contact'>Contact <span aria-hidden='true'>→</span></a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .resume-page { max-width: 58rem; margin: 0 auto; padding: clamp(2rem, 7vw, 5rem) 0 2rem; }
+  .resume-hero { padding-bottom: clamp(2rem, 6vw, 4rem); border-bottom: 1px solid hsl(var(--border)); }
+  .resume-hero > p:first-child, .section-kicker { margin: 0; color: hsl(var(--muted-foreground)); font-size: .62rem; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
+  .resume-hero h1 { margin: .85rem 0 0; font-size: clamp(2.5rem, 9vw, 5rem); letter-spacing: -.07em; line-height: .9; }
+  .resume-title { margin: .65rem 0 0; font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 620; }
+  .resume-summary { max-width: 65ch; margin: 1rem 0 0; color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .resume-meta { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin: 1.3rem 0 0; padding: 0; color: hsl(var(--muted-foreground)); font-size: .76rem; list-style: none; }
+  .resume-meta li + li::before { margin-right: 1rem; color: hsl(var(--border)); content: '·'; }
+  .resume-meta a { color: inherit; text-underline-offset: .2rem; }
+  .resume-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.45rem; }
+  .resume-actions > a { display: inline-flex; min-height: 2.35rem; align-items: center; gap: .35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .48rem .78rem; color: hsl(var(--foreground)); font-size: .76rem; font-weight: 630; text-decoration: none; }
+  section { padding: clamp(2rem, 6vw, 3.5rem) 0; border-bottom: 1px solid hsl(var(--border)); }
+  section h2 { max-width: 20ch; margin: .7rem 0 1.4rem; font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: -.04em; }
+  .resume-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  .resume-card { padding: 1rem; border: 1px solid hsl(var(--border)); border-radius: .8rem; background: hsl(var(--card)); }
+  .resume-card h3 { margin: 0; font-size: 1rem; }
+  .resume-card p { margin: .45rem 0 0; color: hsl(var(--muted-foreground)); font-size: .82rem; line-height: 1.7; }
+  @media (max-width: 760px) { .resume-grid { grid-template-columns: 1fr; } }
+</style>

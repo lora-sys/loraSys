@@ -10,6 +10,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import SocialGrid from '@/components/contact/SocialGrid.astro'
 import ContributionGraph from '@/components/lora/ContributionGraph.astro'
 import CredentialsArchive from '@/components/about/CredentialsArchive.astro'
+import ResumePreview from '@/components/resume/ResumePreview.astro'
 
 const headings = [
   { depth: 2, slug: 'direction', text: 'Current direction' },
@@ -65,7 +66,9 @@ const openSourceProjects = projects.slice(0, 6)
   {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
   <div class='not-prose about-actions'>
     <Button title='Explore projects' href='/projects' variant='ahead' />
-    <a class='about-resume tactile-action' href='/resume.pdf' target='_blank' rel='noopener noreferrer'>Download résumé <span aria-hidden='true'>↗</span></a>
+    <ResumePreview triggerLabel='在线预览简历' />
+    <a class='about-resume tactile-action' href='/resume.pdf' download>下载 PDF <span aria-hidden='true'>↓</span></a>
+    <a class='about-resume tactile-action' href='/resume'>简历页面 <span aria-hidden='true'>↗</span></a>
     <Button title='Contact me' href='/contact' variant='ahead' />
   </div>
 

@@ -1,0 +1,145 @@
+---
+interface Props {
+  lang?: 'zh-CN' | 'en-US'
+}
+
+const { lang = 'zh-CN' } = Astro.props
+const copy = lang === 'en-US'
+  ? {
+      eyebrow: 'Public guestbook',
+      title: 'Leave a note for the next build.',
+      description: 'Messages are public and managed through GitHub Discussions. Sign in with GitHub to post, reply, or react.',
+      fallback: 'Loading the public guestbook…',
+      privacy: 'Your message will be published in the lora-sys/loraSys repository discussions.'
+    }
+  : {
+      eyebrow: 'Public guestbook · 公开留言板',
+      title: '留下一句话，给下一次构建。',
+      description: '留言公开保存在 GitHub Discussions。使用 GitHub 登录后，可以留言、回复或添加反应。',
+      fallback: '正在载入公开留言板…',
+      privacy: '留言会发布到 lora-sys/loraSys 仓库的公开 Discussions。'
+    }
+---
+
+<section class='guestbook-shell' aria-labelledby='guestbook-title'>
+  <header>
+    <p>{copy.eyebrow}</p>
+    <h2 id='guestbook-title'>{copy.title}</h2>
+    <p class='guestbook-description'>{copy.description}</p>
+  </header>
+
+  <div class='giscus-frame' aria-live='polite'>
+    <p class='giscus-loading'>{copy.fallback}</p>
+    <script
+      is:inline
+      src='https://giscus.app/client.js'
+      data-repo='lora-sys/loraSys'
+      data-repo-id='R_kgDORZoeSQ'
+      data-category='General'
+      data-category-id='DIC_kwDORZoeSc4C9UW7'
+      data-mapping='specific'
+      data-term='loraSys public guestbook'
+      data-strict='1'
+      data-reactions-enabled='1'
+      data-emit-metadata='0'
+      data-input-position='top'
+      data-theme='preferred_color_scheme'
+      data-lang={lang === 'en-US' ? 'en' : 'zh-CN'}
+      crossorigin='anonymous'
+      async
+    ></script>
+  </div>
+
+  <p class='guestbook-privacy'>{copy.privacy}</p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.giscus-frame').forEach((frame) => {
+    const observer = new MutationObserver(() => {
+      if (frame.querySelector('iframe.giscus-frame')) {
+        frame.querySelector('.giscus-loading')?.remove()
+        observer.disconnect()
+      }
+    })
+    observer.observe(frame, { childList: true, subtree: true })
+  })
+</script>
+
+<style>
+  .guestbook-shell {
+    position: relative;
+    isolation: isolate;
+    padding: clamp(1.2rem, 4vw, 2.25rem);
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    background:
+      linear-gradient(120deg, hsl(var(--primary) / 0.075), transparent 38%),
+      hsl(var(--card));
+    box-shadow: 0 26px 62px -52px hsl(var(--foreground) / 0.68);
+  }
+
+  .guestbook-shell::before {
+    position: absolute;
+    top: 0;
+    left: clamp(1.2rem, 4vw, 2.25rem);
+    width: min(11rem, 38%);
+    height: 2px;
+    background: hsl(var(--primary));
+    content: '';
+  }
+
+  .guestbook-shell header > p:first-child {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 720;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .guestbook-shell h2 {
+    max-width: 20ch;
+    margin: 0.8rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.35rem, 4vw, 2rem);
+    letter-spacing: -0.04em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .guestbook-description {
+    max-width: 60ch;
+    margin: 0.8rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.7;
+  }
+
+  .giscus-frame {
+    min-height: 12rem;
+    margin-top: 1.4rem;
+  }
+
+  .giscus-frame :global(.giscus) {
+    width: 100%;
+  }
+
+  .giscus-loading {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+  }
+
+  .guestbook-privacy {
+    margin: 1rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guestbook-shell {
+      scroll-behavior: auto;
+    }
+  }
+</style>

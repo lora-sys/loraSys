@@ -1,0 +1,130 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import ResumePreview from '@/components/resume/ResumePreview.astro'
+import { resumeData } from '@/data/resume'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+
+const resume = resumeData.zh
+---
+
+<BaseLayout
+  lang='zh-CN'
+  meta={{
+    title: '赵彦兵 · AI Agent / LLM 应用开发简历',
+    description: '赵彦兵的 AI Agent、LLM 应用与全栈工程简历：教育、技术能力、工作经历和可验证的项目实践。'
+  }}
+>
+  <Fragment slot='head'><CollectionPageJsonLd name='赵彦兵 · AI Agent / LLM 应用开发简历' description='赵彦兵的 AI Agent、LLM 应用与全栈工程简历：教育、技术能力、工作经历和可验证的项目实践。' /></Fragment>
+  <main class='resume-page'>
+    <section class='resume-hero' aria-labelledby='resume-title'>
+      <p>Candidate file · 2026</p>
+      <h1 id='resume-title'>{resume.name}</h1>
+      <p class='resume-title'>{resume.title}</p>
+      <p class='resume-summary'>{resume.summary}</p>
+      <ul class='resume-meta' aria-label='联系信息'>
+        <li>{resume.contact.location}</li>
+        <li><a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a></li>
+        <li>{resume.contact.availability}</li>
+      </ul>
+      <div class='resume-actions'>
+        <ResumePreview triggerLabel='在线预览 PDF 简历' />
+        <a href='/resume.pdf' download>下载 PDF <span aria-hidden='true'>↓</span></a>
+        <a href='/projects'>查看作品集 <span aria-hidden='true'>↗</span></a>
+      </div>
+    </section>
+
+    <section aria-labelledby='resume-education'>
+      <p class='section-kicker'>01 · Education</p>
+      <h2 id='resume-education'>教育与荣誉</h2>
+      <article class='resume-record'>
+        <div>
+          <h3>{resume.education.school}</h3>
+          <p>{resume.education.degree}</p>
+        </div>
+        <p>{resume.education.period}</p>
+      </article>
+      <ul class='honors'>
+        {resume.education.honors.map((item) => <li>{item}</li>)}
+      </ul>
+    </section>
+
+    <section aria-labelledby='resume-skills'>
+      <p class='section-kicker'>02 · Skills</p>
+      <h2 id='resume-skills'>专业能力</h2>
+      <div class='resume-grid'>
+        {resume.skills.map((skill) => (
+          <article class='resume-card'>
+            <h3>{skill.title}</h3>
+            <p>{skill.detail}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby='resume-experience'>
+      <p class='section-kicker'>03 · Experience</p>
+      <h2 id='resume-experience'>经历</h2>
+      <div class='resume-list'>
+        {resume.experience.map((item) => (
+          <article class='resume-record'>
+            <div>
+              <h3>{item.organization}</h3>
+              <p>{item.role}</p>
+              <p class='resume-detail'>{item.detail}</p>
+            </div>
+            <p>{item.period}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby='resume-projects'>
+      <p class='section-kicker'>04 · Selected work</p>
+      <h2 id='resume-projects'>重点项目</h2>
+      <div class='resume-list'>
+        {resume.projects.map((project) => (
+          <article class='resume-record'>
+            <div>
+              <h3><a href={project.href} target='_blank' rel='noopener noreferrer'>{project.name} <span aria-hidden='true'>↗</span></a></h3>
+              <p class='resume-detail'>{project.detail}</p>
+            </div>
+            <p>{project.period}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <aside class='resume-note'>
+      <p>完整两页 PDF 为正式版本，包含完整技能、项目与工作经历。</p>
+      <a href='/resume.pdf' download>下载正式简历 <span aria-hidden='true'>↓</span></a>
+    </aside>
+  </main>
+</BaseLayout>
+
+<style>
+  .resume-page { max-width: 58rem; margin: 0 auto; padding: clamp(2rem, 7vw, 5rem) 0 2rem; }
+  .resume-hero { padding-bottom: clamp(2rem, 6vw, 4rem); border-bottom: 1px solid hsl(var(--border)); }
+  .resume-hero > p:first-child, .section-kicker { margin: 0; color: hsl(var(--muted-foreground)); font-size: .62rem; font-weight: 720; letter-spacing: .14em; text-transform: uppercase; }
+  .resume-hero h1 { margin: .85rem 0 0; font-size: clamp(2.5rem, 9vw, 5rem); letter-spacing: -.07em; line-height: .9; }
+  .resume-title { margin: .65rem 0 0; font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 620; }
+  .resume-summary { max-width: 60ch; margin: 1rem 0 0; color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .resume-meta, .honors { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin: 1.3rem 0 0; padding: 0; color: hsl(var(--muted-foreground)); font-size: .76rem; list-style: none; }
+  .resume-meta li + li::before { margin-right: 1rem; color: hsl(var(--border)); content: '·'; }
+  .resume-meta a, .resume-record a, .resume-note a { color: inherit; text-underline-offset: .2rem; }
+  .resume-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.45rem; }
+  .resume-actions > a, .resume-note a { display: inline-flex; min-height: 2.35rem; align-items: center; gap: .35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .48rem .78rem; color: hsl(var(--foreground)); font-size: .76rem; font-weight: 630; text-decoration: none; }
+  section { padding: clamp(2rem, 6vw, 3.5rem) 0; border-bottom: 1px solid hsl(var(--border)); }
+  section h2 { margin: .7rem 0 1.4rem; font-size: clamp(1.4rem, 4vw, 2rem); letter-spacing: -.04em; }
+  .resume-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+  .resume-card { padding: 1rem; border: 1px solid hsl(var(--border)); border-radius: .8rem; background: hsl(var(--card)); }
+  .resume-card h3, .resume-record h3 { margin: 0; font-size: 1rem; }
+  .resume-card p, .resume-record p { margin: .45rem 0 0; color: hsl(var(--muted-foreground)); font-size: .82rem; line-height: 1.7; }
+  .resume-list { display: grid; gap: 0; }
+  .resume-record { display: grid; grid-template-columns: minmax(0, 1fr) minmax(8rem, auto); gap: 1rem; padding: 1.05rem 0; border-top: 1px solid hsl(var(--border)); }
+  .resume-record:first-child { border-top: 0; padding-top: 0; }
+  .resume-record > p { margin: 0; color: hsl(var(--muted-foreground)); font-size: .72rem; text-align: right; white-space: nowrap; }
+  .resume-detail { max-width: 70ch; }
+  .resume-note { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 2rem; padding: 1rem 0; }
+  .resume-note p { margin: 0; color: hsl(var(--muted-foreground)); font-size: .78rem; }
+  @media (max-width: 640px) { .resume-grid { grid-template-columns: 1fr; } .resume-record { grid-template-columns: 1fr; } .resume-record > p { text-align: left; } .resume-note { align-items: flex-start; flex-direction: column; } }
+</style>

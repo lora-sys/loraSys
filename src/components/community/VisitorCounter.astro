@@ -1,0 +1,83 @@
+---
+interface Props {
+  lang?: 'zh-CN' | 'en-US'
+  compact?: boolean
+}
+
+const { lang = 'zh-CN', compact = false } = Astro.props
+const copy = lang === 'en-US'
+  ? {
+      label: 'Public signal',
+      imageAlt: 'Public site visit count from GoatCounter'
+    }
+  : {
+      label: 'Public signal · 公开访问记录',
+      imageAlt: '来自 GoatCounter 的公开站点访问量'
+    }
+---
+
+<div class:list={['visitor-counter', { 'visitor-counter--compact': compact }]} data-visitor-counter>
+  <span class='visitor-counter-label'>{copy.label}</span>
+  <iframe
+    class='visitor-counter-frame'
+    src='https://lora-sys.goatcounter.com/counter/TOTAL.html?no_branding=1'
+    title={copy.imageAlt}
+    width='200'
+    height='60'
+    loading='eager'
+  ></iframe>
+</div>
+
+<script is:inline src='https://gc.zgo.at/count.js' data-goatcounter='https://lora-sys.goatcounter.com/count' async></script>
+
+<style>
+  .visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    min-width: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .visitor-counter-label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .visitor-counter-frame {
+    display: block;
+    width: 8.5rem;
+    height: 2.55rem;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0.35rem;
+    background: hsl(var(--background));
+  }
+
+  .visitor-counter--compact {
+    width: 7.5rem;
+    height: 2.25rem;
+    flex: 0 0 7.5rem;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .visitor-counter--compact .visitor-counter-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .visitor-counter--compact .visitor-counter-frame {
+    width: 7.5rem;
+    height: 2.25rem;
+  }
+</style>
