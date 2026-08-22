@@ -355,14 +355,17 @@ const languageFilters = [
   .tag-index ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.45rem 0.5rem;
     margin: 0;
     padding: 0;
     list-style: none;
   }
 
   .tag-index li a {
-    display: block;
+    display: inline-flex;
+    min-height: 1.75rem;
+    align-items: center;
+    padding-inline: 0.28rem;
     border-bottom: 1px solid transparent;
     color: hsl(var(--muted-foreground));
     font-size: 0.7rem;

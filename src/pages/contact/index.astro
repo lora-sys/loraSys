@@ -1,8 +1,10 @@
 ---
 import { primarySocialLinks, secondarySocialLinks } from '@/data/social'
 
+import { Image } from 'astro:assets'
 import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
+import contactCorrespondenceHero from '@/assets/field-notes/expansion/contact-correspondence-hero.webp'
 import SocialGrid from '@/components/contact/SocialGrid.astro'
 
 const email = 'lorasys@outlook.com'
@@ -15,6 +17,7 @@ const headings = [
 
 <PageLayout title='Contact' {headings}>
   <div class='not-prose contact-intro'>
+    <Image src={contactCorrespondenceHero} alt='' aria-hidden='true' class='contact-visual' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' />
     <span class='eyebrow'>Contact / Collaboration</span>
     <h2>Let&apos;s build something ambitious.</h2>
     <p>
@@ -121,16 +124,19 @@ const headings = [
     background:
       linear-gradient(145deg, transparent 42%, hsl(var(--primary) / 0.1)), hsl(var(--card));
   }
-  .contact-intro::after {
-    content: '@';
+  .contact-visual {
     position: absolute;
-    right: -0.04em;
-    bottom: -0.36em;
-    color: hsl(var(--foreground) / 0.035);
-    font-size: clamp(8rem, 25vw, 15rem);
-    font-weight: 700;
-    line-height: 1;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.82;
     pointer-events: none;
+  }
+  .contact-intro > :not(.contact-visual) {
+    position: relative;
+    z-index: 1;
   }
   .eyebrow {
     color: hsl(var(--muted-foreground));
@@ -280,6 +286,7 @@ const headings = [
     line-height: 1.55;
   }
   @media (max-width: 620px) {
+    .contact-visual { object-position: 68% center; opacity: 0.62; }
     .conversation-grid {
       grid-template-columns: 1fr;
       gap: 1.25rem;

@@ -1,6 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content'
+import { Image } from 'astro:assets'
 import { FormattedDate } from 'astro-pure/user'
+import agentSystemsMargin from '@/assets/field-notes/expansion/blog-agent-systems-margin.webp'
+import multimodalMargin from '@/assets/field-notes/expansion/blog-multimodal-margin.webp'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -10,9 +13,15 @@ interface Props {
 
 const { post, theme, whyRead } = Astro.props
 const postDate = post.data.updatedDate ?? post.data.publishDate
+const thematicVisuals = {
+  'Agent Systems': agentSystemsMargin,
+  'Multimodal Tools': multimodalMargin
+} as const
+const thematicVisual = thematicVisuals[theme as keyof typeof thematicVisuals]
 ---
 
 <article class='featured-writing'>
+  {thematicVisual && <Image src={thematicVisual} alt='' aria-hidden='true' class='theme-margin' widths={[320, 480, 640]} sizes='(min-width: 768px) 13rem, 10rem' loading='lazy' />}
   <div class='featured-meta'>
     <span>{theme}</span>
     <FormattedDate date={postDate} />
@@ -24,5 +33,5 @@ const postDate = post.data.updatedDate ?? post.data.publishDate
 </article>
 
 <style>
-  .featured-writing{position:relative;display:flex;min-height:17rem;flex-direction:column;overflow:hidden;border:1px solid hsl(var(--border));border-radius:.9rem;padding:clamp(1.1rem,2.6vw,1.5rem);background:linear-gradient(145deg,hsl(var(--card)),hsl(var(--muted) / .45));transition:border-color 200ms ease,transform 200ms ease,box-shadow 200ms ease}.featured-writing::after{position:absolute;inset:auto -15% -45% auto;width:11rem;height:11rem;border-radius:50%;background:radial-gradient(circle,hsl(173 60% 44% / .16),transparent 64%);content:'';pointer-events:none;transition:transform 260ms ease}.featured-writing:hover,.featured-writing:focus-within{border-color:hsl(173 60% 38% / .6);box-shadow:0 22px 48px -42px hsl(173 60% 22% / .8);transform:translateY(-3px)}.featured-writing:hover::after,.featured-writing:focus-within::after{transform:translate(-1rem,-1rem)}.featured-meta{display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:hsl(var(--muted-foreground));font-size:.63rem;font-weight:630;letter-spacing:.08em;text-transform:uppercase}.featured-meta span:first-child{color:hsl(173 60% 36%)}h3{max-width:21ch;margin:1.1rem 0 0;font-size:clamp(1.15rem,2vw,1.45rem);font-weight:610;letter-spacing:-.035em;line-height:1.2;text-wrap:balance}h3 a{color:hsl(var(--foreground));text-decoration:none}h3 a:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:4px}.description,.why-read{margin:0;color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.62}.description{display:-webkit-box;margin-top:.7rem;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3}.why-read{margin-top:auto;padding-top:1rem;border-top:1px solid hsl(var(--border) / .75)}.why-read b{display:block;margin-bottom:.25rem;color:hsl(var(--foreground));font-size:.62rem;font-weight:670;letter-spacing:.08em;text-transform:uppercase}.read-link{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.35rem;width:max-content;margin-top:1rem;color:hsl(var(--foreground));font-size:.7rem;font-weight:620;text-decoration:none}.read-link:hover,.read-link:focus-visible{text-decoration:underline;text-underline-offset:.24rem}@media(prefers-reduced-motion:reduce){.featured-writing,.featured-writing::after{transition:none}.featured-writing:hover,.featured-writing:focus-within{transform:none}}
+  .featured-writing{position:relative;display:flex;min-height:17rem;flex-direction:column;overflow:hidden;border:1px solid hsl(var(--border));border-radius:.9rem;padding:clamp(1.1rem,2.6vw,1.5rem);background:linear-gradient(145deg,hsl(var(--card)),hsl(var(--muted) / .45));transition:border-color 200ms ease,transform 200ms ease,box-shadow 200ms ease}.theme-margin{position:absolute;right:-2.5rem;bottom:-3rem;width:13rem;height:auto;opacity:.2;pointer-events:none;transform:rotate(-4deg)}.featured-writing>:not(.theme-margin){position:relative;z-index:1}.featured-writing::after{position:absolute;inset:auto -15% -45% auto;width:11rem;height:11rem;border-radius:50%;background:radial-gradient(circle,hsl(173 60% 44% / .16),transparent 64%);content:'';pointer-events:none;transition:transform 260ms ease}.featured-writing:hover,.featured-writing:focus-within{border-color:hsl(173 60% 38% / .6);box-shadow:0 22px 48px -42px hsl(173 60% 22% / .8);transform:translateY(-3px)}.featured-writing:hover::after,.featured-writing:focus-within::after{transform:translate(-1rem,-1rem)}.featured-meta{display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:hsl(var(--muted-foreground));font-size:.63rem;font-weight:630;letter-spacing:.08em;text-transform:uppercase}.featured-meta span:first-child{color:hsl(173 60% 36%)}h3{max-width:21ch;margin:1.1rem 0 0;font-size:clamp(1.15rem,2vw,1.45rem);font-weight:610;letter-spacing:-.035em;line-height:1.2;text-wrap:balance}h3 a{color:hsl(var(--foreground));text-decoration:none}h3 a:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:4px}.description,.why-read{margin:0;color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.62}.description{display:-webkit-box;margin-top:.7rem;overflow:hidden;-webkit-box-orient:vertical;-webkit-line-clamp:3}.why-read{margin-top:auto;padding-top:1rem;border-top:1px solid hsl(var(--border) / .75)}.why-read b{display:block;margin-bottom:.25rem;color:hsl(var(--foreground));font-size:.62rem;font-weight:670;letter-spacing:.08em;text-transform:uppercase}.read-link{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.35rem;width:max-content;margin-top:1rem;color:hsl(var(--foreground));font-size:.7rem;font-weight:620;text-decoration:none}.read-link:hover,.read-link:focus-visible{text-decoration:underline;text-underline-offset:.24rem}@media(max-width:640px){.theme-margin{right:-3rem;bottom:-3.5rem;width:11rem;opacity:.14}}@media(prefers-reduced-motion:reduce){.featured-writing,.featured-writing::after{transition:none}.theme-margin{transform:none}.featured-writing:hover,.featured-writing:focus-within{transform:none}}
 </style>

@@ -59,6 +59,7 @@ const nextPost = posts[postIndex + 1]
 const blogBase = `${basePath.replace(/\/$/, '')}/`
 const linkedRepositories = getProjectsForStory(`${blogBase}${id}`)
 const linkedProjects = projects.filter((project) => linkedRepositories.includes(project.repository))
+const denseToc = headings.length > 36
 ---
 
 <PageLayout
@@ -68,7 +69,17 @@ const linkedProjects = projects.filter((project) => linkedRepositories.includes(
   lang={lang}
   showSidebar={!!headings.length}
 >
-  {!!headings.length && <TOC {headings} slot='sidebar' />}
+  {!!headings.length && (
+    denseToc ? (
+      <details class='article-toc-condensed' slot='sidebar'>
+        <summary>
+          <span>Document map</span>
+          <small>{headings.length} sections</small>
+        </summary>
+        <TOC {headings} />
+      </details>
+    ) : <TOC {headings} slot='sidebar' />
+  )}
 
   <ArticleHero {data} {remarkPluginFrontmatter} slot='header'>
     <Fragment slot='description'>
@@ -209,6 +220,61 @@ const linkedProjects = projects.filter((project) => linkedRepositories.includes(
 </script>
 
 <style is:global>
+  .article-toc-condensed {
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 0.55rem;
+  }
+
+  .article-toc-condensed summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    list-style: none;
+    text-transform: uppercase;
+  }
+
+  .article-toc-condensed summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .article-toc-condensed summary::after {
+    content: '+';
+    color: hsl(var(--muted-foreground));
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .article-toc-condensed[open] summary::after {
+    content: '−';
+  }
+
+  .article-toc-condensed summary small {
+    margin-left: auto;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  .article-toc-condensed :global(nav) {
+    max-height: min(62vh, 36rem);
+    margin-top: 0.65rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .article-toc-condensed summary:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 4px;
+  }
+
   .build-context {
     margin-block: 2rem;
     border-block: 1px solid hsl(var(--border));

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import journeyFragment from '@/assets/field-notes/journey-fragment.webp'
+import hackathonFieldPass from '@/assets/field-notes/expansion/about-hackathon-field-pass.webp'
 import { hackathons, profile, projects } from '@/data/profile'
 import { socialLinks } from '@/data/social'
 
@@ -128,7 +129,10 @@ const openSourceProjects = projects.slice(0, 6)
   }
 
   <h2 id='hackathons'>Hackathons</h2>
-  <p>黑客松是我快速学习、验证产品假设并和不同背景的开发者协作的地方。</p>
+  <div class='not-prose hackathon-intro'>
+    <p>黑客松是我快速学习、验证产品假设并和不同背景的开发者协作的地方。</p>
+    <Image src={hackathonFieldPass} alt='' aria-hidden='true' class='hackathon-pass' widths={[320, 480, 640]} sizes='(min-width: 900px) 15rem, 36vw' loading='lazy' />
+  </div>
   <div class='not-prose timeline'>
     {
       hackathons.map((item) => (
@@ -332,6 +336,30 @@ const openSourceProjects = projects.slice(0, 6)
   .education b {
     font-weight: 400;
   }
+  .hackathon-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(7rem, 16vw, 11rem);
+    align-items: center;
+    gap: 1rem;
+    margin-block: 0.8rem 1.2rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 0.75rem;
+  }
+  .hackathon-intro p {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+  .hackathon-pass {
+    justify-self: end;
+    width: 100%;
+    max-width: 10.5rem;
+    height: auto;
+    opacity: 0.82;
+    transform: rotate(1.5deg);
+    pointer-events: none;
+  }
   .timeline {
     display: grid;
     gap: 0;
@@ -402,6 +430,8 @@ const openSourceProjects = projects.slice(0, 6)
     .project-index small {
       display: none;
     }
+    .hackathon-intro { grid-template-columns: minmax(0, 1fr) 6.5rem; }
+    .hackathon-pass { max-width: 6.5rem; opacity: 0.7; }
     .event-meta {
       display: grid;
       gap: 0;
@@ -417,7 +447,8 @@ const openSourceProjects = projects.slice(0, 6)
     .education:focus-visible,
     .about-resume:hover,
     .about-resume:focus-visible,
-    .journey-fragment {
+    .journey-fragment,
+    .hackathon-pass {
       transform: none;
     }
   }
