@@ -87,6 +87,13 @@ const fallbackMark = project.title
     height: 100%;
   }
 
+  :global(.project-card--lead) .project-media {
+    align-self: stretch;
+    height: auto;
+    min-height: 30rem;
+    aspect-ratio: unset;
+  }
+
   .project-media :global(img) {
     object-fit: var(--poster-fit, cover);
     object-position: var(--poster-position, center);
@@ -171,6 +178,14 @@ const fallbackMark = project.title
   @media (hover: hover) and (pointer: fine) {
     :global(.project-card:hover) .project-media :global(img) {
       transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0) scale(1.03);
+    }
+  }
+
+  @media (max-width: 780px) {
+    :global(.project-card--lead) .project-media {
+      min-height: 0;
+      height: auto;
+      aspect-ratio: 16 / 9;
     }
   }
 
