@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+import journeyFragment from '@/assets/field-notes/journey-fragment.webp'
 import { hackathons, profile, projects } from '@/data/profile'
 import { socialLinks } from '@/data/social'
 
@@ -47,6 +49,7 @@ const openSourceProjects = projects.slice(0, 6)
 
 <PageLayout title='About' {headings}>
   <div class='not-prose about-lead'>
+    <Image src={journeyFragment} alt='' aria-hidden='true' class='journey-fragment' widths={[360, 560, 720]} sizes='(min-width: 1024px) 18rem, 45vw' loading='lazy' />
     <span class='eyebrow'>{profile.role}</span>
     <p>我喜欢把还停留在讨论里的想法，推进成可以运行、可以体验、也可以继续演化的系统。</p>
     <div class='lead-meta'>
@@ -59,7 +62,7 @@ const openSourceProjects = projects.slice(0, 6)
   {profile.summary.map((paragraph) => <p>{paragraph}</p>)}
   <div class='not-prose about-actions'>
     <Button title='Explore projects' href='/projects' variant='ahead' />
-    <a class='about-resume' href='/resume.pdf' target='_blank' rel='noopener noreferrer'>Download résumé <span aria-hidden='true'>↗</span></a>
+    <a class='about-resume tactile-action' href='/resume.pdf' target='_blank' rel='noopener noreferrer'>Download résumé <span aria-hidden='true'>↗</span></a>
     <Button title='Contact me' href='/contact' variant='ahead' />
   </div>
 
@@ -88,6 +91,7 @@ const openSourceProjects = projects.slice(0, 6)
         const source = project.links.find((link) => link.type === 'source')
         return (
           <a
+            class='tactile-action'
             href={source?.href || '/projects'}
             target={source ? '_blank' : undefined}
             rel={source ? 'noopener noreferrer' : undefined}
@@ -164,9 +168,23 @@ const openSourceProjects = projects.slice(0, 6)
 
 <style>
   .about-lead {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     margin-bottom: 3rem;
     border-block: 1px solid hsl(var(--border));
     padding-block: clamp(1.3rem, 5vw, 2.2rem);
+  }
+  .journey-fragment {
+    position: absolute;
+    z-index: -1;
+    top: -2.8rem;
+    right: -3rem;
+    width: clamp(9rem, 26vw, 17rem);
+    height: auto;
+    opacity: 0.2;
+    transform: rotate(2.5deg);
+    pointer-events: none;
   }
   .eyebrow {
     color: hsl(var(--muted-foreground));
@@ -371,6 +389,7 @@ const openSourceProjects = projects.slice(0, 6)
     margin-block: 1.3rem 3rem;
   }
   @media (max-width: 600px) {
+    .journey-fragment { top: -1rem; right: -2.5rem; width: 10rem; opacity: 0.14; }
     .capability-list article {
       grid-template-columns: 1.5rem minmax(0, 1fr);
     }
@@ -397,7 +416,8 @@ const openSourceProjects = projects.slice(0, 6)
     .education:hover,
     .education:focus-visible,
     .about-resume:hover,
-    .about-resume:focus-visible {
+    .about-resume:focus-visible,
+    .journey-fragment {
       transform: none;
     }
   }

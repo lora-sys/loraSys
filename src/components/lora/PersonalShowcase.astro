@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets'
+import favoritesTicket from '@/assets/field-notes/favorites-ticket.webp'
 import ShowcaseCarousel from './ShowcaseCarousel.astro'
 import { anime, favorites } from '../../data/showcase'
 
@@ -30,6 +32,7 @@ const copy = isEnglish
 ---
 
 <section class='personal-showcase' aria-labelledby='personal-signals-title'>
+  <Image src={favoritesTicket} alt='' aria-hidden='true' class='favorites-ticket' widths={[240, 360, 520]} sizes='(min-width: 1024px) 15rem, 26vw' loading='lazy' />
   <header class='personal-heading'>
     <p>{copy.eyebrow}</p>
     <h2 id='personal-signals-title'>{copy.title}</h2>
@@ -53,9 +56,24 @@ const copy = isEnglish
 
 <style>
   .personal-showcase {
+    position: relative;
+    isolation: isolate;
     display: grid;
     gap: clamp(2.5rem, 6vw, 4.5rem);
     scroll-margin-top: 5rem;
+  }
+
+  .favorites-ticket {
+    position: absolute;
+    z-index: -1;
+    top: -1.4rem;
+    right: clamp(-1rem, -5vw, -3rem);
+    width: clamp(7rem, 16vw, 12rem);
+    height: auto;
+    opacity: 0.2;
+    transform: rotate(4deg);
+    filter: saturate(0.9);
+    pointer-events: none;
   }
 
   .personal-heading {
@@ -90,5 +108,20 @@ const copy = isEnglish
     color: hsl(var(--muted-foreground));
     font-size: 0.82rem;
     line-height: 1.7;
+  }
+
+  @media (max-width: 720px) {
+    .favorites-ticket {
+      top: -0.8rem;
+      right: -0.5rem;
+      width: 7rem;
+      opacity: 0.14;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .favorites-ticket {
+      transform: none;
+    }
   }
 </style>

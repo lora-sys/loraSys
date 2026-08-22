@@ -15,6 +15,26 @@
   --input: 240 5.9% 90%;
   --ring: 240 5.9% 10%;
   --radius: 0.5rem;
+
+  /* Lora Field Notes: tactile, editorial and intentionally low-tech. */
+  --field-paper: 42 50% 97%;
+  --field-ink: 28 10% 19%;
+  --field-teal: 173 52% 42%;
+  --field-moss: 76 25% 38%;
+  --field-clay: 16 56% 52%;
+  --field-indigo: 219 27% 35%;
+  --motion-quick: 140ms;
+  --motion-base: 190ms;
+  --motion-story: 280ms;
+  --motion-spring: cubic-bezier(0.23, 1, 0.32, 1);
+  --tactile-press: 0.97;
+  --field-shadow: 0 18px 44px -34px hsl(var(--foreground) / 0.46);
+}
+
+.dark {
+  --field-paper: 240 13% 10%;
+  --field-ink: 40 24% 92%;
+  --field-shadow: 0 18px 44px -30px hsl(0 0% 0% / 0.65);
 }
 .dark {
   /* Primary */
@@ -45,6 +65,13 @@ html {
 }
 
 /* Global */
+body {
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(circle at 12% 8%, hsl(var(--field-teal) / 0.028), transparent 28rem),
+    radial-gradient(circle at 88% 78%, hsl(var(--field-clay) / 0.025), transparent 24rem);
+}
+
 a {
   transition: color 0.2s ease;
   &:hover {
@@ -61,12 +88,40 @@ a {
   cursor: pointer;
 }
 
+/* Use this class when an action needs a small, honest tactile response. */
+.tactile-action {
+  transition:
+    transform var(--motion-quick) var(--motion-spring),
+    box-shadow var(--motion-base) ease,
+    background-color var(--motion-base) ease,
+    border-color var(--motion-base) ease;
+}
+
+.tactile-action:active {
+  transform: scale(var(--tactile-press));
+}
+
+:where(a, button, summary, [role='button']):focus-visible {
+  box-shadow: 0 0 0 4px hsl(var(--field-teal) / 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tactile-action:hover {
+    box-shadow: var(--field-shadow);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  a {
+  a,
+  .tactile-action {
     transition: none;
+  }
+
+  .tactile-action:active {
+    transform: none;
   }
 }

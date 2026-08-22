@@ -21,7 +21,7 @@ const headings = [
       I enjoy conversations about AI agents, developer infrastructure, open-source work, and product
       ideas with a real problem behind them. A little context goes a long way.
     </p>
-    <a class='mail-cta' href={`mailto:${email}`}>
+    <a class='mail-cta tactile-action' href={`mailto:${email}`}>
       <Icon name='email' class='size-4' /> Write an email <span aria-hidden='true'>→</span>
     </a>
   </div>
@@ -39,7 +39,7 @@ const headings = [
       <span>Email address</span>
       <strong>{email}</strong>
     </div>
-    <button type='button' data-copy-email={email} aria-describedby='copy-status'>
+    <button class='tactile-action' type='button' data-copy-email={email} aria-describedby='copy-status'>
       <Icon name='document' class='size-4' />
       <span>Copy email</span>
     </button>
@@ -50,7 +50,7 @@ const headings = [
       <span class='eyebrow'>Keep up with the work</span>
       <strong>Read new writing and project notes when they ship.</strong>
     </div>
-    <a href='/rss.xml' data-interaction='subscribe_feed'>Subscribe via RSS <span aria-hidden='true'>↗</span></a>
+    <a class='tactile-action' href='/rss.xml' data-interaction='subscribe_feed'>Subscribe via RSS <span aria-hidden='true'>↗</span></a>
   </div>
 
   <h2 id='good-conversations'>Good conversations</h2>

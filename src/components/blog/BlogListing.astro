@@ -2,8 +2,10 @@
 import type { Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
+import { Image } from 'astro:assets'
 import { Paginator } from 'astro-pure/components/pages'
 import { Button, Icon } from 'astro-pure/user'
+import readingMarker from '@/assets/field-notes/reading-marker.webp'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 import BlogPostCard from './BlogPostCard.astro'
@@ -76,6 +78,7 @@ const languageFilters = [
   <Button title='Back' href='/' variant='back' />
   <main class='blog-shell mt-6 lg:mt-10'>
     <header id='content-header' class='animate editorial-header'>
+      <Image src={readingMarker} alt='' aria-hidden='true' class='reading-marker' widths={[720, 1152, 1536]} sizes='(min-width: 1024px) 34rem, 72vw' loading='lazy' />
       <div>
         <p class='eyebrow'>Writing / 写作</p>
         <h1>把正在构建的东西，写成可复查的笔记。</h1>
@@ -89,7 +92,7 @@ const languageFilters = [
     <nav class='language-filter animate' aria-label='Filter posts by language'>
       {
         languageFilters.map(({ title, href, active, lang }) => (
-          <a href={href} lang={lang} aria-current={active ? 'page' : undefined}>
+          <a class='tactile-action' href={href} lang={lang} aria-current={active ? 'page' : undefined}>
             {title}
           </a>
         ))
@@ -97,9 +100,9 @@ const languageFilters = [
     </nav>
 
     <nav class='reading-paths animate' aria-label='Writing destinations'>
-      <a href='/en/writing' hreflang='en-US'>English originals ↗</a>
-      <a href='/notes'>短笔记 Notes ↗</a>
-      <a href='/archives'>完整归档 Archive ↗</a>
+      <a class='tactile-action' href='/en/writing' hreflang='en-US'>English originals ↗</a>
+      <a class='tactile-action' href='/notes'>短笔记 Notes ↗</a>
+      <a class='tactile-action' href='/archives'>完整归档 Archive ↗</a>
     </nav>
 
     {
@@ -163,12 +166,26 @@ const languageFilters = [
 
 <style>
   .editorial-header {
+    position: relative;
+    isolation: isolate;
     display: flex;
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
     padding-block: 1rem 2rem;
     border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .reading-marker {
+    position: absolute;
+    z-index: -1;
+    right: -1.5rem;
+    bottom: -1.2rem;
+    width: min(42%, 31rem);
+    height: auto;
+    opacity: 0.2;
+    transform: rotate(-1.5deg);
+    pointer-events: none;
   }
 
   .eyebrow {
@@ -371,6 +388,7 @@ const languageFilters = [
   }
 
   @media (max-width: 720px) {
+    .reading-marker { right: -0.5rem; width: 58%; opacity: 0.14; }
     .featured-heading { align-items: start; flex-direction: column; }
     .featured-heading > p { text-align: left; }
     .featured-grid { grid-template-columns: 1fr; }
@@ -400,8 +418,7 @@ const languageFilters = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .language-filter a {
-      transition: none;
-    }
+    .language-filter a { transition: none; }
+    .reading-marker { transform: none; }
   }
 </style>

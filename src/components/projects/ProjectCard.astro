@@ -28,6 +28,10 @@ const interactionLabel = {
   'Glassbox-Agent-Harness': 'TRACE RUN',
   AgentArena: 'JUDGE VERDICT',
   'ai-engineering-harness': 'MERGE LOOP',
+  'nano-vllm-interactive-guide': 'STEP THROUGH',
+  trandingos: 'MARKET VIEW',
+  'packify-skill': 'PACK A FORM',
+  mossguard: 'VERIFY INTENT',
   'free-vision-skill': 'COMPILE VEP',
   ecomatrix: 'SIMULATION VIEW',
   'second-brain': 'LOCAL VAULT',
@@ -155,7 +159,7 @@ const filterAttributes = filterable
         {
           website && (
             <a
-              class='primary'
+              class='primary tactile-action'
               href={website.href}
               target='_blank'
               rel='noopener noreferrer'
@@ -170,7 +174,7 @@ const filterAttributes = filterable
         {
           contribution && (
             <a
-              class='contribution-action'
+              class='contribution-action tactile-action'
               href={contribution.href}
               target='_blank'
               rel='noopener noreferrer'
@@ -184,6 +188,7 @@ const filterAttributes = filterable
         {
           source && (
             <a
+              class='tactile-action'
               href={source.href}
               target='_blank'
               rel='noopener noreferrer'
@@ -373,28 +378,9 @@ const filterAttributes = filterable
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .project-card--magic .project-actions {
-      opacity: 0.68;
-      transform: translateY(0.3rem);
-      transition: opacity 160ms ease, transform 160ms ease;
-    }
-
-    .project-card--magic:hover .project-actions,
-    .project-card--magic:focus-within .project-actions {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .project-card--magic {
-      transform: perspective(960px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg));
-      transform-style: preserve-3d;
-    }
-
     .project-card--magic:hover,
     .project-card--magic:focus-within {
-      transform: perspective(960px) rotateX(var(--tilt-y, 0deg)) rotateY(var(--tilt-x, 0deg)) translateY(-4px);
+      transform: translateY(-4px);
     }
   }
 
@@ -674,7 +660,6 @@ const filterAttributes = filterable
     .project-card,
     .project-card--magic::after,
     .open-case-label,
-    .project-actions,
     .project-actions a {
       transition: none;
     }
