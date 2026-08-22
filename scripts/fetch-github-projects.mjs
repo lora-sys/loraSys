@@ -20,6 +20,9 @@ const explicitlyExcluded = new Map([
   ['fastgithub', 'README-only placeholder with no committed implementation.']
 ])
 
+/** Repositories verified by the portfolio owner that must remain project-visible despite delayed GitHub size metadata. */
+const explicitlyIncluded = new Set(['skills'])
+
 const featuredRanks = new Map([
   ['glassbox-agent-harness', 1],
   ['agentarena', 2],
@@ -46,7 +49,8 @@ const curatedPosters = new Map([
   ['nano-vllm-interactive-guide', { kind: 'generated', sourceUrl: 'local://product-nano-vllm.webp', localFile: 'product-nano-vllm.webp' }],
   ['trandingos', { kind: 'generated', sourceUrl: 'local://product-trading-os.webp', localFile: 'product-trading-os.webp' }],
   ['packify-skill', { kind: 'generated', sourceUrl: 'local://product-packify.webp', localFile: 'product-packify.webp' }],
-  ['mossguard', { kind: 'generated', sourceUrl: 'local://product-mossguard.webp', localFile: 'product-mossguard.webp' }]
+  ['mossguard', { kind: 'generated', sourceUrl: 'local://product-mossguard.webp', localFile: 'product-mossguard.webp' }],
+  ['skills', { kind: 'generated', sourceUrl: 'local://product-lora-skills.webp', localFile: 'product-lora-skills.webp' }]
 ])
 
 /** Explicitly curated external contribution. It is marked as External rather than being represented as a lora-sys-owned repository. */
@@ -110,6 +114,10 @@ const summaryOverrides = new Map([
   [
     'packify-skill',
     'An image-to-collectible skill that turns a supplied subject into a faithful, commercially believable packaged object.'
+  ],
+  [
+    'skills',
+    '一个可安装的个人 Agent Skills 集合，覆盖个人站发布、AI 工程、内容表达与开源工作流，可通过 npx skills add 安装到 Codex 等兼容 Agent。'
   ]
 ])
 
@@ -129,7 +137,8 @@ const titleOverrides = new Map([
   ['ui-aesthetic-improve', 'UI Aesthetic Improve'],
   ['init-codebase', 'Init Codebase'],
   ['neetcode-submissions', 'NeetCode Submissions'],
-  ['lora-skills', 'Lora Skills'],
+  ['lora-skills', 'Marvis Skills'],
+  ['skills', 'Lora Skills'],
   ['research-assistant-skill', 'Research Assistant Skill'],
   ['humanize-write', 'Humanize Write'],
   ['node-base', 'Node Base'],
@@ -518,6 +527,7 @@ async function ensurePoster(repository, readme, cachedPoster) {
 }
 
 function exclusionReason(repository) {
+  if (explicitlyIncluded.has(repository.name.toLowerCase())) return null
   if (repository.fork) {
     return 'Forked repository; excluded to avoid presenting upstream work as original.'
   }
@@ -528,6 +538,8 @@ function exclusionReason(repository) {
 }
 
 function categoriesFor(repository) {
+  const nameKey = repository.name.toLowerCase()
+  if (nameKey === 'skills') return ['Open Source', 'AI Agents', 'Tools']
   const value =
     `${repository.name} ${repository.description ?? ''} ${(repository.topics ?? []).join(' ')}`.toLowerCase()
   const categories = ['Open Source']
