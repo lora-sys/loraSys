@@ -61,8 +61,16 @@ const resume = resumeData.zh
       </div>
     </section>
 
+    <section aria-labelledby='resume-strengths'>
+      <p class='section-kicker'>03 · Strengths</p>
+      <h2 id='resume-strengths'>个人优势</h2>
+      <ol class='strengths'>
+        {resume.strengths.map((strength) => <li>{strength}</li>)}
+      </ol>
+    </section>
+
     <section aria-labelledby='resume-experience'>
-      <p class='section-kicker'>03 · Experience</p>
+      <p class='section-kicker'>04 · Experience</p>
       <h2 id='resume-experience'>经历</h2>
       <div class='resume-list'>
         {resume.experience.map((item) => (
@@ -79,7 +87,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-projects'>
-      <p class='section-kicker'>04 · Selected work</p>
+      <p class='section-kicker'>05 · Selected work</p>
       <h2 id='resume-projects'>重点项目</h2>
       <div class='resume-list'>
         {resume.projects.map((project) => (
@@ -109,6 +117,9 @@ const resume = resumeData.zh
   .resume-title { margin: .65rem 0 0; font-size: clamp(1rem, 3vw, 1.35rem); font-weight: 620; }
   .resume-summary { max-width: 60ch; margin: 1rem 0 0; color: hsl(var(--muted-foreground)); line-height: 1.8; }
   .resume-meta, .honors { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin: 1.3rem 0 0; padding: 0; color: hsl(var(--muted-foreground)); font-size: .76rem; list-style: none; }
+  .strengths { display: grid; gap: .85rem; max-width: 70ch; margin: 0; padding: 0; list-style: none; counter-reset: strength; }
+  .strengths li { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); gap: .75rem; align-items: start; color: hsl(var(--muted-foreground)); font-size: .88rem; line-height: 1.75; counter-increment: strength; }
+  .strengths li::before { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border: 1px solid hsl(173 60% 42% / .38); border-radius: 50%; background: hsl(173 60% 42% / .08); color: hsl(173 60% 32%); content: '0' counter(strength); font-size: .62rem; font-weight: 760; line-height: 1; }
   .resume-meta li + li::before { margin-right: 1rem; color: hsl(var(--border)); content: '·'; }
   .resume-meta a, .resume-record a, .resume-note a { color: inherit; text-underline-offset: .2rem; }
   .resume-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.45rem; }

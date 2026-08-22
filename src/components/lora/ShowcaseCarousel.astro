@@ -45,6 +45,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
   data-drift-active={isEnglish ? 'Drifting' : '正在巡游'}
   data-drift-paused={isEnglish ? 'Paused' : '已暂停'}
   data-drift-waiting={isEnglish ? 'Waiting' : '等待巡游'}
+  aria-roledescription='carousel'
 >
   <header>
     <div>
@@ -69,7 +70,8 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       </button>
     </div>
   </header>
-  <div class='track' tabindex='0' data-track aria-label={title}>
+  <p id={`${id}-carousel-instructions`} class='sr-only'>{isEnglish ? 'Use the previous and next controls, or the left and right arrow keys, to browse this archive. Manual browsing pauses the drift.' : '可使用上一张、下一张控制，或左右方向键浏览档案；手动浏览会暂停巡游。'}</p>
+  <div class='track' tabindex='0' data-track aria-label={title} aria-describedby={`${id}-carousel-instructions`}>
     {
       items.map((item, i) => (
         <article class:list={['magic-card', { stagger: i % 2 }]} data-magic>
@@ -107,7 +109,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     }
   </div>
   <div class='carousel-meta'>
-    <p data-index aria-live='polite'>1 / {items.length}</p>
+    <p data-index aria-live='off'>1 / {items.length}</p>
     <div class='progress' aria-hidden='true'><i data-progress></i></div>
   </div>
   {
@@ -158,6 +160,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     let startX = 0
     let startLeft = 0
     let dragged = false
+    let lastDialogTrigger: HTMLElement | null = null
 
     const move = (direction: number, behavior: ScrollBehavior = reducedMotion.matches ? 'auto' : 'smooth') => {
       track.scrollBy({ left: direction * Math.min(track.clientWidth * 0.82, 420), behavior })
@@ -170,6 +173,14 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       prev.disabled = track.scrollLeft < 2
       next.disabled = track.scrollLeft >= max - 2
       index.textContent = `${Math.min(itemCount, Math.max(1, Math.round(ratio * (itemCount - 1)) + 1))} / ${itemCount}`
+    }
+
+    const announceIndex = () => {
+      window.setTimeout(() => {
+        update()
+        index.setAttribute('aria-live', 'polite')
+        window.setTimeout(() => index.setAttribute('aria-live', 'off'), 700)
+      }, reducedMotion.matches ? 0 : 320)
     }
 
     const driftDelay = () => (coarsePointer.matches ? mobileDelay : delay)
@@ -242,21 +253,25 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     prev.addEventListener('click', () => {
       pauseForInput()
       move(-1)
+      announceIndex()
     })
     next.addEventListener('click', () => {
       pauseForInput()
       move(1)
+      announceIndex()
     })
     track.addEventListener('keydown', (event) => {
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
         pauseForInput()
         move(-1)
+        announceIndex()
       }
       if (event.key === 'ArrowRight') {
         event.preventDefault()
         pauseForInput()
         move(1)
+        announceIndex()
       }
     })
     track.addEventListener('scroll', update, { passive: true })
@@ -325,6 +340,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       trigger.addEventListener('click', (event) => {
         event.preventDefault()
         pauseForInput()
+        lastDialogTrigger = trigger
         if (!dialog) return
         dialog.querySelector('iframe')!.src = trigger.dataset.spotify!
         dialog.querySelector('[data-spotify-heading]')!.textContent =
@@ -336,6 +352,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     dialog?.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close()
     })
+    dialog?.addEventListener('close', () => lastDialogTrigger?.focus())
 
     update()
     updatePlaybackControl()
@@ -422,6 +439,8 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
   @media (max-width: 640px) {
     .showcase header { align-items: start; flex-direction: column; }
     .controls { justify-content: start; }
+    .controls button { position: relative; }
+    .controls button::after { position: absolute; inset: -0.22rem; content: ''; }
     .drift-state { min-height: 1.8rem; }
     .track { grid-auto-columns: 82%; cursor: auto; }
     .stagger { transform: none; }

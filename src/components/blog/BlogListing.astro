@@ -107,11 +107,14 @@ const languageFilters = [
       }
     </nav>
 
-    <nav class='reading-paths animate' aria-label='Writing destinations'>
-      <a class='tactile-action' href='/en/writing' hreflang='en-US'>English originals ↗</a>
-      <a class='tactile-action' href='/notes'>短笔记 Notes ↗</a>
-      <a class='tactile-action' href='/archives'>完整归档 Archive ↗</a>
-    </nav>
+    <details class='writing-routes animate'>
+      <summary><span>更多阅读路径</span><span aria-hidden='true'>+</span></summary>
+      <nav aria-label='More writing destinations'>
+        <a class='tactile-action' href='/en/writing' hreflang='en-US'>English originals ↗</a>
+        <a class='tactile-action' href='/notes'>短笔记 Notes ↗</a>
+        <a class='tactile-action' href='/archives'>完整归档 Archive ↗</a>
+      </nav>
+    </details>
 
     {
       featuredForView.length > 0 && (
@@ -131,42 +134,46 @@ const languageFilters = [
       page.data.length === 0 ? (
         <p class='empty-state'>No posts in this language yet.</p>
       ) : (
-        <div class='content-grid'>
-          <section aria-label={`${languageTitle} post list`} class='animate' id='content'>
-            <div class='list-heading'>
-              <span>
-                More notes · Page {page.currentPage} · Showing {page.data.length} of {collectionsCount}
-              </span>
-              <a href='/archives' data-astro-prefetch>
-                Browse archives →
-              </a>
-            </div>
-            <ul class='post-list'>
-              {page.data.map((post) => (
-                <BlogPostCard {post} />
-              ))}
-            </ul>
-            <Paginator {...paginationProps} />
-          </section>
+        <details class='all-notes animate'>
+          <summary>
+            <span>继续浏览全部文章</span>
+            <small>第 {page.currentPage} 页 · {page.data.length} / {collectionsCount}</small>
+          </summary>
+          <div class='all-notes-body'>
+            <div class='content-grid'>
+              <section aria-label={`${languageTitle} post list`} id='content'>
+                <div class='list-heading'>
+                  <span>按时间浏览完整文章流</span>
+                  <a href='/archives' data-astro-prefetch>完整归档 →</a>
+                </div>
+                <ul class='post-list'>
+                  {page.data.map((post) => (
+                    <BlogPostCard {post} />
+                  ))}
+                </ul>
+                <Paginator {...paginationProps} />
+              </section>
 
-          {!!uniqueTags.length && (
-            <aside class='animate tag-index' aria-labelledby='tag-index-title'>
-              <h2 id='tag-index-title'>
-                <Icon name='tag-2' /> Archive themes
-              </h2>
-              <ul>
-                {uniqueTags.slice(0, 50).map((tag) => (
-                  <li>
-                    <a href={`/tags/${tag}`}>{tag}</a>
-                  </li>
-                ))}
-              </ul>
-              <a class='all-tags' href='/tags' data-astro-prefetch>
-                All topics →
-              </a>
-            </aside>
-          )}
-        </div>
+              {!!uniqueTags.length && (
+                <aside class='tag-index' aria-labelledby='tag-index-title'>
+                  <h2 id='tag-index-title'>
+                    <Icon name='tag-2' /> Archive themes
+                  </h2>
+                  <ul>
+                    {uniqueTags.slice(0, 50).map((tag) => (
+                      <li>
+                        <a href={`/tags/${tag}`}>{tag}</a>
+                      </li>
+                    ))}
+                  </ul>
+                  <a class='all-tags' href='/tags' data-astro-prefetch>
+                    All topics →
+                  </a>
+                </aside>
+              )}
+            </div>
+          </div>
+        </details>
       )
     }
   </main>
@@ -276,7 +283,43 @@ const languageFilters = [
     gap: 1rem;
   }
 
-  .reading-paths{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.75rem}.reading-paths a{border:1px solid hsl(var(--border));border-radius:999px;padding:.4rem .62rem;color:hsl(var(--muted-foreground));font-size:.67rem;text-decoration:none;transition:background 160ms ease,color 160ms ease}.reading-paths a:hover,.reading-paths a:focus-visible{background:hsl(var(--muted));color:hsl(var(--foreground))}.language-filter{
+  .writing-routes,
+  .all-notes {
+    border-block: 1px solid hsl(var(--border));
+  }
+  .writing-routes {
+    margin-top: 0.75rem;
+  }
+  .writing-routes summary,
+  .all-notes summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    list-style: none;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    font-weight: 620;
+  }
+  .writing-routes summary::-webkit-details-marker,
+  .all-notes summary::-webkit-details-marker { display: none; }
+  .writing-routes summary { padding-block: 0.65rem; }
+  .writing-routes summary > span:last-child {
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    transition: transform 160ms ease;
+  }
+  .writing-routes[open] summary > span:last-child { transform: rotate(45deg); }
+  .writing-routes nav { display: flex; flex-wrap: wrap; gap: 0.45rem; padding: 0 0 0.75rem; }
+  .writing-routes a { border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 0.4rem 0.62rem; color: hsl(var(--muted-foreground)); font-size: 0.67rem; text-decoration: none; transition: background 160ms ease,color 160ms ease; }
+  .writing-routes a:hover,.writing-routes a:focus-visible{background:hsl(var(--muted));color:hsl(var(--foreground))}
+  .all-notes { margin-top: clamp(3.5rem, 8vw, 6rem); }
+  .all-notes summary { padding-block: 1rem; color: hsl(var(--foreground)); }
+  .all-notes summary > span { font-size: clamp(1.1rem, 2vw, 1.35rem); letter-spacing: -0.025em; }
+  .all-notes summary small { color: hsl(var(--muted-foreground)); font-size: 0.68rem; font-weight: 500; }
+  .all-notes-body { padding-block: 0.65rem 0.2rem; }
+  .language-filter{
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -429,7 +472,9 @@ const languageFilters = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .language-filter a { transition: none; }
+    .language-filter a,
+    .writing-routes a,
+    .writing-routes summary > span:last-child { transition: none; }
     .reading-marker { transform: none; }
   }
 </style>

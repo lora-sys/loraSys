@@ -8,24 +8,37 @@ const { lang = 'zh-CN', compact = false } = Astro.props
 const copy = lang === 'en-US'
   ? {
       label: 'Public signal',
-      imageAlt: 'Public site visit count from GoatCounter'
+      imageAlt: 'Public site visit count from GoatCounter',
+      openCounter: 'Open the public GoatCounter page'
     }
   : {
       label: 'Public signal · 公开访问记录',
-      imageAlt: '来自 GoatCounter 的公开站点访问量'
+      imageAlt: '来自 GoatCounter 的公开站点访问量',
+      openCounter: '打开 GoatCounter 公开统计页'
     }
 ---
 
 <div class:list={['visitor-counter', { 'visitor-counter--compact': compact }]} data-visitor-counter>
   <span class='visitor-counter-label'>{copy.label}</span>
-  <iframe
-    class='visitor-counter-frame'
-    src='https://lora-sys.goatcounter.com/counter/TOTAL.html?no_branding=1'
-    title={copy.imageAlt}
-    width='200'
-    height='60'
-    loading='eager'
-  ></iframe>
+  <div class='visitor-counter-total'>
+    <iframe
+      class='visitor-counter-frame'
+      src='https://lora-sys.goatcounter.com/counter/TOTAL.html?no_branding=1'
+      title={copy.imageAlt}
+      width='120'
+      height='36'
+      style='width:7.5rem;height:2.25rem;min-width:7.5rem;min-height:2.25rem'
+      loading='eager'
+    ></iframe>
+    <a
+      class='visitor-counter-link tactile-action'
+      href='https://lora-sys.goatcounter.com/counter/TOTAL.html?no_branding=1'
+      target='_blank'
+      rel='noopener noreferrer'
+      aria-label={copy.openCounter}
+      title={copy.openCounter}
+    ><span aria-hidden='true'>↗</span></a>
+  </div>
 </div>
 
 <script is:inline src='https://gc.zgo.at/count.js' data-goatcounter='https://lora-sys.goatcounter.com/count' async></script>
@@ -33,9 +46,10 @@ const copy = lang === 'en-US'
 <style>
   .visitor-counter {
     display: inline-flex;
+    min-width: max-content;
+    min-height: 2.25rem;
     align-items: center;
     gap: 0.42rem;
-    min-width: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
     line-height: 1.35;
@@ -48,10 +62,20 @@ const copy = lang === 'en-US'
     text-transform: uppercase;
   }
 
+  .visitor-counter-total {
+    position: relative;
+    width: 7.5rem;
+    height: 2.25rem;
+    flex: 0 0 7.5rem;
+  }
+
   .visitor-counter-frame {
     display: block;
-    width: 8.5rem;
-    height: 2.55rem;
+    box-sizing: border-box;
+    width: 7.5rem;
+    min-width: 7.5rem;
+    height: 2.25rem;
+    min-height: 2.25rem;
     overflow: hidden;
     border: 0;
     border-radius: 0.35rem;
@@ -76,8 +100,46 @@ const copy = lang === 'en-US'
     white-space: nowrap;
   }
 
+  .visitor-counter-link {
+    position: absolute;
+    top: 0.18rem;
+    right: 0.18rem;
+    display: grid;
+    width: 1rem;
+    height: 1rem;
+    place-items: center;
+    border-radius: 999px;
+    background: hsl(var(--background) / 0.82);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    line-height: 1;
+    text-decoration: none;
+    opacity: 0.55;
+    transition: opacity 160ms ease, background 160ms ease, color 160ms ease;
+  }
+
+  .visitor-counter-link::after {
+    position: absolute;
+    inset: -0.3rem;
+    content: '';
+  }
+
+  .visitor-counter-link:hover,
+  .visitor-counter-link:focus-visible {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    opacity: 1;
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .visitor-counter--compact .visitor-counter-total,
   .visitor-counter--compact .visitor-counter-frame {
     width: 7.5rem;
     height: 2.25rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .visitor-counter-link { transition: none; }
   }
 </style>

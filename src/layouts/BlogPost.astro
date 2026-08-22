@@ -100,6 +100,10 @@ const nextPost = posts[postIndex + 1]
 const linkedRepositories = getProjectsForStory(`${blogBase}${id}`)
 const linkedProjects = projects.filter((project) => linkedRepositories.includes(project.repository))
 const denseToc = headings.length > 36
+const tocOverview = headings.filter((heading) => heading.depth <= 2).slice(0, 8)
+const tocLabels = lang === 'en-US'
+  ? { overview: 'Reading map', full: 'Full document map', sections: 'sections' }
+  : { overview: '阅读地图', full: '展开完整目录', sections: '个章节' }
 const articleFieldNote = {
   'eve-agent': {
     image: agentRunbookMargin,
@@ -155,13 +159,19 @@ const articleFieldNote = {
 
   {!!headings.length && (
     denseToc ? (
-      <details class='article-toc-condensed' slot='sidebar'>
-        <summary>
-          <span>Document map</span>
-          <small>{headings.length} sections</small>
-        </summary>
-        <TOC {headings} />
-      </details>
+      <aside class='article-toc-overview' slot='sidebar' aria-label={tocLabels.overview}>
+        <div class='article-toc-overview-heading'>
+          <span>{tocLabels.overview}</span>
+          <small>{headings.length} {tocLabels.sections}</small>
+        </div>
+        <nav aria-label={tocLabels.overview}>
+          {tocOverview.map((heading) => <a href={`#${heading.slug}`}>{heading.text}</a>)}
+        </nav>
+        <details class='article-toc-condensed'>
+          <summary>{tocLabels.full}</summary>
+          <TOC {headings} />
+        </details>
+      </aside>
     ) : <TOC {headings} slot='sidebar' />
   )}
 
@@ -316,9 +326,58 @@ const articleFieldNote = {
 </script>
 
 <style is:global>
-  .article-toc-condensed {
+  .article-toc-overview {
+    display: grid;
+    gap: 0.7rem;
     border-block: 1px solid hsl(var(--border));
     padding-block: 0.55rem;
+  }
+
+  .article-toc-overview-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .article-toc-overview-heading small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  .article-toc-overview > nav {
+    display: grid;
+    gap: 0.38rem;
+  }
+
+  .article-toc-overview > nav a {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    line-height: 1.35;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .article-toc-overview > nav a:hover,
+  .article-toc-overview > nav a:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .article-toc-condensed {
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.65rem;
   }
 
   .article-toc-condensed summary {
@@ -327,12 +386,10 @@ const articleFieldNote = {
     justify-content: space-between;
     gap: 0.75rem;
     cursor: pointer;
-    color: hsl(var(--foreground));
-    font-size: 0.7rem;
-    font-weight: 650;
-    letter-spacing: 0.08em;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    font-weight: 600;
     list-style: none;
-    text-transform: uppercase;
   }
 
   .article-toc-condensed summary::-webkit-details-marker {
@@ -348,15 +405,6 @@ const articleFieldNote = {
 
   .article-toc-condensed[open] summary::after {
     content: '−';
-  }
-
-  .article-toc-condensed summary small {
-    margin-left: auto;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    text-transform: none;
   }
 
   .article-toc-condensed :global(nav) {

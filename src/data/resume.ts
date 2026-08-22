@@ -25,6 +25,11 @@ export const resumeData = {
         detail: 'LangGraph 状态编排、多 Agent 事件契约、证据与引用审查、人工审批、可追溯导出规则，以及超时和证据不足时的降级路径。'
       }
     ],
+    strengths: [
+      '持续把想法做成可运行作品。主项目都保留代码、测试、演示或项目文档，遇到没完成的部分会写清原因和下一步。',
+      '有模块拆分、接口联调和代码协作经历。做多 Agent 系统时会先定状态、消息和责任边界，再处理页面和模型调用。',
+      '持续维护开源 AI 应用和学习产品。获得黑客松一等奖、蓝桥杯省二、ACM 铜牌；用比赛和公开作品检验工程实现。'
+    ],
     experience: [
       {
         organization: '凌云光技术股份有限公司',
@@ -69,6 +74,11 @@ export const resumeData = {
       phone: '+86 134 6893 4893',
       location: "Xi'an, China",
       availability: 'Class of 2027 · Available now · Five days a week for three months'
-    }
+    },
+    strengths: [
+      'Turns ideas into runnable work, with code, tests, demos, or project documentation retained for core projects; unfinished work is documented with its reason and next step.',
+      'Has experience in module decomposition, interface integration, and code collaboration; defines state, messages, and responsibility boundaries before connecting pages and model calls in multi-agent systems.',
+      'Maintains open-source AI applications and learning products; uses competition awards and public work to test engineering implementation.'
+    ]
   }
 } as const
