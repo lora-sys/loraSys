@@ -31,7 +31,8 @@ const labels = isEnglish
       resume: '播放档案',
     }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
-const autoplayDelay = id === 'anime' ? 7000 : 8000
+const autoplayDelay = id === 'anime' ? 4800 : 6200
+const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
 ---
 
 <section
@@ -40,6 +41,10 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
   data-carousel
   data-item-count={items.length}
   data-autoplay-delay={autoplayDelay}
+  data-mobile-autoplay-delay={mobileAutoplayDelay}
+  data-drift-active={isEnglish ? 'Drifting' : '正在巡游'}
+  data-drift-paused={isEnglish ? 'Paused' : '已暂停'}
+  data-drift-waiting={isEnglish ? 'Waiting' : '等待巡游'}
 >
   <header>
     <div>
@@ -47,6 +52,9 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
       <h2 id={`${id}-title`}>{title}</h2>
     </div>
     <div class='controls' aria-label={isEnglish ? `${title} controls` : `${title} 控制`}>
+      <span class='drift-state' data-drift-state aria-live='off'>
+        <i aria-hidden='true'></i><span data-drift-status>{isEnglish ? 'Drifting' : '正在巡游'}</span>
+      </span>
       <button class='tactile-action' type='button' data-prev aria-label={labels.previous}>←</button>
       <button class='tactile-action' type='button' data-next aria-label={labels.next}>→</button>
       <button
@@ -123,21 +131,30 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
     const bar = root.querySelector<HTMLElement>('[data-progress]')!
     const index = root.querySelector<HTMLElement>('[data-index]')!
     const itemCount = Number(root.dataset.itemCount || 1)
-    const delay = Number(root.dataset.autoplayDelay || 7000)
+    const delay = Number(root.dataset.autoplayDelay || 5000)
+    const mobileDelay = Number(root.dataset.mobileAutoplayDelay || 8000)
     const prev = root.querySelector<HTMLButtonElement>('[data-prev]')!
     const next = root.querySelector<HTMLButtonElement>('[data-next]')!
     const playback = root.querySelector<HTMLButtonElement>('[data-playback]')!
     const playbackLabel = root.querySelector<HTMLElement>('[data-playback-label]')!
+    const driftState = root.querySelector<HTMLElement>('[data-drift-state]')!
+    const driftStatus = root.querySelector<HTMLElement>('[data-drift-status]')!
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+    const coarsePointer = matchMedia('(pointer: coarse)')
     const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
     const dialog = root.querySelector<HTMLDialogElement>('[data-spotify-dialog]')
     const labels = {
       pause: playback.dataset.pauseLabel || 'Pause drift',
       resume: playback.dataset.resumeLabel || 'Play archive',
+      active: root.dataset.driftActive || 'Drifting',
+      paused: root.dataset.driftPaused || 'Paused',
+      waiting: root.dataset.driftWaiting || 'Waiting'
     }
     let inViewport = false
-    let userPaused = !finePointer.matches || reducedMotion.matches
+    let userPaused = reducedMotion.matches
+    let hovering = false
     let timer: number | undefined
+    let hoverResumeTimer: number | undefined
     let startX = 0
     let startLeft = 0
     let dragged = false
@@ -155,7 +172,9 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
       index.textContent = `${Math.min(itemCount, Math.max(1, Math.round(ratio * (itemCount - 1)) + 1))} / ${itemCount}`
     }
 
-    const canDrift = () => itemCount > 1 && finePointer.matches && !reducedMotion.matches && inViewport && !document.hidden && !userPaused
+    const driftDelay = () => (coarsePointer.matches ? mobileDelay : delay)
+    const canDrift = () =>
+      itemCount > 1 && !reducedMotion.matches && inViewport && !document.hidden && !userPaused && !hovering && !dialog?.open
 
     const updatePlaybackControl = () => {
       const active = canDrift()
@@ -163,6 +182,8 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
       playback.setAttribute('aria-pressed', String(active))
       playbackLabel.textContent = active ? labels.pause : labels.resume
       playback.dataset.state = active ? 'playing' : 'paused'
+      driftState.dataset.state = active ? 'playing' : 'paused'
+      driftStatus.textContent = active ? labels.active : userPaused ? labels.paused : labels.waiting
     }
 
     const stopDrift = () => {
@@ -171,29 +192,46 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
       updatePlaybackControl()
     }
 
-    const queueDrift = () => {
+    const queueDrift = (wait = driftDelay()) => {
       stopDrift()
       if (!canDrift()) return
       timer = window.setTimeout(() => {
         const max = track.scrollWidth - track.clientWidth
         if (track.scrollLeft >= max - 2) {
           track.scrollTo({ left: 0, behavior: 'auto' })
+          queueDrift(620)
         } else {
           move(1)
+          queueDrift()
         }
-        queueDrift()
-      }, delay)
+      }, wait)
       updatePlaybackControl()
     }
 
     const pauseForInput = () => {
       userPaused = true
+      hovering = false
+      if (hoverResumeTimer) window.clearTimeout(hoverResumeTimer)
       stopDrift()
+    }
+
+    const pauseForHover = () => {
+      if (!finePointer.matches || userPaused) return
+      hovering = true
+      stopDrift()
+    }
+
+    const resumeAfterHover = () => {
+      if (!finePointer.matches || userPaused) return
+      hovering = false
+      if (hoverResumeTimer) window.clearTimeout(hoverResumeTimer)
+      hoverResumeTimer = window.setTimeout(() => queueDrift(900), 900)
     }
 
     const resumeDrift = () => {
       userPaused = false
-      queueDrift()
+      hovering = false
+      queueDrift(520)
     }
 
     playback.addEventListener('click', () => {
@@ -225,9 +263,8 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
     new ResizeObserver(update).observe(track)
 
     root.addEventListener('focusin', pauseForInput)
-    root.addEventListener('pointerenter', () => {
-      if (finePointer.matches) pauseForInput()
-    })
+    root.addEventListener('pointerenter', pauseForHover)
+    root.addEventListener('pointerleave', resumeAfterHover)
     root.addEventListener('touchstart', pauseForInput, { passive: true })
 
     track.addEventListener('pointerdown', (event) => {
@@ -270,17 +307,18 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
         inViewport = entry.isIntersecting
         queueDrift()
       },
-      { threshold: 0.28 }
+      { threshold: 0.35 }
     )
     observer.observe(root)
-    document.addEventListener('visibilitychange', queueDrift)
+    document.addEventListener('visibilitychange', () => queueDrift(650))
     reducedMotion.addEventListener('change', () => {
       if (reducedMotion.matches) userPaused = true
-      queueDrift()
+      queueDrift(650)
     })
+    coarsePointer.addEventListener('change', () => queueDrift(650))
     finePointer.addEventListener('change', () => {
-      if (!finePointer.matches) userPaused = true
-      queueDrift()
+      if (!finePointer.matches) hovering = false
+      queueDrift(650)
     })
 
     root.querySelectorAll<HTMLElement>('[data-spotify]').forEach((trigger) =>
@@ -349,6 +387,12 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
   .controls button:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
   .playback { color: hsl(var(--muted-foreground)); font-size: 0.67rem; font-weight: 600; }
   .playback[data-state='playing'] { border-color: hsl(var(--field-teal) / 0.55); color: hsl(var(--foreground)); }
+  .drift-state { display: inline-flex; align-items: center; gap: 0.34rem; min-height: 2.25rem; color: hsl(var(--muted-foreground)); font-size: 0.61rem; font-weight: 600; letter-spacing: 0.04em; }
+  .drift-state i { width: 0.4rem; height: 0.4rem; border-radius: 999px; background: hsl(var(--muted-foreground)); }
+  .drift-state[data-state='playing'] { color: hsl(var(--foreground)); }
+  .drift-state[data-state='playing'] i { background: hsl(var(--field-teal)); box-shadow: 0 0 0 4px hsl(var(--field-teal) / 0.13); }
+  @media (prefers-reduced-motion: no-preference) { .drift-state[data-state='playing'] i { animation: archive-pulse 1.8s ease-in-out infinite; } }
+  @keyframes archive-pulse { 50% { transform: scale(0.72); opacity: 0.58; } }
   .track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(15rem, 42%); gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0.2rem 1rem; scrollbar-width: none; cursor: grab; }
   .track[data-dragging] { cursor: grabbing; scroll-snap-type: none; user-select: none; }
   .track::-webkit-scrollbar { display: none; }
@@ -378,12 +422,14 @@ const autoplayDelay = id === 'anime' ? 7000 : 8000
   @media (max-width: 640px) {
     .showcase header { align-items: start; flex-direction: column; }
     .controls { justify-content: start; }
+    .drift-state { min-height: 1.8rem; }
     .track { grid-auto-columns: 82%; cursor: auto; }
     .stagger { transform: none; }
     .lens-glass { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
     .lens-glass, .controls button { transition: none; }
+    .drift-state[data-state='playing'] i { animation: none; }
     .track { cursor: auto; }
     .controls button:hover, .controls button:focus-visible, .controls button:active { transform: none; }
     .lens-glass { display: none; }

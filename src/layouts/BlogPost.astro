@@ -56,12 +56,46 @@ const socialImage = heroImage
     : heroImage.src.src
   : config.socialCard
 const articleDate = updatedDate?.toISOString() ?? publishDate.toISOString()
+// Root-relative source paths are prefixed exactly once by the post-build GitHub Pages pass.
+const blogBase = `${basePath.replace(/\/$/, '')}/`
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
+const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site)
+const blogIndexUrl = new URL(
+  `${import.meta.env.BASE_URL.replace(/\/$/, '')}${blogBase}`,
+  Astro.site
+)
+const socialImageUrl = new URL(socialImage, Astro.url).href
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  inLanguage: lang || 'zh-CN',
+  datePublished: publishDate.toISOString(),
+  dateModified: articleDate,
+  image: socialImageUrl,
+  keywords: data.tags,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl.href },
+  author: { '@type': 'Person', name: config.author, url: siteUrl.href },
+  publisher: { '@type': 'Person', name: config.author, url: siteUrl.href },
+  isPartOf: { '@type': 'Blog', name: 'Writing', url: blogIndexUrl.href },
+  url: canonicalUrl.href
+}
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: '首页', item: siteUrl.href },
+    { '@type': 'ListItem', position: 2, name: '写作', item: blogIndexUrl.href },
+    { '@type': 'ListItem', position: 3, name: title, item: canonicalUrl.href }
+  ]
+}
+const articleJsonLdText = JSON.stringify(articleJsonLd).replace(/</g, '\\u003c')
+const breadcrumbJsonLdText = JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c')
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
 const postIndex = posts.findIndex((entry) => entry.id === id)
 const previousPost = posts[postIndex - 1]
 const nextPost = posts[postIndex + 1]
-// Root-relative source paths are prefixed exactly once by the post-build GitHub Pages pass.
-const blogBase = `${basePath.replace(/\/$/, '')}/`
 const linkedRepositories = getProjectsForStory(`${blogBase}${id}`)
 const linkedProjects = projects.filter((project) => linkedRepositories.includes(project.repository))
 const denseToc = headings.length > 36
@@ -111,6 +145,11 @@ const articleFieldNote = {
   lang={lang}
   showSidebar={!!headings.length}
 >
+  <Fragment slot='head'>
+    <script is:inline type='application/ld+json' set:html={articleJsonLdText} />
+    <script is:inline type='application/ld+json' set:html={breadcrumbJsonLdText} />
+  </Fragment>
+
   {!!headings.length && (
     denseToc ? (
       <details class='article-toc-condensed' slot='sidebar'>
@@ -198,67 +237,78 @@ const articleFieldNote = {
 {config.integ.mediumZoom.enable && <MediumZoom />}
 
 <script>
-  const renderMermaidDiagrams = async () => {
-    const blocks = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        '[data-language="mermaid"] pre code, code.language-mermaid'
-      )
-    )
+  const mermaidSelector = '[data-language="mermaid"] pre code, code.language-mermaid'
+  let mermaidLoader: Promise<(typeof import('mermaid'))['default']> | undefined
+
+  const loadMermaid = () => {
+    mermaidLoader ??= import('mermaid').then(({ default: mermaid }) => {
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
+      })
+      return mermaid
+    })
+    return mermaidLoader
+  }
+
+  const renderMermaidDiagram = async (block: HTMLElement, index: number) => {
+    if (block.dataset.mermaidRendered === 'true') return
+    block.dataset.mermaidRendered = 'true'
+    const container = block.closest('[data-language="mermaid"]') ?? block.closest('pre') ?? block
+    // Read Shiki's source lines only. Its language label and collapse-button
+    // text live in the same outer container and are not Mermaid syntax.
+    const lines = block.querySelectorAll<HTMLElement>('.line')
+    const source = lines.length
+      ? Array.from(lines, (line) => line.textContent ?? '')
+          .join('\n')
+          .trim()
+      : block.textContent?.trim()
+    if (!source) return
+
+    try {
+      const mermaid = await loadMermaid()
+      const { svg, bindFunctions } = await mermaid.render(`mermaid-${index}`, source)
+      const figure = document.createElement('figure')
+      figure.className = 'mermaid-diagram not-prose'
+      figure.setAttribute('aria-label', 'Architecture diagram')
+      figure.innerHTML = svg
+      container.replaceWith(figure)
+      bindFunctions?.(figure)
+    } catch (error) {
+      delete block.dataset.mermaidRendered
+      console.error('Unable to render Mermaid diagram', error)
+    }
+  }
+
+  const observeMermaidDiagrams = () => {
+    const blocks = Array.from(document.querySelectorAll<HTMLElement>(mermaidSelector))
     if (!blocks.length) return
 
-    const { default: mermaid } = await import('mermaid')
-
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'strict',
-      theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
-    })
-
-    for (const [index, block] of blocks.entries()) {
-      const container = block.closest('[data-language="mermaid"]') ?? block.closest('pre') ?? block
-      const sourceNode = block
-      // Read Shiki's source lines only. Its language label and collapse-button
-      // text live in the same outer container and are not Mermaid syntax.
-      const lines = sourceNode?.querySelectorAll<HTMLElement>('.line')
-      const source = lines?.length
-        ? Array.from(lines, (line) => line.textContent ?? '')
-            .join('\n')
-            .trim()
-        : sourceNode?.textContent?.trim()
-      if (!source) continue
-
-      try {
-        const { svg, bindFunctions } = await mermaid.render(`mermaid-${index}`, source)
-        const figure = document.createElement('figure')
-        figure.className = 'mermaid-diagram not-prose'
-        figure.setAttribute('aria-label', 'Architecture diagram')
-        figure.innerHTML = svg
-        container.replaceWith(figure)
-        bindFunctions?.(figure)
-      } catch (error) {
-        console.error('Unable to render Mermaid diagram', error)
-      }
+    if (!('IntersectionObserver' in window)) {
+      blocks.forEach((block, index) => void renderMermaidDiagram(block, index))
+      return
     }
-  }
 
-  type IdleCapableWindow = Window & {
-    requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number
-  }
-
-  const scheduleMermaidRender = () => {
-    const render = () => void renderMermaidDiagrams()
-    const idleWindow = window as IdleCapableWindow
-    if (typeof idleWindow.requestIdleCallback === 'function') {
-      idleWindow.requestIdleCallback(render, { timeout: 1200 })
-    } else {
-      setTimeout(render, 500)
-    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const block = entry.target as HTMLElement
+          observer.unobserve(block)
+          const index = blocks.indexOf(block)
+          void renderMermaidDiagram(block, index)
+        })
+      },
+      { rootMargin: '360px 0px', threshold: 0.01 }
+    )
+    blocks.forEach((block) => observer.observe(block))
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scheduleMermaidRender, { once: true })
+    document.addEventListener('DOMContentLoaded', observeMermaidDiagrams, { once: true })
   } else {
-    scheduleMermaidRender()
+    observeMermaidDiagrams()
   }
 </script>
 

@@ -218,6 +218,10 @@ const filterAttributes = filterable
     const card = target instanceof Element ? target.closest<HTMLElement>('[data-project-magic]') : null
     card?.style.setProperty('--tilt-x', '0deg')
     card?.style.setProperty('--tilt-y', '0deg')
+    card?.querySelector<HTMLElement>('[data-project-media]')?.style.setProperty('--parallax-x', '0px')
+    card?.querySelector<HTMLElement>('[data-project-media]')?.style.setProperty('--parallax-y', '0px')
+    card?.querySelector<HTMLElement>('.project-body')?.style.setProperty('--body-x', '0px')
+    card?.querySelector<HTMLElement>('.project-body')?.style.setProperty('--body-y', '0px')
   }
 
   document.addEventListener('pointerout', (event) => {
@@ -268,11 +272,20 @@ const filterAttributes = filterable
       card.style.setProperty('--tilt-x', `${tiltX.toFixed(2)}deg`)
       card.style.setProperty('--tilt-y', `${tiltY.toFixed(2)}deg`)
 
-      const media = current.target.closest<HTMLElement>('[data-project-media]')
-      const image = media?.querySelector<HTMLImageElement>('[data-project-poster]')
-      const lens = media?.querySelector<HTMLElement>('[data-project-lens]')
-      if (!media || !image || !lens || image.naturalWidth === 0) return
-      const mediaRect = media.getBoundingClientRect()
+      const media = card.querySelector<HTMLElement>('[data-project-media]')
+      const body = card.querySelector<HTMLElement>('.project-body')
+      const normalizedX = (localX / cardRect.width) - 0.5
+      const normalizedY = (localY / cardRect.height) - 0.5
+      media?.style.setProperty('--parallax-x', `${(-normalizedX * 7).toFixed(2)}px`)
+      media?.style.setProperty('--parallax-y', `${(-normalizedY * 6).toFixed(2)}px`)
+      body?.style.setProperty('--body-x', `${(normalizedX * 3.5).toFixed(2)}px`)
+      body?.style.setProperty('--body-y', `${(normalizedY * 2.5).toFixed(2)}px`)
+
+      const activeMedia = current.target.closest<HTMLElement>('[data-project-media]')
+      const image = activeMedia?.querySelector<HTMLImageElement>('[data-project-poster]')
+      const lens = activeMedia?.querySelector<HTMLElement>('[data-project-lens]')
+      if (!activeMedia || !image || !lens || image.naturalWidth === 0) return
+      const mediaRect = activeMedia.getBoundingClientRect()
       const x = Math.max(0, Math.min(mediaRect.width, current.clientX - mediaRect.left))
       const y = Math.max(0, Math.min(mediaRect.height, current.clientY - mediaRect.top))
       const xPercent = (x / mediaRect.width) * 100
@@ -281,7 +294,7 @@ const filterAttributes = filterable
       lens.style.top = `${y}px`
       lens.style.setProperty('--lens-image', `url("${image.currentSrc}")`)
       lens.style.setProperty('--lens-position', `${xPercent}% ${yPercent}%`)
-      media.setAttribute('data-lens-active', 'true')
+      activeMedia.setAttribute('data-lens-active', 'true')
     })
   })
 </script>
@@ -398,6 +411,9 @@ const filterAttributes = filterable
     flex: 1;
     flex-direction: column;
     padding: clamp(1rem, 2.5vw, 1.35rem);
+    transform: translate3d(var(--body-x, 0px), var(--body-y, 0px), 0);
+    transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
   }
 
   .project-card--lead .project-body {
@@ -660,7 +676,8 @@ const filterAttributes = filterable
     .project-card,
     .project-card--magic::after,
     .open-case-label,
-    .project-actions a {
+    .project-actions a,
+    .project-body {
       transition: none;
     }
 

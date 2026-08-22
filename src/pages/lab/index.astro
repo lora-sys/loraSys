@@ -3,13 +3,25 @@ import { Image } from 'astro:assets'
 import { labEntries } from '@/data/lab'
 
 import PageLayout from '@/layouts/CommonPage.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 import labExperimentLedger from '@/assets/field-notes/expansion-2/lab-experiment-ledger.webp'
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const headings = [{ depth: 2, slug: 'experiments', text: 'Experiments' }]
 ---
 
-<PageLayout title='Lab' {headings} view>
+<PageLayout
+  title='Lab'
+  description='Lora 的可检查工程实验：从问题、实现到结果的简明记录。'
+  {headings}
+  view
+>
+  <Fragment slot='head'>
+    <CollectionPageJsonLd
+      name='Lab'
+      description='Lora 的可检查工程实验：从问题、实现到结果的简明记录。'
+    />
+  </Fragment>
   <p class='lab-intro'>
     小型、可检查的工程实验。每一项都来自已经实现的项目；没有独立部署时，会明确链接到源代码，而不是伪装成在线
     Demo。

@@ -90,7 +90,9 @@ const fallbackMark = project.title
   .project-media :global(img) {
     object-fit: var(--poster-fit, cover);
     object-position: var(--poster-position, center);
-    transition: transform 420ms ease;
+    transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0) scale(1.012);
+    transition: transform 260ms cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
   }
 
   .media-fallback {
@@ -166,9 +168,9 @@ const fallbackMark = project.title
     transform: translate(-50%, -50%) scale(1);
   }
 
-  @media (hover: hover) {
+  @media (hover: hover) and (pointer: fine) {
     :global(.project-card:hover) .project-media :global(img) {
-      transform: scale(1.018);
+      transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0) scale(1.03);
     }
   }
 
@@ -178,8 +180,10 @@ const fallbackMark = project.title
       transition: none;
     }
 
-    :global(.project-card:hover) .project-media :global(img) {
+    :global(.project-card:hover) .project-media :global(img),
+    .project-media :global(img) {
       transform: none;
+      will-change: auto;
     }
 
     .project-lens {

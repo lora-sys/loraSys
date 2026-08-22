@@ -7,6 +7,7 @@ import { Paginator } from 'astro-pure/components/pages'
 import { Button, Icon } from 'astro-pure/user'
 import readingMarker from '@/assets/field-notes/reading-marker.webp'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 
 import BlogPostCard from './BlogPostCard.astro'
 import FeaturedWriting from './FeaturedWriting.astro'
@@ -75,6 +76,13 @@ const languageFilters = [
 ---
 
 <PageLayout {meta} lang={activeLanguage}>
+  <Fragment slot='head'>
+    <CollectionPageJsonLd
+      name={meta.title}
+      description={meta.description}
+      inLanguage={activeLanguage ?? 'zh-CN'}
+    />
+  </Fragment>
   <Button title='Back' href='/' variant='back' />
   <main class='blog-shell mt-6 lg:mt-10'>
     <header id='content-header' class='animate editorial-header'>

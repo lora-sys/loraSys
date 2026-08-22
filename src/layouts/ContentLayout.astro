@@ -25,6 +25,7 @@ const {
 ---
 
 <PageLayout {meta} {highlightColor} {lang} {...props}>
+  <slot name='head' slot='head' />
   <Button title='Back' href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}

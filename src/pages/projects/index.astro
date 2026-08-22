@@ -5,6 +5,7 @@ import contributionSnapshot from '@/data/external-contributions.json'
 import syncReport from '@/data/sync-report.json'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
 import ContentGraph from '@/components/projects/ContentGraph.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
@@ -79,6 +80,12 @@ const directoryItems: DirectoryItem[] = [
   }}
   highlightColor='#54c7b7'
 >
+  <Fragment slot='head'>
+    <CollectionPageJsonLd
+      name='Work · 作品'
+      description='Lora 的精选构建：AI Agent、开发者工具、全栈产品与公开证据。'
+    />
+  </Fragment>
   <main class='work-page' id='content'>
     <header class='work-hero'>
       <p class='eyebrow'>Selected Work · 精选作品</p>

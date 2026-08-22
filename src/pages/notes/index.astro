@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import PageLayout from '@/layouts/CommonPage.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 import LanguageBadge from '@/components/blog/LanguageBadge.astro'
 import notesFieldStrip from '@/assets/field-notes/expansion-2/notes-field-strip.webp'
 
@@ -51,7 +52,17 @@ const notes = [
 const tags = [...new Set(notes.flatMap((note) => note.tags))]
 ---
 
-<PageLayout title='Notes' headings={[]}>
+<PageLayout
+  title='Notes'
+  description='Lora 的短篇工程观察、实验记录与技术判断。'
+  headings={[]}
+>
+  <Fragment slot='head'>
+    <CollectionPageJsonLd
+      name='Notes'
+      description='Lora 的短篇工程观察、实验记录与技术判断。'
+    />
+  </Fragment>
   <div class='not-prose notes-intro'>
     <p class='eyebrow'>Field notes / 随记</p>
     <div class='intro-line'>

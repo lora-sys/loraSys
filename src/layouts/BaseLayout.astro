@@ -35,6 +35,7 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 <html {lang}>
   <head>
     <BaseHead {articleDate} {description} {noindex} {ogImage} {title} locale={locale} {alternatePath} />
+    <slot name='head' />
     <ThemeProvider />
   </head>
 
