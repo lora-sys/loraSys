@@ -7,13 +7,15 @@ interface Props {
   priority?: boolean
   lens?: boolean
   sizes?: string
+  quality?: number
 }
 
 const {
   project,
   priority = false,
   lens = false,
-  sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 86vw'
+  sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 86vw',
+  quality
 } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{avif,webp,png,jpg,jpeg}'
@@ -45,6 +47,7 @@ const fallbackMark = project.title
         alt={`${project.title} project poster`}
         widths={[480, 720, 960, 1280]}
         {sizes}
+        quality={quality}
         loading={priority ? 'eager' : 'lazy'}
         decoding='async'
         fetchpriority={priority ? 'high' : 'auto'}

@@ -4,7 +4,6 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
-import VisitorCounter from '@/components/community/VisitorCounter.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
@@ -14,23 +13,23 @@ const englishPosts = allPosts.filter((post) => post.data.language === 'en-US').s
 const featured = projects.filter((project) => project.featured).slice(0, 3)
 ---
 
-<PageLayout lang='en-US' meta={{ title: 'Lora · AI Agent Builder', description: 'AI agent infrastructure, developer tools, experiments, and public evidence built by Lora.' }} highlightColor='#d99a33'>
+<PageLayout lang='en-US' meta={{ title: 'Lora · Personal site', description: 'Lora&apos;s personal site for projects, writing, current work, and personal interests.' }} highlightColor='#d99a33'>
   <main class='en-home'>
     <section class='hero' data-field-notes-hero>
       <HeroScene />
       <div>
-        <p>AI AGENT DEVELOPER · XI’AN, CHINA</p>
-        <h1>I turn ambitious agent ideas into systems that can run, be checked, and improve.</h1>
-        <strong class='hero-slogan'><small>BUILD × LEARN · FIELD NOTE 01</small>Build anything. Learn everything.</strong>
-        <span>I design agent infrastructure, full-stack tools, and public evidence for systems that need to hold up in real work.</span>
-        <div class='actions'><a class='primary' href='#work'>Explore selected work ↘</a><a href='#writing'>Read build notes →</a></div>
-        <div class='hero-signals'><VisitorCounter lang='en-US' compact /><a href='/en/guestbook'>Public guestbook ↗</a><ResumePreview lang='en-US' triggerLabel='Preview résumé' /></div>
+        <p>LORA · AI AGENT DEVELOPER · XI’AN, CHINA</p>
+        <h1>Projects, notes, and the things I&apos;m learning.</h1>
+        <strong class='hero-slogan'><small>PERSONAL SITE · 01</small>Work, notes, and interests.</strong>
+        <span>I&apos;m Lora, an AI Agent developer in Xi&apos;an. This is where I keep my projects, writing, and a few stories, sounds, and ideas I return to.</span>
+        <div class='actions'><a class='primary' href='#work'>See selected work ↘</a><a href='#writing'>Read a recent note →</a></div>
+        <div class='hero-signals'><a href='/en/contact'>Get in touch ↗</a><ResumePreview lang='en-US' triggerLabel='Preview résumé' /></div>
       </div>
     </section>
     <div class='flow'>
-      <section id='work'><header><p>SELECTED WORK</p><h2>Agent systems, developer tools, and experiments in progress.</h2><a href='/en/work'>All work ↗</a></header><LoraVisual asset='projectsMap' class='section-scene' /><div class='work-grid'>{featured.map((project, index) => <ProjectCard {project} variant='featured' priority={index === 0} lens />)}</div></section>
-      <section id='writing'><header><p>BUILD NOTES</p><h2>Notes on agent infrastructure, multimodal tools, and product experiments.</h2><a href='/en/writing'>All writing ↗</a></header><LoraVisual asset='readingMarker' class='section-scene' /><div class='writing-grid'>{englishPosts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time><h3><a href={`/en/writing/${post.id}`}>{post.data.title}</a></h3><p>{post.data.description}</p><a href={`/en/writing/${post.id}`}>Read note ↗</a></article>)}</div></section>
-      <section id='now' class='now'><header><p>NOW</p><h2>Building reliable agent infrastructure in public.</h2><a href='/en/now'>Full now page ↗</a></header><div><span>01</span><strong>Make runs observable.</strong><p>Turn experiments into inspectable systems, clear evidence, and useful next steps.</p></div><div><span>02</span><strong>AgentArena</strong><p>Bring real tasks, review, evidence, and replayable judgment into one agent system.</p></div></section>
+      <section id='work'><header><p>SELECTED WORK</p><h2>Three places to start.</h2><a href='/en/work'>All work ↗</a></header><LoraVisual asset='projectsMap' class='section-scene' quality={60} widths={[320, 480]} /><div class='work-grid'>{featured.map((project) => <ProjectCard {project} variant='featured' lens compact compactLocale='en-US' />)}</div></section>
+      <section id='writing'><header><p>RECENT WRITING</p><h2>Notes on building, learning, and making things work.</h2><a href='/en/writing'>All writing ↗</a></header><LoraVisual asset='readingMarker' class='section-scene' quality={60} widths={[320, 480]} /><div class='writing-grid'>{englishPosts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</time><h3><a href={`/en/writing/${post.id}`}>{post.data.title}</a></h3><p>{post.data.description}</p><a href={`/en/writing/${post.id}`}>Read note ↗</a></article>)}</div></section>
+      <section id='now' class='now'><header><p>NOW</p><h2>What I&apos;m working on and learning next.</h2><a href='/en/now'>Full now page ↗</a></header><div><span>01</span><strong>AgentArena</strong><p>A project for turning real tasks and review into a clearer working loop.</p></div><div><span>02</span><strong>Developer tools</strong><p>Small tools that make building and collaborating easier.</p></div></section>
       <PersonalShowcase locale='en-US' />
     </div>
   </main>

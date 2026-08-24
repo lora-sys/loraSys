@@ -7,9 +7,11 @@ interface Props {
   class?: string
   priority?: boolean
   alt?: string
+  quality?: number
+  widths?: number[]
 }
 
-const { asset, class: className, priority = false, alt } = Astro.props
+const { asset, class: className, priority = false, alt, quality, widths } = Astro.props
 const visual: VisualEntry = loraVisuals[asset]
 const resolvedAlt = alt ?? visual.alt
 const decorative = visual.decorative ?? resolvedAlt === ''
@@ -20,10 +22,11 @@ const decorative = visual.decorative ?? resolvedAlt === ''
   alt={decorative ? '' : resolvedAlt}
   aria-hidden={decorative ? 'true' : undefined}
   class:list={['lora-visual', `lora-visual--${asset}`, className]}
-  widths={visual.widths}
+  widths={widths ?? visual.widths}
   sizes={visual.sizes}
   loading={priority ? 'eager' : 'lazy'}
   fetchpriority={priority ? 'high' : 'auto'}
+  quality={quality}
   decoding='async'
 />
 

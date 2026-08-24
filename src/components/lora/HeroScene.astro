@@ -3,10 +3,10 @@ import LoraVisual from './LoraVisual.astro'
 ---
 
 <div class='hero-scene' aria-hidden='true'>
-  <div class='hero-props'><LoraVisual asset='heroProps' priority /></div>
-  <div class='hero-lora'><LoraVisual asset='heroLora' priority /></div>
+  <div class='hero-props'><LoraVisual asset='heroProps' quality={58} widths={[360, 480]} /></div>
+  <div class='hero-lora'><LoraVisual asset='heroLora' priority quality={72} widths={[360, 480]} /></div>
   <div class='hero-mochi'>
-    <LoraVisual asset='heroMochi' priority />
+    <LoraVisual asset='heroMochi' quality={60} widths={[280, 420]} />
   </div>
 </div>
 

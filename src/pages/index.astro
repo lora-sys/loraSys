@@ -7,15 +7,12 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import SocialIcon from '@/components/contact/SocialIcon.astro'
 import ContactOutro from '@/components/home/ContactOutro.astro'
-import ContributionGraph from '@/components/lora/ContributionGraph.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
-import VisitorCounter from '@/components/community/VisitorCounter.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 import { socialLinks } from '@/data/social'
-import { currentFocus } from '@/data/current-focus'
 
 const allPosts = sortMDByDate(await getBlogCollection())
 const allSelectedProjects = projects.filter((project) => project.featured)
@@ -27,19 +24,28 @@ const heroSocials = socialLinks.filter((link) =>
   ['GitHub', 'LinkedIn', 'X', 'Email'].includes(link.name)
 )
 const focusSummary = [
-  currentFocus,
   {
     title: 'AgentArena · 智能体竞技场',
-    description: '让真实任务、裁判审查、证据与可回放的判定进入同一个多智能体系统。'
+    description: '把真实任务、评审与回放整理成一个可以继续打磨的项目。'
   },
   {
-    title: 'Public evidence, not just demos',
-    description: '把项目、文章、贡献和验证过程连接成可复查、可继续迭代的公开记录。'
+    title: '开发者工具',
+    description: '持续做让构建、调试和协作更顺手的小工具。'
+  },
+  {
+    title: '继续学习',
+    description: '从 Agent 基础设施、多模态工具到更好的写作与表达。'
   }
 ]
 ---
 
-<PageLayout meta={{ title: 'Lora · AI Agent Builder' }} highlightColor='#d99a33'>
+<PageLayout
+  meta={{
+    title: 'Lora · 个人网站',
+    description: 'Lora 的个人网站，记录作品、构建笔记、正在做的事与工作之外的兴趣。'
+  }}
+  highlightColor='#d99a33'
+>
   <main class='v2-home'>
     <section class='v2-hero animate' aria-labelledby='home-title' data-field-notes-hero>
       <div class='hero-orbit' aria-hidden='true'><span></span><span></span><span></span></div>
@@ -47,24 +53,21 @@ const focusSummary = [
       <div class='field-note field-note--experiment' aria-hidden='true'><LoraVisual asset='stampExperiment' /><span>正在实验</span></div>
       <div class='hero-scene-wrap'>
         <HeroScene />
-        <button class='availability' type='button' title='Open to thoughtful collaboration' data-agent-trace-trigger>
-          <i></i> Open to collaborate
-        </button>
+        <a class='availability' href='/contact' title='联系 Lora'><i></i> 欢迎交流 <span aria-hidden='true'>↗</span></a>
       </div>
       <div class='hero-copy'>
-        <p class='eyebrow'>AI Agent Developer · Xi&apos;an, China</p>
-        <h1 id='home-title'>把大胆的 Agent 想法，做成可运行、可验证的系统。</h1>
-        <p class='hero-slogan'><span>Build × Learn · Field note 01</span><strong>构建一切，学习一切！</strong></p>
-        <p class='hero-en'>I design agent infrastructure, full-stack tools, and public evidence for systems that need to hold up in real work.</p>
-        <p class='hero-start'><span>从这里开始</span> 先看三个代表案例，再按兴趣进入作品、笔记与公开记录。</p>
+        <p class='eyebrow'>Lora · AI Agent 开发者 · 西安</p>
+        <h1 id='home-title'>Lora 的个人网站：作品、笔记与正在学习的东西。</h1>
+        <p class='hero-slogan'><span>Personal site · 01</span><strong>工作之外，也留一点位置给兴趣。</strong></p>
+        <p class='hero-en'>I&apos;m Lora, an AI Agent developer in Xi&apos;an. This is where I keep my projects, writing, and a few stories, sounds, and ideas I return to.</p>
+        <p class='hero-start'><span>从这里开始</span> 先看三个代表作品，再按兴趣进入写作、正在构建与个人收藏。</p>
         <div class='hero-actions' aria-label='开始探索'>
-          <a class='primary-action tactile-action' href='#work' data-magnetic>查看三个代表案例 <span aria-hidden='true'>↘</span></a>
-          <a class='tactile-action' href='#writing'>读一篇构建笔记 <span aria-hidden='true'>→</span></a>
+          <a class='primary-action tactile-action' href='#work' data-magnetic>查看三个代表作品 <span aria-hidden='true'>↘</span></a>
+          <a class='tactile-action' href='#writing'>读一篇笔记 <span aria-hidden='true'>→</span></a>
         </div>
-        <div class='hero-signals' aria-label='公开档案与联系入口'>
-          <span class='hero-signal-kicker'>公开档案</span>
-          <VisitorCounter compact />
-          <a href='/guestbook'>公开留言板 <span aria-hidden='true'>↗</span></a>
+        <div class='hero-signals' aria-label='个人入口'>
+          <span class='hero-signal-kicker'>个人入口</span>
+          <a href='/contact'>联系我 <span aria-hidden='true'>↗</span></a>
           <ResumePreview triggerLabel='查看简历' />
         </div>
         <nav class='social-rail' aria-label='Primary social profiles'>
@@ -88,42 +91,42 @@ const focusSummary = [
 
     <div class='v2-flow'>
       <section class='intro-strip' aria-label='How to read this site'>
-        <p><b>个人网站 · 作品展示 · 构建笔记</b><span>从 Agent 系统到开发者工具与公开实验。</span></p>
+        <p><b>个人网站 · 作品 · 笔记 · 收藏</b><span>从 Agent 系统、开发者工具到工作之外的兴趣。</span></p>
         <a href='/about'>认识我 <span aria-hidden='true'>→</span></a>
       </section>
 
       <section id='work' class='v2-section work-section' aria-labelledby='work-title'>
         <header class='section-heading'>
-          <div><p class='eyebrow'>Selected Work · 精选作品</p><h2 id='work-title'>三个可直接进入的 Agent 与开发者产品。</h2></div>
+          <div><p class='eyebrow'>Selected Work · 精选作品</p><h2 id='work-title'>三个作品，先从这里看起。</h2></div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
         </header>
-        <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
+        <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' quality={60} widths={[320, 480]} />
         {
           leadProject && (
             <div class='lead-work'>
-              <ProjectCard project={leadProject} variant='lead' priority lens />
-              <p class='work-rationale'><b>从这里开始。</b> 每张卡片都可进入产品记录、仓库与相关笔记；其余案例在作品页按主题展开。</p>
+              <ProjectCard project={leadProject} variant='lead' lens compact compactLocale='zh-CN' />
+              <p class='work-rationale'><b>从这里开始。</b> 每张卡片都可进入产品记录、仓库与相关笔记；完整作品在作品页按主题展开。</p>
             </div>
           )
         }
         <div class='supporting-work'>
-          {supportingProjects.map((project) => <ProjectCard {project} variant='featured' lens />)}
+          {supportingProjects.map((project) => <ProjectCard {project} variant='featured' lens compact compactLocale='zh-CN' />)}
         </div>
       </section>
 
       <section id='writing' class='v2-section writing-section' aria-labelledby='writing-title'>
         <header class='section-heading'>
-          <div><p class='eyebrow'>Build Notes · 构建笔记</p><h2 id='writing-title'>从 Agent 基础设施到多模态工具的构建笔记。</h2></div>
+          <div><p class='eyebrow'>Build Notes · 构建笔记</p><h2 id='writing-title'>最近写下的构建笔记。</h2></div>
           <a class='text-link' href='/blog'>All writing <span aria-hidden='true'>↗</span></a>
         </header>
-        <LoraVisual asset='readingMarker' class='section-scene' />
+        <LoraVisual asset='readingMarker' class='section-scene' quality={60} widths={[320, 480]} />
         {
           recentPosts.length > 0 && (
             <ul class='writing-list'>
               {recentPosts.map((post, index) => (
                 <Fragment>
                   <PostPreview post={post} class={index === 0 ? 'writing-item writing-item--lead' : 'writing-item'} />
-                  {index === 0 && <li class='writing-reason'>推荐阅读：了解 Agent 系统从运行、验证到工程化的关键路径。</li>}
+                  {index === 0 && <li class='writing-reason'>从这里开始：先读一篇，再进入完整写作目录。</li>}
                 </Fragment>
               ))}
             </ul>
@@ -133,7 +136,7 @@ const focusSummary = [
 
       <section id='now' class='v2-section now-section' aria-labelledby='now-title'>
         <header class='section-heading section-heading--compact'>
-          <div><p class='eyebrow'>Now · 正在构建</p><h2 id='now-title'>近期更新与正在推进的方向。</h2></div>
+          <div><p class='eyebrow'>Now · 正在构建</p><h2 id='now-title'>最近在做，也还在学习。</h2></div>
           <a class='text-link' href='/now'>See the full now page <span aria-hidden='true'>↗</span></a>
         </header>
         <LoraVisual asset='nowWorkbench' class='section-scene section-scene--wide' />
@@ -142,18 +145,8 @@ const focusSummary = [
         </div>
       </section>
 
-      <section id='personal-signals' class='v2-section personal-signals-section' aria-label='Personal signals'>
+      <section id='personal-signals' class='v2-section personal-signals-section' aria-label='工作之外'>
         <PersonalShowcase />
-      </section>
-
-      <section class='v2-section evidence-section' aria-labelledby='evidence-title'>
-        <header class='section-heading section-heading--compact'>
-          <div><p class='eyebrow'>Evidence · 公开记录</p><h2 id='evidence-title'>贡献、黑客松与开源活动。</h2></div>
-          <a class='text-link' href='/about#journey'>Journey & hackathons <span aria-hidden='true'>↗</span></a>
-        </header>
-        <LoraVisual asset='stampContribution' class='evidence-stamp' />
-        <ContributionGraph compact />
-        <div class='evidence-copy'><p>GitHub、黑客松与外部贡献形成一条可回溯的建设记录。<strong>ACAMLab 与 External 内容始终保留真实来源边界。</strong></p><a href='/projects?owner=External'>View contributions <span aria-hidden='true'>→</span></a></div>
       </section>
 
       <ContactOutro />
@@ -161,34 +154,7 @@ const focusSummary = [
     <Quote class='mt-14' />
   </main>
 
-  <dialog class='agent-trace' data-agent-trace aria-labelledby='agent-trace-title'>
-    <button type='button' class='trace-close' data-agent-trace-close aria-label='Close Agent Trace'>×</button>
-    <span class='eyebrow'>Hidden protocol · 03</span>
-    <h2 id='agent-trace-title'>A small trace of how I build.</h2>
-    <div class='trace-steps'><span>Observe</span><i>→</i><span>Plan</span><i>→</i><span>Build</span><i>→</i><span>Verify</span></div>
-    <p>Good systems do not stop at “it works”. They leave evidence behind.</p>
-  </dialog>
-
   <script>
-    const traceTrigger = document.querySelector<HTMLButtonElement>('[data-agent-trace-trigger]')
-    const trace = document.querySelector<HTMLDialogElement>('[data-agent-trace]')
-    const closeTrace = document.querySelector<HTMLButtonElement>('[data-agent-trace-close]')
-    let taps = 0
-    let reset: number | undefined
-    traceTrigger?.addEventListener('click', () => {
-      taps += 1
-      clearTimeout(reset)
-      reset = window.setTimeout(() => { taps = 0 }, 900)
-      if (taps >= 3) {
-        trace?.showModal()
-        taps = 0
-      }
-    })
-    closeTrace?.addEventListener('click', () => trace?.close())
-    trace?.addEventListener('click', (event) => {
-      if (event.target === trace) trace.close()
-    })
-
     const magnetic = document.querySelector<HTMLElement>('[data-magnetic]')
     const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
     const resetMagnetic = () => {
@@ -210,6 +176,7 @@ const focusSummary = [
 
 <style>
   .v2-home{display:flex;width:100%;flex-direction:column;align-items:center}.v2-hero{position:relative;isolation:isolate;display:grid;width:min(100%,70rem);grid-template-columns:auto minmax(0,1fr);align-items:center;gap:clamp(2rem,6vw,5rem);margin:clamp(2rem,6vw,5.5rem) auto clamp(4rem,9vw,8rem);padding:clamp(2.3rem,5vw,4.25rem) clamp(.35rem,2vw,1.25rem);overflow:hidden;border:1px solid hsl(var(--border)/.56);border-radius:clamp(1.25rem,3vw,2rem);background:hsl(var(--background)/.6);box-shadow:0 28px 80px -64px hsl(var(--foreground)/.62)}.field-notes-workbench{position:absolute;z-index:-3;inset:0;width:100%;height:100%;object-fit:cover;opacity:.73;transform:translate(var(--workbench-x,0px),var(--workbench-y,0px)) scale(1.018);transition:transform 300ms cubic-bezier(.23,1,.32,1),opacity 220ms ease;pointer-events:none}.v2-hero::after{position:absolute;z-index:-2;inset:0;content:'';background:linear-gradient(90deg,hsl(var(--background)/.68) 0%,hsl(var(--background)/.32) 44%,hsl(var(--background)/.9) 100%);pointer-events:none}.field-note{position:absolute;z-index:2;display:flex;align-items:center;gap:.3rem;border:1px solid hsl(var(--border)/.78);border-radius:999px;padding:.22rem .5rem .22rem .25rem;background:hsl(var(--background)/.84);box-shadow:0 12px 28px -24px hsl(var(--foreground)/.65);backdrop-filter:blur(8px);font-size:.57rem;font-weight:690;letter-spacing:.04em;pointer-events:none}.field-note img{width:1.1rem;height:1.1rem;border-radius:50%;object-fit:cover}.field-note--verified{top:1rem;right:clamp(1rem,4vw,3rem)}.field-note--experiment{right:clamp(2rem,15vw,11rem);bottom:1rem}.hero-orbit{position:absolute;z-index:-1;inset:-15%;overflow:hidden;pointer-events:none}.hero-orbit::before,.hero-orbit::after{position:absolute;content:'';border-radius:999px;filter:blur(1px);opacity:.75}.hero-orbit::before{width:31rem;height:31rem;top:-13rem;left:-9rem;border:1px solid hsl(var(--field-amber) / .2);box-shadow:0 0 0 4rem hsl(var(--field-amber) / .025),0 0 0 8rem hsl(var(--field-amber) / .018)}.hero-orbit::after{right:-7rem;bottom:-15rem;width:24rem;height:24rem;background:radial-gradient(circle,hsl(31 97% 63% / .13),transparent 62%)}.portrait-wrap{position:relative}.portrait-wrap::before{position:absolute;inset:-.6rem;content:'';border:1px solid hsl(var(--field-amber) / .35);border-radius:50%;animation:orbit 8s linear infinite}.portrait{width:clamp(8rem,16vw,10.5rem);height:clamp(8rem,16vw,10.5rem);border:1px solid hsl(var(--border));border-radius:50%;padding:.32rem;object-fit:cover;box-shadow:0 28px 75px -42px hsl(var(--foreground) / .85)}.availability{position:absolute;bottom:-.78rem;left:50%;display:flex;width:max-content;align-items:center;gap:.4rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.38rem .68rem;background:hsl(var(--background));color:hsl(var(--muted-foreground));font-size:.66rem;box-shadow:0 8px 22px -18px hsl(var(--foreground));transform:translateX(-50%)}.availability:active{transform:translateX(-50%) scale(.97)}.availability:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}.availability i{width:.42rem;height:.42rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal) / .12)}.hero-copy{min-width:0}.eyebrow{margin:0;color:hsl(var(--muted-foreground));font-size:.68rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase}.hero-copy h1{max-width:15ch;margin:.8rem 0 0;font-size:clamp(2.5rem,6.3vw,5.4rem);font-weight:590;letter-spacing:-.065em;line-height:.94;text-wrap:balance}.hero-slogan{display:flex;align-items:center;gap:.56rem;width:max-content;max-width:100%;margin:1.05rem 0 0;border:1px solid hsl(var(--field-amber) / .48);border-radius:.8rem;padding:.45rem .72rem .45rem .48rem;background:linear-gradient(110deg,hsl(var(--field-amber) / .11),hsl(var(--background)/.82) 55%);box-shadow:0 18px 38px -28px hsl(var(--field-amber) / .82);backdrop-filter:blur(8px);color:hsl(var(--foreground));font-size:clamp(.82rem,1.6vw,.98rem);line-height:1.2}.hero-slogan span{border-radius:.42rem;padding:.25rem .42rem;background:hsl(var(--field-amber) / .16);color:hsl(var(--field-amber));font-size:.53rem;font-weight:760;letter-spacing:.08em;text-transform:uppercase}.hero-slogan strong{font-weight:720;letter-spacing:-.025em}.hero-start{display:flex;align-items:baseline;gap:.45rem;max-width:54ch;margin:1.05rem 0 0;color:hsl(var(--muted-foreground));font-size:.72rem;line-height:1.55}.hero-start span,.hero-signal-kicker{flex:0 0 auto;color:hsl(var(--field-amber));font-size:.56rem;font-weight:760;letter-spacing:.12em;text-transform:uppercase}.hero-signals{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem .7rem;margin-top:1rem;padding-top:.85rem;border-top:1px solid hsl(var(--border)/.7)}.hero-signals>a{display:inline-flex;min-height:2rem;align-items:center;gap:.28rem;color:hsl(var(--muted-foreground));font-size:.68rem;font-weight:620;text-decoration:none}.hero-signals>a:hover,.hero-signals>a:focus-visible{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:.2rem}.hero-signals :global(.resume-preview-trigger){min-height:2rem;padding:.33rem .58rem;font-size:.68rem}.hero-en{max-width:47rem;margin:1.4rem 0 0;color:hsl(var(--muted-foreground));font-size:.95rem;line-height:1.72}.hero-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem}.hero-actions a{display:inline-flex;align-items:center;gap:.42rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.64rem .95rem;color:hsl(var(--foreground));font-size:.78rem;text-decoration:none;transition:transform 180ms cubic-bezier(.23,1,.32,1),background 180ms ease,border-color 180ms ease}.hero-actions a:hover,.hero-actions a:focus-visible{transform:translateY(-2px);border-color:hsl(var(--foreground)/.55);background:hsl(var(--muted))}.hero-actions .primary-action{border-color:hsl(var(--field-amber));background:hsl(var(--field-amber));color:white}.hero-actions .primary-action:hover,.hero-actions .primary-action:focus-visible{background:hsl(var(--field-amber))}@media(hover:hover) and (pointer:fine){.hero-actions [data-magnetic]{will-change:transform}.hero-actions [data-magnetic]:hover,.hero-actions [data-magnetic]:focus-visible{transform:translate(var(--magnetic-x,0px),calc(var(--magnetic-y,0px) - 2px))}}.social-rail{display:flex;gap:.42rem;margin-top:1.1rem}.social-rail a{position:relative;display:grid;width:2.1rem;height:2.1rem;place-items:center;border-radius:50%;color:hsl(var(--muted-foreground));transition:background 180ms ease,color 180ms ease,transform 180ms ease}.social-rail a::after{position:absolute;bottom:calc(100% + .4rem);left:50%;content:attr(data-tooltip);border:1px solid hsl(var(--border));border-radius:.4rem;padding:.22rem .42rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.62rem;opacity:0;pointer-events:none;transform:translate(-50%,.2rem);transition:opacity 150ms ease,transform 150ms ease}.social-rail a:hover,.social-rail a:focus-visible{background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand);transform:translateY(-1px)}.social-rail a:hover::after,.social-rail a:focus-visible::after{opacity:1;transform:translate(-50%,0)}.v2-flow{display:flex;width:min(100%,70rem);flex-direction:column;gap:clamp(4.5rem,10vw,8.5rem)}.intro-strip{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;border-block:1px solid hsl(var(--border));padding:1rem 0}.intro-strip p{display:flex;flex-wrap:wrap;gap:.55rem;margin:0;color:hsl(var(--muted-foreground));font-size:.8rem}.intro-strip b{color:hsl(var(--foreground));font-weight:610}.intro-strip a,.text-link,.evidence-copy a{color:hsl(var(--foreground));font-size:.76rem;font-weight:620;text-decoration:none;white-space:nowrap}.intro-strip a:hover,.intro-strip a:focus-visible,.text-link:hover,.text-link:focus-visible,.evidence-copy a:hover,.evidence-copy a:focus-visible{text-decoration:underline;text-underline-offset:.2em}.v2-section{scroll-margin-top:5rem}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:1.25rem;margin-bottom:1.5rem}.section-heading>div{display:grid;gap:.45rem}.section-heading h2{max-width:22ch;margin:0;font-size:clamp(1.75rem,4vw,3.35rem);font-weight:570;letter-spacing:-.055em;line-height:1.03;text-wrap:balance}.section-heading--compact h2{font-size:clamp(1.5rem,3.1vw,2.35rem)}.lead-work{display:grid;gap:.8rem}.work-rationale{max-width:55ch;margin:0;color:hsl(var(--muted-foreground));font-size:.82rem;line-height:1.65}.work-rationale b{color:hsl(var(--foreground))}.supporting-work{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}.writing-list{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}.writing-item{position:relative;border-block-end:1px solid hsl(var(--border));padding:.35rem 0;transition:background 180ms ease,padding 180ms cubic-bezier(.23,1,.32,1),transform 180ms cubic-bezier(.23,1,.32,1)}.writing-item:hover,.writing-item:has(a:focus-visible){padding-inline:.65rem;background:hsl(var(--muted)/.64);transform:translateX(.24rem)}.writing-item--lead{border-block-start:1px solid hsl(var(--border));padding-block:.9rem}.writing-item--lead:hover,.writing-item--lead:has(a:focus-visible){padding-block:.9rem}.writing-reason{max-width:56ch;margin:.2rem 0 .5rem;padding-left:.2rem;color:hsl(var(--muted-foreground));font-size:.75rem;line-height:1.6;list-style:none}.focus-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid hsl(var(--border))}.focus-item{padding:1.25rem 1rem;border-inline-end:1px solid hsl(var(--border))}.focus-item:last-child{border-inline-end:0}.focus-item span{color:hsl(var(--field-amber));font-size:.68rem;font-variant-numeric:tabular-nums}.focus-item h3{margin:.75rem 0 .55rem;font-size:1rem;font-weight:620}.focus-item p{margin:0;color:hsl(var(--muted-foreground));font-size:.75rem;line-height:1.65}.personal-signals-section{padding-top:clamp(.2rem,1vw,.7rem)}.evidence-section :global(.contribution-graph){margin-top:.75rem}.evidence-copy{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem}.evidence-copy p{max-width:65ch;margin:0;color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.65}.evidence-copy strong{color:hsl(var(--foreground));font-weight:600}.agent-trace{width:min(92vw,32rem);border:1px solid hsl(var(--border));border-radius:1rem;padding:1.25rem;background:hsl(var(--background));color:hsl(var(--foreground));box-shadow:0 24px 80px hsl(var(--foreground)/.2)}.agent-trace::backdrop{background:hsl(var(--foreground)/.5);backdrop-filter:blur(4px)}.trace-close{float:right;border:0;background:transparent;color:inherit;font-size:1.4rem;cursor:pointer}.agent-trace h2{margin:.5rem 0;font-size:1.5rem;letter-spacing:-.04em}.agent-trace p{color:hsl(var(--muted-foreground));line-height:1.6}.trace-steps{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:1.2rem 0}.trace-steps span{border:1px solid hsl(var(--border));border-radius:999px;padding:.4rem .65rem;font-size:.72rem}.trace-steps i{color:hsl(var(--muted-foreground));font-style:normal}@keyframes orbit{to{transform:rotate(360deg)}}@media(max-width:760px){.v2-hero{grid-template-columns:1fr;margin-top:1.5rem;text-align:center}.field-notes-workbench{opacity:.5}.v2-hero::after{background:hsl(var(--background)/.72)}.field-note--verified{top:.8rem;right:.8rem}.field-note--experiment{right:.8rem;bottom:.8rem}.portrait-wrap{width:max-content;margin-inline:auto}.hero-copy h1,.hero-en,.hero-start{margin-inline:auto}.hero-slogan{margin-inline:auto}.hero-actions,.hero-signals,.social-rail{justify-content:center}.hero-start{justify-content:center;text-align:left}.hero-signals{padding-top:.75rem}.intro-strip,.section-heading,.evidence-copy{align-items:flex-start;flex-direction:column}.supporting-work,.focus-grid{grid-template-columns:1fr}.focus-item{border-inline-end:0;border-block-end:1px solid hsl(var(--border))}.focus-item:last-child{border-block-end:0}.section-heading h2{max-width:18ch}.hero-orbit{inset:-8%}.evidence-copy a{padding-top:.25rem}}@media(prefers-reduced-motion:reduce){.portrait-wrap::before{animation:none}.field-notes-workbench,.writing-item{transition:none;transform:none}.hero-actions a,.social-rail a,.social-rail a::after{transition:none}.hero-actions a:hover,.hero-actions a:focus-visible,.social-rail a:hover,.social-rail a:focus-visible,.writing-item:hover,.writing-item:has(a:focus-visible){transform:none}}
+.availability{text-decoration:none}
 </style>
 
 <style>

@@ -12,6 +12,9 @@ interface Props {
   priority?: boolean
   lens?: boolean
   filterable?: boolean
+  compact?: boolean
+  compactLocale?: 'zh-CN' | 'en-US'
+  anchor?: boolean
 }
 
 const {
@@ -19,11 +22,18 @@ const {
   variant = 'grid',
   priority = false,
   lens = variant !== 'grid',
-  filterable = false
+  filterable = false,
+  compact = false,
+  compactLocale = 'en-US',
+  anchor = false
 } = Astro.props
 const source = project.links.find((link) => link.type === 'source')
 const website = project.links.find((link) => link.type === 'website')
 const contribution = project.links.find((link) => link.type === 'contribution')
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const projectPath = compactLocale === 'en-US' ? '/en/work' : '/projects'
+const projectHref = website?.href ?? `${base}${projectPath}#${project.repository}`
+const projectIsExternal = Boolean(website)
 const interactionLabel = {
   'Glassbox-Agent-Harness': 'TRACE RUN',
   AgentArena: 'JUDGE VERDICT',
@@ -77,20 +87,62 @@ const filterAttributes = filterable
 ---
 
 <article
-  class:list={['project-card', `project-card--${variant}`, { 'project-card--magic': lens }]}
+  id={anchor ? project.repository : undefined}
+  class:list={['project-card', `project-card--${variant}`, { 'project-card--magic': lens, 'project-card--compact': compact }]}
   data-project-card
   data-project-magic={lens ? '' : undefined}
   {...filterAttributes}
 >
-  {lens && <span class='open-case-label' aria-hidden='true'>{interactionLabel}</span>}
+  {lens && !compact && <span class='open-case-label' aria-hidden='true'>{interactionLabel}</span>}
   <ProjectMedia
     {project}
     {priority}
     {lens}
+    quality={compact ? 56 : undefined}
     sizes={variant === 'lead'
       ? '(min-width: 1024px) 58vw, 86vw'
       : '(min-width: 1024px) 35vw, (min-width: 640px) 46vw, 86vw'}
   />
+  {
+    compact ? (
+      <div class='project-body project-body--compact'>
+        <div class='compact-status'>
+          <span class:list={['status', `status--${project.status}`]}>
+            <i aria-hidden='true'></i>
+            {compactLocale === 'zh-CN'
+              ? ({ building: '构建中', active: '持续维护', archived: '已归档' }[project.status])
+              : statusLabel}
+          </span>
+        </div>
+        <div class='project-heading'><h3>{project.title}</h3></div>
+        <p>{project.description || (compactLocale === 'zh-CN' ? '暂未发布项目说明。' : 'No description published yet.')}</p>
+        <div class='project-actions'>
+          <a
+            class='primary tactile-action'
+            href={projectHref}
+            target={projectIsExternal ? '_blank' : undefined}
+            rel={projectIsExternal ? 'noopener noreferrer' : undefined}
+            data-interaction='project_website'
+            data-destination={project.repository}
+          >
+            {compactLocale === 'zh-CN' ? '项目页' : 'Project'} <span aria-hidden='true'>↗</span>
+          </a>
+          {source && (
+            <a
+              class='tactile-action'
+              href={source.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              data-interaction='project_source'
+              data-destination={project.repository}
+            >
+              <Icon name='github-circle' class='size-4' aria-hidden='true' />
+              {compactLocale === 'zh-CN' ? '仓库' : 'Repository'} <span aria-hidden='true'>↗</span>
+            </a>
+          )}
+        </div>
+      </div>
+    ) : (
   <div class='project-body'>
     <div class='project-eyebrow'>
       <span>{primaryCategory}</span>
@@ -203,6 +255,8 @@ const filterAttributes = filterable
       </div>
     </div>
   </div>
+    )
+  }
 </article>
 
 <script>
@@ -419,6 +473,28 @@ const filterAttributes = filterable
   .project-card--lead .project-body {
     justify-content: center;
     padding: clamp(1.35rem, 4vw, 2.25rem);
+  }
+
+  .project-body--compact .compact-status {
+    display: flex;
+    align-items: center;
+  }
+
+  .project-card--compact .project-heading {
+    margin-top: 0.62rem;
+  }
+
+  .project-card--compact .project-heading h3 {
+    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  }
+
+  .project-card--compact .project-body > p {
+    margin-top: 0.5rem;
+    -webkit-line-clamp: 2;
+  }
+
+  .project-card--compact .project-actions {
+    margin-top: 1.15rem;
   }
 
   .project-eyebrow,

@@ -106,13 +106,13 @@ const directoryItems: DirectoryItem[] = [
       {
         leadProject && (
           <div class='lead-work'>
-            <ProjectCard project={leadProject} variant='lead' priority lens />
+            <ProjectCard project={leadProject} variant='lead' priority lens anchor />
             <p>从这里开始：查看产品能力、运行记录、仓库与关联笔记。</p>
           </div>
         )
       }
       <div class='supporting-work'>
-        {supportingProjects.map((project) => <ProjectCard {project} variant='featured' lens />)}
+          {supportingProjects.map((project) => <ProjectCard {project} variant='featured' lens anchor />)}
       </div>
     </section>
 
