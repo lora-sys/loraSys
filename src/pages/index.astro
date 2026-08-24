@@ -12,7 +12,7 @@ import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import VisitorCounter from '@/components/community/VisitorCounter.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
-import HeroGazeScene from '@/components/lora/HeroGazeScene.astro'
+import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 import { socialLinks } from '@/data/social'
 import { currentFocus } from '@/data/current-focus'
@@ -46,7 +46,7 @@ const focusSummary = [
       <div class='field-note field-note--verified' aria-hidden='true'><LoraVisual asset='stampVerified' priority /><span>可验证</span></div>
       <div class='field-note field-note--experiment' aria-hidden='true'><LoraVisual asset='stampExperiment' /><span>正在实验</span></div>
       <div class='hero-scene-wrap'>
-        <HeroGazeScene />
+        <HeroScene />
         <button class='availability' type='button' title='Open to thoughtful collaboration' data-agent-trace-trigger>
           <i></i> Open to collaborate
         </button>
