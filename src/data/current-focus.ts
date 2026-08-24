@@ -21,7 +21,7 @@ export const currentFocus: CurrentFocus = {
   themeHref: '/projects#theme-roadmap',
   projectTitle: 'Glassbox Agent Harness',
   projectHref: '/projects#Glassbox-Agent-Harness',
-  writingTitle: 'AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化',
+  writingTitle: 'AI Engineering Harness: 从 Vibe Coding 到工程化',
   writingHref: '/blog/ai-engineering-harness',
   primaryLabel: 'Explore the project',
   primaryHref: '/projects#Glassbox-Agent-Harness'

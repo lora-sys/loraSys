@@ -1,5 +1,5 @@
 ---
-title: 'AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化'
+title: 'AI Engineering Harness: 从 Vibe Coding 到工程化'
 description: 'Vibe 之后，正式接管。一个由 18 类 AI Agent 组成的软件工程组织，负责把失控的 AI 代码变成可验证、可审查、可追溯的工程交付。包含完整闭环、证据闸门、对抗式审查，让你的 AI 写的代码真正可以上生产。'
 publishDate: '2026-08-02T00:00:00Z'
 tags: ['AI', 'Agent', 'Engineering', 'Open Source']

@@ -6,7 +6,7 @@ import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import VisitorCounter from '@/components/community/VisitorCounter.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
-import HeroGazeScene from '@/components/lora/HeroGazeScene.astro'
+import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 
 const allPosts = sortMDByDate(await getBlogCollection())
@@ -17,7 +17,7 @@ const featured = projects.filter((project) => project.featured).slice(0, 3)
 <PageLayout lang='en-US' meta={{ title: 'Lora · AI Agent Builder', description: 'AI agent infrastructure, developer tools, experiments, and public evidence built by Lora.' }} highlightColor='#d99a33'>
   <main class='en-home'>
     <section class='hero' data-field-notes-hero>
-      <HeroGazeScene />
+      <HeroScene />
       <div>
         <p>AI AGENT DEVELOPER · XI’AN, CHINA</p>
         <h1>I turn ambitious agent ideas into systems that can run, be checked, and improve.</h1>

@@ -16,7 +16,7 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
   'Glassbox-Agent-Harness': [
     {
       kind: 'Writing',
-      label: 'AI Engineering Harness: 从 Vibe 到 Vibe 的 AI 工程化',
+      label: 'AI Engineering Harness: 从 Vibe Coding 到工程化',
       href: '/blog/ai-engineering-harness'
     },
     {
