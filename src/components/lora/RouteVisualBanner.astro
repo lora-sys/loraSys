@@ -1,0 +1,47 @@
+---
+import PageVisualBanner from './PageVisualBanner.astro'
+import type { LoraVisualKey } from '@/data/lora-visual'
+
+interface Props {
+  path: string
+  lang: 'zh-CN' | 'en-US'
+}
+
+const { path, lang } = Astro.props
+const exactScenes: Record<string, LoraVisualKey> = {
+  '/projects': 'projectsMap',
+  '/en/work': 'projectsMap',
+  '/links': 'linksConstellation',
+  '/en/links': 'linksConstellation',
+  '/resume': 'resumeDossier',
+  '/en/resume': 'resumeDossier',
+  '/guestbook': 'guestbookPostcard',
+  '/en/guestbook': 'guestbookPostcard',
+  '/search': 'indexScene',
+  '/en/search': 'indexScene',
+  '/archives': 'indexScene',
+  '/en/archives': 'indexScene',
+  '/tags': 'indexScene',
+  '/en/tags': 'indexScene',
+  '/talks': 'talksPodium',
+  '/en/talks': 'talksPodium',
+  '/terms': 'termsLedger',
+  '/en/terms': 'termsLedger',
+  '/404': 'wayfinding404',
+  '/en/404': 'wayfinding404',
+  '/en/about': 'aboutJourney',
+  '/en/now': 'nowWorkbench',
+  '/en/contact': 'contactCorrespondence',
+  '/en/writing': 'readingMarker',
+  '/en/notes': 'notesStrip',
+  '/en/lab': 'labLedger'
+}
+const normalizedPath = path.length > 1 ? path.replace(/\/$/, '') : path
+const asset = exactScenes[normalizedPath]
+  ?? (/^\/(?:en\/)?lab\//.test(normalizedPath) ? 'labLedger' : undefined)
+  ?? (/^\/(?:en\/)?(?:search|archives|tags)(?:\/|$)/.test(normalizedPath) ? 'indexScene' : undefined)
+  ?? (/^\/(?:en\/)?terms\//.test(normalizedPath) ? 'termsLedger' : undefined)
+const label = lang === 'en-US' ? 'Lora field notes · scene index' : 'Lora 现场笔记 · 页面场景'
+---
+
+{asset && <PageVisualBanner {asset} {label} />}

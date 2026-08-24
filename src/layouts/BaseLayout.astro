@@ -4,6 +4,7 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 import SiteHeader from '@/components/layout/SiteHeader.astro'
+import RouteVisualBanner from '@/components/lora/RouteVisualBanner.astro'
 import { footerNavigation, localizedPath, type SiteLocale } from '@/i18n/site'
 
 // Import the global.css file here so that it is included on
@@ -70,6 +71,7 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
     >
       <SiteHeader />
       <div id='main-content' class='flex-1 w-full' tabindex='-1'>
+        <RouteVisualBanner path={localPath} lang={locale} />
         <slot />
       </div>
       <div class='site-footer'>

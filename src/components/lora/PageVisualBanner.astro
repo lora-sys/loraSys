@@ -1,0 +1,23 @@
+---
+import LoraVisual from './LoraVisual.astro'
+import type { LoraVisualKey } from '@/data/lora-visual'
+
+interface Props {
+  asset: LoraVisualKey
+  label?: string
+}
+
+const { asset, label } = Astro.props
+---
+
+<figure class='page-visual-banner'>
+  <LoraVisual {asset} priority />
+  {label && <figcaption>{label}</figcaption>}
+</figure>
+
+<style>
+  .page-visual-banner { position: relative; display: grid; place-items: center; width: min(100%, 70rem); min-height: clamp(11rem, 28vw, 22rem); margin: 1.2rem auto 2.25rem; overflow: hidden; border: 1px solid hsl(var(--border)); border-radius: 1.25rem; background: linear-gradient(145deg, hsl(var(--field-paper)), hsl(var(--field-warm) / .82)); box-shadow: var(--field-shadow); }
+  .page-visual-banner :global(.lora-visual) { max-height: clamp(13rem, 33vw, 26rem); object-fit: contain; }
+  figcaption { position: absolute; right: .75rem; bottom: .7rem; border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .28rem .55rem; background: hsl(var(--background) / .88); color: hsl(var(--muted-foreground)); font-size: .63rem; letter-spacing: .06em; }
+  @media (max-width: 760px) { .page-visual-banner { min-height: 10rem; margin-bottom: 1.5rem; } }
+</style>

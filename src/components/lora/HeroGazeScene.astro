@@ -1,0 +1,65 @@
+---
+import LoraVisual from './LoraVisual.astro'
+---
+
+<div class='hero-gaze-scene' data-hero-gaze aria-hidden='true'>
+  <div class='hero-props'><LoraVisual asset='heroProps' priority /></div>
+  <div class='hero-lora'>
+    <LoraVisual asset='heroLora' priority />
+    <i class='pupil pupil--lora-left'></i><i class='pupil pupil--lora-right'></i>
+  </div>
+  <div class='hero-mochi'>
+    <LoraVisual asset='heroMochi' priority />
+    <i class='pupil pupil--mochi-left'></i><i class='pupil pupil--mochi-right'></i>
+  </div>
+</div>
+
+<script>
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+
+  document.querySelectorAll<HTMLElement>('[data-hero-gaze]').forEach((scene) => {
+    const hero = scene.closest<HTMLElement>('[data-field-notes-hero]')
+    if (!hero) return
+    let frame = 0
+    let nextX = 0
+    let nextY = 0
+    const commit = () => {
+      frame = 0
+      scene.style.setProperty('--gaze-x', nextX.toFixed(3))
+      scene.style.setProperty('--gaze-y', nextY.toFixed(3))
+    }
+    const reset = () => {
+      nextX = 0
+      nextY = 0
+      if (!frame) frame = requestAnimationFrame(commit)
+    }
+    hero.addEventListener('pointermove', (event) => {
+      if (!finePointer.matches || reducedMotion.matches) return
+      const rect = hero.getBoundingClientRect()
+      nextX = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - .5) * 2))
+      nextY = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - .5) * 2))
+      if (!frame) frame = requestAnimationFrame(commit)
+    })
+    hero.addEventListener('pointerleave', reset)
+    finePointer.addEventListener('change', reset)
+    reducedMotion.addEventListener('change', reset)
+  })
+</script>
+
+<style>
+  .hero-gaze-scene { --gaze-x: 0; --gaze-y: 0; position: relative; width: min(43vw, 34rem); aspect-ratio: 3 / 2; pointer-events: none; isolation: isolate; }
+  .hero-lora,.hero-mochi,.hero-props { position: absolute; inset: 0; transition: transform 180ms cubic-bezier(.23,1,.32,1); }
+  .hero-props { z-index: 0; transform: translate(calc(var(--gaze-x) * -3px), calc(var(--gaze-y) * -3px)); opacity: .82; }
+  .hero-lora { z-index: 1; transform: translate(calc(var(--gaze-x) * 4px), calc(var(--gaze-y) * 4px)); }
+  .hero-mochi { z-index: 2; width: 54%; left: 46%; top: 30%; transform: translate(calc(var(--gaze-x) * 6px), calc(var(--gaze-y) * 6px)); }
+  .hero-gaze-scene :global(img) { width: 100%; height: 100%; object-fit: contain; }
+  .pupil { position: absolute; z-index: 3; display: block; width: .34rem; height: .38rem; border-radius: 50%; background: #17130f; box-shadow: inset .1rem .1rem 0 rgb(255 255 255 / .88); transform: translate(calc(var(--gaze-x) * .22rem), calc(var(--gaze-y) * .16rem)); transition: transform 180ms cubic-bezier(.23,1,.32,1); }
+  .pupil--lora-left { left: 34.3%; top: 22%; }
+  .pupil--lora-right { left: 37.6%; top: 21.8%; }
+  .hero-mochi .pupil { width: .25rem; height: .28rem; transform: translate(calc(var(--gaze-x) * .12rem), calc(var(--gaze-y) * .09rem)); }
+  .pupil--mochi-left { left: 68.5%; top: 43.2%; }
+  .pupil--mochi-right { left: 73.2%; top: 43.3%; }
+  @media (max-width: 760px) { .hero-gaze-scene { width: min(100%, 34rem); } }
+  @media (prefers-reduced-motion: reduce) { .hero-lora,.hero-mochi,.hero-props,.pupil { transition: none; transform: none; } }
+</style>

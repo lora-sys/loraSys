@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import favoritesTicket from '@/assets/field-notes/favorites-ticket.webp'
+import favoritesTicket from '@/assets/lora-visual/v1/lora-v1-favorites-ticket.webp'
 import ShowcaseCarousel from './ShowcaseCarousel.astro'
 import { anime, favorites } from '../../data/showcase'
 
@@ -86,7 +86,7 @@ const copy = isEnglish
 
   .personal-heading p {
     margin: 0;
-    color: hsl(173 60% 40%);
+    color: hsl(var(--field-amber));
     font-size: 0.67rem;
     font-weight: 650;
     letter-spacing: 0.12em;

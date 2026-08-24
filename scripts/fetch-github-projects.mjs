@@ -39,18 +39,18 @@ const featuredRanks = new Map([
 
 /** Human-curated product visuals. These original local assets must never be replaced by remote preview images. */
 const curatedPosters = new Map([
-  ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://product-glassbox.webp', localFile: 'product-glassbox.webp' }],
-  ['agentarena', { kind: 'generated', sourceUrl: 'local://product-agentarena.webp', localFile: 'product-agentarena.webp' }],
-  ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://product-engineering-harness.webp', localFile: 'product-engineering-harness.webp' }],
-  ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://product-free-vision.webp', localFile: 'product-free-vision.webp' }],
-  ['ecomatrix', { kind: 'generated', sourceUrl: 'local://product-ecomatrix.webp', localFile: 'product-ecomatrix.webp' }],
-  ['second-brain', { kind: 'generated', sourceUrl: 'local://product-second-brain.webp', localFile: 'product-second-brain.webp' }],
-  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://product-multimodal-health.webp', localFile: 'product-multimodal-health.webp' }],
-  ['nano-vllm-interactive-guide', { kind: 'generated', sourceUrl: 'local://product-nano-vllm.webp', localFile: 'product-nano-vllm.webp' }],
-  ['trandingos', { kind: 'generated', sourceUrl: 'local://product-trading-os.webp', localFile: 'product-trading-os.webp' }],
-  ['packify-skill', { kind: 'generated', sourceUrl: 'local://product-packify.webp', localFile: 'product-packify.webp' }],
-  ['mossguard', { kind: 'generated', sourceUrl: 'local://product-mossguard.webp', localFile: 'product-mossguard.webp' }],
-  ['skills', { kind: 'generated', sourceUrl: 'local://product-lora-skills.webp', localFile: 'product-lora-skills.webp' }]
+  ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://lora-v1-project-glassbox.webp', localFile: 'lora-v1-project-glassbox.webp' }],
+  ['agentarena', { kind: 'generated', sourceUrl: 'local://lora-v1-project-agentarena.webp', localFile: 'lora-v1-project-agentarena.webp' }],
+  ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://lora-v1-project-ai-engineering-harness.webp', localFile: 'lora-v1-project-ai-engineering-harness.webp' }],
+  ['free-vision-skill', { kind: 'generated', sourceUrl: 'local://lora-v1-project-free-vision.webp', localFile: 'lora-v1-project-free-vision.webp' }],
+  ['ecomatrix', { kind: 'generated', sourceUrl: 'local://lora-v1-project-ecomatrix.webp', localFile: 'lora-v1-project-ecomatrix.webp' }],
+  ['second-brain', { kind: 'generated', sourceUrl: 'local://lora-v1-project-second-brain.webp', localFile: 'lora-v1-project-second-brain.webp' }],
+  ['mulitimodal', { kind: 'generated', sourceUrl: 'local://lora-v1-project-multimodal-health.webp', localFile: 'lora-v1-project-multimodal-health.webp' }],
+  ['nano-vllm-interactive-guide', { kind: 'generated', sourceUrl: 'local://lora-v1-project-nano-vllm.webp', localFile: 'lora-v1-project-nano-vllm.webp' }],
+  ['trandingos', { kind: 'generated', sourceUrl: 'local://lora-v1-project-trading-os.webp', localFile: 'lora-v1-project-trading-os.webp' }],
+  ['packify-skill', { kind: 'generated', sourceUrl: 'local://lora-v1-project-packify.webp', localFile: 'lora-v1-project-packify.webp' }],
+  ['mossguard', { kind: 'generated', sourceUrl: 'local://lora-v1-project-mossguard.webp', localFile: 'lora-v1-project-mossguard.webp' }],
+  ['skills', { kind: 'generated', sourceUrl: 'local://lora-v1-project-lora-skills.webp', localFile: 'lora-v1-project-lora-skills.webp' }]
 ])
 
 /** Explicitly curated external contribution. It is marked as External rather than being represented as a lora-sys-owned repository. */
@@ -81,7 +81,7 @@ const curatedExternalProjects = {
     status: 'active',
     categories: ['Featured', 'Contribution', 'Hackathon', 'Multimodal'],
     featuredRank: 8,
-    poster: { kind: 'generated', sourceUrl: 'local://product-stageposter.webp', localFile: 'product-stageposter.webp', fit: 'cover', objectPosition: 'center' }
+    poster: { kind: 'generated', sourceUrl: 'local://lora-v1-project-stageposter.webp', localFile: 'lora-v1-project-stageposter.webp', fit: 'cover', objectPosition: 'center' }
   }
 }
 
