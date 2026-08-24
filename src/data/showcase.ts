@@ -1,6 +1,8 @@
 export interface ShowcaseItem {
   name: string
+  nameEn?: string
   description: string
+  descriptionEn?: string
   image: string
   href: string
   cta?: string
@@ -85,11 +87,14 @@ export const anime: ShowcaseItem[] = [
 // https://open.spotify.com/track/2RGoMak3qjAjMfR0duV2Dp
 // Artwork source: https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e025673b6305b503f473b26e2fb
 export const favorites: ShowcaseItem[] = [
+  // Official series header artwork: https://dw9to29mmj727.cloudfront.net/promo/2016/5433-Tier03_SeriesHeader_20C_2000x800.jpg
   {
-    name: 'Frieren',
-    description: '葬送的芙莉莲 — a journey through memory and magic',
-    image: '/images/favorites/frieren.webp',
-    href: 'https://zh.wikipedia.org/wiki/%E8%91%AC%E9%80%81%E7%9A%84%E8%8A%99%E8%8E%89%E8%8E%B2',
+    name: '20世纪少年',
+    nameEn: '20th Century Boys',
+    description: '童年暗号、友情与末日预言，交织成一场跨越二十年的谜局。',
+    descriptionEn: 'Childhood codes, old friendships, and a doomsday mystery unfolding across decades.',
+    image: '/images/favorites/20th-century-boys.webp',
+    href: 'https://www.viz.com/naoki-urasawa-s-20th-century-boys',
   },
   {
     name: 'The Shawshank Redemption',

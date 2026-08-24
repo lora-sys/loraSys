@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets'
 import favoritesTicket from '@/assets/lora-visual/v1/lora-v1-favorites-ticket.webp'
 import ShowcaseCarousel from './ShowcaseCarousel.astro'
-import { anime, favorites } from '../../data/showcase'
+import { anime, favorites, type ShowcaseItem } from '../../data/showcase'
 
 interface Props {
   locale?: 'zh-CN' | 'en-US'
@@ -10,6 +10,14 @@ interface Props {
 
 const { locale = 'zh-CN' } = Astro.props
 const isEnglish = locale === 'en-US'
+const localizeItems = (items: ShowcaseItem[]) =>
+  isEnglish
+    ? items.map((item) => ({
+        ...item,
+        name: item.nameEn ?? item.name,
+        description: item.descriptionEn ?? item.description,
+      }))
+    : items
 const copy = isEnglish
   ? {
       eyebrow: 'Personal signals',
@@ -42,14 +50,14 @@ const copy = isEnglish
     id='anime'
     title={copy.animeTitle}
     eyebrow={copy.animeEyebrow}
-    items={anime}
+    items={localizeItems(anime)}
     locale={locale}
   />
   <ShowcaseCarousel
     id='favorites'
     title={copy.favoritesTitle}
     eyebrow={copy.favoritesEyebrow}
-    items={favorites}
+    items={localizeItems(favorites)}
     locale={locale}
   />
 </section>
