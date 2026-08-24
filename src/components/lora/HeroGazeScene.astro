@@ -6,11 +6,13 @@ import LoraVisual from './LoraVisual.astro'
   <div class='hero-props'><LoraVisual asset='heroProps' priority /></div>
   <div class='hero-lora'>
     <LoraVisual asset='heroLora' priority />
-    <i class='pupil pupil--lora-left'></i><i class='pupil pupil--lora-right'></i>
+    <span class='eye eye--lora-left'><i class='pupil'></i></span>
+    <span class='eye eye--lora-right'><i class='pupil'></i></span>
   </div>
   <div class='hero-mochi'>
     <LoraVisual asset='heroMochi' priority />
-    <i class='pupil pupil--mochi-left'></i><i class='pupil pupil--mochi-right'></i>
+    <span class='eye eye--mochi-left'><i class='pupil'></i></span>
+    <span class='eye eye--mochi-right'><i class='pupil'></i></span>
   </div>
 </div>
 
@@ -87,12 +89,17 @@ import LoraVisual from './LoraVisual.astro'
   .hero-lora { z-index: 1; transform: translate(calc(var(--gaze-x) * 4px), calc(var(--gaze-y) * 4px)); }
   .hero-mochi { z-index: 2; width: 54%; left: 46%; top: 30%; transform: translate(calc(var(--gaze-x) * 6px), calc(var(--gaze-y) * 6px)); }
   .hero-gaze-scene :global(img) { width: 100%; height: 100%; object-fit: contain; }
-  .pupil { position: absolute; z-index: 3; display: block; width: .34rem; height: .38rem; border-radius: 50%; background: #17130f; box-shadow: inset .1rem .1rem 0 rgb(255 255 255 / .88); transform: translate(calc(var(--gaze-x) * .42rem), calc(var(--gaze-y) * .3rem)); will-change: transform; }
-  .pupil--lora-left { left: 34.3%; top: 22%; }
-  .pupil--lora-right { left: 37.6%; top: 21.8%; }
-  .hero-mochi .pupil { width: .25rem; height: .28rem; transform: translate(calc(var(--gaze-x) * .25rem), calc(var(--gaze-y) * .18rem)); }
-  .pupil--mochi-left { left: 68.5%; top: 43.2%; }
-  .pupil--mochi-right { left: 73.2%; top: 43.3%; }
+  .eye { position: absolute; z-index: 3; display: block; width: 5.8%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; pointer-events: none; }
+  /* These sockets are anchored to the painted irises in the 840×560 source. */
+  .eye--lora-left { left: 34%; top: 24.3%; transform: translate(-50%, -50%); }
+  .eye--lora-right { left: 39%; top: 24.3%; transform: translate(-50%, -50%); }
+  .eye--mochi-left { left: 61.3%; top: 40%; width: 10%; transform: translate(-50%, -50%); }
+  .eye--mochi-right { left: 70.5%; top: 40%; width: 10%; transform: translate(-50%, -50%); }
+  .pupil { position: absolute; top: 50%; left: 50%; display: block; width: 24%; height: 28%; border-radius: 50%; background: rgb(23 19 15 / .86); box-shadow: inset .06rem .06rem 0 rgb(255 255 255 / .72); transform: translate3d(calc(-50% + var(--gaze-x) * .34rem), calc(-50% + var(--gaze-y) * .25rem), 0); will-change: transform; }
+  .hero-mochi .pupil { width: 22%; height: 26%; transform: translate3d(calc(-50% + var(--gaze-x) * .24rem), calc(-50% + var(--gaze-y) * .18rem), 0); }
   @media (max-width: 760px) { .hero-gaze-scene { width: min(100%, 34rem); } }
-  @media (prefers-reduced-motion: reduce) { .hero-lora,.hero-mochi,.hero-props,.pupil { transition: none; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-lora,.hero-mochi,.hero-props { transition: none; transform: none; }
+    .pupil,.hero-mochi .pupil { transition: none; transform: translate3d(-50%, -50%, 0); }
+  }
 </style>
