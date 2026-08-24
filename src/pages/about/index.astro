@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
-import journeyFragment from '@/assets/field-notes/journey-fragment.webp'
-import hackathonFieldPass from '@/assets/field-notes/expansion/about-hackathon-field-pass.webp'
+import journeyFragment from '@/assets/lora-visual/v1/lora-v1-about-journey.webp'
+import hackathonFieldPass from '@/assets/lora-visual/v1/lora-v1-about-hackathon.webp'
 import { hackathons, profile, projects } from '@/data/profile'
 import { socialLinks } from '@/data/social'
 
@@ -241,8 +241,8 @@ const openSourceProjects = projects.slice(0, 6)
     width: 0.43rem;
     height: 0.43rem;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 0 3px rgb(34 197 94 / 0.12);
+    background: hsl(var(--field-teal));
+    box-shadow: 0 0 0 3px hsl(var(--field-teal) / 0.12);
   }
   .about-actions {
     display: grid;
@@ -414,9 +414,9 @@ const openSourceProjects = projects.slice(0, 6)
     box-shadow: 0 0 0 4px hsl(var(--background));
   }
   .timeline article.planned .dot {
-    border: 1px solid hsl(173 60% 42%);
+    border: 1px solid hsl(var(--field-amber));
     background: hsl(var(--background));
-    box-shadow: 0 0 0 4px hsl(var(--background)), 0 0 0 5px hsl(173 60% 42% / 0.18);
+    box-shadow: 0 0 0 4px hsl(var(--background)), 0 0 0 5px hsl(var(--field-amber) / 0.18);
   }
   .event-meta {
     display: flex;
@@ -432,10 +432,10 @@ const openSourceProjects = projects.slice(0, 6)
   .event-status {
     display: inline-flex;
     margin: 0.1rem 0 0.34rem;
-    border: 1px solid hsl(173 60% 42% / 0.45);
+    border: 1px solid hsl(var(--field-amber) / 0.45);
     border-radius: 999px;
     padding: 0.16rem 0.4rem;
-    color: hsl(173 60% 30%);
+    color: hsl(var(--field-amber));
     font-size: 0.6rem;
     font-weight: 680;
     letter-spacing: 0.05em;

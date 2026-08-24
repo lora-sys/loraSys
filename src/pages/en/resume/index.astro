@@ -74,7 +74,7 @@ const resume = resumeData.en
   .resume-meta { display: flex; flex-wrap: wrap; gap: .45rem 1rem; margin: 1.3rem 0 0; padding: 0; color: hsl(var(--muted-foreground)); font-size: .76rem; list-style: none; }
   .strengths { display: grid; gap: .85rem; max-width: 70ch; margin: 0; padding: 0; list-style: none; counter-reset: strength; }
   .strengths li { display: grid; grid-template-columns: 1.75rem minmax(0, 1fr); gap: .75rem; align-items: start; color: hsl(var(--muted-foreground)); font-size: .88rem; line-height: 1.75; counter-increment: strength; }
-  .strengths li::before { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border: 1px solid hsl(173 60% 42% / .38); border-radius: 50%; background: hsl(173 60% 42% / .08); color: hsl(173 60% 32%); content: '0' counter(strength); font-size: .62rem; font-weight: 760; line-height: 1; }
+  .strengths li::before { display: grid; width: 1.75rem; height: 1.75rem; place-items: center; border: 1px solid hsl(var(--field-amber) / .38); border-radius: 50%; background: hsl(var(--field-amber) / .08); color: hsl(var(--field-amber)); content: '0' counter(strength); font-size: .62rem; font-weight: 760; line-height: 1; }
   .resume-meta li + li::before { margin-right: 1rem; color: hsl(var(--border)); content: '·'; }
   .resume-meta a { color: inherit; text-underline-offset: .2rem; }
   .resume-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.45rem; }

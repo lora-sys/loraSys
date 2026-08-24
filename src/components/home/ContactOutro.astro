@@ -1,8 +1,10 @@
 ---
 import { Icon } from 'astro-pure/user'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
 ---
 
 <section class='contact-outro' aria-labelledby='contact-outro-title'>
+  <LoraVisual asset='contactCorrespondence' class='contact-scene' />
   <div>
     <span class='eyebrow'>Open to thoughtful work</span>
     <h2 id='contact-outro-title'>Let&apos;s build something ambitious.</h2>
@@ -23,7 +25,7 @@ import { Icon } from 'astro-pure/user'
   .contact-outro {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(10rem, .55fr) minmax(0, 1fr) auto;
     align-items: end;
     gap: 2rem;
     overflow: hidden;
@@ -34,6 +36,7 @@ import { Icon } from 'astro-pure/user'
       radial-gradient(circle at 90% 10%, hsl(var(--primary) / 0.12), transparent 36%),
       hsl(var(--card));
   }
+  .contact-scene { width: min(100%, 18rem); max-height: 13rem; object-fit: contain; }
   .eyebrow {
     color: hsl(var(--muted-foreground));
     font-size: 0.68rem;
@@ -96,6 +99,7 @@ import { Icon } from 'astro-pure/user'
       grid-template-columns: 1fr;
       align-items: start;
     }
+    .contact-scene { width: min(100%, 20rem); margin-inline: auto; }
     .actions {
       justify-content: flex-start;
     }

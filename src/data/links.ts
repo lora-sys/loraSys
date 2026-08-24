@@ -23,7 +23,7 @@ export const linkApplication = [
   { label: 'Link', value: 'https://lora-sys.github.io/loraSys/' },
   {
     label: 'Avatar',
-    value: 'https://lora-sys.github.io/loraSys/favicon/android-chrome-512x512.png'
+    value: 'https://lora-sys.github.io/loraSys/favicon/lora-v1-mark-512.png'
   }
 ] as const
 

@@ -10,9 +10,9 @@ export const theme: ThemeUserConfig = {
   description:
     'AI Agent Developer & Full-stack Engineer building agent infrastructure, developer tools, full-stack products, and experiments in public.',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/loraSys/favicon/favicon-32x32.png',
+  favicon: '/loraSys/favicon/lora-v1-favicon-32x32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
-  socialCard: '/loraSys/images/social-card.png',
+  socialCard: '/loraSys/images/lora-v1-social-card.webp',
   /** Specify the default language for this site. */
   locale: {
     lang: 'zh-CN',
@@ -28,8 +28,8 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/avatar.png',
-    alt: 'Lora 的头像'
+    src: '/src/assets/lora-visual/v1/lora-v1-avatar.webp',
+    alt: 'Lora 在工作台前的插画头像'
   },
 
   titleDelimiter: '•',
@@ -113,7 +113,7 @@ export const integ: IntegrationUserConfig = {
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://lora-sys.github.io/loraSys/' },
-      { name: 'Avatar', val: 'https://lora-sys.github.io/loraSys/favicon/favicon.ico' }
+      { name: 'Avatar', val: 'https://lora-sys.github.io/loraSys/favicon/lora-v1-mark-512.png' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false

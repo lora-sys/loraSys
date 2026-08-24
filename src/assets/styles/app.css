@@ -1,28 +1,31 @@
 /* Theme */
 :root {
   /* Primary */
-  --primary: 200 29% 45%;
+  --primary: 37 72% 47%;
   /* Foreground */
-  --foreground: 240 10% 3.9%;
-  --muted-foreground: 240 3.8% 28.1%;
+  --foreground: 28 12% 10%;
+  --muted-foreground: 28 8% 31%;
   /* Background */
-  --background: 210 33% 99%;
-  --muted: 240 4.8% 96%;
-  --card: 0 0% 90%;
+  --background: 40 43% 97%;
+  --muted: 35 25% 91%;
+  --card: 38 31% 93%;
 
   /* Basic */
-  --border: 240 5.9% 88%;
-  --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
+  --border: 30 16% 78%;
+  --input: 34 18% 84%;
+  --ring: 37 72% 42%;
   --radius: 0.5rem;
 
   /* Lora Field Notes: tactile, editorial and intentionally low-tech. */
-  --field-paper: 42 50% 97%;
-  --field-ink: 28 10% 19%;
-  --field-teal: 173 52% 42%;
-  --field-moss: 76 25% 38%;
-  --field-clay: 16 56% 52%;
-  --field-indigo: 219 27% 35%;
+  --field-paper: 40 43% 97%;
+  --field-warm: 35 30% 88%;
+  --field-ink: 28 12% 17%;
+  --field-amber: 37 72% 55%;
+  --field-amber-strong: 31 62% 38%;
+  --field-teal: 173 38% 36%;
+  --field-moss: 76 18% 38%;
+  --field-clay: 16 38% 48%;
+  --field-indigo: 219 18% 35%;
   --motion-quick: 140ms;
   --motion-base: 190ms;
   --motion-story: 280ms;
@@ -32,25 +35,29 @@
 }
 
 .dark {
-  --field-paper: 240 13% 10%;
-  --field-ink: 40 24% 92%;
+  --field-paper: 30 12% 14%;
+  --field-warm: 30 10% 18%;
+  --field-ink: 40 35% 92%;
+  --field-amber: 37 70% 58%;
+  --field-amber-strong: 39 78% 68%;
+  --field-teal: 173 42% 48%;
   --field-shadow: 0 18px 44px -30px hsl(0 0% 0% / 0.65);
 }
 .dark {
   /* Primary */
-  --primary: 195 95% 85%;
+  --primary: 39 78% 68%;
   /* Foreground */
-  --foreground: 0 0% 98%;
-  --muted-foreground: 240 5% 74.9%;
+  --foreground: 40 35% 92%;
+  --muted-foreground: 35 11% 70%;
   /* Background */
-  --background: 240 20.54% 5.2%;
-  --muted: 240 5.9% 13%;
-  --card: 240 3.7% 24.9%;
+  --background: 28 12% 7%;
+  --muted: 30 9% 13%;
+  --card: 30 10% 17%;
 
   /* Basic */
-  --border: 240 3.7% 22.9%;
-  --input: 240 3.7% 17.9%;
-  --ring: 240 4.9% 83.9%;
+  --border: 31 9% 25%;
+  --input: 31 8% 20%;
+  --ring: 39 78% 68%;
 }
 :root {
   --un-default-border-color: hsl(var(--border) / 1);
@@ -72,8 +79,15 @@ html {
 body {
   background-color: hsl(var(--background));
   background-image:
-    radial-gradient(circle at 12% 8%, hsl(var(--field-teal) / 0.028), transparent 28rem),
-    radial-gradient(circle at 88% 78%, hsl(var(--field-clay) / 0.025), transparent 24rem);
+    radial-gradient(circle at 12% 8%, hsl(var(--field-amber) / 0.055), transparent 28rem),
+    radial-gradient(circle at 88% 78%, hsl(var(--field-amber-strong) / 0.035), transparent 24rem);
+}
+
+/* Original evidence images stay intact; the site supplies a shared paper archive frame. */
+:where(.prose, .certificate-dialog__image) img {
+  border: 0.4rem solid hsl(var(--field-warm));
+  outline: 1px solid hsl(var(--field-ink) / 0.24);
+  box-shadow: var(--field-shadow);
 }
 
 /* Field Notes assets remain tactile in either scheme rather than becoming bright paper blocks in the dark. */
@@ -150,7 +164,7 @@ a {
 }
 
 :where(a, button, summary, [role='button']):focus-visible {
-  box-shadow: 0 0 0 4px hsl(var(--field-teal) / 0.18);
+  box-shadow: 0 0 0 4px hsl(var(--field-amber) / 0.18);
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -1,7 +1,7 @@
 ---
 import type { FriendLink } from '@/data/links'
 
-import avatar from '@/assets/avatar.png'
+import avatar from '@/assets/lora-visual/v1/lora-v1-avatar.webp'
 
 interface Props {
   links: FriendLink[]
@@ -48,7 +48,7 @@ const nodes = activeLinks.map((link, index) => {
     </div>
 
     <div class='self' aria-label='Lora, constellation center'>
-      <span class='self-ring'><img src={avatar.src} alt='Lora 的 GitHub 头像' width={96} height={96} decoding='async' /></span>
+      <span class='self-ring'><img src={avatar.src} alt='Lora 在工作台前的插画头像' width={96} height={96} decoding='async' /></span>
       <strong>Lora</strong>
       <small>lora-sys</small>
     </div>

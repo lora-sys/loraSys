@@ -13,7 +13,7 @@ const {
   project,
   priority = false,
   lens = false,
-  sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 94vw'
+  sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 86vw'
 } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{avif,webp,png,jpg,jpeg}'
@@ -74,7 +74,9 @@ const fallbackMark = project.title
     position: relative;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    background: hsl(var(--muted));
+    border: 1px solid hsl(var(--field-ink) / .26);
+    padding: .42rem;
+    background: hsl(var(--field-warm));
     isolation: isolate;
   }
 
@@ -95,6 +97,7 @@ const fallbackMark = project.title
   }
 
   .project-media :global(img) {
+    border: 1px solid hsl(var(--field-ink) / .18);
     object-fit: var(--poster-fit, cover);
     object-position: var(--poster-position, center);
     transform: translate3d(var(--parallax-x, 0px), var(--parallax-y, 0px), 0) scale(1.012);

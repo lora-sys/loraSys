@@ -272,7 +272,7 @@ docs/evidence/17/
 
 ### 完整流程图
 
-![AI Engineering Harness 从规划到合并的工作流](/images/harness/section-workflow.svg)
+![AI Engineering Harness 从规划到合并的工作流](/images/harness/lora-v1-section-workflow.webp)
 
 ### 9 个 Phase 详解
 
@@ -826,7 +826,7 @@ git add . && git commit -m "feat: init"
 
 ### 数据对比
 
-![AI Engineering Harness 证据交付结构](/images/harness/section-proof.svg)
+![AI Engineering Harness 证据交付结构](/images/harness/lora-v1-section-proof.webp)
 
 | 案例                             | Before → After       | 类型     |
 | -------------------------------- | -------------------- | -------- |
@@ -860,7 +860,7 @@ git add . && git commit -m "feat: init"
 
 ## 9 条运行原则
 
-![AI Engineering Harness 运行原则](/images/harness/section-principles.svg)
+![AI Engineering Harness 运行原则](/images/harness/lora-v1-section-principles.webp)
 
 | #   | 原则                             | 为什么                                                  |
 | --- | -------------------------------- | ------------------------------------------------------- |
