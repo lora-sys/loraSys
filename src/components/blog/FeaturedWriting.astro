@@ -2,8 +2,8 @@
 import type { CollectionEntry } from 'astro:content'
 import { Image } from 'astro:assets'
 import { FormattedDate } from 'astro-pure/user'
-import agentSystemsMargin from '@/assets/lora-visual/v1/lora-v1-blog-agent-systems.webp'
-import multimodalMargin from '@/assets/lora-visual/v1/lora-v1-blog-multimodal.webp'
+import agentSystemsMargin from '@/assets/lora-visual/v2/lora-v2-blog-agent-systems.webp'
+import multimodalMargin from '@/assets/lora-visual/v2/lora-v2-blog-multimodal.webp'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -21,7 +21,7 @@ const thematicVisual = thematicVisuals[theme as keyof typeof thematicVisuals]
 ---
 
 <article class='featured-writing'>
-  {thematicVisual && <Image src={thematicVisual} alt='' aria-hidden='true' class='theme-margin' widths={[320, 480, 640]} sizes='(min-width: 768px) 13rem, 10rem' loading='lazy' />}
+  {thematicVisual && <Image src={thematicVisual} alt='' aria-hidden='true' class='theme-margin' widths={[480, 760, 1000]} sizes='(min-width: 768px) 16rem, 12.5rem' loading='lazy' />}
   <div class='featured-meta'>
     <span>{theme}</span>
     <FormattedDate date={postDate} />

@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import favoritesTicket from '@/assets/lora-visual/v1/lora-v1-favorites-ticket.webp'
+import favoritesTicket from '@/assets/lora-visual/v2/lora-v2-favorites-ticket.webp'
 import ShowcaseCarousel from './ShowcaseCarousel.astro'
 import { anime, favorites, type ShowcaseItem } from '../../data/showcase'
 
@@ -40,7 +40,7 @@ const copy = isEnglish
 ---
 
 <section class='personal-showcase' aria-labelledby='personal-signals-title'>
-  <Image src={favoritesTicket} alt='' aria-hidden='true' class='favorites-ticket' widths={[240, 360, 520]} sizes='(min-width: 1024px) 15rem, 26vw' loading='lazy' />
+  <Image src={favoritesTicket} alt='' aria-hidden='true' class='favorites-ticket' widths={[480, 760, 1000]} sizes='(min-width: 1024px) 15rem, 26vw' loading='lazy' />
   <header class='personal-heading'>
     <p>{copy.eyebrow}</p>
     <h2 id='personal-signals-title'>{copy.title}</h2>

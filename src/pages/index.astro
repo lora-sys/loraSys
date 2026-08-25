@@ -100,7 +100,7 @@ const focusSummary = [
           <div><p class='eyebrow'>Selected Work · 精选作品</p><h2 id='work-title'>三个作品，先从这里看起。</h2></div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
         </header>
-        <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' quality={60} widths={[320, 480]} />
+        <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
         {
           leadProject && (
             <div class='lead-work'>
@@ -119,7 +119,7 @@ const focusSummary = [
           <div><p class='eyebrow'>Build Notes · 构建笔记</p><h2 id='writing-title'>最近写下的构建笔记。</h2></div>
           <a class='text-link' href='/blog'>All writing <span aria-hidden='true'>↗</span></a>
         </header>
-        <LoraVisual asset='readingMarker' class='section-scene' quality={60} widths={[320, 480]} />
+        <LoraVisual asset='readingMarker' class='section-scene' />
         {
           recentPosts.length > 0 && (
             <ul class='writing-list'>
