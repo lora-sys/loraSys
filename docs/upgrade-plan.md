@@ -30,14 +30,18 @@
 
 三个主轴：把真实变成看得见的界面（证据层）、把 Field Notes 从皮肤变成结构、把访客动线修顺。语言切换流利度是已确认的最高优先级痛点。
 
-## 阶段 0 · 工作区整理（独立 commit：`chore(repo)`）
+## 阶段 0 · 工作区整理（已完成 ✅）
+
+实际提交：`771692c` `chore(repo)`、`75fecde` `docs(plan)`。
 
 1. `git rm` 已被追踪的 22 个审查截图（6 个 `review-screenshots*` 目录），原件移至仓库外 `~/.local/share/lora-sys-review/`。依据 AGENTS"审查材料只能放在仓库外"。
 2. 完成根目录 3 个 review md 的删除提交（已在暂存区）。
 3. **将当前未提交改动按主题拆分提交**：`feat(home)`（首页精简与新区块组件）、`feat(projects)`（ProjectDemo 等）、`feat(contact)`（SocialLedger）、`feat(data)`（notes.ts / featured-posts.ts）、`fix(i18n)`（robots、页面标题）。本计划文档与 `docs/interaction-matrix.md` 以 `docs(plan)` 单独提交。拆分前逐文件核对归属，不确定的单独列出询问维护者。
 4. 本文档与 `docs/interaction-matrix.md` 保留在 `docs/`，作为本轮验收依据。
 
-## 阶段 1 · 语言切换流利度（P0）
+## 阶段 1 · 语言切换流利度（P0，已完成 ✅）
+
+实际提交：`9ebe12f` fix(i18n)、`d8fcd38` perf(home)（原生 VT 修正）、`33af8e5` feat(home)（区块标签 + 轮播默认暂停）。
 
 ### 1a. 尾斜杠修复
 
@@ -86,7 +90,9 @@
 - 原生 VT 保持现状；主题跨页一致性由 `ThemeProvider`（已监听 `astro:page-load`，内联在 head）保障。
 - 验收（非 MVP）：中英切换无白屏无迟滞；深浅主题互切后导航不闪色；reduced-motion 下 VT 动画被抑制（已有媒体查询门控）；页内锚点与 pagefind 搜索页导航正常；滚动位置语义合理。
 
-## 阶段 2 · 证据层与现场感（P1）
+## 阶段 2 · 证据层与现场感（P1，部分完成 ✅）
+
+实际提交：`a7d3433` feat(now)（同步事实区 + demoByRepo 共享模块）。
 
 差异化主轴：让"真实"可见。数据全部现成，只做展示层。前提：尊重 `src/data/current-focus.ts` 的既有设计注释（"Keep this explicit so the homepage does not infer a personal priority from sync noise"）——人工策展是主渠道，同步数据作为独立标注区块补充，不替代策展内容。
 
@@ -99,7 +105,9 @@
 3. **首页"正在构建"区块接入 `current-focus.ts`**：现状为 `index.astro` 内联手写的 `focusSummary` 数组（已核实不在 `src/data/` 中），与 `/now` 页两处手写漂移。改为与 `/now` 页共用同一数据模块与组件（双语 props，参照 `current-focus.ts` 现有字段），首页展示精简版。英文首页 now 区现为内联标记，一并迁移。
 4. **作品页佐证区**（服务求职/合作访客）：`/projects` 页已直接导入 `external-contributions.json` 渲染归档目录（仓库、PR 数量、同步日期，已核实），但 PR 级证据（Merged/Open/Closed 状态、PR 链接）只在孤儿组件 `ExternalContributions.astro` 里实现、未挂载。本项工作：优先直接采用孤儿组件（它已渲染 PR 状态与链接，正合佐证区目标）替换页内简化标记，与同步时间 + 简历入口组成"为什么信我"闭环区块；若不采用则删除孤儿组件，避免双实现漂移。不新增数据。
 
-## 阶段 3 · Field Notes 结构化（P1）
+## 阶段 3 · Field Notes 结构化（P1，部分完成 ✅）
+
+实际提交：`7f6c372` feat(projects)（ProjectDemo 可见 + 单次播放 + 触觉震动）、`558ad06` feat(visual)（精选封面 + 搜索空态）、`869f06d` feat(reading)（文章尾部 Mochi 书签 + 写作统计）。
 
 1. **区块编号从导航延伸到区块标题**：`HomeSectionNav` 已有 01–05 编号，但各区块 `<section>` 标题本身没有。首页五个区块标题加统一档案标签行：编号 + 档案类型（作品=已验证章 / 正在构建=实验中章 / 笔记=现场记录）+ 最近更新时间戳。时间戳只给有真实数据的区块：作品（同步的 `pushedAt`）、正在构建（`syncedAt`）、笔记（最新文章发布日期）；收藏与联系区块的数据源（`showcase.ts` 等）没有日期字段（已核实），不显示时间戳，也不得虚构。印章资产 `lora-v1-stamp-verified/experiment` 已存在，直接复用。
 2. **ProjectDemo 默认可见**（体感提升最大项）：现 `display:none`，仅 `html[data-haptics='on']` 可见。改为：
