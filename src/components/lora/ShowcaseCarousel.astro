@@ -152,7 +152,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       waiting: root.dataset.driftWaiting || 'Waiting'
     }
     let inViewport = false
-    let userPaused = reducedMotion.matches
+    let userPaused = true
     let hovering = false
     let timer: number | undefined
     let hoverResumeTimer: number | undefined

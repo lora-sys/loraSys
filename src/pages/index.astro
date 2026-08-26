@@ -18,8 +18,10 @@ import ScrollProgressRail from '@/components/lora/ScrollProgressRail.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import { socialLinks } from '@/data/social'
 import { demoByRepo } from '@/data/project-demos'
+import syncReport from '@/data/sync-report.json'
 
 const allPosts = sortMDByDate(await getBlogCollection())
+const latestPostDate = allPosts[0]?.data?.publishDate ? new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(allPosts[0].data.publishDate)) : null
 const allSelectedProjects = projects.filter((project) => project.featured)
 const featuredProjects = allSelectedProjects.slice(0, 3)
 const [leadProject, ...supportingProjects] = featuredProjects
@@ -128,6 +130,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <h2 id='work-title'>三个作品，先从这里看起。</h2>
           </div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
+            <div class='section-meta'><span class='archive-badge archive-badge--verified'>已验证</span><time datetime='{syncReport.syncedAt.slice(0,10)}'>同步于 {new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))}</time></div>
         </header>
         <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
         {
@@ -157,6 +160,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <h2 id='writing-title'>最近写下的构建笔记。</h2>
           </div>
           <a class='text-link' href='/blog'>全部写作 <span aria-hidden='true'>↗</span></a>
+          {latestPostDate && <div class='section-meta'><span class='archive-badge archive-badge--field'>现场记录</span><time>最新 {latestPostDate}</time></div>}
         </header>
         <LoraVisual asset='readingMarker' class='section-scene' />
         {
@@ -676,4 +680,6 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       transform: none;
     }
   }
+
+  .section-meta{display:flex;align-items:center;gap:.6rem;margin-top:.35rem;font-size:.66rem;font-weight:630;letter-spacing:.06em;color:hsl(var(--muted-foreground))}.archive-badge{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .5rem;border:1px solid hsl(var(--border));border-radius:999px;background:hsl(var(--field-amber)/.08);color:hsl(var(--field-amber-strong));text-transform:uppercase}.archive-badge--verified{border-color:hsl(var(--field-teal)/.45);color:hsl(var(--field-teal));background:hsl(var(--field-teal)/.08)}.archive-badge--experiment{border-color:hsl(var(--field-amber)/.5);color:hsl(var(--field-amber));background:hsl(var(--field-amber)/.08)}.archive-badge--field{border-color:hsl(var(--field-ink)/.35);color:hsl(var(--field-ink));background:hsl(var(--muted)/.25)}.section-meta time{font-variant-numeric:tabular-nums}
 </style>
