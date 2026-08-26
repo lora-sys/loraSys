@@ -97,6 +97,23 @@ const label = labels[locale]
         localStorage.setItem('haptics', next ? 'on' : 'off')
       })
     }
+    // 触觉开启时，按压共享 tactile-action 语义的控件给一次 8ms 轻震；
+    // 仅在支持 vibrate 的设备上生效，失败静默。
+    document.addEventListener(
+      'pointerdown',
+      (event) => {
+        if (document.documentElement.dataset.haptics !== 'on') return
+        const target = event.target instanceof Element ? event.target : null
+        if (target?.closest('button, a, summary, [role=\'button\']')) {
+          try {
+            navigator.vibrate?.(8)
+          } catch {
+            /* 部分平台抛 NotAllowedError，静默即可 */
+          }
+        }
+      },
+      { passive: true }
+    )
     reducedMotion.addEventListener?.('change', (event) => {
       if (event.matches) {
         for (const toggle of toggles) toggle.hidden = true

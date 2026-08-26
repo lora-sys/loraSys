@@ -1,6 +1,6 @@
 ---
-// 体感 demo 面板：只在 html[data-haptics='on'] 且未开启 reduced-motion 时可见。
-// 单次有限播放，重播由访客手动触发；只动 transform 与 opacity。
+// 产品微演示：默认可见，进入视口单次播放，重播由访客手动触发。
+// 只动 transform 与 opacity；reduced-motion 下展示静态终态（全部点亮），不播放。
 type DemoKind = 'timeline' | 'pipeline' | 'terminal'
 type Props = { kind: DemoKind; locale?: 'zh-CN' | 'en-US' }
 const { kind, locale = 'zh-CN' } = Astro.props
@@ -85,22 +85,22 @@ const copy = meta[kind][locale]
 
 <style>
   .project-demo {
-    display: none;
+    display: grid;
+    gap: 0.55rem;
     margin-block: 0.7rem;
     border: 1px dashed hsl(var(--border) / 0.95);
     border-radius: 0.8rem;
     padding: 0.75rem 0.85rem 0.6rem;
     background: hsl(var(--background) / 0.66);
   }
-  /* 体感开启才点亮；reduced-motion 访客永远看不到，也不会被动画打扰。 */
-  :global(html[data-haptics='on']) .project-demo {
-    display: grid;
-    gap: 0.55rem;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .project-demo {
-      display: none !important;
-    }
+
+  /* 未播放前（视口外或等待 IntersectionObserver）保持静态初始态，避免页面加载即全部播完。 */
+  .project-demo[data-playing='false'] .demo-sweep,
+  .project-demo[data-playing='false'] .demo-node,
+  .project-demo[data-playing='false'] .demo-chip,
+  .project-demo[data-playing='false'] .demo-chip::after,
+  .project-demo[data-playing='false'] .demo-line-inner {
+    animation: none;
   }
 
   .demo-stage {
@@ -293,16 +293,37 @@ const copy = meta[kind][locale]
 
 <script>
   const initDemos = () => {
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
     for (const demo of document.querySelectorAll<HTMLElement>('[data-demo]')) {
+      if (demo.dataset.demoReady === 'true') continue
+      demo.dataset.demoReady = 'true'
+      demo.dataset.playing = 'false'
+
+      const play = () => {
+        // animation:none ⇄ 定义切换会从头重播，且不依赖 getAnimations 的引擎差异；
+        // 中间强制一次 reflow，避免同帧内两次属性变更被合并。
+        demo.dataset.playing = 'false'
+        void demo.offsetWidth
+        demo.dataset.playing = 'true'
+      }
+
       const replay = demo.querySelector<HTMLButtonElement>('[data-demo-replay]')
-      replay?.addEventListener('click', () => {
-        const animations = demo.getAnimations({ subtree: true })
-        // Safari 上对 fill:forwards 的动画直接 cancel()+play() 偶发不重启；
-        // 先 cancel，再强制一次 reflow，最后重播，保证三条引擎路径一致。
-        for (const animation of animations) animation.cancel()
-        if (animations.length > 0) void demo.offsetWidth
-        for (const animation of animations) animation.play()
-      })
+      replay?.addEventListener('click', play)
+
+      // 进入视口才首播一次；reduced-motion 访客静态终态即可，不注册观察器。
+      if (reducedMotion.matches || !('IntersectionObserver' in window)) continue
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              observer.disconnect()
+              play()
+            }
+          }
+        },
+        { threshold: 0.45 }
+      )
+      observer.observe(demo)
     }
   }
   initDemos()
