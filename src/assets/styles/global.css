@@ -1,18 +1,16 @@
 /* [Animation] */
 @keyframes fade-in-up {
   0% {
-    transform: translateY(2rem);
-    opacity: 0;
+    transform: translateY(1.1rem);
   }
   100% {
     transform: translateY(0);
-    opacity: 1;
   }
 }
+/* 入场保持初始可见（无 opacity:0），避免延迟首屏首绘、避免与原生跨文档 View Transition 的页面级淡入叠加成双重动画。 */
 .animate {
-  opacity: 0;
-  animation: 300ms fade-in-up;
-  animation-fill-mode: forwards;
+  animation: 260ms ease-out fade-in-up;
+  animation-fill-mode: both;
 }
 @media (prefers-reduced-motion: reduce) {
   .animate {

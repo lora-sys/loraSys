@@ -76,20 +76,15 @@
 
 英文页不做反向要求（已核实：英文页中的中文均为刻意的跨语言链接，如"查看中文联系页 ↗"、带 `lang='zh-CN'` 的双语宣言，属正确 i18n 实践，保留）。唯一不一致点：`src/pages/en/work.astro:49` 的 `查看完整项目档案 ↗` 未遵循其余页面的"查看中文…"命名模式，读起来像文案泄漏而非语言指向链接；统一为该模式（如`查看中文项目档案 ↗`）。
 
-### 1d. 视图过渡（ClientRouter）
+### 1d. 页面过渡（实施修正：保留原生跨文档 View Transitions，不引入 ClientRouter）
 
-落地 `interaction-matrix.md` 已规划的"页面进入/离开"行：全站启用 Astro `ClientRouter`（在 `BaseLayout.astro` 引入），内容层 180–260ms 淡入。已核实全部五个布局（`BaseLayout`/`ContentLayout`/`CommonPage`/`BlogPost`/`IndividualPage`）最终都汇聚到 `BaseLayout` 的单一 `<head>`，因此 ClientRouter 只需在一处引入。
+实施时发现：`app.css` 已启用原生 `@view-transition { navigation: auto }`（140/190ms 淡入淡出 + reduced-motion 门控 + 主题切换专用 clip-path 动画），架构上零 JS、无 observer 重绑与 script 重执行风险。引入 Astro ClientRouter 反而是重复建设。实际摩擦源是全局 `.animate`（`global.css:12`）：每次导航新文档重播 300ms `opacity:0` 入场，叠加在 VT 淡入上形成双重动画迟滞，且延迟首屏主内容首绘（LCP 元素被推给 header 品牌文字）。
 
-**不要对 header 使用 `transition:persist`**：header 的导航文案、aria-label、locale toggle 标签全部依赖当前页面 locale，persist 会把切换前语言的 header DOM 原样带到英文页（中文导航挂在英文页上）。header 应随内容层一起淡入重渲染；只有 locale 无关的状态才允许 persist（如主题）。移动菜单的展开状态也不得跨导航保留。
+实施方案：
 
-风险与验证（非 MVP，逐项过）：
-
-- `ThemeProvider.astro`（本仓库 fork 于 packages/pure，已本地修改）的主题状态挂在 `<html>` 上，视图过渡换文档时会被新页面的属性覆盖：需在 `astro:after-swap` 时机重放主题判定（或持久化主题脚本），实测深浅两方向互切、以及过渡中刷新。
-- `ScrollProgressRail`、`HomeSectionNav` 的 IntersectionObserver 依赖页面加载时机：过渡后需重新绑定或改挂 `astro:page-load` 事件；逐组件确认。
-- `prefers-reduced-motion: reduce` 下禁用过渡动画（`transition:animate` 设置为 none 或按媒体查询降级），降级后导航仍即时可用。
-- 与 pagefind 搜索页、博客 TOC 锚点、`ShowcaseCarousel` 脚本的兼容实测（过渡后脚本是否按预期重新执行）。
-- 与全局 `.animate` 入场动画的交互：ClientRouter 启用后每次站内导航新 DOM 都会重播 300ms 入场动画，符合 interaction-matrix"页面进入淡入"的意图，但需实测是否过度（尤其频繁导航时）；若过度，考虑仅首次进入播放或缩短时长。该动画对 LCP 的影响见阶段 5。
-- 验收标准：中英切换无整页白屏、header 语言与目标页一致、滚动位置语义合理（语言切换因页面内容不同允许回到顶部，站内导航保持位置）。
+- `.animate` 改为 transform-only 入场（初始可见，仅 translateY 位移），保留编辑器物质感但消除首绘延迟与双重动画。
+- 原生 VT 保持现状；主题跨页一致性由 `ThemeProvider`（已监听 `astro:page-load`，内联在 head）保障。
+- 验收（非 MVP）：中英切换无白屏无迟滞；深浅主题互切后导航不闪色；reduced-motion 下 VT 动画被抑制（已有媒体查询门控）；页内锚点与 pagefind 搜索页导航正常；滚动位置语义合理。
 
 ## 阶段 2 · 证据层与现场感（P1）
 
