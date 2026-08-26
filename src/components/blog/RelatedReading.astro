@@ -11,6 +11,7 @@ interface Props {
 }
 
 const { post, posts } = Astro.props
+const isChinese = post.data.language !== 'en-US'
 const currentTags = new Set(post.data.tags)
 const related = posts
   .filter((candidate) => candidate.id !== post.id)
@@ -36,8 +37,8 @@ const related = posts
   !!related.length && (
     <section class='related-reading not-prose' aria-labelledby='related-reading-title'>
       <header>
-        <p>Continue exploring</p>
-        <h2 id='related-reading-title'>Related reading</h2>
+        <p>{isChinese ? '继续探索' : 'Continue exploring'}</p>
+        <h2 id='related-reading-title'>{isChinese ? '相关阅读' : 'Related reading'}</h2>
       </header>
       <ul>
         {related.map(({ candidate, sharedTags }) => (

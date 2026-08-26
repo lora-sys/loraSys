@@ -206,7 +206,7 @@ const filterAttributes = filterable
           )
         }
         {project.language && <span translate='no'>{project.language}</span>}
-        <span>Updated {pushedAt}</span>
+        <span>{compactLocale === 'zh-CN' ? `最近活动 ${pushedAt}` : `Updated ${pushedAt}`}</span>
       </div>
 
       <div class='project-actions'>

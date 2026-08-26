@@ -61,11 +61,11 @@ const statusLabel = (status: Project['status']) =>
   <section class='filter-panel' aria-labelledby='project-filter-title'>
     <div class='filter-heading'>
       <div>
-        <p class='eyebrow'>Find a build</p>
-        <h2 id='project-filter-title'>Explore the repository</h2>
+        <p class='eyebrow'>Find a build · 找一个构建</p>
+        <h2 id='project-filter-title'>浏览完整仓库</h2>
       </div>
       <p class='filter-status' aria-live='polite' data-filter-status>
-        Showing all {projects.length} projects
+        共收录 {projects.length} 个项目
       </p>
     </div>
 
@@ -127,7 +127,7 @@ const statusLabel = (status: Project['status']) =>
         <header class='section-heading'>
           <div>
             <p class='eyebrow'>Featured / 01</p>
-            <h2 id='lead-title'>Lead project</h2>
+            <h2 id='lead-title'>主推项目</h2>
           </div>
           <span data-section-count>1 project</span>
         </header>
@@ -142,7 +142,7 @@ const statusLabel = (status: Project['status']) =>
         <header class='section-heading'>
           <div>
             <p class='eyebrow'>Selected work</p>
-            <h2 id='featured-title'>Featured projects</h2>
+            <h2 id='featured-title'>精选项目</h2>
           </div>
           <span data-section-count>{featuredProjects.length} projects</span>
         </header>
@@ -161,7 +161,7 @@ const statusLabel = (status: Project['status']) =>
         <header class='section-heading'>
           <div>
             <p class='eyebrow'>Recent & maintained</p>
-            <h2 id='maintained-title'>Active projects</h2>
+            <h2 id='maintained-title'>持续维护</h2>
           </div>
           <span data-section-count>{maintainedProjects.length} projects</span>
         </header>
@@ -184,7 +184,7 @@ const statusLabel = (status: Project['status']) =>
         <header class='section-heading'>
           <div>
             <p class='eyebrow'>Complete public record</p>
-            <h2 id='archive-title'>Repository archive</h2>
+            <h2 id='archive-title'>仓库归档</h2>
           </div>
           <span data-section-count>{archiveProjects.length} projects</span>
         </header>
@@ -236,9 +236,9 @@ const statusLabel = (status: Project['status']) =>
 
   <div class='empty-state' data-empty-state hidden>
     <span aria-hidden='true'>⌕</span>
-    <h2>No matching projects</h2>
-    <p>Try another keyword, category, or status.</p>
-    <button type='button' data-filter-reset>Reset filters</button>
+    <h2>没有匹配的项目</h2>
+    <p>换个关键词、分类或状态试试。</p>
+    <button type='button' data-filter-reset>重置筛选</button>
   </div>
 </div>
 
@@ -344,8 +344,8 @@ const statusLabel = (status: Project['status']) =>
           .filter(Boolean)
           .join(' · ')
         status.textContent = filters
-          ? `Showing ${visible} of ${items.length} projects · ${filters}`
-          : `Showing all ${items.length} projects`
+          ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}`
+          : `共收录 ${items.length} 个项目`
       }
       if (emptyState) emptyState.hidden = visible !== 0
     }

@@ -7,13 +7,15 @@ import { Comment, PageInfo } from '@/components/waline'
 
 interface Props {
   title: string
+  /** 页面 h1；缺省回退 title，供浏览器标签保留英文页面名而正文用中文标题。 */
+  heading?: string
   description?: string
   headings?: MarkdownHeading[]
   view?: boolean
   comment?: boolean
 }
 
-const { title, description, headings, view, comment: enableComment, ...props } = Astro.props
+const { title, heading, description, headings, view, comment: enableComment, ...props } = Astro.props
 ---
 
 <PageLayout meta={{ title, description }} showSidebar={!!headings?.length} {...props}>
@@ -21,7 +23,7 @@ const { title, description, headings, view, comment: enableComment, ...props } =
   {!!headings?.length && <TOC headings={headings} slot='sidebar' />}
 
   <Fragment slot='header'>
-    <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>{title}</h1>
+    <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>{heading ?? title}</h1>
     {(view || enableComment) && <PageInfo {view} comment={enableComment} class='italic' />}
   </Fragment>
 

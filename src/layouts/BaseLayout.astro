@@ -5,7 +5,7 @@ import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 import SiteHeader from '@/components/layout/SiteHeader.astro'
 import RouteVisualBanner from '@/components/lora/RouteVisualBanner.astro'
-import { footerNavigation, localizedPath, type SiteLocale } from '@/i18n/site'
+import { footerNavigation, hasAlternate, localizedPath, type SiteLocale } from '@/i18n/site'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -32,7 +32,9 @@ const {
 } = Astro.props
 const locale: SiteLocale = lang === 'en-US' ? 'en-US' : 'zh-CN'
 const localPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
-const alternatePath = localizedPath(localPath, locale === 'zh-CN' ? 'en-US' : 'zh-CN')
+// 只有真实存在对应路由的页面才声明 hreflang alternate。
+const otherLocale: SiteLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
+const alternatePath = hasAlternate(localPath, otherLocale) ? localizedPath(localPath, otherLocale) : undefined
 const footerItems = footerNavigation(locale)
 const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 ---

@@ -1,13 +1,15 @@
 ---
 import { Icon } from 'astro-pure/user'
-import { getLocale, localeMeta, localizedPath, primaryNavigation } from '@/i18n/site'
+import { getLocale, hasAlternate, localeMeta, localizedPath, primaryNavigation } from '@/i18n/site'
 
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
 const locale = getLocale(pathname)
 const copy = localeMeta(locale)
 const menu = primaryNavigation(locale)
-const alternate = localizedPath(pathname, locale === 'zh-CN' ? 'en-US' : 'zh-CN')
-const home = locale === 'en-US' ? '/en/' : '/'
+const otherLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
+// 无对应路由的页面不提供语言切换，避免把访客丢回对方语言首页。
+const alternate = hasAlternate(pathname, otherLocale) ? localizedPath(pathname, otherLocale) : undefined
+const home = locale === 'en-US' ? '/en' : '/'
 const search = locale === 'en-US' ? '/search' : '/search'
 ---
 
@@ -20,7 +22,7 @@ const search = locale === 'en-US' ? '/search' : '/search'
 
   <div class='header-tools'>
     <a class='contact-cta tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
-    <a class='locale-toggle' href={alternate} hreflang={locale === 'en-US' ? 'zh-CN' : 'en-US'} lang={locale === 'en-US' ? 'zh-CN' : 'en-US'}>{copy.switchLabel}</a>
+    {alternate && <a class='locale-toggle' href={alternate} hreflang={otherLocale} lang={otherLocale}>{copy.switchLabel}</a>}
     <a class='search-link' href={search} title={copy.searchLabel} aria-label={copy.searchLabel}><Icon name='search' class='size-4' /></a>
     <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Toggle dark theme' : '切换深色主题'} aria-pressed='false'>
       <Icon class='system size-4' name='computer' />
@@ -36,7 +38,7 @@ const search = locale === 'en-US' ? '/search' : '/search'
   <nav id='mobile-navigation' class='mobile-nav' aria-label={locale === 'en-US' ? 'Mobile navigation' : '移动端导航'} data-mobile-nav hidden>
     {menu.map((item) => <a class='tactile-action' href={item.href}>{item.title}</a>)}
     <a class='tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
-    <a href={alternate} hreflang={locale === 'en-US' ? 'zh-CN' : 'en-US'}>{locale === 'en-US' ? '中文' : 'English'}</a>
+    {alternate && <a href={alternate} hreflang={otherLocale} lang={otherLocale}>{locale === 'en-US' ? '中文' : 'English'}</a>}
   </nav>
 </header>
 

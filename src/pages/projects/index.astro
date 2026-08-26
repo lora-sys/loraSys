@@ -110,7 +110,7 @@ const directoryItems: DirectoryItem[] = [
 
     <section class='selected-work' aria-labelledby='selected-work-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>01 — 0{selectedWork.length}</p><h2 id='selected-work-title'>Selected Work</h2></div>
+        <div><p class='eyebrow'>01 — 0{selectedWork.length}</p><h2 id='selected-work-title'>精选作品</h2></div>
         <div class='heading-side'>
           <span>产品、仓库与相关记录</span>
           <HapticsToggle />
@@ -142,7 +142,7 @@ const directoryItems: DirectoryItem[] = [
     </aside>
 
     <details class='work-archive' id='archive' data-work-archive>
-      <summary class='tactile-action'><span><b>Explore the archive</b><small>查看全部同步项目、贡献关系、内容路线与筛选工具</small></span><em data-archive-state aria-live='polite'>目录已收起</em><i aria-hidden='true'>+</i></summary>
+      <summary class='tactile-action'><span><b>展开完整档案</b><small>查看全部同步项目、贡献关系、内容路线与筛选工具</small></span><em data-archive-state aria-live='polite'>目录已收起</em><i aria-hidden='true'>+</i></summary>
       <div class='archive-content'>
         <ContentGraph projects={graphProjects} />
         <ContentDirectory
