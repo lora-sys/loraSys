@@ -17,6 +17,7 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { getProjectStories } from '@/data/project-stories'
 import { getContentOpportunities } from '@/data/content-intelligence'
 import { getThemeRoadmap } from '@/data/theme-roadmap'
+import { demoByRepo } from '@/data/project-demos'
 
 const selectedWork = projects
   .filter((project) => project.featuredRank !== undefined)
@@ -38,12 +39,6 @@ const selectedContributions = contributionSnapshot.contributions.filter(
 const contributionSyncDate = syncReport.snapshots?.contributions ?? contributionSnapshot.lastUpdated
 const contributionWarningCount = (syncReport.warnings?.length ?? 0) + (contributionSnapshot.warnings?.length ?? 0)
 
-// 与首页同一份体感 demo 映射；键是同步快照里的仓库名。
-const demoByRepo: Record<string, 'timeline' | 'pipeline' | 'terminal'> = {
-  AgentArena: 'timeline',
-  'ai-engineering-harness': 'pipeline',
-  'Glassbox-Agent-Harness': 'terminal'
-}
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository]
 const formatDirectoryDate = (date: Date) =>
   new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)

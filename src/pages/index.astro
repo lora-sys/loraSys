@@ -17,6 +17,7 @@ import LoraVisual from '@/components/lora/LoraVisual.astro'
 import ScrollProgressRail from '@/components/lora/ScrollProgressRail.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import { socialLinks } from '@/data/social'
+import { demoByRepo } from '@/data/project-demos'
 
 const allPosts = sortMDByDate(await getBlogCollection())
 const allSelectedProjects = projects.filter((project) => project.featured)
@@ -51,11 +52,6 @@ const sectionNav = [
 ]
 
 // 体感 demo 只配给精选三卡；键是同步快照里的仓库名，映射缺失就自然不渲染。
-const demoByRepo: Record<string, 'timeline' | 'pipeline' | 'terminal'> = {
-  AgentArena: 'timeline',
-  'ai-engineering-harness': 'pipeline',
-  'Glassbox-Agent-Harness': 'terminal'
-}
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository ?? '']
 ---
 
