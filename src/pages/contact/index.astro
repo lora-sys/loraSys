@@ -5,7 +5,7 @@ import { Image } from 'astro:assets'
 import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import contactCorrespondenceHero from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
-import SocialGrid from '@/components/contact/SocialGrid.astro'
+import SocialLedger from '@/components/contact/SocialLedger.astro'
 
 const email = 'lorasys@outlook.com'
 const headings = [
@@ -35,7 +35,7 @@ const headings = [
     or repository. LinkedIn works well for professional introductions.
   </p>
   <div class='not-prose primary-channels'>
-    <SocialGrid links={primarySocialLinks} />
+    <SocialLedger links={primarySocialLinks} />
   </div>
   <div class='not-prose email-copy'>
     <div>
@@ -88,7 +88,7 @@ const headings = [
     Follow the medium that fits the kind of update you want—short notes, demos, or longer writing.
   </p>
   <div class='not-prose secondary-channels'>
-    <SocialGrid links={secondarySocialLinks} />
+    <SocialLedger links={secondarySocialLinks} startAt={primarySocialLinks.length + 1} />
   </div>
 
   <script>

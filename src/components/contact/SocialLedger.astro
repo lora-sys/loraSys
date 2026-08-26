@@ -1,0 +1,174 @@
+---
+// 编号社交台账：oiloil 式编辑排版行——图标、编号、大名字、说明、箭头。
+// hover/focus 时名字后面扫过琥珀高亮条，箭头入场；只动 transform 与 opacity。
+import type { SocialLink } from '@/data/social'
+
+import SocialIcon from './SocialIcon.astro'
+
+interface Props {
+  links: SocialLink[]
+  startAt?: number
+}
+
+const { links, startAt = 1 } = Astro.props
+---
+
+<ol class='social-ledger'>
+  {
+    links.map((link, index) => (
+      <li>
+        <a
+          href={link.href}
+          target={link.href.startsWith('http') ? '_blank' : undefined}
+          rel={link.href.startsWith('http') ? 'me noopener noreferrer' : undefined}
+          style={`--brand:${link.brand}`}
+          aria-label={`${link.name}: ${link.handle}`}
+        >
+          <span class='ledger-icon'>
+            <SocialIcon name={link.icon} class='brand-icon' />
+          </span>
+          <span class='ledger-index' aria-hidden='true'>
+            {String(startAt + index).padStart(2, '0')}
+          </span>
+          <span class='ledger-name'>
+            {link.name}
+            <span class='ledger-highlight' aria-hidden='true' />
+          </span>
+          <span class='ledger-desc'>{link.description || link.handle}</span>
+          <span class='ledger-arrow' aria-hidden='true'>
+            →
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .social-ledger {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .social-ledger li + li {
+    border-top: 1px solid hsl(var(--border) / 0.75);
+  }
+  .social-ledger a {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1.35fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 0.4rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition: background-color var(--motion-base) ease;
+  }
+  .social-ledger a:hover,
+  .social-ledger a:focus-visible {
+    background: hsl(var(--field-amber) / 0.05);
+  }
+  .ledger-icon {
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    border: 1px solid hsl(var(--border) / 0.9);
+    border-radius: 0.7rem;
+    background: hsl(var(--background) / 0.8);
+    color: hsl(var(--muted-foreground));
+    transition: color var(--motion-base) ease, border-color var(--motion-base) ease;
+  }
+  :global(.brand-icon) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  .ledger-index {
+    color: hsl(var(--muted-foreground) / 0.75);
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.6rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+  }
+  .ledger-name {
+    position: relative;
+    display: inline-block;
+    justify-self: start;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3vw, 1.8rem);
+    font-weight: 720;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .ledger-highlight {
+    position: absolute;
+    right: -0.15em;
+    bottom: 0.08em;
+    left: -0.15em;
+    height: 0.42em;
+    background: hsl(var(--field-amber) / 0.55);
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition:
+      transform var(--motion-base) var(--motion-spring),
+      opacity var(--motion-quick) ease;
+  }
+  .ledger-desc {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ledger-arrow {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition:
+      transform var(--motion-base) var(--motion-spring),
+      opacity var(--motion-base) ease,
+      color var(--motion-base) ease;
+  }
+  .social-ledger a:hover .ledger-icon,
+  .social-ledger a:focus-visible .ledger-icon {
+    color: var(--brand);
+    border-color: color-mix(in srgb, var(--brand) 45%, hsl(var(--border)));
+  }
+  .social-ledger a:hover .ledger-highlight,
+  .social-ledger a:focus-visible .ledger-highlight {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  .social-ledger a:hover .ledger-arrow,
+  .social-ledger a:focus-visible .ledger-arrow {
+    color: hsl(var(--foreground));
+    opacity: 1;
+    transform: translateX(0);
+  }
+  @media (max-width: 560px) {
+    .ledger-desc {
+      display: none;
+    }
+    .social-ledger a {
+      grid-template-columns: auto auto minmax(0, 1fr) auto;
+      gap: 0.7rem;
+    }
+    .ledger-arrow {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .social-ledger a,
+    .ledger-icon,
+    .ledger-highlight,
+    .ledger-arrow {
+      transition: none;
+    }
+    .ledger-arrow {
+      transform: none;
+    }
+  }
+</style>
