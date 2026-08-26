@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content'
 
 import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
 import BlogListing from '@/components/blog/BlogListing.astro'
+import { featuredPostIds } from '@/data/featured-posts'
 import config from '@/site-config'
 
 export const prerender = true
@@ -17,8 +18,7 @@ export const getStaticPaths = (async ({ paginate }) => {
   return supportedLanguages.flatMap((language) => {
     const filtered = collections.filter((post) => post.data.language === language)
     const uniqueTags = getUniqueTagsWithCount(filtered).map(([tag]) => tag)
-    const featuredIds = ['ai-engineering-harness', 'free-vision-skill', 'eve-agent', 'wishlive']
-    const featuredPosts = featuredIds
+    const featuredPosts = featuredPostIds
       .map((id) => filtered.find((post) => post.id === id))
       .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
     return paginate(filtered, {
