@@ -23,7 +23,7 @@ const headings=sections.map(s=>({depth:2,slug:s.id,text:s.title}))
 ---
 <PageLayout title='正在构建' {headings}>
  <section class='not-prose now-hero' aria-labelledby='now-intro'>
-  <Image src={nowCurrentDeskHero} alt='' aria-hidden='true' class='now-hero-image' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' />
+  <Image src={nowCurrentDeskHero} alt='' aria-hidden='true' class='now-hero-image' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
   <div class='now-hero-copy'>
    <span class='now-hero-label'>Field notes / current desk</span>
    <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>2026 年 8 月 20 日</time>，完成重要变化时更新。</p>

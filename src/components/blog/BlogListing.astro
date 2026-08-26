@@ -99,7 +99,7 @@ const languageFilters = [
   <Button title='Back' href='/' variant='back' />
   <main class='blog-shell mt-6 lg:mt-10'>
     <header id='content-header' class='animate editorial-header'>
-      <Image src={readingMarker} alt='' aria-hidden='true' class='reading-marker' widths={[720, 1152, 1536]} sizes='(min-width: 1024px) 34rem, 72vw' loading='eager' />
+      <Image src={readingMarker} alt='' aria-hidden='true' class='reading-marker' widths={[720, 1152, 1536]} sizes='(min-width: 1024px) 34rem, 72vw' loading='eager' fetchpriority='high' />
       <div>
         <p class='eyebrow'>Writing / 写作</p>
         <h1>把正在构建的东西，写成可复查的笔记。</h1>
