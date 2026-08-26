@@ -101,9 +101,9 @@ const profileJsonLd = {
   <meta name='robots' content={noindex ? 'noindex, nofollow' : 'index, follow'} />
   <meta name='referrer' content='strict-origin-when-cross-origin' />
 
-  {/* Theme Color */}
-  <meta name='theme-color' media='(prefers-color-scheme: light)' content='#edf4f7' />
-  <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#11151b' />
+  {/* Theme Color: matches --background in app.css so browser chrome never flashes a foreign hue. */}
+  <meta name='theme-color' media='(prefers-color-scheme: light)' content='#F8F8F4' />
+  <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#141210' />
   <meta name='color-scheme' content='light dark' />
 
 {/* Open Graph / Facebook */}

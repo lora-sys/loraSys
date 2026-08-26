@@ -1,0 +1,110 @@
+---
+// 体感开关：开启后项目卡解锁可玩 demo。默认关闭；reduced-motion 访客不渲染此开关。
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+}
+const { locale = 'zh-CN' } = Astro.props
+const labels = {
+  'zh-CN': { off: '开启体感', on: '体感已开启' },
+  'en-US': { off: 'Enable haptics', on: 'Haptics on' }
+}
+const label = labels[locale]
+---
+
+<button
+  class='haptics-toggle tactile-action'
+  type='button'
+  aria-pressed='false'
+  data-haptics-toggle
+  data-label-off={label.off}
+  data-label-on={label.on}
+  hidden
+>
+  <i aria-hidden='true'></i>
+  <span data-haptics-label>{label.off}</span>
+</button>
+
+<style>
+  .haptics-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    border: 1px solid hsl(var(--border) / 0.9);
+    border-radius: 999px;
+    padding: 0.34rem 0.72rem;
+    background: hsl(var(--background) / 0.8);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 650;
+    letter-spacing: 0.03em;
+  }
+  .haptics-toggle i {
+    width: 0.46rem;
+    height: 0.46rem;
+    border: 1px solid hsl(var(--muted-foreground) / 0.7);
+    border-radius: 999px;
+    background: transparent;
+    transition:
+      background-color var(--motion-base) ease,
+      border-color var(--motion-base) ease;
+  }
+  .haptics-toggle:hover,
+  .haptics-toggle:focus-visible {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--field-teal) / 0.65);
+  }
+  .haptics-toggle[aria-pressed='true'] {
+    border-color: hsl(var(--field-teal) / 0.75);
+    color: hsl(var(--foreground));
+  }
+  .haptics-toggle[aria-pressed='true'] i {
+    border-color: hsl(var(--field-teal));
+    background: hsl(var(--field-teal));
+    box-shadow: 0 0 0 3px hsl(var(--field-teal) / 0.16);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .haptics-toggle,
+    .haptics-toggle i {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const toggles = [...document.querySelectorAll<HTMLButtonElement>('[data-haptics-toggle]')]
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+
+  const apply = (on: boolean) => {
+    document.documentElement.dataset.haptics = on ? 'on' : 'off'
+    for (const toggle of toggles) {
+      toggle.setAttribute('aria-pressed', String(on))
+      const label = toggle.querySelector<HTMLElement>('[data-haptics-label]')
+      if (label) {
+        label.textContent = on
+          ? toggle.dataset.labelOn ?? 'Haptics on'
+          : toggle.dataset.labelOff ?? 'Enable haptics'
+      }
+    }
+  }
+
+  if (toggles.length > 0 && !reducedMotion.matches) {
+    for (const toggle of toggles) toggle.hidden = false
+    apply(localStorage.getItem('haptics') === 'on')
+    for (const toggle of toggles) {
+      toggle.addEventListener('click', () => {
+        const next = document.documentElement.dataset.haptics !== 'on'
+        apply(next)
+        localStorage.setItem('haptics', next ? 'on' : 'off')
+      })
+    }
+    reducedMotion.addEventListener?.('change', (event) => {
+      if (event.matches) {
+        for (const toggle of toggles) toggle.hidden = true
+        apply(false)
+        localStorage.removeItem('haptics')
+      }
+    })
+  } else {
+    document.documentElement.dataset.haptics = 'off'
+  }
+</script>

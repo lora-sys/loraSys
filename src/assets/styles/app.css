@@ -32,6 +32,32 @@
   --motion-spring: cubic-bezier(0.23, 1, 0.32, 1);
   --tactile-press: 0.97;
   --field-shadow: 0 18px 44px -34px hsl(var(--foreground) / 0.46);
+
+  /* Type scale: one fluid ladder so pages stop hand-writing clamp() expressions. */
+  --font-display: var(--font-satoshi), ui-sans-serif, system-ui, 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --text-display: clamp(2.9rem, 9vw, 6.75rem);
+  --text-title-xl: clamp(2.65rem, 7vw, 6rem);
+  --text-title: clamp(1.75rem, 4vw, 3.1rem);
+  --text-lead: clamp(1.05rem, 1.5vw, 1.3rem);
+
+  /* Spacing scale: the shared rhythm for section and card layout. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --section-gap: clamp(4rem, 9vw, 7.5rem);
+
+  /* Radius tiers: pill for capsules, md for floating chrome, lg for hero surfaces. */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: clamp(1.25rem, 3vw, 2rem);
+  --radius-pill: 999px;
 }
 
 .dark {
@@ -72,7 +98,7 @@ html {
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 1rem;
+  scroll-padding-top: 5.5rem;
 }
 
 /* Global */
@@ -114,6 +140,33 @@ html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-
   ::view-transition-new(root) {
     animation-duration: var(--motion-story);
     animation-timing-function: var(--motion-spring);
+  }
+
+  /* 跨文档路由过渡：同源导航时的轻淡入淡出，渐进增强，不支持的浏览器保持即时跳转。 */
+  @view-transition {
+    navigation: auto;
+  }
+
+  @keyframes vt-page-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes vt-page-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-theme-transition='true'])::view-transition-old(root) {
+      animation: 140ms ease both vt-page-out;
+    }
+
+    html:not([data-theme-transition='true'])::view-transition-new(root) {
+      animation: 190ms ease both vt-page-in;
+    }
   }
 
   html[data-theme-transition='true']::view-transition-old(root) {
@@ -159,6 +212,28 @@ a {
     border-color var(--motion-base) ease;
 }
 
+/* The shared eyebrow formula: small, uppercase, amber, tracking wide. */
+.eyebrow {
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--field-amber-strong));
+}
+
+html.dark .eyebrow {
+  color: hsl(var(--field-amber));
+}
+
+/* Display statements carry the site voice: heavy, tight, confident. */
+.display-statement {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
 .tactile-action:active {
   transform: scale(var(--tactile-press));
 }
@@ -192,5 +267,10 @@ a {
 
   .tactile-action:active {
     transform: none;
+  }
+
+  /* The theme Quote component pulses a status dot forever; stillness wins here. */
+  quote-component .animate-ping {
+    animation: none;
   }
 }

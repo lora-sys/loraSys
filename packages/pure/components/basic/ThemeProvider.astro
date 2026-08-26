@@ -6,14 +6,16 @@
 <script is:inline>
   function simpleSetTheme() {
     let theme = localStorage.getItem('theme')
-    // If undefined or 'system', get from system
-    if (!theme || theme === 'system') {
+    // First visit defaults to the light paper look; an explicit 'system' choice still follows the OS.
+    if (!theme) {
+      theme = 'light'
+    } else if (theme === 'system') {
       theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     }
     document.documentElement.classList.toggle('dark', theme === 'dark')
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', theme === 'dark' ? '#0B0B10' : '#FCFCFD')
+      ?.setAttribute('content', theme === 'dark' ? '#141210' : '#F8F8F4')
   }
   simpleSetTheme()
   document.addEventListener('astro:page-load', () => simpleSetTheme())

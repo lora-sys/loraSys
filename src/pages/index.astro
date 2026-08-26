@@ -11,7 +11,11 @@ import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
+import HomeSectionNav from '@/components/lora/HomeSectionNav.astro'
+import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
+import ScrollProgressRail from '@/components/lora/ScrollProgressRail.astro'
+import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import { socialLinks } from '@/data/social'
 
 const allPosts = sortMDByDate(await getBlogCollection())
@@ -37,6 +41,22 @@ const focusSummary = [
     description: '从 Agent 基础设施、多模态工具到更好的写作与表达。'
   }
 ]
+
+const sectionNav = [
+  { id: 'work', label: '作品' },
+  { id: 'writing', label: '笔记' },
+  { id: 'now', label: '正在构建' },
+  { id: 'personal-signals', label: '收藏' },
+  { id: 'contact', label: '联系' }
+]
+
+// 体感 demo 只配给精选三卡；键是同步快照里的仓库名，映射缺失就自然不渲染。
+const demoByRepo: Record<string, 'timeline' | 'pipeline' | 'terminal'> = {
+  AgentArena: 'timeline',
+  'ai-engineering-harness': 'pipeline',
+  'Glassbox-Agent-Harness': 'terminal'
+}
+const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository ?? '']
 ---
 
 <PageLayout
@@ -47,29 +67,41 @@ const focusSummary = [
   highlightColor='#d99a33'
 >
   <main class='v2-home'>
-    <section class='v2-hero animate' aria-labelledby='home-title' data-field-notes-hero>
-      <div class='hero-orbit' aria-hidden='true'><span></span><span></span><span></span></div>
-      <div class='field-note field-note--verified' aria-hidden='true'><LoraVisual asset='stampVerified' priority /><span>可验证</span></div>
-      <div class='field-note field-note--experiment' aria-hidden='true'><LoraVisual asset='stampExperiment' /><span>正在实验</span></div>
-      <div class='hero-scene-wrap'>
-        <HeroScene />
+    <div class='grid-paper' aria-hidden='true'></div>
+    <ScrollProgressRail />
+
+    <section class='manifesto animate' aria-labelledby='home-title' data-field-notes-hero>
+      <div class='manifesto-head'>
+        <p class='eyebrow'>Lora · AI Agent 开发者 · 西安</p>
         <a class='availability' href='/contact' title='联系 Lora'><i></i> 欢迎交流 <span aria-hidden='true'>↗</span></a>
       </div>
-      <div class='hero-copy'>
-        <p class='eyebrow'>Lora · AI Agent 开发者 · 西安</p>
-        <h1 id='home-title'>Lora 的个人网站：作品、笔记与正在学习的东西。</h1>
-        <p class='hero-slogan'><span>Personal site · 01</span><strong>工作之外，也留一点位置给兴趣。</strong></p>
-        <p class='hero-en'>I&apos;m Lora, an AI Agent developer in Xi&apos;an. This is where I keep my projects, writing, and a few stories, sounds, and ideas I return to.</p>
-        <p class='hero-start'><span>从这里开始</span> 先看三个代表作品，再按兴趣进入写作、正在构建与个人收藏。</p>
-        <div class='hero-actions' aria-label='开始探索'>
-          <a class='primary-action tactile-action' href='#work' data-magnetic>查看三个代表作品 <span aria-hidden='true'>↘</span></a>
-          <a class='tactile-action' href='#writing'>读一篇笔记 <span aria-hidden='true'>→</span></a>
+      <div class='manifesto-stage'>
+        <h1 id='home-title' class='display-statement'>构建一切，<br />学习一切。</h1>
+        <p class='statement-en' lang='en'>Build everything. Learn everything.</p>
+        <div class='hero-scene-float'>
+          <HeroScene />
         </div>
+        <div class='field-note field-note--build' aria-hidden='true'>
+          <LoraVisual asset='stampVerified' priority /><span>真实构建</span>
+        </div>
+        <div class='field-note field-note--learn' aria-hidden='true'>
+          <LoraVisual asset='stampExperiment' /><span>保持实验</span>
+        </div>
+      </div>
+      <p class='manifesto-lede'>
+        Agent 系统、开发者工具、构建笔记，加上工作之外的一点兴趣——都摆在这张工作台上。
+      </p>
+      <div class='hero-actions' aria-label='开始探索'>
+        <a class='primary-action tactile-action' href='#work' data-magnetic>查看三个代表作品 <span aria-hidden='true'>↘</span></a>
+        <a class='tactile-action' href='#writing'>读一篇笔记 <span aria-hidden='true'>→</span></a>
+      </div>
+      <div class='hero-foot'>
         <div class='hero-signals' aria-label='个人入口'>
           <span class='hero-signal-kicker'>个人入口</span>
           <a href='/contact'>联系我 <span aria-hidden='true'>↗</span></a>
           <ResumePreview triggerLabel='查看简历' />
         </div>
+        <HapticsToggle />
         <nav class='social-rail' aria-label='Primary social profiles'>
           {
             heroSocials.map((link) => (
@@ -89,34 +121,45 @@ const focusSummary = [
       </div>
     </section>
 
-    <div class='v2-flow'>
-      <section class='intro-strip' aria-label='How to read this site'>
-        <p><b>个人网站 · 作品 · 笔记 · 收藏</b><span>从 Agent 系统、开发者工具到工作之外的兴趣。</span></p>
-        <a href='/about'>认识我 <span aria-hidden='true'>→</span></a>
-      </section>
+    <HomeSectionNav items={sectionNav} />
 
-      <section id='work' class='v2-section work-section' aria-labelledby='work-title'>
+    <div class='v2-flow'>
+      <section id='work' class='v2-section' aria-labelledby='work-title'>
         <header class='section-heading'>
-          <div><p class='eyebrow'>Selected Work · 精选作品</p><h2 id='work-title'>三个作品，先从这里看起。</h2></div>
+          <span class='section-index' aria-hidden='true'>01</span>
+          <div class='section-heading-copy'>
+            <p class='eyebrow'>Selected Work · 精选作品</p>
+            <h2 id='work-title'>三个作品，先从这里看起。</h2>
+          </div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
         </header>
         <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
         {
           leadProject && (
             <div class='lead-work'>
-              <ProjectCard project={leadProject} variant='lead' lens compact compactLocale='zh-CN' />
+              <ProjectCard project={leadProject} variant='lead' lens compact compactLocale='zh-CN'>
+                {demoFor(leadProject) && <ProjectDemo kind={demoFor(leadProject)!} slot='demo' />}
+              </ProjectCard>
               <p class='work-rationale'><b>从这里开始。</b> 每张卡片都可进入产品记录、仓库与相关笔记；完整作品在作品页按主题展开。</p>
             </div>
           )
         }
         <div class='supporting-work'>
-          {supportingProjects.map((project) => <ProjectCard {project} variant='featured' lens compact compactLocale='zh-CN' />)}
+          {supportingProjects.map((project) => (
+            <ProjectCard {project} variant='featured' lens compact compactLocale='zh-CN'>
+              {demoFor(project) && <ProjectDemo kind={demoFor(project)!} slot='demo' />}
+            </ProjectCard>
+          ))}
         </div>
       </section>
 
-      <section id='writing' class='v2-section writing-section' aria-labelledby='writing-title'>
+      <section id='writing' class='v2-section' aria-labelledby='writing-title'>
         <header class='section-heading'>
-          <div><p class='eyebrow'>Build Notes · 构建笔记</p><h2 id='writing-title'>最近写下的构建笔记。</h2></div>
+          <span class='section-index' aria-hidden='true'>02</span>
+          <div class='section-heading-copy'>
+            <p class='eyebrow'>Build Notes · 构建笔记</p>
+            <h2 id='writing-title'>最近写下的构建笔记。</h2>
+          </div>
           <a class='text-link' href='/blog'>All writing <span aria-hidden='true'>↗</span></a>
         </header>
         <LoraVisual asset='readingMarker' class='section-scene' />
@@ -134,9 +177,13 @@ const focusSummary = [
         }
       </section>
 
-      <section id='now' class='v2-section now-section' aria-labelledby='now-title'>
-        <header class='section-heading section-heading--compact'>
-          <div><p class='eyebrow'>Now · 正在构建</p><h2 id='now-title'>最近在做，也还在学习。</h2></div>
+      <section id='now' class='v2-section' aria-labelledby='now-title'>
+        <header class='section-heading'>
+          <span class='section-index' aria-hidden='true'>03</span>
+          <div class='section-heading-copy'>
+            <p class='eyebrow'>Now · 正在构建</p>
+            <h2 id='now-title'>最近在做，也还在学习。</h2>
+          </div>
           <a class='text-link' href='/now'>See the full now page <span aria-hidden='true'>↗</span></a>
         </header>
         <LoraVisual asset='nowWorkbench' class='section-scene section-scene--wide' />
@@ -145,11 +192,13 @@ const focusSummary = [
         </div>
       </section>
 
-      <section id='personal-signals' class='v2-section personal-signals-section' aria-label='工作之外'>
+      <section id='personal-signals' class='v2-section' aria-label='工作之外'>
         <PersonalShowcase />
       </section>
 
-      <ContactOutro />
+      <div id='contact' class='contact-anchor'>
+        <ContactOutro />
+      </div>
     </div>
     <Quote class='mt-14' />
   </main>
@@ -170,26 +219,465 @@ const focusSummary = [
       magnetic.style.setProperty('--magnetic-y', `${pullY.toFixed(2)}px`)
     })
     magnetic?.addEventListener('pointerleave', resetMagnetic)
-
   </script>
 </PageLayout>
 
 <style>
-  .v2-home{display:flex;width:100%;flex-direction:column;align-items:center}.v2-hero{position:relative;isolation:isolate;display:grid;width:min(100%,70rem);grid-template-columns:auto minmax(0,1fr);align-items:center;gap:clamp(2rem,6vw,5rem);margin:clamp(2rem,6vw,5.5rem) auto clamp(4rem,9vw,8rem);padding:clamp(2.3rem,5vw,4.25rem) clamp(.35rem,2vw,1.25rem);overflow:hidden;border:1px solid hsl(var(--border)/.56);border-radius:clamp(1.25rem,3vw,2rem);background:hsl(var(--background)/.6);box-shadow:0 28px 80px -64px hsl(var(--foreground)/.62)}.field-notes-workbench{position:absolute;z-index:-3;inset:0;width:100%;height:100%;object-fit:cover;opacity:.73;transform:translate(var(--workbench-x,0px),var(--workbench-y,0px)) scale(1.018);transition:transform 300ms cubic-bezier(.23,1,.32,1),opacity 220ms ease;pointer-events:none}.v2-hero::after{position:absolute;z-index:-2;inset:0;content:'';background:linear-gradient(90deg,hsl(var(--background)/.68) 0%,hsl(var(--background)/.32) 44%,hsl(var(--background)/.9) 100%);pointer-events:none}.field-note{position:absolute;z-index:2;display:flex;align-items:center;gap:.3rem;border:1px solid hsl(var(--border)/.78);border-radius:999px;padding:.22rem .5rem .22rem .25rem;background:hsl(var(--background)/.84);box-shadow:0 12px 28px -24px hsl(var(--foreground)/.65);backdrop-filter:blur(8px);font-size:.57rem;font-weight:690;letter-spacing:.04em;pointer-events:none}.field-note img{width:1.1rem;height:1.1rem;border-radius:50%;object-fit:cover}.field-note--verified{top:1rem;right:clamp(1rem,4vw,3rem)}.field-note--experiment{right:clamp(2rem,15vw,11rem);bottom:1rem}.hero-orbit{position:absolute;z-index:-1;inset:-15%;overflow:hidden;pointer-events:none}.hero-orbit::before,.hero-orbit::after{position:absolute;content:'';border-radius:999px;filter:blur(1px);opacity:.75}.hero-orbit::before{width:31rem;height:31rem;top:-13rem;left:-9rem;border:1px solid hsl(var(--field-amber) / .2);box-shadow:0 0 0 4rem hsl(var(--field-amber) / .025),0 0 0 8rem hsl(var(--field-amber) / .018)}.hero-orbit::after{right:-7rem;bottom:-15rem;width:24rem;height:24rem;background:radial-gradient(circle,hsl(31 97% 63% / .13),transparent 62%)}.portrait-wrap{position:relative}.portrait-wrap::before{position:absolute;inset:-.6rem;content:'';border:1px solid hsl(var(--field-amber) / .35);border-radius:50%;animation:orbit 8s linear infinite}.portrait{width:clamp(8rem,16vw,10.5rem);height:clamp(8rem,16vw,10.5rem);border:1px solid hsl(var(--border));border-radius:50%;padding:.32rem;object-fit:cover;box-shadow:0 28px 75px -42px hsl(var(--foreground) / .85)}.availability{position:absolute;bottom:-.78rem;left:50%;display:flex;width:max-content;align-items:center;gap:.4rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.38rem .68rem;background:hsl(var(--background));color:hsl(var(--muted-foreground));font-size:.66rem;box-shadow:0 8px 22px -18px hsl(var(--foreground));transform:translateX(-50%)}.availability:active{transform:translateX(-50%) scale(.97)}.availability:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}.availability i{width:.42rem;height:.42rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal) / .12)}.hero-copy{min-width:0}.eyebrow{margin:0;color:hsl(var(--muted-foreground));font-size:.68rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase}.hero-copy h1{max-width:15ch;margin:.8rem 0 0;font-size:clamp(2.5rem,6.3vw,5.4rem);font-weight:590;letter-spacing:-.065em;line-height:.94;text-wrap:balance}.hero-slogan{display:flex;align-items:center;gap:.56rem;width:max-content;max-width:100%;margin:1.05rem 0 0;border:1px solid hsl(var(--field-amber) / .48);border-radius:.8rem;padding:.45rem .72rem .45rem .48rem;background:linear-gradient(110deg,hsl(var(--field-amber) / .11),hsl(var(--background)/.82) 55%);box-shadow:0 18px 38px -28px hsl(var(--field-amber) / .82);backdrop-filter:blur(8px);color:hsl(var(--foreground));font-size:clamp(.82rem,1.6vw,.98rem);line-height:1.2}.hero-slogan span{border-radius:.42rem;padding:.25rem .42rem;background:hsl(var(--field-amber) / .16);color:hsl(var(--field-amber));font-size:.53rem;font-weight:760;letter-spacing:.08em;text-transform:uppercase}.hero-slogan strong{font-weight:720;letter-spacing:-.025em}.hero-start{display:flex;align-items:baseline;gap:.45rem;max-width:54ch;margin:1.05rem 0 0;color:hsl(var(--muted-foreground));font-size:.72rem;line-height:1.55}.hero-start span,.hero-signal-kicker{flex:0 0 auto;color:hsl(var(--field-amber));font-size:.56rem;font-weight:760;letter-spacing:.12em;text-transform:uppercase}.hero-signals{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem .7rem;margin-top:1rem;padding-top:.85rem;border-top:1px solid hsl(var(--border)/.7)}.hero-signals>a{display:inline-flex;min-height:2rem;align-items:center;gap:.28rem;color:hsl(var(--muted-foreground));font-size:.68rem;font-weight:620;text-decoration:none}.hero-signals>a:hover,.hero-signals>a:focus-visible{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:.2rem}.hero-signals :global(.resume-preview-trigger){min-height:2rem;padding:.33rem .58rem;font-size:.68rem}.hero-en{max-width:47rem;margin:1.4rem 0 0;color:hsl(var(--muted-foreground));font-size:.95rem;line-height:1.72}.hero-actions{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem}.hero-actions a{display:inline-flex;align-items:center;gap:.42rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.64rem .95rem;color:hsl(var(--foreground));font-size:.78rem;text-decoration:none;transition:transform 180ms cubic-bezier(.23,1,.32,1),background 180ms ease,border-color 180ms ease}.hero-actions a:hover,.hero-actions a:focus-visible{transform:translateY(-2px);border-color:hsl(var(--foreground)/.55);background:hsl(var(--muted))}.hero-actions .primary-action{border-color:hsl(var(--field-amber));background:hsl(var(--field-amber));color:white}.hero-actions .primary-action:hover,.hero-actions .primary-action:focus-visible{background:hsl(var(--field-amber))}@media(hover:hover) and (pointer:fine){.hero-actions [data-magnetic]{will-change:transform}.hero-actions [data-magnetic]:hover,.hero-actions [data-magnetic]:focus-visible{transform:translate(var(--magnetic-x,0px),calc(var(--magnetic-y,0px) - 2px))}}.social-rail{display:flex;gap:.42rem;margin-top:1.1rem}.social-rail a{position:relative;display:grid;width:2.1rem;height:2.1rem;place-items:center;border-radius:50%;color:hsl(var(--muted-foreground));transition:background 180ms ease,color 180ms ease,transform 180ms ease}.social-rail a::after{position:absolute;bottom:calc(100% + .4rem);left:50%;content:attr(data-tooltip);border:1px solid hsl(var(--border));border-radius:.4rem;padding:.22rem .42rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.62rem;opacity:0;pointer-events:none;transform:translate(-50%,.2rem);transition:opacity 150ms ease,transform 150ms ease}.social-rail a:hover,.social-rail a:focus-visible{background:color-mix(in srgb,var(--brand) 10%,transparent);color:var(--brand);transform:translateY(-1px)}.social-rail a:hover::after,.social-rail a:focus-visible::after{opacity:1;transform:translate(-50%,0)}.v2-flow{display:flex;width:min(100%,70rem);flex-direction:column;gap:clamp(4.5rem,10vw,8.5rem)}.intro-strip{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;border-block:1px solid hsl(var(--border));padding:1rem 0}.intro-strip p{display:flex;flex-wrap:wrap;gap:.55rem;margin:0;color:hsl(var(--muted-foreground));font-size:.8rem}.intro-strip b{color:hsl(var(--foreground));font-weight:610}.intro-strip a,.text-link,.evidence-copy a{color:hsl(var(--foreground));font-size:.76rem;font-weight:620;text-decoration:none;white-space:nowrap}.intro-strip a:hover,.intro-strip a:focus-visible,.text-link:hover,.text-link:focus-visible,.evidence-copy a:hover,.evidence-copy a:focus-visible{text-decoration:underline;text-underline-offset:.2em}.v2-section{scroll-margin-top:5rem}.section-heading{display:flex;align-items:end;justify-content:space-between;gap:1.25rem;margin-bottom:1.5rem}.section-heading>div{display:grid;gap:.45rem}.section-heading h2{max-width:22ch;margin:0;font-size:clamp(1.75rem,4vw,3.35rem);font-weight:570;letter-spacing:-.055em;line-height:1.03;text-wrap:balance}.section-heading--compact h2{font-size:clamp(1.5rem,3.1vw,2.35rem)}.lead-work{display:grid;gap:.8rem}.work-rationale{max-width:55ch;margin:0;color:hsl(var(--muted-foreground));font-size:.82rem;line-height:1.65}.work-rationale b{color:hsl(var(--foreground))}.supporting-work{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1rem}.writing-list{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}.writing-item{position:relative;border-block-end:1px solid hsl(var(--border));padding:.35rem 0;transition:background 180ms ease,padding 180ms cubic-bezier(.23,1,.32,1),transform 180ms cubic-bezier(.23,1,.32,1)}.writing-item:hover,.writing-item:has(a:focus-visible){padding-inline:.65rem;background:hsl(var(--muted)/.64);transform:translateX(.24rem)}.writing-item--lead{border-block-start:1px solid hsl(var(--border));padding-block:.9rem}.writing-item--lead:hover,.writing-item--lead:has(a:focus-visible){padding-block:.9rem}.writing-reason{max-width:56ch;margin:.2rem 0 .5rem;padding-left:.2rem;color:hsl(var(--muted-foreground));font-size:.75rem;line-height:1.6;list-style:none}.focus-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-block:1px solid hsl(var(--border))}.focus-item{padding:1.25rem 1rem;border-inline-end:1px solid hsl(var(--border))}.focus-item:last-child{border-inline-end:0}.focus-item span{color:hsl(var(--field-amber));font-size:.68rem;font-variant-numeric:tabular-nums}.focus-item h3{margin:.75rem 0 .55rem;font-size:1rem;font-weight:620}.focus-item p{margin:0;color:hsl(var(--muted-foreground));font-size:.75rem;line-height:1.65}.personal-signals-section{padding-top:clamp(.2rem,1vw,.7rem)}.evidence-section :global(.contribution-graph){margin-top:.75rem}.evidence-copy{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1rem}.evidence-copy p{max-width:65ch;margin:0;color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.65}.evidence-copy strong{color:hsl(var(--foreground));font-weight:600}.agent-trace{width:min(92vw,32rem);border:1px solid hsl(var(--border));border-radius:1rem;padding:1.25rem;background:hsl(var(--background));color:hsl(var(--foreground));box-shadow:0 24px 80px hsl(var(--foreground)/.2)}.agent-trace::backdrop{background:hsl(var(--foreground)/.5);backdrop-filter:blur(4px)}.trace-close{float:right;border:0;background:transparent;color:inherit;font-size:1.4rem;cursor:pointer}.agent-trace h2{margin:.5rem 0;font-size:1.5rem;letter-spacing:-.04em}.agent-trace p{color:hsl(var(--muted-foreground));line-height:1.6}.trace-steps{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin:1.2rem 0}.trace-steps span{border:1px solid hsl(var(--border));border-radius:999px;padding:.4rem .65rem;font-size:.72rem}.trace-steps i{color:hsl(var(--muted-foreground));font-style:normal}@keyframes orbit{to{transform:rotate(360deg)}}@media(max-width:760px){.v2-hero{grid-template-columns:1fr;margin-top:1.5rem;text-align:center}.field-notes-workbench{opacity:.5}.v2-hero::after{background:hsl(var(--background)/.72)}.field-note--verified{top:.8rem;right:.8rem}.field-note--experiment{right:.8rem;bottom:.8rem}.portrait-wrap{width:max-content;margin-inline:auto}.hero-copy h1,.hero-en,.hero-start{margin-inline:auto}.hero-slogan{margin-inline:auto}.hero-actions,.hero-signals,.social-rail{justify-content:center}.hero-start{justify-content:center;text-align:left}.hero-signals{padding-top:.75rem}.intro-strip,.section-heading,.evidence-copy{align-items:flex-start;flex-direction:column}.supporting-work,.focus-grid{grid-template-columns:1fr}.focus-item{border-inline-end:0;border-block-end:1px solid hsl(var(--border))}.focus-item:last-child{border-block-end:0}.section-heading h2{max-width:18ch}.hero-orbit{inset:-8%}.evidence-copy a{padding-top:.25rem}}@media(prefers-reduced-motion:reduce){.portrait-wrap::before{animation:none}.field-notes-workbench,.writing-item{transition:none;transform:none}.hero-actions a,.social-rail a,.social-rail a::after{transition:none}.hero-actions a:hover,.hero-actions a:focus-visible,.social-rail a:hover,.social-rail a:focus-visible,.writing-item:hover,.writing-item:has(a:focus-visible){transform:none}}
-.availability{text-decoration:none}
-</style>
+  .v2-home {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
 
-<style>
-  .v2-hero { grid-template-columns: minmax(19rem, .9fr) minmax(0, 1.1fr); background: linear-gradient(145deg, hsl(var(--field-paper) / .94), hsl(var(--field-warm) / .78)); }
-  .v2-hero::after { background: radial-gradient(circle at 23% 45%, hsl(var(--field-amber) / .13), transparent 36%); }
-  .hero-scene-wrap { position: relative; display: grid; place-items: center; min-width: 0; }
-  .hero-scene-wrap .availability { bottom: .25rem; z-index: 4; }
-  .field-note :global(.lora-visual) { width: 1.65rem; height: 1.65rem; border-radius: 50%; object-fit: cover; }
-  .section-scene { width: min(100%, 18rem); max-height: 13rem; margin: -1rem 0 1.25rem auto; object-fit: contain; }
-  .section-scene--wide { width: min(100%, 26rem); max-height: 15rem; }
-  .evidence-stamp { width: 4.5rem; margin: -1rem 0 .5rem auto; }
+  /* 格纹纸：首页叙事的地板，向下淡出交给内容。 */
+  .grid-paper {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 50%;
+    width: 100vw;
+    height: min(165vh, 105rem);
+    background-image:
+      linear-gradient(hsl(var(--field-ink) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--field-ink) / 0.05) 1px, transparent 1px);
+    background-size: 2.4rem 2.4rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent);
+    mask-image: linear-gradient(to bottom, black 55%, transparent);
+  }
+
+  .v2-home > :global(quote-component) {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 宣言 hero：开放版面，大字即主角，角色从右侧咬合文字。 */
+  .manifesto {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 70rem);
+    margin-top: clamp(2.5rem, 7vw, 5.5rem);
+    padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+  }
+  .manifesto-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid hsl(var(--border) / 0.9);
+    border-radius: 999px;
+    padding: 0.3rem 0.65rem;
+    background: hsl(var(--background) / 0.8);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    font-weight: 640;
+    text-decoration: none;
+    transition:
+      color var(--motion-base) ease,
+      border-color var(--motion-base) ease,
+      transform var(--motion-quick) var(--motion-spring);
+  }
+  .availability i {
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: hsl(var(--field-teal));
+  }
+  .availability:hover,
+  .availability:focus-visible {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--field-amber) / 0.6);
+    transform: translateY(-1px);
+  }
+
+  .manifesto-stage {
+    position: relative;
+    margin-top: clamp(1.4rem, 4vw, 2.6rem);
+  }
+  .manifesto-stage .display-statement {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    color: hsl(var(--foreground));
+  }
+  .statement-en {
+    position: relative;
+    z-index: 2;
+    max-width: 30rem;
+    margin: clamp(0.9rem, 2vw, 1.3rem) 0 0;
+    color: hsl(var(--muted-foreground));
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+    font-weight: 620;
+    letter-spacing: 0.005em;
+  }
+  .hero-scene-float {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: clamp(-2.5rem, -1vw, 0.5rem);
+    width: min(38vw, 29rem);
+    transform: translateY(-54%);
+  }
+  .field-note {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 1px solid hsl(var(--border) / 0.78);
+    border-radius: 999px;
+    padding: 0.22rem 0.5rem 0.22rem 0.25rem;
+    background: hsl(var(--background) / 0.84);
+    box-shadow: 0 12px 28px -24px hsl(var(--foreground) / 0.65);
+    font-size: 0.57rem;
+    font-weight: 690;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .field-note :global(.lora-visual) {
+    width: 1.65rem;
+    height: 1.65rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .field-note--build {
+    top: -0.9rem;
+    right: clamp(11rem, 30vw, 24rem);
+  }
+  .field-note--learn {
+    right: clamp(6rem, 17vw, 14rem);
+    bottom: -0.6rem;
+  }
+
+  .manifesto-lede {
+    max-width: 34rem;
+    margin: clamp(1.5rem, 4vw, 2.4rem) 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+    line-height: 1.75;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+  .primary-action,
+  .hero-actions > a:not(.primary-action) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.62rem 1.05rem;
+    font-size: 0.78rem;
+    font-weight: 640;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+  }
+  .primary-action {
+    border: 1px solid hsl(var(--field-ink) / 0.9);
+    background: hsl(var(--field-ink));
+    color: hsl(var(--field-paper));
+  }
+  .primary-action:hover {
+    box-shadow: 0 14px 30px -20px hsl(var(--field-ink) / 0.8);
+  }
+  .hero-actions > a:not(.primary-action) {
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--foreground));
+    background: hsl(var(--background) / 0.7);
+  }
+  .hero-actions > a:not(.primary-action):hover {
+    border-color: hsl(var(--field-amber) / 0.7);
+  }
+
+  .hero-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.9rem 1.5rem;
+    margin-top: 2rem;
+    border-top: 1px dashed hsl(var(--border) / 0.9);
+    padding-top: 1.1rem;
+  }
+  .hero-signals {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.7rem;
+  }
+  .hero-signal-kicker {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.6rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .hero-signals > a {
+    display: inline-flex;
+    min-height: 2rem;
+    align-items: center;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    font-weight: 620;
+    text-decoration: none;
+  }
+  .hero-signals > a:hover,
+  .hero-signals > a:focus-visible {
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  .social-rail {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .social-rail a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.15rem;
+    height: 2.15rem;
+    border: 1px solid hsl(var(--border) / 0.8);
+    border-radius: 999px;
+    background: hsl(var(--background) / 0.72);
+    color: hsl(var(--muted-foreground));
+    transition:
+      color var(--motion-base) ease,
+      border-color var(--motion-base) ease,
+      background-color var(--motion-base) ease,
+      transform var(--motion-quick) var(--motion-spring);
+  }
+  .social-rail a:hover,
+  .social-rail a:focus-visible {
+    color: var(--brand, hsl(var(--foreground)));
+    border-color: color-mix(in srgb, var(--brand, hsl(var(--foreground))) 42%, transparent);
+    background: color-mix(in srgb, var(--brand, hsl(var(--foreground))) 9%, transparent);
+    transform: translateY(-1px);
+  }
+
+  /* 滚动叙事区块：编号大字 + 统一节奏。 */
+  .v2-flow {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: min(100%, 70rem);
+    flex-direction: column;
+    gap: var(--section-gap);
+    margin-top: var(--section-gap);
+    padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+  }
+  .v2-section {
+    scroll-margin-top: 5.5rem;
+  }
+  .section-heading {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 1rem;
+  }
+  .section-heading-copy {
+    position: relative;
+    z-index: 1;
+  }
+  .section-heading h2 {
+    max-width: 22ch;
+    margin: 0.5rem 0 0;
+    color: hsl(var(--foreground));
+    font-family: var(--font-display);
+    font-size: var(--text-title);
+    font-weight: 680;
+    letter-spacing: -0.045em;
+    line-height: 1.05;
+  }
+  .section-index {
+    position: absolute;
+    top: -1.4rem;
+    right: -0.4rem;
+    z-index: 0;
+    color: transparent;
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 9vw, 6.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    -webkit-text-stroke: 1.5px hsl(var(--field-ink) / 0.2);
+  }
+  .text-link {
+    position: relative;
+    z-index: 1;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    font-weight: 620;
+    text-decoration: none;
+    transition: color var(--motion-base) ease;
+  }
+  .text-link:hover,
+  .text-link:focus-visible {
+    color: hsl(var(--foreground));
+  }
+  .section-scene {
+    width: min(100%, 18rem);
+    max-height: 13rem;
+    margin: -1rem 0 1.25rem auto;
+    object-fit: contain;
+  }
+  .section-scene--wide {
+    width: min(100%, 26rem);
+    max-height: 15rem;
+  }
+  .lead-work {
+    display: grid;
+    gap: 0.8rem;
+  }
+  .work-rationale {
+    max-width: 44rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  .work-rationale b {
+    color: hsl(var(--foreground));
+    font-weight: 680;
+  }
+  .supporting-work {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .writing-list {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .writing-item {
+    position: relative;
+    border-block-end: 1px solid hsl(var(--border));
+    padding: 0.35rem 0;
+    transition:
+      background var(--motion-base) ease,
+      padding var(--motion-base) var(--motion-spring),
+      transform var(--motion-base) var(--motion-spring);
+  }
+  .writing-item:hover,
+  .writing-item:has(a:focus-visible) {
+    padding-inline: 0.65rem;
+    background: hsl(var(--muted) / 0.64);
+    transform: translateX(0.24rem);
+  }
+  .writing-item--lead {
+    border-block-start: 1px solid hsl(var(--border));
+    padding-block: 0.9rem;
+  }
+  .writing-item--lead:hover,
+  .writing-item--lead:has(a:focus-visible) {
+    padding-block: 0.9rem;
+  }
+  .writing-reason {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+  }
+  .focus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .focus-item {
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1rem;
+  }
+  .focus-item span {
+    color: hsl(var(--field-amber-strong));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.66rem;
+    font-weight: 640;
+    letter-spacing: 0.1em;
+  }
+  .focus-item h3 {
+    margin: 0.5rem 0 0;
+    font-size: 1.02rem;
+    font-weight: 660;
+    letter-spacing: -0.02em;
+  }
+  .focus-item p {
+    margin: 0.45rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .contact-anchor {
+    scroll-margin-top: 5.5rem;
+  }
+
+  @media (max-width: 960px) {
+    .hero-scene-float {
+      position: static;
+      width: min(100%, 25rem);
+      order: 3;
+      margin: 1.4rem auto 0;
+      transform: none;
+    }
+    .manifesto-stage {
+      display: flex;
+      flex-direction: column;
+    }
+    .field-note--build {
+      top: -1.2rem;
+      right: auto;
+      left: 0;
+    }
+    .field-note--learn {
+      right: 0;
+      bottom: auto;
+      margin-top: 0.8rem;
+    }
+  }
   @media (max-width: 760px) {
-    .v2-hero { grid-template-columns: 1fr; }
-    .section-scene,.section-scene--wide { width: min(100%, 22rem); margin-inline: auto; }
+    .supporting-work {
+      grid-template-columns: 1fr;
+    }
+    .section-scene,
+    .section-scene--wide {
+      width: min(100%, 22rem);
+      margin-inline: auto;
+    }
+    .section-heading {
+      grid-template-columns: 1fr;
+    }
+    .section-index {
+      top: -2.4rem;
+      font-size: clamp(3.2rem, 14vw, 4.5rem);
+    }
+    .focus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .availability,
+    .text-link,
+    .social-rail a {
+      transition: none;
+    }
+    .availability:hover,
+    .social-rail a:hover {
+      transform: none;
+    }
   }
 </style>

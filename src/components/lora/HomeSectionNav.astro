@@ -1,0 +1,127 @@
+---
+// 首页滚动叙事导航：大字区块入口 + IntersectionObserver 驱动的琥珀下划线活动态。
+interface SpyItem {
+  id: string
+  label: string
+}
+type Props = {
+  items: SpyItem[]
+}
+const { items } = Astro.props
+---
+
+<nav class='section-nav animate' aria-label='首页区块导航'>
+  <ul>
+    {
+      items.map((item, index) => (
+        <li>
+          <a href={`#${item.id}`} data-spy-link={item.id}>
+            <span class='section-nav-index' aria-hidden='true'>
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .section-nav {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 70rem);
+    margin-top: clamp(2.2rem, 6vw, 4.5rem);
+    padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+  }
+  .section-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem clamp(1.2rem, 4vw, 2.6rem);
+    margin: 0;
+    padding: 0 0.35rem;
+    list-style: none;
+  }
+  .section-nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding-block: 0.3rem;
+    color: hsl(var(--muted-foreground) / 0.85);
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 3.4vw, 2.3rem);
+    font-weight: 720;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-decoration: none;
+    transition: color var(--motion-base) ease;
+  }
+  .section-nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.1rem;
+    left: 0;
+    height: 0.32rem;
+    background: hsl(var(--field-amber) / 0.85);
+    content: '';
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition:
+      transform var(--motion-base) var(--motion-spring),
+      opacity var(--motion-quick) ease;
+  }
+  .section-nav a:hover,
+  .section-nav a:focus-visible {
+    color: hsl(var(--foreground));
+  }
+  .section-nav a[aria-current='true'] {
+    color: hsl(var(--foreground));
+  }
+  .section-nav a[aria-current='true']::after {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  .section-nav-index {
+    color: hsl(var(--field-amber-strong) / 0.7);
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .section-nav a,
+    .section-nav a::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-spy-link]')]
+  const sections = links
+    .map((link) => document.getElementById(link.dataset.spyLink ?? ''))
+    .filter((section): section is HTMLElement => section !== null)
+
+  if (links.length > 0 && sections.length > 0) {
+    const setActive = (id: string) => {
+      for (const link of links) {
+        if (link.dataset.spyLink === id) link.setAttribute('aria-current', 'true')
+        else link.removeAttribute('aria-current')
+      }
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        if (visible[0]) setActive(visible[0].target.id)
+      },
+      { rootMargin: '-18% 0px -52% 0px' }
+    )
+    sections.forEach((section) => observer.observe(section))
+  }
+</script>
