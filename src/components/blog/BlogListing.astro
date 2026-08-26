@@ -6,6 +6,8 @@ import { Image } from 'astro:assets'
 import { Paginator } from 'astro-pure/components/pages'
 import { Button, Icon } from 'astro-pure/user'
 import readingMarker from '@/assets/lora-visual/v2/lora-v2-reading-marker.webp'
+import { fieldNotes } from '@/data/notes'
+import projectSnapshot from '@/data/github-projects.json'
 import coverAiEngineeringHarness from '@/assets/blog-covers/cover-1.webp'
 import coverFreeVisionSkill from '@/assets/blog-covers/cover-2.webp'
 import coverEveAgent from '@/assets/blog-covers/cover-3.webp'
@@ -187,6 +189,12 @@ const languageFilters = [
         </details>
       )
     }
+
+    <footer class='writing-stats'>
+      <span>{collectionsCount} 篇长文</span>
+      <span>{fieldNotes.length} 篇短笔记</span>
+      <span>{Object.keys(projectSnapshot.projects).length} 个公开仓库</span>
+    </footer>
   </main>
 </PageLayout>
 
@@ -488,4 +496,6 @@ const languageFilters = [
     .writing-routes summary > span:last-child { transition: none; }
     .reading-marker { transform: none; }
   }
+
+  .writing-stats{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;margin-top:2rem;padding-top:1rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem;font-weight:630;letter-spacing:.08em;text-transform:uppercase}
 </style>
