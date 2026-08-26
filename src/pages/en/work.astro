@@ -2,16 +2,67 @@
 import { projects } from '@/data/profile'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
+import ProjectDemo from '@/components/projects/ProjectDemo.astro'
+import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 
 const featured = projects.filter((project) => project.featured)
+
+const demoByRepo: Record<string, 'timeline' | 'pipeline' | 'terminal'> = {
+  AgentArena: 'timeline',
+  'ai-engineering-harness': 'pipeline',
+  'Glassbox-Agent-Harness': 'terminal'
+}
+const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository]
 ---
 
-<PageLayout lang='en-US' meta={{ title: 'Work', description: 'Selected AI agent systems, developer tools, and public experiments by Lora.' }} highlightColor='#d99a33'>
+<PageLayout
+  lang='en-US'
+  meta={{
+    title: 'Work',
+    description: 'Selected AI agent systems, developer tools, and public experiments by Lora.'
+  }}
+  highlightColor='#d99a33'
+>
   <main class='work-page'>
-    <header><p>SELECTED WORK</p><h1>Agent systems, developer tools, and public experiments.</h1><span>Each case links to its product record, repository, public writing, or contribution evidence.</span></header>
-    <section aria-label='Selected work'>{featured.map((project, index) => <div class:list={['case', { lead: index === 0 }]}><ProjectCard {project} variant={index === 0 ? 'lead' : 'featured'} lens anchor /></div>)}</section>
-    <aside><strong>Looking for the Chinese project archive?</strong><a href='/projects'>查看完整项目档案 ↗</a></aside>
+    <header>
+      <p>SELECTED WORK</p>
+      <h1>Agent systems, developer tools, and public experiments.</h1>
+      <span>Each case links to its product record, repository, public writing, or contribution evidence.</span>
+      <div class='header-toggle'>
+        <HapticsToggle locale='en-US' />
+        <small class='toggle-hint'>Turn on to play the live product demos inside the cards below.</small>
+      </div>
+    </header>
+    <section aria-label='Selected work'>
+      {
+        featured.map((project, index) => (
+          <div class:list={['case', { lead: index === 0 }]}>
+            <ProjectCard {project} variant={index === 0 ? 'lead' : 'featured'} lens anchor>
+              {demoFor(project) && <ProjectDemo kind={demoFor(project)!} locale='en-US' slot='demo' />}
+            </ProjectCard>
+          </div>
+        ))
+      }
+    </section>
+    <aside>
+      <strong>Looking for the Chinese project archive?</strong>
+      <a href='/projects'>查看完整项目档案 ↗</a>
+    </aside>
   </main>
 </PageLayout>
 
-<style>.work-page{display:grid;gap:clamp(2.5rem,6vw,5rem)}header{display:grid;max-width:70rem;gap:.8rem;padding-block:clamp(1rem,4vw,3rem)}header p{margin:0;color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{max-width:15ch;margin:0;font-size:clamp(2.6rem,7vw,6rem);font-weight:580;letter-spacing:-.07em;line-height:.9}header span{max-width:48ch;color:hsl(var(--muted-foreground));line-height:1.7}section{display:grid;gap:1rem}.case:not(.lead){max-width:58rem;margin-left:auto}aside{display:flex;justify-content:space-between;gap:1rem;border-block:1px solid hsl(var(--border));padding:1rem 0;font-size:.78rem}aside a{color:hsl(var(--foreground));text-decoration:none}aside a:hover{text-decoration:underline}@media(max-width:640px){aside{flex-direction:column}}</style>
+<style>
+  .work-page{display:grid;gap:clamp(2.5rem,6vw,5rem)}
+  header{display:grid;max-width:70rem;gap:.8rem;padding-block:clamp(1rem,4vw,3rem)}
+  header p{margin:0;color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.13em}
+  h1{max-width:15ch;margin:0;font-size:var(--text-title-xl);font-weight:580;letter-spacing:-.07em;line-height:.9}
+  header span{max-width:48ch;color:hsl(var(--muted-foreground));line-height:1.7}
+  .header-toggle{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .7rem;margin-top:.4rem}
+  .toggle-hint{color:hsl(var(--muted-foreground));font-size:.68rem}
+  section{display:grid;gap:1rem}
+  .case:not(.lead){max-width:58rem;margin-left:auto}
+  aside{display:flex;justify-content:space-between;gap:1rem;border-block:1px solid hsl(var(--border));padding:1rem 0;font-size:.78rem}
+  aside a{color:hsl(var(--foreground));text-decoration:none}
+  aside a:hover{text-decoration:underline}
+  @media(max-width:640px){aside{flex-direction:column}}
+</style>

@@ -116,6 +116,7 @@ const filterAttributes = filterable
         </div>
         <div class='project-heading'><h3>{project.title}</h3></div>
         <p>{project.description || (compactLocale === 'zh-CN' ? '暂未发布项目说明。' : 'No description published yet.')}</p>
+        <slot name='demo' />
         <div class='project-actions'>
           <a
             class='primary tactile-action'
@@ -157,6 +158,7 @@ const filterAttributes = filterable
       <span translate='no'>{project.repository}</span>
     </div>
     <p>{project.description || 'No description published yet.'}</p>
+    <slot name='demo' />
 
     {
       visibleTechnologies.length > 0 && (
