@@ -54,7 +54,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     </div>
     <div class='controls' aria-label={isEnglish ? `${title} controls` : `${title} 控制`}>
       <span class='drift-state' data-drift-state aria-live='off'>
-        <i aria-hidden='true'></i><span data-drift-status>{isEnglish ? 'Drifting' : '正在巡游'}</span>
+        <i aria-hidden='true'></i><span data-drift-status>{isEnglish ? 'Paused' : '已暂停'}</span>
       </span>
       <button class='tactile-action' type='button' data-prev aria-label={labels.previous}>←</button>
       <button class='tactile-action' type='button' data-next aria-label={labels.next}>→</button>
