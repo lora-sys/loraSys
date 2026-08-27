@@ -15,7 +15,7 @@ const { asset, class: className, priority = false, alt, quality, widths } = Astr
 const visual: VisualEntry = loraVisuals[asset]
 const resolvedAlt = alt ?? visual.alt
 const decorative = visual.decorative ?? resolvedAlt === ''
-const isPriority = priority || visual.loading === 'eager'
+const isPriority = priority
 ---
 
 <Image
@@ -28,7 +28,7 @@ const isPriority = priority || visual.loading === 'eager'
   loading={isPriority ? 'eager' : 'lazy'}
   fetchpriority={isPriority ? 'high' : 'auto'}
   quality={quality ?? visual.quality}
-  decoding={isPriority ? 'sync' : 'async'}
+  decoding='async'
 />
 
 <style>
