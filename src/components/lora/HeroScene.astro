@@ -23,25 +23,52 @@ import LoraVisual from './LoraVisual.astro'
 
   if (heroScene) {
     const heroImages = Array.from(heroScene.querySelectorAll('img'))
-    const waitForImage = async (image: HTMLImageElement) => {
-      if (!image.complete) {
-        await new Promise<void>((resolve) => {
-          image.addEventListener('load', () => resolve(), { once: true })
-          image.addEventListener('error', () => resolve(), { once: true })
-        })
-      }
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
+    const heroRoot = document.querySelector<HTMLElement>('[data-field-notes-hero]')
 
-      if (typeof image.decode === 'function') {
-        await image.decode().catch(() => undefined)
-      }
+    const markReady = () => {
+      heroScene.dataset.heroReady = 'true'
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      heroScene.dataset.heroReady = 'true'
+    if (reducedMotion.matches || heroImages.every((img) => img.complete && img.naturalWidth > 0)) {
+      markReady()
     } else {
-      Promise.all(heroImages.map(waitForImage)).then(() => {
-        heroScene.dataset.heroReady = 'true'
-      })
+      const waitForImage = async (image: HTMLImageElement) => {
+        if (!image.complete) {
+          await new Promise<void>((resolve) => {
+            image.addEventListener('load', () => resolve(), { once: true })
+            image.addEventListener('error', () => resolve(), { once: true })
+          })
+        }
+        if (typeof image.decode === 'function') {
+          await image.decode().catch(() => undefined)
+        }
+      }
+      Promise.all(heroImages.map(waitForImage)).then(markReady)
+    }
+
+    // 桌面指针视差微动：计算微小偏移量（-1 到 1），带动工作台各图层产生立体目光视差
+    if (heroRoot && !reducedMotion.matches) {
+      let frame = 0
+      const onPointerMove = (event: PointerEvent) => {
+        if (!finePointer.matches) return
+        if (frame) return
+        frame = requestAnimationFrame(() => {
+          frame = 0
+          const rect = heroRoot.getBoundingClientRect()
+          const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2
+          const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2
+          heroScene.style.setProperty('--hx', Math.max(-1, Math.min(1, x)).toFixed(3))
+          heroScene.style.setProperty('--hy', Math.max(-1, Math.min(1, y)).toFixed(3))
+        })
+      }
+      const resetParallax = () => {
+        heroScene.style.setProperty('--hx', '0')
+        heroScene.style.setProperty('--hy', '0')
+      }
+      heroRoot.addEventListener('pointermove', onPointerMove, { passive: true })
+      heroRoot.addEventListener('pointerleave', resetParallax)
     }
   }
 </script>
@@ -49,11 +76,30 @@ import LoraVisual from './LoraVisual.astro'
 <style>
   /* 宽度完全由外层容器决定，避免 vw 双重约束互相打架。 */
   .hero-scene { position: relative; width: 100%; aspect-ratio: 3 / 2; pointer-events: none; isolation: isolate; }
-  .hero-lora,.hero-mochi,.hero-props { position: absolute; inset: 0; }
-  .hero-props { z-index: 0; opacity: .82; }
-  .hero-lora { z-index: 1; }
-  .hero-mochi { z-index: 2; width: 48%; left: 52%; top: 32%; }
-  .hero-scene > div { transition: opacity 180ms ease; }
+  .hero-lora,.hero-mochi,.hero-props {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+    transition:
+      opacity 180ms ease,
+      transform var(--motion-story, 280ms) var(--motion-spring, cubic-bezier(0.23, 1, 0.32, 1));
+  }
+  .hero-props {
+    z-index: 0;
+    opacity: .82;
+    transform: translate3d(calc(var(--hx, 0) * 2px), calc(var(--hy, 0) * 1.5px), 0);
+  }
+  .hero-lora {
+    z-index: 1;
+    transform: translate3d(calc(var(--hx, 0) * 4.5px), calc(var(--hy, 0) * 3.5px), 0);
+  }
+  .hero-mochi {
+    z-index: 2;
+    width: 48%;
+    left: 52%;
+    top: 32%;
+    transform: translate3d(calc(var(--hx, 0) * 7.5px), calc(var(--hy, 0) * 5.5px), 0);
+  }
   .hero-scene[data-hero-ready='false'] > div { opacity: 0; }
   .hero-scene[data-hero-ready='true'] .hero-props { opacity: .82; }
   .hero-scene[data-hero-ready='true'] .hero-lora,
@@ -61,7 +107,7 @@ import LoraVisual from './LoraVisual.astro'
   .hero-scene :global(img) { width: 100%; height: 100%; object-fit: contain; }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-scene > div { transition: none; }
+    .hero-lora,.hero-mochi,.hero-props { transition: none; transform: none !important; }
     .hero-scene[data-hero-ready='false'] > div { opacity: 1; }
   }
 </style>
