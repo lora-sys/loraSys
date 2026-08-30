@@ -238,14 +238,13 @@ const nowItems = [
     position: absolute;
     z-index: 0;
     top: 0;
-    left: 50%;
-    width: 100vw;
+    left: 0;
+    width: 100%;
     height: min(165vh, 105rem);
     background-image:
       linear-gradient(hsl(var(--field-ink) / 0.05) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--field-ink) / 0.05) 1px, transparent 1px);
     background-size: 2.4rem 2.4rem;
-    transform: translateX(-50%);
     pointer-events: none;
     -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent);
     mask-image: linear-gradient(to bottom, black 55%, transparent);
@@ -294,7 +293,7 @@ const nowItems = [
   .availability:focus-visible {
     color: hsl(var(--foreground));
     border-color: hsl(var(--field-amber) / 0.6);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px hsl(var(--field-amber) / 0.3);
   }
   .manifesto-stage {
     position: relative;
@@ -306,8 +305,8 @@ const nowItems = [
     max-width: min(58%, 34rem);
     margin: 0;
     color: hsl(var(--foreground));
-    letter-spacing: -0.035em;
-    line-height: 0.98;
+    letter-spacing: -0.025em;
+    line-height: 1.0;
   }
   .statement-zh {
     position: relative;
@@ -482,6 +481,7 @@ const nowItems = [
     letter-spacing: -0.04em;
     pointer-events: none;
     -webkit-text-stroke: 1.5px hsl(var(--field-ink) / 0.2);
+    text-stroke: 1.5px hsl(var(--field-ink) / 0.2);
   }
   .text-link {
     position: relative;
