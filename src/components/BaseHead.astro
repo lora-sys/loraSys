@@ -27,14 +27,18 @@ const {
 } = Astro.props
 const localeInfo = localeMeta(locale)
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, '/')
-
+const basePath = baseUrl.replace(/\/$/, '')
+// URL resolves a leading slash against the origin, so add the deployment base first.
+const alternateWithBase = alternatePath
+  ? alternatePath === basePath || alternatePath.startsWith(`${basePath}/`)
+    ? alternatePath
+    : `${basePath}/${alternatePath.replace(/^\/+/, '')}`
+  : undefined
 const siteTitle = `${title} ${config.titleDelimiter} ${config.title}`
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url).href
-const alternateURL = alternatePath ? new URL(alternatePath, Astro.site) : undefined
-const socialProfiles = socialLinks
-  .filter((link) => link.href.startsWith('http'))
-  .map((link) => link.href)
+const alternateURL = alternateWithBase ? new URL(alternateWithBase, Astro.site) : undefined
+const socialProfiles = socialLinks.filter((link) => link.href.startsWith('http')).map((link) => link.href)
 const twitterCreator = socialLinks.find((link) => link.name === 'X')?.handle
 const websiteJsonLd = {
   '@context': 'https://schema.org',
@@ -65,14 +69,10 @@ const profileJsonLd = {
 ---
 
 <meta charset='utf-8' />
-<meta
-  content='width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover'
-  name='viewport'
-/>
+<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover' name='viewport' />
 <meta content='IE=edge' http-equiv='X-UA-Compatible' />
 <title>{siteTitle}</title>
 
-{/* Icons / Favicon */}
 <link rel='icon' type={config.favicon.type} href={config.favicon.href} />
 <link rel='shortcut icon' type={config.favicon.type} href={config.favicon.href} />
 <link rel='icon' type='image/png' sizes='32x32' href={`${baseUrl}favicon/lora-v1-favicon-32x32.png`} />
@@ -80,33 +80,25 @@ const profileJsonLd = {
 <link rel='apple-touch-icon' sizes='180x180' href={`${baseUrl}favicon/lora-v1-apple-touch-icon.png`} />
 <link rel='manifest' href={`${baseUrl}favicon/site.webmanifest`} />
 
-{/* Font preloads */}
 <Font cssVariable='--font-satoshi' preload={[{ subset: 'latin', style: 'normal' }]} />
 <style>
-  body {
-    font-family: var(--font-satoshi);
-  }
+  body { font-family: var(--font-satoshi); }
 </style>
 
-{/* Canonical URL */}
 <link rel='canonical' href={canonicalURL} />
 <link rel='alternate' hreflang={locale} href={canonicalURL} />
 {alternateURL && <link rel='alternate' hreflang={locale === 'zh-CN' ? 'en-US' : 'zh-CN'} href={alternateURL} />}
 <link rel='alternate' hreflang='x-default' href={new URL(import.meta.env.BASE_URL, Astro.site)} />
 
-{/* Primary Meta Tags */}
 <meta content={siteTitle} name='title' />
 <meta content={description} name='description' />
 <meta content={config.author} name='author' />
-  <meta name='robots' content={noindex ? 'noindex, nofollow' : 'index, follow'} />
-  <meta name='referrer' content='strict-origin-when-cross-origin' />
+<meta name='robots' content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+<meta name='referrer' content='strict-origin-when-cross-origin' />
+<meta name='theme-color' media='(prefers-color-scheme: light)' content='#F8F8F4' />
+<meta name='theme-color' media='(prefers-color-scheme: dark)' content='#141210' />
+<meta name='color-scheme' content='light dark' />
 
-  {/* Theme Color: matches --background in app.css so browser chrome never flashes a foreign hue. */}
-  <meta name='theme-color' media='(prefers-color-scheme: light)' content='#F8F8F4' />
-  <meta name='theme-color' media='(prefers-color-scheme: dark)' content='#141210' />
-  <meta name='color-scheme' content='light dark' />
-
-{/* Open Graph / Facebook */}
 <meta content={articleDate ? 'article' : 'website'} property='og:type' />
 <meta content={title} property='og:title' />
 <meta content={description} property='og:description' />
@@ -115,48 +107,32 @@ const profileJsonLd = {
 <meta content={localeInfo.ogLocale} property='og:locale' />
 <meta content='image/webp' property='og:image:type' />
 <meta content={socialImageURL} property='og:image' />
-  <meta content={`${config.title} — ${description}`} property='og:image:alt' />
-  <meta content='1200' property='og:image:width' />
-
+<meta content={`${config.title} — ${description}`} property='og:image:alt' />
+<meta content='1200' property='og:image:width' />
 <meta content='630' property='og:image:height' />
-{
-  articleDate && (
-    <>
-      <meta content={config.author} property='article:author' />
-      <meta content={articlePublishedAt ?? articleDate} property='article:published_time' />
-      {articleModifiedAt && <meta content={articleModifiedAt} property='article:modified_time' />}
-    </>
-  )
-}
+{articleDate && (
+  <>
+    <meta content={config.author} property='article:author' />
+    <meta content={articlePublishedAt ?? articleDate} property='article:published_time' />
+    {articleModifiedAt && <meta content={articleModifiedAt} property='article:modified_time' />}
+  </>
+)}
 
-{/* Twitter */}
 <meta content='summary_large_image' property='twitter:card' />
 <meta content={canonicalURL} property='twitter:url' />
 <meta content={title} property='twitter:title' />
 <meta content={description} property='twitter:description' />
 <meta content={socialImageURL} property='twitter:image' />
-  {twitterCreator && (
-    <>
-      <meta content={twitterCreator} property='twitter:creator' />
-      <meta content={twitterCreator} property='twitter:site' />
-    </>
-  )}
+{twitterCreator && (
+  <>
+    <meta content={twitterCreator} property='twitter:creator' />
+    <meta content={twitterCreator} property='twitter:site' />
+  </>
+)}
 
-  {/* Site, page, and person entities for search engines */}
-  <script is:inline type='application/ld+json' set:html={JSON.stringify(websiteJsonLd)} />
-  <script is:inline type='application/ld+json' set:html={JSON.stringify(webPageJsonLd)} />
-  <script is:inline type='application/ld+json' set:html={JSON.stringify(profileJsonLd)} />
-
-  {/* Sitemap */}
-
+<script is:inline type='application/ld+json' set:html={JSON.stringify(websiteJsonLd)} />
+<script is:inline type='application/ld+json' set:html={JSON.stringify(webPageJsonLd)} />
+<script is:inline type='application/ld+json' set:html={JSON.stringify(profileJsonLd)} />
 <link href={`${baseUrl}sitemap-index.xml`} rel='sitemap' />
-
-{/* RSS auto-discovery */}
-<link
-  rel='alternate'
-  type='application/rss+xml'
-  title={config.title}
-  href={new URL(`${baseUrl}rss.xml`, Astro.site)}
-/>
-
+<link rel='alternate' type='application/rss+xml' title={config.title} href={new URL(`${baseUrl}rss.xml`, Astro.site)} />
 <meta content={Astro.generator} name='generator' />
