@@ -1,0 +1,49 @@
+name: Verify published reading quality
+
+on:
+  workflow_run:
+    workflows: ['Deploy Astro site to GitHub Pages']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: published-reading-quality
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout deployed revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser runner
+        run: |
+          npm install --prefix "$RUNNER_TEMP/lorasys-browser" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/lorasys-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Read published pages in Chromium
+        env:
+          SITE_TEST_URL: https://lora-sys.github.io/loraSys/
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/lorasys-published-reading-quality
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs
+        run: node scripts/test-reading-quality.mjs
+      - name: Preserve published page screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-reading-quality
+          path: ${{ runner.temp }}/lorasys-published-reading-quality
+          if-no-files-found: warn
+          retention-days: 14

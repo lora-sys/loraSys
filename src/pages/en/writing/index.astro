@@ -7,10 +7,10 @@ const posts = sortMDByDate(await getBlogCollection()).filter((post) => post.data
 
 <PageLayout lang='en-US' meta={{ title: 'Writing', description: 'English build notes on agent systems, tools, and building in public.' }} highlightColor='#d99a33'>
   <main class='writing-page'>
-    <header><p>WRITING</p><h1>Notes on systems I am building, checking, and learning from.</h1><span>English originals live here. Chinese long-form writing remains available in its original language rather than being auto-translated.</span></header>
-    <nav aria-label='Writing languages'><a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'>中文原文与长文 ↗</a></nav>
-    <section aria-label='English writing'>{posts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time><h2><a href={`/en/writing/${post.id}`}>{post.data.title}</a></h2><p>{post.data.description}</p><div>{post.data.tags.slice(0, 4).map((tag) => <span>#{tag}</span>)}</div><a class='read' href={`/en/writing/${post.id}`}>Read note ↗</a></article>)}</section>
-    {posts.length === 0 && <p class='empty'>English notes are being prepared. The Chinese Writing archive remains available from the language switcher.</p>}
+    <header><p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span>English originals are listed here. Each article keeps one permanent address and its original language.</span></header>
+    <nav aria-label='Writing languages'><a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'>全部文章与中文原文 ↗</a></nav>
+    <section aria-label='English writing'>{posts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time><h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2><p>{post.data.description}</p><div>{post.data.tags.slice(0, 4).map((tag) => <span>#{tag}</span>)}</div><a class='read' href={`/blog/${post.id}`}>Read note ↗</a></article>)}</section>
+    {posts.length === 0 && <p class='empty'>No English notes are published yet. The full writing archive remains available.</p>}
   </main>
 </PageLayout>
 

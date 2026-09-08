@@ -8,13 +8,10 @@ interface Props {
 }
 
 const { path, lang } = Astro.props
+// Work and résumé pages start with their content rather than a decorative banner.
 const exactScenes: Record<string, LoraVisualKey> = {
-  '/projects': 'projectsMap',
-  '/en/work': 'projectsMap',
   '/links': 'linksConstellation',
   '/en/links': 'linksConstellation',
-  '/resume': 'resumeDossier',
-  '/en/resume': 'resumeDossier',
   '/guestbook': 'guestbookPostcard',
   '/en/guestbook': 'guestbookPostcard',
   '/search': 'indexScene',
