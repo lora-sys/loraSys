@@ -49,6 +49,11 @@ jobs:
           SITE_TEST_OUTPUT: ${{ runner.temp }}/lorasys-site-regressions
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs
         run: node scripts/test-site-regressions.mjs
+      - name: Verify project fold search deduplication and readable resumes
+        env:
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/lorasys-site-regressions/reading-quality
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs
+        run: node scripts/test-reading-quality.mjs
       - name: Preserve browser evidence
         if: always()
         uses: actions/upload-artifact@v4
