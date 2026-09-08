@@ -29,30 +29,18 @@ export const localizedPath = (pathname: string, target: SiteLocale): string => {
   if (target === 'en-US') {
     if (normalized in zhToEn) return zhToEn[normalized]
     if (normalized.startsWith('/blog/language/')) return '/en/writing'
-    if (normalized.startsWith('/blog/')) return `/en/writing/${normalized.slice('/blog/'.length)}`
-    return '/en'
+    return normalized.startsWith('/blog/') ? normalized : '/en'
   }
   if (normalized in enToZh) return enToZh[normalized]
   if (normalized.startsWith('/en/writing/')) return `/blog/${normalized.slice('/en/writing/'.length)}`
   return '/'
 }
 
-// 只有真实存在对应路由的页面才提供语言切换；分页页码（如 /blog/2）与
-// 中文独有页面（notes/lab/archives/talks/tags/terms/search）返回 false，
-// 由 SiteHeader 隐藏 toggle、BaseLayout 停发 hreflang alternate。
-const isPaginationSegment = (slug: string) => /^\d+$/.test(slug)
-
+// Article aliases are not translations. Only paired directory pages expose a language switch.
 export const hasAlternate = (pathname: string, target: SiteLocale): boolean => {
   const normalized = normalizePath(pathname)
-  if (target === 'en-US') {
-    if (normalized in zhToEn) return true
-    if (normalized.startsWith('/blog/language/')) return true
-    if (normalized.startsWith('/blog/')) return !isPaginationSegment(normalized.slice('/blog/'.length))
-    return false
-  }
-  if (normalized in enToZh) return true
-  if (normalized.startsWith('/en/writing/')) return !isPaginationSegment(normalized.slice('/en/writing/'.length))
-  return false
+  if (target === 'en-US') return normalized in zhToEn || normalized.startsWith('/blog/language/')
+  return normalized in enToZh
 }
 
 export const primaryNavigation = (locale: SiteLocale) =>
