@@ -101,7 +101,8 @@ try {
         }
         await search.click()
         await page.waitForURL((u) => u.pathname.replace(/\/$/, '') === '/loraSys/search', { waitUntil: 'domcontentloaded' })
-        const input = page.locator('input[type="search"]')
+        // Pagefind renders type=text with enterkeyhint=search.
+        const input = page.locator('.pagefind-ui__search-input')
         await input.fill('Harness')
         await page.locator('.pagefind-ui__result').first().waitFor({ state: 'visible' })
         await capture('search-results')
@@ -115,6 +116,7 @@ try {
         const visible = page.locator('[data-project-browser] [data-project-item]:not([hidden])')
         await page.waitForFunction(() => document.querySelectorAll('[data-project-browser] [data-project-item]:not([hidden])').length === 1)
         await visible.scrollIntoViewIfNeeded()
+        await visible.locator('h3').waitFor({ state: 'visible' })
         assert.match(await visible.textContent(), /loraSys/i)
         await capture('lorasys-result')
         const labels = (await page.locator('[data-source-filter]').allTextContents()).map((s) => s.trim())
