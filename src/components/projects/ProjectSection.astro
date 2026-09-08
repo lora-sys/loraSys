@@ -1,14 +1,9 @@
 ---
 import type { Project } from '@/data/projects'
-
 import { Icon } from 'astro-pure/user'
-
 import ProjectCard from './ProjectCard.astro'
 
-interface Props {
-  projects: Project[]
-}
-
+interface Props { projects: Project[] }
 const { projects } = Astro.props
 const featured = projects
   .filter((project) => project.featuredRank !== undefined)
@@ -16,228 +11,130 @@ const featured = projects
 const [leadProject, ...featuredProjects] = featured
 const featuredRepositories = new Set(featured.map((project) => project.repository))
 const unfeatured = projects.filter((project) => !featuredRepositories.has(project.repository))
-const maintainedProjects = unfeatured
-  .filter((project) => project.status !== 'archived')
-  .slice(0, 12)
+const maintainedProjects = unfeatured.filter((project) => project.status !== 'archived').slice(0, 12)
 const maintainedRepositories = new Set(maintainedProjects.map((project) => project.repository))
-const archiveProjects = unfeatured.filter(
-  (project) => !maintainedRepositories.has(project.repository)
-)
+const archiveProjects = unfeatured.filter((project) => !maintainedRepositories.has(project.repository))
 const sources = [...new Set(projects.map((project) => project.source))].sort()
-const sourceLabel = (source: string) => (source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys')
-const categories = [
-  ...new Set(
-    projects.flatMap((project) =>
-      project.categories.filter((category) => !['Featured', 'Open Source'].includes(category))
-    )
-  )
-].sort((left, right) => left.localeCompare(right))
-const formatUpdated = (date: string) =>
-  new Intl.DateTimeFormat('en', {
-    month: 'short',
-    year: 'numeric',
-    timeZone: 'UTC'
-  }).format(new Date(date))
-const searchValue = (project: Project) =>
-  [
-    project.title,
-    project.repository,
-    project.description,
-    project.categories.join(' '),
-    project.technologies.join(' '),
-    project.language ?? '',
-    project.source
-  ]
-    .join(' ')
-    .toLocaleLowerCase()
-const sourceFor = (project: Project) =>
-  project.links.find((link) => link.type === 'source')?.href ?? '#'
+const sourceLabel = (source: string) => source === 'External' ? '外部贡献' : source
+const categories = [...new Set(projects.flatMap((project) =>
+  project.categories.filter((category) => !['Featured', 'Open Source'].includes(category))
+))].sort((left, right) => left.localeCompare(right))
+const formatUpdated = (date: string) => new Intl.DateTimeFormat('en', {
+  month: 'short', year: 'numeric', timeZone: 'UTC'
+}).format(new Date(date))
+const searchValue = (project: Project) => [
+  project.title, project.repository, project.description, project.categories.join(' '),
+  project.technologies.join(' '), project.language ?? '', project.source
+].join(' ').toLocaleLowerCase()
+const sourceFor = (project: Project) => project.links.find((link) => link.type === 'source')?.href ?? '#'
 const websiteFor = (project: Project) => project.links.find((link) => link.type === 'website')?.href
-const statusLabel = (status: Project['status']) =>
-  ({ building: 'Building', active: 'Maintained', archived: 'Archived' })[status]
+const statusLabel = (status: Project['status']) => ({ building: 'Building', active: 'Maintained', archived: 'Archived' })[status]
 ---
 
 <div class='portfolio' data-project-browser>
   <section class='filter-panel' aria-labelledby='project-filter-title'>
     <div class='filter-heading'>
-      <div>
-        <p class='eyebrow'>Find a build · 找一个构建</p>
-        <h2 id='project-filter-title'>浏览完整仓库</h2>
-      </div>
-      <p class='filter-status' aria-live='polite' data-filter-status>
-        共收录 {projects.length} 个项目
-      </p>
+      <div><p class='eyebrow'>Find a build · 找一个构建</p><h2 id='project-filter-title'>浏览完整仓库</h2></div>
+      <p class='filter-status' aria-live='polite' data-filter-status>共收录 {projects.length} 个项目</p>
     </div>
-
     <div class='search-field'>
       <Icon name='search' class='size-4' aria-hidden='true' />
-      <label class='sr-only' for='project-search'>Search projects</label>
-      <input
-        id='project-search'
-        name='q'
-        type='search'
-        autocomplete='off'
-        placeholder='Search projects, tools, or technologies…'
-        data-project-search
-      />
+      <label class='sr-only' for='project-search'>搜索项目</label>
+      <input id='project-search' name='q' type='search' autocomplete='off'
+        placeholder='搜索项目、工具或技术…' data-project-search />
     </div>
-
     <div class='filter-groups'>
-      <div class='filter-group' role='group' aria-label='Filter projects by category'>
-        <span>Category</span>
-        <div>
-          <button type='button' data-category-filter='all' aria-pressed='true'>All</button>
-          {
-            categories.map((category) => (
-              <button type='button' data-category-filter={category} aria-pressed='false'>
-                {category}
-              </button>
-            ))
-          }
+      <div class='filter-group' role='group' aria-label='按分类筛选项目'>
+        <span>分类</span><div>
+          <button type='button' data-category-filter='all' aria-pressed='true'>全部</button>
+          {categories.map((category) => <button type='button' data-category-filter={category} aria-pressed='false'>{category}</button>)}
         </div>
       </div>
-      <div class='filter-group' role='group' aria-label='Filter projects by source'>
-        <span>Source</span>
-        <div>
-          <button type='button' data-source-filter='all' aria-pressed='true'>All</button>
-          {
-            sources.map((source) => (
-              <button type='button' data-source-filter={source} aria-pressed='false'>
-                {sourceLabel(source)}
-              </button>
-            ))
-          }
+      <div class='filter-group' role='group' aria-label='按来源筛选项目'>
+        <span>来源</span><div>
+          <button type='button' data-source-filter='all' aria-pressed='true'>全部</button>
+          {sources.map((source) => <button type='button' data-source-filter={source} aria-pressed='false'>{sourceLabel(source)}</button>)}
         </div>
       </div>
-      <div class='filter-group' role='group' aria-label='Filter projects by status'>
-        <span>Status</span>
-        <div>
-          <button type='button' data-status-filter='all' aria-pressed='true'>All</button>
-          <button type='button' data-status-filter='building' aria-pressed='false'>Building</button>
-          <button type='button' data-status-filter='active' aria-pressed='false'>Maintained</button>
-          <button type='button' data-status-filter='archived' aria-pressed='false'>Archived</button>
+      <div class='filter-group' role='group' aria-label='按状态筛选项目'>
+        <span>状态</span><div>
+          <button type='button' data-status-filter='all' aria-pressed='true'>全部</button>
+          <button type='button' data-status-filter='building' aria-pressed='false'>构建中</button>
+          <button type='button' data-status-filter='active' aria-pressed='false'>持续维护</button>
+          <button type='button' data-status-filter='archived' aria-pressed='false'>已归档</button>
         </div>
       </div>
     </div>
   </section>
 
-  {
-    leadProject && (
-      <section class='project-block lead-block' data-project-section aria-labelledby='lead-title'>
-        <header class='section-heading'>
-          <div>
-            <p class='eyebrow'>Featured / 01</p>
-            <h2 id='lead-title'>主推项目</h2>
-          </div>
-          <span data-section-count>1 project</span>
-        </header>
-        <ProjectCard project={leadProject} variant='lead' priority lens filterable />
-      </section>
-    )
-  }
-
-  {
-    featuredProjects.length > 0 && (
-      <section class='project-block' data-project-section aria-labelledby='featured-title'>
-        <header class='section-heading'>
-          <div>
-            <p class='eyebrow'>Selected work</p>
-            <h2 id='featured-title'>精选项目</h2>
-          </div>
-          <span data-section-count>{featuredProjects.length} projects</span>
-        </header>
-        <div class='featured-grid'>
-          {featuredProjects.map((project) => (
-            <ProjectCard project={project} variant='featured' lens filterable />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
-    maintainedProjects.length > 0 && (
-      <section class='project-block' data-project-section aria-labelledby='maintained-title'>
-        <header class='section-heading'>
-          <div>
-            <p class='eyebrow'>Recent & maintained</p>
-            <h2 id='maintained-title'>持续维护</h2>
-          </div>
-          <span data-section-count>{maintainedProjects.length} projects</span>
-        </header>
-        <div class='project-grid'>
-          {maintainedProjects.map((project) => (
-            <ProjectCard project={project} variant='grid' filterable />
-          ))}
-        </div>
-      </section>
-    )
-  }
-
-  {
-    archiveProjects.length > 0 && (
-      <section
-        class='project-block archive-block'
-        data-project-section
-        aria-labelledby='archive-title'
-      >
-        <header class='section-heading'>
-          <div>
-            <p class='eyebrow'>Complete public record</p>
-            <h2 id='archive-title'>仓库归档</h2>
-          </div>
-          <span data-section-count>{archiveProjects.length} projects</span>
-        </header>
-        <div class='archive-list'>
-          {archiveProjects.map((project) => {
-            const website = websiteFor(project)
-            const technologies = project.technologies.slice(0, 2)
-            return (
-              <article
-                class='archive-row'
-                data-project-item
-                data-category={project.categories.join('|')}
-                data-status={project.status}
-                data-source={project.source}
-                data-search={searchValue(project)}
-              >
-                <div class='archive-main'>
-                  <span class:list={['archive-status', `archive-status--${project.status}`]}>
-                    <i aria-hidden='true' /> {statusLabel(project.status)}
-                  </span>
-                  <div class='archive-title-row'>
-                    <h3>{project.title}</h3>
-                    <span class='archive-source'>{sourceLabel(project.source)}</span>
-                  </div>
-                  <p>{project.description || 'No description published yet.'}</p>
-                </div>
-                <div class='archive-meta'>
-                  <span translate='no'>{project.language || technologies[0] || 'Open source'}</span>
-                  {project.stars > 0 && <span>{project.stars}★</span>}
-                  <span>{formatUpdated(project.pushedAt)}</span>
-                </div>
-                <div class='archive-actions'>
-                  {website && (
-                    <a href={website} target='_blank' rel='noopener noreferrer'>
-                      Website <span aria-hidden='true'>↗</span>
-                    </a>
-                  )}
-                  <a href={sourceFor(project)} target='_blank' rel='noopener noreferrer'>
-                    Source <span aria-hidden='true'>↗</span>
-                  </a>
-                </div>
-              </article>
-            )
-          })}
-        </div>
-      </section>
-    )
-  }
-
+  {/* Featured projects already own their canonical anchors above the archive. */}
+  {leadProject && (
+    <section class='project-block lead-block' data-project-section aria-labelledby='lead-title'>
+      <header class='section-heading'>
+        <div><p class='eyebrow'>Featured / 01</p><h2 id='lead-title'>主推项目</h2></div>
+        <span data-section-count>1 project</span>
+      </header>
+      <ProjectCard project={leadProject} variant='lead' priority lens filterable />
+    </section>
+  )}
+  {featuredProjects.length > 0 && (
+    <section class='project-block' data-project-section aria-labelledby='featured-title'>
+      <header class='section-heading'>
+        <div><p class='eyebrow'>Selected work</p><h2 id='featured-title'>精选项目</h2></div>
+        <span data-section-count>{featuredProjects.length} projects</span>
+      </header>
+      <div class='featured-grid'>
+        {featuredProjects.map((project) => <ProjectCard {project} variant='featured' lens filterable />)}
+      </div>
+    </section>
+  )}
+  {maintainedProjects.length > 0 && (
+    <section class='project-block' data-project-section aria-labelledby='maintained-title'>
+      <header class='section-heading'>
+        <div><p class='eyebrow'>Recent & maintained</p><h2 id='maintained-title'>持续维护</h2></div>
+        <span data-section-count>{maintainedProjects.length} projects</span>
+      </header>
+      <div class='project-grid'>
+        {maintainedProjects.map((project) => <ProjectCard {project} variant='grid' filterable anchor />)}
+      </div>
+    </section>
+  )}
+  {archiveProjects.length > 0 && (
+    <section class='project-block archive-block' data-project-section aria-labelledby='archive-title'>
+      <header class='section-heading'>
+        <div><p class='eyebrow'>Complete public record</p><h2 id='archive-title'>仓库归档</h2></div>
+        <span data-section-count>{archiveProjects.length} projects</span>
+      </header>
+      <div class='archive-list'>
+        {archiveProjects.map((project) => {
+          const website = websiteFor(project)
+          const technologies = project.technologies.slice(0, 2)
+          return (
+            <article id={project.repository} class='archive-row' data-project-item
+              data-category={project.categories.join('|')} data-status={project.status}
+              data-source={project.source} data-search={searchValue(project)}>
+              <div class='archive-main'>
+                <span class:list={['archive-status', `archive-status--${project.status}`]}><i aria-hidden='true' /> {statusLabel(project.status)}</span>
+                <div class='archive-title-row'><h3>{project.title}</h3><span class='archive-source'>{sourceLabel(project.source)}</span></div>
+                <p>{project.description || 'No description published yet.'}</p>
+              </div>
+              <div class='archive-meta'>
+                <span translate='no'>{project.language || technologies[0] || 'Open source'}</span>
+                {project.stars > 0 && <span>{project.stars}★</span>}
+                <span>{formatUpdated(project.pushedAt)}</span>
+              </div>
+              <div class='archive-actions'>
+                {website && <a href={website} target='_blank' rel='noopener noreferrer'>Website <span aria-hidden='true'>↗</span></a>}
+                <a href={sourceFor(project)} target='_blank' rel='noopener noreferrer'>Source <span aria-hidden='true'>↗</span></a>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </section>
+  )}
   <div class='empty-state' data-empty-state hidden>
-    <span aria-hidden='true'>⌕</span>
-    <h2>没有匹配的项目</h2>
-    <p>换个关键词、分类或状态试试。</p>
+    <span aria-hidden='true'>⌕</span><h2>没有匹配的项目</h2><p>换个关键词、分类或状态试试。</p>
     <button type='button' data-filter-reset>重置筛选</button>
   </div>
 </div>
@@ -249,32 +146,19 @@ const statusLabel = (status: Project['status']) =>
     const sections = [...browser.querySelectorAll<HTMLElement>('[data-project-section]')]
     const status = browser.querySelector<HTMLElement>('[data-filter-status]')
     const emptyState = browser.querySelector<HTMLElement>('[data-empty-state]')
-    const categoryButtons = [
-      ...browser.querySelectorAll<HTMLButtonElement>('[data-category-filter]')
-    ]
+    const categoryButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-category-filter]')]
     const statusButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-status-filter]')]
     const sourceButtons = [...browser.querySelectorAll<HTMLButtonElement>('[data-source-filter]')]
     const reset = browser.querySelector<HTMLButtonElement>('[data-filter-reset]')
-
-    const allowedCategories = new Set(
-      categoryButtons.map((button) => button.dataset.categoryFilter)
-    )
+    const allowedCategories = new Set(categoryButtons.map((button) => button.dataset.categoryFilter))
     const allowedStatuses = new Set(statusButtons.map((button) => button.dataset.statusFilter))
     const allowedSources = new Set(sourceButtons.map((button) => button.dataset.sourceFilter))
     let category = 'all'
     let projectStatus = 'all'
     let projectSource = 'all'
 
-    const setPressed = (
-      buttons: HTMLButtonElement[],
-      value: string,
-      key: 'category' | 'status' | 'source'
-    ) =>
-      buttons.forEach((button) => {
-        const selected = button.dataset[`${key}Filter`] === value
-        button.setAttribute('aria-pressed', String(selected))
-      })
-
+    const setPressed = (buttons: HTMLButtonElement[], value: string, key: 'category' | 'status' | 'source') =>
+      buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset[`${key}Filter`] === value)))
     const readUrl = () => {
       const params = new URLSearchParams(location.search)
       const nextCategory = params.get('category') ?? 'all'
@@ -288,7 +172,6 @@ const statusLabel = (status: Project['status']) =>
       setPressed(statusButtons, projectStatus, 'status')
       setPressed(sourceButtons, projectSource, 'source')
     }
-
     const writeUrl = (mode: 'push' | 'replace') => {
       const params = new URLSearchParams(location.search)
       const query = search?.value.trim() ?? ''
@@ -300,14 +183,12 @@ const statusLabel = (status: Project['status']) =>
       if (mode === 'push') history.pushState({}, '', next)
       else history.replaceState({}, '', next)
     }
-
     const applyFilters = () => {
       const query = search?.value.trim().toLocaleLowerCase() ?? ''
       let visible = 0
       items.forEach((item) => {
         const matchesQuery = !query || (item.dataset.search ?? '').includes(query)
-        const matchesCategory =
-          category === 'all' || (item.dataset.category ?? '').split('|').includes(category)
+        const matchesCategory = category === 'all' || (item.dataset.category ?? '').split('|').includes(category)
         const matchesStatus = projectStatus === 'all' || item.dataset.status === projectStatus
         const matchesSource = projectSource === 'all' || item.dataset.source === projectSource
         const show = matchesQuery && matchesCategory && matchesStatus && matchesSource
@@ -315,70 +196,21 @@ const statusLabel = (status: Project['status']) =>
         item.style.display = show ? '' : 'none'
         if (show) visible += 1
       })
-
       sections.forEach((section) => {
-        const count = section.querySelectorAll<HTMLElement>(
-          '[data-project-item]:not([hidden])'
-        ).length
+        const count = section.querySelectorAll<HTMLElement>('[data-project-item]:not([hidden])').length
         section.hidden = count === 0
         const countNode = section.querySelector<HTMLElement>('[data-section-count]')
         if (countNode) countNode.textContent = `${count} ${count === 1 ? 'project' : 'projects'}`
       })
-
       if (status) {
-        const statusName =
-          projectStatus === 'building'
-            ? 'Building'
-            : projectStatus === 'active'
-              ? 'Maintained'
-              : projectStatus === 'archived'
-                ? 'Archived'
-                : ''
-        const sourceName = projectSource === 'all' ? '' : projectSource
-        const filters = [
-          query && `“${search?.value.trim()}”`,
-          category !== 'all' && category,
-          sourceName,
-          statusName
-        ]
-          .filter(Boolean)
-          .join(' · ')
-        status.textContent = filters
-          ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}`
-          : `共收录 ${items.length} 个项目`
+        const statusName = projectStatus === 'building' ? '构建中' : projectStatus === 'active' ? '持续维护' : projectStatus === 'archived' ? '已归档' : ''
+        const sourceName = projectSource === 'all' ? '' : projectSource === 'External' ? '外部贡献' : projectSource
+        const filters = [query && `“${search?.value.trim()}”`, category !== 'all' && category, sourceName, statusName].filter(Boolean).join(' · ')
+        status.textContent = filters ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}` : `共收录 ${items.length} 个项目`
       }
       if (emptyState) emptyState.hidden = visible !== 0
     }
-
-    categoryButtons.forEach((button) =>
-      button.addEventListener('click', () => {
-        category = button.dataset.categoryFilter ?? 'all'
-        setPressed(categoryButtons, category, 'category')
-        writeUrl('push')
-        applyFilters()
-      })
-    )
-    statusButtons.forEach((button) =>
-      button.addEventListener('click', () => {
-        projectStatus = button.dataset.statusFilter ?? 'all'
-        setPressed(statusButtons, projectStatus, 'status')
-        writeUrl('push')
-        applyFilters()
-      })
-    )
-    sourceButtons.forEach((button) =>
-      button.addEventListener('click', () => {
-        projectSource = button.dataset.sourceFilter ?? 'all'
-        setPressed(sourceButtons, projectSource, 'source')
-        writeUrl('push')
-        applyFilters()
-      })
-    )
-    search?.addEventListener('input', () => {
-      writeUrl('replace')
-      applyFilters()
-    })
-    reset?.addEventListener('click', () => {
+    const clearFilters = () => {
       category = 'all'
       projectStatus = 'all'
       projectSource = 'all'
@@ -386,404 +218,106 @@ const statusLabel = (status: Project['status']) =>
       setPressed(categoryButtons, category, 'category')
       setPressed(statusButtons, projectStatus, 'status')
       setPressed(sourceButtons, projectSource, 'source')
-      writeUrl('push')
-      applyFilters()
-      search?.focus()
+    }
+    const openAncestors = (element: HTMLElement) => {
+      let parent = element.parentElement
+      while (parent) {
+        if (parent instanceof HTMLDetailsElement) parent.open = true
+        parent = parent.parentElement
+      }
+    }
+    // Direct article links must reveal their target even inside a closed or filtered archive.
+    const revealHashTarget = () => {
+      let id: string
+      try { id = decodeURIComponent(location.hash.slice(1)) } catch { return }
+      if (!id) return
+      const target = document.getElementById(id)
+      if (!target || !browser.contains(target) || !target.matches('[data-project-item]')) return
+      if (target.hidden) {
+        clearFilters()
+        writeUrl('replace')
+        applyFilters()
+      }
+      openAncestors(target)
+      target.setAttribute('tabindex', '-1')
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ block: 'start', behavior: 'instant' })
+        target.focus({ preventScroll: true })
+      })
+    }
+    categoryButtons.forEach((button) => button.addEventListener('click', () => {
+      category = button.dataset.categoryFilter ?? 'all'
+      setPressed(categoryButtons, category, 'category')
+      writeUrl('push'); applyFilters()
+    }))
+    statusButtons.forEach((button) => button.addEventListener('click', () => {
+      projectStatus = button.dataset.statusFilter ?? 'all'
+      setPressed(statusButtons, projectStatus, 'status')
+      writeUrl('push'); applyFilters()
+    }))
+    sourceButtons.forEach((button) => button.addEventListener('click', () => {
+      projectSource = button.dataset.sourceFilter ?? 'all'
+      setPressed(sourceButtons, projectSource, 'source')
+      writeUrl('push'); applyFilters()
+    }))
+    search?.addEventListener('input', () => { writeUrl('replace'); applyFilters() })
+    reset?.addEventListener('click', () => {
+      clearFilters(); writeUrl('push'); applyFilters(); search?.focus()
     })
-    addEventListener('popstate', () => {
-      readUrl()
-      applyFilters()
-    })
-
+    addEventListener('popstate', () => { readUrl(); applyFilters(); revealHashTarget() })
+    addEventListener('hashchange', revealHashTarget)
     readUrl()
     applyFilters()
+    if (['q', 'category', 'source', 'status'].some((key) => new URLSearchParams(location.search).has(key))) openAncestors(browser)
+    revealHashTarget()
   })
 </script>
 
 <style>
-  .portfolio {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(4rem, 8vw, 7rem);
-  }
-
-  .filter-panel {
-    position: relative;
-    display: grid;
-    gap: 1.25rem;
-    border-block: 1px solid hsl(var(--border));
-    padding-block: 1.4rem;
-  }
-
-  .filter-heading,
-  .section-heading {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .eyebrow {
-    margin: 0 0 0.25rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.65rem;
-    font-weight: 650;
-    letter-spacing: 0.13em;
-    text-transform: uppercase;
-  }
-
-  .filter-heading h2,
-  .section-heading h2,
-  .empty-state h2 {
-    margin: 0;
-    font-size: clamp(1.35rem, 3vw, 1.9rem);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    text-wrap: balance;
-  }
-
-  .filter-status,
-  .section-heading > span {
-    margin: 0;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .search-field {
-    display: flex;
-    min-height: 3.1rem;
-    align-items: center;
-    gap: 0.7rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: 0.85rem;
-    padding-inline: 0.9rem;
-    background: hsl(var(--background));
-    color: hsl(var(--muted-foreground));
-    transition:
-      border-color 180ms ease,
-      box-shadow 180ms ease;
-  }
-
-  .search-field:focus-within {
-    border-color: hsl(var(--foreground) / 0.55);
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
-    color: hsl(var(--foreground));
-  }
-
-  .search-field input {
-    min-width: 0;
-    flex: 1;
-    border: 0;
-    outline: 0;
-    background: transparent;
-    color: hsl(var(--foreground));
-    font: inherit;
-    font-size: 0.82rem;
-  }
-
-  .search-field input::placeholder {
-    color: hsl(var(--muted-foreground));
-  }
-
-  .filter-groups,
-  .filter-group,
-  .filter-group > div {
-    display: flex;
-  }
-
-  .filter-groups {
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1.2rem 2rem;
-  }
-
-  .filter-group {
-    min-width: 0;
-    align-items: center;
-    gap: 0.7rem;
-  }
-
-  .filter-group > span {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.64rem;
-    font-weight: 620;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .filter-group > div {
-    flex-wrap: wrap;
-    gap: 0.38rem;
-  }
-
-  .filter-group button,
-  .empty-state button {
-    min-height: 2.35rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: 999px;
-    background: hsl(var(--background));
-    padding: 0.42rem 0.7rem;
-    color: hsl(var(--muted-foreground));
-    font: inherit;
-    font-size: 0.7rem;
-    cursor: pointer;
-    touch-action: manipulation;
-    transition:
-      background 180ms ease,
-      border-color 180ms ease,
-      color 180ms ease,
-      transform 180ms ease;
-  }
-
-  .filter-group button:hover,
-  .filter-group button:focus-visible,
-  .empty-state button:hover,
-  .empty-state button:focus-visible {
-    border-color: hsl(var(--foreground) / 0.42);
-    color: hsl(var(--foreground));
-    transform: translateY(-1px);
-  }
-
-  .filter-group button[aria-pressed='true'] {
-    border-color: hsl(var(--foreground));
-    background: hsl(var(--foreground));
-    color: hsl(var(--background));
-  }
-
-  .project-block {
-    display: grid;
-    gap: 1.35rem;
-    scroll-margin-top: 5.5rem;
-  }
-
-  .featured-grid,
-  .project-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-
-  .archive-list {
-    border-top: 1px solid hsl(var(--border));
-  }
-
-  .archive-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
-    gap: 1rem 1.5rem;
-    border-bottom: 1px solid hsl(var(--border));
-    padding: 1rem 0.15rem;
-    content-visibility: auto;
-    contain-intrinsic-size: auto 7rem;
-  }
-
-  .archive-main {
-    display: grid;
-    min-width: 0;
-    grid-template-columns: auto minmax(0, auto) minmax(7rem, 1fr);
-    align-items: baseline;
-    gap: 0.45rem 0.75rem;
-  }
-
-  .archive-title-row {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-  }
-
-  .archive-source {
-    border: 1px solid hsl(var(--border));
-    border-radius: 999px;
-    padding: 0.16rem 0.42rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.62rem;
-    letter-spacing: 0.04em;
-  }
-
-  .archive-main h3 {
-    min-width: 0;
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 610;
-    overflow-wrap: anywhere;
-  }
-
-  .archive-main p {
-    min-width: 0;
-    margin: 0;
-    overflow: hidden;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .archive-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.32rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.59rem;
-    font-weight: 620;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .archive-status i {
-    width: 0.35rem;
-    height: 0.35rem;
-    border-radius: 50%;
-    background: hsl(var(--muted-foreground));
-  }
-
-  .archive-status--building i {
-    background: hsl(var(--field-teal));
-  }
-
-  .archive-status--active i {
-    background: #659eb9;
-  }
-
-  .archive-meta,
-  .archive-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    white-space: nowrap;
-  }
-
-  .archive-meta {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.65rem;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .archive-meta span + span::before {
-    content: '·';
-    margin-right: 0.5rem;
-  }
-
-  .archive-actions a {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
-    text-decoration: none;
-    transition:
-      color 160ms ease,
-      transform 160ms ease;
-  }
-
-  .archive-actions a:hover,
-  .archive-actions a:focus-visible {
-    color: hsl(var(--foreground));
-    text-decoration: underline;
-    text-underline-offset: 0.24rem;
-  }
-
-  .empty-state {
-    display: grid;
-    min-height: 22rem;
-    place-items: center;
-    align-content: center;
-    gap: 0.55rem;
-    border: 1px dashed hsl(var(--border));
-    border-radius: 1rem;
-    padding: 2rem;
-    text-align: center;
-  }
-
-  .empty-state[hidden] {
-    display: none;
-  }
-
-  .empty-state > span {
-    color: hsl(var(--muted-foreground));
-    font-size: 2rem;
-  }
-
-  .empty-state p {
-    margin: 0;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.8rem;
-  }
-
-  [hidden] {
-    display: none !important;
-  }
-
-  @media (max-width: 900px) {
-    .filter-groups {
-      flex-direction: column;
-    }
-
-    .archive-row {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    .archive-main {
-      grid-column: 1 / -1;
-    }
-  }
-
-  @media (max-width: 700px) {
-    .featured-grid,
-    .project-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .filter-heading,
-    .section-heading {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-
-    .filter-group {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .archive-row {
-      grid-template-columns: 1fr;
-      gap: 0.65rem;
-    }
-
-    .archive-main {
-      display: flex;
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.28rem;
-    }
-
-    .archive-main p {
-      display: -webkit-box;
-      overflow: hidden;
-      white-space: normal;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-
-    .archive-actions,
-    .archive-meta {
-      justify-content: flex-start;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .search-field,
-    .filter-group button,
-    .empty-state button,
-    .archive-actions a {
-      transition: none;
-    }
-
-    .filter-group button:hover,
-    .filter-group button:focus-visible,
-    .empty-state button:hover,
-    .empty-state button:focus-visible {
-      transform: none;
-    }
-  }
+  .portfolio { display: flex; flex-direction: column; gap: clamp(4rem, 8vw, 7rem); }
+  .filter-panel { position: relative; display: grid; gap: 1.25rem; border-block: 1px solid hsl(var(--border)); padding-block: 1.4rem; }
+  .filter-heading, .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .eyebrow { margin: 0 0 .25rem; color: hsl(var(--muted-foreground)); font-size: .65rem; font-weight: 650; letter-spacing: .13em; text-transform: uppercase; }
+  .filter-heading h2, .section-heading h2, .empty-state h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.9rem); font-weight: 600; letter-spacing: -.035em; text-wrap: balance; }
+  .filter-status, .section-heading > span { margin: 0; color: hsl(var(--muted-foreground)); font-size: .68rem; font-variant-numeric: tabular-nums; }
+  .search-field { display: flex; min-height: 3.1rem; align-items: center; gap: .7rem; border: 1px solid hsl(var(--border)); border-radius: .85rem; padding-inline: .9rem; background: hsl(var(--background)); color: hsl(var(--muted-foreground)); transition: border-color 180ms ease, box-shadow 180ms ease; }
+  .search-field:focus-within { border-color: hsl(var(--foreground) / .55); box-shadow: 0 0 0 3px hsl(var(--primary) / .12); color: hsl(var(--foreground)); }
+  .search-field input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: hsl(var(--foreground)); font: inherit; font-size: .82rem; }
+  .search-field input::placeholder { color: hsl(var(--muted-foreground)); }
+  .filter-groups, .filter-group, .filter-group > div { display: flex; }
+  .filter-groups { align-items: flex-start; justify-content: space-between; gap: 1.2rem 2rem; }
+  .filter-group { min-width: 0; align-items: center; gap: .7rem; }
+  .filter-group > span { color: hsl(var(--muted-foreground)); font-size: .64rem; font-weight: 620; letter-spacing: .08em; text-transform: uppercase; }
+  .filter-group > div { flex-wrap: wrap; gap: .38rem; }
+  .filter-group button, .empty-state button { min-height: 2.35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); padding: .42rem .7rem; color: hsl(var(--muted-foreground)); font: inherit; font-size: .7rem; cursor: pointer; touch-action: manipulation; transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease; }
+  .filter-group button:hover, .filter-group button:focus-visible, .empty-state button:hover, .empty-state button:focus-visible { border-color: hsl(var(--foreground) / .42); color: hsl(var(--foreground)); transform: translateY(-1px); }
+  .filter-group button[aria-pressed='true'] { border-color: hsl(var(--foreground)); background: hsl(var(--foreground)); color: hsl(var(--background)); }
+  .project-block { display: grid; gap: 1.35rem; scroll-margin-top: 5.5rem; }
+  [data-project-item][id] { scroll-margin-top: 6.5rem; }
+  .featured-grid, .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .archive-list { border-top: 1px solid hsl(var(--border)); }
+  .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem 1.5rem; border-bottom: 1px solid hsl(var(--border)); padding: 1rem .15rem; content-visibility: auto; contain-intrinsic-size: auto 7rem; }
+  .archive-main { display: grid; min-width: 0; grid-template-columns: auto minmax(0, auto) minmax(7rem, 1fr); align-items: baseline; gap: .45rem .75rem; }
+  .archive-title-row { display: flex; align-items: center; gap: .65rem; }
+  .archive-source { border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .16rem .42rem; color: hsl(var(--muted-foreground)); font-size: .62rem; letter-spacing: .04em; }
+  .archive-main h3 { min-width: 0; margin: 0; font-size: .9rem; font-weight: 610; overflow-wrap: anywhere; }
+  .archive-main p { min-width: 0; margin: 0; overflow: hidden; color: hsl(var(--muted-foreground)); font-size: .72rem; text-overflow: ellipsis; white-space: nowrap; }
+  .archive-status { display: inline-flex; align-items: center; gap: .32rem; color: hsl(var(--muted-foreground)); font-size: .59rem; font-weight: 620; letter-spacing: .06em; text-transform: uppercase; }
+  .archive-status i { width: .35rem; height: .35rem; border-radius: 50%; background: hsl(var(--muted-foreground)); }
+  .archive-status--building i { background: hsl(var(--field-teal)); }
+  .archive-status--active i { background: #659eb9; }
+  .archive-meta, .archive-actions { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
+  .archive-meta { color: hsl(var(--muted-foreground)); font-size: .65rem; font-variant-numeric: tabular-nums; }
+  .archive-meta span + span::before { content: '·'; margin-right: .5rem; }
+  .archive-actions a { color: hsl(var(--muted-foreground)); font-size: .68rem; text-decoration: none; transition: color 160ms ease, transform 160ms ease; }
+  .archive-actions a:hover, .archive-actions a:focus-visible { color: hsl(var(--foreground)); text-decoration: underline; text-underline-offset: .24rem; }
+  .empty-state { display: grid; min-height: 22rem; place-items: center; align-content: center; gap: .55rem; border: 1px dashed hsl(var(--border)); border-radius: 1rem; padding: 2rem; text-align: center; }
+  .empty-state[hidden] { display: none; }
+  .empty-state > span { color: hsl(var(--muted-foreground)); font-size: 2rem; }
+  .empty-state p { margin: 0; color: hsl(var(--muted-foreground)); font-size: .8rem; }
+  [hidden] { display: none !important; }
+  @media (max-width: 900px) { .filter-groups { flex-direction: column; } .archive-row { grid-template-columns: minmax(0, 1fr) auto; } .archive-main { grid-column: 1 / -1; } }
+  @media (max-width: 700px) { .featured-grid, .project-grid { grid-template-columns: 1fr; } .filter-heading, .section-heading { align-items: flex-start; flex-direction: column; } .filter-group { align-items: flex-start; flex-direction: column; } }
+  @media (max-width: 520px) { .archive-row { grid-template-columns: 1fr; gap: .65rem; } .archive-main { display: flex; align-items: flex-start; flex-direction: column; gap: .28rem; } .archive-main p { display: -webkit-box; overflow: hidden; white-space: normal; -webkit-box-orient: vertical; -webkit-line-clamp: 2; } .archive-actions, .archive-meta { justify-content: flex-start; } }
+  @media (prefers-reduced-motion: reduce) { .search-field, .filter-group button, .empty-state button, .archive-actions a { transition: none; } .filter-group button:hover, .filter-group button:focus-visible, .empty-state button:hover, .empty-state button:focus-visible { transform: none; } }
 </style>

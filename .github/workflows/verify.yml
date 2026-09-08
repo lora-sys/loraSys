@@ -1,0 +1,67 @@
+name: Verify site pull request
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-verify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Build and browser regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - name: Checkout pull request
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Install locked dependencies
+        run: bun install --frozen-lockfile
+      - name: Validate retained snapshots
+        run: bun run validate:sync
+      - name: Check Astro types
+        run: bun run check
+      - name: Build production output
+        run: bun run build
+      - name: Install isolated browser test runner
+        run: |
+          npm install --prefix "$RUNNER_TEMP/lorasys-browser" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/lorasys-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Test production pages in Chromium
+        env:
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/lorasys-site-regressions
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs
+        run: node scripts/test-site-regressions.mjs
+      - name: Preserve browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-regression-evidence
+          path: ${{ runner.temp }}/lorasys-site-regressions
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Package tested site
+        run: tar -czf "$RUNNER_TEMP/verified-site.tar.gz" -C dist .
+      - name: Preserve tested output
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-site
+          path: ${{ runner.temp }}/verified-site.tar.gz
+          retention-days: 7
