@@ -41,6 +41,7 @@ jobs:
       - name: Build production output
         run: bun run build
       - name: Install isolated browser test runner
+        id: browser
         run: |
           npm install --prefix "$RUNNER_TEMP/lorasys-browser" --no-save --package-lock=false playwright@1.58.2
           node "$RUNNER_TEMP/lorasys-browser/node_modules/playwright/cli.js" install --with-deps chromium
@@ -50,6 +51,7 @@ jobs:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs
         run: node scripts/test-site-regressions.mjs
       - name: Verify project fold search deduplication and readable resumes
+        if: ${{ !cancelled() && steps.browser.outcome == 'success' }}
         env:
           SITE_TEST_OUTPUT: ${{ runner.temp }}/lorasys-site-regressions/reading-quality
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/lorasys-browser/node_modules/playwright/index.mjs

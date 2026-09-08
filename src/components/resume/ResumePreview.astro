@@ -87,7 +87,11 @@ const copy = lang === 'en-US'
       const rect = dialog.getBoundingClientRect()
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close()
     })
-    dialog.addEventListener('close', () => trigger.focus())
+    dialog.addEventListener('close', () => {
+      // A queued close event must not steal focus from another preview being opened.
+      const active = document.activeElement
+      if (active === document.body || (active && dialog.contains(active))) trigger.focus()
+    })
   })
 </script>
 
