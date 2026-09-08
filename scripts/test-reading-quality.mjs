@@ -113,7 +113,8 @@ try {
           assert.ok(box.y >= 0 && box.y + box.height <= viewport.height, `First project title below fold: ${JSON.stringify(box)}`)
           assert.ok(cardBox.y < viewport.height / 2, `First card starts too low: ${cardBox.y}`)
           assert.equal(await page.evaluate(() => scrollY), 0, 'Test must not scroll to make the title pass')
-          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'No page overflow')
+          const overflow = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: innerWidth, elements: [...document.querySelectorAll('main *')].filter((element) => element.getBoundingClientRect().right > innerWidth + 1).slice(0, 8).map((element) => ({ tag: element.tagName, class: element.className, right: element.getBoundingClientRect().right })) }))
+          assert.ok(overflow.width <= overflow.viewport + 1, `No page overflow: ${JSON.stringify(overflow)}`)
           await capture(route.replace('/', '-') + '-light')
           await page.evaluate(() => { document.documentElement.classList.add('dark'); localStorage.setItem('theme', 'dark') })
           await capture(route.replace('/', '-') + '-dark')
@@ -129,9 +130,20 @@ try {
         const links = await page.locator('.pagefind-ui__result-link').evaluateAll((items) => items.map((item) => ({ title: item.textContent, href: item.href })))
         assert.ok(links.some((item) => item.href.includes('/blog/')), 'Search must retain matching articles')
         assert.ok(links.every((item) => !/\/en\/writing\/[^/?#]+/.test(new URL(item.href).pathname)), 'Search must not show legacy duplicates')
-        const urls = links.map((item) => new URL(item.href).pathname)
-        assert.equal(new Set(urls).size, urls.length, 'Search must not repeat a page')
-        report.searches.push({ label, links })
+        // The UI includes section links for a page. Check page-level uniqueness in the index.
+        const indexed = await page.evaluate(async (base) => {
+          const pagefind = await import(`${location.origin}${base}pagefind/pagefind.js`)
+          const result = await pagefind.search('Harness')
+          return Promise.all(result.results.map(async (item) => {
+            const data = await item.data()
+            return { title: data.meta.title, href: new URL(data.url, location.origin).href }
+          }))
+        }, base)
+        assert.ok(indexed.length > 0, 'Page-level search must contain results')
+        const urls = indexed.map((item) => new URL(item.href).pathname)
+        assert.equal(new Set(urls).size, urls.length, 'Index must not repeat a page')
+        assert.ok(urls.every((url) => !/\/en\/writing\/[^/]+/.test(url)), 'Index must exclude legacy article aliases')
+        report.searches.push({ label, indexed, links })
         await capture('search')
         const article = page.locator('.pagefind-ui__result-link').filter({ hasText: /Harness/i }).first()
         await article.click()
