@@ -107,7 +107,14 @@ try {
         await page.locator('.pagefind-ui__result').first().waitFor({ state: 'visible' })
         await capture('search-results')
         const links = await page.locator('.pagefind-ui__result-link').evaluateAll((es) => es.map((e) => e.href))
-        assert.ok(links.length > 0 && links.every((h) => new URL(h).pathname.startsWith('/loraSys/')))
+        const site = new URL(base)
+        const root = site.pathname.replace(/\/$/, '')
+        assert.ok(links.length > 0)
+        for (const href of links) {
+          const destination = new URL(href)
+          assert.equal(destination.origin, site.origin)
+          assert.ok(destination.pathname === root || destination.pathname.startsWith(`${root}/`), `Search URL leaves the deployment base: ${href}`)
+        }
         return { bounds, links }
       })
       await check('source filtering and history', async () => {
