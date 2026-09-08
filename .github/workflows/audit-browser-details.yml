@@ -1,0 +1,97 @@
+name: Inspect search destinations and native PDF
+on:
+  push:
+    branches: ['audit/live-browser-20260908']
+    paths: ['.github/workflows/audit-browser-details.yml']
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install full Chromium
+        run: |
+          npm install --prefix "$RUNNER_TEMP/browser-detail" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/browser-detail/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Check live search links and PDF display
+        env:
+          OUT: ${{ runner.temp }}/live-detail-evidence
+          MODULE: ${{ runner.temp }}/browser-detail/node_modules/playwright/index.mjs
+        run: |
+          cat > "$RUNNER_TEMP/browser-detail/check.mjs" <<'JS'
+          import { chromium } from 'playwright';
+          import { mkdir, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          const out=process.env.OUT;
+          await mkdir(out,{recursive:true});
+          const report={startedAt:new Date().toISOString(),browser:'full Chromium, new headless',target:'https://lora-sys.github.io/loraSys/',search:[],pdf:[],errors:[]};
+          const save=()=>writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2));
+          const browser=await chromium.launch({channel:'chromium',headless:true});
+          try {
+            for(const width of [1440,390]){
+              const context=await browser.newContext({viewport:{width,height:width===390?844:1000},reducedMotion:'reduce'});
+              const page=await context.newPage();page.setDefaultTimeout(15000);page.setDefaultNavigationTimeout(25000);
+              page.on('pageerror',e=>report.errors.push({width,error:e.message}));
+              await page.goto(report.target+'search',{waitUntil:'domcontentloaded'});
+              await page.locator('.pagefind-ui__search-input').fill('Harness');
+              const results=page.locator('.pagefind-ui__result-link');
+              await results.first().waitFor({state:'visible'});
+              await results.first().scrollIntoViewIfNeeded();
+              const links=await results.evaluateAll(es=>es.map(e=>({text:e.textContent,href:e.href,raw:e.getAttribute('href')})));
+              const search={width,links};report.search.push(search);await save();
+              await page.screenshot({path:path.join(out,`${width}-search-links.png`)});
+              const first=results.first();
+              const responsePromise=page.waitForResponse(r=>r.request().isNavigationRequest()&&r.request().frame()===page.mainFrame(),{timeout:15000});
+              await first.click();
+              const response=await responsePromise;
+              search.clicked={url:page.url(),status:response.status(),title:await page.title()};
+              await page.screenshot({path:path.join(out,`${width}-search-destination.png`)});await save();
+              for(let i=0;i<2;i++){
+                await page.goto(report.target+'en/resume',{waitUntil:'domcontentloaded'});
+                const preview=page.locator('[data-resume-preview]').nth(i);
+                const entry={width,button:i+1,observations:[]};report.pdf.push(entry);
+                const pdfResponse=page.waitForResponse(r=>r.url().includes('/loraSys/resume.pdf'),{timeout:15000});
+                await preview.locator('[data-resume-trigger]').press('Enter');
+                await preview.locator('dialog').waitFor({state:'visible'});
+                const r=await pdfResponse;entry.status=r.status();
+                await r.finished().catch(e=>{entry.responseFinishedError=String(e)});
+                // Chromium's native viewer runs in a PDF extension frame.
+                let viewerFrame=null;
+                try {
+                  await page.waitForEvent('framenavigated',{predicate:f=>f.url().startsWith('chrome-extension://'),timeout:1000});
+                } catch {}
+                viewerFrame=page.frames().find(f=>f.url().startsWith('chrome-extension://'));
+                if(viewerFrame){
+                  try {
+                    await viewerFrame.waitForFunction(()=>{const v=document.querySelector('pdf-viewer');return !!v&&(v.loadProgress===100||v.loadProgress_===100||v.loaded===true||v.documentLoaded===true)},null,{timeout:12000});
+                    entry.viewerReady=true;
+                  }catch(e){entry.viewerReady=false;entry.viewerWaitError=String(e)}
+                }else entry.viewerReady=false;
+                for(const f of page.frames()){
+                  try {entry.observations.push(await f.evaluate(()=>{const v=document.querySelector('pdf-viewer');return {url:location.href,title:document.title,bodyText:document.body?.innerText?.slice(0,400),viewer:!!v,viewerProperties:v?Object.getOwnPropertyNames(v).filter(k=>/load|progress|page/i.test(k)).map(k=>[k,typeof v[k]==='object'?String(v[k]):v[k]]):[],plugin:!!document.querySelector('embed[type="application/x-google-chrome-pdf"]')}}))}catch(e){entry.observations.push({url:f.url(),error:String(e)})}
+                }
+                await page.screenshot({path:path.join(out,`${width}-native-resume-${i+1}.png`)});
+                await page.keyboard.press('Escape');
+                await preview.locator('dialog').waitFor({state:'hidden'});
+                entry.focusReturned=await preview.locator('[data-resume-trigger]').evaluate(e=>e===document.activeElement);
+                await save();
+              }
+              await context.close();
+            }
+          }catch(e){report.fatal=String(e.stack||e);process.exitCode=1}
+          finally{report.finishedAt=new Date().toISOString();await save();await browser.close()}
+          console.log(JSON.stringify(report,null,2));
+          JS
+          node "$RUNNER_TEMP/browser-detail/check.mjs"
+      - name: Save diagnostic screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-browser-detail-evidence
+          path: ${{ runner.temp }}/live-detail-evidence
+          if-no-files-found: error
+          retention-days: 14
