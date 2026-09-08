@@ -143,7 +143,16 @@ try {
         await page.waitForFunction(() => document.querySelector('[data-work-archive]')?.open === true)
         const items = page.locator('[data-project-browser] [data-project-item]:not([hidden])')
         await page.waitForFunction(() => document.querySelectorAll('[data-project-browser] [data-project-item]:not([hidden])').length === 1)
+        // Archive rows use content-visibility:auto. Scroll to the result as a reader
+        // would before asserting innerText, which excludes skipped offscreen content.
+        await items.scrollIntoViewIfNeeded()
+        await items.locator('h3').waitFor({ state: 'visible' })
+        await page.waitForFunction(() => {
+          const result = document.querySelector('[data-project-browser] [data-project-item]:not([hidden])')
+          return result instanceof HTMLElement && /loraSys/i.test(result.innerText)
+        })
         assert.match(await items.innerText(), /loraSys/i)
+        await capture('lorasys-result')
         const labels = await page.locator('[data-source-filter]').allTextContents()
         assert.equal(new Set(labels.map((text) => text.trim())).size, labels.length, 'Source labels must be distinct')
         const search = page.locator('[data-project-search]')
@@ -155,7 +164,9 @@ try {
         assert.equal((await external.textContent()).trim(), '外部贡献')
         await external.click()
         assert.equal(new URL(page.url()).searchParams.get('source'), 'External')
-        assert.ok((await items.evaluateAll((elements) => elements.map((element) => element.dataset.source))).every((source) => source === 'External'))
+        const visibleSources = await items.evaluateAll((elements) => elements.map((element) => element.dataset.source))
+        assert.ok(visibleSources.length > 0, 'External filter should retain matching contributions')
+        assert.ok(visibleSources.every((source) => source === 'External'))
         await page.goBack()
         await page.waitForFunction(() => document.querySelector('[data-source-filter="all"]')?.getAttribute('aria-pressed') === 'true')
         await page.goForward()
