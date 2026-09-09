@@ -227,6 +227,7 @@ const articleFieldNote = {
           <a
             class='rounded-xl px-4 py-2 no-underline transition-colors hover:bg-muted'
             href={`${blogBase}${previousPost.id}`}
+            lang={previousPost.data.language}
           >
             ← {previousPost.data.title}
           </a>
@@ -239,6 +240,7 @@ const articleFieldNote = {
           <a
             class='rounded-xl px-4 py-2 text-right no-underline transition-colors hover:bg-muted'
             href={`${blogBase}${nextPost.id}`}
+            lang={nextPost.data.language}
           >
             {nextPost.data.title} →
           </a>

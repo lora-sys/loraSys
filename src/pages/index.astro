@@ -69,7 +69,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     <div class='grid-paper' aria-hidden='true'></div>
     <ScrollProgressRail />
 
-    <section class='manifesto animate' aria-labelledby='home-title' data-field-notes-hero>
+    <section class='manifesto' aria-labelledby='home-title' data-field-notes-hero>
       <div class='manifesto-head'>
         <p class='eyebrow'>Lora · AI Agent 开发者 · 西安</p>
         <a class='availability' href='/contact' title='联系 Lora'><i></i> 欢迎交流 <span aria-hidden='true'>↗</span></a>
@@ -224,6 +224,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
 </PageLayout>
 
 <style>
+  #home-title { font-family: ui-sans-serif, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; }
   .v2-home {
     position: relative;
     display: flex;

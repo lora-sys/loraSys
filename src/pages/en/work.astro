@@ -27,7 +27,8 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       <span>Explore project notes, source code, demos, and contribution records.</span>
       <div class='header-toggle'><HapticsToggle locale='en-US' /></div>
     </header>
-    <section aria-label='Selected work'>
+    <section aria-labelledby='selected-work-heading'>
+      <h2 id='selected-work-heading' class='sr-only'>Selected projects</h2>
       {featured.map((project, index) => (
         <div class:list={['case', { lead: index === 0 }]}>
           <ProjectCard {project} variant={index === 0 ? 'lead' : 'featured'} lens anchor>

@@ -69,6 +69,9 @@ for file, doc in docs.items():
         if resolved.scheme not in {'http','https'} or resolved.netloc != urlsplit(origin).netloc: continue
         pathname = unquote(resolved.path)
         if not (pathname == base or pathname.startswith(base+'/')):
+            absolute = urlsplit(raw)
+            if tag=='a' and absolute.scheme in {'http','https'} and attrs.get('target')=='_blank' and 'noopener' in attrs.get('rel','').split():
+                continue
             issue(file, 'missing deployment prefix', raw)
             continue
         target = (root / pathname[len(base):].lstrip('/')).resolve()

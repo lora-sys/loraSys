@@ -17,7 +17,7 @@ const {
   priority = false,
   lens = false,
   sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 86vw',
-  quality,
+  quality = 74,
   locale = uiLocale(Astro.url.pathname)
 } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(

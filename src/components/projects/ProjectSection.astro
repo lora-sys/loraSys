@@ -280,9 +280,9 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
   .portfolio { display: flex; flex-direction: column; gap: clamp(4rem, 8vw, 7rem); }
   .filter-panel { position: relative; display: grid; gap: 1.25rem; border-block: 1px solid hsl(var(--border)); padding-block: 1.4rem; }
   .filter-heading, .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
-  .eyebrow { margin: 0 0 .25rem; color: hsl(var(--muted-foreground)); font-size: .65rem; font-weight: 650; letter-spacing: .13em; text-transform: uppercase; }
+  .eyebrow { margin: 0 0 .25rem; color: hsl(var(--muted-foreground)); font-size:.75rem; font-weight: 650; letter-spacing: .13em; text-transform: uppercase; }
   .filter-heading h2, .section-heading h2, .empty-state h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.9rem); font-weight: 600; letter-spacing: -.035em; text-wrap: balance; }
-  .filter-status, .section-heading > span { margin: 0; color: hsl(var(--muted-foreground)); font-size: .68rem; font-variant-numeric: tabular-nums; }
+  .filter-status, .section-heading > span { margin: 0; color: hsl(var(--muted-foreground)); font-size:.75rem; font-variant-numeric: tabular-nums; }
   .search-field { display: flex; min-height: 3.1rem; align-items: center; gap: .7rem; border: 1px solid hsl(var(--border)); border-radius: .85rem; padding-inline: .9rem; background: hsl(var(--background)); color: hsl(var(--muted-foreground)); transition: border-color 180ms ease, box-shadow 180ms ease; }
   .search-field:focus-within { border-color: hsl(var(--foreground) / .55); box-shadow: 0 0 0 3px hsl(var(--primary) / .12); color: hsl(var(--foreground)); }
   .search-field input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: hsl(var(--foreground)); font: inherit; font-size: .82rem; }
@@ -290,9 +290,9 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
   .filter-groups, .filter-group, .filter-group > div { display: flex; }
   .filter-groups { align-items: flex-start; justify-content: space-between; gap: 1.2rem 2rem; }
   .filter-group { min-width: 0; align-items: center; gap: .7rem; }
-  .filter-group > span { color: hsl(var(--muted-foreground)); font-size: .64rem; font-weight: 620; letter-spacing: .08em; text-transform: uppercase; }
+  .filter-group > span { color: hsl(var(--muted-foreground)); font-size:.75rem; font-weight: 620; letter-spacing: .08em; text-transform: uppercase; }
   .filter-group > div { flex-wrap: wrap; gap: .38rem; }
-  .filter-group button, .empty-state button { min-height: 2.35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); padding: .42rem .7rem; color: hsl(var(--muted-foreground)); font: inherit; font-size: .7rem; cursor: pointer; touch-action: manipulation; transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease; }
+  .filter-group button, .empty-state button { min-height: 2.35rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); padding: .42rem .7rem; color: hsl(var(--muted-foreground)); font: inherit; font-size:.75rem; cursor: pointer; touch-action: manipulation; transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease; }
   .filter-group button:hover, .filter-group button:focus-visible, .empty-state button:hover, .empty-state button:focus-visible { border-color: hsl(var(--foreground) / .42); color: hsl(var(--foreground)); transform: translateY(-1px); }
   .filter-group button[aria-pressed='true'] { border-color: hsl(var(--foreground)); background: hsl(var(--foreground)); color: hsl(var(--background)); }
   .project-block { display: grid; gap: 1.35rem; scroll-margin-top: 5.5rem; }
@@ -302,17 +302,17 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
   .archive-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem 1.5rem; border-bottom: 1px solid hsl(var(--border)); padding: 1rem .15rem; content-visibility: auto; contain-intrinsic-size: auto 7rem; }
   .archive-main { display: grid; min-width: 0; grid-template-columns: auto minmax(0, auto) minmax(7rem, 1fr); align-items: baseline; gap: .45rem .75rem; }
   .archive-title-row { display: flex; align-items: center; gap: .65rem; }
-  .archive-source { border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .16rem .42rem; color: hsl(var(--muted-foreground)); font-size: .62rem; letter-spacing: .04em; }
+  .archive-source { border: 1px solid hsl(var(--border)); border-radius: 999px; padding: .16rem .42rem; color: hsl(var(--muted-foreground)); font-size:.75rem; letter-spacing: .04em; }
   .archive-main h3 { min-width: 0; margin: 0; font-size: .9rem; font-weight: 610; overflow-wrap: anywhere; }
-  .archive-main p { min-width: 0; margin: 0; overflow: hidden; color: hsl(var(--muted-foreground)); font-size: .72rem; text-overflow: ellipsis; white-space: nowrap; }
-  .archive-status { display: inline-flex; align-items: center; gap: .32rem; color: hsl(var(--muted-foreground)); font-size: .59rem; font-weight: 620; letter-spacing: .06em; text-transform: uppercase; }
+  .archive-main p { min-width: 0; margin: 0; overflow: hidden; color: hsl(var(--muted-foreground)); font-size:.75rem; text-overflow: ellipsis; white-space: nowrap; }
+  .archive-status { display: inline-flex; align-items: center; gap: .32rem; color: hsl(var(--muted-foreground)); font-size:.75rem; font-weight: 620; letter-spacing: .06em; text-transform: uppercase; }
   .archive-status i { width: .35rem; height: .35rem; border-radius: 50%; background: hsl(var(--muted-foreground)); }
   .archive-status--building i { background: hsl(var(--field-teal)); }
   .archive-status--active i { background: #659eb9; }
   .archive-meta, .archive-actions { display: flex; align-items: center; gap: .5rem; white-space: nowrap; }
-  .archive-meta { color: hsl(var(--muted-foreground)); font-size: .65rem; font-variant-numeric: tabular-nums; }
+  .archive-meta { color: hsl(var(--muted-foreground)); font-size:.75rem; font-variant-numeric: tabular-nums; }
   .archive-meta span + span::before { content: '·'; margin-right: .5rem; }
-  .archive-actions a { color: hsl(var(--muted-foreground)); font-size: .68rem; text-decoration: none; transition: color 160ms ease, transform 160ms ease; }
+  .archive-actions a { color: hsl(var(--muted-foreground)); font-size:.75rem; text-decoration: none; transition: color 160ms ease, transform 160ms ease; }
   .archive-actions a:hover, .archive-actions a:focus-visible { color: hsl(var(--foreground)); text-decoration: underline; text-underline-offset: .24rem; }
   .empty-state { display: grid; min-height: 22rem; place-items: center; align-content: center; gap: .55rem; border: 1px dashed hsl(var(--border)); border-radius: 1rem; padding: 2rem; text-align: center; }
   .empty-state[hidden] { display: none; }

@@ -43,9 +43,9 @@ export type VisualEntry = {
 }
 
 export const loraVisuals = {
-  heroLora: { src: heroLora, alt: '', decorative: true, widths: [768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 80, pages: ['/', '/en/'] },
+  heroLora: { src: heroLora, alt: '', decorative: true, widths: [480, 768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 72, pages: ['/', '/en/'] },
   heroMochi: { src: heroMochi, alt: '', decorative: true, widths: [192, 384, 576, 768], sizes: '(max-width: 760px) 42vw, 17rem', quality: 80, pages: ['/', '/en/'] },
-  heroProps: { src: heroProps, alt: '', decorative: true, widths: [768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 78, pages: ['/', '/en/'] },
+  heroProps: { src: heroProps, alt: '', decorative: true, widths: [480, 768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 72, pages: ['/', '/en/'] },
   avatar: { src: avatar, alt: 'Lora 的角色参考头像', widths: [128, 256, 512, 860], sizes: '10rem', quality: 78, pages: ['/', '/en/', '/links', '/en/links'] },
   aboutJourney: { src: aboutJourney, alt: 'Lora 与 Mochi 沿项目、学习和贡献路线前进', widths: [480, 768, 1152, 1440], sizes: '(max-width: 760px) 86vw, 38rem', quality: 78, pages: ['/about', '/en/about'] },
   aboutHackathon: { src: aboutHackathon, alt: 'Lora 整理黑客松证据板，Mochi 拿着计时器', widths: [360, 600, 900, 1000], sizes: '(max-width: 760px) 92vw, 26rem', quality: 78, pages: ['/about'] },
