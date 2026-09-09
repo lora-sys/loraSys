@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
-import { readFile, readdir, mkdir, writeFile, stat } from 'node:fs/promises'
+import { readFile, mkdir, writeFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { createHash } from 'node:crypto'
@@ -86,11 +86,14 @@ try {
         }
       })
     }
-    await check(`${viewport.width}: featured English descriptions and new project`,async()=>{
+    await check(`${viewport.width}: curated English cases and complete repository archive`,async()=>{
       await open('en/work/')
-      const descriptions=await page.locator('[data-project-card] .project-body > p').allTextContents()
-      assert.ok(descriptions.length>=13,'New project must be included with existing selected work')
+      // v4 intentionally curates four cases. Every synchronized repository must remain in the archive.
+      const descriptions=await page.locator('[data-project-card] .project-heading > p').allTextContents()
+      assert.equal(descriptions.length,4,'Four reviewed case studies must be available')
       assert.equal(descriptions.filter(x=>/[\u3400-\u9fff]/.test(x)).length,0)
+      const snapshot=JSON.parse(await readFile('src/data/github-projects.json','utf8'))
+      assert.equal(await page.locator('[data-project-item]').count(),Object.keys(snapshot.projects).length,'No synchronized project may disappear')
       const link=page.locator('a[href$="/en/projects/zhihu-threads"]').first();await link.click();await page.locator('[data-zhihu-case]').waitFor()
       assert.ok(page.url().includes('/en/projects/zhihu-threads'))
     })
@@ -147,7 +150,7 @@ try {
     await check(`${viewport.width}: no uncaught application exceptions`,async()=>assert.deepEqual(errors,[]))
     await context.close()
   }
-  await check('New illustrations have stable dimensions and no extra font artifacts',async()=>{
+  await check('Retained illustrations have stable dimensions and no extra font artifacts',async()=>{
     if(process.env.SITE_TEST_URL)return
     const paths=['zh','en'].flatMap(lang=>[`lora-v3-project-zhihu-threads-${lang}.webp`,`lora-v3-zhihu-workflow-${lang}.webp`])
     for(const file of paths) { const buffer=await readFile(path.resolve('src/assets/projects',file));assert.ok(buffer.length<180000,`${file} must stay lightweight`);assert.equal(buffer.toString('ascii',8,12),'WEBP') }

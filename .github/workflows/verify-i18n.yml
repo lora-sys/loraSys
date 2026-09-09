@@ -11,7 +11,7 @@ concurrency:
 jobs:
   audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       NODE_OPTIONS: --max-old-space-size=3072
     steps:
@@ -44,6 +44,13 @@ jobs:
         run: |
           node scripts/audit-i18n-site.mjs
           node scripts/audit-microinteractions.mjs
+      - name: Redesign pages and executable teaching fixtures
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          AXE_PATH: ${{ runner.temp }}/locale-tools/node_modules/axe-core/axe.min.js
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
+        run: node scripts/test-studio-v4.mjs
       - name: Lighthouse measurements
         if: ${{ !cancelled() }}
         env:
