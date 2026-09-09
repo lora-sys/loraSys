@@ -60,6 +60,8 @@ try {
       assert.ok(await page.evaluate(()=>typeof window.__codeValue==='string' && window.__codeValue.length>0))
       await page.evaluate(()=>window.__resolveCopy())
       await page.waitForFunction(()=>document.querySelector('[data-code-copy]')?.getAttribute('aria-label')==='代码已复制')
+      const successContent=await copy.evaluate(el=>getComputedStyle(el.querySelector('.success'),'::before').content)
+      assert.ok(['none','normal','\"\"'].includes(successContent),'Copy confirmation must not append a hard-coded English tooltip')
       await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async()=>{throw new Error('Permission denied in test')}}}))
       await copy.press('Enter')
       await page.waitForFunction(()=>document.querySelector('[data-code-feedback]')?.textContent.includes('复制失败'))

@@ -158,7 +158,7 @@ span.katex-display {
     right: 0.75rem;
     user-select: none;
     & .success::before {
-      content: 'Copied!';
+      content: none;
       position: absolute;
       right: 100%;
       top: 0;
