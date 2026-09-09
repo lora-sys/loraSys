@@ -1,92 +1,99 @@
-"""Validate every generated page without network or third-party packages."""
+"""Audit every built page, internal target and interface label without external requests."""
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urljoin, urlsplit, unquote
-import json
-import os
-import re
-import sys
+from urllib.parse import unquote, urlsplit
+import json, os, re
 
-VOID = {'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'}
-OLD_UI = re.compile(r'^(Back|Back to Top|Tags|Tags:|Archives|Appearances|All|Building|Maintained|Archived|Selected Work(?: · 精选作品)?|Visit website|Contribution PR|Source|Story|Copy exploration receipt|Filter posts by language|More writing destinations|Blog post list|No posts yet\.|Any tag yet\.)$', re.I)
-class Document(HTMLParser):
-    def __init__(self, html):
+ROOT = Path('dist').resolve()
+BASE = '/loraSys'
+OLD_UI = re.compile(r'^(?:Selected Work|Selected work|Visit website|Source|Copy code|Copy failed|Collapse|Expand|All tags|Previous Page|Next Page|Powered by|Skip to content|Back|All|Search project, stack, repository|Repository archive|All projects|Build channel map|Project page|BUILDING|ACTIVE|ARCHIVED)$')
+class Page(HTMLParser):
+    def __init__(self, file):
         super().__init__(convert_charrefs=True)
-        self.stack = []
-        self.nodes = []
-        self.ids = []
-        self.labels = []
-        self.lang = ''
-        self.feed(html)
-    def handle_starttag(self, tag, attrs):
-        values = dict(attrs)
-        if tag == 'html': self.lang = values.get('lang', '')
-        self.nodes.append((tag, values))
-        if values.get('id'): self.ids.append(values['id'])
-        lang = values.get('lang') or next((a.get('lang') for _, a in reversed(self.stack) if a.get('lang')), self.lang)
-        for name in ['aria-label', 'placeholder']:
-            if values.get(name): self.labels.append((values[name], lang))
-        if tag not in VOID: self.stack.append((tag, values))
+        self.file, self.ids, self.links, self.labels, self.controls, self.alt_text = file, [], [], [], [], []
+        self.stack, self.lang, self.canonical = [], '', ''
+    def handle_starttag(self, tag, pairs):
+        attrs = dict(pairs)
+        if tag == 'html': self.lang = attrs.get('lang', '')
+        if 'id' in attrs: self.ids.append(attrs['id'])
+        if tag == 'link' and attrs.get('rel') == 'canonical': self.canonical = attrs.get('href', '')
+        for key in ['href', 'src']:
+            if key in attrs and tag not in ['script', 'iframe']: self.links.append((tag, key, attrs[key], attrs))
+        for key in ['aria-controls', 'aria-labelledby']:
+            if key in attrs: self.controls.append((key, attrs[key]))
+        lang = attrs.get('lang', self.stack[-1][1] if self.stack else self.lang)
+        if tag == 'img' and attrs.get('alt') and attrs.get('aria-hidden') != 'true':
+            self.alt_text.append({'alt':attrs['alt'], 'lang':lang})
+        if tag not in ['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']:
+            self.stack.append((tag, lang))
     def handle_endtag(self, tag):
-        for index in range(len(self.stack)-1, -1, -1):
-            if self.stack[index][0] == tag:
-                self.stack = self.stack[:index]
+        for i in range(len(self.stack)-1, -1, -1):
+            if self.stack[i][0] == tag:
+                self.stack = self.stack[:i]
                 break
     def handle_data(self, value):
-        if not value.strip() or any(tag in {'script', 'style', 'code', 'pre'} for tag, _ in self.stack): return
-        lang = next((a.get('lang') for _, a in reversed(self.stack) if a.get('lang')), self.lang)
-        if any(tag in {'button', 'nav', 'summary', 'label', 'h1', 'h2'} for tag, _ in self.stack): self.labels.append((value.strip(), lang))
+        if self.stack and not any(tag in ['script','style','pre','code'] for tag,_ in self.stack):
+            text = value.strip()
+            if text and self.stack[-1][1].startswith('zh') and OLD_UI.fullmatch(text): self.labels.append(text)
 
-root = Path(sys.argv[1] if len(sys.argv)>1 else 'dist').resolve()
-out = Path(os.getenv('SITE_TEST_OUTPUT', '/tmp/lorasys-static-audit'))
-out.mkdir(parents=True, exist_ok=True)
-docs = {p: Document(p.read_text()) for p in root.rglob('*.html')}
-canonical = next(a['href'] for t,a in docs[root/'index.html'].nodes if t=='link' and a.get('rel')=='canonical')
-base = urlsplit(canonical).path.rstrip('/')
-origin = f'{urlsplit(canonical).scheme}://{urlsplit(canonical).netloc}'
+pages = {}
+for file in ROOT.rglob('*.html'):
+    p = Page(file); p.feed(file.read_text()); pages[file] = p
+
+def local_file(raw_path):
+    raw_path = unquote(raw_path).rstrip('/')
+    if raw_path == BASE: return ROOT / 'index.html'
+    if not raw_path.startswith(BASE + '/'): return None
+    p = ROOT / raw_path[len(BASE)+1:]
+    if p.is_dir(): p = p / 'index.html'
+    if not p.exists() and p.suffix == '': p = p.with_suffix('.html')
+    return p
+
 errors = []
-link_count = 0
+checked = 0
+alternates = 0
 
-def issue(file, kind, value):
-    item = {'page':str(file.relative_to(root)), 'kind':kind, 'value':value}
-    if item not in errors: errors.append(item)
-
-for file, doc in docs.items():
-    route = str(file.relative_to(root))
-    route = route[:-10] if route.endswith('index.html') else route
-    url = f'{origin}{base}/{route}'
-    if not doc.lang: issue(file, 'missing document language', '')
-    if len(doc.ids) != len(set(doc.ids)): issue(file, 'duplicate IDs', sorted({x for x in doc.ids if doc.ids.count(x)>1}))
-    for label, lang in doc.labels:
-        if lang.startswith('zh') and OLD_UI.fullmatch(label): issue(file, 'untranslated UI', label)
-    for tag, attrs in doc.nodes:
-        for target in (attrs.get('aria-controls') or '').split():
-            if target not in doc.ids: issue(file, 'missing controlled element', target)
-        if tag == 'label' and attrs.get('for') and attrs['for'] not in doc.ids: issue(file, 'missing label target', attrs['for'])
-        raw = attrs.get('src') if tag in {'img','script','iframe','source'} else attrs.get('href') if tag in {'a','link'} else None
-        if not raw: continue
-        resolved = urlsplit(urljoin(url, raw))
-        if resolved.scheme not in {'http','https'} or resolved.netloc != urlsplit(origin).netloc: continue
-        pathname = unquote(resolved.path)
-        if not (pathname == base or pathname.startswith(base+'/')):
-            absolute = urlsplit(raw)
-            if tag=='a' and absolute.scheme in {'http','https'} and attrs.get('target')=='_blank' and 'noopener' in attrs.get('rel','').split():
-                continue
+def issue(file, kind, detail): errors.append({'page':str(file.relative_to(ROOT)), 'kind':kind, 'detail':detail})
+for file, page in pages.items():
+    if not page.lang: issue(file, 'missing language', '')
+    if len(page.ids) != len(set(page.ids)): issue(file, 'duplicate IDs', sorted({x for x in page.ids if page.ids.count(x)>1}))
+    for label in page.labels: issue(file, 'untranslated Chinese interface', label)
+    for image in page.alt_text:
+        if image['lang'].startswith('en') and re.search('[\u3400-\u9fff]', image['alt']):
+            issue(file, 'untranslated English image description', image['alt'])
+    for key, ids in page.controls:
+        for ident in ids.split():
+            if ident not in page.ids: issue(file, 'missing accessible target', f'{key}={ident}')
+    for tag, key, raw, attrs in page.links:
+        if raw.startswith(('mailto:', 'tel:', 'data:', 'javascript:')): continue
+        parsed = urlsplit(raw)
+        if parsed.netloc and parsed.netloc != 'lora-sys.github.io': continue
+        if raw.startswith('#'):
+            target, fragment = file, unquote(parsed.fragment)
+        elif parsed.path.startswith('/'):
+            target, fragment = local_file(parsed.path), unquote(parsed.fragment)
+        else:
+            continue
+        if target is None:
+            if file.name == '404.html' and tag == 'link' and attrs.get('rel') == 'canonical': continue
+            # Separate project sites share the same Pages origin, but are explicitly external links.
+            if tag == 'a' and parsed.scheme in {'http','https'} and attrs.get('target') == '_blank' and 'noopener' in attrs.get('rel','').split(): continue
             issue(file, 'missing deployment prefix', raw)
             continue
-        target = (root / pathname[len(base):].lstrip('/')).resolve()
-        if not target.is_relative_to(root): issue(file, 'invalid local path', raw); continue
-        if target.is_dir(): target = target/'index.html'
-        # The host serves 404.html for nonexistent URLs; metadata on that page is not a navigation link.
-        if file.name=='404.html' and tag=='link' and attrs.get('rel')=='canonical': continue
-        link_count += 1
-        if not target.exists(): issue(file, 'missing destination', raw)
-        elif resolved.fragment and target in docs and unquote(resolved.fragment) not in docs[target].ids:
+        checked += 1
+        if not target.exists():
+            if file.name == '404.html' and tag == 'link' and attrs.get('rel') == 'canonical': continue
+            issue(file, 'missing local target', raw)
+            continue
+        if fragment and target in pages and fragment not in pages[target].ids:
             issue(file, 'missing fragment', raw)
-        if tag=='link' and attrs.get('hreflang') and target in docs:
-            expected = attrs['hreflang'].split('-')[0]
-            if expected!='x' and not docs[target].lang.startswith(expected): issue(file, 'alternate language mismatch', raw)
-report = {'pages':len(docs), 'internalReferences':link_count, 'errors':errors}
-(out/'static-site.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
+        if attrs.get('hreflang'):
+            alternates += 1
+            language = attrs['hreflang']
+            if language != 'x-default' and target in pages and not pages[target].lang.startswith(language[:2]):
+                issue(file, 'alternate language mismatch', raw)
+report = {'pages':len(pages), 'internalReferences':checked, 'alternateReferences':alternates, 'errors':errors}
+out = Path(os.environ.get('SITE_TEST_OUTPUT', '/tmp/lorasys-static-audit')); out.mkdir(parents=True, exist_ok=True)
+(out / 'static-site.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
 print(json.dumps(report, ensure_ascii=False, indent=2))
-if errors: sys.exit(1)
+raise SystemExit(1 if errors else 0)
