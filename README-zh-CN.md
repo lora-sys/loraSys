@@ -1,140 +1,84 @@
-<p align="center">
-  <a href="https://lora-sys.github.io/loraSys/"><img src="./assets/readme/hero.svg" width="100%" alt="loraSys：Lora 关于 AI Agent、工具、产品与实验的个人工程笔记"></a>
-</p>
+# loraSys
 
-<p align="center">
-  <a href="./README.md">English</a> ·
-  <a href="https://lora-sys.github.io/loraSys/">在线网站</a> ·
-  <a href="https://lora-sys.github.io/loraSys/projects">项目集</a> ·
-  <a href="https://lora-sys.github.io/loraSys/blog">文章</a>
-</p>
+Lora 的双语作品站与构建笔记。Astro 将项目案例、文章、短笔记和浏览器实验输出为静态网站。
 
-<p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/lora-sys/loraSys/deploy.yml?branch=main&label=Pages" alt="GitHub Pages 部署状态">
-  <img src="https://img.shields.io/badge/Astro-5.17-FF5D01?logo=astro&logoColor=white" alt="Astro 5.17">
-  <img src="https://img.shields.io/badge/Bun-1.3.5-fbf0df?logo=bun&logoColor=14151a" alt="Bun 1.3.5">
-  <img src="https://img.shields.io/github/license/lora-sys/loraSys" alt="许可证">
-</p>
+[已发布网站](https://lora-sys.github.io/loraSys/) · [English](./README.md) · [改版实现说明](./docs/redesign-v4.md)
 
-`loraSys` 是 Lora 的个人工程笔记：以静态、编辑式的网站记录 AI Agent、全栈产品、开发者工具和 Web3 实验。
+<p align="center"><img src="./src/assets/lora-visual/v2/lora-v2-hero-lora.webp" width="440" alt="Lora 在工作台前的原创角色插画"></p>
 
-这个站点坚持 **内容优先、构建期驱动**。文章与结构化项目数据一起维护，GitHub 项目元数据和贡献活动在构建前生成快照，最后输出为 GitHub Pages 上的静态网站。
+## 页面分工
 
-> Build systems that learn.
-
-## 新项目 Zhihu Threads
-
-[Zhihu Threads](https://github.com/lora-sys/zhihu-threads) 将用户选择的知乎摘要摘录组织成学习线，支持追问和自测。来源由用户选择，证据不足时明确保留未知项。
-
-[查看项目说明](https://lora-sys.github.io/loraSys/projects/zhihu-threads)。
-
-![Lora 与 Mochi 整理来源摘录的项目插画](./src/assets/projects/lora-v3-project-zhihu-threads-zh.webp)
-
-![用户选源后生成学习线的流程示意](./src/assets/projects/lora-v3-zhihu-workflow-zh.webp)
-
-以上是项目插画与流程示意，不是产品截图或实时评测结果。四份中英文 WebP 资产沿用本站已有的 Lora 与 Mochi 原创角色素材，图片排版与页面交互分开维护。
-
-## 建议从这里开始
+主导航为作品、写作、实验室、关于。正在构建、收藏、阅读、友链、短笔记、简历与 RSS 留在补充导航。联系、搜索、语言和主题使用独立工具入口。
 
 | 页面 | 内容 |
 | --- | --- |
-| [Projects](https://lora-sys.github.io/loraSys/projects) | 多个自有公开仓库，包含海报、状态、技术栈、Stars、源码和线上链接。 |
-| [Blog](https://lora-sys.github.io/loraSys/blog) | 关于 Agent 基础设施、视觉证据、模型 API 和工程实验的文章。 |
-| [Lab](https://lora-sys.github.io/loraSys/lab) | 五篇项目导览，解释实际系统是怎么工作的。 |
-| [Notes](https://lora-sys.github.io/loraSys/notes) | 关于 Agent、前端系统、Web3 和研究的短笔记。 |
+| 首页 | 三个代表案例、原始语言写作、一个实验入口和紧凑收藏。 |
+| 作品 | 四个项目案例与完整同步项目档案。保留关键词、来源、状态、方向筛选和稳定锚点。 |
+| 项目案例 | Glassbox、Zhihu Threads、AI Engineering Harness、AgentArena，分别说明用途、实现选择和边界。 |
+| 写作 | 文章列表默认展开，保留原文语言、永久地址与分页。 |
+| 实验室 | 来源选择与验收规则两个可操作实验，并保留原有五篇仓库实验记录。 |
+| 关于与正在构建 | 保留真实教育、证书、活动和有日期的人工记录。自动推送时间不等于人工确认的新进展。 |
+| 联系与简历 | 邮箱优先，复制失败有恢复提示，网页简历优先阅读，PDF 按需打开。 |
 
-## 精选项目
+新增页面提供中英文版本。已有文章正文和旧地址跳转保留，不把中文原文复制后称为英文翻译。
 
-<table>
-  <tr>
-    <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/lora-v1-project-glassbox.webp" alt="Glassbox Agent Harness 项目海报"></a>
-      <h3><a href="https://github.com/lora-sys/Glassbox-Agent-Harness">Glassbox Agent Harness</a></h3>
-      <p>面向 AI Agent 的可观测与评测实验室：把行动变成可检查的轨迹，让上下文可复现，让迭代拥有证据。</p>
-    </td>
-    <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/lora-v1-project-free-vision.webp" alt="Free Vision Skill 项目海报"></a>
-      <h3><a href="https://github.com/lora-sys/free-vision-skill">Free Vision Skill</a></h3>
-      <p>低 token 的视觉证据编译器，把图片转换为文本模型和 Coding Agent 可以使用的紧凑证据包。</p>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/nano-vllm-interactive-guide"><img src="./src/assets/projects/github-nano-vllm-interactive-guide.webp" alt="nano-vLLM Interactive Guide 项目海报"></a>
-      <h3><a href="https://github.com/lora-sys/nano-vllm-interactive-guide">nano-vLLM Interactive Guide</a></h3>
-      <p>通过 13 个交互实验和中文教程理解 LLM 推理引擎的关键组成。</p>
-    </td>
-    <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/trustops"><img src="./src/assets/projects/github-trustops.webp" alt="TrustOps 项目海报"></a>
-      <h3><a href="https://github.com/lora-sys/trustops">TrustOps</a></h3>
-      <p>面向成长型 B2B SaaS 的可审计承诺层，连接政策、控制、审查与责任决策。</p>
-    </td>
-  </tr>
-</table>
+## 项目插画与机制示意
 
-## 网站是怎样构建的
+![Lora 与 Mochi 整理来源的项目插画](./src/assets/projects/lora-v3-project-zhihu-threads-zh.webp)
 
-<p align="center"><img src="./assets/readme/system-map.svg" width="100%" alt="Markdown 和结构化数据经过 Astro Pure 与构建期 GitHub 快照，最终发布到 GitHub Pages"></p>
+![用户选源后组织学习线的流程图](./src/assets/projects/lora-v3-zhihu-workflow-zh.webp)
 
-- **内容：** Markdown 文章、短笔记、个人资料、项目记录和本地媒体。
-- **组合：** Astro + [Pure 主题](https://github.com/cworld1/astro-theme-pure)。
-- **构建期快照：** 在发布前刷新 GitHub 项目、海报和贡献数据。
-- **交付：** 静态 `dist/`、Pagefind 搜索、RSS、sitemap，以及 `/loraSys` GitHub Pages 项目站。
+项目插画沿用现有 Lora 与 Mochi，不是产品截图。四种项目卡片机制示意使用可本地化的 HTML 与 CSS，不将标题烧进图片。机制图不冒充真实执行过程。
 
-浏览器不依赖作品集 API 或数据库。GitHub 数据刷新失败时会继续使用上一次本地快照，保证网站仍然可以构建和发布。
+## 两个可操作实验
 
-## 本地运行
+来源选择实验包含三条本站编写的材料和四个有来源依赖的节点。每次选择都在浏览器内重算。取消所需来源后，节点继续显示，但会标明证据缺口。
 
-环境要求：[Bun 1.3.5](https://bun.sh/) 和 Git。
+验收规则实验包含四条固定教学记录。只检查完成情况时通过三条，同时检查工具和证据时通过一条。切换规则不会重新运行 Agent，也不是任何真实模型的性能结果。
 
-```bash
-git clone https://github.com/lora-sys/loraSys.git
-cd loraSys
+步骤查看器支持直接选择、上一步、下一步、键盘和边界状态，并标为教学回放。以上交互不需要模型密钥、账号或后端服务。
+
+## 本地开发
+
+使用 Bun 1.3.5 和仓库锁文件。
+
+```sh
 bun install --frozen-lockfile
-bun dev
+bun run dev
 ```
 
-常用检查：
+访问 Astro 实际输出的地址，不假设固定端口。
 
-```bash
-bun run check       # Astro 类型和内容诊断
-bun run build       # 静态构建、base 路径和发布审计
-bun preview         # 预览生产构建
+```sh
+bun run validate:sync
+bun run check
+NODE_OPTIONS=--max-old-space-size=3072 bun run build
+bun run preview --host 0.0.0.0
 ```
 
-## 仓库结构
+生产构建会执行 Astro 检查、静态生成、部署路径补全和已有发布审计。部署前缀为 `/loraSys`。
 
-```text
-src/content/              已发布文章
-src/data/                 个人资料、笔记、项目和快照
-src/pages/                blog、projects、lab、notes、now、talks、links
-src/components/           建立在 Pure 之上的个人组件
-packages/pure/             锁定版本的 Astro Theme Pure 源码
-assets/readme/             README 专用视觉资产
-.github/workflows/        GitHub Pages 部署和数据刷新
+## 内容与数据
+
+文章在 `src/content/blog`。GitHub 同步快照在 `src/data`，仍由原有同步脚本维护。项目案例说明在 `src/data/studio/curation.ts`，与同步事实分开维护。
+
+```sh
+bun run sync:github
+bun run validate:sync
 ```
 
-## 设计取舍
+不要手工修改快照来伪造项目状态。原创插画、公开产品截图和个人收藏图片分别保留归属。原始图、审计截图、报告和字体放在仓库外。
 
-- Pure 仍然是主要 UI 系统，个人内容只融入它的编辑式结构。
-- Projects 按证据策展，不把所有公开仓库伪装成同等重要。
-- 项目海报全部本地化为 WebP，优先使用 README 截图或 GitHub 预览图。
-- 动漫、收藏、贡献图和友链都采用静态数据配合轻量可访问交互，不引入运行时数据库。
-- 旧 Svelte/Wayfinder 已归档，不保留兼容层。
+## 验证方式
 
-## 链接
+PR 继续运行原有功能与阅读回归、全部页面静态检查、国际化审计，并增加 `scripts/test-studio-v4.mjs`。新增检查覆盖四个视口宽度、双语路由、所有来源组合、规则切换、步骤查看、收藏筛选和完整项目保留。
 
-- [在线网站](https://lora-sys.github.io/loraSys/)
-- [联系 Lora](https://lora-sys.github.io/loraSys/contact)
-- [RSS](https://lora-sys.github.io/loraSys/rss.xml)
-- [GitHub](https://github.com/lora-sys)
+通过 `PLAYWRIGHT_MODULE`、`AXE_PATH` 和 `SITE_TEST_OUTPUT` 指定隔离测试工具与报告目录。新增脚本只服务本地生产构建，拒绝非读取请求。构建成功不代表外部服务全部可用。
 
-## 同步与归属契约
+Lighthouse 沿用模拟手机网络和 CPU 限速，每页测量三次，保留所有样本。分数和截图应放在 PR 的审计记录中，不写成永久不变的宣传数字。
 
-公开目录明确区分三类内容：**lora-sys** 是个人项目，**ACAMLab** 是实验室项目，**External** 只包含人工 allowlist 允许的外部开源贡献。GitHub 快照会在 Actions 中先刷新，再由 verified site 构建；质量门会在 Actions summary 中记录快照时间、项目归属分组、贡献 allowlist 覆盖率、PR 数量和 warning。
-
-review 截图和本地审计记录不会进入提交。任何特性分支都必须通过 `bun run check`、`bun run build`，并完成桌面端与 390×844 浏览器审查后，才允许合并到 `main`。
+PR 用于审查。维护者合并后，仍按原有同步、质量检查、构建与 GitHub Pages 流程发布。
 
 ## 许可证
 
-仓库和锁定的 Pure 主题基础采用 [Apache-2.0](./LICENSE)。文章、项目截图、Logo 和第三方媒体可能有单独的署名或许可证要求。
+参见 [LICENSE](./LICENSE) 及仓库已有归属说明。

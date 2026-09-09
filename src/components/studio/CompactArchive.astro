@@ -3,56 +3,120 @@ import { projects } from '@/data/projects'
 import { localizeProject } from '@/i18n/project-copy'
 import { displayLabel } from '@/i18n/ui'
 import type { SiteLocale } from '@/i18n/site'
-import { local,findCase,casePath } from '@/data/studio/curation'
+import { local, findCase, casePath, pick } from '@/data/studio/curation'
 interface Props { locale: SiteLocale }
-const {locale}=Astro.props
-const t=(zh:string,en:string)=>local(locale,zh,en)
-const records=projects.map(project=>localizeProject(project,locale))
-const sources=[...new Set(records.map(p=>p.source))].sort()
-const categories=[...new Set(records.flatMap(p=>p.categories.filter(c=>!['Featured','Open Source'].includes(c))))].sort()
-const statusName=(status:string)=>displayLabel({building:'Building',active:'Maintained',archived:'Archived'}[status]??status,locale)
+const { locale } = Astro.props
+const t = (zh: string, en: string) => local(locale, zh, en)
+const records = projects.map(project => {
+  const localized = localizeProject(project, locale)
+  const study = findCase(project.repository)
+  return study ? { ...localized, description: pick(study.summary, locale) } : localized
+})
+const sources = [...new Set(records.map(p => p.source))].sort()
+const categories = [...new Set(records.flatMap(p => p.categories.filter(c => !['Featured', 'Open Source'].includes(c))))].sort()
+const statusNames: Record<string, string> = { building: 'Building', active: 'Maintained', archived: 'Archived' }
+const statusName = (status: string) => displayLabel(statusNames[status] ?? status, locale)
 ---
 <div class='compact-archive' data-project-browser data-archive-locale={locale}>
- <div class='archive-filter-head'><h2>{t('完整项目档案','Repository archive')}</h2><p data-filter-status aria-live='polite'>{t(`共收录 ${records.length} 个项目`,`${records.length} projects in the archive`)}</p></div>
- <label class='archive-search' for='project-search'>{t('搜索项目','Search projects')}<input id='project-search' type='search' data-project-search placeholder={t('搜索名称、技术或用途','Search names, tools or descriptions')} autocomplete='off'/></label>
- <div class='archive-filters'>
-  <div role='group' aria-label={t('按来源筛选','Filter by source')}><span>{t('来源','Source')}</span><button type='button' data-source-filter='all' aria-pressed='true'>{t('全部','All')}</button>{sources.map(source=><button type='button' data-source-filter={source} aria-pressed='false'>{source==='External'?t('外部贡献','External contribution'):source}</button>)}</div>
-  <div role='group' aria-label={t('按状态筛选','Filter by status')}><span>{t('状态','Status')}</span><button type='button' data-status-filter='all' aria-pressed='true'>{t('全部','All')}</button>{['building','active','archived'].map(status=><button type='button' data-status-filter={status} aria-pressed='false'>{statusName(status)}</button>)}</div>
-  <details><summary>{t('按方向筛选','Filter by area')}</summary><div role='group' aria-label={t('按方向筛选','Filter by area')}><button type='button' data-category-filter='all' aria-pressed='true'>{t('全部','All')}</button>{categories.map(category=><button type='button' data-category-filter={category} aria-pressed='false'>{displayLabel(category,locale)}</button>)}</div></details>
- </div>
- <div class='archive-records' data-project-section>{records.map(project=>{const study=findCase(project.repository);return <article id={project.repository} data-project-item data-category={project.categories.join('|')} data-status={project.status} data-source={project.source} data-search={[project.title,project.repository,project.description,...project.technologies,...project.categories,project.source].join(' ').toLowerCase()}><div><div class='list-meta'><span>{statusName(project.status)}</span><span>{project.source==='External'?t('外部贡献','External contribution'):project.source}</span></div><h3>{project.title}</h3><p>{project.description||t('暂未发布项目说明。','No project description is published yet.')}</p></div><nav aria-label={`${project.title} ${t('入口','links')}`}>{study&&<a href={casePath(study,locale)}>{t('项目案例','Case study')}</a>}{project.links.map(link=><a href={link.href} target='_blank' rel='noopener noreferrer'>{link.type==='source'?t('源码','Source'):link.type==='contribution'?t('贡献记录','Contribution'):t('网站','Website')} ↗</a>)}</nav></article>})}</div>
- <div data-empty-state hidden class='archive-empty'><h3>{t('没有匹配的项目','No matching projects')}</h3><p>{t('换个关键词，或清除当前筛选。','Try another keyword or clear the current filters.')}</p></div>
- <button class='button' type='button' data-filter-reset>{t('重置筛选','Reset filters')}</button>
+  <div class='archive-filter-head'><h2>{t('完整项目档案', 'Repository archive')}</h2><p data-filter-status aria-live='polite'>{t(`共收录 ${records.length} 个项目`, `${records.length} projects in the archive`)}</p></div>
+  <label class='archive-search' for='project-search'>{t('搜索项目', 'Search projects')}<input id='project-search' type='search' data-project-search placeholder={t('搜索名称、技术或用途', 'Search names, tools or descriptions')} autocomplete='off'/></label>
+  <div class='archive-filters'>
+    <div role='group' aria-label={t('按来源筛选', 'Filter by source')}><span>{t('来源', 'Source')}</span><button type='button' data-source-filter='all' aria-pressed='true'>{t('全部', 'All')}</button>{sources.map(source => <button type='button' data-source-filter={source} aria-pressed='false'>{source === 'External' ? t('外部贡献', 'External contribution') : source}</button>)}</div>
+    <div role='group' aria-label={t('按状态筛选', 'Filter by status')}><span>{t('状态', 'Status')}</span><button type='button' data-status-filter='all' aria-pressed='true'>{t('全部', 'All')}</button>{['building', 'active', 'archived'].map(status => <button type='button' data-status-filter={status} aria-pressed='false'>{statusName(status)}</button>)}</div>
+    <details><summary>{t('按方向筛选', 'Filter by area')}</summary><div role='group' aria-label={t('按方向筛选', 'Filter by area')}><button type='button' data-category-filter='all' aria-pressed='true'>{t('全部', 'All')}</button>{categories.map(category => <button type='button' data-category-filter={category} aria-pressed='false'>{displayLabel(category, locale)}</button>)}</div></details>
+  </div>
+  <div class='archive-records' data-project-section>
+    {records.map(project => {
+      const study = findCase(project.repository)
+      return <article id={project.repository} tabindex='-1' data-project-item data-category={project.categories.join('|')} data-status={project.status} data-source={project.source} data-search={[project.title, project.repository, project.description, ...project.technologies, ...project.categories, project.source].join(' ').toLowerCase()}>
+        <div><div class='list-meta'><span>{statusName(project.status)}</span><span>{project.source === 'External' ? t('外部贡献', 'External contribution') : project.source}</span></div><h3>{project.title}</h3><p>{project.description || t('暂未发布项目说明。', 'No project description is published yet.')}</p></div>
+        <nav aria-label={`${project.title} ${t('入口', 'links')}`}>{study && <a href={casePath(study, locale)}>{t('项目案例', 'Case study')}</a>}{project.links.map(link => <a href={link.href} target='_blank' rel='noopener noreferrer'>{link.type === 'source' ? t('源码', 'Source') : link.type === 'contribution' ? t('贡献记录', 'Contribution') : t('网站', 'Website')} ↗</a>)}</nav>
+      </article>
+    })}
+  </div>
+  <div data-empty-state hidden class='archive-empty'><h3>{t('没有匹配的项目', 'No matching projects')}</h3><p>{t('换个关键词，或清除当前筛选。', 'Try another keyword or clear the current filters.')}</p></div>
+  <button class='button' type='button' data-filter-reset>{t('重置筛选', 'Reset filters')}</button>
 </div>
 <script>
- document.querySelectorAll<HTMLElement>('[data-project-browser][data-archive-locale]').forEach(root=>{
-  const en=root.dataset.archiveLocale==='en-US'
-  const search=root.querySelector<HTMLInputElement>('[data-project-search]')
-  const items=[...root.querySelectorAll<HTMLElement>('[data-project-item]')]
-  const feedback=root.querySelector<HTMLElement>('[data-filter-status]')
-  const empty=root.querySelector<HTMLElement>('[data-empty-state]')
-  const archive=root.closest<HTMLDetailsElement>('[data-work-archive]')
-  const groups=['source','status','category'] as const
-  const filters:{source:string;status:string;category:string}={source:'all',status:'all',category:'all'}
-  const buttons=(key:typeof groups[number])=>[...root.querySelectorAll<HTMLButtonElement>(`[data-${key}-filter]`)]
-  const apply=()=>{
-   const query=search?.value.trim().toLowerCase()??''
-   let count=0
-   items.forEach(item=>{const visible=(!query||item.dataset.search?.includes(query))&&(filters.source==='all'||item.dataset.source===filters.source)&&(filters.status==='all'||item.dataset.status===filters.status)&&(filters.category==='all'||item.dataset.category?.split('|').includes(filters.category));item.hidden=!visible;if(visible)count++})
-   groups.forEach(key=>buttons(key).forEach(button=>button.setAttribute('aria-pressed',String(button.dataset[`${key}Filter`]===filters[key]))))
-   const names=groups.filter(key=>filters[key]!=='all').map(key=>buttons(key).find(b=>b.dataset[`${key}Filter`]===filters[key])?.textContent?.trim()).filter(Boolean)
-   if(feedback)feedback.textContent=(en?`${count} of ${items.length} projects`:`共 ${items.length} 个项目，当前显示 ${count} 个`)+(names.length?` · ${names.join(' · ')}`:'')
-   if(empty)empty.hidden=count!==0
-  }
-  const write=(mode:'push'|'replace')=>{const url=new URL(location.href);for(const key of groups){if(filters[key]==='all')url.searchParams.delete(key);else url.searchParams.set(key,filters[key])}const q=search?.value.trim();if(q)url.searchParams.set('q',q);else url.searchParams.delete('q');if(url.href!==location.href)history[mode==='push'?'pushState':'replaceState']({},'',url);apply()}
-  const read=()=>{const params=new URLSearchParams(location.search);if(search)search.value=params.get('q')??'';groups.forEach(key=>{const value=params.get(key)??'all';filters[key]=buttons(key).some(b=>b.dataset[`${key}Filter`]===value)?value:'all'});if(archive&&(params.has('q')||groups.some(key=>params.has(key))))archive.open=true;apply()}
-  const reveal=()=>{let id='';try{id=decodeURIComponent(location.hash.slice(1))}catch{return}const target=items.find(item=>item.id===id);if(!target)return;if(archive)archive.open=true;if(target.hidden){if(search)search.value='';groups.forEach(key=>{filters[key]='all'});write('replace')}requestAnimationFrame(()=>target.scrollIntoView({block:'start',behavior:'instant'}))}
-  search?.addEventListener('input',()=>write('replace'))
-  groups.forEach(key=>buttons(key).forEach(button=>button.addEventListener('click',()=>{filters[key]=button.dataset[`${key}Filter`]??'all';write('push')})))
-  root.querySelector('[data-filter-reset]')?.addEventListener('click',()=>{if(search)search.value='';groups.forEach(key=>{filters[key]='all'});write('push');search?.focus()})
-  window.addEventListener('popstate',()=>{read();reveal()});window.addEventListener('hashchange',reveal);read();reveal()
- })
+  document.querySelectorAll<HTMLElement>('[data-project-browser][data-archive-locale]').forEach(root => {
+    const en = root.dataset.archiveLocale === 'en-US'
+    const search = root.querySelector<HTMLInputElement>('[data-project-search]')
+    const items = [...root.querySelectorAll<HTMLElement>('[data-project-item]')]
+    const feedback = root.querySelector<HTMLElement>('[data-filter-status]')
+    const empty = root.querySelector<HTMLElement>('[data-empty-state]')
+    const archive = root.closest<HTMLDetailsElement>('[data-work-archive]')
+    const groups = ['source', 'status', 'category'] as const
+    const filters: Record<typeof groups[number], string> = { source: 'all', status: 'all', category: 'all' }
+    const buttons = (key: typeof groups[number]) => [...root.querySelectorAll<HTMLButtonElement>(`[data-${key}-filter]`)]
+    const apply = () => {
+      const query = search?.value.trim().toLowerCase() ?? ''
+      let count = 0
+      items.forEach(item => {
+        const visible = (!query || item.dataset.search?.includes(query)) && (filters.source === 'all' || item.dataset.source === filters.source) && (filters.status === 'all' || item.dataset.status === filters.status) && (filters.category === 'all' || item.dataset.category?.split('|').includes(filters.category))
+        item.hidden = !visible
+        if (visible) count++
+      })
+      groups.forEach(key => buttons(key).forEach(button => button.setAttribute('aria-pressed', String(button.dataset[`${key}Filter`] === filters[key]))))
+      const names = groups.filter(key => filters[key] !== 'all').map(key => buttons(key).find(b => b.dataset[`${key}Filter`] === filters[key])?.textContent?.trim()).filter(Boolean)
+      if (feedback) feedback.textContent = (en ? `${count} of ${items.length} projects` : `共 ${items.length} 个项目，当前显示 ${count} 个`) + (names.length ? ` · ${names.join(' · ')}` : '')
+      if (empty) empty.hidden = count !== 0
+    }
+    const write = (mode: 'push' | 'replace') => {
+      const url = new URL(location.href)
+      for (const key of groups) {
+        if (filters[key] === 'all') url.searchParams.delete(key)
+        else url.searchParams.set(key, filters[key])
+      }
+      const query = search?.value.trim()
+      if (query) url.searchParams.set('q', query)
+      else url.searchParams.delete('q')
+      if (url.href !== location.href) history[mode === 'push' ? 'pushState' : 'replaceState']({}, '', url)
+      apply()
+    }
+    const read = () => {
+      const params = new URLSearchParams(location.search)
+      if (search) search.value = params.get('q') ?? ''
+      groups.forEach(key => {
+        const value = params.get(key) ?? 'all'
+        filters[key] = buttons(key).some(b => b.dataset[`${key}Filter`] === value) ? value : 'all'
+      })
+      if (archive && (params.has('q') || groups.some(key => params.has(key)))) archive.open = true
+      apply()
+    }
+    const reveal = () => {
+      let id = ''
+      try { id = decodeURIComponent(location.hash.slice(1)) } catch { return }
+      const target = items.find(item => item.id === id)
+      if (!target) return
+      if (archive) archive.open = true
+      if (target.hidden) {
+        if (search) search.value = ''
+        groups.forEach(key => { filters[key] = 'all' })
+        write('replace')
+      }
+      // A deep link must move keyboard focus as well as the viewport.
+      requestAnimationFrame(() => {
+        target.focus({ preventScroll: true })
+        target.scrollIntoView({ block: 'start', behavior: 'instant' })
+      })
+    }
+    search?.addEventListener('input', () => write('replace'))
+    groups.forEach(key => buttons(key).forEach(button => button.addEventListener('click', () => {
+      filters[key] = button.dataset[`${key}Filter`] ?? 'all'
+      write('push')
+    })))
+    root.querySelector('[data-filter-reset]')?.addEventListener('click', () => {
+      if (search) search.value = ''
+      groups.forEach(key => { filters[key] = 'all' })
+      write('push')
+      search?.focus()
+    })
+    window.addEventListener('popstate', () => { read(); reveal() })
+    window.addEventListener('hashchange', reveal)
+    read()
+    reveal()
+  })
 </script>
 <style>
-.compact-archive{display:grid;gap:1.3rem}.archive-filter-head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}.archive-filter-head h2{font-size:1.2rem}.archive-filter-head p{font-size:.78rem;color:hsl(var(--muted-foreground))}.archive-search{display:grid;gap:.45rem;font-size:.8rem}.archive-search input{width:100%;min-height:44px;border:1px solid hsl(var(--border));border-radius:.5rem;background:hsl(var(--background));color:hsl(var(--foreground));padding:.7rem .9rem;font:inherit;font-size:.92rem}.archive-filters{display:grid;gap:.65rem}.archive-filters div{display:flex;gap:.45rem;flex-wrap:wrap;align-items:center}.archive-filters div>span{font-size:.72rem;color:hsl(var(--muted-foreground));min-width:3.5rem}.archive-filters button{border:1px solid hsl(var(--border));border-radius:.3rem;min-height:44px;padding:.4rem .7rem;background:hsl(var(--background));color:hsl(var(--foreground));font:inherit;font-size:.72rem;cursor:pointer}.archive-filters button[aria-pressed=true]{background:hsl(var(--foreground));color:hsl(var(--background))}.archive-filters summary{font-size:.77rem;min-height:44px;cursor:pointer;padding-top:.65rem}.archive-filters details>div{margin-top:.6rem}.archive-records>article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;padding:1.1rem 0;border-top:1px solid hsl(var(--border));scroll-margin-top:6rem}.archive-records h3{font-size:1rem}.archive-records p{font-size:.8rem;color:hsl(var(--muted-foreground));margin-top:.4rem}.archive-records nav{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;font-size:.77rem}.archive-records nav a{min-height:44px;display:inline-flex;align-items:center}.archive-empty{padding:2rem 0}.archive-empty p{font-size:.87rem;color:hsl(var(--muted-foreground))}[hidden]{display:none!important}@media(max-width:700px){.archive-filter-head,.archive-records>article{display:flex;flex-direction:column;gap:.6rem}.archive-records nav{gap:1.2rem}}
+  .compact-archive{display:grid;gap:1.3rem}.archive-filter-head{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}.archive-filter-head h2{font-size:1.2rem}.archive-filter-head p{font-size:.78rem;color:hsl(var(--muted-foreground))}.archive-search{display:grid;gap:.45rem;font-size:.8rem}.archive-search input{width:100%;min-height:44px;border:1px solid hsl(var(--border));border-radius:.5rem;background:hsl(var(--background));color:hsl(var(--foreground));padding:.7rem .9rem;font:inherit;font-size:.92rem}.archive-filters{display:grid;gap:.65rem}.archive-filters div{display:flex;gap:.45rem;flex-wrap:wrap;align-items:center}.archive-filters div>span{font-size:.72rem;color:hsl(var(--muted-foreground));min-width:3.5rem}.archive-filters button{border:1px solid hsl(var(--border));border-radius:.3rem;min-height:44px;padding:.4rem .7rem;background:hsl(var(--background));color:hsl(var(--foreground));font:inherit;font-size:.72rem;cursor:pointer}.archive-filters button[aria-pressed=true]{background:hsl(var(--foreground));color:hsl(var(--background))}.archive-filters summary{font-size:.77rem;min-height:44px;cursor:pointer;padding-top:.65rem}.archive-filters details>div{margin-top:.6rem}.archive-records>article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;padding:1.1rem 0;border-top:1px solid hsl(var(--border));scroll-margin-top:6rem}.archive-records>article:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:5px}.archive-records h3{font-size:1rem}.archive-records p{font-size:.8rem;color:hsl(var(--muted-foreground));margin-top:.4rem}.archive-records nav{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;font-size:.77rem}.archive-records nav a{min-height:44px;display:inline-flex;align-items:center}.archive-empty{padding:2rem 0}.archive-empty p{font-size:.87rem;color:hsl(var(--muted-foreground))}[hidden]{display:none!important}@media(max-width:700px){.archive-filter-head,.archive-records>article{display:flex;flex-direction:column;gap:.6rem}.archive-records nav{gap:1.2rem}}
 </style>
