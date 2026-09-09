@@ -1,0 +1,61 @@
+name: Verify localization and project assets
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: site-locale-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bun install --frozen-lockfile
+      - run: bun run validate:sync && bun run check && bun run build
+      - name: Install isolated quality tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/locale-tools" --no-save --package-lock=false playwright@1.58.2 axe-core@4.10.3 lighthouse@12.8.2 chrome-launcher@1.2.0
+          node "$RUNNER_TEMP/locale-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Browser route, language and interaction audit
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          AXE_PATH: ${{ runner.temp }}/locale-tools/node_modules/axe-core/axe.min.js
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
+        run: node scripts/audit-i18n-site.mjs
+      - name: Lighthouse measurements
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          QUALITY_TOOLS: ${{ runner.temp }}/locale-tools/node_modules
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence/lighthouse
+        run: node scripts/audit-lighthouse.mjs
+      - name: Preserve quality evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: locale-browser-evidence
+          path: ${{ runner.temp }}/site-locale-evidence
+          retention-days: 14
+      - name: Preserve production output for review
+        if: ${{ !cancelled() }}
+        run: tar -czf "$RUNNER_TEMP/locale-site.tar.gz" -C dist .
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: locale-production-output
+          path: ${{ runner.temp }}/locale-site.tar.gz
+          retention-days: 7
