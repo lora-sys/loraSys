@@ -44,6 +44,9 @@ const directory: DirectoryItem[] = [
   .work-page .page-intro h1 { font-size: clamp(2rem, 4vw, 3.1rem); max-width: 29ch; }
   .work-page .page-intro .lede { font-size: .94rem; max-width: 62ch; line-height: 1.7; margin-top: .8rem; }
   .work-page .section-head { margin-bottom: 1rem; }
+  .work-page :global(.work-card--lead) { grid-column: auto; display: flex; }
+  .work-page :global(.work-card .work-preview) { order: 2; }
+  .work-page :global(.work-card .project-heading) { flex: 1; }
   @media(max-width:640px) {
     .work-page .page-intro h1 { font-size: 1.95rem; line-height: 1.18; }
     .work-page .page-intro { margin-bottom: 1rem; padding-bottom: 1rem; }
@@ -52,3 +55,13 @@ const directory: DirectoryItem[] = [
     .work-page .section-head > a { font-size: .72rem; }
   }
 </style>
+<script>
+  // Keep an active category discoverable when the archive opens from a shared URL.
+  const revealCategory = () => {
+    if (!new URLSearchParams(location.search).has('category')) return
+    const panel = document.querySelector('[data-category-filter]')?.closest('details')
+    if (panel) panel.open = true
+  }
+  revealCategory()
+  window.addEventListener('popstate', revealCategory)
+</script>

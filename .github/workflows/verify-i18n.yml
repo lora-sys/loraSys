@@ -51,6 +51,12 @@ jobs:
           AXE_PATH: ${{ runner.temp }}/locale-tools/node_modules/axe-core/axe.min.js
           SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
         run: node scripts/test-studio-v4.mjs
+      - name: Full page screenshots and reading navigation
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
+        run: node scripts/test-studio-reading.mjs
       - name: Lighthouse measurements
         if: ${{ !cancelled() }}
         env:
