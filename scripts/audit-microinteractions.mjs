@@ -96,7 +96,7 @@ try {
     await check(`${label}: dark-mode accessibility`,async()=>{
       if(!process.env.AXE_PATH) return
       for(const route of ['projects/','en/work/','projects/zhihu-threads/','en/projects/zhihu-threads/']) {
-        await open(route);await page.evaluate(()=>document.documentElement.classList.add('dark'))
+        await page.evaluate(()=>localStorage.setItem('theme','dark'));await open(route);await page.waitForFunction(()=>document.documentElement.classList.contains('dark') && document.getAnimations().every(a=>a.playState!=='running'))
         await page.addScriptTag({path:process.env.AXE_PATH})
         const violations=await page.evaluate(async()=>{const result=await window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}});return result.violations.filter(v=>['serious','critical'].includes(v.impact)).map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}))})
         assert.deepEqual(violations,[],route)
