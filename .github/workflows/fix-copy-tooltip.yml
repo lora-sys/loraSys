@@ -1,0 +1,39 @@
+name: Stage localized copy feedback
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/fix-copy-tooltip.yml]
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 49e6c8b4c04daf80117a3baf2c6bdd7b3fe4b0c9
+          persist-credentials: false
+      - name: Remove duplicate generated tooltip and verify the real success state
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('src/assets/styles/global.css');s=p.read_text();assert s.count("content: 'Copied!';")==1;p.write_text(s.replace("content: 'Copied!';",'content: none;'))
+          p=Path('scripts/audit-microinteractions.mjs');s=p.read_text()
+          old="      await page.waitForFunction(()=>document.querySelector('[data-code-copy]')?.getAttribute('aria-label')==='代码已复制')"
+          assert s.count(old)==1
+          new=old+"\n      const successContent=await copy.evaluate(el=>getComputedStyle(el.querySelector('.success'),'::before').content)\n      assert.ok(['none','normal','\\\"\\\"'].includes(successContent),'Copy confirmation must not append a hard-coded English tooltip')"
+          p.write_text(s.replace(old,new))
+      - name: Stage without changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node --check scripts/audit-microinteractions.mjs
+          git diff --check
+          git switch -c stage/copy-feedback-20260909
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/assets/styles/global.css scripts/audit-microinteractions.mjs
+          git commit -m 'fix(i18n): keep copy success feedback in the active language'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/stage/copy-feedback-20260909
