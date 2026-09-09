@@ -12,13 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: bbb6d2944e61560590b6c5635caa23407e011415
+          ref: 0ab4b21c9373bb6adf56cf93bda7bbb51009e8e5
           persist-credentials: false
           path: site
       - uses: actions/checkout@v4
         with:
           repository: lora-sys/zhihu-threads
-          ref: 6c34a81e750b418620c0bb5be148427fd1f68d80
+          ref: 461a130fd00b24551648775757c55df2f84722a7
           persist-credentials: false
           path: threads
       - name: Package tracked public files without Git credentials
