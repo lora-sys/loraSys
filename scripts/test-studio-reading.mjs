@@ -24,14 +24,16 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
 const base = `http://127.0.0.1:${server.address().port}/loraSys/`
 const browser = await chromium.launch({ headless:true, channel:'chromium' })
 const report = { checks:[], screenshots:[], startedAt:new Date().toISOString() }
+// Playwright exposes method() as a function. Keep the read-only and same-origin restrictions.
+const localReadOnly = route => route.request().method() === 'GET' && new URL(route.request().url()).origin === new URL(base).origin ? route.continue() : route.abort()
 async function check(name, run) {
-  try { await run(); report.checks.push({ name, passed:true }) }
-  catch (error) { report.checks.push({ name, passed:false, error:String(error.stack) }) }
+  try { await run(); report.checks.push({ name, passed:true }); console.log('PASS', name) }
+  catch (error) { report.checks.push({ name, passed:false, error:String(error.stack) }); console.error('FAIL', name, error.message) }
 }
 try {
   for (const width of [1440,390]) {
     const context = await browser.newContext({ viewport:{width,height:width === 1440 ? 1000 : 844}, reducedMotion:'reduce', colorScheme:'light' })
-    await context.route('**/*', route => route.request().method === 'GET' && new URL(route.request().url()).origin === new URL(base).origin ? route.continue() : route.abort())
+    await context.route('**/*', localReadOnly)
     const page = await context.newPage()
     page.setDefaultTimeout(12000)
     for (const route of ['', 'en/', 'projects/', 'en/work/', 'blog/', 'en/writing/', 'lab/', 'en/lab/', 'projects/glassbox/', 'projects/zhihu-threads/', 'projects/ai-engineering-harness/', 'projects/agentarena/', 'en/projects/zhihu-threads/', 'about/', 'en/about/', 'collections/', 'contact/', 'now/', 'reading/']) {
@@ -43,8 +45,9 @@ try {
           await image.evaluate(img => img.complete ? null : new Promise(resolve => { img.addEventListener('load',resolve,{once:true}); img.addEventListener('error',resolve,{once:true}) }))
           assert.equal(await image.evaluate(img => img.naturalWidth > 0),true,'Visible image must decode')
         }
-        await page.evaluate(() => window.scrollTo(0,0))
+        await page.evaluate(() => window.scrollTo({top:0,behavior:'instant'}))
         await page.waitForFunction(() => window.scrollY === 0)
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
         const file = `${width}-${(route || 'home').replaceAll('/','-')}-full.png`
         await page.screenshot({ path:path.join(out,file), fullPage:true, animations:'disabled' })
@@ -55,7 +58,7 @@ try {
   }
   for (const reducedMotion of ['reduce','no-preference']) {
     const context = await browser.newContext({ viewport:{width:768,height:1024}, reducedMotion })
-    await context.route('**/*', route => route.request().method === 'GET' && new URL(route.request().url()).origin === new URL(base).origin ? route.continue() : route.abort())
+    await context.route('**/*', localReadOnly)
     const page = await context.newPage()
     page.setDefaultTimeout(12000)
     await check(`${reducedMotion}: article contents resize, focus trap and Escape`, async () => {

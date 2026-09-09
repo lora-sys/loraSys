@@ -10,9 +10,10 @@ const experiment=experiments.find(item=>item.slug===slug)
 if(!experiment)throw new Error(`Unknown experiment: ${slug}`)
 const t=(zh:string,en:string)=>local(locale,zh,en)
 const study=caseStudies.find(item=>item.slug===experiment.related)!
+const chineseTitle=experiment.kind==='sources'?['选择来源，','检查证据缺口']:['规则变了，','通过率也会变']
 ---
 <BaseLayout lang={locale} meta={{title:pick(experiment.title,locale),description:pick(experiment.summary,locale)}}>
- <main class='studio-page' data-experiment-page={slug}><header class='page-intro'><p class='eyebrow'>{t('实验室 / 固定教学材料','Lab / Fixed teaching fixtures')}</p><h1>{pick(experiment.title,locale)}</h1><p class='lede'>{pick(experiment.summary,locale)}</p><div class='action-row'><a class='button' href={t('/lab','/en/lab')}>{t('返回实验室','Back to the lab')}</a><a class='button' href={casePath(study,locale)}>{t('关联项目','Related project')} · {study.title}</a></div></header>
+ <main class='studio-page' data-experiment-page={slug}><header class='page-intro'><p class='eyebrow'>{t('实验室 / 固定教学材料','Lab / Fixed teaching fixtures')}</p><h1>{locale==='zh-CN'?chineseTitle.map(part=><span class='title-phrase'>{part}</span>):pick(experiment.title,locale)}</h1><p class='lede'>{pick(experiment.summary,locale)}</p><div class='action-row'><a class='button' href={t('/lab','/en/lab')}>{t('返回实验室','Back to the lab')}</a><a class='button' href={casePath(study,locale)}>{t('关联项目','Related project')} · {study.title}</a></div></header>
  {experiment.kind==='sources'?<SourceExplorer {locale}/>:<EvalExplorer {locale}/>}
  <section class='studio-section case-section'><h2>{t('你可以检查什么','What to inspect')}</h2><div class='decision-list'>{(experiment.kind==='sources'?[
 [t('取消来源 B','Uncheck source B'),t('第二个节点和同时需要 A、B 的第三个节点会失去完整依据。输出没有被重新生成。','The second node and the third node requiring A and B lose full support. No output is regenerated.')],
@@ -25,3 +26,4 @@ const study=caseStudies.find(item=>item.slug===experiment.related)!
 ]).map(([title,body])=><article><h3>{title}</h3><p>{body}</p></article>)}</div></section>
  </main>
 </BaseLayout>
+<style>.title-phrase{display:inline-block;white-space:nowrap}</style>
