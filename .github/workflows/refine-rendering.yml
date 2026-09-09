@@ -1,0 +1,52 @@
+name: Refine audited page rendering
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/refine-rendering.yml]
+permissions:
+  contents: write
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: inputs
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          path: site
+          ref: 9c65ce3abe72d4595ce76546784a594682be8187
+          persist-credentials: false
+      - name: Apply exact reviewed source delta
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib,json,base64,lzma
+          raw=lzma.decompress(base64.b64decode(Path('inputs/.audit/round3.b64').read_text().strip(),validate=True))
+          assert hashlib.sha256(raw).hexdigest()=='4cfd48e806e66dbd6c75d5946e1bbb1390245f4614ad26ba903d7141de3d7b6f'
+          root=Path('site').resolve()
+          for item in json.loads(raw):
+              name=item['path'];p=(root/name).resolve()
+              assert p.is_relative_to(root) and name.startswith(('src/','scripts/'))
+              old=p.read_text();assert hashlib.sha256(old.encode()).hexdigest()==item['old'],name
+              end=len(old);s=old
+              for start,stop,replacement in reversed(item['changes']):
+                  assert 0<=start<=stop<=end
+                  s=s[:start]+replacement+s[stop:];end=start
+              p.write_text(s)
+      - name: Push isolated content revision without force
+        working-directory: site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git switch -c fix/i18n-zhihu-20260909
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src scripts
+          git commit -m 'fix(audit): mark adjacent article languages and remove first-paint delays'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/fix/i18n-zhihu-20260909
+          git rev-parse HEAD
