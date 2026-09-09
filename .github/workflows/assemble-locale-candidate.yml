@@ -1,0 +1,94 @@
+name: Assemble reviewed locale candidate
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/assemble-locale-candidate.yml]
+permissions:
+  contents: write
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: inputs
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          path: site
+          ref: bbb6d2944e61560590b6c5635caa23407e011415
+          persist-credentials: false
+      - name: Verify and apply exact reviewed text changes
+        shell: python
+        run: |
+          from pathlib import Path
+          import base64, hashlib, json, lzma
+          inputs = Path('inputs/.audit')
+          encoded = ''.join((inputs / f'changes.{i}.b64').read_text().strip() for i in range(5))
+          payload = lzma.decompress(base64.b64decode(encoded, validate=True))
+          assert hashlib.sha256(payload).hexdigest() == '7b82803ca3fa555cf0ea3f5377692352cb1ea42088790bd3f5f819c1d16c25f6', 'Patch checksum mismatch'
+          root = Path('site').resolve()
+          changes = json.loads(payload)
+          for item in changes:
+              name = item['path']
+              allowed = name in ['README.md', 'README-zh-CN.md', '.github/workflows/verify-i18n.yml'] or name.startswith(('src/', 'scripts/', 'packages/pure/components/'))
+              file = (root / name).resolve()
+              assert allowed and file.is_relative_to(root) and '.git' not in file.parts
+              old = file.read_text() if file.exists() else ''
+              assert hashlib.sha256(old.encode()).hexdigest() == item['old'], f'Base changed: {name}'
+              text = old
+              end = len(old)
+              for start, stop, replacement in reversed(item['changes']):
+                  assert 0 <= start <= stop <= end
+                  text = text[:start] + replacement + text[stop:]
+                  end = start
+              file.parent.mkdir(parents=True, exist_ok=True)
+              file.write_text(text)
+          print(f'Applied {len(changes)} verified UTF-8 files')
+      - name: Install artwork renderer dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install pillow==12.0.0
+      - name: Compose localized artwork from existing original characters
+        working-directory: site
+        run: python scripts/render-project-assets.py --evidence-dir "$RUNNER_TEMP/locale-art-evidence"
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Install locked site dependencies
+        working-directory: site
+        run: bun install --frozen-lockfile
+      - name: Refresh and validate authentic project snapshots
+        working-directory: site
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          bun run sync:github
+          bun run validate:sync
+          node -e 'const fs=require("fs");const x=fs.readFileSync("src/data/github-projects.json","utf8");if(!x.includes("zhihu-threads"))throw Error("New repository missing from sync");'
+      - name: Push isolated candidate branch
+        working-directory: site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --check
+          git switch -c fix/i18n-zhihu-20260909
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md README-zh-CN.md src scripts packages/pure/components .github/workflows/verify-i18n.yml
+          git commit -m 'fix(i18n): localize public UI and add verified Zhihu Threads case and artwork'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/fix/i18n-zhihu-20260909
+          git rev-parse HEAD
+          git archive --format=tar.gz HEAD > "$RUNNER_TEMP/locale-candidate-source.tar.gz"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: locale-candidate-source
+          path: |
+            ${{ runner.temp }}/locale-candidate-source.tar.gz
+            ${{ runner.temp }}/locale-art-evidence
+          if-no-files-found: warn
+          retention-days: 7
