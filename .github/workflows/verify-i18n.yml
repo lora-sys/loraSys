@@ -26,11 +26,17 @@ jobs:
           node-version: '22'
       - run: bun install --frozen-lockfile
       - run: bun run validate:sync && bun run check && bun run build
+      - name: Every rendered page, local target and locale label
+        env:
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
+        run: python scripts/audit-rendered-site.py
       - name: Install isolated quality tools
+        if: ${{ !cancelled() }}
         run: |
           npm install --prefix "$RUNNER_TEMP/locale-tools" --no-save --package-lock=false playwright@1.58.2 axe-core@4.10.3 lighthouse@12.8.2 chrome-launcher@1.2.0
           node "$RUNNER_TEMP/locale-tools/node_modules/playwright/cli.js" install --with-deps chromium
       - name: Browser route, language and interaction audit
+        if: ${{ !cancelled() }}
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
           AXE_PATH: ${{ runner.temp }}/locale-tools/node_modules/axe-core/axe.min.js
