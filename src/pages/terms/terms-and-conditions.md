@@ -1,14 +1,13 @@
 ---
 layout: '@/layouts/IndividualPage.astro'
-
-title: 'Terms and Conditions'
-description: 'Last updated: 2026-08-13'
-language: 'En'
+title: '使用条款'
+description: '更新于 2026 年 9 月 9 日'
+language: 'zh-CN'
 back: '/terms'
 ---
 
-This website shares personal writing, projects, and learning notes. You may browse it for personal and educational use.
+本站分享个人文章、项目和学习记录，可供个人与学习用途浏览。
 
-Content is provided as-is and may be corrected, reorganized, or removed without notice. Do not use this website to infringe rights, disrupt service, or misrepresent its content as your own work.
+内容按现状提供，可能被修正、重新组织或移除。请勿利用本站侵犯他人权利、干扰服务，或把他人内容误称为自己的作品。
 
-Third-party links are provided for convenience; their services and terms are outside this site's control.
+第三方链接仅为查阅提供便利，相关服务及其条款由各提供方负责。

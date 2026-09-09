@@ -1,0 +1,51 @@
+---
+import LocalSearch from './LocalSearch.astro'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import { Image } from 'astro:assets'
+import { integ } from '@/site-config'
+import searchEmptyMochi from '@/assets/lora-visual/v2/search-empty-mochi.webp'
+import { text } from '@/i18n/ui'
+interface Props { locale: 'zh-CN' | 'en-US' }
+const { locale } = Astro.props
+const t = (zh: string, en: string) => text(locale, zh, en)
+const work = locale === 'en-US' ? '/en/work' : '/projects'
+const writing = locale === 'en-US' ? '/en/writing' : '/blog'
+const intro = t('搜索项目、文章、短笔记与实验记录。按 / 可定位搜索框。', 'Search projects, articles, notes and experiments. Press / to focus search.')
+---
+<PageLayout lang={locale} meta={{ title: t('搜索', 'Search'), description: intro }}>
+  <main>
+    <a class='back' href={writing}>{t('返回写作', 'Back to writing')}</a>
+    <h1>{t('搜索', 'Search')}</h1>
+    <p>{intro}</p>
+    {integ.pagefind ? <div class='search-shell'><LocalSearch {locale} /></div> : <p>{t('本站暂未启用搜索。', 'Search is not enabled.')}</p>}
+    <nav class='search-help' aria-label={t('其他浏览方式', 'Other ways to browse')}>
+      <a href={work}>{t('浏览作品', 'Explore projects')}</a>
+      <a href={writing}>{t('浏览文章', 'Browse writing')}</a>
+      <a href={locale === 'en-US' ? '/search' : '/en/search'}>{t('搜索英文内容', 'Search Chinese content')}</a>
+    </nav>
+    <aside class='search-empty-custom' data-search-empty data-zero-prefix={t('没有找到', 'No results for')} hidden aria-hidden='true'>
+      <Image src={searchEmptyMochi} alt='' aria-hidden='true' widths={[320, 480]} sizes='8rem' loading='lazy' />
+      <div><h2>{t('换个词试试', 'Try another term')}</h2><p>{t('可以缩短关键词，或从项目与文章目录继续浏览。', 'Try a shorter keyword, or continue through the project and writing directories.')}</p></div>
+    </aside>
+  </main>
+</PageLayout>
+<script>
+  const shell = document.querySelector('.search-shell')
+  const empty = document.querySelector<HTMLElement>('.search-empty-custom')
+  if (shell && empty) {
+    const refresh = () => {
+      const input = shell.querySelector<HTMLInputElement>('.pagefind-ui__search-input')
+      const message = shell.querySelector('.pagefind-ui__message')?.textContent ?? ''
+      const query = input?.value.trim() ?? ''
+      const visible = Boolean(query && message.includes(empty.dataset.zeroPrefix ?? '') && message.includes(query) && !shell.querySelector('.pagefind-ui__result'))
+      empty.hidden = !visible
+      empty.setAttribute('aria-hidden', String(!visible))
+    }
+    shell.addEventListener('input', () => { empty.hidden = true; empty.setAttribute('aria-hidden', 'true') })
+    new MutationObserver(refresh).observe(shell, { childList: true, subtree: true, characterData: true })
+    refresh()
+  }
+</script>
+<style>
+  main{max-width:58rem;margin:0 auto}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.2;margin:1rem 0}.back,.search-help a{color:hsl(var(--foreground));text-underline-offset:.2em}p{line-height:1.75;color:hsl(var(--muted-foreground))}.search-shell{margin-top:1.5rem}.search-help{display:flex;flex-wrap:wrap;gap:.6rem 1.25rem}.search-help a{min-height:2.75rem;display:inline-flex;align-items:center;font-size:.85rem}.search-empty-custom{display:flex;align-items:center;gap:1.2rem;margin-top:1.5rem;border:1px dashed hsl(var(--border));border-radius:1rem;padding:1rem}.search-empty-custom[hidden]{display:none}.search-empty-custom :global(img){width:7rem;height:auto}.search-empty-custom h2{font-size:1.25rem;margin:0}.search-empty-custom p{font-size:.88rem}.search-shell :global(.pagefind-ui__result){border-radius:.6rem;transition:transform 160ms ease}.search-shell :global(.pagefind-ui__result:focus-within){outline:2px solid hsl(var(--ring));outline-offset:3px}@media(hover:hover){.search-shell :global(.pagefind-ui__result:hover){transform:translateX(2px)}}@media(max-width:480px){.search-empty-custom{align-items:start;flex-direction:column}}@media(prefers-reduced-motion:reduce){.search-shell :global(.pagefind-ui__result){transition:none}.search-shell :global(.pagefind-ui__result:hover){transform:none}}
+</style>

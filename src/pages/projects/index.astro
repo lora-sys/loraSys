@@ -41,7 +41,7 @@ const contributionWarningCount = (syncReport.warnings?.length ?? 0) + (contribut
 
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository]
 const formatDirectoryDate = (date: Date) =>
-  new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
+  new Intl.DateTimeFormat('zh-CN', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
 const directoryItems: DirectoryItem[] = [
   ...allPosts.map((post) => ({
     kind: 'Writing' as const,
@@ -49,7 +49,7 @@ const directoryItems: DirectoryItem[] = [
     meta: formatDirectoryDate(post.data.updatedDate ?? post.data.publishDate),
     href: `/blog/${post.id}`,
     source: 'lora-sys' as const,
-    detail: post.data.language === 'zh-CN' ? '中文长文' : 'English essay'
+    detail: post.data.language === 'zh-CN' ? '中文长文' : '英文原文'
   })),
   ...creatorChannels.map((channel) => ({
     kind: 'Channel' as const,
@@ -73,21 +73,21 @@ const directoryItems: DirectoryItem[] = [
     meta: project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys',
     href: `/projects#${project.repository}`,
     source: project.source === 'ACAMLab' ? ('ACAMLab' as const) : ('lora-sys' as const),
-    detail: `${project.status} · ${getProjectStories(project.repository).length} Story links`
+    detail: `${({building:'构建中',active:'持续维护',archived:'已归档'}[project.status])} · ${getProjectStories(project.repository).length} 条内容链接`
   }))
 ]
 ---
 
 <PageLayout
   meta={{
-    title: 'Work · 作品',
+    title: '作品',
     description: 'Lora 的精选构建：AI Agent、开发者工具、全栈产品与公开证据。'
   }}
   highlightColor='#d99a33'
 >
   <Fragment slot='head'>
     <CollectionPageJsonLd
-      name='Work · 作品'
+      name='作品'
       description='Lora 的精选构建：AI Agent、开发者工具、全栈产品与公开证据。'
     />
   </Fragment>
@@ -157,7 +157,7 @@ const directoryItems: DirectoryItem[] = [
     </details>
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>
-      <div><p>Open to thoughtful work</p><h2 id='project-outro-title'>有一个值得认真构建的想法？</h2></div>
+      <div><p>交流与合作</p><h2 id='project-outro-title'>有一个值得认真构建的想法？</h2></div>
       <a class='tactile-action' href='/contact'>联系我 <span aria-hidden='true'>→</span></a>
     </aside>
   </main>

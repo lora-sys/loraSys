@@ -1,0 +1,80 @@
+---
+import '@pagefind/default-ui/css/ui.css'
+interface Props { locale: 'zh-CN' | 'en-US' }
+const { locale } = Astro.props
+---
+
+<localized-site-search data-locale={locale}>
+  <aside class='form my-4'>
+    {
+      import.meta.env.DEV ? (
+        <div class='w-full rounded-xl border-2 bg-transparent px-4 py-2 pe-3 outline-none focus:border-foreground'>
+          {locale === 'en-US' ? 'Search is available in the production preview.' : '搜索在生产构建预览中可用。'}
+        </div>
+      ) : (
+        <div id='site-search' /><p data-search-load-error role='status' hidden></p>
+      )
+    }
+  </aside>
+</localized-site-search>
+
+<script>
+  class SiteSearch extends HTMLElement {
+    constructor() {
+      super()
+      // const shouldStrip = this.dataset.stripTrailingSlash !== undefined
+      // const stripTrailingSlash = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
+      // const formatURL = shouldStrip ? stripTrailingSlash : (path: string) => path
+      const formatURL = (path: string) => path.replace(/(.)\/(#.*)?$/, '$1$2')
+
+      const initialize = () => {
+        // if (import.meta.env.DEV) return
+        const onIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1))
+        onIdle(async () => {
+          try {
+          // @ts-expect-error — Missing types for @pagefind/default-ui package.
+          const { PagefindUI } = await import('@pagefind/default-ui')
+          new PagefindUI({
+            element: '#site-search',
+            translations: this.dataset.locale === 'en-US' ? { placeholder: 'Search articles and projects', zero_results: 'No results for [SEARCH_TERM]', clear_search: 'Clear', searching: 'Searching…' } : { placeholder: '搜索文章与项目', zero_results: '没有找到 [SEARCH_TERM]', clear_search: '清除', searching: '正在搜索…' },
+            baseUrl: import.meta.env.BASE_URL,
+            bundlePath: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind/`,
+            showImages: false,
+            showSubResults: true,
+            processResult: (result: { url: string; sub_results: Array<{ url: string }> }) => {
+              result.url = formatURL(result.url)
+              result.sub_results = result.sub_results.map((sub_result) => {
+                sub_result.url = formatURL(sub_result.url)
+                return sub_result
+              })
+              return result
+            }
+          })
+          } catch {
+            const error = this.querySelector<HTMLElement>('[data-search-load-error]')
+            if (error) { error.hidden = false; error.textContent = this.dataset.locale === 'en-US' ? 'Search could not load. Refresh or browse the links below.' : '搜索暂时无法加载，请刷新页面或浏览下方链接。' }
+          }
+        })
+      }
+      if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', initialize, { once: true })
+      else initialize()
+    }
+  }
+  if (!customElements.get('localized-site-search')) customElements.define('localized-site-search', SiteSearch)
+</script>
+
+<style>
+  #site-search {
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: hsl(var(--primary) / var(--un-bg-opacity, 1));
+    --pagefind-ui-text: hsl(var(--foreground) / var(--un-text-opacity, 1));
+    --pagefind-ui-background: hsl(var(--muted) / var(--un-bg-opacity, 1));
+    --pagefind-ui-border: hsl(var(--border) / var(--un-border-opacity, 1));
+    --pagefind-ui-tag: hsl(var(--muted-foreground) / var(--un-text-opacity, 1));
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: calc(var(--radius) + 2px);
+    --pagefind-ui-image-border-radius: calc(var(--radius) + 2px);
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: sans-serif;
+  }
+</style>

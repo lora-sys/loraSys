@@ -36,8 +36,9 @@ const focusSummary = [
     description: '把真实任务、评审与回放整理成一个可以继续打磨的项目。'
   },
   {
-    title: '开发者工具',
-    description: '持续做让构建、调试和协作更顺手的小工具。'
+    title: 'Zhihu Threads',
+    description: '手动选择知乎摘录，生成可追问和自测的学习线。',
+    href: '/projects/zhihu-threads'
   },
   {
     title: '继续学习',
@@ -75,7 +76,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       </div>
       <div class='manifesto-stage'>
         <h1 id='home-title' class='display-statement'>构建一切，<br />学习一切。</h1>
-        <p class='statement-en' lang='en'>Build everything. Learn everything.</p>
+        <p class='statement-en'>做项目，也记录验证过程。</p>
         <div class='hero-scene-float'>
           <HeroScene />
         </div>
@@ -100,7 +101,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
           <ResumePreview triggerLabel='查看简历' />
         </div>
         <HapticsToggle />
-        <nav class='social-rail' aria-label='Primary social profiles'>
+        <nav class='social-rail' aria-label='主要社交主页'>
           {
             heroSocials.map((link) => (
               <a
@@ -126,11 +127,11 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
         <header class='section-heading'>
           <span class='section-index' aria-hidden='true'>01</span>
           <div class='section-heading-copy'>
-            <p class='eyebrow'>Selected Work · 精选作品</p>
+            <p class='eyebrow'>精选作品</p>
             <h2 id='work-title'>三个作品，先从这里看起。</h2>
           </div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
-            <div class='section-meta'><span class='archive-badge archive-badge--verified'>已验证</span><time datetime='{syncReport.syncedAt.slice(0,10)}'>同步于 {new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))}</time></div>
+            <div class='section-meta'><span class='archive-badge archive-badge--verified'>已验证</span><time datetime={syncReport.syncedAt.slice(0,10)}>同步于 {new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))}</time></div>
         </header>
         <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
         {
@@ -156,7 +157,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
         <header class='section-heading'>
           <span class='section-index' aria-hidden='true'>02</span>
           <div class='section-heading-copy'>
-            <p class='eyebrow'>Build Notes · 构建笔记</p>
+            <p class='eyebrow'>构建笔记</p>
             <h2 id='writing-title'>最近写下的构建笔记。</h2>
           </div>
           <a class='text-link' href='/blog'>全部写作 <span aria-hidden='true'>↗</span></a>
@@ -181,14 +182,14 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
         <header class='section-heading'>
           <span class='section-index' aria-hidden='true'>03</span>
           <div class='section-heading-copy'>
-            <p class='eyebrow'>Now · 正在构建</p>
+            <p class='eyebrow'>正在构建</p>
             <h2 id='now-title'>最近在做，也还在学习。</h2>
           </div>
           <a class='text-link' href='/now'>查看完整的正在构建 <span aria-hidden='true'>↗</span></a>
         </header>
         <LoraVisual asset='nowWorkbench' class='section-scene section-scene--wide' />
         <div class='focus-grid'>
-          {focusSummary.map((item, index) => <article class='focus-item'><span>0{index + 1}</span><h3>{item.title}</h3><p>{item.description}</p></article>)}
+          {focusSummary.map((item, index) => <article class='focus-item'><span>0{index + 1}</span><h3>{'href' in item ? <a href={item.href}>{item.title}</a> : item.title}</h3><p>{item.description}</p></article>)}
         </div>
       </section>
 
@@ -211,7 +212,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       magnetic?.style.setProperty('--magnetic-y', '0px')
     }
     magnetic?.addEventListener('pointermove', (event) => {
-      if (!finePointer.matches || !magnetic) return
+      if (!finePointer.matches || !magnetic || matchMedia('(prefers-reduced-motion: reduce)').matches) return
       const rect = magnetic.getBoundingClientRect()
       const pullX = Math.max(-7, Math.min(7, (event.clientX - rect.left - rect.width / 2) * 0.14))
       const pullY = Math.max(-7, Math.min(7, (event.clientY - rect.top - rect.height / 2) * 0.14))

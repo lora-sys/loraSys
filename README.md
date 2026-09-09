@@ -25,11 +25,23 @@ The site is intentionally **content-first and build-time driven**. Articles live
 
 > Build systems that learn.
 
+## New project: Zhihu Threads
+
+[Zhihu Threads](https://github.com/lora-sys/zhihu-threads) turns selected Zhihu excerpts into a learning thread with follow-up questions and self-tests. The user chooses the sources. Missing evidence remains explicit.
+
+[Read the project notes](https://lora-sys.github.io/loraSys/en/projects/zhihu-threads).
+
+![Zhihu Threads project illustration with Lora and Mochi](./src/assets/projects/lora-v3-project-zhihu-threads-en.webp)
+
+![Workflow showing user-selected evidence before thread generation](./src/assets/projects/lora-v3-zhihu-workflow-en.webp)
+
+These are editorial illustrations, not screenshots or live evaluation results. The four localized WebP assets reuse this site's original Lora and Mochi character art. The renderer and typography stay separate from the interactive page.
+
 ## What to look at first
 
 | Start here | What it contains |
 | --- | --- |
-| [Projects](https://lora-sys.github.io/loraSys/projects) | 52 owned public repositories, with curated posters, status, technologies, stars, and source/live links. |
+| [Projects](https://lora-sys.github.io/loraSys/projects) | Public repositories and clearly attributed external contributions, with curated posters, status, technologies, stars, and source/live links. |
 | [Writing](https://lora-sys.github.io/loraSys/blog) | Technical essays on agent infrastructure, visual evidence, model APIs, and shipping experiments. |
 | [Lab](https://lora-sys.github.io/loraSys/lab) | Five project-native explainers for the systems behind the work. |
 | [Notes](https://lora-sys.github.io/loraSys/notes) | Short observations on agents, frontend systems, Web3, and research. |
@@ -39,12 +51,12 @@ The site is intentionally **content-first and build-time driven**. Articles live
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/github-glassbox-agent-harness.webp" alt="Glassbox Agent Harness project poster"></a>
+      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/lora-v1-project-glassbox.webp" alt="Glassbox Agent Harness project poster"></a>
       <h3><a href="https://github.com/lora-sys/Glassbox-Agent-Harness">Glassbox Agent Harness</a></h3>
       <p>An observability and evaluation lab for AI agents: actions become inspectable traces, contexts stay reproducible, and iteration has evidence.</p>
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/github-free-vision-skill.webp" alt="Free Vision Skill project poster"></a>
+      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/lora-v1-project-free-vision.webp" alt="Free Vision Skill project poster"></a>
       <h3><a href="https://github.com/lora-sys/free-vision-skill">Free Vision Skill</a></h3>
       <p>A low-token visual evidence compiler that turns images into compact packets for text-only coding agents.</p>
     </td>

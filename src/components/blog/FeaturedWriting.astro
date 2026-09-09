@@ -1,7 +1,8 @@
 ---
+import { displayLabel } from '@/i18n/ui'
 import type { CollectionEntry } from 'astro:content'
 import { Image } from 'astro:assets'
-import { FormattedDate } from 'astro-pure/user'
+import FormattedDate from './LocalDate.astro'
 import agentSystemsMargin from '@/assets/lora-visual/v2/lora-v2-blog-agent-systems.webp'
 import multimodalMargin from '@/assets/lora-visual/v2/lora-v2-blog-multimodal.webp'
 import coverAiEngineeringHarness from '@/assets/blog-covers/cover-1.webp'
@@ -36,13 +37,13 @@ const featuredCover = cover ?? coverMap[post.id]
   {featuredCover && <Image src={featuredCover} alt='' aria-hidden='true' class='featured-cover' widths={[480, 760, 1000, 1200]} sizes='(min-width: 768px) 28rem, 22rem' loading='lazy' />}
   {thematicVisual && <Image src={thematicVisual} alt='' aria-hidden='true' class='theme-margin' widths={[480, 760, 1000]} sizes='(min-width: 768px) 16rem, 12.5rem' loading='lazy' />}
   <div class='featured-meta'>
-    <span>{theme}</span>
+    <span>{displayLabel(theme, 'zh-CN')}</span>
     <FormattedDate date={postDate} />
   </div>
-  <h3><a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a></h3>
-  <p class='description'>{post.data.description}</p>
+  <h3 lang={post.data.language}><a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a></h3>
+  <p class='description' lang={post.data.language}>{post.data.description}</p>
   <p class='why-read'><b>为什么值得读</b>{whyRead}</p>
-  <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch>Read note <span aria-hidden='true'>↗</span></a>
+  <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch>阅读文章 <span aria-hidden='true'>↗</span></a>
 </article>
 
 <style>

@@ -20,7 +20,7 @@ const { title, heading, description, headings, view, comment: enableComment, ...
 
 <PageLayout meta={{ title, description }} showSidebar={!!headings?.length} {...props}>
   <slot name='head' slot='head' />
-  {!!headings?.length && <TOC headings={headings} slot='sidebar' />}
+  {!!headings?.length && <TOC title='目录' headings={headings} slot='sidebar' />}
 
   <Fragment slot='header'>
     <h1 class='text-2xl font-medium sm:mb-2 sm:text-3xl'>{heading ?? title}</h1>

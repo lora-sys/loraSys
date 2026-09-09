@@ -7,16 +7,16 @@ const { kind, locale = 'zh-CN' } = Astro.props
 
 const meta: Record<DemoKind, Record<'zh-CN' | 'en-US', { name: string; note: string }>> = {
   timeline: {
-    'zh-CN': { name: 'AgentArena · 对战时间线', note: '提交 → 对战 → 评审 → 复盘（点击节点可查看详情）' },
-    'en-US': { name: 'AgentArena · Match timeline', note: 'Commit → Arena → Review → Retro (click step to inspect)' }
+    'zh-CN': { name: 'AgentArena · 对战时间线', note: '流程示意。点击节点查看说明。' },
+    'en-US': { name: 'AgentArena · Match timeline', note: 'Illustrative match flow. Select a step to inspect.' }
   },
   pipeline: {
-    'zh-CN': { name: 'Harness · 闭环流水线', note: 'Issue → Plan → Build → Review → Merge（点击筹码查看产物）' },
-    'en-US': { name: 'Harness · Closed loop', note: 'Issue → Plan → Build → Review → Merge (click chip to inspect)' }
+    'zh-CN': { name: 'Harness · 闭环流水线', note: '流程示意。点击步骤查看说明。' },
+    'en-US': { name: 'Harness · Closed loop', note: 'Illustrative engineering flow. Select a step to inspect.' }
   },
   terminal: {
-    'zh-CN': { name: 'Glassbox · 记录流', note: '一次真实运行的捕获回放（点击日志行可复制）' },
-    'en-US': { name: 'Glassbox · Capture stream', note: 'Replay of one captured run (click line to copy)' }
+    'zh-CN': { name: 'Glassbox · 记录流', note: '示例日志，不是实时运行。点击可复制。' },
+    'en-US': { name: 'Glassbox · Capture stream', note: 'Illustrative logs, not a live run. Click to copy.' }
   }
 }
 
@@ -25,23 +25,23 @@ const timelineData = {
     { label: '提交', note: '01 提交 · 封装 Agent 镜像、沙盒指令与提示词规范' },
     { label: '对战', note: '02 对战 · 多智能体在隔离环境中针对真实任务交锋' },
     { label: '评审', note: '03 评审 · 裁判模型多维度盲评打分，生成胜率矩阵' },
-    { label: '复盘', note: '04 复盘 · 溯源完整思维链、动作轨迹与失误归因证据' }
+    { label: '复盘', note: '04 复盘 · 检查动作轨迹与失误归因证据' }
   ],
   'en-US': [
     { label: 'Commit', note: '01 Commit · Package runtime, sandbox instructions & prompts' },
     { label: 'Arena', note: '02 Arena · Multi-agents compete in isolated environment' },
     { label: 'Review', note: '03 Review · Blind judging matrix & score verdict' },
-    { label: 'Retro', note: '04 Retro · Trace full CoT, action logs & failure evidence' }
+    { label: 'Retro', note: '04 Retro · Inspect action logs and failure evidence' }
   ]
 }
 
 const pipelineData = {
   'zh-CN': [
-    { label: 'Issue', note: 'Issue · 问题确立：捕获真实需求、前置边界与验收条件' },
-    { label: 'Plan', note: 'Plan · 任务拆解：输出可验证的代码修改规划与检查单' },
-    { label: 'Build', note: 'Build · 隔离构建：在独立 Worktree 中编写代码并跑通测试' },
-    { label: 'Review', note: 'Review · 证据审计：通过多维度代码闸门与安全性检查' },
-    { label: 'Merge', note: 'Merge · 交付归档：自动合入主干并生成现场变更快照' }
+    { label: '需求', note: '需求 · 问题确立：捕获真实需求、前置边界与验收条件' },
+    { label: '规划', note: '规划 · 任务拆解：输出可验证的代码修改规划与检查单' },
+    { label: '构建', note: '构建 · 隔离构建：在独立 Worktree 中编写代码并跑通测试' },
+    { label: '审查', note: '审查 · 证据审计：通过多维度代码闸门与安全性检查' },
+    { label: '合并', note: '合并 · 交付归档：自动合入主干并生成现场变更快照' }
   ],
   'en-US': [
     { label: 'Issue', note: 'Issue · Capture requirements, boundaries & criteria' },
@@ -54,12 +54,12 @@ const pipelineData = {
 
 const terminalData = {
   'zh-CN': [
-    { line: '$ glassbox attach --run 42', tip: '已复制指令 · 接入活跃运行会话 42' },
-    { line: '» step 03 captured · context rebuilt', tip: '已复制 · 捕获第 03 步完整上下文与思维链' },
+    { line: '$ glassbox attach --run 42', tip: '已复制示例指令，不会启动运行' },
+    { line: '» step 03 captured · context rebuilt', tip: '已复制第 03 步的示例上下文日志' },
     { line: '» evidence saved · verdict: pass', tip: '已复制 · 证据文件已就绪，判定结果：通过' }
   ],
   'en-US': [
-    { line: '$ glassbox attach --run 42', tip: 'Copied command · Attached to active run 42' },
+    { line: '$ glassbox attach --run 42', tip: 'Copied illustrative command; no run was started' },
     { line: '» step 03 captured · context rebuilt', tip: 'Copied · Captured step 03 trace & context' },
     { line: '» evidence saved · verdict: pass', tip: 'Copied · Evidence saved with passing verdict' }
   ]
@@ -71,7 +71,7 @@ const currentTerminal = terminalData[locale]
 const copy = meta[kind][locale]
 ---
 
-<div class='project-demo' data-demo={kind} data-default-note={copy.note}>
+<div class='project-demo' data-demo={kind} data-locale={locale} data-default-note={copy.note}>
   <div class='demo-stage' aria-label={copy.name}>
     {
       kind === 'timeline' && (
@@ -125,7 +125,7 @@ const copy = meta[kind][locale]
               title={locale === 'zh-CN' ? '点击复制此行日志' : 'Click to copy log line'}
             >
               <span class='demo-line-inner'>{item.line}</span>
-              <span class='demo-copy-badge' aria-hidden='true'>Copy</span>
+              <span class='demo-copy-badge' aria-hidden='true'>{locale === 'zh-CN' ? '复制' : 'Copy'}</span>
             </button>
           ))}
         </div>
@@ -199,7 +199,7 @@ const copy = meta[kind][locale]
     gap: 0.28rem;
     border: none;
     background: transparent;
-    padding: 0.2rem 0.35rem;
+    padding: 0.2rem 0.35rem; min-height: 2.75rem;
     border-radius: 999px;
     color: hsl(var(--muted-foreground) / 0.65);
     font-size: 0.62rem;
@@ -244,7 +244,7 @@ const copy = meta[kind][locale]
     position: relative;
     border: 1px solid hsl(var(--border));
     border-radius: 0.45rem;
-    padding: 0.24rem 0.5rem;
+    padding: 0.24rem 0.5rem; min-height: 2.75rem;
     background: hsl(var(--background) / 0.8);
     color: hsl(var(--muted-foreground) / 0.7);
     font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
@@ -467,6 +467,7 @@ const copy = meta[kind][locale]
         }
         node.addEventListener('click', handleInspect)
         node.addEventListener('mouseenter', handleInspect)
+        node.addEventListener('focus', handleInspect)
       })
 
       // 2. Pipeline 筹码点击探索
@@ -496,11 +497,13 @@ const copy = meta[kind][locale]
               const badge = line.querySelector<HTMLElement>('.demo-copy-badge')
               if (badge) {
                 const old = badge.textContent
-                badge.textContent = '✓ Copied'
+                badge.textContent = demo.dataset.locale === 'en-US' ? 'Copied' : '已复制'
                 window.setTimeout(() => { badge.textContent = old }, 1500)
               }
               if (document.documentElement.dataset.haptics === 'on') navigator.vibrate?.(12)
-            } catch {}
+            } catch {
+              setNote(demo.dataset.locale === 'en-US' ? 'Copy unavailable. Select the log text manually.' : '无法自动复制，请手动选择日志文本。', false)
+            }
           }
         })
       })

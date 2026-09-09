@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 
-import { FormattedDate } from 'astro-pure/user'
+import FormattedDate from './LocalDate.astro'
 
 import LanguageBadge from './LanguageBadge.astro'
 
@@ -45,12 +45,12 @@ const related = posts
           <li>
             <a href={`/blog/${candidate.id}`}>
               <div class='meta'>
-                <FormattedDate date={candidate.data.updatedDate ?? candidate.data.publishDate} />
+                <FormattedDate locale={isChinese ? 'zh-CN' : 'en-US'} date={candidate.data.updatedDate ?? candidate.data.publishDate} />
                 <LanguageBadge language={candidate.data.language} compact />
               </div>
-              <h3>{candidate.data.title}</h3>
-              <p>{candidate.data.description}</p>
-              <span class='reason'>Shared: {sharedTags.slice(0, 2).join(' / ')}</span>
+              <h3 lang={candidate.data.language}>{candidate.data.title}</h3>
+              <p lang={candidate.data.language}>{candidate.data.description}</p>
+              <span class='reason'>{isChinese ? '相关主题：' : 'Shared topics:'} {sharedTags.slice(0, 2).join(' / ')}</span>
             </a>
           </li>
         ))}

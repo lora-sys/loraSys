@@ -99,3 +99,47 @@ export const socialLinks: SocialLink[] = [
 
 export const primarySocialLinks = socialLinks.filter((link) => link.primary)
 export const secondarySocialLinks = socialLinks.filter((link) => !link.primary)
+
+const descriptions: Record<SocialIcon, [string, string]> = {
+  "email": [
+    "项目讨论与合作提议。",
+    "Project discussions and collaboration proposals."
+  ],
+  "github-circle": [
+    "源码、问题记录与开源协作。",
+    "Source code, issues and open-source collaboration."
+  ],
+  "linkedin": [
+    "工作经历与职业交流。",
+    "Professional experience and career conversations."
+  ],
+  "x": [
+    "短笔记与正在探索的想法。",
+    "Short notes and ideas in progress."
+  ],
+  "peerlist": [
+    "开发者资料、项目发布与更新。",
+    "Builder profile, project releases and updates."
+  ],
+  "youtube": [
+    "项目视频与实验演示。",
+    "Project videos and experiment demos."
+  ],
+  "bilibili": [
+    "中文视频、项目演示与开发记录。",
+    "Chinese videos, project demos and build logs."
+  ],
+  "zhihu": [
+    "中文技术文章与学习记录。",
+    "Chinese technical articles and learning notes."
+  ],
+  "xiaohongshu": [
+    "中文内容、项目记录与创作日常。",
+    "Chinese posts, project notes and creative work."
+  ]
+}
+export const localizedSocial = (link: SocialLink, locale: 'zh-CN' | 'en-US'): SocialLink => ({
+  ...link,
+  name: locale === 'en-US' ? ({ '知乎': 'Zhihu', '小红书': 'Xiaohongshu' }[link.name] ?? link.name) : link.name === 'Email' ? '邮箱' : link.name,
+  description: descriptions[link.icon][locale === 'en-US' ? 1 : 0]
+})

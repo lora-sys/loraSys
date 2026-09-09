@@ -1,5 +1,6 @@
 ---
-import { Footer, ThemeProvider } from 'astro-pure/components/basic'
+import SiteFooter from '@/components/layout/SiteFooter.astro'
+import { ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
@@ -66,18 +67,18 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
         />
       )
     }
-    <a class='skip-link' href='#main-content'>Skip to content</a>
+    <a class='skip-link' href='#main-content'>{locale === 'en-US' ? 'Skip to content' : '跳到正文'}</a>
     <div
       id='main-container'
       class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
     >
-      <SiteHeader />
+      <SiteHeader locale={locale} />
       <div id='main-content' class='flex-1 w-full' tabindex='-1'>
         <RouteVisualBanner path={localPath} lang={locale} />
         <slot />
       </div>
       <div class='site-footer'>
-        <nav class='secondary-navigation' aria-label='Secondary navigation'>
+        <nav class='secondary-navigation' aria-label={locale === 'en-US' ? 'Secondary navigation' : '补充导航'}>
           <span>{footerLabel}</span>
           <ul>
             {
@@ -89,7 +90,7 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
             }
           </ul>
         </nav>
-        <Footer />
+        <SiteFooter locale={locale} />
       </div>
     </div>
 

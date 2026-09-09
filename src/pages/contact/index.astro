@@ -5,111 +5,87 @@ import { Image } from 'astro:assets'
 import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
 import contactCorrespondenceHero from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
+import CopyAction from '@/components/layout/CopyAction.astro'
 import SocialLedger from '@/components/contact/SocialLedger.astro'
 
 const email = 'lorasys@outlook.com'
 const headings = [
-  { depth: 2, slug: 'start-here', text: 'Start here' },
-  { depth: 2, slug: 'good-conversations', text: 'Good conversations' },
-  { depth: 2, slug: 'elsewhere', text: 'Elsewhere' }
+  { depth: 2, slug: 'start-here', text: '联系方式' },
+  { depth: 2, slug: 'good-conversations', text: '交流主题' },
+  { depth: 2, slug: 'elsewhere', text: '其他平台' }
 ]
 ---
 
-<PageLayout title='Contact' heading='联系' {headings}>
+<PageLayout title='联系' heading='联系' {headings}>
   <div class='not-prose contact-intro'>
     <Image src={contactCorrespondenceHero} alt='' aria-hidden='true' class='contact-visual' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
-    <span class='eyebrow'>Contact / Collaboration</span>
-    <h2>Let&apos;s build something ambitious.</h2>
+    <span class='eyebrow'>联系与合作</span>
+    <h2>你正在解决什么问题？</h2>
     <p>
-      I enjoy conversations about AI agents, developer infrastructure, open-source work, and product
-      ideas with a real problem behind them. A little context goes a long way.
+      可以交流智能体、开发工具、开源项目或产品想法。请附上项目背景和你希望讨论的问题。
     </p>
     <a class='mail-cta tactile-action' href={`mailto:${email}`}>
-      <Icon name='email' class='size-4' /> Write an email <span aria-hidden='true'>→</span>
+      <Icon name='email' class='size-4' /> 发送邮件 <span aria-hidden='true'>→</span>
     </a>
   </div>
 
-  <h2 id='start-here'>Start here</h2>
+  <h2 id='start-here'>联系方式</h2>
   <p>
-    Email is best for a new conversation. GitHub is best when the context already lives in an issue
-    or repository. LinkedIn works well for professional introductions.
+    新话题可以发邮件。已有仓库或问题记录的技术讨论，请在 GitHub 上继续。职业交流也可以通过 LinkedIn 联系。
   </p>
   <div class='not-prose primary-channels'>
     <SocialLedger links={primarySocialLinks} />
   </div>
   <div class='not-prose email-copy'>
     <div>
-      <span>Email address</span>
+      <span>邮箱地址</span>
       <strong>{email}</strong>
     </div>
-    <button class='tactile-action' type='button' data-copy-email={email} aria-describedby='copy-status'>
-      <Icon name='document' class='size-4' />
-      <span>Copy email</span>
-    </button>
-    <span id='copy-status' class='sr-only' aria-live='polite'></span><span class='copy-toast' data-copy-toast role='status' aria-live='polite' hidden>Copied — ready to share</span>
+    <CopyAction value={email} label='复制邮箱' />
   </div>
   <div class='not-prose subscribe-card'>
     <div>
-      <span class='eyebrow'>Keep up with the work</span>
-      <strong>Read new writing and project notes when they ship.</strong>
+      <span class='eyebrow'>关注更新</span>
+      <strong>通过 RSS 接收新文章与项目笔记。</strong>
     </div>
-    <a class='tactile-action' href='/rss.xml' data-interaction='subscribe_feed'>Subscribe via RSS <span aria-hidden='true'>↗</span></a>
+    <a class='tactile-action' href='/rss.xml' data-interaction='subscribe_feed'>订阅 RSS <span aria-hidden='true'>↗</span></a>
   </div>
 
-  <h2 id='good-conversations'>Good conversations</h2>
+  <h2 id='good-conversations'>交流主题</h2>
   <div class='not-prose conversation-grid'>
     <article>
       <span>01</span>
-      <h3>Agent systems</h3>
+      <h3>智能体系统</h3>
       <p>
-        Multi-agent workflows, context engineering, evaluation, tooling, and reliable execution.
+        多智能体流程、上下文管理、评测、工具调用与运行可靠性。
       </p>
     </article>
     <article>
       <span>02</span>
-      <h3>Open source</h3>
+      <h3>开源协作</h3>
       <p>
-        Repository collaboration, implementation feedback, and ideas that benefit from being public.
+        仓库协作、实现反馈和公开讨论。
       </p>
     </article>
     <article>
       <span>03</span>
-      <h3>Product experiments</h3>
-      <p>Turning an ambitious technical idea into a focused, testable, and useful product.</p>
+      <h3>产品实验</h3>
+      <p>确定使用场景，缩小实现范围，并验证产品是否解决问题。</p>
     </article>
   </div>
   <blockquote>
-    The best first message explains what you are building, why it matters, and where a second pair
-    of eyes could help.
+    第一封消息请说明项目用途、当前进展，以及希望一起检查的部分。
   </blockquote>
 
-  <h2 id='elsewhere'>Elsewhere</h2>
+  <h2 id='elsewhere'>其他平台</h2>
   <p>
-    Follow the medium that fits the kind of update you want—short notes, demos, or longer writing.
+    不同平台分别记录短笔记、项目演示和长篇文章。
   </p>
   <div class='not-prose secondary-channels'>
     <SocialLedger links={secondarySocialLinks} startAt={primarySocialLinks.length + 1} />
   </div>
 
-  <script>
-    const copyButton = document.querySelector<HTMLButtonElement>('[data-copy-email]')
-    const copyStatus = document.querySelector<HTMLElement>('#copy-status'); const copyToast = document.querySelector<HTMLElement>('[data-copy-toast]'); let copyToastTimer:number|undefined
-    copyButton?.addEventListener('click', async () => {
-      const email = copyButton.dataset.copyEmail
-      if (!email) return
-      try {
-        await navigator.clipboard.writeText(email)
-        const label = copyButton.querySelector('span')
-        if (label) label.textContent = 'Copied'
-        if (copyStatus) copyStatus.textContent = `Copied ${email} to clipboard`; if (copyToast) { copyToast.hidden=false; clearTimeout(copyToastTimer); copyToastTimer=window.setTimeout(()=>{copyToast.hidden=true},1800) }
-        window.setTimeout(() => {
-          if (label) label.textContent = 'Copy email'
-        }, 1800)
-      } catch {
-        if (copyStatus) copyStatus.textContent = `Copy unavailable. Email address: ${email}`
-      }
-    })
-  </script>
+
 </PageLayout>
 
 <style>

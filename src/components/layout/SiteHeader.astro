@@ -3,14 +3,15 @@ import { Icon } from 'astro-pure/user'
 import { getLocale, hasAlternate, localeMeta, localizedPath, primaryNavigation } from '@/i18n/site'
 
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
-const locale = getLocale(pathname)
+interface Props { locale?: 'zh-CN' | 'en-US' }
+const locale = Astro.props.locale ?? getLocale(pathname)
 const copy = localeMeta(locale)
 const menu = primaryNavigation(locale)
 const otherLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
 // 无对应路由的页面不提供语言切换，避免把访客丢回对方语言首页。
 const alternate = hasAlternate(pathname, otherLocale) ? localizedPath(pathname, otherLocale) : undefined
 const home = locale === 'en-US' ? '/en' : '/'
-const search = '/search'
+const search = locale === 'en-US' ? '/en/search' : '/search'
 ---
 
 <header class='site-header' data-site-header>
@@ -23,7 +24,7 @@ const search = '/search'
   <div class='header-tools'>
     <a class='contact-cta tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
     {alternate && <a class='locale-toggle' href={alternate} hreflang={otherLocale} lang={otherLocale}>{copy.switchLabel}</a>}
-    <a class='search-link' href={search} title={copy.searchLabel} aria-label={copy.searchLabel}><Icon name='search' class='size-4' /></a>
+    <a class='search-link' href={search} title={`${copy.searchLabel} /`} aria-label={copy.searchLabel} aria-keyshortcuts='/'><Icon name='search' class='size-4' /></a>
     <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Toggle dark theme' : '切换深色主题'} aria-pressed='false'>
       <Icon class='system size-4' name='computer' />
       <Icon class='light hidden size-4' name='sun' />
@@ -100,6 +101,16 @@ const search = '/search'
   window.addEventListener('resize', () => { if (matchMedia('(min-width: 900px)').matches) setMenu(false) })
   window.addEventListener('scroll', updateScrollState, { passive: true })
   updateScrollState()
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== '/' || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return
+    if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]')) return
+    if (document.querySelector('dialog[open]')) return
+    const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input')
+    event.preventDefault()
+    if (input) input.focus()
+    else document.querySelector<HTMLAnchorElement>('.search-link')?.click()
+  })
 
   themeButton?.addEventListener('click', () => {
     const root = document.documentElement

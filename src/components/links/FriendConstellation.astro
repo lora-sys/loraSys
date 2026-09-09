@@ -22,7 +22,7 @@ const nodes = activeLinks.map((link, index) => {
 <section class='constellation' aria-labelledby='constellation-title'>
   <div class='constellation-copy' id='friend-constellation'>
     <div>
-      <p class='kicker'>Friend constellation</p>
+      <p class='kicker'>友链星图</p>
       <h2 id='constellation-title'>朋友是互联网上真实发光的坐标。</h2>
     </div>
     <p>把指针移到星点上，可以看到名字与来处。这里只收录真实、确认过的连接。</p>
@@ -81,7 +81,7 @@ const nodes = activeLinks.map((link, index) => {
     {
       activeLinks.length === 0 && (
         <div class='empty-sky'>
-          <span>0 linked stars</span>
+          <span>0 个友链</span>
           <p>星图已经展开，等待第一条经过确认的友链。</p>
           <a href='#apply-links'>
             成为第一个坐标 <span aria-hidden='true'>↓</span>
@@ -94,7 +94,7 @@ const nodes = activeLinks.map((link, index) => {
   <footer>
     <span>{activeLinks.length.toString().padStart(2, '0')} stars</span>
     <span aria-hidden='true'>·</span>
-    <span>open canvas</span>
+    <span>等待连接</span>
   </footer>
 </section>
 

@@ -15,7 +15,7 @@ const syncedLabel = new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'nume
 )
 const sections=[
  {id:'building',title:'营造中',status:'In progress',frequency:'As I build',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
- {id:'learning',title:'学习中',status:'Exploring',frequency:'When it clicks',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
+ {id:'learning',title:'学习中',status:'Exploring',frequency:'有进展时更新',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
  {id:'reading',title:'阅读中',status:'On my desk',frequency:'Slowly',category:'Reading',items:['Designing Data-Intensive Applications']},
  {id:'listening',title:'共鸣中',status:'On repeat',frequency:'Often',category:'Listening',items:['Tame Impala — Currents']}
 ]
@@ -25,7 +25,7 @@ const headings=sections.map(s=>({depth:2,slug:s.id,text:s.title}))
  <section class='not-prose now-hero' aria-labelledby='now-intro'>
   <Image src={nowCurrentDeskHero} alt='' aria-hidden='true' class='now-hero-image' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
   <div class='now-hero-copy'>
-   <span class='now-hero-label'>Field notes / current desk</span>
+   <span class='now-hero-label'>当前记录</span>
    <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>2026 年 8 月 20 日</time>，完成重要变化时更新。</p>
   </div>
  </section>

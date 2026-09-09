@@ -1,10 +1,12 @@
 ---
+import { displayLabel } from '@/i18n/ui'
+import { localizeProject } from '@/i18n/project-copy'
 import type { Project } from '@/data/projects'
 import { Icon } from 'astro-pure/user'
 import ProjectCard from './ProjectCard.astro'
 
 interface Props { projects: Project[] }
-const { projects } = Astro.props
+const projects = Astro.props.projects.map((project) => localizeProject(project, 'zh-CN'))
 const featured = projects
   .filter((project) => project.featuredRank !== undefined)
   .sort((left, right) => (left.featuredRank ?? 99) - (right.featuredRank ?? 99))
@@ -19,7 +21,7 @@ const sourceLabel = (source: string) => source === 'External' ? '外部贡献' :
 const categories = [...new Set(projects.flatMap((project) =>
   project.categories.filter((category) => !['Featured', 'Open Source'].includes(category))
 ))].sort((left, right) => left.localeCompare(right))
-const formatUpdated = (date: string) => new Intl.DateTimeFormat('en', {
+const formatUpdated = (date: string) => new Intl.DateTimeFormat('zh-CN', {
   month: 'short', year: 'numeric', timeZone: 'UTC'
 }).format(new Date(date))
 const searchValue = (project: Project) => [
@@ -28,13 +30,13 @@ const searchValue = (project: Project) => [
 ].join(' ').toLocaleLowerCase()
 const sourceFor = (project: Project) => project.links.find((link) => link.type === 'source')?.href ?? '#'
 const websiteFor = (project: Project) => project.links.find((link) => link.type === 'website')?.href
-const statusLabel = (status: Project['status']) => ({ building: 'Building', active: 'Maintained', archived: 'Archived' })[status]
+const statusLabel = (status: Project['status']) => ({ building: '构建中', active: '持续维护', archived: '已归档' })[status]
 ---
 
 <div class='portfolio' data-project-browser>
   <section class='filter-panel' aria-labelledby='project-filter-title'>
     <div class='filter-heading'>
-      <div><p class='eyebrow'>Find a build · 找一个构建</p><h2 id='project-filter-title'>浏览完整仓库</h2></div>
+      <div><p class='eyebrow'>查找项目</p><h2 id='project-filter-title'>浏览完整仓库</h2></div>
       <p class='filter-status' aria-live='polite' data-filter-status>共收录 {projects.length} 个项目</p>
     </div>
     <div class='search-field'>
@@ -47,7 +49,7 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
       <div class='filter-group' role='group' aria-label='按分类筛选项目'>
         <span>分类</span><div>
           <button type='button' data-category-filter='all' aria-pressed='true'>全部</button>
-          {categories.map((category) => <button type='button' data-category-filter={category} aria-pressed='false'>{category}</button>)}
+          {categories.map((category) => <button type='button' data-category-filter={category} aria-pressed='false'>{displayLabel(category, 'zh-CN')}</button>)}
         </div>
       </div>
       <div class='filter-group' role='group' aria-label='按来源筛选项目'>
@@ -71,8 +73,8 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
   {leadProject && (
     <section class='project-block lead-block' data-project-section aria-labelledby='lead-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>Featured / 01</p><h2 id='lead-title'>主推项目</h2></div>
-        <span data-section-count>1 project</span>
+        <div><p class='eyebrow'>首个项目</p><h2 id='lead-title'>主推项目</h2></div>
+        <span data-section-count>1 个项目</span>
       </header>
       <ProjectCard project={leadProject} variant='lead' priority lens filterable />
     </section>
@@ -80,8 +82,8 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
   {featuredProjects.length > 0 && (
     <section class='project-block' data-project-section aria-labelledby='featured-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>Selected work</p><h2 id='featured-title'>精选项目</h2></div>
-        <span data-section-count>{featuredProjects.length} projects</span>
+        <div><p class='eyebrow'>精选项目</p><h2 id='featured-title'>精选项目</h2></div>
+        <span data-section-count>{featuredProjects.length} 个项目</span>
       </header>
       <div class='featured-grid'>
         {featuredProjects.map((project) => <ProjectCard {project} variant='featured' lens filterable />)}
@@ -91,8 +93,8 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
   {maintainedProjects.length > 0 && (
     <section class='project-block' data-project-section aria-labelledby='maintained-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>Recent & maintained</p><h2 id='maintained-title'>持续维护</h2></div>
-        <span data-section-count>{maintainedProjects.length} projects</span>
+        <div><p class='eyebrow'>近期维护</p><h2 id='maintained-title'>持续维护</h2></div>
+        <span data-section-count>{maintainedProjects.length} 个项目</span>
       </header>
       <div class='project-grid'>
         {maintainedProjects.map((project) => <ProjectCard {project} variant='grid' filterable anchor />)}
@@ -102,8 +104,8 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
   {archiveProjects.length > 0 && (
     <section class='project-block archive-block' data-project-section aria-labelledby='archive-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>Complete public record</p><h2 id='archive-title'>仓库归档</h2></div>
-        <span data-section-count>{archiveProjects.length} projects</span>
+        <div><p class='eyebrow'>完整记录</p><h2 id='archive-title'>仓库归档</h2></div>
+        <span data-section-count>{archiveProjects.length} 个项目</span>
       </header>
       <div class='archive-list'>
         {archiveProjects.map((project) => {
@@ -116,16 +118,16 @@ const statusLabel = (status: Project['status']) => ({ building: 'Building', acti
               <div class='archive-main'>
                 <span class:list={['archive-status', `archive-status--${project.status}`]}><i aria-hidden='true' /> {statusLabel(project.status)}</span>
                 <div class='archive-title-row'><h3>{project.title}</h3><span class='archive-source'>{sourceLabel(project.source)}</span></div>
-                <p>{project.description || 'No description published yet.'}</p>
+                <p>{project.description || '暂未发布项目说明。'}</p>
               </div>
               <div class='archive-meta'>
-                <span translate='no'>{project.language || technologies[0] || 'Open source'}</span>
+                <span translate='no'>{project.language || technologies[0] || '开源项目'}</span>
                 {project.stars > 0 && <span>{project.stars}★</span>}
                 <span>{formatUpdated(project.pushedAt)}</span>
               </div>
               <div class='archive-actions'>
-                {website && <a href={website} target='_blank' rel='noopener noreferrer'>Website <span aria-hidden='true'>↗</span></a>}
-                <a href={sourceFor(project)} target='_blank' rel='noopener noreferrer'>Source <span aria-hidden='true'>↗</span></a>
+                {website && <a href={website} target='_blank' rel='noopener noreferrer'>网站 <span aria-hidden='true'>↗</span></a>}
+                <a href={sourceFor(project)} target='_blank' rel='noopener noreferrer'>源码 <span aria-hidden='true'>↗</span></a>
               </div>
             </article>
           )

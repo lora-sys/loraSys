@@ -1,0 +1,84 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import CopyAction from '@/components/layout/CopyAction.astro'
+import type { SiteLocale } from '@/i18n/site'
+import { text } from '@/i18n/ui'
+import coverZh from '@/assets/projects/lora-v3-project-zhihu-threads-zh.webp'
+import coverEn from '@/assets/projects/lora-v3-project-zhihu-threads-en.webp'
+import flowZh from '@/assets/projects/lora-v3-zhihu-workflow-zh.webp'
+import flowEn from '@/assets/projects/lora-v3-zhihu-workflow-en.webp'
+interface Props { locale?: SiteLocale }
+const { locale = 'zh-CN' } = Astro.props
+const en = locale === 'en-US'
+const t = (zh: string, english: string) => text(locale, zh, english)
+const repository = 'https://github.com/lora-sys/zhihu-threads'
+const reviewedSource = `${repository}/tree/6c34a81e750b418620c0bb5be148427fd1f68d80`
+const description = t('从知乎摘要摘录中选择来源，组织可追问、自测的学习线。', 'Choose Zhihu source excerpts and build a learning thread with follow-up questions and self-tests.')
+const steps = [
+  { title: t('澄清问题', 'Clarify the question'), body: t('先明确学习意图，再检索候选。输入不够具体时，AI 帮助补充问题范围。', 'Clarify the learning intent before retrieval. When the question is vague, AI helps narrow its scope.') },
+  { title: t('检索摘录', 'Retrieve excerpts'), body: t('搜索返回知乎回答或专栏的摘要级摘录。每条候选保留来源类型和链接，不能当作完整正文。', 'Search returns summary-level excerpts from Zhihu answers or articles. Candidates retain their source type and link; they are not full article bodies.') },
+  { title: t('手动选源', 'Select sources'), body: t('AI 解释候选的用途和相关性，用户决定勾选哪些来源。未勾选的摘录不进入当前学习线的证据范围。', 'AI explains relevance and possible use. The user chooses the sources. Unselected excerpts stay outside the thread’s evidence boundary.') },
+  { title: t('追问自测', 'Follow up and self-test'), body: t('AI 根据选中的摘录生成学习节点、开放追问与自测题。线程内追问仍受这组证据约束，不足时保留未知项。', 'AI organizes selected excerpts into learning nodes, open questions and self-tests. Follow-up answers remain grounded in those excerpts and retain evidence gaps.') }
+]
+---
+<BaseLayout lang={locale} meta={{ title: 'Zhihu Threads', description }}>
+  <main class='case-page' data-zhihu-case>
+    <header>
+      <p class='kicker'>{t('项目说明', 'Project notes')}</p>
+      <h1>Zhihu Threads</h1>
+      <p class='lede'>{description}</p>
+      <nav class='case-actions' aria-label={t('项目入口', 'Project links')}>
+        <a href={repository} target='_blank' rel='noopener noreferrer'>{t('查看源码', 'View source')}</a>
+        <a href={en ? '/en/work#zhihu-threads' : '/projects#zhihu-threads'}>{t('返回作品', 'Back to work')}</a>
+        <CopyAction {locale} url />
+      </nav>
+    </header>
+    <figure>
+      <Image src={en ? coverEn : coverZh} alt={t('Lora 与 Mochi 在工作台整理知乎来源摘录的项目插画。', 'Project illustration of Lora and Mochi organizing source excerpts at their desk.')} widths={[640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='eager' fetchpriority='high' quality={85} />
+      <figcaption>{t('项目插画，非产品截图。', 'Project illustration, not a product screenshot.')}</figcaption>
+    </figure>
+    <section aria-labelledby='evidence-boundary'>
+      <h2 id='evidence-boundary'>{t('来源由用户选择', 'The user chooses the evidence')}</h2>
+      <p>{t('这个项目处理的是学习资料的组织，不是社交讨论社区。AI 可以帮助解释候选、整理线索，但不能悄悄改变用户选择的证据范围。', 'This project organizes learning material rather than hosting a social discussion community. AI can explain candidates and organize evidence, but cannot silently change the user’s source selection.')}</p>
+      <div class='step-explorer' data-evidence-explorer>
+        <div class='step-controls' role='group' aria-label={t('查看流程说明', 'Explore the workflow')}>
+          {steps.map((step, index) => <button type='button' data-evidence-step={index} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`evidence-step-${index}`}>{String(index+1).padStart(2,'0')} {step.title}</button>)}
+        </div>
+        <div class='step-panels'>
+          {steps.map((step,index) => <article id={`evidence-step-${index}`} data-evidence-panel={index}><h3>{step.title}</h3><p>{step.body}</p></article>)}
+        </div>
+        <p class='explainer-note'>{t('这是工作流程说明，不会调用模型或读取你的知乎账号。', 'This explains the workflow. It does not call a model or access your Zhihu account.')}</p>
+      </div>
+      <figure>
+        <Image src={en ? flowEn : flowZh} alt={t('流程示意。问题经澄清和检索后，由用户选择摘要摘录，再生成学习线。证据不足保持未知。', 'Workflow diagram. Clarify the question, retrieve excerpts, let the user select sources, then build a learning thread. Missing evidence stays unknown.')} widths={[640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='lazy' quality={85} />
+      </figure>
+    </section>
+    <section aria-labelledby='implementation'><h2 id='implementation'>{t('实现与边界', 'Implementation and limits')}</h2>
+      <dl>
+        <div><dt>{t('技术栈', 'Stack')}</dt><dd>TanStack Start · TypeScript · Tailwind CSS · Effect · SQLite</dd></div>
+        <div><dt>{t('检索范围', 'Retrieval')}</dt><dd>{t('使用官方接口返回的 ContentText 摘要，不抓取或补造完整正文。', 'Uses summary-level ContentText from the official API, not scraped or invented full article bodies.')}</dd></div>
+        <div><dt>{t('线程内追问', 'Thread follow-up')}</dt><dd>{t('只依据当前线程摘录回答。证据不足时标记 unknown 或 evidence_gap。', 'Answers from the current thread’s excerpts. Missing evidence is marked unknown or evidence_gap.')}</dd></div>
+        <div><dt>{t('运行记录', 'Run records')}</dt><dd>{t('仓库包含评测数据、JSON 运行轨迹和本地评测看板。此页不把测试数量当作质量分数，也不声称已经验证线上模型效果。', 'The repository includes evaluation data, JSON traces and a local evaluation dashboard. Test counts are not quality scores; this page does not claim verified live-model performance.')}</dd></div>
+      </dl>
+      <p class='source-note'>{t('本页依据 2026 年 9 月 9 日读取的仓库版本整理。功能以当前源码为准。', 'These notes were checked against the repository on September 9, 2026. Current source code remains authoritative.')} <a href={reviewedSource} target='_blank' rel='noopener noreferrer'>{t('查看核对版本', 'View reviewed revision')} 6c34a81</a></p>
+    </section>
+  </main>
+</BaseLayout>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-evidence-explorer]').forEach((root) => {
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-evidence-step]')]
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-evidence-panel]')]
+    if (!buttons.length || buttons.length !== panels.length) return
+    const activate = (index: number) => {
+      buttons.forEach((button,i) => button.setAttribute('aria-pressed', String(i === index)))
+      panels.forEach((panel,i) => { panel.hidden = i !== index })
+    }
+    buttons.forEach((button,index) => button.addEventListener('click', () => activate(index)))
+    activate(0)
+    root.dataset.enhanced = 'true'
+  })
+</script>
+<style>
+.case-page{max-width:62rem;margin:0 auto;display:grid;gap:2.5rem;padding:0 0 2rem}.case-page header{display:grid;gap:.8rem}.kicker{color:hsl(var(--field-amber));font-size:.8rem;font-weight:650}h1{font-size:clamp(2rem,6vw,4rem);line-height:1.12;letter-spacing:-.04em;margin:0}h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.3;margin:0 0 1rem}h3{font-size:1.05rem;margin:0 0 .5rem}p{font-size:1rem;line-height:1.8;margin:.5rem 0;color:hsl(var(--muted-foreground))}.lede{max-width:55ch;font-size:1.1rem}.case-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.6rem}.case-actions>a{display:inline-flex;align-items:center;min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.55rem;padding:.5rem .8rem;font-size:.85rem;text-decoration:none;color:hsl(var(--foreground))}figure{margin:1rem 0}figure :global(img){width:100%;height:auto;border:1px solid hsl(var(--border));border-radius:.85rem}figcaption{font-size:.8rem;line-height:1.6;color:hsl(var(--muted-foreground));margin-top:.5rem}.step-explorer{padding:1rem;border:1px solid hsl(var(--border));border-radius:.85rem;background:hsl(var(--card));margin-block:1.4rem}.step-controls{display:flex;flex-wrap:wrap;gap:.5rem}.step-controls button{min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.5rem;padding:.5rem .75rem;background:hsl(var(--background));color:hsl(var(--foreground));font:inherit;font-size:.88rem;cursor:pointer;transition:transform 150ms ease}.step-controls button[aria-pressed='true']{border-color:hsl(var(--foreground));box-shadow:inset 0 -3px hsl(var(--field-amber));font-weight:650}.step-controls button:active{transform:scale(.98)}button:focus-visible,a:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}.step-panels{min-height:9rem;padding-top:1rem}.step-panels article[hidden]{display:none}.step-explorer[data-enhanced='true'] .step-panels article:not([hidden]){animation:step-in 180ms ease}.explainer-note,.source-note{font-size:.85rem}.explainer-note{border-top:1px solid hsl(var(--border));padding-top:.8rem}dl{display:grid;gap:1rem}dl>div{border-top:1px solid hsl(var(--border));padding-top:1rem}dt{font-weight:650}dd{margin:.5rem 0 0;color:hsl(var(--muted-foreground));font-size:1rem;line-height:1.8}a{text-underline-offset:.2em}@keyframes step-in{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.step-controls button{transition:none}.step-controls button:active{transform:none}.step-explorer[data-enhanced='true'] .step-panels article:not([hidden]){animation:none}}@media(max-width:540px){.step-controls{display:grid;grid-template-columns:1fr 1fr}.step-panels{min-height:14rem}.case-page{gap:1.5rem}}
+</style>

@@ -1,7 +1,9 @@
 ---
 import { Image } from 'astro:assets'
+import { text } from '@/i18n/ui'
 import type { InferEntrySchema } from 'astro:content'
-import { FormattedDate, Icon } from 'astro-pure/user'
+import { Icon } from 'astro-pure/user'
+import FormattedDate from './LocalDate.astro'
 
 interface Props {
   data: InferEntrySchema<'blog'>
@@ -12,6 +14,8 @@ const {
   data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
   remarkPluginFrontmatter
 } = Astro.props
+const locale = language === 'en-US' ? 'en-US' : 'zh-CN'
+const t = (zh: string, en: string) => text(locale, zh, en)
 const dateTimeOptions: Intl.DateTimeFormatOptions = { month: 'short' }
 ---
 
@@ -28,23 +32,23 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = { month: 'short' }
   </div>
 )}
 
-{draft ? <span class='text-red-500'>(Draft)</span> : null}
+{draft ? <span class='text-red-500'>{t('草稿', 'Draft')}</span> : null}
 
 <div class='article-info max-lg:mx-auto'>
   <div class='flex flex-wrap gap-x-4 gap-y-2 text-xs leading-6 text-muted-foreground'>
     <div class='flex items-center gap-1'>
       <Icon name='calendar' class='size-5' />
-      <FormattedDate class='font-sans' date={publishDate} dateTimeOptions={dateTimeOptions} />
+      <FormattedDate {locale} class='font-sans' date={publishDate} dateTimeOptions={dateTimeOptions} />
       {updatedDate && (
         <div class='flex items-center gap-1'>
           <span> / </span>
-          <span>Update <FormattedDate class='font-sans' date={updatedDate} dateTimeOptions={dateTimeOptions} /></span>
+          <span>{t('更新', 'Updated')} <FormattedDate {locale} class='font-sans' date={updatedDate} dateTimeOptions={dateTimeOptions} /></span>
         </div>
       )}
     </div>
     <div class='flex items-center gap-1'>
       <Icon name='time' class='size-5' />
-      {remarkPluginFrontmatter.minutesRead}
+      {t(`约 ${String(remarkPluginFrontmatter.minutesRead).match(/\d+/)?.[0] ?? '1'} 分钟`, String(remarkPluginFrontmatter.minutesRead))}
     </div>
     {language && <span class='flex items-center gap-1'><Icon name='earth' class='size-5' />{language}</span>}
     {!!tags?.length && (
@@ -52,7 +56,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = { month: 'short' }
         <Icon name='hashtag' class='size-5' />
         {tags.map((tag: string, index: number) => (
           <Fragment>
-            <a aria-label={`View more blogs with the tag ${tag}`} class='hover:underline hover:underline-offset-4' data-pagefind-filter='tag' href={`/tags/${tag}`}>{tag}</a>
+            <a aria-label={t(`查看标签 ${tag} 的文章`, `View posts tagged ${tag}`)} class='hover:underline hover:underline-offset-4' data-pagefind-filter='tag' href={`/tags/${tag}`}>{tag}</a>
             {index < tags.length - 1 && '/'}
           </Fragment>
         ))}

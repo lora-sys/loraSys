@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-23T18:10:25.731Z",
+  "lastUpdated": "2026-09-09T01:23:16.573Z",
   "accounts": [
     {
       "owner": "lora-sys",
@@ -12,20 +12,16 @@
     }
   ],
   "totals": {
-    "publicRepositories": 151,
+    "publicRepositories": 144,
     "sourceRepositories": 2,
-    "includedProjects": 69,
-    "excludedRepositories": 83,
+    "includedProjects": 64,
+    "excludedRepositories": 81,
     "forks": 72
   },
   "mediaPolicy": "README screenshot or project preview first; otherwise GitHub official OpenGraph. All portfolio posters are stored locally as optimized WebP.",
   "exclusions": [
     {
-      "name": "living-answer",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "speech-to-speech",
+      "name": "Awesome-LLM",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -37,7 +33,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Awesome-LLM",
+      "name": "speech-to-speech",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -53,11 +49,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "qm",
+      "name": "Radeon-hackathon-2026-07",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "Radeon-hackathon-2026-07",
+      "name": "qm",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -81,23 +77,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "nano-vllm",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "development-rules",
       "reason": "Shared conventions and configuration only; no standalone software or experiment."
-    },
-    {
-      "name": "claw-code",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "cloud-mail",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "1",
+      "name": "nano-vllm",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "claw-code",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -105,15 +97,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "1",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "vibe-blog",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "whale-whisper",
+      "name": "langfuse",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "langfuse",
+      "name": "whale-whisper",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -129,15 +125,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "opencode",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "GenerativeAIExamples",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "PocketFlow",
+      "name": "cfnew",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "cfnew",
+      "name": "PocketFlow",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -149,15 +149,11 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "github-readme-stats",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "sutskever-30-implementations",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "FreeDomain",
+      "name": "github-readme-stats",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -165,19 +161,15 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "react-server-components",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "jaaz",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "opencode",
+      "name": "FreeDomain",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "papers-we-love",
+      "name": "react-server-components",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -185,23 +177,15 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "papers-we-love",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "deeplearning.ai",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "astro",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "mianshiya-next",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "generative-ai",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "agents",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -213,11 +197,23 @@
       "reason": "Empty repository with no committed implementation."
     },
     {
-      "name": "ai-agents-for-beginners",
+      "name": "agents",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "astro",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "mianshiya-next",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "generative-ai-for-beginners",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "ai-agents-for-beginners",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -229,23 +225,27 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "fastgithub",
-      "reason": "Empty repository with no committed implementation."
+      "name": "developer-roadmap",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "minnow",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "ml5-library",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "fastgithub",
+      "reason": "Empty repository with no committed implementation."
+    },
+    {
       "name": "ai-town",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "developer-roadmap",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "ml5-library",
+      "name": "EASTL",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -257,11 +257,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "linux",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "EASTL",
+      "name": "C-Plus-Plus",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -269,7 +265,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "C-Plus-Plus",
+      "name": "linux",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -281,6 +277,10 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "project-based-learning",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "calculator",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
@@ -289,20 +289,16 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "project-based-learning",
+      "name": "hello-algo",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "hello-algo",
+      "name": "REKCARC-TSC-UHT",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "cs50",
       "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "REKCARC-TSC-UHT",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
       "name": "30-Days-Of-Python",
@@ -313,15 +309,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "awesome-security-weixin-official-accounts",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
       "name": "LeetCode-Go",
-      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "CPlusPlusThings",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -329,11 +317,19 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
+      "name": "CPlusPlusThings",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
       "name": "shareOI",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "CS61A",
+      "name": "awesome-security-weixin-official-accounts",
+      "reason": "Forked repository; excluded to avoid presenting upstream work as original."
+    },
+    {
+      "name": "Learn-Web-Hacking",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -341,11 +337,7 @@
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "DIy-Model",
-      "reason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "Learn-Web-Hacking",
+      "name": "CS61A",
       "reason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
@@ -356,29 +348,151 @@
   "warnings": [],
   "inventory": [
     {
-      "name": "living-answer",
+      "name": "loraSys",
       "owner": "lora-sys",
-      "fullName": "lora-sys/living-answer",
-      "description": null,
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/living-answer",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
       "stars": 0,
       "fork": false,
       "archived": false,
       "languages": {
-        "TypeScript": 7767,
+        "Astro": 557955,
+        "TypeScript": 220688,
+        "JavaScript": 102307,
+        "XSLT": 80493,
+        "CSS": 13262,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-09-09T01:22:42Z",
+      "updatedAt": "2026-09-08T15:03:04Z",
+      "defaultBranch": "main",
+      "size": 139880,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "zhihu-threads",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/zhihu-threads",
+      "description": null,
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/zhihu-threads",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 619422,
+        "CSS": 5541,
         "Shell": 1296,
-        "CSS": 222
+        "Dockerfile": 975
       },
       "language": "TypeScript",
       "createdAt": "2026-08-23T07:41:39Z",
-      "pushedAt": "2026-08-23T18:09:07Z",
-      "updatedAt": "2026-08-23T18:09:29Z",
+      "pushedAt": "2026-09-08T14:26:13Z",
+      "updatedAt": "2026-09-04T14:52:51Z",
       "defaultBranch": "main",
-      "size": 0,
-      "included": false,
-      "exclusionReason": "Empty repository with no committed implementation."
+      "size": 4873,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "skills",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/skills",
+      "description": null,
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/skills",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 292439,
+        "Python": 140971,
+        "HTML": 46797,
+        "Shell": 5119
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-22T08:07:54Z",
+      "pushedAt": "2026-09-02T03:27:41Z",
+      "updatedAt": "2026-09-02T03:27:46Z",
+      "defaultBranch": "main",
+      "size": 17081,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "TrandingOs",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/TrandingOs",
+      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "topics": [
+        "backtesting",
+        "finance",
+        "market-data",
+        "trading",
+        "trading-bot",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/TrandingOs",
+      "stars": 2,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 1362100,
+        "CSS": 4826,
+        "JavaScript": 1493,
+        "Dockerfile": 1105,
+        "HTML": 670
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-06-09T03:37:14Z",
+      "pushedAt": "2026-08-31T09:32:24Z",
+      "updatedAt": "2026-08-22T18:49:53Z",
+      "defaultBranch": "main",
+      "size": 20914,
+      "included": true,
+      "exclusionReason": null
+    },
+    {
+      "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
+      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 5806783,
+        "TypeScript": 564513,
+        "HTML": 618,
+        "CSS": 100
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-14T11:35:56Z",
+      "pushedAt": "2026-08-30T14:36:29Z",
+      "updatedAt": "2026-08-30T14:37:33Z",
+      "defaultBranch": "main",
+      "size": 7449,
+      "included": true,
+      "exclusionReason": null
     },
     {
       "name": "packify-skill",
@@ -394,10 +508,10 @@
       "languages": {},
       "language": null,
       "createdAt": "2026-08-17T08:58:40Z",
-      "pushedAt": "2026-08-23T17:12:47Z",
-      "updatedAt": "2026-08-23T17:14:18Z",
+      "pushedAt": "2026-08-23T18:14:24Z",
+      "updatedAt": "2026-08-23T18:14:46Z",
       "defaultBranch": "main",
-      "size": 51907,
+      "size": 55068,
       "included": true,
       "exclusionReason": null
     },
@@ -418,10 +532,10 @@
       },
       "language": "JavaScript",
       "createdAt": "2026-08-17T02:55:22Z",
-      "pushedAt": "2026-08-23T17:12:45Z",
-      "updatedAt": "2026-08-23T17:12:52Z",
+      "pushedAt": "2026-08-23T18:14:20Z",
+      "updatedAt": "2026-08-23T18:14:45Z",
       "defaultBranch": "main",
-      "size": 28139,
+      "size": 30107,
       "included": true,
       "exclusionReason": null
     },
@@ -444,7 +558,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 27,
+      "stars": 33,
       "fork": false,
       "archived": false,
       "languages": {
@@ -454,10 +568,10 @@
       },
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-23T17:12:42Z",
-      "updatedAt": "2026-08-23T17:12:50Z",
+      "pushedAt": "2026-08-23T18:14:17Z",
+      "updatedAt": "2026-09-02T11:12:43Z",
       "defaultBranch": "main",
-      "size": 39503,
+      "size": 42250,
       "included": true,
       "exclusionReason": null
     },
@@ -493,31 +607,10 @@
       },
       "language": "TypeScript",
       "createdAt": "2026-08-01T08:04:35Z",
-      "pushedAt": "2026-08-23T17:12:39Z",
-      "updatedAt": "2026-08-23T17:12:47Z",
+      "pushedAt": "2026-08-23T18:14:14Z",
+      "updatedAt": "2026-08-23T18:14:32Z",
       "defaultBranch": "main",
-      "size": 10637,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "Glassbox-Agent-Harness",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/Glassbox-Agent-Harness",
-      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2026-08-14T11:35:56Z",
-      "pushedAt": "2026-08-23T17:12:36Z",
-      "updatedAt": "2026-08-23T17:12:45Z",
-      "defaultBranch": "main",
-      "size": 32,
+      "size": 13600,
       "included": true,
       "exclusionReason": null
     },
@@ -551,10 +644,10 @@
       },
       "language": "Shell",
       "createdAt": "2026-07-11T02:31:47Z",
-      "pushedAt": "2026-08-23T17:12:33Z",
-      "updatedAt": "2026-08-23T17:13:32Z",
+      "pushedAt": "2026-08-23T18:14:09Z",
+      "updatedAt": "2026-08-23T18:14:40Z",
       "defaultBranch": "main",
-      "size": 6506,
+      "size": 6508,
       "included": true,
       "exclusionReason": null
     },
@@ -577,72 +670,12 @@
       "languages": {},
       "language": null,
       "createdAt": "2025-08-07T01:03:49Z",
-      "pushedAt": "2026-08-23T17:12:31Z",
-      "updatedAt": "2026-08-23T17:12:39Z",
+      "pushedAt": "2026-08-23T18:14:06Z",
+      "updatedAt": "2026-08-23T18:14:14Z",
       "defaultBranch": "main",
-      "size": 5491,
+      "size": 8523,
       "included": false,
       "exclusionReason": "GitHub profile README; identity metadata rather than a software project."
-    },
-    {
-      "name": "skills",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/skills",
-      "description": null,
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/skills",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 46797,
-        "Python": 45998,
-        "Shell": 1784
-      },
-      "language": "HTML",
-      "createdAt": "2026-08-22T08:07:54Z",
-      "pushedAt": "2026-08-23T17:04:44Z",
-      "updatedAt": "2026-08-23T17:06:34Z",
-      "defaultBranch": "main",
-      "size": 16358,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "loraSys",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Astro": 515602,
-        "TypeScript": 200041,
-        "XSLT": 80493,
-        "JavaScript": 73420,
-        "CSS": 10512,
-        "MDX": 2857
-      },
-      "language": "Astro",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-22T09:36:44Z",
-      "updatedAt": "2026-08-22T09:36:49Z",
-      "defaultBranch": "main",
-      "size": 129127,
-      "included": true,
-      "exclusionReason": null
     },
     {
       "name": "speech-to-speech",
@@ -798,40 +831,6 @@
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
     },
     {
-      "name": "TrandingOs",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/TrandingOs",
-      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
-      "topics": [
-        "backtesting",
-        "finance",
-        "market-data",
-        "trading",
-        "trading-bot",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/TrandingOs",
-      "stars": 2,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 1362100,
-        "CSS": 4826,
-        "JavaScript": 1493,
-        "Dockerfile": 1105,
-        "HTML": 670
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-06-09T03:37:14Z",
-      "pushedAt": "2026-08-17T09:32:48Z",
-      "updatedAt": "2026-08-22T18:49:53Z",
-      "defaultBranch": "main",
-      "size": 20911,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
       "name": "Vibe-Trading",
       "owner": "lora-sys",
       "fullName": "lora-sys/Vibe-Trading",
@@ -861,42 +860,6 @@
       "size": 62880,
       "included": false,
       "exclusionReason": "Forked repository; excluded to avoid presenting upstream work as original."
-    },
-    {
-      "name": "ReposTwin",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/ReposTwin",
-      "description": "Convert GitHub repos into interactive 3D code galaxies with an AI agent sidebar",
-      "topics": [
-        "3d",
-        "ai-agent",
-        "fastapi",
-        "github",
-        "three-js",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/ReposTwin",
-      "stars": 1,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 1154377,
-        "Python": 465735,
-        "TypeScript": 229467,
-        "JavaScript": 47621,
-        "CSS": 11279,
-        "Shell": 8114,
-        "Dockerfile": 6179
-      },
-      "language": "HTML",
-      "createdAt": "2026-04-20T06:17:01Z",
-      "pushedAt": "2026-08-10T03:41:04Z",
-      "updatedAt": "2026-07-14T08:07:08Z",
-      "defaultBranch": "main",
-      "size": 10815,
-      "included": true,
-      "exclusionReason": null
     },
     {
       "name": "teaching-html-story-deck",
@@ -1190,42 +1153,6 @@
       "exclusionReason": null
     },
     {
-      "name": "Pixel-Heart-OS-",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Pixel-Heart-OS-",
-      "description": "Pixel Heart OS 是一个以女主配置驱动全局生成、结合 Git 式记忆管理（Beads）与 AI 协作编辑的涌现型社会宇宙模拟系统",
-      "topics": [
-        "agent",
-        "ai",
-        "python",
-        "simulation"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Pixel-Heart-OS-",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 188757,
-        "HTML": 55292,
-        "Svelte": 13980,
-        "JavaScript": 4367,
-        "TypeScript": 4139,
-        "Shell": 1738,
-        "Makefile": 1086,
-        "Mako": 635,
-        "Dockerfile": 457
-      },
-      "language": "Python",
-      "createdAt": "2026-03-15T04:25:17Z",
-      "pushedAt": "2026-07-14T16:37:50Z",
-      "updatedAt": "2026-07-14T16:38:49Z",
-      "defaultBranch": "main",
-      "size": 12973,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
       "name": "ecomatrix",
       "owner": "lora-sys",
       "fullName": "lora-sys/ecomatrix",
@@ -1425,33 +1352,6 @@
       "updatedAt": "2026-07-14T05:09:44Z",
       "defaultBranch": "main",
       "size": 124,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "Defect-Supervised",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Defect-Supervised",
-      "description": "Supervised defect-detection experiments",
-      "topics": [
-        "defect-detection",
-        "python",
-        "supervised-learning"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Defect-Supervised",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 215978
-      },
-      "language": "Python",
-      "createdAt": "2026-05-31T12:45:01Z",
-      "pushedAt": "2026-06-29T14:09:42Z",
-      "updatedAt": "2026-07-11T09:21:51Z",
-      "defaultBranch": "main",
-      "size": 87,
       "included": true,
       "exclusionReason": null
     },
@@ -1675,33 +1575,6 @@
       "exclusionReason": null
     },
     {
-      "name": "Defect-Semi-supervised",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Defect-Semi-supervised",
-      "description": "Semi-supervised defect-detection experiments",
-      "topics": [
-        "defect-detection",
-        "python",
-        "semi-supervised"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Defect-Semi-supervised",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 181103
-      },
-      "language": "Python",
-      "createdAt": "2026-05-31T12:46:53Z",
-      "pushedAt": "2026-06-03T13:28:29Z",
-      "updatedAt": "2026-07-11T09:21:58Z",
-      "defaultBranch": "main",
-      "size": 19144,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
       "name": "JonLinker",
       "owner": "lora-sys",
       "fullName": "lora-sys/JonLinker",
@@ -1822,58 +1695,6 @@
       "updatedAt": "2026-07-11T09:21:47Z",
       "defaultBranch": "main",
       "size": 2298,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "DIy-Model",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/DIy-Model",
-      "description": "DIY-model training playground",
-      "topics": [
-        "diy",
-        "machine-learning",
-        "python"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/DIy-Model",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2026-05-05T07:04:07Z",
-      "pushedAt": "2026-05-05T07:06:56Z",
-      "updatedAt": "2026-07-11T09:22:02Z",
-      "defaultBranch": "main",
-      "size": 0,
-      "included": false,
-      "exclusionReason": "Empty repository with no committed implementation."
-    },
-    {
-      "name": "demo-repository",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/demo-repository",
-      "description": "A code repository designed to show the best GitHub has to offer.",
-      "topics": [
-        "github",
-        "html",
-        "showcase"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/demo-repository",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 64
-      },
-      "language": "HTML",
-      "createdAt": "2026-05-05T06:54:27Z",
-      "pushedAt": "2026-05-05T06:55:22Z",
-      "updatedAt": "2026-07-11T09:22:18Z",
-      "defaultBranch": "main",
-      "size": 3,
       "included": true,
       "exclusionReason": null
     },
@@ -2286,36 +2107,6 @@
       "updatedAt": "2026-07-14T05:09:48Z",
       "defaultBranch": "main",
       "size": 1642,
-      "included": true,
-      "exclusionReason": null
-    },
-    {
-      "name": "git-opilot",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/git-opilot",
-      "description": "git-copilot is an intelligent CLI code collaboration assistant that integrates deeply with local Git repositories.",
-      "topics": [
-        "ai",
-        "cli",
-        "git",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/git-opilot",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 331573,
-        "JavaScript": 10231,
-        "Shell": 105
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-03-15T11:38:15Z",
-      "pushedAt": "2026-03-17T13:20:03Z",
-      "updatedAt": "2026-07-11T09:22:23Z",
-      "defaultBranch": "main",
-      "size": 385,
       "included": true,
       "exclusionReason": null
     },
@@ -4957,6 +4748,228 @@
     }
   ],
   "projects": {
+    "lora-sys/lorasys": {
+      "name": "loraSys",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/loraSys",
+      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
+      "topics": [
+        "github-pages",
+        "personal-site",
+        "portfolio",
+        "svelte",
+        "sveltekit",
+        "typescript"
+      ],
+      "homepage": "https://lora-sys.github.io/loraSys",
+      "url": "https://github.com/lora-sys/loraSys",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "Astro": 557955,
+        "TypeScript": 220688,
+        "JavaScript": 102307,
+        "XSLT": 80493,
+        "CSS": 13262,
+        "MDX": 2857
+      },
+      "language": "Astro",
+      "createdAt": "2026-02-26T16:07:19Z",
+      "pushedAt": "2026-09-09T01:22:42Z",
+      "updatedAt": "2026-09-08T15:03:04Z",
+      "defaultBranch": "main",
+      "size": 139880,
+      "title": "LoraSys",
+      "summary": "基于 Astro 的个人站，收录项目、构建笔记和公开贡献，通过 GitHub Pages 发布。",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "Apps"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "readme",
+        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
+        "localFile": "github-lora-sys-lorasys.webp",
+        "fit": "contain",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/zhihu-threads": {
+      "name": "zhihu-threads",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/zhihu-threads",
+      "description": null,
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/zhihu-threads",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 619422,
+        "CSS": 5541,
+        "Shell": 1296,
+        "Dockerfile": 975
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-08-23T07:41:39Z",
+      "pushedAt": "2026-09-08T14:26:13Z",
+      "updatedAt": "2026-09-04T14:52:51Z",
+      "defaultBranch": "main",
+      "size": 4873,
+      "title": "Zhihu Threads",
+      "summary": "从知乎回答与专栏摘录中选择来源，生成可追问、自测和导出的学习线。",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Featured",
+        "Open Source"
+      ],
+      "featuredRank": 13,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://lora-v3-project-zhihu-threads-zh.webp",
+        "localFile": "lora-v3-project-zhihu-threads-zh.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/skills": {
+      "name": "skills",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/skills",
+      "description": null,
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/skills",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 292439,
+        "Python": 140971,
+        "HTML": 46797,
+        "Shell": 5119
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-22T08:07:54Z",
+      "pushedAt": "2026-09-02T03:27:41Z",
+      "updatedAt": "2026-09-02T03:27:46Z",
+      "defaultBranch": "main",
+      "size": 17081,
+      "title": "Lora Skills",
+      "summary": "一个可安装的个人 Agent Skills 集合，覆盖个人站发布、AI 工程、内容表达与开源工作流，可通过 npx skills add 安装到 Codex 等兼容 Agent。",
+      "kind": "owned",
+      "status": "active",
+      "categories": [
+        "Open Source",
+        "AI Agents",
+        "Tools"
+      ],
+      "featuredRank": null,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://lora-v1-project-lora-skills.webp",
+        "localFile": "lora-v1-project-lora-skills.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/trandingos": {
+      "name": "TrandingOs",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/TrandingOs",
+      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
+      "topics": [
+        "backtesting",
+        "finance",
+        "market-data",
+        "trading",
+        "trading-bot",
+        "typescript"
+      ],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/TrandingOs",
+      "stars": 2,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "TypeScript": 1362100,
+        "CSS": 4826,
+        "JavaScript": 1493,
+        "Dockerfile": 1105,
+        "HTML": 670
+      },
+      "language": "TypeScript",
+      "createdAt": "2026-06-09T03:37:14Z",
+      "pushedAt": "2026-08-31T09:32:24Z",
+      "updatedAt": "2026-08-22T18:49:53Z",
+      "defaultBranch": "main",
+      "size": 20914,
+      "title": "TradingOS",
+      "summary": "A personal trading operations dashboard that brings market data, positions, backtests and execution checks into one TypeScript workspace.",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Featured",
+        "Open Source",
+        "Tools",
+        "Apps"
+      ],
+      "featuredRank": 10,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://lora-v1-project-trading-os.webp",
+        "localFile": "lora-v1-project-trading-os.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
+    "lora-sys/glassbox-agent-harness": {
+      "name": "Glassbox-Agent-Harness",
+      "owner": "lora-sys",
+      "fullName": "lora-sys/Glassbox-Agent-Harness",
+      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "topics": [],
+      "homepage": null,
+      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
+      "stars": 0,
+      "fork": false,
+      "archived": false,
+      "languages": {
+        "JavaScript": 5806783,
+        "TypeScript": 564513,
+        "HTML": 618,
+        "CSS": 100
+      },
+      "language": "JavaScript",
+      "createdAt": "2026-08-14T11:35:56Z",
+      "pushedAt": "2026-08-30T14:36:29Z",
+      "updatedAt": "2026-08-30T14:37:33Z",
+      "defaultBranch": "main",
+      "size": 7449,
+      "title": "Glassbox Agent Harness",
+      "summary": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
+      "kind": "owned",
+      "status": "building",
+      "categories": [
+        "Featured",
+        "Open Source",
+        "AI Agents",
+        "Tools"
+      ],
+      "featuredRank": 1,
+      "poster": {
+        "kind": "generated",
+        "sourceUrl": "local://lora-v1-project-glassbox.webp",
+        "localFile": "lora-v1-project-glassbox.webp",
+        "fit": "cover",
+        "objectPosition": "center"
+      }
+    },
     "lora-sys/packify-skill": {
       "name": "packify-skill",
       "owner": "lora-sys",
@@ -4971,10 +4984,10 @@
       "languages": {},
       "language": null,
       "createdAt": "2026-08-17T08:58:40Z",
-      "pushedAt": "2026-08-23T17:12:47Z",
-      "updatedAt": "2026-08-23T17:14:18Z",
+      "pushedAt": "2026-08-23T18:14:24Z",
+      "updatedAt": "2026-08-23T18:14:46Z",
       "defaultBranch": "main",
-      "size": 51907,
+      "size": 55068,
       "title": "Packify Skill",
       "summary": "An image-to-collectible skill that turns a supplied subject into a faithful, commercially believable packaged object.",
       "kind": "owned",
@@ -5010,10 +5023,10 @@
       },
       "language": "JavaScript",
       "createdAt": "2026-08-17T02:55:22Z",
-      "pushedAt": "2026-08-23T17:12:45Z",
-      "updatedAt": "2026-08-23T17:12:52Z",
+      "pushedAt": "2026-08-23T18:14:20Z",
+      "updatedAt": "2026-08-23T18:14:45Z",
       "defaultBranch": "main",
-      "size": 28139,
+      "size": 30107,
       "title": "Nano Sglang Interactive Guide",
       "summary": "https://lora-sys.github.io/nano-sglang-interactive-guide/",
       "kind": "owned",
@@ -5050,7 +5063,7 @@
       ],
       "homepage": "https://lora-sys.github.io/nano-vllm-interactive-guide/",
       "url": "https://github.com/lora-sys/nano-vllm-interactive-guide",
-      "stars": 27,
+      "stars": 33,
       "fork": false,
       "archived": false,
       "languages": {
@@ -5060,10 +5073,10 @@
       },
       "language": "JavaScript",
       "createdAt": "2026-08-02T14:49:28Z",
-      "pushedAt": "2026-08-23T17:12:42Z",
-      "updatedAt": "2026-08-23T17:12:50Z",
+      "pushedAt": "2026-08-23T18:14:17Z",
+      "updatedAt": "2026-09-02T11:12:43Z",
       "defaultBranch": "main",
-      "size": 39503,
+      "size": 42250,
       "title": "nano-vLLM Interactive Guide",
       "summary": "An interactive Chinese source-code guide to LLM inference: 13 browser experiments make continuous batching, KV cache, paged attention and scheduling visible.",
       "kind": "owned",
@@ -5115,10 +5128,10 @@
       },
       "language": "TypeScript",
       "createdAt": "2026-08-01T08:04:35Z",
-      "pushedAt": "2026-08-23T17:12:39Z",
-      "updatedAt": "2026-08-23T17:12:47Z",
+      "pushedAt": "2026-08-23T18:14:14Z",
+      "updatedAt": "2026-08-23T18:14:32Z",
       "defaultBranch": "main",
-      "size": 10637,
+      "size": 13600,
       "title": "Free Vision Skill",
       "summary": "A low-token visual evidence compiler for text-only coding agents. Convert images into compact Visual Evidence Packets (VEP) for DeepSeek, Codex, Claude Code, and other text-only models.",
       "kind": "owned",
@@ -5134,43 +5147,6 @@
         "kind": "generated",
         "sourceUrl": "local://lora-v1-project-free-vision.webp",
         "localFile": "lora-v1-project-free-vision.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/glassbox-agent-harness": {
-      "name": "Glassbox-Agent-Harness",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/Glassbox-Agent-Harness",
-      "description": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/Glassbox-Agent-Harness",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {},
-      "language": null,
-      "createdAt": "2026-08-14T11:35:56Z",
-      "pushedAt": "2026-08-23T17:12:36Z",
-      "updatedAt": "2026-08-23T17:12:45Z",
-      "defaultBranch": "main",
-      "size": 32,
-      "title": "Glassbox Agent Harness",
-      "summary": "面向AI Agent 的飞行记录器与评测实验室，让每一次行动可观察，每一份上下文可追溯，每一次优化都有证据。",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "AI Agents",
-        "Tools"
-      ],
-      "featuredRank": 1,
-      "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://lora-v1-project-glassbox.webp",
-        "localFile": "lora-v1-project-glassbox.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -5205,10 +5181,10 @@
       },
       "language": "Shell",
       "createdAt": "2026-07-11T02:31:47Z",
-      "pushedAt": "2026-08-23T17:12:33Z",
-      "updatedAt": "2026-08-23T17:13:32Z",
+      "pushedAt": "2026-08-23T18:14:09Z",
+      "updatedAt": "2026-08-23T18:14:40Z",
       "defaultBranch": "main",
-      "size": 6506,
+      "size": 6508,
       "title": "AI Engineering Harness",
       "summary": "AI-native software engineering harness — 18 agents, 9 workflows, one closed loop: Issue → Worktree → Plan → Build → Review → Evidence → Merge → Memory.",
       "kind": "owned",
@@ -5225,95 +5201,6 @@
         "sourceUrl": "local://lora-v1-project-ai-engineering-harness.webp",
         "localFile": "lora-v1-project-ai-engineering-harness.webp",
         "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/skills": {
-      "name": "skills",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/skills",
-      "description": null,
-      "topics": [],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/skills",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 46797,
-        "Python": 45998,
-        "Shell": 1784
-      },
-      "language": "HTML",
-      "createdAt": "2026-08-22T08:07:54Z",
-      "pushedAt": "2026-08-23T17:04:44Z",
-      "updatedAt": "2026-08-23T17:06:34Z",
-      "defaultBranch": "main",
-      "size": 16358,
-      "title": "Lora Skills",
-      "summary": "一个可安装的个人 Agent Skills 集合，覆盖个人站发布、AI 工程、内容表达与开源工作流，可通过 npx skills add 安装到 Codex 等兼容 Agent。",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "AI Agents",
-        "Tools"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://lora-v1-project-lora-skills.webp",
-        "localFile": "lora-v1-project-lora-skills.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/lorasys": {
-      "name": "loraSys",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/loraSys",
-      "description": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "topics": [
-        "github-pages",
-        "personal-site",
-        "portfolio",
-        "svelte",
-        "sveltekit",
-        "typescript"
-      ],
-      "homepage": "https://lora-sys.github.io/loraSys",
-      "url": "https://github.com/lora-sys/loraSys",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Astro": 515602,
-        "TypeScript": 200041,
-        "XSLT": 80493,
-        "JavaScript": 73420,
-        "CSS": 10512,
-        "MDX": 2857
-      },
-      "language": "Astro",
-      "createdAt": "2026-02-26T16:07:19Z",
-      "pushedAt": "2026-08-22T09:36:44Z",
-      "updatedAt": "2026-08-22T09:36:49Z",
-      "defaultBranch": "main",
-      "size": 129127,
-      "title": "LoraSys",
-      "summary": "Personal portfolio site built with Svelte/SvelteKit — dark mode, motion-rich sections, deployed via GitHub Pages.",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Apps"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/lora-sys/loraSys/main/assets/readme/hero.svg",
-        "localFile": "github-lora-sys-lorasys.webp",
-        "fit": "contain",
         "objectPosition": "center"
       }
     },
@@ -5362,56 +5249,6 @@
         "kind": "generated",
         "sourceUrl": "local://lora-v1-project-multimodal-health.webp",
         "localFile": "lora-v1-project-multimodal-health.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "lora-sys/trandingos": {
-      "name": "TrandingOs",
-      "owner": "lora-sys",
-      "fullName": "lora-sys/TrandingOs",
-      "description": "Personal Trading Operating System — market data, position tracking, backtesting, and execution in one TypeScript dashboard.",
-      "topics": [
-        "backtesting",
-        "finance",
-        "market-data",
-        "trading",
-        "trading-bot",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/lora-sys/TrandingOs",
-      "stars": 2,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 1362100,
-        "CSS": 4826,
-        "JavaScript": 1493,
-        "Dockerfile": 1105,
-        "HTML": 670
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-06-09T03:37:14Z",
-      "pushedAt": "2026-08-17T09:32:48Z",
-      "updatedAt": "2026-08-22T18:49:53Z",
-      "defaultBranch": "main",
-      "size": 20911,
-      "title": "TradingOS",
-      "summary": "A personal trading operations dashboard that brings market data, positions, backtests and execution checks into one TypeScript workspace.",
-      "kind": "owned",
-      "status": "building",
-      "categories": [
-        "Featured",
-        "Open Source",
-        "Tools",
-        "Apps"
-      ],
-      "featuredRank": 10,
-      "poster": {
-        "kind": "generated",
-        "sourceUrl": "local://lora-v1-project-trading-os.webp",
-        "localFile": "lora-v1-project-trading-os.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -7569,188 +7406,6 @@
         "objectPosition": "center"
       }
     },
-    "acamlab/repostwin": {
-      "name": "ReposTwin",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/ReposTwin",
-      "description": "Convert GitHub repos into interactive 3D code galaxies with an AI agent sidebar",
-      "topics": [
-        "3d",
-        "ai-agent",
-        "fastapi",
-        "github",
-        "three-js",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/ReposTwin",
-      "stars": 1,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 1154377,
-        "Python": 465735,
-        "TypeScript": 229467,
-        "JavaScript": 47621,
-        "CSS": 11279,
-        "Shell": 8114,
-        "Dockerfile": 6179
-      },
-      "language": "HTML",
-      "createdAt": "2026-04-20T06:17:01Z",
-      "pushedAt": "2026-08-10T03:41:04Z",
-      "updatedAt": "2026-07-14T08:07:08Z",
-      "defaultBranch": "main",
-      "size": 10815,
-      "title": "ReposTwin",
-      "summary": "Convert GitHub repos into interactive 3D code galaxies with an AI agent sidebar",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "AI Agents",
-        "Apps"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/ACAMLab/ReposTwin/main/docs/evidence/redesign-screenshots/17-hero-with-recent.png",
-        "localFile": "github-acamlab-repostwin.webp",
-        "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "acamlab/pixel-heart-os-": {
-      "name": "Pixel-Heart-OS-",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Pixel-Heart-OS-",
-      "description": "Pixel Heart OS 是一个以女主配置驱动全局生成、结合 Git 式记忆管理（Beads）与 AI 协作编辑的涌现型社会宇宙模拟系统",
-      "topics": [
-        "agent",
-        "ai",
-        "python",
-        "simulation"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Pixel-Heart-OS-",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 188757,
-        "HTML": 55292,
-        "Svelte": 13980,
-        "JavaScript": 4367,
-        "TypeScript": 4139,
-        "Shell": 1738,
-        "Makefile": 1086,
-        "Mako": 635,
-        "Dockerfile": 457
-      },
-      "language": "Python",
-      "createdAt": "2026-03-15T04:25:17Z",
-      "pushedAt": "2026-07-14T16:37:50Z",
-      "updatedAt": "2026-07-14T16:38:49Z",
-      "defaultBranch": "main",
-      "size": 12973,
-      "title": "Pixel Heart OS ",
-      "summary": "Pixel Heart OS 是一个以女主配置驱动全局生成、结合 Git 式记忆管理（Beads）与 AI 协作编辑的涌现型社会宇宙模拟系统",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "AI Agents"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "readme",
-        "sourceUrl": "https://raw.githubusercontent.com/ACAMLab/Pixel-Heart-OS-/main/docs/screenshots/dossier.svg",
-        "localFile": "github-acamlab-pixel-heart-os-.webp",
-        "fit": "contain",
-        "objectPosition": "center"
-      }
-    },
-    "acamlab/defect-supervised": {
-      "name": "Defect-Supervised",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Defect-Supervised",
-      "description": "Supervised defect-detection experiments",
-      "topics": [
-        "defect-detection",
-        "python",
-        "supervised-learning"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Defect-Supervised",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 215978
-      },
-      "language": "Python",
-      "createdAt": "2026-05-31T12:45:01Z",
-      "pushedAt": "2026-06-29T14:09:42Z",
-      "updatedAt": "2026-07-11T09:21:51Z",
-      "defaultBranch": "main",
-      "size": 87,
-      "title": "Defect Supervised",
-      "summary": "Supervised defect-detection experiments",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Learning"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://avatars.githubusercontent.com/u/281853622?s=400&v=4",
-        "localFile": "github-acamlab-defect-supervised.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "acamlab/defect-semi-supervised": {
-      "name": "Defect-Semi-supervised",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/Defect-Semi-supervised",
-      "description": "Semi-supervised defect-detection experiments",
-      "topics": [
-        "defect-detection",
-        "python",
-        "semi-supervised"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/Defect-Semi-supervised",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "Python": 181103
-      },
-      "language": "Python",
-      "createdAt": "2026-05-31T12:46:53Z",
-      "pushedAt": "2026-06-03T13:28:29Z",
-      "updatedAt": "2026-07-11T09:21:58Z",
-      "defaultBranch": "main",
-      "size": 19144,
-      "title": "Defect Semi Supervised",
-      "summary": "Semi-supervised defect-detection experiments",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://avatars.githubusercontent.com/u/281853622?s=400&v=4",
-        "localFile": "github-acamlab-defect-semi-supervised.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
     "acamlab/nanoagent": {
       "name": "NanoAgent",
       "owner": "ACAMLab",
@@ -7790,46 +7445,6 @@
         "kind": "github-opengraph",
         "sourceUrl": "https://opengraph.githubassets.com/e016b5341b7999ab8fbbd8e38238455e926c1b05ce39a9567a60dd5c57fc89d6/ACAMLab/NanoAgent",
         "localFile": "github-acamlab-nanoagent.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "acamlab/demo-repository": {
-      "name": "demo-repository",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/demo-repository",
-      "description": "A code repository designed to show the best GitHub has to offer.",
-      "topics": [
-        "github",
-        "html",
-        "showcase"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/demo-repository",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "HTML": 64
-      },
-      "language": "HTML",
-      "createdAt": "2026-05-05T06:54:27Z",
-      "pushedAt": "2026-05-05T06:55:22Z",
-      "updatedAt": "2026-07-11T09:22:18Z",
-      "defaultBranch": "main",
-      "size": 3,
-      "title": "Demo Repository",
-      "summary": "A code repository designed to show the best GitHub has to offer.",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://avatars.githubusercontent.com/u/281853622?s=400&v=4",
-        "localFile": "github-acamlab-demo-repository.webp",
         "fit": "cover",
         "objectPosition": "center"
       }
@@ -7957,50 +7572,6 @@
         "kind": "github-opengraph",
         "sourceUrl": "https://opengraph.githubassets.com/cb0b5c33fc97ba1df667983e95a6c96a933dfefe4a34b49fa28fc874f887fb14/ACAMLab/redis-go",
         "localFile": "github-acamlab-redis-go.webp",
-        "fit": "cover",
-        "objectPosition": "center"
-      }
-    },
-    "acamlab/git-opilot": {
-      "name": "git-opilot",
-      "owner": "ACAMLab",
-      "fullName": "ACAMLab/git-opilot",
-      "description": "git-copilot is an intelligent CLI code collaboration assistant that integrates deeply with local Git repositories.",
-      "topics": [
-        "ai",
-        "cli",
-        "git",
-        "typescript"
-      ],
-      "homepage": null,
-      "url": "https://github.com/ACAMLab/git-opilot",
-      "stars": 0,
-      "fork": false,
-      "archived": false,
-      "languages": {
-        "TypeScript": 331573,
-        "JavaScript": 10231,
-        "Shell": 105
-      },
-      "language": "TypeScript",
-      "createdAt": "2026-03-15T11:38:15Z",
-      "pushedAt": "2026-03-17T13:20:03Z",
-      "updatedAt": "2026-07-11T09:22:23Z",
-      "defaultBranch": "main",
-      "size": 385,
-      "title": "Git Opilot",
-      "summary": "git-copilot is an intelligent CLI code collaboration assistant that integrates deeply with local Git repositories.",
-      "kind": "owned",
-      "status": "active",
-      "categories": [
-        "Open Source",
-        "Tools"
-      ],
-      "featuredRank": null,
-      "poster": {
-        "kind": "github-opengraph",
-        "sourceUrl": "https://avatars.githubusercontent.com/u/281853622?s=400&v=4",
-        "localFile": "github-acamlab-git-opilot.webp",
         "fit": "cover",
         "objectPosition": "center"
       }

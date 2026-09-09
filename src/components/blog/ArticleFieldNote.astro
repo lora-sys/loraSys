@@ -6,12 +6,20 @@ interface Props {
   image: ImageMetadata
   label: string
   caption: string
+  locale?: 'zh-CN' | 'en-US'
 }
 
-const { image, label, caption } = Astro.props
+const { image, label, caption, locale = 'zh-CN' } = Astro.props
+const notes: Record<string, [string, string]> = {
+  'Agent runbook': ['智能体运行记录', '记录文章讨论的系统、工具与任务交接。'],
+  'Media workbench': ['多媒体工作台', '记录素材、队列与工具调用的实现。'],
+  'Sandbox specimen': ['沙盒实验', '检查隔离边界、访问权限与执行过程。'],
+  'Shipping log': ['构建记录', '记录开发、发布与运行时的取舍。']
+}
+const [localLabel, localCaption] = locale === 'zh-CN' ? notes[label] ?? [label, caption] : [label, caption]
 ---
 
-<aside class='article-field-note not-prose' aria-label={label}>
+<aside class='article-field-note not-prose' aria-label={localLabel}>
   <Image
     src={image}
     alt=''
@@ -23,8 +31,8 @@ const { image, label, caption } = Astro.props
     decoding='async'
   />
   <div>
-    <p>{label}</p>
-    <span>{caption}</span>
+    <p>{localLabel}</p>
+    <span>{localCaption}</span>
   </div>
 </aside>
 

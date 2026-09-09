@@ -1,4 +1,5 @@
 ---
+import { displayLabel, dateLabel } from '@/i18n/ui'
 import type { Project } from '@/data/projects'
 import { getProjectStories } from '@/data/project-stories'
 
@@ -12,11 +13,11 @@ const { projects } = Astro.props
 <section id='content-graph' class='content-graph' aria-labelledby='content-graph-title'>
   <div class='graph-heading'>
     <div>
-      <p class='eyebrow'>Content Graph</p>
-      <h2 id='content-graph-title'>顺着仓库之外看这条工作线。</h2>
+      <p class='eyebrow'>项目与文章</p>
+      <h2 id='content-graph-title'>查看项目的关联记录</h2>
     </div>
     <p>
-      A curated trail from shipped projects to the writing and channels that explain how they were made.
+      从项目进入构建笔记、技术文章和创作主页。
     </p>
   </div>
 
@@ -25,14 +26,14 @@ const { projects } = Astro.props
       const stories = getProjectStories(project.repository)
       return (
         <article class='graph-node'>
-          <div class='node-meta' aria-label={`${project.title} project context`}>
+          <div class='node-meta' aria-label={`${project.title} 项目信息`}>
             <span>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>
-            <span>{project.status}</span>
-            <span>Updated {new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}</span>
+            <span>{displayLabel(project.status, 'zh-CN')}</span>
+            <span>更新于 {dateLabel(project.pushedAt, 'zh-CN')}</span>
           </div>
           <div class='node-main'>
-            <a class='node-title' href={`/projects#${project.repository}`} aria-label={`${project.title}, ${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'} project`}>{project.title}<span aria-hidden='true'>↗</span></a>
-            <div class='node-links' aria-label={`Content links for ${project.title}`}>
+            <a class='node-title' href={`/projects#${project.repository}`} aria-label={`${project.title}, ${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'} 的项目`}>{project.title}<span aria-hidden='true'>↗</span></a>
+            <div class='node-links' aria-label={`${project.title} 的关联内容`}>
               {stories.map((story) => (
                 <a
                   href={story.href}
@@ -41,7 +42,7 @@ const { projects } = Astro.props
                   data-interaction='content_graph_link'
                   data-destination={story.kind}
                 >
-                  <span>{story.kind}</span> {story.label} <span aria-hidden='true'>↗</span>
+                  <span>{displayLabel(story.kind, 'zh-CN')}</span> {story.label} <span aria-hidden='true'>↗</span>
                 </a>
               ))}
             </div>

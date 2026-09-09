@@ -1,4 +1,5 @@
 ---
+import { displayLabel } from '@/i18n/ui'
 import type { ContentOpportunity } from '@/data/content-intelligence'
 
 export type DirectoryKind = 'Writing' | 'Channel' | 'Project' | 'Contribution'
@@ -25,7 +26,7 @@ interface Props {
 }
 
 const { items, opportunities, audit } = Astro.props
-const syncDate = new Intl.DateTimeFormat('en-US', {
+const syncDate = new Intl.DateTimeFormat('zh-CN', {
   month: 'short',
   day: 'numeric',
   year: 'numeric',
@@ -36,46 +37,46 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
 <section id='content-directory' class='content-directory' aria-labelledby='content-directory-title'>
   <div class='directory-heading'>
     <div>
-      <p class='eyebrow'>Content Directory</p>
-      <h2 id='content-directory-title'>把发布面也摊开来看。</h2>
+      <p class='eyebrow'>内容目录</p>
+      <h2 id='content-directory-title'>文章、项目与公开贡献</h2>
     </div>
     <div>
       <p>
-        Browse the writing, channels, projects, and selected external contributions that currently have a clear path into the public story.
+        按类型和来源浏览文章、项目、创作主页与外部贡献。
       </p>
-      <p class='directory-audit' aria-label='Content directory sync status'>
+      <p class='directory-audit' aria-label='内容目录同步状态'>
         <span class:list={['audit-dot', { 'audit-dot--warning': audit.warningCount > 0 }]} aria-hidden='true'></span>
-        GitHub sync {syncDate} · {audit.contributionCount}/{audit.allowlistCount} allowlisted contributions · {audit.warningCount > 0 ? `${audit.warningCount} warning${audit.warningCount === 1 ? '' : 's'}` : 'no warnings'}
+        GitHub 同步于 {syncDate} · 已收录 {audit.contributionCount} 项外部贡献 · {audit.warningCount > 0 ? `${audit.warningCount} 条同步提示` : '同步检查通过'}
       </p>
     </div>
   </div>
 
   <div class='directory-controls' data-content-browser>
     <div class='directory-search'>
-      <label for='content-directory-search'>Search content</label>
-      <input id='content-directory-search' type='search' placeholder='Search writing, projects, channels, or contributions…' autocomplete='off' data-content-search />
+      <label for='content-directory-search'>搜索内容</label>
+      <input id='content-directory-search' type='search' placeholder='搜索文章、项目、创作主页或贡献…' autocomplete='off' data-content-search />
     </div>
-    <div class='directory-filters' role='group' aria-label='Filter content directory'>
+    <div class='directory-filters' role='group' aria-label='筛选内容目录'>
       <div>
-        <span>Type</span>
-        <button type='button' data-kind-filter='all' aria-pressed='true'>All</button>
-        <button type='button' data-kind-filter='Writing' aria-pressed='false'>Writing</button>
-        <button type='button' data-kind-filter='Channel' aria-pressed='false'>Channel</button>
-        <button type='button' data-kind-filter='Project' aria-pressed='false'>Project</button>
-        <button type='button' data-kind-filter='Contribution' aria-pressed='false'>Contribution</button>
+        <span>类型</span>
+        <button type='button' data-kind-filter='all' aria-pressed='true'>全部</button>
+        <button type='button' data-kind-filter='Writing' aria-pressed='false'>文章</button>
+        <button type='button' data-kind-filter='Channel' aria-pressed='false'>创作主页</button>
+        <button type='button' data-kind-filter='Project' aria-pressed='false'>项目</button>
+        <button type='button' data-kind-filter='Contribution' aria-pressed='false'>贡献</button>
       </div>
       <div>
-        <span>Owner</span>
-        <button type='button' data-owner-filter='all' aria-pressed='true'>All</button>
+        <span>来源</span>
+        <button type='button' data-owner-filter='all' aria-pressed='true'>全部</button>
         <button type='button' data-owner-filter='lora-sys' aria-pressed='false'>lora-sys</button>
         <button type='button' data-owner-filter='ACAMLab' aria-pressed='false'>ACAMLab</button>
-        <button type='button' data-owner-filter='External' aria-pressed='false'>External</button>
+        <button type='button' data-owner-filter='External' aria-pressed='false'>外部贡献</button>
       </div>
     </div>
     <div class='directory-status-row'>
-      <p class='directory-status' aria-live='polite' data-content-status>Showing all {items.length} entries</p>
+      <p class='directory-status' aria-live='polite' data-content-status>共 {items.length} 条内容</p>
       <span class='directory-filter-summary' data-content-filter-summary hidden></span>
-      <button type='button' class='directory-receipt' data-content-receipt hidden>Copy exploration receipt</button><button type='button' class='directory-reset' data-content-reset hidden>Reset filters</button>
+      <button type='button' class='directory-receipt' data-content-receipt hidden>复制筛选记录</button><button type='button' class='directory-reset' data-content-reset hidden>清除筛选</button>
     </div>
   </div>
 
@@ -92,7 +93,7 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
           data-interaction='content_directory_item'
           data-destination={item.kind}
         >
-          <span class='directory-kind'>{item.kind}</span>
+          <span class='directory-kind'>{displayLabel(item.kind, 'zh-CN')}</span>
           <span class='directory-main'>
             <strong>{item.title}</strong>
             <small>{item.meta}{item.detail ? ` · ${item.detail}` : ''}</small>
@@ -100,19 +101,19 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
           <span aria-hidden='true'>↗</span>
         </a>
       ))}
-      <p class='directory-empty' hidden data-content-empty>No matching content entries.</p>
+      <p class='directory-empty' hidden data-content-empty>没有匹配的内容。</p>
     </div>
 
     <aside class='coverage-panel' aria-labelledby='coverage-title'>
-      <p class='eyebrow'>Publishing status</p>
-      <h3 id='coverage-title'>{opportunities.length} projects still need a Story.</h3>
-      <p>Prioritized candidates for a build note, technical essay, or channel update.</p>
+      <p class='eyebrow'>内容待补充</p>
+      <h3 id='coverage-title'>{opportunities.length} 个项目尚无关联记录</h3>
+      <p>这些项目尚未关联构建笔记、技术文章或创作主页。</p>
       <ul>
         {opportunities.slice(0, 6).map((opportunity) => (
           <li>
             <a href={`/projects#${opportunity.repository}`}>{opportunity.title}<span aria-hidden='true'>↗</span></a>
-            <small><strong>{opportunity.priority}</strong> · {opportunity.format} · {opportunity.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</small>
-            <small>{opportunity.reason}</small>
+            <small><strong>{displayLabel(opportunity.priority, 'zh-CN')}</strong> · {displayLabel(opportunity.format, 'zh-CN')} · {opportunity.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</small>
+            <small>{displayLabel(opportunity.reason, 'zh-CN')}</small>
           </li>
         ))}
       </ul>
@@ -134,7 +135,7 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
     let owner = params.get('owner') || 'all'
     if (!['all', 'Writing', 'Channel', 'Project', 'Contribution'].includes(kind)) kind = 'all'
     if (!['all', 'lora-sys', 'ACAMLab', 'External'].includes(owner)) owner = 'all'
-    if (search && params.get('q')) search.value = params.get('q') || ''
+    if (search && params.get('content-q')) search.value = params.get('content-q') || ''
     const summary = browser.querySelector<HTMLElement>('[data-content-filter-summary]'); const receipt = browser.querySelector<HTMLButtonElement>('[data-content-receipt]')
 
     const setPressed = (buttons: HTMLButtonElement[], key: string, value: string) => {
@@ -151,16 +152,16 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
         item.hidden = !show
         if (show) visible += 1
       })
-      const kindLabel = kind === 'all' ? '' : ` · type: ${kind}`
-      const ownerLabel = owner === 'all' ? '' : ` · owner: ${owner}`
+      const kindLabel = kind === 'all' ? '' : ` · 类型：${kindButtons.find((button) => button.dataset.kindFilter === kind)?.textContent?.trim() ?? kind}`
+      const ownerLabel = owner === 'all' ? '' : ` · 来源：${owner === 'External' ? '外部贡献' : owner}`
       const hasFilters = kind !== 'all' || owner !== 'all' || Boolean(query)
-      if (status) status.textContent = `Showing ${visible} of ${items.length} entries${kindLabel}${ownerLabel}`
-      if (summary) { summary.hidden = !hasFilters; summary.textContent = [kind !== 'all' ? `Type: ${kind}` : '', owner !== 'all' ? `Owner: ${owner}` : '', query ? `Search: ${query}` : ''].filter(Boolean).join(' · ') }
+      if (status) status.textContent = `${visible} / ${items.length} 条内容${kindLabel}${ownerLabel}`
+      if (summary) { summary.hidden = !hasFilters; summary.textContent = [kind !== 'all' ? `类型：${kindButtons.find((button) => button.dataset.kindFilter === kind)?.textContent?.trim() ?? kind}` : '', owner !== 'all' ? `来源：${owner === 'External' ? '外部贡献' : owner}` : '', query ? `关键词：${query}` : ''].filter(Boolean).join(' · ') }
       if (reset) reset.hidden = !hasFilters
       if (receipt) receipt.hidden = !hasFilters
       if (empty) empty.hidden = visible !== 0
     }
-    const syncUrl = () => { const next = new URL(window.location.href); kind === 'all' ? next.searchParams.delete('type') : next.searchParams.set('type', kind); owner === 'all' ? next.searchParams.delete('owner') : next.searchParams.set('owner', owner); const query = search?.value.trim() ?? ''; query ? next.searchParams.set('q', query) : next.searchParams.delete('q'); window.history.replaceState({}, '', next) }
+    const syncUrl = () => { const next = new URL(window.location.href); kind === 'all' ? next.searchParams.delete('type') : next.searchParams.set('type', kind); owner === 'all' ? next.searchParams.delete('owner') : next.searchParams.set('owner', owner); const query = search?.value.trim() ?? ''; query ? next.searchParams.set('content-q', query) : next.searchParams.delete('content-q'); window.history.replaceState({}, '', next) }
     kindButtons.forEach((button) => button.addEventListener('click', () => {
       kind = button.dataset.kindFilter ?? 'all'
       setPressed(kindButtons, 'kindFilter', kind)
@@ -172,8 +173,8 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       syncUrl(); apply()
     }))
     search?.addEventListener('input', () => { syncUrl(); apply() })
-    receipt?.addEventListener('click', async () => { const text = `loraSys exploration receipt\n${summary?.textContent || 'All content'}\n${visibleLabel()}`; try { await navigator.clipboard.writeText(text); receipt.textContent='Receipt copied'; window.setTimeout(()=>{receipt.textContent='Copy exploration receipt'},1600) } catch { receipt.textContent='Select and copy manually' } })
-    const visibleLabel = () => status?.textContent || 'Exploration complete'
+    receipt?.addEventListener('click', async () => { const text = `loraSys 筛选记录\n${summary?.textContent || '全部内容'}\n${visibleLabel()}`; try { await navigator.clipboard.writeText(text); receipt.textContent='已复制筛选记录'; window.setTimeout(()=>{receipt.textContent='复制筛选记录'},1600) } catch { receipt.textContent='复制失败，可选择并复制筛选条件' } })
+    const visibleLabel = () => status?.textContent || '筛选完成'
     reset?.addEventListener('click', () => {
       kind = 'all'
       owner = 'all'
@@ -182,6 +183,17 @@ const syncDate = new Intl.DateTimeFormat('en-US', {
       setPressed(ownerButtons, 'ownerFilter', owner)
       syncUrl(); apply()
       search?.focus()
+    })
+    window.addEventListener('popstate', () => {
+      const current = new URLSearchParams(window.location.search)
+      const nextKind = current.get('type') || 'all'
+      const nextOwner = current.get('owner') || 'all'
+      kind = kindButtons.some((button) => button.dataset.kindFilter === nextKind) ? nextKind : 'all'
+      owner = ownerButtons.some((button) => button.dataset.ownerFilter === nextOwner) ? nextOwner : 'all'
+      if (search) search.value = current.get('content-q') || ''
+      setPressed(kindButtons, 'kindFilter', kind)
+      setPressed(ownerButtons, 'ownerFilter', owner)
+      apply()
     })
     setPressed(kindButtons, 'kindFilter', kind)
     setPressed(ownerButtons, 'ownerFilter', owner)
