@@ -1,0 +1,49 @@
+name: Refine dark controls and stylesheet delivery
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/refine-contrast.yml]
+permissions:
+  contents: write
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0d83ec0a265fc460796b86167a4386dc7050d2d1
+          persist-credentials: false
+      - name: Apply minimal reviewed changes
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('src/pages/projects/index.astro');s=p.read_text()
+          old='background:hsl(var(--field-amber-strong)); color:#ffffff;'
+          assert s.count(old)==1
+          s=s.replace(old,'background:hsl(var(--foreground)); color:hsl(var(--background));')
+          s=s.replace('border:1px solid hsl(var(--field-amber-strong)); border-radius:999px; padding:.58rem .9rem;','border:1px solid hsl(var(--foreground)); border-radius:999px; padding:.58rem .9rem;')
+          p.write_text(s)
+          p=Path('scripts/audit-microinteractions.mjs');s=p.read_text()
+          old="await open(route);await page.evaluate(()=>document.documentElement.classList.add('dark'))"
+          assert s.count(old)==1
+          s=s.replace(old,"await page.evaluate(()=>localStorage.setItem('theme','dark'));await open(route);await page.waitForFunction(()=>document.documentElement.classList.contains('dark') && document.getAnimations().every(a=>a.playState!=='running'))")
+          p.write_text(s)
+          p=Path('astro.config.ts');s=p.read_text()
+          old="  output: 'static',"
+          assert s.count(old)==1 and 'inlineStylesheets:' not in s
+          s=s.replace(old,old+"\n  // Small static pages avoid blocking on several separate stylesheet requests.\n  build: { inlineStylesheets: 'always' },")
+          p.write_text(s)
+      - name: Push candidate without forcing or changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git switch -c fix/i18n-zhihu-20260909
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/pages/projects/index.astro scripts/audit-microinteractions.mjs astro.config.ts
+          git commit -m 'fix(audit): keep dark controls legible and inline render-blocking styles'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/fix/i18n-zhihu-20260909
+          git rev-parse HEAD
