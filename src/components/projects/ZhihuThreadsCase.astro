@@ -35,12 +35,12 @@ const steps = [
       </nav>
     </header>
     <figure>
-      <Image src={en ? coverEn : coverZh} alt={t('Lora 与 Mochi 在工作台整理知乎来源摘录的项目插画。', 'Project illustration of Lora and Mochi organizing source excerpts at their desk.')} widths={[640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='eager' fetchpriority='high' quality={85} />
+      <Image src={en ? coverEn : coverZh} alt={t('Lora 与 Mochi 在工作台整理知乎来源摘录的项目插画。', 'Project illustration of Lora and Mochi organizing source excerpts at their desk.')} widths={[480,640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='eager' fetchpriority='high' quality={80} />
       <figcaption>{t('项目插画，非产品截图。', 'Project illustration, not a product screenshot.')}</figcaption>
     </figure>
     <section aria-labelledby='evidence-boundary'>
       <h2 id='evidence-boundary'>{t('来源由用户选择', 'The user chooses the evidence')}</h2>
-      <p>{t('这个项目处理的是学习资料的组织，由用户选择证据的学习工具。AI 可以帮助解释候选、整理线索，但不能悄悄改变用户选择的证据范围。', 'This project organizes learning material rather than hosting a social discussion community. AI can explain candidates and organize evidence, but cannot silently change the user’s source selection.')}</p>
+      <p>{t('用户选择知乎摘录，AI 将选中的材料组织成学习线。AI 可以解释候选来源，但不会替用户修改来源选择。', 'The user selects Zhihu excerpts. AI organizes the selected material into a learning thread without silently changing the evidence boundary.')}</p>
       <div class='step-explorer' data-evidence-explorer>
         <div class='step-controls' role='group' aria-label={t('查看流程说明', 'Explore the workflow')}>
           {steps.map((step, index) => <button type='button' data-evidence-step={index} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`evidence-step-${index}`}>{String(index+1).padStart(2,'0')} {step.title}</button>)}
@@ -51,7 +51,7 @@ const steps = [
         <p class='explainer-note'>{t('这是工作流程说明，不会调用模型或读取你的知乎账号。', 'This explains the workflow. It does not call a model or access your Zhihu account.')}</p>
       </div>
       <figure>
-        <Image src={en ? flowEn : flowZh} alt={t('流程示意。问题经澄清和检索后，由用户选择摘要摘录，再生成学习线。证据不足保持未知。', 'Workflow diagram. Clarify the question, retrieve excerpts, let the user select sources, then build a learning thread. Missing evidence stays unknown.')} widths={[640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='lazy' quality={85} />
+        <Image src={en ? flowEn : flowZh} alt={t('流程示意。问题经澄清和检索后，由用户选择摘要摘录，再生成学习线。证据不足保持未知。', 'Workflow diagram. Clarify the question, retrieve excerpts, let the user select sources, then build a learning thread. Missing evidence stays unknown.')} widths={[480,640,960,1280,1600]} sizes='(min-width: 1100px) 1000px, 92vw' loading='lazy' quality={80} />
       </figure>
     </section>
     <section aria-labelledby='implementation'><h2 id='implementation'>{t('实现与边界', 'Implementation and limits')}</h2>
