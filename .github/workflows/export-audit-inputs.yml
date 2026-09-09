@@ -1,0 +1,33 @@
+name: Export pinned audit inputs
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/export-audit-inputs.yml]
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: bbb6d2944e61560590b6c5635caa23407e011415
+          persist-credentials: false
+          path: site
+      - uses: actions/checkout@v4
+        with:
+          repository: lora-sys/zhihu-threads
+          ref: 6c34a81e750b418620c0bb5be148427fd1f68d80
+          persist-credentials: false
+          path: threads
+      - name: Package tracked public files without Git credentials
+        run: |
+          mkdir -p "$RUNNER_TEMP/audit-inputs"
+          git -C site archive --format=tar.gz HEAD > "$RUNNER_TEMP/audit-inputs/site-source.tar.gz"
+          git -C threads archive --format=tar.gz HEAD > "$RUNNER_TEMP/audit-inputs/threads-source.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pinned-audit-inputs
+          path: ${{ runner.temp }}/audit-inputs
+          retention-days: 7
