@@ -59,20 +59,20 @@ const languageTitle =
   activeLanguage === 'zh-CN'
     ? '中文文章'
     : activeLanguage === 'en-US'
-      ? 'English writing'
-      : 'All writing'
+      ? '英文文章'
+      : '全部文章'
 const meta = {
   description: activeLanguage
-    ? `${languageTitle} from Lora on agents, engineering and products.`
-    : 'Writing from Lora on AI agents, engineering, open source and products.',
-  title: activeLanguage ? `Blog · ${languageTitle}` : 'Blog'
+    ? `${languageTitle}，记录智能体、工程与产品构建。`
+    : '关于智能体、工程、开源与产品构建的文章。',
+  title: activeLanguage ? languageTitle : '写作'
 }
 const paginationProps = {
-  ...(page.url.prev && { prevUrl: { text: '← Previous Posts', url: page.url.prev } }),
-  ...(page.url.next && { nextUrl: { text: 'Next Posts →', url: page.url.next } })
+  ...(page.url.prev && { prevUrl: { text: '上一页', url: page.url.prev } }),
+  ...(page.url.next && { nextUrl: { text: '下一页', url: page.url.next } })
 }
 const languageFilters = [
-  { title: 'All', href: '/blog', active: !activeLanguage },
+  { title: '全部', href: '/blog', active: !activeLanguage },
   {
     title: '中文',
     href: '/blog/language/zh-CN',
@@ -80,7 +80,7 @@ const languageFilters = [
     lang: 'zh-CN'
   },
   {
-    title: 'English',
+    title: '英文',
     href: '/blog/language/en-US',
     active: activeLanguage === 'en-US',
     lang: 'en-US'
@@ -88,29 +88,29 @@ const languageFilters = [
 ]
 ---
 
-<PageLayout {meta} lang={activeLanguage}>
+<PageLayout {meta} lang='zh-CN'>
   <Fragment slot='head'>
     <CollectionPageJsonLd
       name={meta.title}
       description={meta.description}
-      inLanguage={activeLanguage ?? 'zh-CN'}
+      inLanguage='zh-CN'
     />
   </Fragment>
-  <Button title='Back' href='/' variant='back' />
+  <Button title='返回首页' href='/' variant='back' />
   <main class='blog-shell mt-6 lg:mt-10'>
     <header id='content-header' class='animate editorial-header'>
       <Image src={readingMarker} alt='' aria-hidden='true' class='reading-marker' widths={[720, 1152, 1536]} sizes='(min-width: 1024px) 34rem, 72vw' loading='eager' fetchpriority='high' />
       <div>
-        <p class='eyebrow'>Writing / 写作</p>
+        <p class='eyebrow'>写作</p>
         <h1>把正在构建的东西，写成可复查的笔记。</h1>
         <p class='intro'>这里不是资讯流，而是关于智能体系统、多模态工具与公开构建的长期思考记录。</p>
       </div>
-      <span class='edition' aria-label={`${collectionsCount} posts in this view`}>
-        {String(collectionsCount).padStart(2, '0')}<small> posts</small>
+      <span class='edition' aria-label={`当前显示 ${collectionsCount} 篇文章`}>
+        {String(collectionsCount).padStart(2, '0')}<small> 篇文章</small>
       </span>
     </header>
 
-    <nav class='language-filter animate' aria-label='Filter posts by language'>
+    <nav class='language-filter animate' aria-label='按文章语言筛选'>
       {
         languageFilters.map(({ title, href, active, lang }) => (
           <a class='tactile-action' href={href} lang={lang} aria-current={active ? 'page' : undefined}>
@@ -122,10 +122,10 @@ const languageFilters = [
 
     <details class='writing-routes animate'>
       <summary><span>更多阅读路径</span><span aria-hidden='true'>+</span></summary>
-      <nav aria-label='More writing destinations'>
+      <nav aria-label='更多阅读方式'>
         <a class='tactile-action' href='/en/writing' hreflang='en-US'>英文原文 ↗</a>
-        <a class='tactile-action' href='/notes'>短笔记 Notes ↗</a>
-        <a class='tactile-action' href='/archives'>完整归档 Archive ↗</a>
+        <a class='tactile-action' href='/notes'>短笔记 ↗</a>
+        <a class='tactile-action' href='/archives'>完整归档 ↗</a>
       </nav>
     </details>
 

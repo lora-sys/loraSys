@@ -44,7 +44,7 @@ export type VisualEntry = {
 
 export const loraVisuals = {
   heroLora: { src: heroLora, alt: '', decorative: true, widths: [768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 80, pages: ['/', '/en/'] },
-  heroMochi: { src: heroMochi, alt: '', decorative: true, widths: [1536], sizes: '(max-width: 760px) 42vw, 17rem', quality: 80, pages: ['/', '/en/'] },
+  heroMochi: { src: heroMochi, alt: '', decorative: true, widths: [192, 384, 576, 768], sizes: '(max-width: 760px) 42vw, 17rem', quality: 80, pages: ['/', '/en/'] },
   heroProps: { src: heroProps, alt: '', decorative: true, widths: [768, 1152, 1536], sizes: '(max-width: 760px) 88vw, 42rem', quality: 78, pages: ['/', '/en/'] },
   avatar: { src: avatar, alt: 'Lora 的角色参考头像', widths: [128, 256, 512, 860], sizes: '10rem', quality: 78, pages: ['/', '/en/', '/links', '/en/links'] },
   aboutJourney: { src: aboutJourney, alt: 'Lora 与 Mochi 沿项目、学习和贡献路线前进', widths: [480, 768, 1152, 1440], sizes: '(max-width: 760px) 86vw, 38rem', quality: 78, pages: ['/about', '/en/about'] },
@@ -61,7 +61,7 @@ export const loraVisuals = {
   mediaWorkbench: { src: mediaWorkbench, alt: 'Lora 将图像和音频证据整理到同一文件夹', widths: [320, 520, 760, 1122], sizes: '(max-width: 900px) 60vw, 17rem', quality: 78, pages: ['/blog/*'] },
   sandbox: { src: sandbox, alt: 'Lora 将输入放入隔离实验盒并检查输出', widths: [320, 520, 760, 1122], sizes: '(max-width: 900px) 60vw, 17rem', quality: 78, pages: ['/blog/*'] },
   shippingLog: { src: shippingLog, alt: 'Lora 与 Mochi 封装完成记录并送入交付托盘', widths: [320, 520, 760, 1122], sizes: '(max-width: 900px) 60vw, 17rem', quality: 78, pages: ['/blog/*'] },
-  projectsMap: { src: projectsMap, alt: 'Lora 与 Mochi 展开连接 Agent、视觉、模拟、记忆和验证项目的地图', widths: [1152, 1600], sizes: '(max-width: 760px) 100vw, 65rem', quality: 78, pages: ['/projects', '/en/work', '/', '/en/'] },
+  projectsMap: { src: projectsMap, alt: 'Lora 与 Mochi 展开连接 Agent、视觉、模拟、记忆和验证项目的地图', widths: [480, 768, 1152, 1600], sizes: '(max-width: 760px) 92vw, 65rem', quality: 78, pages: ['/projects', '/en/work', '/', '/en/'] },
   linksConstellation: { src: linksConstellation, alt: 'Lora 与 Mochi 用纸片和线连接友链星图', widths: [480, 768, 1152, 1536], sizes: '(max-width: 760px) 86vw, 42rem', quality: 78, pages: ['/links', '/en/links'] },
   resumeDossier: { src: resumeDossier, alt: 'Lora 展开包含经历、项目与证据的简历档案', widths: [480, 768, 1152, 1536], sizes: '(max-width: 760px) 86vw, 42rem', quality: 78, pages: ['/resume', '/en/resume'] },
   guestbookPostcard: { src: guestbookPostcard, alt: 'Lora 与 Mochi 把空白明信片放入留言盒', widths: [480, 768, 1152, 1536], sizes: '(max-width: 760px) 86vw, 38rem', quality: 78, pages: ['/guestbook', '/en/guestbook'] },

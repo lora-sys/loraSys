@@ -9,9 +9,10 @@ interface Props {
   title?: string
   class?: string
   id?: string
+  sectionLabel?: string
 }
 
-const { headings, title = 'Table of contents', class: className, ...props } = Astro.props
+const { headings, title = 'Table of contents', sectionLabel = title === '目录' ? '跳转到章节' : 'Go to section', class: className, ...props } = Astro.props
 
 const toc = generateToc(headings)
 ---
@@ -19,7 +20,7 @@ const toc = generateToc(headings)
 <toc-heading class={className} {...props}>
   <h2 class='font-medium'>{title}</h2>
   <ul class='mt-4'>
-    {toc.map((heading) => <TOCHeading heading={heading} />)}
+    {toc.map((heading) => <TOCHeading heading={heading} {sectionLabel} />)}
   </ul>
 </toc-heading>
 
@@ -119,7 +120,9 @@ const toc = generateToc(headings)
               directHeading.textContent || '',
               link.element.getAttribute('href')
             )
-            directHeading.scrollIntoView({ behavior: 'smooth' })
+            directHeading.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
+            directHeading.setAttribute('tabindex', '-1')
+            directHeading.focus({ preventScroll: true })
           } else {
             console.warn(`No heading found for slug: ${link.slug}`)
           }

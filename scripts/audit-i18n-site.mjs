@@ -41,7 +41,7 @@ async function check(name, fn) {
   catch (error) { report.checks.push({ name, passed: false, error: String(error.stack) }); console.error('FAIL',name,error.message) }
   await save()
 }
-const keyRoutes = ['', 'en/', 'projects/', 'en/work/', 'projects/zhihu-threads/', 'en/projects/zhihu-threads/', 'contact/', 'en/contact/', 'about/', 'en/about/', 'blog/', 'en/writing/', 'notes/', 'now/', 'en/now/', 'links/', 'en/links/', 'resume/', 'en/resume/', 'lab/', 'talks/', 'terms/', 'terms/privacy-policy/', 'search/', 'en/search/']
+const keyRoutes = ['', 'en/', 'projects/', 'en/work/', 'projects/zhihu-threads/', 'en/projects/zhihu-threads/', 'contact/', 'en/contact/', 'about/', 'en/about/', 'blog/', 'en/writing/', 'notes/', 'now/', 'en/now/', 'links/', 'en/links/', 'resume/', 'en/resume/', 'lab/', 'talks/', 'terms/', 'terms/privacy-policy/', 'search/', 'en/search/','archives/','tags/','tags/agent/','blog/ai-engineering-harness/','blog/wishlive/','blog/language/en-US/']
 const uiLeaks = /^(Selected Work|BUILDING|Building|Maintained|Archived|View case|Visit website|Contribution PR|Source|Story|Search content|Content Directory|Content Graph|Theme Roadmap|Table of Contents|Back|Author|Published at|Copyright|No matching content entries\.|Copy exploration receipt|Reset filters)$/i
 try {
   for (const viewport of [{ width:1440,height:1000 },{ width:390,height:844 },{ width:768,height:1024 }]) {
@@ -59,7 +59,7 @@ try {
     for (const route of keyRoutes) {
       await check(`${viewport.width}: route ${route || 'home'}`,async () => {
         const response=await open(route)
-        const expected=route.startsWith('en/')?'en':'zh'
+        const expected=route.startsWith('en/') || route==='blog/wishlive/' ? 'en':'zh'
         const info=await page.evaluate(() => {
           const nodes=[...document.querySelectorAll('body *')].filter(el => !el.closest('script,style,pre,code,svg,iframe') && !el.children.length && el.textContent.trim())
           const visible=nodes.filter(el => { const r=el.getBoundingClientRect(); return r.width>0 && r.height>0 && getComputedStyle(el).visibility!=='hidden' })
@@ -82,6 +82,7 @@ try {
           await page.addScriptTag({path:process.env.AXE_PATH})
           const axe=await page.evaluate(async()=>window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}))
           report.accessibility.push({route,viewport:viewport.width,violations:axe.violations.map(v=>({id:v.id,impact:v.impact,description:v.description,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}))})
+          assert.equal(axe.violations.filter(v=>['serious','critical'].includes(v.impact)).length,0,'Serious accessibility violations')
         }
       })
     }
@@ -121,18 +122,18 @@ try {
         await page.locator('.pagefind-ui__result-link').first().waitFor({state:'visible'})
         assert.ok((await page.locator('.pagefind-ui__result-link').allTextContents()).some(s=>s.includes('Zhihu')))
         await capture(`${lang?'en':'zh'}-search-results`)
-        await input.fill('xqzz-no-such-record-78a5')
-        await page.waitForFunction(()=>document.querySelector('.pagefind-ui__message')?.textContent?.match(/没有找到|No results/))
+        await input.fill('qxzvbnmk927413nomatch')
+        await page.waitForFunction(()=>[...document.querySelectorAll('.pagefind-ui__message')].some(el=>/没有找到|No results/.test(el.textContent||'')))
         await page.locator('[data-search-empty]').waitFor({state:'visible'})
         await capture(`${lang?'en':'zh'}-search-empty`)
       }
     })
     await check(`${viewport.width}: archive searches do not overwrite each other`,async()=>{
       await open('projects/?q=zhihu-threads')
-      const input=page.locator('[data-content-browser] [data-content-search]');await input.waitFor({state:'visible'})
+      await page.locator('[data-content-browser][data-content-ready="true"]').waitFor();const input=page.locator('[data-content-browser] [data-content-search]');await input.waitFor({state:'visible'})
       await input.fill('Harness')
       assert.equal(new URL(page.url()).searchParams.get('q'),'zhihu-threads')
-      assert.equal(new URL(page.url()).searchParams.get('content-q'),'Harness')
+      await page.waitForURL(url=>url.searchParams.get('content-q')==='Harness');assert.equal(new URL(page.url()).searchParams.get('content-q'),'Harness')
       await page.locator('[data-content-reset]').click()
       assert.equal(new URL(page.url()).searchParams.get('q'),'zhihu-threads')
     })

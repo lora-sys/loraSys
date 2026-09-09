@@ -202,7 +202,7 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
         const count = section.querySelectorAll<HTMLElement>('[data-project-item]:not([hidden])').length
         section.hidden = count === 0
         const countNode = section.querySelector<HTMLElement>('[data-section-count]')
-        if (countNode) countNode.textContent = `${count} ${count === 1 ? 'project' : 'projects'}`
+        if (countNode) countNode.textContent = `${count} 个项目`
       })
       if (status) {
         const statusName = projectStatus === 'building' ? '构建中' : projectStatus === 'active' ? '持续维护' : projectStatus === 'archived' ? '已归档' : ''
@@ -272,6 +272,7 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
     applyFilters()
     if (['q', 'category', 'source', 'status'].some((key) => new URLSearchParams(location.search).has(key))) openAncestors(browser)
     revealHashTarget()
+    browser.dataset.projectReady = 'true'
   })
 </script>
 

@@ -2,7 +2,7 @@
 import LoraVisual from './LoraVisual.astro'
 ---
 
-<div class='hero-scene' data-hero-scene data-hero-ready='false' aria-hidden='true'>
+<div class='hero-scene' data-hero-scene data-hero-ready='true' aria-hidden='true'>
   <div class='hero-props'><LoraVisual asset='heroProps' priority /></div>
   <div class='hero-lora'><LoraVisual asset='heroLora' priority /></div>
   <div class='hero-mochi'>
@@ -22,31 +22,9 @@ import LoraVisual from './LoraVisual.astro'
   const heroScene = document.querySelector<HTMLElement>('[data-hero-scene]')
 
   if (heroScene) {
-    const heroImages = Array.from(heroScene.querySelectorAll('img'))
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
     const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
     const heroRoot = document.querySelector<HTMLElement>('[data-field-notes-hero]')
-
-    const markReady = () => {
-      heroScene.dataset.heroReady = 'true'
-    }
-
-    if (reducedMotion.matches || heroImages.every((img) => img.complete && img.naturalWidth > 0)) {
-      markReady()
-    } else {
-      const waitForImage = async (image: HTMLImageElement) => {
-        if (!image.complete) {
-          await new Promise<void>((resolve) => {
-            image.addEventListener('load', () => resolve(), { once: true })
-            image.addEventListener('error', () => resolve(), { once: true })
-          })
-        }
-        if (typeof image.decode === 'function') {
-          await image.decode().catch(() => undefined)
-        }
-      }
-      Promise.all(heroImages.map(waitForImage)).then(markReady)
-    }
 
     // 桌面指针视差微动：计算微小偏移量（-1 到 1），带动工作台各图层产生立体目光视差
     if (heroRoot && !reducedMotion.matches) {

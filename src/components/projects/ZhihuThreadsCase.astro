@@ -40,7 +40,7 @@ const steps = [
     </figure>
     <section aria-labelledby='evidence-boundary'>
       <h2 id='evidence-boundary'>{t('来源由用户选择', 'The user chooses the evidence')}</h2>
-      <p>{t('这个项目处理的是学习资料的组织，不是社交讨论社区。AI 可以帮助解释候选、整理线索，但不能悄悄改变用户选择的证据范围。', 'This project organizes learning material rather than hosting a social discussion community. AI can explain candidates and organize evidence, but cannot silently change the user’s source selection.')}</p>
+      <p>{t('这个项目处理的是学习资料的组织，由用户选择证据的学习工具。AI 可以帮助解释候选、整理线索，但不能悄悄改变用户选择的证据范围。', 'This project organizes learning material rather than hosting a social discussion community. AI can explain candidates and organize evidence, but cannot silently change the user’s source selection.')}</p>
       <div class='step-explorer' data-evidence-explorer>
         <div class='step-controls' role='group' aria-label={t('查看流程说明', 'Explore the workflow')}>
           {steps.map((step, index) => <button type='button' data-evidence-step={index} aria-pressed={index === 0 ? 'true' : 'false'} aria-controls={`evidence-step-${index}`}>{String(index+1).padStart(2,'0')} {step.title}</button>)}

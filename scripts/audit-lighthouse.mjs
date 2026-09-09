@@ -1,3 +1,4 @@
+import { gzipSync } from 'node:zlib'
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
 import { readFile, readdir, mkdir, writeFile, stat } from 'node:fs/promises'
@@ -27,13 +28,16 @@ if (!process.env.SITE_TEST_URL) {
       const info = await stat(file)
       if (info.isDirectory()) file = path.join(file, 'index.html')
       const body = await readFile(file)
-      res.writeHead(200, { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream' }); res.end(body)
+      const textual = /\.(html|css|js|json|svg|xml)$/.test(file)
+      const compressed = textual && /gzip/.test(req.headers['accept-encoding'] || '')
+      res.writeHead(200, { 'Content-Type': mime[path.extname(file)] || 'application/octet-stream', ...(compressed ? { 'Content-Encoding':'gzip', Vary:'Accept-Encoding' } : {}) }); res.end(compressed ? gzipSync(body) : body)
     } catch { res.writeHead(404); res.end('Not found') }
   })
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve))
   site = `http://127.0.0.1:${server.address().port}${base}`
 }
 report.site = site
+report.transport = 'Gzip for text resources, matching static production delivery. Simulated mobile throttling remains enabled.'
 const modules = process.env.QUALITY_TOOLS
 const { default: lighthouse } = await import(pathToFileURL(path.join(modules,'lighthouse/core/index.js')).href)
 const chromeLauncher = await import(pathToFileURL(path.join(modules,'chrome-launcher/dist/index.js')).href)

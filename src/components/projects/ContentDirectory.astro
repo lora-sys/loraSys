@@ -198,6 +198,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
     setPressed(kindButtons, 'kindFilter', kind)
     setPressed(ownerButtons, 'ownerFilter', owner)
     apply()
+    browser.dataset.contentReady = 'true'
   })
 </script>
 

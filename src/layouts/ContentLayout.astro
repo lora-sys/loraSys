@@ -1,4 +1,5 @@
 ---
+import CodeActions from '@/components/blog/CodeActions.astro'
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
@@ -31,6 +32,7 @@ const {
 
 <PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {...props}>
   <slot name='head' slot='head' />
+  <CodeActions />
   <Button title={lang === 'en-US' ? 'Back' : '返回'} href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
@@ -84,7 +86,7 @@ const {
     </div>
   </div>
 
-  <BackToTop header='content-header' content='content'>
+  <BackToTop label={lang === 'en-US' ? 'Back to top' : '返回顶部'} header='content-header' content='content'>
     {
       showSidebar && (
         <button

@@ -102,7 +102,7 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
           var(--highlightColor) 40%,
           hsl(var(--foreground)/var(--un-text-opacity, 1))
         );
-        color: var(--highlight-fg, hsl(var(--primary) / var(--un-text-opacity))) !important;
+        color: hsl(var(--foreground)) !important;
       }
       :global(.highlight-bg) {
         background-color: var(

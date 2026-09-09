@@ -14,10 +14,10 @@ const syncedLabel = new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'nume
   new Date(syncReport.syncedAt)
 )
 const sections=[
- {id:'building',title:'营造中',status:'In progress',frequency:'As I build',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
+ {id:'building',title:'营造中',status:'In progress',frequency:'随项目进展更新',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
  {id:'learning',title:'学习中',status:'Exploring',frequency:'有进展时更新',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
- {id:'reading',title:'阅读中',status:'On my desk',frequency:'Slowly',category:'Reading',items:['Designing Data-Intensive Applications']},
- {id:'listening',title:'共鸣中',status:'On repeat',frequency:'Often',category:'Listening',items:['Tame Impala — Currents']}
+ {id:'reading',title:'阅读中',status:'On my desk',frequency:'随阅读进展更新',category:'Reading',items:['Designing Data-Intensive Applications']},
+ {id:'listening',title:'共鸣中',status:'On repeat',frequency:'不定期更新',category:'Listening',items:['Tame Impala — Currents']}
 ]
 const headings=sections.map(s=>({depth:2,slug:s.id,text:s.title}))
 ---

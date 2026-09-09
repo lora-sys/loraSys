@@ -1,0 +1,42 @@
+<p class="code-feedback sr-only" data-code-feedback role="status" aria-live="polite"></p>
+<script>
+  const english = document.documentElement.lang.startsWith('en')
+  const status = document.querySelector<HTMLElement>('[data-code-feedback]')
+  const copyLabel = english ? 'Copy code' : '复制代码'
+  const expandedLabel = english ? 'Collapse code' : '收起代码'
+  const collapsedLabel = english ? 'Expand code' : '展开代码'
+  document.querySelectorAll<HTMLButtonElement>('[data-code-copy]').forEach((button) => {
+    button.setAttribute('aria-label', copyLabel)
+    let resetTimer: number | undefined
+    button.addEventListener('click', async () => {
+      button.disabled = true
+      if (resetTimer) window.clearTimeout(resetTimer)
+      try {
+        await navigator.clipboard.writeText(button.dataset.code ?? '')
+        button.classList.add('copied')
+        button.setAttribute('aria-label', english ? 'Code copied' : '代码已复制')
+        if (status) status.textContent = english ? 'Code copied.' : '代码已复制。'
+        resetTimer = window.setTimeout(() => { button.classList.remove('copied'); button.setAttribute('aria-label', copyLabel) }, Number(button.dataset.resetMs) || 2000)
+      } catch {
+        button.classList.remove('copied')
+        button.setAttribute('aria-label', copyLabel)
+        if (status) status.textContent = english ? 'Copy failed. Select the code and copy it manually.' : '复制失败，请选择代码后手动复制。'
+      } finally { button.disabled = false }
+    })
+  })
+  document.querySelectorAll<HTMLButtonElement>('[data-code-collapse]').forEach((button) => {
+    const update = () => {
+      const expanded = !button.parentElement?.classList.contains('collapsed')
+      button.setAttribute('aria-expanded', String(expanded))
+      button.setAttribute('aria-label', expanded ? expandedLabel : collapsedLabel)
+      const label = button.querySelector('.desc')
+      if (label) label.textContent = expanded ? expandedLabel : collapsedLabel
+    }
+    button.addEventListener('click', () => { button.parentElement?.classList.toggle('collapsed'); update() })
+    update()
+  })
+</script>
+<style is:global>
+  [data-code-copy], [data-code-collapse] { min-width:44px; min-height:44px; }
+  [data-code-copy]:focus-visible, [data-code-collapse]:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; }
+</style>
