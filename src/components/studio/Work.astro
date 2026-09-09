@@ -3,23 +3,52 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import type { SiteLocale } from '@/i18n/site'
 import WorkCard from './WorkCard.astro'
 import CompactArchive from './CompactArchive.astro'
-import {caseStudies,local} from '@/data/studio/curation'
-import ContentDirectory,{type DirectoryItem} from '@/components/projects/ContentDirectory.astro'
-import {getBlogCollection,sortMDByDate} from 'astro-pure/server'
+import { caseStudies, local } from '@/data/studio/curation'
+import ContentDirectory, { type DirectoryItem } from '@/components/projects/ContentDirectory.astro'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import contributions from '@/data/external-contributions.json'
 import syncReport from '@/data/sync-report.json'
-interface Props {locale:SiteLocale}
-const {locale}=Astro.props
-const en=locale==='en-US'
-const t=(zh:string,english:string)=>local(locale,zh,english)
-const posts=sortMDByDate(await getBlogCollection())
-const directory:DirectoryItem[]=[...posts.map(post=>({kind:'Writing' as const,title:post.data.title,meta:new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'short'}).format(post.data.publishDate),href:`/blog/${post.id}`,source:'lora-sys' as const,detail:post.data.language==='en-US'?'英文原文':'中文长文'})),...contributions.contributions.map(item=>({kind:'Contribution' as const,title:item.repository,meta:item.label,href:item.repositoryUrl,source:'External' as const,detail:item.note}))]
+interface Props { locale: SiteLocale }
+const { locale } = Astro.props
+const en = locale === 'en-US'
+const t = (zh: string, english: string) => local(locale, zh, english)
+const posts = sortMDByDate(await getBlogCollection())
+const directory: DirectoryItem[] = [
+  ...posts.map(post => ({ kind: 'Writing' as const, title: post.data.title, meta: new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'short' }).format(post.data.publishDate), href: `/blog/${post.id}`, source: 'lora-sys' as const, detail: post.data.language === 'en-US' ? '英文原文' : '中文长文' })),
+  ...contributions.contributions.map(item => ({ kind: 'Contribution' as const, title: item.repository, meta: item.label, href: item.repositoryUrl, source: 'External' as const, detail: item.note }))
+]
 ---
-<BaseLayout lang={locale} meta={{title:t('作品','Work'),description:t('四个项目案例与完整仓库档案。查看用途、工程选择、源码和限制。','Four project case studies and the full repository archive. Inspect the use cases, engineering decisions, source and limitations.')}}>
- <main class='studio-page work-page'>
-  <header class='page-intro'><p class='eyebrow'>{t('作品 / 项目案例与源码','Work / Case studies & source')}</p><h1>{t('从具体问题，看到实现选择。','From a concrete problem to an engineering decision.')}</h1><p class='lede'>{t('先看四个项目，再按用途、来源和状态浏览完整档案。图中的机制示意不是产品截图。','Start with four projects, then filter the archive by area, source and status. Interface studies are diagrams, not product screenshots.')}</p></header>
-  <section aria-labelledby='selected-work-title'><header class='section-head'><h2 id='selected-work-title'>{t('精选案例','Selected case studies')}</h2><a class='text-link' href='#archive'>{t('浏览完整档案','Browse the archive')} ↓</a></header><div class='work-grid'>{caseStudies.map((study,i)=><WorkCard {study} {locale} lead={i===0}/>)}</div></section>
-  <details class='studio-catalog' id='archive' data-work-archive><summary><span><b>{t('完整项目档案','Full project archive')}</b><small>{t('保留所有同步项目与外部贡献，支持搜索和稳定链接。','All synchronized projects and external contributions, with search and stable links.')}</small></span><i aria-hidden='true'>+</i></summary><div class='catalog-body'><CompactArchive {locale}/>{!en&&<details class='secondary-tools'><summary>{t('文章与公开贡献目录','Articles and contributions')}</summary><div><ContentDirectory items={directory} opportunities={[]} audit={{status:syncReport.status,syncedAt:syncReport.syncedAt,allowlistCount:contributions.allowlist.length,contributionCount:contributions.contributions.length,warningCount:syncReport.warnings.length}}/></div></details>}</div></details>
-  <section class='contact-strip'><div><h2>{t('有具体反馈？','Have specific feedback?')}</h2><p>{t('仓库问题可以直接提 Issue，其他交流欢迎邮件。','Open a repository issue for a project problem, or email for other conversations.')}</p></div><a class='button' href={t('/contact','/en/contact')}>{t('联系我','Contact me')} ↗</a></section>
- </main>
+<BaseLayout lang={locale} meta={{ title: t('作品', 'Work'), description: t('四个项目案例与完整仓库档案。查看用途、工程选择、源码和限制。', 'Four project case studies and the full repository archive. Inspect use cases, engineering decisions, source and limitations.') }}>
+  <main class='studio-page work-page'>
+    <header class='page-intro'>
+      <p class='eyebrow'>{t('作品 / 项目案例与源码', 'Work / Case studies & source')}</p>
+      <h1>{t('从问题，看到实现。', 'From a problem to an implementation.')}</h1>
+      <p class='lede'>{t('四个项目的用途、实现选择与限制。其余项目保留在可筛选的完整档案里。', 'Four projects, their engineering choices and limitations. The remaining work stays in the filterable archive.')}</p>
+    </header>
+    <section aria-labelledby='selected-work-title'>
+      <header class='section-head'><h2 id='selected-work-title'>{t('精选案例', 'Selected case studies')}</h2><a class='text-link' href='#archive'>{t('浏览完整档案', 'Browse the archive')} ↓</a></header>
+      <div class='work-grid'>{caseStudies.map((study, i) => <WorkCard {study} {locale} lead={i === 0}/>)}</div>
+    </section>
+    <details class='studio-catalog' id='archive' data-work-archive>
+      <summary><span><b>{t('完整项目档案', 'Full project archive')}</b><small>{t('保留所有同步项目与外部贡献，支持搜索和稳定链接。', 'All synchronized projects and external contributions, with search and stable links.')}</small></span><i aria-hidden='true'>+</i></summary>
+      <div class='catalog-body'>
+        <CompactArchive {locale}/>
+        {!en && <section class='secondary-tools' aria-label='文章与公开贡献目录'><ContentDirectory items={directory} opportunities={[]} audit={{ status: syncReport.status, syncedAt: syncReport.syncedAt, allowlistCount: contributions.allowlist.length, contributionCount: contributions.contributions.length, warningCount: syncReport.warnings.length }}/></section>}
+      </div>
+    </details>
+    <section class='contact-strip'><div><h2>{t('有具体反馈？', 'Have specific feedback?')}</h2><p>{t('仓库问题可以直接提 Issue，其他交流欢迎邮件。', 'Open a repository issue for a project problem, or email for other conversations.')}</p></div><a class='button' href={t('/contact', '/en/contact')}>{t('联系我', 'Contact me')} ↗</a></section>
+  </main>
 </BaseLayout>
+<style>
+  .work-page .page-intro { margin-bottom: 1.5rem; padding-bottom: 1.3rem; }
+  .work-page .page-intro h1 { font-size: clamp(2rem, 4vw, 3.1rem); max-width: 29ch; }
+  .work-page .page-intro .lede { font-size: .94rem; max-width: 62ch; line-height: 1.7; margin-top: .8rem; }
+  .work-page .section-head { margin-bottom: 1rem; }
+  @media(max-width:640px) {
+    .work-page .page-intro h1 { font-size: 1.95rem; line-height: 1.18; }
+    .work-page .page-intro { margin-bottom: 1rem; padding-bottom: 1rem; }
+    .work-page .section-head h2 { font-size: 1.15rem; }
+    .work-page .section-head { gap: .4rem; align-items: center; }
+    .work-page .section-head > a { font-size: .72rem; }
+  }
+</style>

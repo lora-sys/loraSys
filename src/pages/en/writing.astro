@@ -1,6 +1,0 @@
----
-import {getBlogCollection,sortMDByDate} from 'astro-pure/server'
-import WritingPage from '@/components/studio/WritingPage.astro'
-const posts=sortMDByDate(await getBlogCollection()).filter(post=>post.data.language==='en-US')
----
-<WritingPage locale='en-US' {posts} total={posts.length}/>
