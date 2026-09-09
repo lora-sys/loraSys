@@ -93,6 +93,44 @@ try {
       assert.equal(await input.inputValue(),'Zhihu/')
       assert.ok(new URL(page.url()).pathname.includes('/en/search'))
     })
+    await check(`${label}: localized filter status and stable category history`,async()=>{
+      await open('projects/?category=Tools')
+      const category=page.locator('[data-category-filter="Tools"]')
+      await category.waitFor({state:'visible'})
+      assert.equal(await category.getAttribute('aria-pressed'),'true')
+      assert.match(await page.locator('[data-filter-status]').textContent(),/开发工具/)
+      assert.doesNotMatch(await page.locator('[data-filter-status]').textContent(),/Tools/)
+      await page.locator('[data-category-filter="all"]').click()
+      await page.waitForURL(url=>!url.searchParams.has('category'))
+      await page.goBack()
+      await page.waitForFunction(()=>document.querySelector('[data-category-filter="Tools"]')?.getAttribute('aria-pressed')==='true')
+      assert.equal(new URL(page.url()).searchParams.get('category'),'Tools')
+      assert.match(await page.locator('[data-filter-status]').textContent(),/开发工具/)
+      await capture('localized-category')
+    })
+    await check(`${label}: IME composition and unrelated Escape retain focus`,async()=>{
+      await open('projects/zhihu-threads/')
+      const initial=page.url()
+      const unhandled=await page.evaluate(()=>document.body.dispatchEvent(new KeyboardEvent('keydown',{key:'/',isComposing:true,bubbles:true,cancelable:true})))
+      assert.equal(unhandled,true,'Composition keystrokes must not be intercepted')
+      assert.equal(page.url(),initial)
+      const menu=page.locator('[data-menu-toggle]')
+      if(await menu.isVisible()) {
+        await menu.press('Enter')
+        await page.waitForFunction(()=>document.querySelector('[data-menu-toggle]')?.getAttribute('aria-expanded')==='true')
+        await page.keyboard.press('Escape')
+        assert.equal(await menu.getAttribute('aria-expanded'),'false')
+        assert.equal(await menu.evaluate(el=>document.activeElement===el),true)
+      }
+      const theme=page.locator('#toggleDarkMode')
+      await theme.focus();await theme.press('Escape')
+      assert.equal(await theme.evaluate(el=>document.activeElement===el),true,'Closed menu must not steal Escape from other controls')
+    })
+    await check(`${label}: disabled statistics do not load or show empty counts`,async()=>{
+      await open('lab/')
+      assert.equal(await page.locator('.waline-pageview-count,.waline-comment-count').count(),0)
+      assert.equal(await page.evaluate(()=>[...document.scripts].some(s=>s.textContent.includes('loadPageview'))),false)
+    })
     await check(`${label}: dark-mode accessibility`,async()=>{
       if(!process.env.AXE_PATH) return
       for(const route of ['projects/','en/work/','projects/zhihu-threads/','en/projects/zhihu-threads/']) {
