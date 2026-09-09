@@ -140,6 +140,40 @@ try {
         assert.deepEqual(violations,[],route)
       }
     })
+    await check(`${label}: visible code labels have no generated English duplicates`,async()=>{
+      for(const [route,expand,collapse] of [['blog/ai-engineering-harness/','展开代码','收起代码'],['blog/eve-agent/','Expand code','Collapse code']]) {
+        await open(route)
+        const button=page.locator('[data-code-collapse]').first()
+        await button.waitFor()
+        const state=()=>button.evaluate(el=>{const desc=el.querySelector('.desc');return {text:desc.textContent.trim(),before:getComputedStyle(desc,'::before').content,after:getComputedStyle(desc,'::after').content}})
+        let value=await state()
+        assert.equal(value.text,expand)
+        assert.ok(['none','normal','""'].includes(value.before),JSON.stringify(value))
+        assert.ok(['none','normal','""'].includes(value.after),JSON.stringify(value))
+        await button.press('Enter')
+        value=await state();assert.equal(value.text,collapse)
+        assert.ok(['none','normal','""'].includes(value.before),JSON.stringify(value))
+        await button.press('Enter')
+        assert.equal((await state()).text,expand)
+        await capture(route.includes('eve-agent')?'en-code-labels':'zh-code-labels')
+      }
+    })
+    await check(`${label}: localized search filter labels retain selection`,async()=>{
+      for(const [route,label] of [['search/','标签'],['en/search/','Tags']]) {
+        await open(route)
+        const input=page.locator('.pagefind-ui__search-input');await input.waitFor();await input.fill('Agent')
+        await page.locator('.pagefind-ui__result-link').first().waitFor()
+        const filter=page.locator('.pagefind-ui__filter-block').first();await filter.waitFor()
+        const names=await page.locator('.pagefind-ui__filter-name').allTextContents()
+        assert.deepEqual(names.map(s=>s.trim()),[label])
+        if(!await filter.evaluate(el=>el.open)) await filter.locator('summary').click()
+        const option=filter.locator('input[type="checkbox"]').first()
+        await option.check();assert.equal(await option.isChecked(),true)
+        await option.uncheck();assert.equal(await option.isChecked(),false)
+        await page.locator('.pagefind-ui__result-link').first().waitFor()
+        await capture(route.startsWith('en/')?'en-filter-label':'zh-filter-label')
+      }
+    })
     await check(`${label}: no uncaught script errors`,async()=>assert.deepEqual(errors,[]))
     await context.close()
   }

@@ -233,7 +233,7 @@ span.katex-display {
     margin: 0;
     border-top: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
     & .desc::before {
-      content: 'Collapse';
+      content: none;
     }
     & svg {
       transition: transform 0.2s ease;
@@ -249,7 +249,7 @@ span.katex-display {
       margin: 0.5rem;
       border: 1px solid hsl(var(--border) / var(--un-border-opacity, 1));
       & .desc::before {
-        content: 'Show all';
+        content: none;
       }
       & svg {
         transform: rotate(0deg);
