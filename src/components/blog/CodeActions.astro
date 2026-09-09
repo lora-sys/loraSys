@@ -1,10 +1,20 @@
-<p class="code-feedback sr-only" data-code-feedback role="status" aria-live="polite"></p>
+<p class="code-feedback" data-code-feedback role="status" aria-live="polite"></p>
 <script>
   const english = document.documentElement.lang.startsWith('en')
   const status = document.querySelector<HTMLElement>('[data-code-feedback]')
   const copyLabel = english ? 'Copy code' : '复制代码'
   const expandedLabel = english ? 'Collapse code' : '收起代码'
   const collapsedLabel = english ? 'Expand code' : '展开代码'
+  let feedbackTimer: number | undefined
+  const announce = (message: string, persistent = false) => {
+    if (!status) return
+    if (feedbackTimer) window.clearTimeout(feedbackTimer)
+    status.textContent = message
+    if (!persistent) feedbackTimer = window.setTimeout(() => { status.textContent = '' }, 3000)
+  }
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && status) status.textContent = ''
+  })
   document.querySelectorAll<HTMLButtonElement>('[data-code-copy]').forEach((button) => {
     button.setAttribute('aria-label', copyLabel)
     let resetTimer: number | undefined
@@ -15,12 +25,12 @@
         await navigator.clipboard.writeText(button.dataset.code ?? '')
         button.classList.add('copied')
         button.setAttribute('aria-label', english ? 'Code copied' : '代码已复制')
-        if (status) status.textContent = english ? 'Code copied.' : '代码已复制。'
+        announce(english ? 'Code copied.' : '代码已复制。')
         resetTimer = window.setTimeout(() => { button.classList.remove('copied'); button.setAttribute('aria-label', copyLabel) }, Number(button.dataset.resetMs) || 2000)
       } catch {
         button.classList.remove('copied')
         button.setAttribute('aria-label', copyLabel)
-        if (status) status.textContent = english ? 'Copy failed. Select the code and copy it manually.' : '复制失败，请选择代码后手动复制。'
+        announce(english ? 'Copy failed. Select the code and copy it manually.' : '复制失败，请选择代码后手动复制。', true)
       } finally { button.disabled = false }
     })
   })
@@ -36,6 +46,10 @@
     update()
   })
 </script>
+<style>
+  .code-feedback:empty { display:none; }
+  .code-feedback { position:fixed; z-index:60; left:1rem; bottom:max(1rem,env(safe-area-inset-bottom)); max-width:min(28rem,calc(100vw - 6rem)); margin:0; padding:.65rem .85rem; border:1px solid hsl(var(--border)); border-radius:.65rem; background:hsl(var(--background)); color:hsl(var(--foreground)); box-shadow:0 4px 18px hsl(var(--foreground)/.12); font-size:.875rem; line-height:1.6; }
+</style>
 <style is:global>
   [data-code-copy], [data-code-collapse] { min-width:44px; min-height:44px; }
   [data-code-copy]:focus-visible, [data-code-collapse]:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; }
