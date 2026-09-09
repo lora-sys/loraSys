@@ -10,22 +10,22 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
 ---
 
 <PageLayout
-  title='Notes'
+  title='短笔记'
   heading='短笔记'
   description='Lora 的短篇工程观察、实验记录与技术判断。'
   headings={[]}
 >
   <Fragment slot='head'>
     <CollectionPageJsonLd
-      name='Notes'
+      name='短笔记'
       description='Lora 的短篇工程观察、实验记录与技术判断。'
     />
   </Fragment>
   <div class='not-prose notes-intro'>
-    <p class='eyebrow'>Field notes / 随记</p>
+    <p class='eyebrow'>随记</p>
     <div class='intro-line'>
-      <p>未长成文章的观察、实验记录与工程判断。它们比 Blog 更短，但会保留问题的棱角。</p>
-      <span>{String(notes.length).padStart(2, '0')} notes</span>
+      <p>未长成文章的观察、实验记录与工程判断。它们比长文更短，但会保留问题的棱角。</p>
+      <span>{String(notes.length).padStart(2, '0')} 条笔记</span>
     </div>
     <Image
       src={notesFieldStrip}
@@ -39,8 +39,8 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
     />
   </div>
 
-  <div class='not-prose note-filters' aria-label='Filter notes by topic'>
-    <button type='button' data-note-filter='all' aria-pressed='true'>All</button>
+  <div class='not-prose note-filters' aria-label='按主题筛选笔记'>
+    <button type='button' data-note-filter='all' aria-pressed='true'>全部</button>
     {
       tags.map((tag) => (
         <button type='button' data-note-filter={tag} aria-pressed='false'>
@@ -68,7 +68,7 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
             <h2>{note.title}</h2>
             <p>{note.summary}</p>
             <footer>
-              <ul aria-label={`Tags for ${note.title}`}>
+              <ul aria-label={`${note.title} 的标签`}>
                 {note.tags.map((tag) => (
                   <li>#{tag}</li>
                 ))}
@@ -105,7 +105,7 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
         if (show) visible += 1
       })
 
-      if (status) status.textContent = `${visible} notes shown for ${selected}`
+      if (status) status.textContent = `已显示 ${visible} 条笔记，主题：${selected === 'all' ? '全部' : selected}`
     })
   })
 </script>

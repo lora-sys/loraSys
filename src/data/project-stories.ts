@@ -1,4 +1,4 @@
-export type ProjectStoryKind = 'Writing' | 'Channel'
+export type ProjectStoryKind = 'Writing' | 'Channel' | 'Project'
 
 export interface ProjectStoryLink {
   kind: ProjectStoryKind
@@ -13,6 +13,7 @@ export interface ProjectStoryLink {
  * per-post URLs are available; never infer or fabricate social posts.
  */
 export const projectStories: Record<string, ProjectStoryLink[]> = {
+  'zhihu-threads': [{ kind: 'Project', label: '来源选择与学习线', href: '/projects/zhihu-threads' }],
   'Glassbox-Agent-Harness': [
     {
       kind: 'Writing',
@@ -26,6 +27,7 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
       external: true
     }
   ],
+  'ai-engineering-harness': [{ kind: 'Writing', label: 'AI Engineering Harness: 从 Vibe Coding 到工程化', href: '/blog/ai-engineering-harness' }],
   'free-vision-skill': [
     {
       kind: 'Writing',
@@ -67,7 +69,19 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
   ]
 }
 
-export const getProjectStories = (repository: string) => projectStories[repository] ?? []
+const storyLabels: Record<string, [string, string]> = {
+  '来源选择与学习线': ['来源选择与学习线', 'Source selection and learning threads'],
+  'Bilibili channel': ['哔哩哔哩主页', 'Bilibili profile'],
+  '小红书 channel': ['小红书主页', 'Xiaohongshu profile'],
+  '知乎 channel': ['知乎主页', 'Zhihu profile']
+}
+export const getProjectStories = (repository: string, locale: 'zh-CN' | 'en-US' = 'zh-CN') =>
+  (projectStories[repository] ?? []).map((story) => ({
+    ...story,
+    href: story.kind === 'Project' && locale === 'en-US' ? `/en${story.href}` : story.href,
+    label: storyLabels[story.label]?.[locale === 'en-US' ? 1 : 0] ??
+      (locale === 'en-US' && story.kind === 'Writing' ? 'Read the original Chinese article' : story.label)
+  }))
 
 export const getProjectsForStory = (href: string) =>
   Object.entries(projectStories)

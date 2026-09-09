@@ -1,9 +1,12 @@
 ---
+import { uiLocale, text, displayLabel } from '@/i18n/ui'
+import { localizeProject } from '@/i18n/project-copy'
 import type { Project } from '@/data/projects'
 
 import { Icon } from 'astro-pure/user'
 
 import ProjectMedia from './ProjectMedia.astro'
+import CopyAction from '@/components/layout/CopyAction.astro'
 import { getProjectStories } from '@/data/project-stories'
 
 interface Props {
@@ -18,23 +21,26 @@ interface Props {
 }
 
 const {
-  project,
+  project: rawProject,
   variant = 'grid',
   priority = false,
   lens = variant !== 'grid',
   filterable = false,
   compact = false,
-  compactLocale = 'en-US',
+  compactLocale = uiLocale(Astro.url.pathname),
   anchor = false
 } = Astro.props
+const project = localizeProject(rawProject, compactLocale)
+const t = (zh: string, en: string) => text(compactLocale, zh, en)
+const caseHref = project.repository.toLowerCase() === 'zhihu-threads' ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${compactLocale === 'en-US' ? '/en/projects/zhihu-threads' : '/projects/zhihu-threads'}` : undefined
 const source = project.links.find((link) => link.type === 'source')
 const website = project.links.find((link) => link.type === 'website')
 const contribution = project.links.find((link) => link.type === 'contribution')
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const projectPath = compactLocale === 'en-US' ? '/en/work' : '/projects'
-const projectHref = website?.href ?? `${base}${projectPath}#${project.repository}`
-const projectIsExternal = Boolean(website)
-const interactionLabel = {
+const projectHref = caseHref ?? website?.href ?? `${base}${projectPath}#${project.repository}`
+const projectIsExternal = !caseHref && Boolean(website)
+const interactionLabel = compactLocale === 'zh-CN' ? '查看项目' : {
   'Glassbox-Agent-Harness': 'TRACE RUN',
   AgentArena: 'JUDGE VERDICT',
   'ai-engineering-harness': 'MERGE LOOP',
@@ -53,14 +59,15 @@ const statusLabel = {
   active: 'Maintained',
   archived: 'Archived'
 }[project.status]
-const sourceLabel = project.source === 'External' ? 'External contribution' : project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'
+const localizedStatus = displayLabel(statusLabel, compactLocale)
+const sourceLabel = project.source === 'External' ? t('外部贡献', 'External contribution') : project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'
 const primaryCategory =
   project.categories.find((category) => !['Featured', 'Open Source'].includes(category)) ??
   'Open Source'
 const visibleTechnologies = project.technologies.slice(0, 3)
 const technologyOverflow = Math.max(0, project.technologies.length - visibleTechnologies.length)
-const stories = getProjectStories(project.repository)
-const pushedAt = new Intl.DateTimeFormat('en', {
+const stories = getProjectStories(project.repository, compactLocale)
+const pushedAt = new Intl.DateTimeFormat(compactLocale, {
   month: 'short',
   year: 'numeric',
   timeZone: 'UTC'
@@ -98,6 +105,7 @@ const filterAttributes = filterable
     {project}
     {priority}
     {lens}
+    locale={compactLocale}
     quality={compact ? 84 : undefined}
     sizes={variant === 'lead'
       ? '(min-width: 1024px) 58vw, 100vw'
@@ -146,10 +154,10 @@ const filterAttributes = filterable
     ) : (
   <div class='project-body'>
     <div class='project-eyebrow'>
-      <span>{primaryCategory}</span>
-      <span class='project-source' title={`Source: ${project.source}`} aria-label={`Project source: ${sourceLabel}`}>{sourceLabel}</span>
+      <span>{displayLabel(primaryCategory, compactLocale)}</span>
+      <span class='project-source' title={`${t('来源', 'Source')}: ${project.source}`} aria-label={`${t('项目来源', 'Project source')}: ${sourceLabel}`}>{sourceLabel}</span>
       <span class:list={['status', `status--${project.status}`]}>
-        <i aria-hidden='true'></i>{statusLabel}
+        <i aria-hidden='true'></i>{localizedStatus}
       </span>
     </div>
 
@@ -157,17 +165,17 @@ const filterAttributes = filterable
       <h3>{project.title}</h3>
       <span translate='no'>{project.repository}</span>
     </div>
-    <p>{project.description || 'No description published yet.'}</p>
+    <p>{project.description || t('暂未发布项目说明。', 'No description published yet.')}</p>
     <slot name='demo' />
 
     {
       visibleTechnologies.length > 0 && (
-        <ul class='technologies' aria-label='Technologies'>
+        <ul class='technologies' aria-label={t('技术栈', 'Technologies')}>
           {visibleTechnologies.map((technology) => (
-            <li translate='no'>{technology}</li>
+            <li translate='no'>{displayLabel(technology, compactLocale)}</li>
           ))}
           {technologyOverflow > 0 && (
-            <li aria-label={`${technologyOverflow} more technologies`}>+{technologyOverflow}</li>
+            <li aria-label={t(`另有 ${technologyOverflow} 项技术`, `${technologyOverflow} more technologies`)}>+{technologyOverflow}</li>
           )}
         </ul>
       )
@@ -175,8 +183,8 @@ const filterAttributes = filterable
 
     {
       stories.length > 0 && (
-        <div class='project-stories' aria-label='Related project stories'>
-          <span class='project-stories-label'>Story</span>
+        <div class='project-stories' aria-label={t('项目相关内容', 'Related project stories')}>
+          <span class='project-stories-label'>{t('相关记录', 'Related records')}</span>
           <div class='project-story-links'>
             {stories.map((story) => (
               <a
@@ -186,7 +194,7 @@ const filterAttributes = filterable
                 data-interaction='project_story'
                 data-destination={story.kind}
               >
-                {story.kind} · {story.label}
+                {displayLabel(story.kind, compactLocale)} · {story.label}
                 <span aria-hidden='true'>↗</span>
               </a>
             ))}
@@ -196,12 +204,12 @@ const filterAttributes = filterable
     }
 
     <div class='project-foot'>
-      <div class='github-meta' aria-label='GitHub repository metadata'>
+      <div class='github-meta' aria-label={t('GitHub 仓库信息', 'GitHub repository metadata')}>
         {
           project.stars > 0 && (
             <span>
               <Icon name='github-circle' class='size-3.5' aria-hidden='true' />
-              {project.stars} {project.stars === 1 ? 'star' : 'stars'}
+              {project.stars} {t('收藏', project.stars === 1 ? 'star' : 'stars')}
             </span>
           )
         }
@@ -210,6 +218,8 @@ const filterAttributes = filterable
       </div>
 
       <div class='project-actions'>
+        <CopyAction value={`${base}${projectPath}#${project.repository}`} locale={compactLocale} url />
+        {caseHref && <a class='primary tactile-action' href={caseHref} data-case-link>{t('查看项目说明', 'Read project notes')}</a>}
         {
           website && (
             <a
@@ -221,7 +231,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='earth' class='size-4' aria-hidden='true' />
-              Visit website <span aria-hidden='true'>↗</span>
+              {t('访问网站', 'Visit website')} <span aria-hidden='true'>↗</span>
             </a>
           )
         }
@@ -235,7 +245,7 @@ const filterAttributes = filterable
               data-interaction='project_contribution'
               data-destination={project.repository}
             >
-              Contribution PR <span aria-hidden='true'>↗</span>
+              {t('贡献记录', 'Contribution PR')} <span aria-hidden='true'>↗</span>
             </a>
           )
         }
@@ -250,7 +260,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='github-circle' class='size-4' aria-hidden='true' />
-              {project.source === 'External' ? 'Project' : 'Source'} <span aria-hidden='true'>↗</span>
+              {project.source === 'External' ? t('原项目', 'Project') : t('源码', 'Source')} <span aria-hidden='true'>↗</span>
             </a>
           )
         }
@@ -411,7 +421,7 @@ const filterAttributes = filterable
     padding: 0.22rem 0.42rem;
     background: hsl(var(--foreground) / 0.72);
     color: hsl(var(--background));
-    font-size: 0.56rem;
+    font-size:.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     opacity: 0;
@@ -469,7 +479,7 @@ const filterAttributes = filterable
     padding: clamp(1rem, 2.5vw, 1.35rem);
     transform: translate3d(var(--body-x, 0px), var(--body-y, 0px), 0);
     transition: transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
-    will-change: transform;
+    will-change: auto;
   }
 
   .project-card--lead .project-body {
@@ -511,7 +521,7 @@ const filterAttributes = filterable
     justify-content: space-between;
     gap: 0.8rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.67rem;
+    font-size:.75rem;
     font-weight: 620;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -522,7 +532,7 @@ const filterAttributes = filterable
     border-radius: 999px;
     padding: 0.16rem 0.45rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.58rem;
+    font-size:.75rem;
     letter-spacing: 0.06em;
     text-transform: none;
   }
@@ -579,7 +589,7 @@ const filterAttributes = filterable
     max-width: 40%;
     overflow: hidden;
     color: hsl(var(--muted-foreground));
-    font-size: 0.62rem;
+    font-size:.75rem;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -614,7 +624,7 @@ const filterAttributes = filterable
     border-radius: 999px;
     padding: 0.2rem 0.5rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.65rem;
+    font-size:.75rem;
   }
 
   .project-stories {
@@ -627,7 +637,7 @@ const filterAttributes = filterable
 
   .project-stories-label {
     color: hsl(var(--muted-foreground));
-    font-size: 0.61rem;
+    font-size:.75rem;
     font-weight: 650;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -645,7 +655,7 @@ const filterAttributes = filterable
     max-width: 100%;
     gap: 0.28rem;
     color: hsl(var(--foreground));
-    font-size: 0.68rem;
+    font-size:.75rem;
     line-height: 1.35;
     text-decoration: none;
   }
@@ -665,7 +675,7 @@ const filterAttributes = filterable
     flex-wrap: wrap;
     gap: 0.35rem 0.52rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.67rem;
+    font-size:.75rem;
     font-variant-numeric: tabular-nums;
   }
 
@@ -695,7 +705,7 @@ const filterAttributes = filterable
     border-radius: 999px;
     padding: 0.45rem 0.72rem;
     color: hsl(var(--foreground));
-    font-size: 0.72rem;
+    font-size:.75rem;
     font-weight: 560;
     text-decoration: none;
     transition:

@@ -1,6 +1,6 @@
 {
   "syncVersion": 2,
-  "lastUpdated": "2026-08-20T06:50:56.296Z",
+  "lastUpdated": "2026-09-09T01:23:17.574Z",
   "source": "GitHub GraphQL / user:lora-sys",
   "allowlist": [
     "nishuzumi/moss",
@@ -94,25 +94,6 @@
           "state": "MERGED",
           "mergedAt": "2026-05-25T08:44:05Z",
           "updatedAt": "2026-05-25T08:44:05Z"
-        }
-      ]
-    },
-    {
-      "repository": "datawhalechina/vibe-blog",
-      "repositoryUrl": "https://github.com/datawhalechina/vibe-blog",
-      "description": "Vibe-Blog is a multi-agent AI assistant that turns a single prompt into a 10,000-word technical article. It combines deep research, smart illustrations, Mermaid diagrams, code integration, and professional formatting to transform complex technologies into clear, engaging content, making daily long-form publishing effortless.",
-      "label": "Documentation contribution",
-      "note": "Contributed deployment documentation to an open-source community project.",
-      "priority": 4,
-      "prUrl": null,
-      "projectUrl": null,
-      "pullRequests": [
-        {
-          "title": "docs: add Docker deployment guide to README",
-          "url": "https://github.com/datawhalechina/vibe-blog/pull/57",
-          "state": "MERGED",
-          "mergedAt": "2026-02-04T16:10:29Z",
-          "updatedAt": "2026-02-04T16:10:29Z"
         }
       ]
     },

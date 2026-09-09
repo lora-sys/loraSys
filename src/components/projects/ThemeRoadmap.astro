@@ -7,17 +7,17 @@ interface Props {
 }
 
 const { themes } = Astro.props
-const channelsByName = new Map(socialLinks.map((channel) => [channel.name, channel]))
+const 创作主页ByName = new Map(socialLinks.map((channel) => [channel.name, channel]))
 ---
 
 <section id='theme-roadmap' class='theme-roadmap' aria-labelledby='theme-roadmap-title'>
   <div class='roadmap-intro'>
     <div>
-      <p class='eyebrow'>Theme Roadmap</p>
+      <p class='eyebrow'>主题索引</p>
       <h2 id='theme-roadmap-title'>作品背后的主线。</h2>
     </div>
     <p>
-      A curated view of the technical themes connecting projects, writing, and the channels where the process is shared.
+      按技术主题查找关联项目、文章和创作主页。
     </p>
   </div>
 
@@ -31,28 +31,28 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
         <h3>{theme.title}</h3>
         <p class='theme-description'>{theme.description}</p>
 
-        <div class='theme-counts' aria-label={`${theme.title} coverage`}>
-          <span><strong>{theme.projects.length}</strong> projects</span>
-          <span><strong>{theme.writings.length}</strong> writings</span>
+        <div class='theme-counts' aria-label={`${theme.title} 内容数量`}>
+          <span><strong>{theme.projects.length}</strong> 个项目</span>
+          <span><strong>{theme.writings.length}</strong> 篇文章</span>
         </div>
 
         <div class='theme-links'>
           {theme.projects.slice(0, 2).map((project) => (
-            <a href={`/projects#${project.repository}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='project' aria-label={`${project.title} project, ${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}`}>
-              <span>Project · {project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>{project.title}<span aria-hidden='true'>↗</span>
+            <a href={`/projects#${project.repository}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='project' aria-label={`${project.title} 项目，${project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}`}>
+              <span>项目 · {project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>{project.title}<span aria-hidden='true'>↗</span>
             </a>
           ))}
           {theme.writings.slice(0, 2).map((writing) => (
             <a href={`/blog/${writing.id}`} data-interaction='theme_route' data-theme={theme.slug} data-destination='writing'>
-              <span>Writing</span>{writing.title}<span aria-hidden='true'>↗</span>
+              <span>文章</span>{writing.title}<span aria-hidden='true'>↗</span>
             </a>
           ))}
         </div>
 
         <div class='theme-footer'>
-          <span class='theme-channels' aria-label={`${theme.title} channels`}>
+          <span class='theme-channels' aria-label={`${theme.title} 创作主页`}>
             {theme.channelNames.map((channelName) => {
-              const channel = channelsByName.get(channelName)
+              const channel = 创作主页ByName.get(channelName)
               return channel ? (
                 <a
                   href={channel.href}
@@ -68,7 +68,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
               )
             })}
           </span>
-          <span>Next: {theme.nextFormat}</span>
+          <span>下一篇形式：{theme.nextFormat}</span>
         </div>
       </article>
     ))}
@@ -90,7 +90,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
   .eyebrow {
     margin: 0 0 0.45rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.66rem;
+    font-size:.75rem;
     font-weight: 650;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -129,7 +129,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
     justify-content: space-between;
     gap: 1rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.66rem;
+    font-size:.75rem;
   }
   .theme-channels {
     display: flex;
@@ -173,7 +173,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
     border-top: 1px solid hsl(var(--border));
     padding-top: 0.7rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
+    font-size:.75rem;
   }
   .theme-counts strong {
     color: hsl(var(--foreground));
@@ -191,7 +191,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
     align-items: baseline;
     min-width: 0;
     color: hsl(var(--foreground));
-    font-size: 0.72rem;
+    font-size:.75rem;
     text-decoration: none;
   }
   .theme-links a:hover,
@@ -201,7 +201,7 @@ const channelsByName = new Map(socialLinks.map((channel) => [channel.name, chann
   }
   .theme-links a > span:first-child {
     color: hsl(var(--muted-foreground));
-    font-size: 0.58rem;
+    font-size:.75rem;
     text-transform: uppercase;
   }
   .theme-links a:not(:has(> span:nth-child(3))) {

@@ -96,13 +96,10 @@ export const addCopyButton = (timeout?: number): ShikiTransformer => {
         'button',
         {
           class: 'copy text-muted-foreground p-1 box-content border rounded-lg bg-card',
-          'aria-label': 'Copy code',
-          'data-code': this.source,
-          onclick: `
-          navigator.clipboard.writeText(this.dataset.code);
-          this.classList.add('copied');
-          setTimeout(() => this.classList.remove('copied'), ${toggleMs})
-        `
+          'aria-label': '复制代码',
+          'data-code-copy': '',
+          'data-reset-ms': String(toggleMs),
+          'data-code': this.source
         },
         [
           h('div', { class: 'ready' }, [
@@ -137,14 +134,15 @@ export const addCollapse = (displayLineCount?: number): ShikiTransformer => {
         'button',
         {
           class: 'collapse-toggle bg-card text-muted-foreground rounded-lg m-2',
-          'aria-label': 'Toggle collapse code block',
-          onclick: "this.parentElement.classList.toggle('collapsed')"
+          'aria-label': '展开代码',
+          'aria-expanded': 'false',
+          'data-code-collapse': ''
         },
         [
           h('svg', { class: 'size-5' }, [
             h('use', { href: `${codeIconUrl}#mingcute-arrow-down-line` })
           ]),
-          h('span', { class: 'desc' }, ' code')
+          h('span', { class: 'desc' }, '展开代码')
         ]
       )
       node.children.push(collapse)

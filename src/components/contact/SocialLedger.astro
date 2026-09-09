@@ -1,7 +1,8 @@
 ---
 // 编号社交台账：oiloil 式编辑排版行——图标、编号、大名字、说明、箭头。
 // hover/focus 时名字后面扫过琥珀高亮条，箭头入场；只动 transform 与 opacity。
-import type { SocialLink } from '@/data/social'
+import { localizedSocial, type SocialLink } from '@/data/social'
+import { uiLocale } from '@/i18n/ui'
 
 import SocialIcon from './SocialIcon.astro'
 
@@ -10,7 +11,9 @@ interface Props {
   startAt?: number
 }
 
-const { links, startAt = 1 } = Astro.props
+const { links: sourceLinks, startAt = 1 } = Astro.props
+const links = sourceLinks.map((link) => localizedSocial(link, uiLocale(Astro.url.pathname)))
+
 ---
 
 <ol class='social-ledger'>

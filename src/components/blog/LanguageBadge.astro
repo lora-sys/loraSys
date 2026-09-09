@@ -11,7 +11,7 @@ const isEnglish = language.toLowerCase().startsWith('en')
 <span
   class:list={['language-badge', { compact }]}
   lang={isEnglish ? 'en-US' : 'zh-CN'}
-  title={`Content language: ${language}`}
+  title={isEnglish ? 'English original' : '中文原文'}
 >
   <span>{isEnglish ? 'EN' : '中文'}</span>
 </span>

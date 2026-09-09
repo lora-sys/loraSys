@@ -18,11 +18,11 @@ export interface FriendLink {
 export const friendLinks: FriendLink[] = []
 
 export const linkApplication = [
-  { label: 'Name', value: 'Lora' },
-  { label: 'Desc', value: 'AI Agent Developer & Full-stack Engineer' },
-  { label: 'Link', value: 'https://lora-sys.github.io/loraSys/' },
+  { label: '名称', value: 'Lora' },
+  { label: '简介', value: 'AI Agent 开发者与全栈工程师' },
+  { label: '网址', value: 'https://lora-sys.github.io/loraSys/' },
   {
-    label: 'Avatar',
+    label: '头像',
     value: 'https://lora-sys.github.io/loraSys/favicon/lora-v1-mark-512.png'
   }
 ] as const

@@ -124,3 +124,102 @@ export const favorites: ShowcaseItem[] = [
     href: 'https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA',
   },
 ]
+
+const copy: Record<string, [string, string, string, string]> = {
+  "Made in Abyss": [
+    "来自深渊",
+    "即使付出代价，也想探索深渊的真相。",
+    "Made in Abyss",
+    "Exploring the Abyss, despite the cost."
+  ],
+  "相聚一刻": [
+    "相聚一刻",
+    "平凡日子里的相遇与守护。",
+    "Maison Ikkoku",
+    "Companionship in ordinary days."
+  ],
+  "Kimagure Orange☆Road / 橙路": [
+    "橙路",
+    "夏日、超能力与摇摆不定的青春。",
+    "Kimagure Orange Road",
+    "Summer, psychic powers and uncertain young love."
+  ],
+  "City Hunter / 城市猎人": [
+    "城市猎人",
+    "新宿的夜、神枪手与危险委托。",
+    "City Hunter",
+    "Shinjuku nights, a marksman and dangerous assignments."
+  ],
+  "Steins;Gate": [
+    "命运石之门",
+    "未来尚未确定，选择仍有可能。",
+    "Steins;Gate",
+    "An uncertain future shaped by choices."
+  ],
+  "Attack on Titan": [
+    "进击的巨人",
+    "残酷世界中的生存与选择。",
+    "Attack on Titan",
+    "Survival and choices in a merciless world."
+  ],
+  "Eureka Seven": [
+    "交响诗篇",
+    "自由需要主动争取。",
+    "Eureka Seven",
+    "Freedom that must be actively pursued."
+  ],
+  "Bakuman": [
+    "爆漫王",
+    "将想画的故事变成作品。",
+    "Bakuman",
+    "Turning a story you want to draw into finished work."
+  ],
+  "Death Note": [
+    "死亡笔记",
+    "正义、权力与后果之间的冲突。",
+    "Death Note",
+    "A conflict between justice, power and consequences."
+  ],
+  "天元突破红莲螺岩": [
+    "天元突破红莲螺岩",
+    "从地底走向自己的天空。",
+    "Gurren Lagann",
+    "A journey from underground to an open sky."
+  ],
+  "四月是你的谎言": [
+    "四月是你的谎言",
+    "音乐与青春的记忆。",
+    "Your Lie in April",
+    "Music and memories of youth."
+  ],
+  "The Shawshank Redemption": [
+    "肖申克的救赎",
+    "困境中的希望与坚持。",
+    "The Shawshank Redemption",
+    "Hope and persistence through hardship."
+  ],
+  "Living Inside Of Your Love": [
+    "Living Inside Of Your Love",
+    "横仓裕的爵士融合与城市流行音乐。",
+    "Living Inside Of Your Love",
+    "Jazz fusion and city pop by Yutaka Yokokura."
+  ],
+  "Bitcoin": [
+    "比特币",
+    "数字稀缺性、开放网络与可编程货币。",
+    "Bitcoin",
+    "Digital scarcity, open networks and programmable money."
+  ],
+  "Black Myth: Wukong": [
+    "黑神话：悟空",
+    "以西游故事为背景的游戏。",
+    "Black Myth: Wukong",
+    "A game inspired by Journey to the West."
+  ]
+}
+export const localizeShowcase = (item: ShowcaseItem, en: boolean): ShowcaseItem => {
+  const entry = copy[item.name]
+  return { ...item, name: entry ? entry[en ? 2 : 0] : en ? item.nameEn ?? item.name : item.name,
+    description: entry ? entry[en ? 3 : 1] : en ? item.descriptionEn ?? item.description : item.description,
+    cta: item.spotify ? en ? 'Listen' : '收听' : item.cta }
+}

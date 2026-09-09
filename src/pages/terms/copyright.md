@@ -1,12 +1,11 @@
 ---
 layout: '@/layouts/IndividualPage.astro'
-
-title: 'Copyright'
-description: 'Effective date: 2026-08-13'
-language: 'En'
+title: '版权与许可'
+description: '更新于 2026 年 9 月 9 日'
+language: 'zh-CN'
 back: '/terms'
 ---
 
-Unless an individual page says otherwise, original articles and written content are licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). You may share and adapt them for non-commercial purposes with attribution and the same license.
+除非页面另有说明，本站原创文章和文字内容使用 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可。使用时需要署名，只能用于非商业目的，演绎内容需采用相同许可。
 
-Source code is governed by the license in its repository. Product names, logos, screenshots, embedded media, and third-party assets remain the property of their respective owners.
+源码以各仓库中的许可证为准。产品名称、标志、截图、嵌入媒体与第三方素材的权利归各自权利人所有。文章许可不代表这些第三方素材可以自由再分发。

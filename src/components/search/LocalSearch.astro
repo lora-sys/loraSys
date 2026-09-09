@@ -1,0 +1,71 @@
+---
+import '@pagefind/default-ui/css/ui.css'
+interface Props { locale: 'zh-CN' | 'en-US' }
+const { locale } = Astro.props
+---
+
+<localized-site-search data-locale={locale}>
+  <aside class='form my-4'>
+    {import.meta.env.DEV ? (
+      <p class='rounded-xl border-2 px-4 py-2'>{locale === 'en-US' ? 'Search is available in the production preview.' : '搜索在生产构建预览中可用。'}</p>
+    ) : (
+      <Fragment><div id='site-search' /><p data-search-load-error role='status' hidden></p></Fragment>
+    )}
+  </aside>
+</localized-site-search>
+
+<script>
+  class SiteSearch extends HTMLElement {
+    connectedCallback() {
+      if (this.dataset.initialized || import.meta.env.DEV) return
+      this.dataset.initialized = 'true'
+      const initialize = () => { void this.initialize() }
+      if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', initialize, { once: true })
+      else initialize()
+    }
+    async initialize() {
+      if (!this.querySelector('#site-search')) return
+      const formatURL = (url: string) => url.replace(/(.)\/(#.*)?$/, '$1$2')
+      try {
+        // @ts-expect-error Missing declarations in @pagefind/default-ui.
+        const { PagefindUI } = await import('@pagefind/default-ui')
+        new PagefindUI({
+          element: '#site-search',
+          translations: this.dataset.locale === 'en-US'
+            ? { placeholder: 'Search articles and projects', zero_results: 'No results for [SEARCH_TERM]', clear_search: 'Clear', searching: 'Searching…' }
+            : { placeholder: '搜索文章与项目', zero_results: '没有找到 [SEARCH_TERM]', clear_search: '清除', searching: '正在搜索…' },
+          baseUrl: import.meta.env.BASE_URL,
+          bundlePath: `${import.meta.env.BASE_URL.replace(/\/$/, '')}/pagefind/`,
+          showImages: false,
+          showSubResults: true,
+          processResult: (result: { url: string; sub_results: Array<{ url: string }> }) => {
+            result.url = formatURL(result.url)
+            result.sub_results = result.sub_results.map((item) => ({ ...item, url: formatURL(item.url) }))
+            return result
+          }
+        })
+      } catch {
+        const error = this.querySelector<HTMLElement>('[data-search-load-error]')
+        if (error) {
+          error.hidden = false
+          error.textContent = this.dataset.locale === 'en-US' ? 'Search could not load. Refresh or browse the links below.' : '搜索暂时无法加载，请刷新页面或浏览下方链接。'
+        }
+      }
+    }
+  }
+  if (!customElements.get('localized-site-search')) customElements.define('localized-site-search', SiteSearch)
+</script>
+
+<style>
+  #site-search {
+    --pagefind-ui-scale: 0.8;
+    --pagefind-ui-primary: hsl(var(--primary));
+    --pagefind-ui-text: hsl(var(--foreground));
+    --pagefind-ui-background: hsl(var(--muted));
+    --pagefind-ui-border: hsl(var(--border));
+    --pagefind-ui-tag: hsl(var(--muted-foreground));
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: calc(var(--radius) + 2px);
+    --pagefind-ui-font: sans-serif;
+  }
+</style>

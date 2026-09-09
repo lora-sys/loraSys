@@ -115,3 +115,38 @@ export const hackathons = [
     status: 'completed'
   }
 ]
+
+const chineseProfileText: Record<string, string> = {
+  "September 13, 2026": "2026 年 9 月 13 日",
+  "August 22, 2026": "2026 年 8 月 22 日",
+  "June 5–7, 2026": "2026 年 6 月 5 至 7 日",
+  "January 2026": "2026 年 1 月",
+  "February 2026": "2026 年 2 月",
+  "Planned · date pending": "计划参加，日期待定",
+  "2026 · PR open": "2026 年，贡献申请待审",
+  "Upcoming · venue pending": "即将举行，地点待定",
+  "Datawhale × 阿里云 · Online": "Datawhale 与阿里云 · 线上",
+  "Beijing · Kunlun Nest": "北京 · 昆仑巢",
+  "Online": "线上",
+  "Beijing · Startup Hackathon": "北京 · 创业黑客松",
+  "Track 1 · Multimodal Content Creation Tools": "赛道一 · 多模态内容创作工具",
+  "Built an AI Agent × Blockchain project with a team of five.": "与五人团队构建智能体与区块链结合的项目。",
+  "Shipped a working prototype in a 48-hour rapid iteration sprint.": "在 48 小时内完成可运行原型。",
+  "Built a Web3 tarot prediction platform on Monad Testnet.": "在 Monad 测试网上构建 Web3 塔罗预测原型。",
+  "Built Emergence, a resilient multi-agent collaboration protocol.": "构建多智能体协作协议 Emergence。",
+  "Built Agent Arena, an evidence-centered AI Agent team arena for proposal, attack, defense, verification, and replayable verdicts.": "相关项目 Agent Arena 支持提案、攻击、防守、验证与裁决回放。",
+  "Contributed to StagePoster, an AI-native music event poster engine running on AMD Radeon PRO W7900 + ROCm.": "参与 StagePoster 音乐活动海报引擎，使用 AMD Radeon PRO W7900 与 ROCm。",
+  "Monad Blitz Hackathon": "Monad Blitz 黑客松",
+  "Monad Hackathon": "Monad 黑客松",
+  "Online AI Agent Hackathon": "线上智能体黑客松",
+  "Horizon Startup Hackathon": "Horizon 创业黑客松"
+}
+export const profileZh = {
+  ...profile, role: 'AI Agent 开发者与全栈工程师', location: '中国西安',
+  education: profile.education.map((item) => ({ ...item, school: '西安明德理工学院', degree: '计算机科学本科', period: '2023.07 至 2027.07' }))
+}
+export const hackathonsZh = hackathons.map((item) => ({
+  ...item, title: chineseProfileText[item.title] ?? item.title,
+  date: chineseProfileText[item.date] ?? item.date, location: chineseProfileText[item.location] ?? item.location,
+  content: chineseProfileText[item.content] ?? item.content
+}))

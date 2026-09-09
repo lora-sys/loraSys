@@ -1,5 +1,6 @@
 ---
-import type { SocialLink } from '@/data/social'
+import { localizedSocial, type SocialLink } from '@/data/social'
+import { uiLocale } from '@/i18n/ui'
 
 import SocialIcon from './SocialIcon.astro'
 
@@ -8,7 +9,9 @@ interface Props {
   compact?: boolean
 }
 
-const { links, compact = false } = Astro.props
+const { links: sourceLinks, compact = false } = Astro.props
+const links = sourceLinks.map((link) => localizedSocial(link, uiLocale(Astro.url.pathname)))
+
 ---
 
 <div class:list={['social-grid', { compact }]}>

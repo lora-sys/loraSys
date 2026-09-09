@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { loraVisuals, type LoraVisualKey, type VisualEntry } from '@/data/lora-visual'
+import { uiLocale } from '@/i18n/ui'
 
 interface Props {
   asset: LoraVisualKey
@@ -11,11 +12,37 @@ interface Props {
   widths?: number[]
 }
 
+const englishAlt: Record<LoraVisualKey, string> = {
+  heroLora: '', heroMochi: '', heroProps: '',
+  avatar: 'Illustrated portrait of Lora.',
+  aboutJourney: 'Lora and Mochi follow a path through projects, learning and contributions.',
+  aboutHackathon: 'Lora organizes a hackathon evidence board while Mochi holds a timer.',
+  nowWorkbench: 'Lora updates the workbench while Mochi rests beside a timer.',
+  contactCorrespondence: 'Lora and Mochi prepare letters at their correspondence desk.',
+  readingMarker: 'Lora and Mochi place a bookmark in their build notes.',
+  favoritesTicket: 'Lora sorts collected tickets while Mochi sits beside the archive box.',
+  labLedger: 'Lora and Mochi review interactive prototypes in an experiment notebook.',
+  notesStrip: 'Lora and Mochi organize a series of short notes.',
+  blogAgentSystems: 'A task moves from a question card through a run box to an evidence record.',
+  blogMultimodal: 'Text and images join a timeline of inspectable results.',
+  agentRunbook: 'Lora follows a runbook while Mochi carries an evidence folder.',
+  mediaWorkbench: 'Lora organizes image and audio evidence in one folder.',
+  sandbox: 'Lora places an input in an isolated experiment box and checks its output.',
+  shippingLog: 'Lora and Mochi package a completed record for delivery.',
+  projectsMap: 'Lora and Mochi unfold a map of agent, visual, simulation, memory and verification projects.',
+  linksConstellation: 'Lora and Mochi connect friend-link cards with thread.',
+  resumeDossier: 'Lora opens a dossier of experience, projects and supporting records.',
+  guestbookPostcard: 'Lora and Mochi put a blank postcard in the guestbook box.',
+  indexScene: 'Lora and Mochi search and organize a card index.',
+  talksPodium: 'Lora sorts talk cards beside a podium while Mochi watches the microphone.',
+  termsLedger: 'Lora and Mochi read the site terms notebook.',
+  wayfinding404: 'Lora points toward the way home while Mochi inspects a broken path.',
+  stampVerified: '', stampExperiment: '', stampContribution: ''
+}
 const { asset, class: className, priority = false, alt, quality, widths } = Astro.props
 const visual: VisualEntry = loraVisuals[asset]
-const resolvedAlt = alt ?? visual.alt
+const resolvedAlt = alt ?? (uiLocale(Astro.url.pathname) === 'en-US' ? englishAlt[asset] : visual.alt)
 const decorative = visual.decorative ?? resolvedAlt === ''
-const isPriority = priority
 ---
 
 <Image
@@ -25,8 +52,8 @@ const isPriority = priority
   class:list={['lora-visual', `lora-visual--${asset}`, className]}
   widths={widths ?? visual.widths}
   sizes={visual.sizes}
-  loading={isPriority ? 'eager' : 'lazy'}
-  fetchpriority={isPriority ? 'high' : 'auto'}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchpriority={priority ? 'high' : 'auto'}
   quality={quality ?? visual.quality}
   decoding='async'
 />

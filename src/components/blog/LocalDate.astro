@@ -1,0 +1,7 @@
+---
+import { FormattedDate } from 'astro-pure/user'
+import { uiLocale } from '@/i18n/ui'
+interface Props { date: Date; locale?: string; class?: string; dateTimeOptions?: Intl.DateTimeFormatOptions }
+const { locale = uiLocale(Astro.url.pathname), ...props } = Astro.props
+---
+<FormattedDate {locale} {...props} />

@@ -4,9 +4,11 @@ import { cn } from '../../utils'
 
 interface Props {
   heading: TocItem
+  sectionLabel?: string
 }
 
 const {
+  sectionLabel = 'Go to section',
   heading: { depth, slug, subheadings, text: rawText }
 } = Astro.props
 // TODO: Temporary fix for the issue with the headings that end with link reference text
@@ -19,7 +21,7 @@ const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
       class='absolute top-[5%] w-[2px] rounded transition-colors duration-300 [&.highlight-bg]:bg-primary [&.is-read]:bg-border'
     ></span>
     <a
-      aria-label={`Scroll to section: ${text}`}
+      aria-label={`${sectionLabel} ${text}`}
       class={cn(
         'toc-item line-clamp-2 px-3 py-1 ms-2 text-foreground/75 transition-all hover:text-foreground [&.highlight]:font-medium [&.highlight]:text-primary [&.highlight-bg-translucent]:bg-muted',
         depth > 2 && 'ps-7'
@@ -31,7 +33,7 @@ const text = rawText.endsWith('#') ? rawText.slice(0, -1) : rawText
     !!subheadings.length && (
       <ul>
         {subheadings.map((subheading) => (
-          <Astro.self heading={subheading} />
+          <Astro.self heading={subheading} {sectionLabel} />
         ))}
       </ul>
     )

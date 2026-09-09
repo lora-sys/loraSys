@@ -1,9 +1,11 @@
 ---
+import CodeActions from '@/components/blog/CodeActions.astro'
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { uiLocale } from '@/i18n/ui'
 import { integ } from '@/site-config'
 
 interface Props {
@@ -22,7 +24,7 @@ const {
   articleModifiedAt,
   highlightColor,
   back = '/',
-  lang,
+  lang = uiLocale(Astro.url.pathname),
   showSidebar = Astro.slots.has('sidebar'),
   ...props
 } = Astro.props
@@ -30,7 +32,8 @@ const {
 
 <PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {...props}>
   <slot name='head' slot='head' />
-  <Button title='Back' href={back} variant='back' />
+  <CodeActions />
+  <Button title={lang === 'en-US' ? 'Back' : '返回'} href={back} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     {
@@ -83,12 +86,12 @@ const {
     </div>
   </div>
 
-  <BackToTop header='content-header' content='content'>
+  <BackToTop label={lang === 'en-US' ? 'Back to top' : '返回顶部'} header='content-header' content='content'>
     {
       showSidebar && (
         <button
           slot='other-icons'
-          aria-label='Toggle sidebar'
+          aria-label={lang === 'en-US' ? 'Toggle table of contents' : '展开或收起目录'}
           class='size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 md:hidden sm:size-12'
           id='sidebar-btn'
           aria-expanded='false'
@@ -195,4 +198,5 @@ const {
       min-width: 55vw !important;
     }
   }
+  @media(prefers-reduced-motion:reduce){aside,#sidebar-shade{animation:none!important}}
 </style>

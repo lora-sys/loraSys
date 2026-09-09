@@ -76,7 +76,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       items.map((item, i) => (
         <article class:list={['magic-card', { stagger: i % 2 }]} data-magic>
           <a
-            href={item.spotify ? '#spotify-player' : item.href}
+            href={item.href}
             target={item.spotify ? undefined : '_blank'}
             rel='noopener noreferrer'
             class='lens'

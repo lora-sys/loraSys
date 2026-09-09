@@ -1,0 +1,45 @@
+name: Verify published localization
+on:
+  workflow_run:
+    workflows: ['Deploy Astro site to GitHub Pages']
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: published-localization
+  cancel-in-progress: true
+jobs:
+  audit:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated read-only browser checks
+        run: |
+          npm install --prefix "$RUNNER_TEMP/locale-tools" --no-save --package-lock=false playwright@1.58.2 axe-core@4.10.3
+          node "$RUNNER_TEMP/locale-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Inspect published pages and interactions
+        env:
+          SITE_TEST_URL: https://lora-sys.github.io/loraSys/
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          AXE_PATH: ${{ runner.temp }}/locale-tools/node_modules/axe-core/axe.min.js
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/published-locale-evidence
+        run: |
+          node scripts/audit-i18n-site.mjs
+          node scripts/audit-microinteractions.mjs
+          git rev-parse HEAD > "$SITE_TEST_OUTPUT/source-revision.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: published-locale-evidence
+          path: ${{ runner.temp }}/published-locale-evidence
+          if-no-files-found: warn
+          retention-days: 14

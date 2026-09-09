@@ -22,11 +22,23 @@
 
 > Build systems that learn.
 
+## 新项目 Zhihu Threads
+
+[Zhihu Threads](https://github.com/lora-sys/zhihu-threads) 将用户选择的知乎摘要摘录组织成学习线，支持追问和自测。来源由用户选择，证据不足时明确保留未知项。
+
+[查看项目说明](https://lora-sys.github.io/loraSys/projects/zhihu-threads)。
+
+![Lora 与 Mochi 整理来源摘录的项目插画](./src/assets/projects/lora-v3-project-zhihu-threads-zh.webp)
+
+![用户选源后生成学习线的流程示意](./src/assets/projects/lora-v3-zhihu-workflow-zh.webp)
+
+以上是项目插画与流程示意，不是产品截图或实时评测结果。四份中英文 WebP 资产沿用本站已有的 Lora 与 Mochi 原创角色素材，图片排版与页面交互分开维护。
+
 ## 建议从这里开始
 
 | 页面 | 内容 |
 | --- | --- |
-| [Projects](https://lora-sys.github.io/loraSys/projects) | 52 个自有公开仓库，包含海报、状态、技术栈、Stars、源码和线上链接。 |
+| [Projects](https://lora-sys.github.io/loraSys/projects) | 多个自有公开仓库，包含海报、状态、技术栈、Stars、源码和线上链接。 |
 | [Blog](https://lora-sys.github.io/loraSys/blog) | 关于 Agent 基础设施、视觉证据、模型 API 和工程实验的文章。 |
 | [Lab](https://lora-sys.github.io/loraSys/lab) | 五篇项目导览，解释实际系统是怎么工作的。 |
 | [Notes](https://lora-sys.github.io/loraSys/notes) | 关于 Agent、前端系统、Web3 和研究的短笔记。 |
@@ -36,12 +48,12 @@
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/github-glassbox-agent-harness.webp" alt="Glassbox Agent Harness 项目海报"></a>
+      <a href="https://github.com/lora-sys/Glassbox-Agent-Harness"><img src="./src/assets/projects/lora-v1-project-glassbox.webp" alt="Glassbox Agent Harness 项目海报"></a>
       <h3><a href="https://github.com/lora-sys/Glassbox-Agent-Harness">Glassbox Agent Harness</a></h3>
       <p>面向 AI Agent 的可观测与评测实验室：把行动变成可检查的轨迹，让上下文可复现，让迭代拥有证据。</p>
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/github-free-vision-skill.webp" alt="Free Vision Skill 项目海报"></a>
+      <a href="https://github.com/lora-sys/free-vision-skill"><img src="./src/assets/projects/lora-v1-project-free-vision.webp" alt="Free Vision Skill 项目海报"></a>
       <h3><a href="https://github.com/lora-sys/free-vision-skill">Free Vision Skill</a></h3>
       <p>低 token 的视觉证据编译器，把图片转换为文本模型和 Coding Agent 可以使用的紧凑证据包。</p>
     </td>

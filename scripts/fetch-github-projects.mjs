@@ -21,9 +21,10 @@ const explicitlyExcluded = new Map([
 ])
 
 /** Repositories verified by the portfolio owner that must remain project-visible despite delayed GitHub size metadata. */
-const explicitlyIncluded = new Set(['skills'])
+const explicitlyIncluded = new Set(['skills', 'zhihu-threads'])
 
 const featuredRanks = new Map([
+  ['zhihu-threads', 13],
   ['glassbox-agent-harness', 1],
   ['agentarena', 2],
   ['ai-engineering-harness', 3],
@@ -39,6 +40,7 @@ const featuredRanks = new Map([
 
 /** Human-curated product visuals. These original local assets must never be replaced by remote preview images. */
 const curatedPosters = new Map([
+  ['zhihu-threads', { kind: 'generated', sourceUrl: 'local://lora-v3-project-zhihu-threads-zh.webp', localFile: 'lora-v3-project-zhihu-threads-zh.webp' }],
   ['glassbox-agent-harness', { kind: 'generated', sourceUrl: 'local://lora-v1-project-glassbox.webp', localFile: 'lora-v1-project-glassbox.webp' }],
   ['agentarena', { kind: 'generated', sourceUrl: 'local://lora-v1-project-agentarena.webp', localFile: 'lora-v1-project-agentarena.webp' }],
   ['ai-engineering-harness', { kind: 'generated', sourceUrl: 'local://lora-v1-project-ai-engineering-harness.webp', localFile: 'lora-v1-project-ai-engineering-harness.webp' }],
@@ -95,6 +97,8 @@ const buildingRepositories = new Set([
 ])
 
 const summaryOverrides = new Map([
+  ['zhihu-threads', '从知乎回答与专栏摘录中选择来源，生成可追问、自测和导出的学习线。'],
+  ['lorasys', '基于 Astro 的个人站，收录项目、构建笔记和公开贡献，通过 GitHub Pages 发布。'],
   [
     'trustops',
     '面向成长型 B2B SaaS 的可信证据控制层，将政策、系统控制、历史承诺、风险审查与人工责任连接成可审计的承诺链。'
@@ -122,6 +126,7 @@ const summaryOverrides = new Map([
 ])
 
 const titleOverrides = new Map([
+  ['zhihu-threads', 'Zhihu Threads'],
   ['glassbox-agent-harness', 'Glassbox Agent Harness'],
   ['ai-engineering-harness', 'AI Engineering Harness'],
   ['nano-vllm-interactive-guide', 'nano-vLLM Interactive Guide'],

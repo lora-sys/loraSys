@@ -41,7 +41,7 @@ const contributionWarningCount = (syncReport.warnings?.length ?? 0) + (contribut
 
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository]
 const formatDirectoryDate = (date: Date) =>
-  new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
+  new Intl.DateTimeFormat('zh-CN', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(date)
 const directoryItems: DirectoryItem[] = [
   ...allPosts.map((post) => ({
     kind: 'Writing' as const,
@@ -49,7 +49,7 @@ const directoryItems: DirectoryItem[] = [
     meta: formatDirectoryDate(post.data.updatedDate ?? post.data.publishDate),
     href: `/blog/${post.id}`,
     source: 'lora-sys' as const,
-    detail: post.data.language === 'zh-CN' ? '中文长文' : 'English essay'
+    detail: post.data.language === 'zh-CN' ? '中文长文' : '英文原文'
   })),
   ...creatorChannels.map((channel) => ({
     kind: 'Channel' as const,
@@ -73,27 +73,27 @@ const directoryItems: DirectoryItem[] = [
     meta: project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys',
     href: `/projects#${project.repository}`,
     source: project.source === 'ACAMLab' ? ('ACAMLab' as const) : ('lora-sys' as const),
-    detail: `${project.status} · ${getProjectStories(project.repository).length} Story links`
+    detail: `${({building:'构建中',active:'持续维护',archived:'已归档'}[project.status])} · ${getProjectStories(project.repository).length} 条内容链接`
   }))
 ]
 ---
 
 <PageLayout
   meta={{
-    title: 'Work · 作品',
+    title: '作品',
     description: 'Lora 的精选构建：AI Agent、开发者工具、全栈产品与公开证据。'
   }}
   highlightColor='#d99a33'
 >
   <Fragment slot='head'>
     <CollectionPageJsonLd
-      name='Work · 作品'
+      name='作品'
       description='Lora 的精选构建：AI Agent、开发者工具、全栈产品与公开证据。'
     />
   </Fragment>
   <main class='work-page' id='content'>
     <header class='work-hero'>
-      <p class='eyebrow'>Selected work · 精选作品</p>
+      <p class='eyebrow'>精选作品</p>
       <div class='hero-grid'>
         <h1>Agent 系统、开发者工具与公开实验。</h1>
         <div class='hero-copy'>
@@ -131,7 +131,7 @@ const directoryItems: DirectoryItem[] = [
     </section>
 
     <aside class='work-principle'>
-      <span>Case guide</span>
+      <span>项目说明</span>
       <p>每个案例从一个具体产品问题出发：可观测性、评测、视觉证据、工程协作或多智能体模拟。</p>
       <a href='/blog'>查看相关笔记 <span aria-hidden='true'>→</span></a>
     </aside>
@@ -157,7 +157,7 @@ const directoryItems: DirectoryItem[] = [
     </details>
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>
-      <div><p>Open to thoughtful work</p><h2 id='project-outro-title'>有一个值得认真构建的想法？</h2></div>
+      <div><p>交流与合作</p><h2 id='project-outro-title'>有一个值得认真构建的想法？</h2></div>
       <a class='tactile-action' href='/contact'>联系我 <span aria-hidden='true'>→</span></a>
     </aside>
   </main>
@@ -207,7 +207,7 @@ const directoryItems: DirectoryItem[] = [
   .archive-content { display:flex; flex-direction:column; gap:clamp(4rem,8vw,7rem); padding:1rem 0 clamp(2rem,5vw,4rem); }
   .project-outro { display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; border-block:1px solid hsl(var(--border)); padding-block:clamp(1.5rem,4vw,2.5rem); }
   .project-outro h2 { max-width:22ch; margin:.35rem 0 0; font-size:clamp(1.45rem,4vw,2.35rem); font-weight:580; letter-spacing:-.04em; line-height:1.08; text-wrap:balance; }
-  .project-outro a { display:inline-flex; min-height:2.75rem; flex:none; align-items:center; gap:.5rem; border:1px solid hsl(var(--field-amber-strong)); border-radius:999px; padding:.58rem .9rem; background:hsl(var(--field-amber-strong)); color:#21170e; font-size:.75rem; font-weight:650; text-decoration:none; transition:opacity 180ms ease,transform 180ms ease; }
+  .project-outro a { display:inline-flex; min-height:2.75rem; flex:none; align-items:center; gap:.5rem; border:1px solid hsl(var(--foreground)); border-radius:999px; padding:.58rem .9rem; background:hsl(var(--foreground)); color:hsl(var(--background)); font-size:.75rem; font-weight:650; text-decoration:none; transition:opacity 180ms ease,transform 180ms ease; }
   .project-outro a:hover,.project-outro a:focus-visible { opacity:.88; transform:translateY(-1px); }
   @media(max-width:820px) {
     .hero-grid { grid-template-columns:1fr; align-items:start; gap:.75rem; }

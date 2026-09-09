@@ -17,7 +17,7 @@ const resume = resumeData.zh
   <Fragment slot='head'><CollectionPageJsonLd name='赵彦兵 · AI Agent / LLM 应用开发简历' description='赵彦兵的 AI Agent、LLM 应用与全栈工程简历：教育、技术能力、工作经历和可验证的项目实践。' /></Fragment>
   <main class='resume-page'>
     <section class='resume-hero' aria-labelledby='resume-title'>
-      <p>Candidate file · 2026</p>
+      <p>个人简历 · 2026</p>
       <h1 id='resume-title'>{resume.name}</h1>
       <p class='resume-title'>{resume.title}</p>
       <p class='resume-summary'>{resume.summary}</p>
@@ -34,7 +34,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-education'>
-      <p class='section-kicker'>01 · Education</p>
+      <p class='section-kicker'>01 · 教育</p>
       <h2 id='resume-education'>教育与荣誉</h2>
       <article class='resume-record'>
         <div>
@@ -49,7 +49,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-skills'>
-      <p class='section-kicker'>02 · Skills</p>
+      <p class='section-kicker'>02 · 技能</p>
       <h2 id='resume-skills'>专业能力</h2>
       <div class='resume-grid'>
         {resume.skills.map((skill) => (
@@ -62,7 +62,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-strengths'>
-      <p class='section-kicker'>03 · Strengths</p>
+      <p class='section-kicker'>03 · 优势</p>
       <h2 id='resume-strengths'>个人优势</h2>
       <ol class='strengths'>
         {resume.strengths.map((strength) => <li>{strength}</li>)}
@@ -70,7 +70,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-experience'>
-      <p class='section-kicker'>04 · Experience</p>
+      <p class='section-kicker'>04 · 经历</p>
       <h2 id='resume-experience'>经历</h2>
       <div class='resume-list'>
         {resume.experience.map((item) => (
@@ -87,7 +87,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-projects'>
-      <p class='section-kicker'>05 · Selected work</p>
+      <p class='section-kicker'>05 · 重点项目</p>
       <h2 id='resume-projects'>重点项目</h2>
       <div class='resume-list'>
         {resume.projects.map((project) => (

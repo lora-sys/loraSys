@@ -1,0 +1,25 @@
+---
+import config from 'virtual:config'
+import CopyAction from '@/components/layout/CopyAction.astro'
+import { text, dateLabel } from '@/i18n/ui'
+import type { SiteLocale } from '@/i18n/site'
+interface Props { title: string; publishDate: Date; locale: SiteLocale }
+const { title, publishDate, locale } = Astro.props
+const articleUrl = new URL(Astro.url.pathname, Astro.site).href
+const shares = {
+  weibo: { name: text(locale, '微博', 'Weibo'), href: `https://service.weibo.com/share/share.php?${new URLSearchParams({ url: articleUrl, title })}` },
+  x: { name: 'X', href: `https://x.com/intent/tweet?${new URLSearchParams({ url: articleUrl, text: title })}` },
+  bluesky: { name: 'Bluesky', href: `https://bsky.app/intent/compose?${new URLSearchParams({ text: `${title} ${articleUrl}` })}` }
+}
+
+---
+<aside class='attribution' aria-label={text(locale, '文章署名与许可', 'Article attribution and license')}>
+  <strong>{title}</strong>
+  <p>{text(locale, '作者', 'Author')} {config.author} · {dateLabel(publishDate, locale)}</p>
+  <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/' target='_blank' rel='noopener noreferrer'>CC BY-NC-SA 4.0</a>
+  <CopyAction {locale} url />
+  <nav aria-label={text(locale, '分享文章', 'Share article')}>
+    {config.content.share.map((key) => <a href={shares[key].href} target='_blank' rel='noopener noreferrer'>{text(locale, '分享到', 'Share on')} {shares[key].name}</a>)}
+  </nav>
+</aside>
+<style>.attribution{display:grid;gap:.65rem;border:1px solid hsl(var(--border));border-radius:.8rem;padding:1rem;overflow-wrap:anywhere}.attribution p{margin:0;font-size:.82rem;color:hsl(var(--muted-foreground))}.attribution>a{width:fit-content;font-size:.82rem;text-underline-offset:.2em}.attribution nav{display:flex;flex-wrap:wrap;gap:.5rem}.attribution nav a{display:inline-flex;align-items:center;min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.5rem;padding:.4rem .6rem;font-size:.78rem}</style>

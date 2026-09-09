@@ -1,4 +1,5 @@
 ---
+import { uiLocale, text } from '@/i18n/ui'
 import type { FriendLink } from '@/data/links'
 
 import avatar from '@/assets/lora-visual/v2/lora-v2-avatar.webp'
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const { links } = Astro.props
+const locale = uiLocale(Astro.url.pathname)
+const t = (zh: string, en: string) => text(locale, zh, en)
 const activeLinks = links.filter((link) => link.status === 'active')
 const nodes = activeLinks.map((link, index) => {
   const angle = (index / activeLinks.length) * Math.PI * 2 - Math.PI / 2
@@ -22,10 +25,10 @@ const nodes = activeLinks.map((link, index) => {
 <section class='constellation' aria-labelledby='constellation-title'>
   <div class='constellation-copy' id='friend-constellation'>
     <div>
-      <p class='kicker'>Friend constellation</p>
-      <h2 id='constellation-title'>朋友是互联网上真实发光的坐标。</h2>
+      <p class='kicker'>{t('友链星图', 'Friend links')}</p>
+      <h2 id='constellation-title'>{t('与朋友保持联系', 'Stay connected with friends')}</h2>
     </div>
-    <p>把指针移到星点上，可以看到名字与来处。这里只收录真实、确认过的连接。</p>
+    <p>{t('悬停或用键盘选中友链，可查看名称与介绍。这里只收录确认过的连接。', 'Hover or focus a link to read the name and introduction. Only confirmed connections are listed.')}</p>
   </div>
 
   <div class='sky' data-empty={activeLinks.length === 0}>
@@ -47,15 +50,15 @@ const nodes = activeLinks.map((link, index) => {
       <i style='--x: 63%; --y: 84%; --d: 1s'></i>
     </div>
 
-    <div class='self' aria-label='Lora, constellation center'>
-      <span class='self-ring'><img src={avatar.src} alt='Lora 在工作台前的插画头像' width={96} height={96} decoding='async' /></span>
+    <div class='self' aria-label={t('星图中心的 Lora', 'Lora at the center')}>
+      <span class='self-ring'><img src={avatar.src} alt={t('Lora 的插画头像', 'Illustrated portrait of Lora')} width={96} height={96} decoding='async' /></span>
       <strong>Lora</strong>
       <small>lora-sys</small>
     </div>
 
     {
       nodes.length > 0 && (
-        <ul class='friend-stars' aria-label='Friend links'>
+        <ul class='friend-stars' aria-label={t('友链', 'Friend links')}>
           {nodes.map(({ link, x, y }) => (
             <li style={`--x:${x}%;--y:${y}%`}>
               <a href={link.url} target='_blank' rel='friend noopener noreferrer'>
@@ -81,10 +84,10 @@ const nodes = activeLinks.map((link, index) => {
     {
       activeLinks.length === 0 && (
         <div class='empty-sky'>
-          <span>0 linked stars</span>
-          <p>星图已经展开，等待第一条经过确认的友链。</p>
+          <span>{t('0 个友链', 'No friend links yet')}</span>
+          <p>{t('尚未添加已确认的友链。', 'No confirmed friend links have been added yet.')}</p>
           <a href='#apply-links'>
-            成为第一个坐标 <span aria-hidden='true'>↓</span>
+            {t('申请友链', 'Suggest a friend link')} <span aria-hidden='true'>↓</span>
           </a>
         </div>
       )
@@ -92,9 +95,9 @@ const nodes = activeLinks.map((link, index) => {
   </div>
 
   <footer>
-    <span>{activeLinks.length.toString().padStart(2, '0')} stars</span>
+    <span>{activeLinks.length.toString().padStart(2, '0')} {t('个友链', 'links')}</span>
     <span aria-hidden='true'>·</span>
-    <span>open canvas</span>
+    <span>{t('等待连接', 'Open to connections')}</span>
   </footer>
 </section>
 
@@ -174,7 +177,7 @@ const nodes = activeLinks.map((link, index) => {
     border-radius: 999px;
     background: hsl(var(--background));
     box-shadow: 0 0 0 0.35rem hsl(var(--primary) / 0.05);
-    animation: breathe 3.4s var(--d) ease-in-out infinite;
+    opacity: .65;
   }
   .self {
     position: absolute;

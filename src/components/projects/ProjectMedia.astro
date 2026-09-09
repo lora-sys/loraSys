@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets'
+import { uiLocale, text } from '@/i18n/ui'
 import type { Project } from '@/data/projects'
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   lens?: boolean
   sizes?: string
   quality?: number
+  locale?: 'zh-CN' | 'en-US'
 }
 
 const {
@@ -15,7 +17,8 @@ const {
   priority = false,
   lens = false,
   sizes = '(min-width: 1024px) 48vw, (min-width: 640px) 46vw, 86vw',
-  quality
+  quality = 74,
+  locale = uiLocale(Astro.url.pathname)
 } = Astro.props
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{avif,webp,png,jpg,jpeg}'
@@ -38,14 +41,14 @@ const fallbackMark = project.title
   <div class='media-fallback' aria-hidden='true'>
     <span>{fallbackMark || '</>'}</span>
     <strong>{project.title}</strong>
-    <small>{project.language || 'Open source'}</small>
+    <small>{project.language || text(locale, '开源项目', 'Open source')}</small>
   </div>
   {
     source && (
       <Image
         src={source()}
-        alt={`${project.title} project poster`}
-        widths={[960, 1280]}
+        alt={text(locale, `${project.title} 项目封面插画`, `${project.title} illustrated project cover`)}
+        widths={[480, 768, 960, 1280]}
         {sizes}
         quality={quality}
         loading={priority ? 'eager' : 'lazy'}
@@ -193,6 +196,10 @@ const fallbackMark = project.title
       height: auto;
       aspect-ratio: 16 / 9;
     }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .project-media :global(img) { transform: none; will-change: auto; }
   }
 
   @media (prefers-reduced-motion: reduce) {

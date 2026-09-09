@@ -37,6 +37,8 @@ export default defineConfig({
   // [Adapter]
   // https://docs.astro.build/en/guides/deploy/
   output: 'static',
+  // Small static pages avoid blocking on several separate stylesheet requests.
+  build: { inlineStylesheets: 'always' },
   // Local (standalone)
   // adapter: node({ mode: 'standalone' }),
   // output: 'server',

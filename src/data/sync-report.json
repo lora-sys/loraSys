@@ -1,24 +1,24 @@
 {
   "syncVersion": 2,
   "status": "ok",
-  "syncedAt": "2026-08-23T18:10:25.731Z",
+  "syncedAt": "2026-09-09T01:23:17.574Z",
   "sources": {
     "github": {
-      "projects": 69,
+      "projects": 64,
       "projectBreakdown": {
-        "lora-sys": 57,
-        "ACAMLab": 11,
+        "lora-sys": 58,
+        "ACAMLab": 5,
         "External": 1
       },
-      "contributions": 5,
+      "contributions": 4,
       "contributionAllowlist": 7,
-      "pullRequests": 9
+      "pullRequests": 8
     }
   },
   "warnings": [],
   "snapshots": {
-    "projects": "2026-08-23T18:10:25.731Z",
-    "contributions": "2026-08-20T06:50:56.296Z",
-    "contributionCalendar": "2026-08-20T06:50:47.777Z"
+    "projects": "2026-09-09T01:23:16.573Z",
+    "contributions": "2026-09-09T01:23:17.574Z",
+    "contributionCalendar": "2026-09-09T01:23:10.497Z"
   }
 }

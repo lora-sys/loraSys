@@ -1,0 +1,41 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+import { uiLocale, text } from '@/i18n/ui'
+interface Props { value?: string; label?: string; locale?: SiteLocale; url?: boolean }
+const { value = '', locale = uiLocale(Astro.url.pathname), label = text(locale, '复制链接', 'Copy link'), url = false } = Astro.props
+---
+<span class='copy-action' data-copy-action data-copy-value={value} data-copy-url={String(url)} data-copy-locale={locale}>
+  <button type='button' data-copy-button>{label}</button>
+  <span class='copy-feedback' data-copy-feedback role='status' aria-live='polite'></span>
+</span>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-copy-action]').forEach((root) => {
+    const button = root.querySelector<HTMLButtonElement>('[data-copy-button]')
+    const status = root.querySelector<HTMLElement>('[data-copy-feedback]')
+    if (!button || !status) return
+    const en = root.dataset.copyLocale === 'en-US'
+    button.addEventListener('click', async () => {
+      const value = root.dataset.copyValue || window.location.href
+      const result = root.dataset.copyUrl === 'true' ? new URL(value, window.location.href).href : value
+      button.disabled = true
+      status.textContent = en ? 'Copying…' : '正在复制…'
+      try {
+        await navigator.clipboard.writeText(result)
+        status.textContent = en ? 'Copied' : '已复制'
+        root.dataset.copyState = 'success'
+      } catch {
+        status.textContent = `${en ? 'Copy unavailable. Select this text:' : '无法自动复制，请选择下方文本：'} ${result}`
+        root.dataset.copyState = 'error'
+      } finally {
+        button.disabled = false
+      }
+    })
+  })
+</script>
+<style>
+  .copy-action{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;min-width:0}
+  button{min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.55rem;padding:.5rem .7rem;color:hsl(var(--foreground));background:hsl(var(--background));font:inherit;font-size:.78rem;cursor:pointer;transition:transform 140ms ease}
+  button:active{transform:scale(.98)}button:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}button:disabled{cursor:wait}
+  .copy-feedback{font-size:.78rem;line-height:1.6;overflow-wrap:anywhere;user-select:text}.copy-action[data-copy-state='error'] .copy-feedback{flex-basis:100%}
+  @media(prefers-reduced-motion:reduce){button{transition:none}button:active{transform:none}}
+</style>
