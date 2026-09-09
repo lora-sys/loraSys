@@ -1,0 +1,75 @@
+name: Stage final locale touchups
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/final-locale-touchups.yml]
+permissions:
+  contents: write
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0ab4b21c9373bb6adf56cf93bda7bbb51009e8e5
+          persist-credentials: false
+      - name: Apply reviewed source edits
+        shell: python
+        run: |
+          from pathlib import Path
+          import subprocess
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip() == '0ab4b21c9373bb6adf56cf93bda7bbb51009e8e5'
+          def replace(name, old, new):
+              file=Path(name)
+              value=file.read_text()
+              assert value.count(old)==1, f'Unexpected source: {name}'
+              file.write_text(value.replace(old,new))
+          replace('src/pages/projects/index.astro','<span>Case guide</span>','<span>项目说明</span>')
+          replace('src/pages/en/writing/index.astro','全部文章与中文原文 ↗','All articles and Chinese originals ↗')
+          replace('src/components/projects/ProjectSection.astro',
+              "        const filters = [query && `“${search?.value.trim()}”`, category !== 'all' && category, sourceName, statusName].filter(Boolean).join(' · ')",
+              "        const categoryName = category === 'all' ? '' : categoryButtons.find((button) => button.dataset.categoryFilter === category)?.textContent?.trim() ?? ''\n        const filters = [query && `“${search?.value.trim()}”`, categoryName, sourceName, statusName].filter(Boolean).join(' · ')")
+          replace('src/components/layout/SiteHeader.astro',
+              "document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenu(false, true) })",
+              "document.addEventListener('keydown', (event) => {\n    if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') setMenu(false, true)\n  })")
+          replace('src/components/layout/SiteHeader.astro',
+              "if (event.key !== '/' || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return",
+              "if (event.key !== '/' || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return")
+          replace('src/components/blog/ArticleHero.astro',
+              "<Icon name='earth' class='size-5' />{language}",
+              "<Icon name='earth' class='size-5' />{language === 'en-US' ? 'English' : '中文'}")
+          replace('src/layouts/BlogPost.astro', "<PageInfo comment class='mt-1' />", "<PageInfo locale={locale} comment class='mt-1' />")
+          Path('src/components/waline/PageInfo.astro').write_text("---\nimport { cn } from 'astro-pure/utils'\nimport Pageview from '@/components/waline/Pageview.astro'\nimport config from '@/site-config'\nimport { uiLocale, text } from '@/i18n/ui'\nimport type { SiteLocale } from '@/i18n/site'\n\ninterface Props {\n  locale?: SiteLocale\n  view?: boolean\n  comment?: boolean\n  class?: string\n}\n\nconst { view, comment, locale = uiLocale(Astro.url.pathname), class: className, ...props } = Astro.props\nconst enabled = config.integ.waline.enable\nconst t = (zh: string, en: string) => text(locale, zh, en)\nconst path = Astro.url.pathname\n---\n\n{enabled && (view || comment) && (\n  <div class={cn('text-sm text-muted-foreground', className)} {...props}>\n    {view && <span><span class='waline-pageview-count' data-path={path}></span> {t('次阅读', 'views')}</span>}\n    {view && comment && ' · '}\n    {comment && (\n      <a href='#waline'>\n        <span class='waline-comment-count' data-path={path}></span> {t('条评论', 'comments')}\n      </a>\n    )}\n  </div>\n)}\n\n{enabled && view && !comment && <Pageview />}\n")
+          replace('src/components/lora/HeroScene.astro',
+              '  @media (prefers-reduced-motion: reduce) {',
+              "  @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {\n    .hero-lora,.hero-mochi,.hero-props { will-change: auto; transform: none !important; }\n    .hero-scene :global(img) { filter: none; }\n  }\n\n  @media (prefers-reduced-motion: reduce) {")
+          replace('src/components/projects/ProjectMedia.astro',
+              '  @media (prefers-reduced-motion: reduce) {',
+              "  @media (hover: none), (pointer: coarse) {\n    .project-media :global(img) { transform: none; will-change: auto; }\n  }\n\n  @media (prefers-reduced-motion: reduce) {")
+          replace('src/components/projects/ProjectCard.astro', '    will-change: transform;', '    will-change: auto;')
+          replace('scripts/audit-rendered-site.py', 'Selected Work|Selected work|', 'Selected Work|Selected work|Case guide|views|comments|')
+          replace('scripts/audit-i18n-site.mjs', 'Selected Work|BUILDING|', 'Selected Work|Case guide|views|comments|BUILDING|')
+          replace('scripts/audit-i18n-site.mjs', 'assert.deepEqual(leaks.filter(x=>x.text.length>15),[]', 'assert.deepEqual(leaks,[]')
+          replace('scripts/audit-lighthouse.mjs', " for(const route of ['', 'projects/', 'en/work/', 'projects/zhihu-threads/']) {", " for(const route of ['', 'projects/', 'en/work/', 'projects/zhihu-threads/']) for(let sample=1;sample<=3;sample++) {")
+          replace('scripts/audit-lighthouse.mjs', '`${name}.json`', '`${name}-${sample}.json`')
+          replace('scripts/audit-lighthouse.mjs', 'report.checks.push({route,scores:', 'report.checks.push({route,sample,scores:')
+          print('Applied locale, keyboard and touch-rendering fixes. No snapshots or workflows changed.')
+      - name: Preserve changes in staging branch without changing the PR or main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git diff --check
+          git switch -c stage/i18n-final-20260909
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src scripts
+          git commit -m 'fix(i18n): close remaining label and keyboard gaps found in final audit'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/stage/i18n-final-20260909
+          git rev-parse HEAD > "$RUNNER_TEMP/final-staged-commit.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: final-staged-commit
+          path: ${{ runner.temp }}/final-staged-commit.txt
+          retention-days: 7
