@@ -1,0 +1,51 @@
+---
+import {Image} from 'astro:assets'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import CopyAction from '@/components/layout/CopyAction.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {caseStudies,casePath,local,pick,projectFor,studySource} from '@/data/studio/curation'
+import WorkPreview from './WorkPreview.astro'
+import SourceExplorer from './SourceExplorer.astro'
+import EvalExplorer from './EvalExplorer.astro'
+import TraceViewer from './TraceViewer.astro'
+import coverZh from '@/assets/projects/lora-v3-project-zhihu-threads-zh.webp'
+import coverEn from '@/assets/projects/lora-v3-project-zhihu-threads-en.webp'
+import flowZh from '@/assets/projects/lora-v3-zhihu-workflow-zh.webp'
+import flowEn from '@/assets/projects/lora-v3-zhihu-workflow-en.webp'
+interface Props {locale:SiteLocale;slug:string}
+const {locale,slug}=Astro.props
+const study=caseStudies.find(item=>item.slug===slug)
+if(!study)throw new Error(`Unknown case study: ${slug}`)
+const project=projectFor(study)
+const en=locale==='en-US'
+const t=(zh:string,english:string)=>local(locale,zh,english)
+const description=pick(study.summary,locale)
+const source=studySource(study)
+const next=caseStudies[(caseStudies.indexOf(study)+1)%caseStudies.length]
+const steps=[
+{title:t('澄清问题','Clarify the question'),body:t('先确认学习意图，再检索候选。','Confirm the learning intent before retrieving candidates.')},
+{title:t('检索摘录','Retrieve excerpts'),body:t('保留知乎回答或专栏的摘要级摘录、类型和原始链接。','Retain summary-level excerpts from Zhihu answers or articles, their type and original link.')},
+{title:t('手动选源','Select sources'),body:t('用户勾选来源。AI 可以解释候选，但不替用户决定选择。','The user selects sources. AI can explain candidates, but does not choose on the user’s behalf.')},
+{title:t('追问自测','Follow up and self-test'),body:t('根据已选摘录组织学习节点、追问和自测题。证据不足保留未知。','Organize learning nodes, follow-ups and self-tests from selected excerpts. Missing evidence stays unknown.')}
+]
+---
+<BaseLayout lang={locale} meta={{title:study.title,description}}>
+ <main class='studio-page' data-case-page={slug} data-zhihu-case={slug==='zhihu-threads'||undefined}>
+  <header class='page-intro'><p class='eyebrow'>{t('项目案例','Case study')} {study.number} / {pick(study.category,locale)}</p><h1>{study.title}</h1><p class='lede'>{description}</p><nav class='action-row' aria-label={t('项目入口','Project links')}><a class='button primary' href={source} target='_blank' rel='noopener noreferrer'>{t('查看源码','View source')} ↗</a><a class='button' href={t(`/projects#${study.repository}`,`/en/work#${study.repository}`)}>{t('返回作品','Back to work')}</a><CopyAction {locale} url/></nav></header>
+  <div class='case-layout'><div class='case-main'>
+   <section class='case-section'><p class='eyebrow'>{t('问题','The problem')}</p><h2>{pick(study.question,locale)}</h2><p>{pick(study.approach,locale)}</p></section>
+   {slug==='zhihu-threads'?<figure class='case-art'><Image src={en?coverEn:coverZh} alt={t('Lora 与 Mochi 整理来源卡片的项目插画。','Project illustration of Lora and Mochi organizing source cards.')} widths={[480,800,1200,1600]} sizes='(min-width:1000px) 760px, 92vw' quality={80} loading='eager'/><figcaption>{t('沿用本站原创角色的项目插画，非产品截图。','Project illustration using the site’s original characters. Not a product screenshot.')}</figcaption></figure>:<WorkPreview {study} {locale}/>}
+   <section class='case-section'><p class='eyebrow'>{t('实现选择','Engineering decisions')}</p><h2>{t('为什么这样组织。','Why organize it this way?')}</h2><div class='decision-list'>{study.decisions.map(decision=><article><h3>{pick(decision.title,locale)}</h3><p>{pick(decision.body,locale)}</p></article>)}</div></section>
+   {slug==='zhihu-threads'&&<section class='case-section'><h2>{t('从问题到学习线','From a question to a learning thread')}</h2><div class='interactive-panel' data-evidence-explorer><div class='workflow-steps' role='group' aria-label={t('查看流程说明','Explore the workflow')}>{steps.map((step,i)=><button data-evidence-step={i} type='button' aria-controls={`evidence-step-${i}`} aria-pressed={i===0?'true':'false'}>{String(i+1).padStart(2,'0')} {step.title}</button>)}</div>{steps.map((step,i)=><article class='workflow-panel' id={`evidence-step-${i}`} data-evidence-panel={i}><h3>{step.title}</h3><p>{step.body}</p></article>)}</div><figure class='case-art'><Image src={en?flowEn:flowZh} alt={t('问题澄清、检索摘录、用户选源、组织学习线的流程示意。','Workflow diagram showing question clarification, excerpt retrieval, user selection and learning threads.')} widths={[480,800,1200,1600]} sizes='(min-width:1000px) 760px, 92vw' quality={80} loading='lazy'/></figure></section>}
+   <section class='case-section'><p class='eyebrow'>{t('可操作说明','Interactive explanation')}</p><h2>{t('操作一次，检查这个机制。','Try the mechanism yourself.')}</h2><p class='boundary-note'>{pick(study.limitation,locale)}</p>{slug==='zhihu-threads'?<SourceExplorer {locale}/>:slug==='ai-engineering-harness'?<EvalExplorer {locale}/>:<TraceViewer {locale}/>}</section>
+   <section class='case-section'><h2>{t('继续查看','Continue exploring')}</h2><p>{t('项目能力以源码为准。演示数据只用于解释，不代表真实运行结果。','Source code is authoritative. Teaching fixtures illustrate mechanisms, not verified product runs.')}</p><div class='action-row'><a class='button' href={`${source}/blob/main/README.md`} target='_blank' rel='noopener noreferrer'>{t('仓库说明','Repository README')} ↗</a><a class='button' href={`/blog/${study.related}`}>{t('相关构建笔记','Related build notes')} ↗</a><a class='button' href={casePath(next,locale)}>{t('下一个项目','Next project')} · {next.title}</a></div></section>
+  </div><aside class='case-sidebar' aria-label={t('项目信息','Project information')}><dl><div><dt>{t('来源','Source')}</dt><dd>{project?.source??'lora-sys'}</dd></div><div><dt>{t('内容依据','Content basis')}</dt><dd>{t('已核对的 README','Reviewed README')}</dd></div><div><dt>{t('技术','Technology')}</dt><dd>{project?.technologies.slice(0,4).join(' · ')??'TypeScript'}</dd></div><div><dt>{t('说明更新','Notes reviewed')}</dt><dd><time datetime='2026-09-09'>{t('2026 年 9 月 9 日','September 9, 2026')}</time></dd></div></dl><p class='source-note'>{t('本页整理实现思路，没有代替项目执行完整在线验收。','This page explains implementation choices; it is not a full live acceptance test of the project.')}</p></aside></div>
+ </main>
+</BaseLayout>
+<script>
+ document.querySelectorAll<HTMLElement>('[data-evidence-explorer]').forEach(root=>{
+ const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-evidence-step]')],panels=[...root.querySelectorAll<HTMLElement>('[data-evidence-panel]')]
+ const activate=(index:number)=>{buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));panels.forEach((panel,i)=>{panel.hidden=i!==index})}
+ buttons.forEach((button,i)=>button.addEventListener('click',()=>activate(i)));activate(0)
+ })
+</script>

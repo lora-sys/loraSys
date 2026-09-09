@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {local} from '@/data/studio/curation'
+interface Props {locale:SiteLocale}
+const {locale}=Astro.props
+const t=(zh:string,en:string)=>local(locale,zh,en)
+const entries=[
+ {title:t('Astro 的组件岛架构','Astro islands architecture'),author:'Astro',href:'https://docs.astro.build/en/concepts/islands/',reason:t('先读组件岛的定义，再检查一个页面究竟需要哪些客户端交互。适合静态内容和局部实验共存的网站。','Start with the definition of an island, then identify which parts of a page actually need client-side interaction. Useful for static content with small interactive experiments.')},
+ {title:t('交互动画与减少动态','Animation from interactions'),author:'W3C WAI',href:'https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html',reason:t('先看非必要动画如何关闭，再检查键盘操作和减少动态模式。关闭动画不应该同时移除功能。','Read how non-essential animation can be disabled, then check keyboard use and reduced motion. Disabling animation should not remove functionality.')},
+ {title:t('文本对比度的判断依据','Understanding text contrast'),author:'W3C WAI',href:'https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html',reason:t('先看普通文本和大号文本的区别，再对照浅色与深色状态测量，而不是凭截图感觉判断。','Start with normal and large text requirements. Measure light and dark states rather than judging contrast by appearance alone.')}
+]
+---
+<BaseLayout lang={locale} meta={{title:t('阅读收藏','Reading'),description:t('为本站实现与实验挑选的原始资料，保留作者和阅读理由。','Primary references selected for this site’s implementation and experiments, with authors and reading notes.')}}>
+ <main class='studio-page'><header class='page-intro'><p class='eyebrow'>{t('阅读 / 原始资料','Reading / Primary references')}</p><h1>{t('保留来源，也写清为什么读。','Keep the source and the reason to read it.')}</h1><p class='lede'>{t('这些资料为本次站点实现配套整理，不冒充历史收藏记录。每条链接回到原作者或官方文档。','These references were selected for this site redesign, not presented as a historical bookmark collection. Each links to its author or official documentation.')}</p></header><ul class='quiet-list'>{entries.map(entry=><li><div class='list-meta'><span>{entry.author}</span><time datetime='2026-09-09'>{t('2026 年 9 月 9 日核对','Checked September 9, 2026')}</time></div><h2 style='font-size:1.4rem'><a href={entry.href} target='_blank' rel='noopener noreferrer'>{entry.title} ↗</a></h2><p style='margin-top:.7rem'>{entry.reason}</p></li>)}</ul><a class='text-link' href={t('/blog','/en/writing')}>{t('返回写作','Back to writing')} ↗</a></main>
+</BaseLayout>

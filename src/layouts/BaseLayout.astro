@@ -5,14 +5,10 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 import SiteHeader from '@/components/layout/SiteHeader.astro'
-import RouteVisualBanner from '@/components/lora/RouteVisualBanner.astro'
 import { footerNavigation, hasAlternate, localizedPath, type SiteLocale } from '@/i18n/site'
-
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/global.css'
 import '@/assets/styles/app.css'
-
+import '@/assets/styles/studio.css'
 interface Props {
   meta: SiteMeta
   articlePublishedAt?: string
@@ -21,7 +17,6 @@ interface Props {
   noindex?: boolean
   lang?: string
 }
-
 const {
   meta: { articleDate, description = config.description, ogImage, title },
   articlePublishedAt,
@@ -33,188 +28,43 @@ const {
 } = Astro.props
 const locale: SiteLocale = lang === 'en-US' ? 'en-US' : 'zh-CN'
 const localPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
-// 只有真实存在对应路由的页面才声明 hreflang alternate。
 const otherLocale: SiteLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
 const alternatePath = hasAlternate(localPath, otherLocale) ? localizedPath(localPath, otherLocale) : undefined
 const footerItems = footerNavigation(locale)
 const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 ---
-
 <html {lang}>
   <head>
-    <BaseHead
-      {articleDate}
-      {articlePublishedAt}
-      {articleModifiedAt}
-      {description}
-      {noindex}
-      {ogImage}
-      {title}
-      locale={locale}
-      {alternatePath}
-    />
-    <slot name='head' />
-    <ThemeProvider />
+    <BaseHead {articleDate} {articlePublishedAt} {articleModifiedAt} {description} {noindex} {ogImage} {title} {locale} {alternatePath}/>
+    <slot name='head'/>
+    <ThemeProvider/>
   </head>
-
-  <body class='flex justify-center bg-background text-foreground' {...props}>
-    {
-      highlightColor && (
-        <div
-          id='highlight-gradient'
-          class='pointer-events-none absolute start-0 top-0 z-0 h-screen w-full opacity-25'
-          style={`background-image:linear-gradient(${highlightColor},transparent)`}
-        />
-      )
-    }
+  <body class='site-v4 flex justify-center bg-background text-foreground' {...props}>
     <a class='skip-link' href='#main-content'>{locale === 'en-US' ? 'Skip to content' : '跳到正文'}</a>
-    <div
-      id='main-container'
-      class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
-    >
-      <SiteHeader locale={locale} />
-      <div id='main-content' class='flex-1 w-full' tabindex='-1'>
-        <RouteVisualBanner path={localPath} lang={locale} />
-        <slot />
-      </div>
+    <div id='main-container' class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'>
+      <SiteHeader locale={locale}/>
+      <div id='main-content' class='flex-1 w-full' tabindex='-1'><slot/></div>
       <div class='site-footer'>
-        <nav class='secondary-navigation' aria-label={locale === 'en-US' ? 'Secondary navigation' : '补充导航'}>
-          <span>{footerLabel}</span>
-          <ul>
-            {
-              footerItems.map((item) => (
-                <li>
-                  <a href={item.href}>{item.title}</a>
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-        <SiteFooter locale={locale} />
+        <nav class='secondary-navigation' aria-label={locale === 'en-US' ? 'Secondary navigation' : '补充导航'}><span>{footerLabel}</span><ul>{footerItems.map(item=><li><a href={item.href}>{item.title}</a></li>)}</ul></nav>
+        <SiteFooter locale={locale}/>
       </div>
     </div>
-
-    {/* Set highlight color */}
-    <style define:vars={{ highlightColor }}>
-      :global(.highlight) {
-        --highlight-fg: color-mix(
-          in srgb,
-          var(--highlightColor) 40%,
-          hsl(var(--foreground)/var(--un-text-opacity, 1))
-        );
-        color: hsl(var(--foreground)) !important;
-      }
-      :global(.highlight-bg) {
-        background-color: var(
-          --highlightColor,
-          hsl(var(--primary) / var(--un-text-opacity))
-        ) !important;
-      }
-
-      /* Extend safe area for some special screens
-       * https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/env
-       * https://webkit.org/blog/7929/designing-websites-for-iphone-x/
-       */
-      #main-container {
-        padding-top: env(safe-area-inset-top);
-        padding-left: calc(1rem + env(safe-area-inset-left));
-        padding-right: calc(1rem + env(safe-area-inset-right));
-      }
-      @media (min-width: 640px) {
-        #main-container {
-          padding-left: calc(1.75rem + env(safe-area-inset-left));
-          padding-right: calc(1.75rem + env(safe-area-inset-right));
-        }
-      }
-      @media (min-width: 1024px) {
-        #main-container {
-          padding-left: calc(2.5rem + env(safe-area-inset-left));
-          padding-right: calc(2.5rem + env(safe-area-inset-right));
-        }
-      }
-
-      .skip-link {
-        position: fixed;
-        top: 0.75rem;
-        left: 0.75rem;
-        z-index: 50;
-        border: 1px solid hsl(var(--foreground));
-        border-radius: 999px;
-        padding: 0.55rem 0.8rem;
-        background: hsl(var(--background));
-        color: hsl(var(--foreground));
-        font-size: 0.75rem;
-        font-weight: 650;
-        text-decoration: none;
-        transform: translateY(-180%);
-        transition: transform 160ms ease;
-      }
-
-      .skip-link:focus-visible {
-        transform: translateY(0);
-      }
-
-      .secondary-navigation {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-top: 4rem;
-        padding-top: 1rem;
-        border-top: 1px solid hsl(var(--border));
-      }
-
-      .secondary-navigation > span {
-        color: hsl(var(--muted-foreground));
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
-      }
-
-      .secondary-navigation ul {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 0.55rem 1.1rem;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .secondary-navigation a {
-        color: hsl(var(--muted-foreground));
-        font-size: 0.72rem;
-        text-decoration: none;
-      }
-
-      .secondary-navigation a:hover,
-      .secondary-navigation a:focus-visible {
-        color: hsl(var(--foreground));
-        text-decoration: underline;
-        text-underline-offset: 0.25rem;
-      }
-
-      :global(.site-footer footer) {
-        margin-top: 1.5rem;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .skip-link {
-          transition: none;
-        }
-      }
-
-      @media (max-width: 560px) {
-        .secondary-navigation {
-          align-items: flex-start;
-          flex-direction: column;
-        }
-
-        .secondary-navigation ul {
-          justify-content: flex-start;
-        }
-      }
+    <style define:vars={{highlightColor}}>
+      :global(.highlight){--highlight-fg:color-mix(in srgb,var(--highlightColor) 40%,hsl(var(--foreground)));color:hsl(var(--foreground))!important}
+      :global(.highlight-bg){background-color:var(--highlightColor,hsl(var(--primary)))!important}
+      #main-container{padding-top:env(safe-area-inset-top);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right))}
+      @media(min-width:640px){#main-container{padding-left:calc(1.75rem + env(safe-area-inset-left));padding-right:calc(1.75rem + env(safe-area-inset-right))}}
+      @media(min-width:1024px){#main-container{padding-left:calc(2.5rem + env(safe-area-inset-left));padding-right:calc(2.5rem + env(safe-area-inset-right))}}
+      .skip-link{position:fixed;top:.75rem;left:.75rem;z-index:100;border:1px solid hsl(var(--foreground));border-radius:.4rem;padding:.65rem .85rem;background:hsl(var(--background));color:hsl(var(--foreground));font-size:.85rem;font-weight:600;text-decoration:none;transform:translateY(-180%);transition:transform 150ms ease}
+      .skip-link:focus-visible{transform:translateY(0)}
+      .secondary-navigation{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;margin-top:4rem;padding-top:1rem;border-top:1px solid hsl(var(--border))}
+      .secondary-navigation>span{color:hsl(var(--muted-foreground));font-size:.7rem;font-weight:600;white-space:nowrap}
+      .secondary-navigation ul{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.3rem 1rem;margin:0;padding:0;list-style:none}
+      .secondary-navigation a{display:inline-flex;align-items:center;min-height:44px;color:hsl(var(--muted-foreground));font-size:.78rem;text-decoration:none}
+      .secondary-navigation a:hover,.secondary-navigation a:focus-visible{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:.25rem}
+      :global(.site-footer footer){margin-top:1.5rem}
+      @media(prefers-reduced-motion:reduce){.skip-link{transition:none}}
+      @media(max-width:560px){.secondary-navigation{align-items:flex-start;flex-direction:column;gap:.5rem}.secondary-navigation ul{justify-content:flex-start}}
     </style>
   </body>
 </html>

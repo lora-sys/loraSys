@@ -1,0 +1,39 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+import { local } from '@/data/studio/curation'
+interface Props { locale: SiteLocale }
+const { locale } = Astro.props
+const t = (zh: string, en: string) => local(locale, zh, en)
+const steps = [
+ { name: t('读取任务', 'Read task'), status: t('已完成','Complete'), input: t('检查一份示例文档的链接。','Check the links in an example document.'), output: t('范围已确认，只检查文档链接。','Scope confirmed: document links only.') },
+ { name: t('查找目标', 'Find targets'), status: t('已完成','Complete'), input: t('读取文档中的三个内部链接。','Read three internal links from the document.'), output: t('两个目标存在，一个目标需要检查。','Two targets exist; one needs inspection.') },
+ { name: t('执行检查', 'Run checks'), status: t('发现问题','Issue found'), input: t('验证每个链接的目标。','Validate each link destination.'), output: t('检测到缺失章节，等待修正。','A missing section was found. A correction is required.') },
+ { name: t('修正与复查', 'Correct and recheck'), status: t('已完成','Complete'), input: t('修正章节引用，再执行相同检查。','Correct the section reference and repeat the same check.'), output: t('示例中的三个链接均有对应目标。','All three example links have matching destinations.') }
+]
+---
+<section class='trace-viewer interactive-panel' data-trace-viewer data-locale={locale} aria-label={t('运行记录教学查看器','Teaching trace viewer')}>
+ <div class='panel-bar'><span class='specimen-label'>{t('教学回放','Teaching replay')}</span><span>{t('固定示例，不是真实 Agent 运行','Fixed example, not a captured agent run')}</span></div>
+ <div class='trace-layout'><div class='trace-steps' role='group' aria-label={t('选择步骤','Choose a step')}>{steps.map((step,i)=><button type='button' data-trace-step={i} aria-pressed={i===0?'true':'false'} aria-controls={`trace-panel-${i}`}><span class='trace-num'>{String(i+1).padStart(2,'0')}</span><span><b>{step.name}</b><small>{step.status}</small></span></button>)}</div>
+ <div class='trace-output'>{steps.map((step,i)=><article id={`trace-panel-${i}`} data-trace-panel={i}><span class='small-label'>{t('步骤记录','Step record')} {String(i+1).padStart(2,'0')}</span><h3>{step.name}</h3><dl><div><dt>{t('输入','Input')}</dt><dd>{step.input}</dd></div><div><dt>{t('输出','Output')}</dt><dd>{step.output}</dd></div></dl></article>)}</div></div>
+ <div class='panel-foot'><p data-trace-position aria-live='polite'>{t('选择一个步骤查看输入和输出。','Choose a step to inspect its input and output.')}</p><div class='inline-actions'><button type='button' class='quiet-button' data-trace-prev>{t('上一步','Previous')}</button><button type='button' class='quiet-button' data-trace-next>{t('下一步','Next')}</button></div></div>
+</section>
+<script>
+ document.querySelectorAll<HTMLElement>('[data-trace-viewer]').forEach(root=>{
+  const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-trace-step]')]
+  const panels=[...root.querySelectorAll<HTMLElement>('[data-trace-panel]')]
+  const prev=root.querySelector<HTMLButtonElement>('[data-trace-prev]'),next=root.querySelector<HTMLButtonElement>('[data-trace-next]')
+  const position=root.querySelector<HTMLElement>('[data-trace-position]')
+  let current=0
+  const activate=(index:number)=>{
+   current=Math.max(0,Math.min(buttons.length-1,index))
+   buttons.forEach((b,i)=>b.setAttribute('aria-pressed',String(i===current)))
+   panels.forEach((p,i)=>{p.hidden=i!==current})
+   if(prev)prev.disabled=current===0
+   if(next)next.disabled=current===buttons.length-1
+   if(position)position.textContent=root.dataset.locale==='en-US'?`Step ${current+1} of ${buttons.length}`:`第 ${current+1} 步，共 ${buttons.length} 步`
+  }
+  buttons.forEach((button,i)=>button.addEventListener('click',()=>activate(i)))
+  prev?.addEventListener('click',()=>activate(current-1));next?.addEventListener('click',()=>activate(current+1))
+  activate(0)
+ })
+</script>

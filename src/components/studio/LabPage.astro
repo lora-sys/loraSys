@@ -1,0 +1,16 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {experiments,pick,local} from '@/data/studio/curation'
+import {labEntries} from '@/data/lab'
+interface Props {locale:SiteLocale}
+const {locale}=Astro.props
+const en=locale==='en-US'
+const t=(zh:string,english:string)=>local(locale,zh,english)
+const archiveTitles=['Inspecting multi-agent collaboration','Inspecting Monad operations before signing','Generation and review loops','A small-scale language-model training pipeline','Three-dimensional card interactions']
+---
+<BaseLayout lang={locale} meta={{title:t('实验室','Lab'),description:t('在浏览器中选择来源、切换验收规则，直接检查输入和结果。','Select sources and change acceptance rules in your browser. Inspect the inputs and outcomes directly.')}}>
+ <main class='studio-page'><header class='page-intro'><p class='eyebrow'>{t('实验室 / 输入、操作与结果','Lab / Inputs, actions & results')}</p><h1>{t('小实验，把机制讲清楚。','Small experiments. Inspectable mechanisms.')}</h1><p class='lede'>{t('先操作，再看解释。以下两个实验使用明确标注的固定教学材料，不调用模型，不需要账号。','Try an action, then inspect what changed. These two experiments use labeled teaching fixtures, with no model calls or account required.')}</p></header><div class='experiment-grid'>{experiments.map((experiment,i)=><article class='experiment-card'><span class='experiment-number' aria-hidden='true'>0{i+1}</span><p class='eyebrow'>{t('可直接操作','Interactive')}</p><h2>{pick(experiment.title,locale)}</h2><p>{pick(experiment.summary,locale)}</p><a class='text-link' href={`${en?'/en':''}/lab/${experiment.slug}`}>{t('打开实验','Open experiment')} ↗</a></article>)}</div>
+ <section class='studio-section'><header class='section-head'><div><p class='eyebrow'>{t('历史记录','Documented experiments')}</p><h2>{t('仓库里的独立实验。','Experiments documented in repositories.')}</h2></div></header><p class='muted'>{t('这些记录保留原有项目入口，不代表本站提供在线演示。','These records retain their original project links. They are not live demos hosted by this site.')}</p><ul class='quiet-list'>{labEntries.map((entry,i)=><li><div class='list-meta'><span>{entry.project}</span><span>{t('中文记录','Chinese notes')}</span></div><h3><a href={`/lab/${entry.slug}`}>{en?archiveTitles[i]:entry.title}</a></h3><a class='text-link' href={entry.source} target='_blank' rel='noopener noreferrer'>{t('查看源码','View source')} ↗</a></li>)}</ul></section>
+ </main>
+</BaseLayout>

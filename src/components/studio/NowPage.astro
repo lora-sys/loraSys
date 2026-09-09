@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {local} from '@/data/studio/curation'
+import projectSnapshot from '@/data/github-projects.json'
+import syncReport from '@/data/sync-report.json'
+interface Props {locale:SiteLocale}
+const {locale}=Astro.props
+const t=(zh:string,en:string)=>local(locale,zh,en)
+const lastReviewed='2026-08-20'
+const recent=Object.values(projectSnapshot.projects).filter(p=>!p.archived&&!p.fork).sort((a,b)=>String(b.pushedAt).localeCompare(String(a.pushedAt))).slice(0,5)
+const records=[
+{title:t('构建中','Building'),body:t('Agent 沙盒的可靠执行边界，以及 AI Company OS 和多智能体工程 Harness。','Reliable execution boundaries for agent sandboxes, AI Company OS and multi-agent engineering harnesses.'),href:'/projects',link:t('查看项目档案','Explore the project archive')},
+{title:t('学习中','Learning'),body:t('生成式画布、交互反馈、LangGraph 与多智能体协作。','Generative canvases, interaction feedback, LangGraph and multi-agent collaboration.'),href:'/lab',link:t('打开实验室','Open the lab')},
+{title:t('阅读中','Reading'),body:'Designing Data-Intensive Applications',href:'/reading',link:t('阅读资料','Reading references')},
+{title:t('在听','Listening'),body:'Tame Impala · Currents',href:'/collections',link:t('收藏架','The shelf')}
+]
+const path=(href:string)=>locale==='en-US'?({'/projects':'/en/work','/lab':'/en/lab','/reading':'/en/reading','/collections':'/en/collections'}[href]??href):href
+---
+<BaseLayout lang={locale} meta={{title:t('正在构建','Now'),description:t('人工维护的关注方向与独立标注的 GitHub 推送记录。','Manually maintained interests and separately labeled GitHub push records.')}}>
+ <main class='studio-page'><header class='page-intro'><p class='eyebrow'>{t('正在构建 / 保留更新时间','Now / Keep the review date visible')}</p><h1>{t('现在把时间花在哪里。','Where the time is going.')}</h1><p class='lede'>{t('下方人工记录最后复核于 2026 年 8 月 20 日。页面改版不等于这些项目有了新进展。','The manual notes below were last reviewed on August 20, 2026. A site redesign does not imply new progress on these projects.')}</p><time datetime={lastReviewed} class='muted' style='font-size:.8rem'>{t('人工记录日期','Manual review date')} · {lastReviewed}</time></header>{records.map(record=><section class='now-record'><h2>{record.title}</h2><div><p>{record.body}</p><a class='text-link' href={path(record.href)}>{record.link} ↗</a></div></section>)}<section class='studio-section'><header class='section-head'><div><p class='eyebrow'>{t('自动同步，独立于人工记录','Automatic snapshot, separate from manual notes')}</p><h2>{t('最近的仓库推送','Recent repository pushes')}</h2></div></header><p class='muted' style='font-size:.8rem'>{t('快照同步日期','Snapshot date')} · {syncReport.syncedAt.slice(0,10)}</p><ul class='quiet-list'>{recent.map(project=><li><div class='list-meta'><time datetime={String(project.pushedAt)}>{new Intl.DateTimeFormat(locale,{year:'numeric',month:'short',day:'numeric',timeZone:'UTC'}).format(new Date(project.pushedAt))}</time></div><h3><a href={project.url} target='_blank' rel='noopener noreferrer'>{project.fullName} ↗</a></h3></li>)}</ul><p class='boundary-note'>{t('推送时间只表示仓库有更新，不自动解释为发布、完成或性能提升。','A push timestamp only indicates a repository update. It is not automatically a release, completion or performance improvement.')}</p></section></main>
+</BaseLayout>

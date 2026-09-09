@@ -1,0 +1,17 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {local} from '@/data/studio/curation'
+import {anime,favorites,localizeShowcase} from '@/data/showcase'
+interface Props {locale:SiteLocale}
+const {locale}=Astro.props
+const en=locale==='en-US'
+const t=(zh:string,english:string)=>local(locale,zh,english)
+const items=[...anime.map(item=>({...localizeShowcase(item,en),group:'anime'})),...favorites.map(item=>({...localizeShowcase(item,en),group:'favorites'}))]
+---
+<BaseLayout lang={locale} meta={{title:t('收藏','Shelf'),description:t('Lora 的动画与兴趣收藏。沿用已有收藏记录，不自动播放媒体。','Lora’s animation and interests shelf, using existing collection records without autoplay.')}}>
+ <main class='studio-page' data-collection-shelf><header class='page-intro'><p class='eyebrow'>{t('工作之外 / 收藏架','Away from the keyboard / Shelf')}</p><h1>{t('给喜欢的东西留个位置。','A place for things I enjoy.')}</h1><p class='lede'>{t('保留原来的动画、音乐和兴趣记录。海报用于识别作品，链接进入原有资料或收听入口。','The existing animation, music and interests collection. Posters identify the works; links open the original reference or listening destination.')}</p></header><div class='content-tabs' role='group' aria-label={t('筛选收藏','Filter the shelf')}><button type='button' data-shelf-filter='all' aria-pressed='true'>{t('全部','All')}</button><button type='button' data-shelf-filter='anime' aria-pressed='false'>{t('动画','Animation')}</button><button type='button' data-shelf-filter='favorites' aria-pressed='false'>{t('其他收藏','Other interests')}</button></div><div class='collection-grid'>{items.map(item=><article class='collection-card' data-shelf-item={item.group}><a href={item.href} target='_blank' rel='noopener noreferrer'><img src={item.image} alt={item.name} width='300' height='230' loading='lazy'/><h2>{item.name}</h2></a><p>{item.description}</p></article>)}</div><p class='muted' style='margin-top:2rem;font-size:.8rem'>{t('收藏图片保留原作品归属，不属于本站原创角色资产。','Collection artwork belongs to its respective works; it is not part of this site’s original character assets.')}</p></main>
+</BaseLayout>
+<script>
+ document.querySelectorAll<HTMLElement>('[data-collection-shelf]').forEach(root=>{const buttons=[...root.querySelectorAll<HTMLButtonElement>('[data-shelf-filter]')],items=[...root.querySelectorAll<HTMLElement>('[data-shelf-item]')];buttons.forEach(button=>button.addEventListener('click',()=>{const group=button.dataset.shelfFilter;buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));items.forEach(item=>{item.hidden=group!=='all'&&item.dataset.shelfItem!==group})}))})
+</script>

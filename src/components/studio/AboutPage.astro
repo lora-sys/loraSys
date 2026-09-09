@@ -1,0 +1,24 @@
+---
+import {Image} from 'astro:assets'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import type {SiteLocale} from '@/i18n/site'
+import {local,caseStudies,casePath,pick} from '@/data/studio/curation'
+import {profile,profileZh,hackathons,hackathonsZh} from '@/data/profile'
+import ContributionGraph from '@/components/lora/ContributionGraph.astro'
+import CredentialsArchive from '@/components/about/CredentialsArchive.astro'
+import avatar from '@/assets/lora-visual/v2/lora-v2-avatar.webp'
+interface Props {locale:SiteLocale}
+const {locale}=Astro.props
+const en=locale==='en-US'
+const t=(zh:string,english:string)=>local(locale,zh,english)
+const education=en?profile.education:profileZh.education
+const events=(en?hackathons:hackathonsZh).map(item=>item.title==='知乎黑客松'&&en?{...item,title:'Zhihu Hackathon',content:'Planning to participate on September 13, 2026. Details will be added after the event.'}:item.title==='世界人工智能开源大赛 · Agent Infra'&&en?{...item,title:'World AI Open Source Competition · Agent Infra',content:'Completed the second phase of the 2026 Datawhale AI Summer Camp and received the completion certificate.'}:item)
+---
+<BaseLayout lang={locale} meta={{title:t('关于 Lora','About Lora'),description:t('学生开发者，关注 AI Agent、全栈应用与可检查的工程实现。','A student developer working on AI agents, full-stack applications and inspectable engineering.')}}>
+ <main class='studio-page'><header class='page-intro profile-intro'><div><p class='eyebrow'>{t('关于 / 学习、实现与协作','About / Learning, implementation & collaboration')}</p><h1>{t('我是 Lora。','I’m Lora.')}</h1><p class='lede'>{t('学生开发者，主要做 AI Agent、开发者工具和全栈应用。现在在西安学习，也通过开源项目与黑客松实践工程方法。','I’m a student developer working on AI agents, developer tools and full-stack applications. I study in Xi’an and practice engineering through open-source projects and hackathons.')}</p><div class='action-row'><a class='button primary' data-resume-reading href={t('/resume','/en/resume')}>{t('阅读简历','Read résumé')}</a><a class='button' href={t('/contact','/en/contact')}>{t('联系我','Contact me')}</a></div></div><Image src={avatar} alt={t('Lora 的原创插画头像','Original illustrated Lora avatar')} widths={[160,320,480]} sizes='(max-width:640px) 96px, 240px' loading='eager'/></header>
+ <section><header class='section-head'><div><p class='eyebrow'>{t('用作品说明','Shown through projects')}</p><h2>{t('正在实践的工程问题。','Engineering questions I’m working on.')}</h2></div></header><ul class='quiet-list'>{caseStudies.map(study=><li><h3><a href={casePath(study,locale)}>{study.title} ↗</a></h3><p>{pick(study.summary,locale)}</p></li>)}</ul></section>
+ <section class='studio-section' id='education'><h2>{t('教育经历','Education')}</h2><dl class='fact-list'>{education.map(item=><div><dt>{item.period.replace(' — ',' / ')}</dt><dd><a href={item.href} target='_blank' rel='noopener noreferrer'>{item.school}</a><br/>{item.degree}</dd></div>)}</dl></section>
+ {!en?<section class='studio-section'><CredentialsArchive/></section>:<section class='studio-section'><h2>Learning credentials</h2><p class='lede'>Original certificates remain available with their Chinese descriptions.</p><a class='text-link' href='/about#credentials-title'>View the original credentials ↗</a></section>}
+ <section class='studio-section' id='hackathons'><h2>{t('黑客松与活动记录','Hackathons and activity records')}</h2><p class='lede'>{t('沿用已有记录。计划参加和已完成的活动分别标注，不把计划写成成果。','Existing records are retained. Planned and completed activities are labeled separately; plans are not presented as results.')}</p><ul class='quiet-list'>{events.map(event=><li><div class='list-meta'><span>{event.status==='planned'?t('计划参加','Planned'):t('活动记录','Recorded activity')}</span><span>{event.date}</span></div><h3>{event.href?<a href={event.href} target='_blank' rel='noopener noreferrer'>{event.title} ↗</a>:event.title}</h3><p>{event.content}</p></li>)}</ul></section>
+ <section class='studio-section' id='contributions'><ContributionGraph {locale}/></section><section class='contact-strip'><div><h2>{t('还有工作之外的兴趣。','There is life outside the work.')}</h2><p>{t('动画、音乐与其他收藏，保留在独立的收藏架里。','Animation, music and other interests live on a separate shelf.')}</p></div><a class='button' href={t('/collections','/en/collections')}>{t('打开收藏架','Open the shelf')} ↗</a></section></main>
+</BaseLayout>

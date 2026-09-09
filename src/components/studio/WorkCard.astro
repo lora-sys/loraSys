@@ -1,0 +1,17 @@
+---
+import WorkPreview from './WorkPreview.astro'
+import { casePath, studySource, pick, local, type CaseStudy } from '@/data/studio/curation'
+import type { SiteLocale } from '@/i18n/site'
+interface Props { study: CaseStudy; locale: SiteLocale; lead?: boolean }
+const {study,locale,lead=false}=Astro.props
+const t=(zh:string,en:string)=>local(locale,zh,en)
+---
+<article class:list={['work-card',{'work-card--lead':lead}]} data-project-card data-case={study.slug}>
+ <WorkPreview {study} {locale}/>
+ <div class='project-heading'>
+  <div class='case-kicker'><span>{pick(study.category,locale)}</span><span>{study.number}</span></div>
+  <h3><a href={casePath(study,locale)}>{study.title}</a></h3>
+  <p>{pick(study.summary,locale)}</p>
+  <div class='case-links'><a href={casePath(study,locale)}>{t('查看项目案例','Read case study')} <span aria-hidden='true'>↗</span></a><a href={studySource(study)} target='_blank' rel='noopener noreferrer'>{t('源码','Source')}</a></div>
+ </div>
+</article>

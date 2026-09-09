@@ -1,0 +1,54 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+import { local } from '@/data/studio/curation'
+interface Props { locale: SiteLocale }
+const { locale } = Astro.props
+const t = (zh: string, en: string) => local(locale, zh, en)
+const sources = [
+  { id: 'A', title: t('完成与正确', 'Completion and correctness'), body: t('完成输出并不意味着工具选择正确。验收需要同时检查结果和执行过程。', 'A completed output does not prove correct tool selection. Acceptance checks both the result and the execution.') },
+  { id: 'B', title: t('可回查的记录', 'Inspectable records'), body: t('保留工具输入、输出和错误，才能从最终结果回查执行过程。', 'Retain tool inputs, outputs and errors to trace a final result back to the execution.') },
+  { id: 'C', title: t('诚实的失败反馈', 'Honest failure feedback'), body: t('复制操作失败时，应显示失败原因或手动复制入口，而不是显示成功。', 'When copying fails, report the failure or offer manual copying instead of claiming success.') }
+]
+const nodes = [
+  { title: t('同时检查完成情况和工具选择', 'Check completion and tool selection'), refs: ['A'] },
+  { title: t('保存输入、输出与错误', 'Retain inputs, outputs and errors'), refs: ['B'] },
+  { title: t('用记录解释验收结论', 'Explain acceptance with records'), refs: ['A','B'] },
+  { title: t('失败时保留恢复路径', 'Offer a recovery path on failure'), refs: ['C'] }
+]
+---
+<section class='source-explorer interactive-panel' data-source-explorer data-locale={locale} aria-label={t('来源选择实验', 'Source selection experiment')}>
+  <div class='panel-bar'><span class='specimen-label'>{t('教学样例', 'Teaching fixture')}</span><span>{t('在浏览器内计算，不调用模型', 'Computed in your browser. No model calls.')}</span></div>
+  <div class='source-columns'>
+    <fieldset class='source-options'><legend>{t('1. 选择材料', '1. Choose material')}</legend><p class='supporting-copy'>{t('取消来源 B，检查右侧哪些节点缺少依据。', 'Uncheck source B to see which nodes lose support.')}</p>
+      {sources.map(source => <label class='source-option'><input type='checkbox' data-source-id={source.id} checked={source.id !== 'C'} /><span class='source-body'><span class='source-name'><b>{source.id}</b>{source.title}</span><span>{source.body}</span><small>{t('本站编写的示例摘录', 'Example excerpt authored for this site')}</small></span></label>)}
+    </fieldset>
+    <div class='evidence-nodes'><h3>{t('2. 检查学习节点', '2. Inspect learning nodes')}</h3><p class='supporting-copy' data-source-summary aria-live='polite'>{t('启用 JavaScript 后可以检查来源关系。', 'Enable JavaScript to inspect source relationships.')}</p>
+      {nodes.map((node, index) => <article class='evidence-node' data-source-node data-refs={node.refs.join(',')}><span class='node-index'>{String(index+1).padStart(2,'0')}</span><div><h4>{node.title}</h4><p><span>{t('需要来源', 'Required sources')} {node.refs.join(' + ')}</span><strong data-source-state></strong></p></div></article>)}
+    </div>
+  </div>
+  <div class='panel-foot'><p>{t('这些材料不是知乎原文，也不构成事实检索结果。实验仅说明来源依赖关系。', 'These excerpts are not Zhihu content or retrieval results. This experiment only explains source dependencies.')}</p><button type='button' class='quiet-button' data-source-reset>{t('重置选择', 'Reset selection')}</button></div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-source-explorer]').forEach(root => {
+    const en = root.dataset.locale === 'en-US'
+    const inputs = [...root.querySelectorAll<HTMLInputElement>('[data-source-id]')]
+    const nodes = [...root.querySelectorAll<HTMLElement>('[data-source-node]')]
+    const summary = root.querySelector<HTMLElement>('[data-source-summary]')
+    const update = () => {
+      const selected = new Set(inputs.filter(input => input.checked).map(input => input.dataset.sourceId))
+      let supported = 0
+      nodes.forEach(node => {
+        const refs = node.dataset.refs?.split(',') ?? []
+        const missing = refs.filter(ref => !selected.has(ref))
+        node.dataset.supported = String(missing.length === 0)
+        const state = node.querySelector<HTMLElement>('[data-source-state]')
+        if (missing.length === 0) supported++
+        if (state) state.textContent = missing.length ? (en ? `Missing ${missing.join(', ')}` : `缺少 ${missing.join('、')}`) : (en ? 'Supported' : '有依据')
+      })
+      if (summary) summary.textContent = en ? `${selected.size} sources selected · ${supported}/${nodes.length} nodes supported` : `已选 ${selected.size} 条材料，${supported}/${nodes.length} 个节点有完整依据`
+    }
+    inputs.forEach(input => input.addEventListener('change', update))
+    root.querySelector('[data-source-reset]')?.addEventListener('click', () => { inputs.forEach(input => { input.checked = input.dataset.sourceId !== 'C' }); update() })
+    update()
+  })
+</script>

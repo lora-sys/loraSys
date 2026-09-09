@@ -1,0 +1,48 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+import { local } from '@/data/studio/curation'
+interface Props { locale: SiteLocale }
+const { locale } = Astro.props
+const t = (zh: string, en: string) => local(locale, zh, en)
+const runs = [
+  { id: '01', label: t('结果与证据齐全', 'Complete output and evidence'), done: true, tool: true, evidence: true, output: t('已生成摘要，使用授权来源，并保留引用。', 'Summary completed using the authorized sources, with citations retained.') },
+  { id: '02', label: t('完成了输出，工具选择错误', 'Finished with the wrong tool'), done: true, tool: false, evidence: true, output: t('生成了摘要，但调用的来源不在允许列表中。', 'Summary completed, but the source tool was outside the allowed list.') },
+  { id: '03', label: t('完成了输出，缺少依据', 'Finished without evidence'), done: true, tool: true, evidence: false, output: t('生成了摘要，但没有保存支持结论的摘录。', 'Summary completed, but supporting excerpts were not retained.') },
+  { id: '04', label: t('运行中断', 'Execution interrupted'), done: false, tool: false, evidence: false, output: t('工具返回错误，没有完成最终输出。', 'The tool returned an error and no final output was completed.') }
+]
+---
+<section class='eval-explorer interactive-panel' data-eval-explorer data-locale={locale} aria-label={t('评测规则实验', 'Evaluation rules experiment')}>
+  <div class='panel-bar'><span class='specimen-label'>{t('固定教学数据', 'Fixed teaching data')}</span><span>{t('4 条样例，切换规则不会重新运行 Agent', '4 fixtures. Changing rules does not rerun an agent.')}</span></div>
+  <div class='eval-controls'><div><h3>{t('选择验收规则', 'Choose the acceptance rule')}</h3><div class='segmented' role='group' aria-label={t('验收规则', 'Acceptance rule')}><button type='button' data-eval-rule='completion' aria-pressed='true'>{t('只看完成', 'Completion only')}</button><button type='button' data-eval-rule='strict' aria-pressed='false'>{t('严格验收', 'Strict checks')}</button></div><p data-eval-explanation>{t('只要求最终输出完成。', 'Require only a completed final output.')}</p></div><div class='eval-result' aria-live='polite'><strong data-eval-total>3 / 4</strong><span data-eval-percent>{t('通过率 75%', '75% pass rate')}</span></div></div>
+  <div class='eval-records'>
+    {runs.map(run => <details class='eval-record' data-eval-record data-done={String(run.done)} data-tool={String(run.tool)} data-evidence={String(run.evidence)}><summary><span class='mono'>{run.id}</span><span>{run.label}</span><strong data-eval-verdict>{t('查看结果', 'Inspect result')}</strong><span aria-hidden='true'>+</span></summary><div class='eval-record-body'><p>{run.output}</p><dl class='record-checks'><div><dt>{t('输出完成', 'Output complete')}</dt><dd>{run.done ? t('是','Yes') : t('否','No')}</dd></div><div><dt>{t('工具正确', 'Correct tool')}</dt><dd>{run.tool ? t('是','Yes') : t('否','No')}</dd></div><div><dt>{t('证据齐全', 'Evidence retained')}</dt><dd>{run.evidence ? t('是','Yes') : t('否','No')}</dd></div></dl></div></details>)}
+  </div>
+  <div class='panel-foot'><p>{t('输出没有变，验收标准变了。这里的通过率不是任何真实模型的性能结果。', 'The outputs are unchanged; the acceptance criteria changed. These rates are not performance results for any real model.')}</p><button type='button' class='quiet-button' data-eval-reset>{t('重置规则', 'Reset rule')}</button></div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-eval-explorer]').forEach(root => {
+    const en = root.dataset.locale === 'en-US'
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>('[data-eval-rule]')]
+    const rows = [...root.querySelectorAll<HTMLElement>('[data-eval-record]')]
+    const update = (rule: string) => {
+      let passed = 0
+      buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.evalRule === rule)))
+      rows.forEach(row => {
+        const ok = row.dataset.done === 'true' && (rule === 'completion' || (row.dataset.tool === 'true' && row.dataset.evidence === 'true'))
+        if (ok) passed++
+        row.dataset.passed = String(ok)
+        const verdict = row.querySelector<HTMLElement>('[data-eval-verdict]')
+        if (verdict) verdict.textContent = ok ? (en ? 'Pass' : '通过') : (en ? 'Fail' : '未通过')
+      })
+      const total = root.querySelector<HTMLElement>('[data-eval-total]')
+      const percent = root.querySelector<HTMLElement>('[data-eval-percent]')
+      const explanation = root.querySelector<HTMLElement>('[data-eval-explanation]')
+      if (total) total.textContent = `${passed} / ${rows.length}`
+      if (percent) percent.textContent = en ? `${Math.round(passed/rows.length*100)}% pass rate` : `通过率 ${Math.round(passed/rows.length*100)}%`
+      if (explanation) explanation.textContent = rule === 'strict' ? (en ? 'Require completion, correct tools and supporting evidence.' : '同时要求输出完成、工具正确、证据齐全。') : (en ? 'Require only a completed final output.' : '只要求最终输出完成。')
+    }
+    buttons.forEach(button => button.addEventListener('click', () => update(button.dataset.evalRule ?? 'completion')))
+    root.querySelector('[data-eval-reset]')?.addEventListener('click', () => update('completion'))
+    update('completion')
+  })
+</script>

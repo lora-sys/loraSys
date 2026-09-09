@@ -1,0 +1,15 @@
+---
+import type { CaseStudy } from '@/data/studio/curation'
+import { local } from '@/data/studio/curation'
+import type { SiteLocale } from '@/i18n/site'
+interface Props { study: CaseStudy; locale: SiteLocale }
+const { study, locale } = Astro.props
+const t = (zh: string,en: string) => local(locale,zh,en)
+---
+<div class:list={['work-preview', `work-preview--${study.motif}`]} aria-hidden='true'>
+  {study.motif === 'canvas' && <div class='preview-canvas'><div class='preview-node'><b>{t('任务与计划','Task & plan')}</b><small>{t('检查变更范围','Inspect change scope')}</small></div><div class='preview-node signal'><b>{t('文件变更','File changes')}</b><small>{t('查看差异','Inspect the diff')}</small></div><div class='preview-node signal'><b>{t('检查结果','Check results')}</b><small>{t('保留证据','Retain evidence')}</small></div><div class='preview-node'><b>{t('人工审批','Human approval')}</b><small>{t('执行状态独立保存','Runtime state stays separate')}</small></div></div>}
+  {study.motif === 'sources' && <div class='preview-thread'><div class='thread-notes'><div class='preview-node signal'><b>A · {t('已选来源','Selected source')}</b><small>{t('原始链接与摘录','Original link & excerpt')}</small></div><div class='preview-node signal'><b>B · {t('已选来源','Selected source')}</b><small>{t('原始链接与摘录','Original link & excerpt')}</small></div><div class='preview-node'><small>C · {t('未选择','Not selected')}</small></div></div><div class='thread-output'><div class='preview-node'><b>{t('学习节点','Learning node')}</b><small>A + B</small></div><div class='preview-node'><b>{t('追问与自测','Follow up & self-test')}</b><small>{t('依据所选来源','Grounded in selected sources')}</small></div></div></div>}
+  {study.motif === 'gates' && <div class='preview-gates'><span><b>01</b>{t('范围与计划','Scope & plan')}</span><span><b>02</b>{t('实现与检查','Implementation & checks')}</span><span><b>03</b>{t('审查与证据','Review & evidence')}</span><span class='gate-approval'><b>04</b>{t('等待人工审批','Human approval is separate')}</span></div>}
+  {study.motif === 'arena' && <div class='preview-arena'>{[t('构建者','Builder'),t('设计师','Designer'),t('架构师','Architect')].map((name,i)=><div class='preview-node'><span class='team-mark'>0{i+1}</span><b>{name}</b><small>{t('提案 · 修订 · 证据','Propose · revise · prove')}</small></div>)}</div>}
+  <span class='preview-caption'>{t('机制示意，非产品截图','Interface study, not a product screenshot')}</span>
+</div>
