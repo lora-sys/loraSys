@@ -51,6 +51,7 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
       :global(html.dark body.site-v4){--studio-accent:#e5b879}
       :global(.site-v4 .locale-toggle){color:hsl(var(--foreground))}
       :global(.studio-page [data-source-node][data-supported='false']){opacity:1}
+      :global(.studio-page h1),:global(.studio-page h2){text-wrap:balance}
       #main-container{padding-top:env(safe-area-inset-top);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right))}
       @media(min-width:640px){#main-container{padding-left:calc(1.75rem + env(safe-area-inset-left));padding-right:calc(1.75rem + env(safe-area-inset-right))}}
       @media(min-width:1024px){#main-container{padding-left:calc(2.5rem + env(safe-area-inset-left));padding-right:calc(2.5rem + env(safe-area-inset-right))}}

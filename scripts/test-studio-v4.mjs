@@ -64,6 +64,12 @@ try {
     }
     const capture = async (route, suffix = '', fullPage = false) => {
       const name = `${width}-${(route || 'home').replaceAll('/', '-').replaceAll('?', '-')}${suffix}.png`
+      if (fullPage) {
+        // Reset only the scroll position. Preserve the real selection and focus states.
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+        await page.waitForFunction(() => window.scrollY === 0)
+        await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+      }
       await page.screenshot({ path: path.join(output, name), fullPage, animations: 'disabled' })
       report.screenshots.push({ file: name, route, viewport: { width, height }, fullPage, suffix })
     }
@@ -190,8 +196,7 @@ try {
 } finally {
   await browser.close()
   await new Promise(resolve => server.close(resolve))
-  report.completedAt = new Date().toISOString()
-  await save()
+  report.completedAt = new Date().toISOString(); await save()
 }
 const failed = report.checks.filter(item => !item.passed).length
 console.log(JSON.stringify({ checks: report.checks.length, failed, output }))
