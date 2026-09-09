@@ -207,7 +207,8 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
       if (status) {
         const statusName = projectStatus === 'building' ? '构建中' : projectStatus === 'active' ? '持续维护' : projectStatus === 'archived' ? '已归档' : ''
         const sourceName = projectSource === 'all' ? '' : projectSource === 'External' ? '外部贡献' : projectSource
-        const filters = [query && `“${search?.value.trim()}”`, category !== 'all' && category, sourceName, statusName].filter(Boolean).join(' · ')
+        const categoryName = category === 'all' ? '' : categoryButtons.find((button) => button.dataset.categoryFilter === category)?.textContent?.trim() ?? ''
+        const filters = [query && `“${search?.value.trim()}”`, categoryName, sourceName, statusName].filter(Boolean).join(' · ')
         status.textContent = filters ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}` : `共收录 ${items.length} 个项目`
       }
       if (emptyState) emptyState.hidden = visible !== 0

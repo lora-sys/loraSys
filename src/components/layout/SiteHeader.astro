@@ -94,7 +94,9 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     if (linkPath === currentPath) link.setAttribute('aria-current', 'page')
   })
 
-  document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenu(false, true) })
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') setMenu(false, true)
+  })
   document.addEventListener('pointerdown', (event) => {
     if (header && event.target instanceof Node && !header.contains(event.target)) setMenu(false)
   })
@@ -103,7 +105,7 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   updateScrollState()
 
   document.addEventListener('keydown', (event) => {
-    if (event.key !== '/' || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return
+    if (event.key !== '/' || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return
     if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]')) return
     if (document.querySelector('dialog[open]')) return
     const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input')

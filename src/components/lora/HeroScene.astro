@@ -84,6 +84,11 @@ import LoraVisual from './LoraVisual.astro'
   .hero-scene[data-hero-ready='true'] .hero-mochi { opacity: 1; }
   .hero-scene :global(img) { width: 100%; height: 100%; object-fit: contain; }
 
+  @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .hero-lora,.hero-mochi,.hero-props { will-change: auto; transform: none !important; }
+    .hero-scene :global(img) { filter: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-lora,.hero-mochi,.hero-props { transition: none; transform: none !important; }
     .hero-scene[data-hero-ready='false'] > div { opacity: 1; }

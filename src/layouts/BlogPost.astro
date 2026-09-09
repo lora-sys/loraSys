@@ -190,7 +190,7 @@ const articleFieldNote = {
           {data.language === 'en-US' ? 'Article in English' : '中文长文'}
         </span>
       </div>
-      {!isDraft && enableComment && config.integ.waline.enable && <PageInfo comment class='mt-1' />}
+      {!isDraft && enableComment && config.integ.waline.enable && <PageInfo locale={locale} comment class='mt-1' />}
     </Fragment>
   </ArticleHero>
 

@@ -43,11 +43,11 @@ const { default: lighthouse } = await import(pathToFileURL(path.join(modules,'li
 const chromeLauncher = await import(pathToFileURL(path.join(modules,'chrome-launcher/dist/index.js')).href)
 const chrome = await chromeLauncher.launch({ chromePath:chromium.executablePath(), chromeFlags:['--headless','--no-sandbox','--disable-dev-shm-usage'] })
 try {
- for(const route of ['', 'projects/', 'en/work/', 'projects/zhihu-threads/']) {
+ for(const route of ['', 'projects/', 'en/work/', 'projects/zhihu-threads/']) for(let sample=1;sample<=3;sample++) {
   const result=await lighthouse(new URL(route,site).href, { port:chrome.port, output:'json', logLevel:'error', onlyCategories:['performance','accessibility','best-practices','seo'] })
   const name=route.replaceAll('/','-')||'home'
-  await writeFile(path.join(output,`${name}.json`),result.report)
-  report.checks.push({route,scores:Object.fromEntries(Object.entries(result.lhr.categories).map(([k,v])=>[k,v.score])),metrics:Object.fromEntries(['first-contentful-paint','largest-contentful-paint','total-blocking-time','cumulative-layout-shift'].map(k=>[k,result.lhr.audits[k]?.numericValue]))})
+  await writeFile(path.join(output,`${name}-${sample}.json`),result.report)
+  report.checks.push({route,sample,scores:Object.fromEntries(Object.entries(result.lhr.categories).map(([k,v])=>[k,v.score])),metrics:Object.fromEntries(['first-contentful-paint','largest-contentful-paint','total-blocking-time','cumulative-layout-shift'].map(k=>[k,result.lhr.audits[k]?.numericValue]))})
  }
  await writeFile(path.join(output,'summary.json'),JSON.stringify(report,null,2))
 }finally{

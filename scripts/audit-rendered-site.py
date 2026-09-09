@@ -6,7 +6,7 @@ import json, os, re
 
 ROOT = Path('dist').resolve()
 BASE = '/loraSys'
-OLD_UI = re.compile(r'^(?:Selected Work|Selected work|Visit website|Source|Copy code|Copy failed|Collapse|Expand|All tags|Previous Page|Next Page|Powered by|Skip to content|Back|All|Search project, stack, repository|Repository archive|All projects|Build channel map|Project page|BUILDING|ACTIVE|ARCHIVED)$')
+OLD_UI = re.compile(r'^(?:Selected Work|Selected work|Case guide|views|comments|Visit website|Source|Copy code|Copy failed|Collapse|Expand|All tags|Previous Page|Next Page|Powered by|Skip to content|Back|All|Search project, stack, repository|Repository archive|All projects|Build channel map|Project page|BUILDING|ACTIVE|ARCHIVED)$')
 class Page(HTMLParser):
     def __init__(self, file):
         super().__init__(convert_charrefs=True)

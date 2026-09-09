@@ -42,7 +42,7 @@ async function check(name, fn) {
   await save()
 }
 const keyRoutes = ['', 'en/', 'projects/', 'en/work/', 'projects/zhihu-threads/', 'en/projects/zhihu-threads/', 'contact/', 'en/contact/', 'about/', 'en/about/', 'blog/', 'en/writing/', 'notes/', 'now/', 'en/now/', 'links/', 'en/links/', 'resume/', 'en/resume/', 'lab/', 'talks/', 'terms/', 'terms/privacy-policy/', 'search/', 'en/search/','archives/','tags/','tags/agent/','blog/ai-engineering-harness/','blog/wishlive/','blog/language/en-US/']
-const uiLeaks = /^(Selected Work|BUILDING|Building|Maintained|Archived|View case|Visit website|Contribution PR|Source|Story|Search content|Content Directory|Content Graph|Theme Roadmap|Table of Contents|Back|Author|Published at|Copyright|No matching content entries\.|Copy exploration receipt|Reset filters)$/i
+const uiLeaks = /^(Selected Work|Case guide|views|comments|BUILDING|Building|Maintained|Archived|View case|Visit website|Contribution PR|Source|Story|Search content|Content Directory|Content Graph|Theme Roadmap|Table of Contents|Back|Author|Published at|Copyright|No matching content entries\.|Copy exploration receipt|Reset filters)$/i
 try {
   for (const viewport of [{ width:1440,height:1000 },{ width:390,height:844 },{ width:768,height:1024 }]) {
     const context = await browser.newContext({ viewport, reducedMotion:'reduce', colorScheme:'light' })
@@ -75,7 +75,7 @@ try {
         if (expected==='en') {
           const leaks=info.text.filter(x=>/[\u3400-\u9fff]/.test(x.text) && !x.lang?.startsWith('zh'))
           report.languageCandidates.push({route,viewport:viewport.width,candidates:leaks})
-          assert.deepEqual(leaks.filter(x=>x.text.length>15),[],'Unmarked Chinese prose in English interface')
+          assert.deepEqual(leaks,[],'Unmarked Chinese prose in English interface')
         }
         if (viewport.width!==768 || ['projects/','en/work/'].includes(route)) await capture((route||'home').replaceAll('/','-'))
         if(process.env.AXE_PATH && viewport.width!==768 && ['', 'projects/','en/work/','projects/zhihu-threads/','en/projects/zhihu-threads/','search/','en/search/','contact/','en/contact/'].includes(route)) {

@@ -50,7 +50,7 @@ const dateTimeOptions: Intl.DateTimeFormatOptions = { month: 'short' }
       <Icon name='time' class='size-5' />
       {t(`约 ${String(remarkPluginFrontmatter.minutesRead).match(/\d+/)?.[0] ?? '1'} 分钟`, String(remarkPluginFrontmatter.minutesRead))}
     </div>
-    {language && <span class='flex items-center gap-1'><Icon name='earth' class='size-5' />{language}</span>}
+    {language && <span class='flex items-center gap-1'><Icon name='earth' class='size-5' />{language === 'en-US' ? 'English' : '中文'}</span>}
     {!!tags?.length && (
       <span class='flex items-center gap-1'>
         <Icon name='hashtag' class='size-5' />

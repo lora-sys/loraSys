@@ -198,6 +198,10 @@ const fallbackMark = project.title
     }
   }
 
+  @media (hover: none), (pointer: coarse) {
+    .project-media :global(img) { transform: none; will-change: auto; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .project-media :global(img),
     .project-lens {
