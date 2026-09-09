@@ -1,0 +1,55 @@
+name: Refine locale candidate from audit
+on:
+  push:
+    branches: [audit/i18n-zhihu-20260909]
+    paths: [.github/workflows/refine-locale-candidate.yml]
+permissions:
+  contents: write
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: inputs
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          path: site
+          ref: 860950b256c72c32864cd2f247c2f2d8cffd1935
+          persist-credentials: false
+      - name: Apply exact reviewed fixes
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib,json,base64,lzma
+          raw=lzma.decompress(base64.b64decode(Path('inputs/.audit/round2.b64').read_text().strip(),validate=True))
+          assert hashlib.sha256(raw).hexdigest()=='31076245806a89be95d4fe8ecdec38dbfc77abbca169e25dc21f6dc124c941a8'
+          root=Path('site').resolve()
+          changes=json.loads(raw)
+          for item in changes:
+              name=item['path']; p=(root/name).resolve()
+              assert p.is_relative_to(root) and name.startswith(('src/','scripts/','packages/pure/components/'))
+              old=p.read_text() if p.exists() else ''
+              assert hashlib.sha256(old.encode()).hexdigest()==item['old'],name
+              end=len(old);s=old
+              for start,stop,replacement in reversed(item['changes']):
+                  assert 0<=start<=stop<=end
+                  s=s[:start]+replacement+s[stop:];end=start
+              p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
+          print(f'Applied {len(changes)} reviewed source files')
+      - name: Push candidate without force or workflow mutation
+        working-directory: site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git switch -c fix/i18n-zhihu-20260909
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src scripts packages/pure/components
+          git commit -m 'fix(audit): close remaining locale gaps, improve contrast and right-size hero images'
+          AUTH=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:refs/heads/fix/i18n-zhihu-20260909
+          git rev-parse HEAD
