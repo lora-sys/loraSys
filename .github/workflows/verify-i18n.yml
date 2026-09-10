@@ -44,6 +44,12 @@ jobs:
         run: |
           node scripts/audit-i18n-site.mjs
           node scripts/audit-microinteractions.mjs
+      - name: Verify focused project updates and capture cards
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/locale-tools/node_modules/playwright/index.mjs
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/site-locale-evidence
+        run: node scripts/test-project-refresh.mjs
       - name: Lighthouse measurements
         if: ${{ !cancelled() }}
         env:
