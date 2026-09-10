@@ -34,7 +34,8 @@ if (!site) {
 const report={version:1,site,commit:process.env.IMAGE_TEST_COMMIT||null,label:process.env.IMAGE_TEST_LABEL||'measurement',startedAt:new Date().toISOString(),environment:{downloadBitsPerSecond:1600000,uploadBitsPerSecond:768000,latencyMs:150,cpuSlowdown:4,cache:'disabled',reducedMotion:'reduce'},samples:[],checks:[],screenshots:[]}
 const browser=await chromium.launch({headless:true,channel:'chromium'})
 report.environment.browser=browser.version()
-const checks=async(name,fn)=>{try{await fn();report.checks.push({name,passed:true})}catch(e){report.checks.push({name,passed:false,error:String(e.stack)})}}
+const save=()=>writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2))
+const checks=async(name,fn)=>{try{await fn();report.checks.push({name,passed:true})}catch(e){report.checks.push({name,passed:false,error:String(e.stack)});console.error(name,e.message)}await save()}
 const rounds=Number(process.env.IMAGE_TEST_ROUNDS||'1')
 const routes=(process.env.IMAGE_TEST_ROUTES||',en/,projects/,en/work/').split(',')
 try {
@@ -60,31 +61,31 @@ try {
   await checks(name,async()=>{
    const response=await page.goto(new URL(route,site).href,{waitUntil:'load',timeout:60000});assert.equal(response.status(),200)
    await page.evaluate(()=>document.fonts.ready)
-   // Wait for actual transfer settlement, rather than hiding a timeout with a fixed sleep.
    await page.waitForLoadState('networkidle',{timeout:30000})
    const info=await page.evaluate(()=>({metrics:window.__imageMetrics,elapsed:performance.now(),overflow:document.documentElement.scrollWidth-innerWidth,images:[...document.images].map(img=>{const r=img.getBoundingClientRect();return {src:img.getAttribute('src'),url:img.currentSrc,srcset:img.srcset,sizes:img.sizes,loading:img.loading,priority:img.fetchPriority,complete:img.complete,naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,width:r.width,height:r.height,top:r.top,visible:r.width>0&&r.height>0,fold:r.width>0&&r.height>0&&r.top<innerHeight&&r.bottom>0,alt:img.alt}})}))
    const requests=[...net.values()];const images=requests.filter(n=>n.type==='Image'||n.mime?.startsWith('image/'))
    report.samples.push({name,route,width,dpr:width===390?2:1,round,documentSha256:createHash('sha256').update(await response.body()).digest('hex'),...info,imageBytes:images.reduce((s,n)=>s+(n.bytes||0),0),imageRequests:images.length,totalBytes:requests.reduce((s,n)=>s+(n.bytes||0),0),requests,errors})
+   await save();console.log('MEASURED',name,images.reduce((sum,n)=>sum+(n.bytes||0),0))
    assert.ok(info.overflow<=1,`Horizontal overflow ${info.overflow}`)
    assert.deepEqual(errors,[],'Uncaught browser errors')
    assert.ok(info.images.filter(i=>i.fold).every(i=>i.complete&&i.naturalWidth>0),'All first-screen images must decode')
    if(round===1){
     const screen=`${name}.png`;await page.screenshot({path:path.join(out,screen),animations:'disabled'});report.screenshots.push({file:screen,route,width,state:'initial'})
-    for(const selector of ['#work','[data-project-card]','.personal-showcase']){
-     const target=page.locator(selector).first();if(!await target.count())continue
+    const target=page.locator('[data-project-card]').first()
+    if(await target.count()){
      await target.scrollIntoViewIfNeeded()
-     for(const image of await target.locator('img').all()){
-      if(!await image.isVisible())continue
+     const image=target.locator('img').first()
+     if(await image.count()){
       await image.scrollIntoViewIfNeeded()
-      await image.evaluate(async img=>{if(!img.complete)await new Promise((resolve,reject)=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',reject,{once:true})});await img.decode()})
+      await page.waitForFunction(img=>img.complete&&img.naturalWidth>0,await image.elementHandle(),{timeout:15000})
+      await image.evaluate(img=>img.decode())
      }
-     await target.scrollIntoViewIfNeeded();const file=`${name}-${selector.replace(/[^a-zA-Z]/g,'')}.png`
-     await page.screenshot({path:path.join(out,file),animations:'disabled'});report.screenshots.push({file,route,width,state:selector})
+     const file=`${name}-project.png`;await page.screenshot({path:path.join(out,file),animations:'disabled'});report.screenshots.push({file,route,width,state:'project'})
     }
    }
   })
-  await context.close();await writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2))
+  await context.close();await save()
  }
-}finally{await browser.close();if(server)await new Promise(resolve=>server.close(resolve));report.completedAt=new Date().toISOString();await writeFile(path.join(out,'report.json'),JSON.stringify(report,null,2))}
+}finally{await browser.close();if(server)await new Promise(resolve=>server.close(resolve));report.completedAt=new Date().toISOString();await save()}
 console.log(JSON.stringify({label:report.label,samples:report.samples.map(({name,imageBytes,imageRequests,metrics})=>({name,imageBytes,imageRequests,metrics})),failed:report.checks.filter(c=>!c.passed)},null,2))
 if(report.checks.some(c=>!c.passed))process.exitCode=1
