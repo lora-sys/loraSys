@@ -26,7 +26,7 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
 const base = `http://127.0.0.1:${server.address().port}${basePath}`
 const browser = await chromium.launch({ headless:true, channel:'chromium' })
 const report = { startedAt:new Date().toISOString(), browser:browser.version(), site:base, checks:[], screenshots:[], pages:[] }
-const glassboxReadme = 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/c19140104b0eba3451aebcd27334161e5ffb6d8d/README.md'
+const glassboxReadme = 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/main/README.md'
 async function check(name, run) {
   try { await run(); report.checks.push({ name, passed:true }); console.log('PASS', name) }
   catch (error) { report.checks.push({ name, passed:false, error:String(error.stack) }); console.error('FAIL', name, error.message) }
@@ -95,7 +95,7 @@ try {
       await page.locator('[data-zhihu-case]').waitFor()
       await capture('zhihu-case')
     })
-    await check(`${label}: works retain matching artwork and pinned Glassbox source`, async () => {
+    await check(`${label}: works retain matching artwork and current Glassbox source`, async () => {
       await open(locale === 'en' ? 'en/work/' : 'projects/')
       const glassbox = card('Glassbox-Agent-Harness')
       assert.equal((await glassbox.locator('h3').textContent()).trim(),'Glassbox')

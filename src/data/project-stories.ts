@@ -18,7 +18,7 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
     {
       kind: 'Project',
       label: '当前能力与规划',
-      href: 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/c19140104b0eba3451aebcd27334161e5ffb6d8d/README.md',
+      href: 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/main/README.md',
       external: true
     },
     {
