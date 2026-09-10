@@ -47,7 +47,46 @@ const { meta, articlePublishedAt, articleModifiedAt, highlightColor, back = '/',
   const shade = document.querySelector<HTMLElement>('#sidebar-shade')
   const trigger = document.querySelector<HTMLButtonElement>('#sidebar-btn')
   const mobile = matchMedia('(max-width:767px)')
+  const backgroundState = new Map<HTMLElement, boolean>()
   let open = false
+
+  const tabbable = () => {
+    if (!sidebar) return []
+    return [...sidebar.querySelectorAll<HTMLElement>('a[href], button, summary, input, select, textarea, [tabindex]')].filter(element => {
+      if (element.tabIndex < 0 || element.matches(':disabled') || element.closest('[inert], [hidden]')) return false
+      const style = getComputedStyle(element)
+      if (style.visibility !== 'visible' || !element.getClientRects().length) return false
+      // Closed details can retain descendant layout boxes. Only its own summary is reachable.
+      for (let parent = element.parentElement; parent && parent !== sidebar; parent = parent.parentElement) {
+        if (parent instanceof HTMLDetailsElement && !parent.open) {
+          const summary = parent.querySelector(':scope > summary')
+          if (!summary?.contains(element)) return false
+        }
+      }
+      return true
+    })
+  }
+
+  const setBackgroundInert = (value: boolean) => {
+    if (!value) {
+      backgroundState.forEach((inert, element) => { element.inert = inert })
+      backgroundState.clear()
+      return
+    }
+    if (!sidebar || backgroundState.size) return
+    let branch: HTMLElement = sidebar
+    while (branch.parentElement) {
+      const parent = branch.parentElement
+      for (const sibling of parent.children) {
+        if (!(sibling instanceof HTMLElement) || sibling === branch || sibling === shade || sibling.matches('script, style, link')) continue
+        backgroundState.set(sibling, sibling.inert)
+        sibling.inert = true
+      }
+      if (parent === document.body) break
+      branch = parent
+    }
+  }
+
   const setOpen = (value: boolean, restoreFocus = false) => {
     if (!sidebar || !shade) return
     open = mobile.matches && value
@@ -56,22 +95,60 @@ const { meta, articlePublishedAt, articleModifiedAt, highlightColor, back = '/',
     sidebar.setAttribute('aria-hidden', String(sidebar.inert))
     shade.hidden = !open
     trigger?.setAttribute('aria-expanded', String(open))
-    if (open) sidebar.querySelector<HTMLElement>('button, a, [tabindex="0"]')?.focus()
-    else if (restoreFocus) trigger?.focus()
+    if (open) {
+      sidebar.setAttribute('role', 'dialog')
+      sidebar.setAttribute('aria-modal', 'true')
+    } else {
+      sidebar.removeAttribute('role')
+      sidebar.removeAttribute('aria-modal')
+    }
+    setBackgroundInert(open)
+    if (open) (tabbable()[0] ?? sidebar).focus({ preventScroll: true })
+    else if (restoreFocus && mobile.matches) trigger?.focus({ preventScroll: true })
   }
+
   trigger?.addEventListener('click', () => setOpen(!open, open))
   sidebar?.querySelector('[data-sidebar-close]')?.addEventListener('click', () => setOpen(false, true))
   shade?.addEventListener('click', () => setOpen(false, true))
-  sidebar?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { if (mobile.matches) setOpen(false, true) }))
-  mobile.addEventListener('change', () => setOpen(false))
+  sidebar?.addEventListener('click', event => {
+    if (!open || !(event.target instanceof Element) || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
+    const link = event.target.closest<HTMLAnchorElement>('a[href]')
+    if (!link) return
+    const destination = new URL(link.href, location.href)
+    if (destination.origin !== location.origin || destination.pathname !== location.pathname || !destination.hash) return
+    // Release the modal before the TOC component or native fragment navigation focuses the heading.
+    setOpen(false)
+    queueMicrotask(() => {
+      let id: string
+      try { id = decodeURIComponent(destination.hash.slice(1)) } catch { return }
+      const heading = document.getElementById(id)
+      if (heading) {
+        heading.setAttribute('tabindex', '-1')
+        heading.focus({ preventScroll: true })
+      }
+    })
+  }, true)
+  mobile.addEventListener('change', () => {
+    const previous = document.activeElement
+    const hadFocus = previous instanceof Node && !!sidebar?.contains(previous)
+    setOpen(false)
+    if (!mobile.matches && hadFocus && sidebar) {
+      const target = previous instanceof HTMLElement && tabbable().includes(previous) ? previous : tabbable()[0] ?? sidebar
+      target.focus({ preventScroll: true })
+    } else if (mobile.matches && hadFocus) trigger?.focus({ preventScroll: true })
+  })
   document.addEventListener('keydown', event => {
-    if (!open || !sidebar) return
+    if (!open || !sidebar || event.defaultPrevented) return
     if (event.key === 'Escape') { event.preventDefault(); setOpen(false, true); return }
     if (event.key !== 'Tab') return
-    const focusable = [...sidebar.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]')].filter(el => el.getBoundingClientRect().height > 0)
-    const first = focusable[0], last = focusable.at(-1)
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+    const elements = tabbable()
+    const first = elements[0], last = elements.at(-1)
+    if (!first || !last) { event.preventDefault(); sidebar.focus(); return }
+    const current = elements.indexOf(document.activeElement as HTMLElement)
+    if (current < 0 || (event.shiftKey && current === 0) || (!event.shiftKey && current === elements.length - 1)) {
+      event.preventDefault()
+      ;(event.shiftKey ? last : first).focus()
+    }
   })
   setOpen(false)
 </script>
