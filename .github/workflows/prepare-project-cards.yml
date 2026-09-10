@@ -1,0 +1,79 @@
+name: Prepare project card candidate
+on:
+  push:
+    branches: [audit/project-cards-20260910]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 601e50bb63de67eb76d28fc52b7dbf0b2360a37e
+      - name: Apply only the six requested content changes
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib
+          expected = {
+            'src/i18n/project-copy.ts':'df62d92c7e0ba710f62b6fd676d99e2e320d9b29',
+            'src/pages/index.astro':'e62b3d72bb6648cf5f647d97ea445dbe7baaff05',
+            'src/pages/en/index.astro':'cf60020063b8859a50da6609296a935f81260417',
+            'scripts/fetch-github-projects.mjs':'dbb365c9b529f426316d130a34e5b9de61646b58',
+            'src/components/projects/ProjectDemo.astro':'acddb1adc8eaf361e8cf0e40562d81822fd251c8',
+            'src/data/project-stories.ts':'8607747dec3b9af1e1768a195c9df439dfac7d61'
+          }
+          for name, expected_sha in expected.items():
+              b=Path(name).read_bytes()
+              assert hashlib.sha1(f'blob {len(b)}\0'.encode()+b).hexdigest()==expected_sha, name
+          def replace(name, old, new):
+              p=Path(name);s=p.read_text()
+              assert s.count(old)==1, (name,old)
+              p.write_text(s.replace(old,new))
+          replace('src/pages/index.astro','const featuredProjects = allSelectedProjects.slice(0, 3)',"const featuredProjects = allSelectedProjects.filter(\n  (project, index) => index < 3 || project.repository === 'zhihu-threads'\n)")
+          replace('src/pages/index.astro','// 体感 demo 只配给精选三卡；键是同步快照里的仓库名，映射缺失就自然不渲染。','// 保留原有微演示映射，Zhihu Threads 使用已有项目封面与案例入口。')
+          replace('src/pages/index.astro','查看三个代表作品','查看 {featuredProjects.length} 个代表作品')
+          replace('src/pages/index.astro','三个作品，先从这里看起。','{featuredProjects.length} 个作品，先从这里看起。')
+          replace('src/pages/en/index.astro','const featured = projects.filter((project) => project.featured).slice(0, 3)',"const featured = projects.filter((project) => project.featured).filter(\n  (project, index) => index < 3 || project.repository === 'zhihu-threads'\n)")
+          replace('src/pages/en/index.astro','Three places to start.','{featured.length} places to start.')
+          zh='正在演进为长期运行的个人 Agent 工作台。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；微信、QQ、长期任务和学习沉淀仍在规划。'
+          en='Evolving into a long-lived personal agent workbench. Available today: Codex, Claude Code, local sessions, replay, approvals and canvas inspection. WeChat, QQ, long tasks and learning remain planned.'
+          replace('src/i18n/project-copy.ts','记录智能体动作、上下文与评测证据，用于检查运行过程和优化结果。',zh)
+          replace('src/i18n/project-copy.ts','Records agent actions, context and evaluation evidence to inspect runs and compare changes.',en)
+          replace('src/i18n/project-copy.ts','  ...project,\n  description:',"  ...project,\n  title: project.repository.toLowerCase() === 'glassbox-agent-harness' ? 'Glassbox' : project.title,\n  description:")
+          replace('scripts/fetch-github-projects.mjs','const summaryOverrides = new Map([',f"const summaryOverrides = new Map([\n  // Reviewed against Glassbox c191401 on 2026-09-10; roadmap capabilities are not shipped.\n  ['glassbox-agent-harness', '{zh}'],")
+          replace('scripts/fetch-github-projects.mjs',"['glassbox-agent-harness', 'Glassbox Agent Harness']","['glassbox-agent-harness', 'Glassbox']")
+          replace('src/data/project-stories.ts',"  'Glassbox-Agent-Harness': [\n    {\n      kind: 'Writing',\n      label: 'AI Engineering Harness: 从 Vibe Coding 到工程化',\n      href: '/blog/ai-engineering-harness'\n    },", "  'Glassbox-Agent-Harness': [\n    {\n      kind: 'Project',\n      label: '当前能力与规划',\n      href: 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/c19140104b0eba3451aebcd27334161e5ffb6d8d/README.md',\n      external: true\n    },")
+          replace('src/data/project-stories.ts','const storyLabels: Record<string, [string, string]> = {',"const storyLabels: Record<string, [string, string]> = {\n  '当前能力与规划': ['当前能力与规划', 'Available capabilities and roadmap'],")
+          replace('src/data/project-stories.ts',"story.kind === 'Project' && locale === 'en-US' ?","story.kind === 'Project' && !story.external && locale === 'en-US' ?")
+          replace('src/components/projects/ProjectDemo.astro',"name: 'Glassbox · 记录流', note: '示例日志，不是实时运行。点击可复制。'","name: 'Glassbox · 能力概览', note: '仓库能力说明，规划项尚未实现。点击可复制。'")
+          replace('src/components/projects/ProjectDemo.astro',"name: 'Glassbox · Capture stream', note: 'Illustrative logs, not a live run. Click to copy.'","name: 'Glassbox · Capabilities', note: 'Repository summary, not a live run. Planned items are not available.'")
+          p=Path('src/components/projects/ProjectDemo.astro');s=p.read_text()
+          start=s.index('const terminalData = {');end=s.index('\n\nconst currentTimeline', start)
+          s=s[:start]+'''const terminalData = {
+            'zh-CN': [
+              { line: '当前 · Codex / Claude Code', tip: '已复制当前支持的 Agent 适配器说明' },
+              { line: '当前 · 回放、审批与画布检查', tip: '已复制当前工作台能力说明' },
+              { line: '规划 · 微信、QQ、长期任务、学习沉淀', tip: '已复制规划说明，这些功能尚未实现' }
+            ],
+            'en-US': [
+              { line: 'Available: Codex / Claude Code', tip: 'Copied the available provider adapters' },
+              { line: 'Available: replay, approvals, canvas', tip: 'Copied the available workbench capabilities' },
+              { line: 'Planned: channels, long tasks, learning', tip: 'Copied planned capabilities; these are not available yet' }
+            ]
+          }'''+s[end:]
+          p.write_text(s)
+          replace('src/components/projects/ProjectDemo.astro',"'点击复制此行日志' : 'Click to copy log line'","'点击复制此项说明' : 'Click to copy capability note'")
+          import subprocess
+          names=set(subprocess.check_output(['git','diff','--name-only'],text=True).splitlines())
+          assert names==set(expected), names
+          PY
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/pages/index.astro src/pages/en/index.astro src/i18n/project-copy.ts src/data/project-stories.ts src/components/projects/ProjectDemo.astro scripts/fetch-github-projects.mjs
+          git commit -m 'fix(projects): feature Zhihu Threads and refresh Glassbox capabilities'
+          git push origin HEAD:refs/heads/stage/project-cards-20260910
