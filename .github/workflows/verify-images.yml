@@ -1,0 +1,71 @@
+name: Verify image delivery
+on:
+  push:
+    branches: [perf/image-loading-20260910]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/components/lora/**'
+      - 'src/components/projects/**'
+      - 'src/data/lora-visual.ts'
+      - 'scripts/test-image-delivery.mjs'
+      - '.github/workflows/verify-images.yml'
+permissions:
+  contents: read
+concurrency:
+  group: image-delivery-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bun install --frozen-lockfile
+      - run: bun run validate:sync && bun run build
+      - name: Install isolated browser runner
+        run: |
+          npm install --prefix "$RUNNER_TEMP/image-tools" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/image-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Measure current production build
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
+          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/baseline
+          IMAGE_TEST_LABEL: baseline
+          IMAGE_TEST_COMMIT: ${{ github.sha }}
+        run: node scripts/test-image-delivery.mjs dist
+      - name: Measure published site without changing it
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
+          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/published
+          IMAGE_TEST_LABEL: published
+          IMAGE_TEST_URL: https://lora-sys.github.io/loraSys/
+          IMAGE_TEST_ROUTES: ',projects/'
+        run: node scripts/test-image-delivery.mjs
+      - name: Preserve measurements and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-delivery-evidence
+          path: ${{ runner.temp }}/image-evidence
+          retention-days: 14
+      - name: Preserve production output for visual review
+        if: ${{ !cancelled() }}
+        run: tar -czf "$RUNNER_TEMP/image-production.tar.gz" -C dist .
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: image-production
+          path: ${{ runner.temp }}/image-production.tar.gz
+          retention-days: 7
