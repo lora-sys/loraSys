@@ -130,7 +130,8 @@ const { meta, articlePublishedAt, articleModifiedAt, highlightColor, back = '/',
   }, true)
   mobile.addEventListener('change', () => {
     const previous = document.activeElement
-    const hadFocus = previous instanceof Node && !!sidebar?.contains(previous)
+    // A breakpoint can blur the now-hidden close button before this callback runs.
+    const hadFocus = open || (previous instanceof Node && !!sidebar?.contains(previous))
     setOpen(false)
     if (!mobile.matches && hadFocus && sidebar) {
       const target = previous instanceof HTMLElement && tabbable().includes(previous) ? previous : tabbable()[0] ?? sidebar
