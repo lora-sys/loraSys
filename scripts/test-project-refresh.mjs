@@ -55,6 +55,9 @@ try {
       if (target) {
         await target.scrollIntoViewIfNeeded()
         for (const image of await target.locator('img').all()) {
+          // A tall card can be visible while its lazy image is still outside the viewport.
+          await image.scrollIntoViewIfNeeded()
+          await page.waitForFunction(img => img.complete && img.naturalWidth > 0, await image.elementHandle())
           await image.evaluate(img => img.decode())
           assert.equal(await image.evaluate(img => img.naturalWidth > 0),true)
         }
@@ -66,7 +69,7 @@ try {
     }
     await check(`${label}: homepage keeps original design and features four projects`, async () => {
       await open(prefix)
-      assert.equal(await page.locator('.v2-home').count(),1)
+      assert.equal(await page.locator(locale === 'en' ? '.en-home' : '.v2-home').count(),1)
       const cards = page.locator('#work [data-project-card]')
       assert.equal(await cards.count(),4)
       for (const repo of ['Glassbox-Agent-Harness','AgentArena','ai-engineering-harness','zhihu-threads']) assert.equal(await cards.filter({has:page.locator(`[data-destination="${repo}"]`)}).count(),1,repo)
