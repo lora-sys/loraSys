@@ -43,9 +43,12 @@ const { asset, class: className, priority = false, alt, quality, widths } = Astr
 const visual: VisualEntry = loraVisuals[asset]
 const resolvedAlt = alt ?? (uiLocale(Astro.url.pathname) === 'en-US' ? englishAlt[asset] : visual.alt)
 const decorative = visual.decorative ?? resolvedAlt === ''
-// Lazy images can use their actual laid-out width. Older browsers retain the explicit fallback.
+// Lazy images can use their laid-out width, with an explicit fallback for older browsers.
 const sizes = priority ? visual.sizes : `auto, ${visual.sizes}`
 const highPriority = priority && !['heroMochi', 'stampVerified', 'stampExperiment', 'stampContribution'].includes(asset)
+// Keep fine pencil lines readable; the first 480px hero candidate was visibly softer.
+const minimumHeroWidth = asset === 'heroMochi' ? 320 : ['heroLora', 'heroProps'].includes(asset) ? 640 : 0
+const imageWidths = widths ?? visual.widths.filter(width => width >= minimumHeroWidth)
 ---
 
 <Picture
@@ -56,7 +59,7 @@ const highPriority = priority && !['heroMochi', 'stampVerified', 'stampExperimen
   alt={decorative ? '' : resolvedAlt}
   aria-hidden={decorative ? 'true' : undefined}
   class:list={['lora-visual', `lora-visual--${asset}`, className]}
-  widths={widths ?? visual.widths}
+  widths={imageWidths}
   {sizes}
   loading={priority ? 'eager' : 'lazy'}
   fetchpriority={highPriority ? 'high' : 'auto'}

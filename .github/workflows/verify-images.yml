@@ -8,7 +8,7 @@ on:
       - 'src/components/lora/**'
       - 'src/components/projects/**'
       - 'src/data/lora-visual.ts'
-      - 'scripts/test-image-delivery.mjs'
+      - 'scripts/test-image-*.mjs'
       - '.github/workflows/verify-images.yml'
 permissions:
   contents: read
@@ -49,14 +49,22 @@ jobs:
       - name: Compare cold loads on the same runner
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
-          IMAGE_TEST_COMMIT: ${{ github.sha }}
         run: |
           failed=0
+          before_sha="$(git -C .image-baseline rev-parse HEAD)"
+          after_sha="$(git rev-parse HEAD)"
           for sample in 1 2 3; do
-            IMAGE_TEST_LABEL="before-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/before-$sample" node scripts/test-image-delivery.mjs .image-baseline/dist || failed=1
-            IMAGE_TEST_LABEL="after-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/after-$sample" node scripts/test-image-delivery.mjs dist || failed=1
+            IMAGE_TEST_COMMIT="$before_sha" IMAGE_TEST_LABEL="before-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/before-$sample" node scripts/test-image-delivery.mjs .image-baseline/dist || failed=1
+            IMAGE_TEST_COMMIT="$after_sha" IMAGE_TEST_LABEL="after-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/after-$sample" node scripts/test-image-delivery.mjs dist || failed=1
           done
           exit "$failed"
+      - name: Verify native WebP fallback and unchanged artwork
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
+          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/formats
+          IMAGE_TEST_COMMIT: ${{ github.sha }}
+        run: node scripts/test-image-formats.mjs dist
       - name: Preserve measurements and screenshots
         if: always()
         uses: actions/upload-artifact@v4

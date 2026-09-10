@@ -1,5 +1,5 @@
 ---
-import { Picture } from 'astro:assets'
+import { Image } from 'astro:assets'
 import { uiLocale, text } from '@/i18n/ui'
 import type { Project } from '@/data/projects'
 
@@ -20,6 +20,9 @@ const {
   quality = 74,
   locale = uiLocale(Astro.url.pathname)
 } = Astro.props
+// Cards stay inside the page gutters. Keep explicit desktop sizes: offscreen
+// content-visibility placeholders overestimate their width with native auto sizes.
+const deliverySizes = `(max-width: 639px) calc(100vw - 2rem), ${sizes}`
 const images = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/projects/*.{avif,webp,png,jpg,jpeg}'
 )
@@ -45,13 +48,11 @@ const fallbackMark = project.title
   </div>
   {
     source && (
-      <Picture
-        formats={['avif']}
-        fallbackFormat='webp'
+      <Image
         src={source()}
         alt={text(locale, `${project.title} 项目封面插画`, `${project.title} illustrated project cover`)}
         widths={[320, 480, 640, 768, 960, 1280]}
-        sizes={priority ? sizes : `auto, ${sizes}`}
+        sizes={deliverySizes}
         quality={quality}
         loading={priority ? 'eager' : 'lazy'}
         decoding='async'
