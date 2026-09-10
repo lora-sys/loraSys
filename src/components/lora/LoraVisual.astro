@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 import { loraVisuals, type LoraVisualKey, type VisualEntry } from '@/data/lora-visual'
 import { uiLocale } from '@/i18n/ui'
 
@@ -43,17 +43,23 @@ const { asset, class: className, priority = false, alt, quality, widths } = Astr
 const visual: VisualEntry = loraVisuals[asset]
 const resolvedAlt = alt ?? (uiLocale(Astro.url.pathname) === 'en-US' ? englishAlt[asset] : visual.alt)
 const decorative = visual.decorative ?? resolvedAlt === ''
+// Lazy images can use their actual laid-out width. Older browsers retain the explicit fallback.
+const sizes = priority ? visual.sizes : `auto, ${visual.sizes}`
+const highPriority = priority && !['heroMochi', 'stampVerified', 'stampExperiment', 'stampContribution'].includes(asset)
 ---
 
-<Image
+<Picture
+  formats={['avif']}
+  fallbackFormat='webp'
+  pictureAttributes={{ style: 'display: contents' }}
   src={visual.src}
   alt={decorative ? '' : resolvedAlt}
   aria-hidden={decorative ? 'true' : undefined}
   class:list={['lora-visual', `lora-visual--${asset}`, className]}
   widths={widths ?? visual.widths}
-  sizes={visual.sizes}
+  {sizes}
   loading={priority ? 'eager' : 'lazy'}
-  fetchpriority={priority ? 'high' : 'auto'}
+  fetchpriority={highPriority ? 'high' : 'auto'}
   quality={quality ?? visual.quality}
   decoding='async'
 />

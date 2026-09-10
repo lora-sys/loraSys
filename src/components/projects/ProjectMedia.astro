@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets'
+import { Picture } from 'astro:assets'
 import { uiLocale, text } from '@/i18n/ui'
 import type { Project } from '@/data/projects'
 
@@ -45,11 +45,13 @@ const fallbackMark = project.title
   </div>
   {
     source && (
-      <Image
+      <Picture
+        formats={['avif']}
+        fallbackFormat='webp'
         src={source()}
         alt={text(locale, `${project.title} 项目封面插画`, `${project.title} illustrated project cover`)}
-        widths={[480, 768, 960, 1280]}
-        {sizes}
+        widths={[320, 480, 640, 768, 960, 1280]}
+        sizes={priority ? sizes : `auto, ${sizes}`}
         quality={quality}
         loading={priority ? 'eager' : 'lazy'}
         decoding='async'

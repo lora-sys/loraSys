@@ -13,12 +13,12 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: image-delivery-${{ github.ref }}
+  group: image-delivery-${{ github.event.pull_request.head.ref || github.ref_name }}
   cancel-in-progress: true
 jobs:
   measure:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     env:
       NODE_OPTIONS: --max-old-space-size=3072
     steps:
@@ -33,26 +33,30 @@ jobs:
           node-version: '22'
       - run: bun install --frozen-lockfile
       - run: bun run validate:sync && bun run build
+      - name: Check out the comparison baseline after candidate build
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha || '601e50bb63de67eb76d28fc52b7dbf0b2360a37e' }}
+          path: .image-baseline
+          persist-credentials: false
+      - name: Build baseline with its locked dependencies
+        working-directory: .image-baseline
+        run: bun install --frozen-lockfile && bun run validate:sync && bun run build
       - name: Install isolated browser runner
         run: |
           npm install --prefix "$RUNNER_TEMP/image-tools" --no-save --package-lock=false playwright@1.58.2
           node "$RUNNER_TEMP/image-tools/node_modules/playwright/cli.js" install --with-deps chromium
-      - name: Measure current production build
+      - name: Compare cold loads on the same runner
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
-          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/baseline
-          IMAGE_TEST_LABEL: baseline
           IMAGE_TEST_COMMIT: ${{ github.sha }}
-        run: node scripts/test-image-delivery.mjs dist
-      - name: Measure published site without changing it
-        if: ${{ !cancelled() }}
-        env:
-          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
-          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/published
-          IMAGE_TEST_LABEL: published
-          IMAGE_TEST_URL: https://lora-sys.github.io/loraSys/
-          IMAGE_TEST_ROUTES: ',projects/'
-        run: node scripts/test-image-delivery.mjs
+        run: |
+          failed=0
+          for sample in 1 2 3; do
+            IMAGE_TEST_LABEL="before-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/before-$sample" node scripts/test-image-delivery.mjs .image-baseline/dist || failed=1
+            IMAGE_TEST_LABEL="after-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/after-$sample" node scripts/test-image-delivery.mjs dist || failed=1
+          done
+          exit "$failed"
       - name: Preserve measurements and screenshots
         if: always()
         uses: actions/upload-artifact@v4
