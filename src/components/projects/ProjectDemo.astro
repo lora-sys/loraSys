@@ -15,8 +15,8 @@ const meta: Record<DemoKind, Record<'zh-CN' | 'en-US', { name: string; note: str
     'en-US': { name: 'Harness · Closed loop', note: 'Illustrative engineering flow. Select a step to inspect.' }
   },
   terminal: {
-    'zh-CN': { name: 'Glassbox · 记录流', note: '示例日志，不是实时运行。点击可复制。' },
-    'en-US': { name: 'Glassbox · Capture stream', note: 'Illustrative logs, not a live run. Click to copy.' }
+    'zh-CN': { name: 'Glassbox · 能力概览', note: '仓库能力说明，规划项尚未实现。点击可复制。' },
+    'en-US': { name: 'Glassbox · Capabilities', note: 'Repository summary, not a live run. Planned items are not available.' }
   }
 }
 
@@ -54,14 +54,14 @@ const pipelineData = {
 
 const terminalData = {
   'zh-CN': [
-    { line: '$ glassbox attach --run 42', tip: '已复制示例指令，不会启动运行' },
-    { line: '» step 03 captured · context rebuilt', tip: '已复制第 03 步的示例上下文日志' },
-    { line: '» evidence saved · verdict: pass', tip: '已复制 · 证据文件已就绪，判定结果：通过' }
+    { line: '当前 · Codex / Claude Code', tip: '已复制当前支持的 Agent 适配器说明' },
+    { line: '当前 · 回放、审批与画布检查', tip: '已复制当前工作台能力说明' },
+    { line: '规划 · 微信、QQ、长期任务、学习沉淀', tip: '已复制规划说明，这些功能尚未实现' }
   ],
   'en-US': [
-    { line: '$ glassbox attach --run 42', tip: 'Copied illustrative command; no run was started' },
-    { line: '» step 03 captured · context rebuilt', tip: 'Copied · Captured step 03 trace & context' },
-    { line: '» evidence saved · verdict: pass', tip: 'Copied · Evidence saved with passing verdict' }
+    { line: 'Available: Codex / Claude Code', tip: 'Copied the available provider adapters' },
+    { line: 'Available: replay, approvals, canvas', tip: 'Copied the available workbench capabilities' },
+    { line: 'Planned: channels, long tasks, learning', tip: 'Copied planned capabilities; these are not available yet' }
   ]
 }
 
@@ -122,7 +122,7 @@ const copy = meta[kind][locale]
               data-text={item.line}
               data-tip={item.tip}
               style={`--i:${index}`}
-              title={locale === 'zh-CN' ? '点击复制此行日志' : 'Click to copy log line'}
+              title={locale === 'zh-CN' ? '点击复制此项说明' : 'Click to copy capability note'}
             >
               <span class='demo-line-inner'>{item.line}</span>
               <span class='demo-copy-badge' aria-hidden='true'>{locale === 'zh-CN' ? '复制' : 'Copy'}</span>

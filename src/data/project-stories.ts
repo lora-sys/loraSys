@@ -16,9 +16,10 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
   'zhihu-threads': [{ kind: 'Project', label: '来源选择与学习线', href: '/projects/zhihu-threads' }],
   'Glassbox-Agent-Harness': [
     {
-      kind: 'Writing',
-      label: 'AI Engineering Harness: 从 Vibe Coding 到工程化',
-      href: '/blog/ai-engineering-harness'
+      kind: 'Project',
+      label: '当前能力与规划',
+      href: 'https://github.com/lora-sys/Glassbox-Agent-Harness/blob/c19140104b0eba3451aebcd27334161e5ffb6d8d/README.md',
+      external: true
     },
     {
       kind: 'Channel',
@@ -70,6 +71,7 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
 }
 
 const storyLabels: Record<string, [string, string]> = {
+  '当前能力与规划': ['当前能力与规划', 'Available capabilities and roadmap'],
   '来源选择与学习线': ['来源选择与学习线', 'Source selection and learning threads'],
   'Bilibili channel': ['哔哩哔哩主页', 'Bilibili profile'],
   '小红书 channel': ['小红书主页', 'Xiaohongshu profile'],
@@ -78,7 +80,7 @@ const storyLabels: Record<string, [string, string]> = {
 export const getProjectStories = (repository: string, locale: 'zh-CN' | 'en-US' = 'zh-CN') =>
   (projectStories[repository] ?? []).map((story) => ({
     ...story,
-    href: story.kind === 'Project' && locale === 'en-US' ? `/en${story.href}` : story.href,
+    href: story.kind === 'Project' && !story.external && locale === 'en-US' ? `/en${story.href}` : story.href,
     label: storyLabels[story.label]?.[locale === 'en-US' ? 1 : 0] ??
       (locale === 'en-US' && story.kind === 'Writing' ? 'Read the original Chinese article' : story.label)
   }))
