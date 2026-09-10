@@ -67,8 +67,15 @@ try {
       page.setDefaultTimeout(12000)
       const lang = route.includes('eve-agent') ? 'en' : 'zh'
       const name = `${lang}-${reducedMotion}`
+      const hasDisclosure = lang === 'zh'
       const sidebar = page.locator('#sidebar'), trigger = page.locator('#sidebar-btn')
       const inside = () => sidebar.evaluate(el => el.contains(document.activeElement))
+      const backgroundReleased = () => page.evaluate(() => !document.querySelector('.reading-article')?.inert && !document.querySelector('[data-site-header]')?.inert)
+      const load = async width => {
+        await page.setViewportSize({width,height:width===768?1024:844})
+        await page.goto(new URL(route,base).href,{waitUntil:'load'})
+        await page.waitForFunction(expected=>document.querySelector('#sidebar')?.inert===expected,width<768)
+      }
       const open = async () => {
         if (await trigger.getAttribute('aria-expanded') !== 'true') {
           await page.locator('#content h2').first().scrollIntoViewIfNeeded()
@@ -78,9 +85,8 @@ try {
         await page.waitForFunction(() => document.querySelector('#sidebar')?.classList.contains('show'))
         assert.equal(await inside(),true)
       }
-      const backgroundReleased = () => page.evaluate(() => !document.querySelector('.reading-article')?.inert && !document.querySelector('[data-site-header]')?.inert)
       await check(`${name}: article contents resize, focus trap and Escape`, async () => {
-        await page.goto(new URL(route,base).href,{waitUntil:'load'})
+        await load(768)
         assert.equal(await sidebar.evaluate(el => el.inert),false,'Desktop navigation must be focusable at 768px')
         assert.equal(await trigger.isVisible(),false)
         await page.setViewportSize({width:390,height:844})
@@ -89,7 +95,8 @@ try {
         assert.equal(await sidebar.getAttribute('role'),'dialog')
         assert.equal(await sidebar.getAttribute('aria-modal'),'true')
         assert.equal(await backgroundReleased(),false)
-        // Include native disclosure summaries and cycle across every reachable control.
+        // Test both actual templates: Chinese condensed contents and English direct contents.
+        assert.equal(await sidebar.locator('details > summary').count(),hasDisclosure?1:0)
         const count = await sidebar.locator('button:visible,a:visible,summary:visible').count()
         const visited = []
         for (let i=0;i<count+2;i++) {
@@ -98,26 +105,29 @@ try {
           visited.push(active)
           assert.equal(await inside(),true,JSON.stringify({i,active,visited}))
         }
-        assert.ok(visited.some(item=>item.tag==='SUMMARY'),'The collapsed disclosure remains keyboard reachable')
+        if (hasDisclosure) assert.ok(visited.some(item=>item.tag==='SUMMARY'),'The disclosure must be keyboard reachable')
+        else assert.ok(visited.some(item=>item.tag==='A'),'The direct contents links must be keyboard reachable')
         for (let i=0;i<count+2;i++) { await page.keyboard.press('Shift+Tab'); assert.equal(await inside(),true) }
-        await capture(page,route,390,`${name}-contents-collapsed`,'contents open, disclosure collapsed')
+        await capture(page,route,390,`${name}-contents-collapsed`,hasDisclosure?'contents open, disclosure collapsed':'contents open, direct list')
         await page.keyboard.press('Escape')
         assert.equal(await trigger.evaluate(el=>el === document.activeElement),true)
         assert.equal(await sidebar.evaluate(el=>el.inert),true)
         assert.equal(await backgroundReleased(),true)
       })
-      await check(`${name}: expanded contents and hidden controls keep focus inside`, async () => {
+      await check(`${name}: complete contents and hidden controls keep focus inside`, async () => {
+        await load(390)
         await open()
         const summary = sidebar.locator('details > summary').first()
-        await summary.press('Enter')
-        await page.waitForFunction(() => document.querySelector('#sidebar details')?.open === true)
+        if (hasDisclosure) {
+          await summary.press('Enter')
+          await page.waitForFunction(() => document.querySelector('#sidebar details')?.open === true)
+        }
         const links = sidebar.locator('a:visible')
         await links.last().focus()
         await page.keyboard.press('Tab')
         assert.equal(await sidebar.locator('[data-sidebar-close]').evaluate(el=>el===document.activeElement),true)
         await page.keyboard.press('Shift+Tab')
         assert.equal(await links.last().evaluate(el=>el===document.activeElement),true)
-        // Non-tabbable sentinels must not change the end of the loop.
         await sidebar.evaluate(el=>{
           const hidden=document.createElement('button');hidden.hidden=true;hidden.dataset.focusSentinel='hidden';el.append(hidden)
           const disabled=document.createElement('button');disabled.disabled=true;disabled.dataset.focusSentinel='disabled';el.append(disabled)
@@ -126,8 +136,8 @@ try {
         await page.keyboard.press('Tab')
         assert.equal(await sidebar.locator('[data-sidebar-close]').evaluate(el=>el===document.activeElement),true)
         await sidebar.locator('[data-focus-sentinel]').evaluateAll(elements=>elements.forEach(el=>el.remove()))
-        await summary.focus()
-        await capture(page,route,390,`${name}-contents-expanded`,'contents open, full disclosure expanded')
+        await (hasDisclosure?summary:sidebar.locator('[data-sidebar-close]')).focus()
+        await capture(page,route,390,`${name}-contents-expanded`,hasDisclosure?'contents open, full disclosure expanded':'contents open, direct list boundaries verified')
         await page.setViewportSize({width:768,height:1024})
         await page.waitForFunction(() => document.querySelector('#sidebar')?.inert === false && document.querySelector('#sidebar-shade')?.hidden === true)
         assert.equal(await trigger.getAttribute('aria-expanded'),'false')
@@ -136,8 +146,7 @@ try {
         assert.equal(await inside(),true,'Resize must not leave focus on a hidden mobile close button')
       })
       await check(`${name}: chapter links transfer focus and modal restores prior inert state`, async () => {
-        await page.setViewportSize({width:390,height:844})
-        await page.waitForFunction(() => document.querySelector('#sidebar')?.inert === true)
+        await load(390)
         await page.evaluate(()=>{const sentinel=document.createElement('div');sentinel.id='prior-inert-sentinel';sentinel.inert=true;document.body.append(sentinel)})
         await open()
         const link = sidebar.locator('a:visible').first()
