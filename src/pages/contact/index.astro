@@ -18,7 +18,7 @@ const headings = [
 
 <PageLayout title='联系' heading='联系' {headings}>
   <div class='not-prose contact-intro'>
-    <Image src={contactCorrespondenceHero} alt='' aria-hidden='true' class='contact-visual' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
+    <Image src={contactCorrespondenceHero} alt='' aria-hidden='true' class='contact-visual' widths={[480, 768, 1152]} sizes='(max-width: 620px) 100vw, (max-width: 960px) 50vw, 31rem' loading='eager' fetchpriority='high' />
     <span class='eyebrow'>联系与合作</span>
     <h2>你正在解决什么问题？</h2>
     <p>
@@ -92,23 +92,28 @@ const headings = [
   .copy-toast{position:fixed;right:1rem;bottom:1rem;z-index:20;border:1px solid hsl(var(--border));border-radius:999px;padding:.55rem .75rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.72rem;box-shadow:0 12px 30px hsl(var(--foreground)/.18)}
   .contact-intro {
     position: relative;
+    min-height: 28rem;
     overflow: hidden;
     margin-bottom: 3rem;
     border: 1px solid hsl(var(--border));
     border-radius: 1.15rem;
     padding: clamp(1.25rem, 5vw, 2.5rem);
+    padding-right: clamp(17rem, 39vw, 24rem);
     background:
       linear-gradient(145deg, transparent 42%, hsl(var(--primary) / 0.1)), hsl(var(--card));
   }
   .contact-visual {
     position: absolute;
-    inset: 0;
+    inset: 0 0 0 auto;
     z-index: 0;
-    width: 100%;
+    width: min(58%, 31rem);
     height: 100%;
     object-fit: cover;
-    opacity: 0.82;
+    object-position: 56% center;
+    opacity: 0.92;
     pointer-events: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, rgb(0 0 0 / 0.16) 9%, #000 30%);
+    mask-image: linear-gradient(to right, transparent 0, rgb(0 0 0 / 0.16) 9%, #000 30%);
   }
   .contact-intro > :not(.contact-visual) {
     position: relative;
@@ -124,7 +129,7 @@ const headings = [
   .contact-intro h2 {
     position: relative;
     z-index: 1;
-    max-width: 13ch;
+    max-width: 11ch;
     margin-top: 0.65rem;
     font-size: clamp(2rem, 7vw, 3.6rem);
     font-weight: 570;
@@ -134,7 +139,7 @@ const headings = [
   .contact-intro p {
     position: relative;
     z-index: 1;
-    max-width: 39rem;
+    max-width: 34rem;
     margin-top: 1rem;
     color: hsl(var(--muted-foreground));
     font-size: 0.9rem;
@@ -261,8 +266,32 @@ const headings = [
     font-size: 0.78rem;
     line-height: 1.55;
   }
+  @media (max-width: 900px) and (min-width: 621px) {
+    .contact-intro {
+      min-height: 26rem;
+      padding-right: clamp(16rem, 43vw, 21rem);
+    }
+    .contact-visual {
+      width: 54%;
+      object-position: 58% center;
+    }
+  }
   @media (max-width: 620px) {
-    .contact-visual { object-position: 68% center; opacity: 0.62; }
+    .contact-intro {
+      min-height: 0;
+      padding: 1.25rem;
+      padding-bottom: 17rem;
+    }
+    .contact-visual {
+      inset: auto 0 0;
+      width: 100%;
+      height: 17rem;
+      object-position: 58% center;
+      opacity: 0.9;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.24) 11%, #000 34%);
+      mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.24) 11%, #000 34%);
+    }
+    .contact-intro h2 { max-width: 10ch; }
     .conversation-grid {
       grid-template-columns: 1fr;
       gap: 1.25rem;
