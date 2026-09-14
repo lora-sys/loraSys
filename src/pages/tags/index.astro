@@ -8,8 +8,8 @@ const allPosts = await getBlogCollection()
 const allTags = getUniqueTagsWithCount(allPosts)
 
 const meta = {
-  description: "按标签浏览全部文章。",
-  title: '全部标签'
+  description: '按标签浏览全部长文。短笔记、实验记录和项目使用各自的浏览入口。',
+  title: '文章标签'
 }
 ---
 
@@ -17,7 +17,8 @@ const meta = {
   <Button title='返回写作' href='/blog' variant='back' />
   <main class='mt-6 lg:mt-10'>
     <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>全部标签</h1>
+      <h1 class='mb-2 text-3xl font-medium'>文章标签</h1>
+      <p class='mb-6 text-muted-foreground'>这里只整理长文标签；短笔记、实验记录和项目不混用这一套分类。</p>
     </div>
 
     <div id='content' class='animate'>
@@ -41,7 +42,7 @@ const meta = {
             ))}
           </ul>
         ) : (
-          <p>暂时没有标签。</p>
+          <p>暂时没有文章标签。</p>
         )
       }
     </div>
