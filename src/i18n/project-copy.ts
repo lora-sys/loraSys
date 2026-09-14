@@ -20,8 +20,8 @@ const descriptions: Record<string, Record<SiteLocale, string>> = {
     "en-US": "Compiles images into compact visual evidence packets for coding agents without a connected vision input."
   },
   "glassbox-agent-harness": {
-    "zh-CN": "记录智能体动作、上下文与评测证据，用于检查运行过程和优化结果。",
-    "en-US": "Records agent actions, context and evaluation evidence to inspect runs and compare changes."
+    "zh-CN": "正在演进为长期运行的个人 Agent 工作台。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；微信、QQ、长期任务和学习沉淀仍在规划。",
+    "en-US": "Evolving into a long-lived personal agent workbench. Available today: Codex, Claude Code, local sessions, replay, approvals and canvas inspection. WeChat, QQ, long tasks and learning remain planned."
   },
   "ai-engineering-harness": {
     "zh-CN": "用 18 类智能体和 9 条工作流组织需求、规划、构建、审查、证据与合并。",
@@ -287,6 +287,7 @@ const descriptions: Record<string, Record<SiteLocale, string>> = {
 
 export const localizeProject = (project: Project, locale: SiteLocale): Project => ({
   ...project,
+  title: project.repository.toLowerCase() === 'glassbox-agent-harness' ? 'Glassbox' : project.title,
   description: descriptions[project.repository.toLowerCase()]?.[locale] ?? project.description,
   image: project.repository.toLowerCase() === 'zhihu-threads' ? `lora-v3-project-zhihu-threads-${locale === 'en-US' ? 'en' : 'zh'}.webp` : project.image
 })
