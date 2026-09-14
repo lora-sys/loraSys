@@ -1,4 +1,5 @@
 import githubSnapshot from './github-projects.json'
+import { featuredRankFor } from './project-curation'
 
 export interface Link {
   type: 'source' | 'website' | 'contribution'
@@ -115,22 +116,17 @@ const technologiesFor = (project: GitHubProjectRecord) => {
 
 const records = Object.values(githubSnapshot.projects) as GitHubProjectRecord[]
 
-export const projects: Project[] = records
-  .sort((left, right) => {
-    if (left.featuredRank && right.featuredRank) return left.featuredRank - right.featuredRank
-    if (left.featuredRank) return -1
-    if (right.featuredRank) return 1
-    return new Date(right.pushedAt).getTime() - new Date(left.pushedAt).getTime()
-  })
-  .map((project) => ({
+const toProject = (project: GitHubProjectRecord): Project => {
+  const featuredRank = featuredRankFor(project.name, project.featuredRank)
+  return {
     title: project.title,
     dates: formatDates(project.createdAt, project.status),
     active: project.status !== 'archived',
     description: project.summary,
     technologies: technologiesFor(project),
     image: project.poster.localFile,
-    featured: project.featuredRank !== null,
-    featuredRank: project.featuredRank ?? undefined,
+    featured: featuredRank !== null,
+    featuredRank: featuredRank ?? undefined,
     kind: project.kind,
     status: project.status,
     categories: project.categories,
@@ -151,4 +147,15 @@ export const projects: Project[] = records
         ? [{ type: 'website' as const, href: project.homepage }]
         : [])
     ]
-  }))
+  }
+}
+
+export const projects: Project[] = records
+  .map(toProject)
+  .sort((left, right) => {
+    if (left.featuredRank !== undefined && right.featuredRank !== undefined)
+      return left.featuredRank - right.featuredRank
+    if (left.featuredRank !== undefined) return -1
+    if (right.featuredRank !== undefined) return 1
+    return new Date(right.pushedAt).getTime() - new Date(left.pushedAt).getTime()
+  })
