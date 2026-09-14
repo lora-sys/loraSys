@@ -1,11 +1,11 @@
 ---
-// 体感开关：开启后项目卡解锁可玩 demo。默认关闭；reduced-motion 访客不渲染此开关。
+// 触感反馈只在浏览器同时支持 vibration 且访客未请求 reduced-motion 时提供。
 interface Props {
   locale?: 'zh-CN' | 'en-US'
 }
 const { locale = 'zh-CN' } = Astro.props
 const labels = {
-  'zh-CN': { off: '开启体感', on: '体感已开启' },
+  'zh-CN': { off: '开启触感反馈', on: '触感反馈已开启' },
   'en-US': { off: 'Enable haptics', on: 'Haptics on' }
 }
 const label = labels[locale]
@@ -73,22 +73,33 @@ const label = labels[locale]
 <script>
   const toggles = [...document.querySelectorAll<HTMLButtonElement>('[data-haptics-toggle]')]
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  const supportsHaptics = 'vibrate' in navigator && typeof navigator.vibrate === 'function'
 
   const apply = (on: boolean) => {
-    document.documentElement.dataset.haptics = on ? 'on' : 'off'
+    const enabled = supportsHaptics && !reducedMotion.matches && on
+    document.documentElement.dataset.haptics = enabled ? 'on' : 'off'
     for (const toggle of toggles) {
-      toggle.setAttribute('aria-pressed', String(on))
+      toggle.setAttribute('aria-pressed', String(enabled))
       const label = toggle.querySelector<HTMLElement>('[data-haptics-label]')
       if (label) {
-        label.textContent = on
+        label.textContent = enabled
           ? toggle.dataset.labelOn ?? 'Haptics on'
           : toggle.dataset.labelOff ?? 'Enable haptics'
       }
     }
   }
 
-  if (toggles.length > 0 && !reducedMotion.matches) {
-    for (const toggle of toggles) toggle.hidden = false
+  const syncAvailability = () => {
+    const available = supportsHaptics && !reducedMotion.matches
+    for (const toggle of toggles) toggle.hidden = !available
+    if (!available) {
+      apply(false)
+      localStorage.removeItem('haptics')
+    }
+    return available
+  }
+
+  if (toggles.length > 0 && syncAvailability()) {
     apply(localStorage.getItem('haptics') === 'on')
     for (const toggle of toggles) {
       toggle.addEventListener('click', () => {
@@ -97,8 +108,6 @@ const label = labels[locale]
         localStorage.setItem('haptics', next ? 'on' : 'off')
       })
     }
-    // 触觉开启时，按压共享 tactile-action 语义的控件给一次 8ms 轻震；
-    // 仅在支持 vibrate 的设备上生效，失败静默。
     document.addEventListener(
       'pointerdown',
       (event) => {
@@ -106,21 +115,15 @@ const label = labels[locale]
         const target = event.target instanceof Element ? event.target : null
         if (target?.closest('button, a, summary, [role=\'button\']')) {
           try {
-            navigator.vibrate?.(8)
+            navigator.vibrate(8)
           } catch {
-            /* 部分平台抛 NotAllowedError，静默即可 */
+            /* 部分平台会拒绝振动请求，静默即可。 */
           }
         }
       },
       { passive: true }
     )
-    reducedMotion.addEventListener?.('change', (event) => {
-      if (event.matches) {
-        for (const toggle of toggles) toggle.hidden = true
-        apply(false)
-        localStorage.removeItem('haptics')
-      }
-    })
+    reducedMotion.addEventListener?.('change', () => syncAvailability())
   } else {
     document.documentElement.dataset.haptics = 'off'
   }
