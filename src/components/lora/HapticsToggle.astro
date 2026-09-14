@@ -1,5 +1,5 @@
 ---
-// 触感反馈只在浏览器同时支持 vibration 且访客未请求 reduced-motion 时提供。
+// 触感反馈只在触控/粗指针设备支持 vibration 且访客未请求 reduced-motion 时提供。
 interface Props {
   locale?: 'zh-CN' | 'en-US'
 }
@@ -73,7 +73,9 @@ const label = labels[locale]
 <script>
   const toggles = [...document.querySelectorAll<HTMLButtonElement>('[data-haptics-toggle]')]
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
-  const supportsHaptics = 'vibrate' in navigator && typeof navigator.vibrate === 'function'
+  const coarsePointer = matchMedia('(pointer: coarse)')
+  const touchCapable = navigator.maxTouchPoints > 0 || coarsePointer.matches
+  const supportsHaptics = touchCapable && 'vibrate' in navigator && typeof navigator.vibrate === 'function'
 
   const apply = (on: boolean) => {
     const enabled = supportsHaptics && !reducedMotion.matches && on
