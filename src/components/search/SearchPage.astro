@@ -10,7 +10,7 @@ const { locale } = Astro.props
 const t = (zh: string, en: string) => text(locale, zh, en)
 const work = locale === 'en-US' ? '/en/work' : '/projects'
 const writing = locale === 'en-US' ? '/en/writing' : '/blog'
-const intro = t('搜索项目、文章、短笔记与实验记录。按 / 可定位搜索框。', 'Search projects, articles, notes and experiments. Press / to focus search.')
+const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 可定位搜索框。', 'Search English projects and writing. Press / to focus search.')
 ---
 <PageLayout lang={locale} meta={{ title: t('搜索', 'Search'), description: intro }}>
   <main>
