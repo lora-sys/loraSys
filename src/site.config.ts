@@ -10,7 +10,7 @@ export const theme: ThemeUserConfig = {
   description:
     'AI Agent developer and full-stack engineer. A personal site for projects, writing, current work, and the stories, sounds, and ideas I keep close.',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/loraSys/favicon/lora-v1-favicon-32x32.png',
+  favicon: '/loraSys/favicon/lora-v2-favicon-32x32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
   socialCard: '/loraSys/images/lora-v1-social-card.webp',
   /** Specify the default language for this site. */
@@ -113,7 +113,7 @@ export const integ: IntegrationUserConfig = {
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
       { name: 'Link', val: 'https://lora-sys.github.io/loraSys/' },
-      { name: 'Avatar', val: 'https://lora-sys.github.io/loraSys/favicon/lora-v1-mark-512.png' }
+      { name: 'Avatar', val: 'https://lora-sys.github.io/loraSys/favicon/lora-v2-mark-512.png' }
     ],
     // Cache avatars in `public/avatars/` to improve user experience.
     cacheAvatar: false
@@ -135,7 +135,6 @@ export const integ: IntegrationUserConfig = {
     inlineCodeBlockStyle: 'modern'
   },
   // [Lightbox]
-  // A lightbox library that can add zoom effect
   // https://astro-pure.js.org/docs/integrations/others#medium-zoom
   mediumZoom: {
     enable: true, // disable it will not load the whole library
@@ -151,11 +150,9 @@ export const integ: IntegrationUserConfig = {
     server: 'https://astro-theme-pure-waline.arthals.ink/',
     // Show meta info for comments
     showMeta: false,
-    // Refer https://waline.js.org/en/guide/features/emoji.html
+    // https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
-    // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
-      // search: false,
       pageview: true,
       comment: true,
       locale: {
