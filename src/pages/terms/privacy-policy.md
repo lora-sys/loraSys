@@ -1,7 +1,7 @@
 ---
 layout: '@/layouts/IndividualPage.astro'
 title: '隐私说明'
-description: '更新于 2026 年 9 月 9 日'
+description: '更新于 2026 年 9 月 14 日'
 language: 'zh-CN'
 back: '/terms'
 ---
@@ -10,7 +10,7 @@ back: '/terms'
 
 本站是托管在 GitHub Pages 的静态个人网站，浏览公开内容不需要注册本站账号。托管服务会按其政策处理网络请求。
 
-页面接入 GoatCounter 访问统计。留言板使用 Giscus，并关联 GitHub Discussions。选择发表留言时需要按服务要求使用 GitHub 账号，发布的留言会进入公开讨论。不要在留言中填写私人联系方式、密钥或其他敏感信息。
+本站当前不接入独立的第三方访问统计脚本。留言板使用 Giscus，并关联 GitHub Discussions。选择发表留言时需要按服务要求使用 GitHub 账号，发布的留言会进入公开讨论。不要在留言中填写私人联系方式、密钥或其他敏感信息。
 
 音乐播放器仅在选择播放后加载 Spotify 嵌入页面。外部链接和嵌入服务的数据处理规则以对应提供方的政策为准。
 
