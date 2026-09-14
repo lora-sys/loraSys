@@ -1,5 +1,5 @@
 ---
-// 首页滚动叙事导航：大字区块入口 + IntersectionObserver 驱动的琥珀下划线活动态。
+// 首页滚动叙事导航：桌面作为大字目录；窄屏收紧为单行可横向滚动的区块索引。
 interface SpyItem {
   id: string
   label: string
@@ -92,6 +92,49 @@ const { items } = Astro.props
     font-weight: 600;
     letter-spacing: 0.1em;
   }
+
+  @media (max-width: 760px) {
+    .section-nav {
+      margin-top: 1.65rem;
+      margin-inline: calc(-1 * clamp(0.35rem, 2vw, 1.25rem));
+      width: calc(100% + 2 * clamp(0.35rem, 2vw, 1.25rem));
+      overflow-x: auto;
+      padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .section-nav::-webkit-scrollbar { display: none; }
+    .section-nav ul {
+      width: max-content;
+      min-width: 100%;
+      flex-wrap: nowrap;
+      gap: 0.35rem;
+      padding: 0 0.15rem 0.45rem;
+    }
+    .section-nav li { flex: none; }
+    .section-nav a {
+      min-height: 2.75rem;
+      align-items: center;
+      gap: 0.3rem;
+      border: 1px solid hsl(var(--border));
+      border-radius: 999px;
+      padding: 0.45rem 0.72rem;
+      background: hsl(var(--background) / 0.72);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.78rem;
+      font-weight: 640;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .section-nav a::after {
+      right: 0.65rem;
+      bottom: 0.28rem;
+      left: 0.65rem;
+      height: 2px;
+    }
+    .section-nav-index { font-size: 0.52rem; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .section-nav a,
     .section-nav a::after {
