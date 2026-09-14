@@ -14,6 +14,14 @@ export interface ProjectStoryLink {
  */
 export const projectStories: Record<string, ProjectStoryLink[]> = {
   'zhihu-threads': [{ kind: 'Project', label: '来源选择与学习线', href: '/projects/zhihu-threads' }],
+  'skills': [
+    {
+      kind: 'Project',
+      label: '13 个可安装 Agent Skills',
+      href: 'https://github.com/lora-sys/skills/blob/main/README.md',
+      external: true
+    }
+  ],
   'Glassbox-Agent-Harness': [
     {
       kind: 'Project',
@@ -71,6 +79,7 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
 }
 
 const storyLabels: Record<string, [string, string]> = {
+  '13 个可安装 Agent Skills': ['13 个可安装 Agent Skills', '13 installable Agent Skills'],
   '当前能力与规划': ['当前能力与规划', 'Available capabilities and roadmap'],
   '来源选择与学习线': ['来源选择与学习线', 'Source selection and learning threads'],
   'Bilibili channel': ['哔哩哔哩主页', 'Bilibili profile'],
