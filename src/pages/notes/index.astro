@@ -7,6 +7,10 @@ import notesFieldStrip from '@/assets/lora-visual/v2/lora-v2-notes-strip.webp'
 import { fieldNotes as notes } from '@/data/notes'
 
 const tags = [...new Set(notes.flatMap((note) => note.tags))]
+const formatNoteDate = (date: string) =>
+  new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', timeZone: 'UTC' }).format(
+    new Date(`${date}T00:00:00Z`)
+  )
 ---
 
 <PageLayout
@@ -24,7 +28,7 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
   <div class='not-prose notes-intro'>
     <p class='eyebrow'>随记</p>
     <div class='intro-line'>
-      <p>未长成文章的观察、实验记录与工程判断。它们比长文更短，但会保留问题的棱角。</p>
+      <p>未长成文章的观察、实验记录与工程判断。它们比长文更短，但会保留问题的棱角。每条笔记都有稳定链接。</p>
       <span>{String(notes.length).padStart(2, '0')} 条笔记</span>
     </div>
     <Image
@@ -54,18 +58,18 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
   <ol class='not-prose notes-grid' data-notes-list>
     {
       notes.map((note, index) => (
-        <li data-note data-tags={JSON.stringify(note.tags)}>
+        <li id={note.slug} data-note data-tags={JSON.stringify(note.tags)}>
           <article>
             <header>
               <span class='note-number' aria-hidden='true'>
                 {String(index + 1).padStart(2, '0')}
               </span>
               <div class='meta'>
-                <time datetime={note.date}>{note.dateLabel}</time>
+                <time datetime={note.date}>{formatNoteDate(note.date)}</time>
                 <LanguageBadge language='zh-CN' compact />
               </div>
             </header>
-            <h2>{note.title}</h2>
+            <h2><a href={`#${note.slug}`}>{note.title}</a></h2>
             <p>{note.summary}</p>
             <footer>
               <ul aria-label={`${note.title} 的标签`}>
@@ -73,10 +77,16 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
                   <li>#{tag}</li>
                 ))}
               </ul>
-              <a href={note.related.href}>
-                <small>{note.related.label}</small>
-                <span>{note.related.title} ↗</span>
-              </a>
+              <div class='note-links'>
+                <a class='permalink' href={`#${note.slug}`} aria-label={`${note.title} 的固定链接`}>
+                  <small>固定链接</small>
+                  <span>#{note.slug}</span>
+                </a>
+                <a href={note.related.href}>
+                  <small>{note.related.label}</small>
+                  <span>{note.related.title} ↗</span>
+                </a>
+              </div>
             </footer>
           </article>
         </li>
@@ -108,6 +118,11 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
       if (status) status.textContent = `已显示 ${visible} 条笔记，主题：${selected === 'all' ? '全部' : selected}`
     })
   })
+
+  if (location.hash) {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)))
+    if (target?.matches('[data-note]')) target.scrollIntoView({ block: 'center' })
+  }
 </script>
 
 <style>
@@ -206,7 +221,13 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
 
   .notes-grid > li {
     min-width: 0;
+    scroll-margin-top: 7rem;
     background: hsl(var(--background));
+  }
+
+  .notes-grid > li:target {
+    outline: 2px solid hsl(var(--field-amber));
+    outline-offset: -2px;
   }
 
   .notes-grid > li[hidden] {
@@ -259,6 +280,17 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
     line-height: 1.28;
   }
 
+  h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  h2 a:hover,
+  h2 a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+  }
+
   article > p {
     margin: 0.85rem 0 0;
     color: hsl(var(--muted-foreground));
@@ -286,25 +318,40 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
     list-style: none;
   }
 
-  article footer a {
+  .note-links {
     display: grid;
-    min-width: min(10rem, 48%);
+    gap: 0.55rem;
+    min-width: min(12rem, 52%);
+  }
+
+  .note-links a {
+    display: grid;
     gap: 0.18rem;
+    overflow: hidden;
     color: hsl(var(--foreground));
     font-size: 0.72rem;
     text-align: right;
     text-decoration: none;
   }
 
-  article footer a small {
+  .note-links a small {
     color: hsl(var(--muted-foreground));
     font-size: 0.58rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
-  article footer a:hover span,
-  article footer a:focus-visible span {
+  .note-links .permalink span {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.6rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .note-links a:hover span,
+  .note-links a:focus-visible span {
     text-decoration: underline;
     text-underline-offset: 0.25rem;
   }
@@ -322,6 +369,19 @@ const tags = [...new Set(notes.flatMap((note) => note.tags))]
 
     article {
       min-height: 19rem;
+    }
+
+    article footer {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .note-links {
+      width: 100%;
+    }
+
+    .note-links a {
+      text-align: left;
     }
   }
 
