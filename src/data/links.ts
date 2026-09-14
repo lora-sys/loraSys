@@ -23,7 +23,7 @@ export const linkApplication = [
   { label: '网址', value: 'https://lora-sys.github.io/loraSys/' },
   {
     label: '头像',
-    value: 'https://lora-sys.github.io/loraSys/favicon/lora-v1-mark-512.png'
+    value: 'https://lora-sys.github.io/loraSys/favicon/lora-v3-mark-512.png'
   }
 ] as const
 
