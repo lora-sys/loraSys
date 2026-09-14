@@ -67,7 +67,7 @@ export const footerNavigation = (locale: SiteLocale) =>
     ? [
         { title: 'Notes in Chinese', href: '/notes' },
         { title: 'Lab in Chinese', href: '/lab' },
-        { title: 'Writing archive', href: '/archives' },
+        { title: 'Writing archive in Chinese', href: '/archives' },
         { title: 'Guestbook', href: '/en/guestbook' },
         { title: 'Résumé', href: '/en/resume' },
         { title: 'RSS', href: '/rss.xml' }
