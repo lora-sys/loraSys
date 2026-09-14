@@ -10,6 +10,7 @@ const required = [
   'blog/index.html',
   'notes/index.html',
   'projects/index.html',
+  'projects/zhihu-threads/index.html',
   'lab/index.html',
   'talks/index.html',
   'about/index.html',
@@ -17,6 +18,22 @@ const required = [
   'now/index.html',
   'links/index.html',
   'search/index.html',
+  'archives/index.html',
+  'tags/index.html',
+  'guestbook/index.html',
+  'resume/index.html',
+  'terms/index.html',
+  'en/index.html',
+  'en/work/index.html',
+  'en/writing/index.html',
+  'en/now/index.html',
+  'en/links/index.html',
+  'en/about/index.html',
+  'en/contact/index.html',
+  'en/search/index.html',
+  'en/guestbook/index.html',
+  'en/resume/index.html',
+  'en/projects/zhihu-threads/index.html',
   '404.html',
   'rss.xml',
   'robots.txt',
@@ -74,6 +91,9 @@ for (const file of files.filter((path) => textExtensions.has(extname(path)))) {
       url.startsWith(`${base}/tags/`) ||
       url.startsWith(`${base}/archives`) ||
       url.startsWith(`${base}/terms`) ||
+      url.startsWith(`${base}/guestbook`) ||
+      url.startsWith(`${base}/resume`) ||
+      url.startsWith(`${base}/en/`) ||
       url.startsWith(`${base}/404`)
     ) continue
 
