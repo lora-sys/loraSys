@@ -51,10 +51,10 @@ export const hackathons = [
   {
     title: '知乎黑客松',
     date: 'September 13, 2026',
-    location: 'Upcoming · venue pending',
-    content: '计划参加。具体项目、协作信息与现场记录将在活动结束后补充。',
+    location: 'Event passed · record pending',
+    content: 'The event date has passed; participation and final project notes are not yet confirmed in the public record.',
     href: '',
-    status: 'planned'
+    status: 'record-pending'
   },
   {
     title: '世界人工智能开源大赛 · Agent Infra',
@@ -124,12 +124,13 @@ const chineseProfileText: Record<string, string> = {
   "February 2026": "2026 年 2 月",
   "Planned · date pending": "计划参加，日期待定",
   "2026 · PR open": "2026 年，贡献申请待审",
-  "Upcoming · venue pending": "即将举行，地点待定",
+  "Event passed · record pending": "活动日期已过，记录待补",
   "Datawhale × 阿里云 · Online": "Datawhale 与阿里云 · 线上",
   "Beijing · Kunlun Nest": "北京 · 昆仑巢",
   "Online": "线上",
   "Beijing · Startup Hackathon": "北京 · 创业黑客松",
   "Track 1 · Multimodal Content Creation Tools": "赛道一 · 多模态内容创作工具",
+  "The event date has passed; participation and final project notes are not yet confirmed in the public record.": "活动日期已经过去；目前公开记录还不足以确认最终参与情况与项目记录，待核实后补充。",
   "Built an AI Agent × Blockchain project with a team of five.": "与五人团队构建智能体与区块链结合的项目。",
   "Shipped a working prototype in a 48-hour rapid iteration sprint.": "在 48 小时内完成可运行原型。",
   "Built a Web3 tarot prediction platform on Monad Testnet.": "在 Monad 测试网上构建 Web3 塔罗预测原型。",
