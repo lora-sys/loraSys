@@ -95,11 +95,9 @@ const { items } = Astro.props
 
   @media (max-width: 760px) {
     .section-nav {
+      width: min(100%, 70rem);
       margin-top: 1.65rem;
-      margin-inline: calc(-1 * clamp(0.35rem, 2vw, 1.25rem));
-      width: calc(100% + 2 * clamp(0.35rem, 2vw, 1.25rem));
       overflow-x: auto;
-      padding-inline: clamp(0.35rem, 2vw, 1.25rem);
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
