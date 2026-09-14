@@ -135,7 +135,8 @@ export const integ: IntegrationUserConfig = {
     inlineCodeBlockStyle: 'modern'
   },
   // [Lightbox]
-  // A lightbox library that adds zoom effect
+  // A lightbox library that can add zoom effect
+  // https://astro-pure.js.org/docs/integrations/others#medium-zoom
   mediumZoom: {
     enable: true, // disable it will not load the whole library
     selector: '.prose .zoomable',
