@@ -141,7 +141,7 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     root.style.setProperty('--theme-origin-y', `${rect.top + rect.height / 2}px`)
 
     const applyTheme = () => {
-      const nextTheme = setTheme(undefined, true)
+      const nextTheme = setTheme(undefined, true) ?? 'system'
       themeButton.dataset.theme = nextTheme
       updateThemeLabel(nextTheme)
     }
