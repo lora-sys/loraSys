@@ -135,6 +135,7 @@ export const integ: IntegrationUserConfig = {
     inlineCodeBlockStyle: 'modern'
   },
   // [Lightbox]
+  // A lightbox library that can add zoom effect
   // https://astro-pure.js.org/docs/integrations/others#medium-zoom
   mediumZoom: {
     enable: true, // disable it will not load the whole library
@@ -150,9 +151,11 @@ export const integ: IntegrationUserConfig = {
     server: 'https://astro-theme-pure-waline.arthals.ink/',
     // Show meta info for comments
     showMeta: false,
-    // https://waline.js.org/en/guide/features/emoji.html
+    // Refer https://waline.js.org/en/guide/features/emoji.html
     emoji: ['bmoji', 'weibo'],
+    // Refer https://waline.js.org/en/reference/client/props.html
     additionalConfigs: {
+      // search: false,
       pageview: true,
       comment: true,
       locale: {
