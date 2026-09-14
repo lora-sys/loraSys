@@ -1,6 +1,7 @@
 // 短笔记策展数据：从 notes 页面迁出，便于维护与后续扩充。
-// 条目按新到旧排列；新增条目时保持 dateLabel 与 date 一致。
+// 条目按新到旧排列；slug 是公开固定链接的一部分，发布后不要修改。
 export interface FieldNote {
+  slug: string
   title: string
   date: string
   dateLabel: string
@@ -15,6 +16,7 @@ export interface FieldNote {
 
 export const fieldNotes: FieldNote[] = [
   {
+    slug: 'multi-agent-emergent-behavior',
     title: '多智能体系统的涌现行为',
     date: '2025-12-01',
     dateLabel: 'Dec 2025',
@@ -28,6 +30,7 @@ export const fieldNotes: FieldNote[] = [
     }
   },
   {
+    slug: 'monad-parallel-evm-benchmark',
     title: 'Monad 并行 EVM 性能基准',
     date: '2025-11-01',
     dateLabel: 'Nov 2025',
@@ -36,6 +39,7 @@ export const fieldNotes: FieldNote[] = [
     related: { href: '/blog/wishlive', label: '关联构建', title: 'WishLive Multi-Agent Runtime' }
   },
   {
+    slug: 'vercel-ai-sdk-v3-migration',
     title: 'Vercel AI SDK v3 迁移经验',
     date: '2025-10-01',
     dateLabel: 'Oct 2025',
@@ -44,6 +48,7 @@ export const fieldNotes: FieldNote[] = [
     related: { href: '/blog/eve-agent', label: '关联长文', title: 'Vercel Eve Agent Framework' }
   },
   {
+    slug: 'rust-for-ai-agents',
     title: 'Rust for AI Agents：值得吗？',
     date: '2025-09-01',
     dateLabel: 'Sep 2025',
