@@ -6,23 +6,24 @@ export const prerender = true
 export async function getStaticPaths() {
   return (await getBlogCollection()).map((post) => ({
     params: { id: post.id },
-    props: { title: post.data.title }
+    props: { title: post.data.title, description: post.data.description }
   }))
 }
 
-interface Props { title: string }
-const { title } = Astro.props
+interface Props { title: string; description: string }
+const { title, description } = Astro.props
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const destination = `${base}/blog/${Astro.params.id}`
 const canonical = new URL(destination, Astro.site)
 ---
 
 <!doctype html>
-<html lang='en' data-pagefind-ignore='all'>
+<html lang='en-US' data-pagefind-ignore='all'>
   <head>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
     <title>{title}</title>
+    <meta name='description' content={description} />
     <meta name='robots' content='noindex, follow' />
     <link rel='canonical' href={canonical} />
     <script is:inline define:vars={{ destination }}>
