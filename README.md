@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://lora-sys.github.io/loraSys/">
-    <img src="./assets/readme/hero.webp" width="100%" alt="Lora — personal site, projects, writing, current work, and experiments">
+    <img src="./assets/readme/hero.svg" width="100%" alt="Lora — personal site, projects, writing, current work, and experiments">
   </a>
 </p>
 
