@@ -61,6 +61,9 @@ if (existsSync(dist)) walk(dist)
 
 const textExtensions = new Set(['.html', '.xml', '.txt', '.webmanifest', '.css', '.js'])
 const assetPattern = /(?:href|src|content)=["']([^"']+)["']/g
+const htmlTagText = (value = '') => value.replace(/<[^>]*>/g, '').trim()
+const attributeValue = (tag, name) =>
+  tag.match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, 'i'))?.[1]?.trim() ?? ''
 
 for (const file of files.filter((path) => textExtensions.has(extname(path)))) {
   const source = readFileSync(file, 'utf8')
@@ -73,6 +76,19 @@ for (const file of files.filter((path) => textExtensions.has(extname(path)))) {
   ) failures.push(`${label}: undefined HTML attribute`)
 
   if (extname(file) !== '.html') continue
+
+  const title = source.match(/<title(?:\s[^>]*)?>([\s\S]*?)<\/title>/i)?.[1]
+  if (!htmlTagText(title)) failures.push(`${label}: missing document title`)
+
+  const descriptionTag = [...source.matchAll(/<meta\b[^>]*>/gi)]
+    .map(([tag]) => tag)
+    .find((tag) => attributeValue(tag, 'name').toLowerCase() === 'description')
+  if (!descriptionTag || !attributeValue(descriptionTag, 'content')) {
+    failures.push(`${label}: missing meta description`)
+  }
+
+  const h1Count = [...source.matchAll(/<h1\b/gi)].length
+  if (h1Count !== 1) failures.push(`${label}: expected exactly one h1, found ${h1Count}`)
 
   for (const match of source.matchAll(assetPattern)) {
     const url = match[1]
