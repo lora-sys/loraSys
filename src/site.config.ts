@@ -12,7 +12,7 @@ export const theme: ThemeUserConfig = {
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
   favicon: '/loraSys/favicon/lora-v3-favicon-32x32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
-  socialCard: '/loraSys/images/lora-v1-social-card.webp',
+  socialCard: '/loraSys/images/lora-social-card.webp',
   /** Specify the default language for this site. */
   locale: {
     lang: 'zh-CN',
@@ -136,7 +136,6 @@ export const integ: IntegrationUserConfig = {
   },
   // [Lightbox]
   // A lightbox library that can add zoom effect
-  // https://astro-pure.js.org/docs/integrations/others#medium-zoom
   mediumZoom: {
     enable: true, // disable it will not load the whole library
     selector: '.prose .zoomable',

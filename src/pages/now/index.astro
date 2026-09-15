@@ -4,7 +4,15 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import nowCurrentDeskHero from '@/assets/lora-visual/v2/lora-v2-now-workbench.webp'
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
-const lastUpdated = '2026-08-20'
+import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
+
+const lastUpdated = currentFocus.reviewedAt
+const lastUpdatedLabel = new Intl.DateTimeFormat('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(`${lastUpdated}T00:00:00Z`))
 // 同步事实区：来自 GitHub 快照的最近推送仓库；数据旧就如实显示旧，不伪造新鲜。
 const recentPushes = Object.values(projectSnapshot.projects)
   .filter((project) => !project.archived && !project.fork)
@@ -13,23 +21,22 @@ const recentPushes = Object.values(projectSnapshot.projects)
 const syncedLabel = new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(
   new Date(syncReport.syncedAt)
 )
-const sections=[
- {id:'building',title:'营造中',status:'In progress',frequency:'随项目进展更新',category:'Building',items:['Agent 沙盒：MCP 工具与 LangGraph 的可靠执行边界','设计并打磨 AI Company OS 与多智能体工程 Harness']},
- {id:'learning',title:'学习中',status:'Exploring',frequency:'有进展时更新',category:'Learning',items:['生成式画布与运动系统','LangGraph、多智能体协作与 Agent 基础设施']},
- {id:'reading',title:'阅读中',status:'On my desk',frequency:'随阅读进展更新',category:'Reading',items:['Designing Data-Intensive Applications']},
- {id:'listening',title:'共鸣中',status:'On repeat',frequency:'不定期更新',category:'Listening',items:['Tame Impala — Currents']}
-]
-const headings=sections.map(s=>({depth:2,slug:s.id,text:s.title}))
+const sections = getCurrentFocusSections('zh-CN')
+const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: section.title }))
 ---
-<PageLayout title='正在构建' {headings}>
+<PageLayout
+  title='正在构建'
+  description='Lora 当前正在构建、学习、阅读和反复思考的内容快照。'
+  {headings}
+>
  <section class='not-prose now-hero' aria-labelledby='now-intro'>
   <Image src={nowCurrentDeskHero} alt='' aria-hidden='true' class='now-hero-image' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
   <div class='now-hero-copy'>
    <span class='now-hero-label'>当前记录</span>
-   <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>2026 年 8 月 20 日</time>，完成重要变化时更新。</p>
+   <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>{lastUpdatedLabel}</time>，完成重要变化时更新。</p>
   </div>
  </section>
- <div class='now-recent' data-now-visit><strong>最近完成</strong><span>把 loraSys 升级为个人品牌与内容中心：项目同步、Notion 候选审核和静态发布边界已经建立。</span><small data-now-return>欢迎回来，继续看看最近的构建。</small></div>
+ <div class='now-recent' data-now-visit><strong>当前主线</strong><span>{currentFocus.description}</span><small data-now-return>欢迎回来，继续看看最近的构建。</small></div>
  <aside class='now-sync' aria-label='来自 GitHub 同步的最近活动'>
    <header><strong>来自 GitHub 同步</strong><span>档案同步于 {syncedLabel}</span></header>
    <ul>

@@ -152,13 +152,13 @@ const formatLinkDate = (link: FriendLink) => link.since || '未记录日期'
         try {
           await copyText(value)
           button.textContent = '已复制'
-          if (status) status.textContent = 'Site information copied to the clipboard.'; if (toast) { toast.hidden=false; clearTimeout(toastTimer); toastTimer=window.setTimeout(()=>{toast.hidden=true},1800) }
+          if (status) status.textContent = '已复制站点资料到剪贴板。'; if (toast) { toast.hidden=false; clearTimeout(toastTimer); toastTimer=window.setTimeout(()=>{toast.hidden=true},1800) }
           window.setTimeout(() => {
             button.textContent = initialLabel
           }, 1600)
         } catch {
           if (status)
-            status.textContent = 'Copy is unavailable. Select the text and copy it manually.'
+            status.textContent = '当前浏览器无法自动复制，请手动选择文字复制。'
         }
       })
     })

@@ -25,7 +25,7 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     <a class='contact-cta tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
     {alternate && <a class='locale-toggle' href={alternate} hreflang={otherLocale} lang={otherLocale}>{copy.switchLabel}</a>}
     <a class='search-link' href={search} title={`${copy.searchLabel} /`} aria-label={copy.searchLabel} aria-keyshortcuts='/'><Icon name='search' class='size-4' /></a>
-    <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Toggle dark theme' : '切换深色主题'} aria-pressed='false'>
+    <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Theme: system. Activate to change theme.' : '主题：跟随系统。点击切换主题。'}>
       <Icon class='system size-4' name='computer' />
       <Icon class='light hidden size-4' name='sun' />
       <Icon class='dark hidden size-4' name='moon' />
@@ -47,9 +47,17 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   const themeButton = document.getElementById('toggleDarkMode')
   if (themeButton) {
     const savedTheme = localStorage.getItem('theme') || 'system'
+    const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
+    const themeNames = isEnglish
+      ? { system: 'system', light: 'light', dark: 'dark' }
+      : { system: '跟随系统', light: '浅色', dark: '深色' }
     themeButton.dataset.theme = savedTheme
-    const appliedTheme = savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : savedTheme
-    themeButton.setAttribute('aria-pressed', String(appliedTheme === 'dark'))
+    themeButton.setAttribute(
+      'aria-label',
+      isEnglish
+        ? `Theme: ${themeNames[savedTheme] || savedTheme}. Activate to change theme.`
+        : `主题：${themeNames[savedTheme] || savedTheme}。点击切换主题。`
+    )
   }
 </script>
 <script>
@@ -63,6 +71,17 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   const menuLabel = menuToggle?.querySelector<HTMLElement>('[data-menu-label]')
   const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
   let menuReturnFocus: HTMLElement | null = null
+
+  const updateThemeLabel = (theme: string) => {
+    if (!themeButton) return
+    const name = isEnglish
+      ? ({ system: 'system', light: 'light', dark: 'dark' }[theme] ?? theme)
+      : ({ system: '跟随系统', light: '浅色', dark: '深色' }[theme] ?? theme)
+    themeButton.setAttribute(
+      'aria-label',
+      isEnglish ? `Theme: ${name}. Activate to change theme.` : `主题：${name}。点击切换主题。`
+    )
+  }
 
   const updateScrollState = () => {
     if (!header) return
@@ -122,10 +141,9 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     root.style.setProperty('--theme-origin-y', `${rect.top + rect.height / 2}px`)
 
     const applyTheme = () => {
-      const nextTheme = setTheme(undefined, true)
+      const nextTheme = setTheme(undefined, true) ?? 'system'
       themeButton.dataset.theme = nextTheme
-      const appliedTheme = nextTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : nextTheme
-      themeButton.setAttribute('aria-pressed', String(appliedTheme === 'dark'))
+      updateThemeLabel(nextTheme)
     }
 
     const finish = () => {
