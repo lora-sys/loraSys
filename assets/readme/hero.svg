@@ -1,31 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
-  <title id="title">loraSys — building systems that learn</title>
-  <desc id="desc">A personal engineering notebook connecting AI agents, tools, products, and experiments.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Lora — personal site, projects, writing, current work and experiments</title>
+  <desc id="desc">Warm editorial README banner with Lora avatar, selected projects and Astro technology labels.</desc>
   <defs>
-    <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#121a23"/><stop offset="1" stop-color="#0b0f15"/></linearGradient>
-    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#b9c6d4" stroke-opacity=".07"/></pattern>
-    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#74e38e"/></marker>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#fbf6ec"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffc04a"/>
+      <stop offset="1" stop-color="#eda223"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="18" flood-color="#1b2028" flood-opacity=".06"/>
+    </filter>
+    <clipPath id="avatarClip"><circle cx="300" cy="355" r="205"/></clipPath>
   </defs>
-  <rect width="1200" height="380" rx="28" fill="url(#wash)"/><rect width="1200" height="380" rx="28" fill="url(#grid)"/>
-  <path d="M56 318H1144" stroke="#e8edf2" stroke-opacity=".18"/>
-  <g transform="translate(60 54)" fill="#e8edf2">
-    <text x="0" y="0" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="19" letter-spacing="4" fill="#74e38e">LORASYS / FIELD NOTES</text>
-    <text x="0" y="82" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="64" font-weight="750">Building systems</text>
-    <text x="0" y="151" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="64" font-weight="750">that learn<tspan fill="#ef765e">.</tspan></text>
-    <text x="2" y="207" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" fill="#b9c6d4">AI agents · full-stack products · developer tools</text>
-    <text x="2" y="252" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" fill="#8e9baa">Lora · Xi'an, China · github.com/lora-sys</text>
+  <rect width="1600" height="900" fill="url(#paper)"/>
+  <circle cx="300" cy="355" r="205" fill="url(#amber)"/>
+  <g clip-path="url(#avatarClip)">
+    <path d="M95 630 C125 535 205 495 295 495 C405 495 470 540 510 630 L510 700 L85 700 Z" fill="#1c222b"/>
+    <path d="M252 450 L352 450 L360 530 Q310 565 253 530 Z" fill="#fffaf0"/>
+    <path d="M252 470 Q304 510 355 472 L358 520 Q307 553 255 520 Z" fill="#1b2028" opacity=".13"/>
+    <ellipse cx="188" cy="373" rx="43" ry="55" fill="#fffaf0"/>
+    <path d="M186 250 C210 195 285 172 352 196 C418 220 442 282 430 356 C420 426 381 475 314 477 C252 478 212 444 199 398 C185 348 176 287 186 250 Z" fill="#fffaf0"/>
+    <path d="M160 316 C128 240 159 176 227 145 C282 118 352 121 401 153 C446 182 465 231 448 276 C438 301 421 319 401 329 C400 284 384 252 354 229 C309 251 251 247 211 216 C207 268 195 301 160 316 Z" fill="#1c222b"/>
+    <path d="M150 326 C113 313 106 266 129 231 C147 204 176 194 198 204 C184 235 174 271 173 307 Z" fill="#1c222b"/>
+    <path d="M214 205 C226 165 265 136 319 133 C363 130 401 146 423 176 C385 169 357 182 336 198 C302 183 258 186 214 205 Z" fill="#1c222b"/>
+    <path d="M339 176 C365 148 398 146 421 161 C444 176 449 206 435 231 C405 219 381 210 345 214 Z" fill="#1c222b"/>
+    <path d="M250 302 Q278 282 306 296" fill="none" stroke="#252b33" stroke-width="13" stroke-linecap="round"/>
+    <path d="M357 293 Q378 281 398 294" fill="none" stroke="#252b33" stroke-width="13" stroke-linecap="round"/>
+    <ellipse cx="286" cy="336" rx="11" ry="18" fill="#242a32"/>
+    <ellipse cx="382" cy="329" rx="11" ry="18" fill="#242a32"/>
+    <path d="M300 395 Q335 422 374 397" fill="none" stroke="#242a32" stroke-width="10" stroke-linecap="round"/>
+    <path d="M348 546 v72 h55" fill="none" stroke="#f4aa2d" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-  <g transform="translate(776 58)">
-    <rect x="0" y="0" width="338" height="242" rx="18" fill="#151f2b" stroke="#b9c6d4" stroke-opacity=".28"/>
-    <text x="26" y="34" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="16" fill="#8e9baa">BUILD LOOP / 04</text>
-    <rect x="26" y="58" width="120" height="52" rx="10" fill="#203044"/><text x="86" y="90" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#e8edf2">ideas</text>
-    <rect x="192" y="58" width="120" height="52" rx="10" fill="#223b2c"/><text x="252" y="90" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#e8edf2">evidence</text>
-    <path d="M148 84H185" stroke="#74e38e" stroke-width="2" marker-end="url(#arrow)"/>
-    <rect x="26" y="142" width="120" height="52" rx="10" fill="#2c2632"/><text x="86" y="174" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#e8edf2">agents</text>
-    <rect x="192" y="142" width="120" height="52" rx="10" fill="#352a27"/><text x="252" y="174" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#e8edf2">products</text>
-    <path d="M86 112V135" stroke="#64c8ff" stroke-width="2" marker-end="url(#arrow)"/><path d="M252 112V135" stroke="#ef765e" stroke-width="2" marker-end="url(#arrow)"/>
-    <circle cx="169" cy="217" r="7" fill="#74e38e"/><path d="M146 217H99M192 217H239" stroke="#74e38e" stroke-width="2"/>
-    <text x="169" y="235" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#8e9baa">ship → observe → iterate</text>
+  <g stroke="#f1ac35" stroke-width="12" stroke-linecap="round" opacity=".9"><path d="M112 182 l-26 -16"/><path d="M142 146 l-12 -27"/><path d="M103 222 l-30 -4"/></g>
+  <text x="575" y="300" fill="#1b2028" font-family="Arial, Helvetica, sans-serif" font-size="148" font-weight="800" letter-spacing="-7">Lora</text>
+  <g stroke="#f1aa30" stroke-width="12" stroke-linecap="round"><path d="M1085 191 l12 -28"/><path d="M1115 218 l30 -8"/><path d="M1099 250 l20 20"/></g>
+  <text x="580" y="365" fill="#242a32" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="650">Personal site<tspan fill="#e6a128"> · </tspan>Projects<tspan fill="#e6a128"> · </tspan>Writing<tspan fill="#e6a128"> · </tspan>Current work<tspan fill="#e6a128"> · </tspan>Experiments</text>
+  <text x="580" y="425" fill="#5b6470" font-family="Arial, Helvetica, sans-serif" font-size="26"><tspan x="580" dy="0">Built with Astro. Focused on AI agents, open source tools,</tspan><tspan x="580" dy="38">and thoughtful web craftsmanship.</tspan></text>
+  <g filter="url(#soft)" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#20262e">
+    <g transform="translate(575 520)"><rect width="215" height="82" rx="28" fill="#fff2d4"/><path d="M33 32 l18 -10 18 10 -18 10z M33 32 v22 l18 10 18-10 V32 M51 42 v22" fill="none" stroke="#242a32" stroke-width="4" stroke-linejoin="round"/><text x="84" y="51">Glassbox</text></g>
+    <g transform="translate(810 520)"><rect width="235" height="82" rx="28" fill="#fff2d4"/><rect x="28" y="27" width="42" height="34" rx="10" fill="none" stroke="#242a32" stroke-width="4"/><path d="M49 20 v8 M40 38 h18 M42 48 h2 M58 48 h2" stroke="#242a32" stroke-width="4" stroke-linecap="round"/><text x="84" y="51">AgentArena</text></g>
+    <g transform="translate(1065 520)"><rect width="215" height="82" rx="28" fill="#fff2d4"/><path d="M31 31 Q43 24 53 30 V58 Q43 52 31 58 Z M53 30 Q64 24 75 31 V58 Q64 52 53 58 Z" fill="none" stroke="#242a32" stroke-width="4" stroke-linejoin="round"/><text x="88" y="51">Lora Skills</text></g>
+    <g transform="translate(1300 520)"><rect width="250" height="82" rx="28" fill="#fff2d4"/><rect x="28" y="25" width="48" height="37" rx="10" fill="none" stroke="#242a32" stroke-width="4"/><path d="M42 62 l-2 11 13 -11 M41 40 h23 M41 50 h16" fill="none" stroke="#242a32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><text x="91" y="51">Zhihu Threads</text></g>
   </g>
-  <g transform="translate(60 344)" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#8e9baa"><text x="0" y="0">ASTRO / PURE / BUN / GITHUB PAGES</text><text x="1080" y="0" text-anchor="end">01</text></g>
+  <circle cx="80" cy="690" r="6" fill="#e9a42b"/><line x1="100" y1="690" x2="1510" y2="690" stroke="#e8c985" stroke-width="2"/><circle cx="1532" cy="690" r="6" fill="#e9a42b"/>
+  <g transform="translate(365 770)" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="650" fill="#222932">
+    <path d="M0 18 L16 -18 L31 18 L22 10 L10 10 Z" fill="#222932"/><circle cx="16" cy="23" r="4" fill="#e9a42b"/><text x="45" y="15">Astro</text><line x1="158" y1="-20" x2="158" y2="26" stroke="#d5d0c6" stroke-width="2"/>
+    <rect x="205" y="-21" width="45" height="45" rx="8" fill="#222932"/><text x="213" y="11" font-size="18" fill="#fffaf0">TS</text><text x="270" y="15">TypeScript</text><line x1="430" y1="-20" x2="430" y2="26" stroke="#d5d0c6" stroke-width="2"/>
+    <circle cx="485" cy="0" r="23" fill="#222932"/><circle cx="477" cy="-5" r="9" fill="#fffaf0"/><circle cx="493" cy="-5" r="9" fill="#fffaf0"/><rect x="476" y="-1" width="18" height="16" rx="8" fill="#fffaf0"/><text x="525" y="15">GitHub Pages</text><line x1="720" y1="-20" x2="720" y2="26" stroke="#d5d0c6" stroke-width="2"/>
+    <circle cx="775" cy="0" r="22" fill="none" stroke="#222932" stroke-width="4"/><path d="M753 0 h44 M775 -22 c-12 12 -12 32 0 44 M775 -22 c12 12 12 32 0 44" fill="none" stroke="#222932" stroke-width="3"/><text x="814" y="15">Bilingual</text>
+  </g>
 </svg>
