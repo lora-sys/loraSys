@@ -1,0 +1,83 @@
+name: Verify image delivery
+on:
+  push:
+    branches: [perf/image-loading-20260910]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/components/lora/**'
+      - 'src/components/projects/**'
+      - 'src/data/lora-visual.ts'
+      - 'scripts/test-image-*.mjs'
+      - '.github/workflows/verify-images.yml'
+permissions:
+  contents: read
+concurrency:
+  group: image-delivery-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bun install --frozen-lockfile
+      - run: bun run validate:sync && bun run build
+      - name: Check out the comparison baseline after candidate build
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha || '601e50bb63de67eb76d28fc52b7dbf0b2360a37e' }}
+          path: .image-baseline
+          persist-credentials: false
+      - name: Build baseline with its locked dependencies
+        working-directory: .image-baseline
+        run: bun install --frozen-lockfile && bun run validate:sync && bun run build
+      - name: Install isolated browser runner
+        run: |
+          npm install --prefix "$RUNNER_TEMP/image-tools" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/image-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Compare cold loads on the same runner
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
+        run: |
+          failed=0
+          before_sha="$(git -C .image-baseline rev-parse HEAD)"
+          after_sha="$(git rev-parse HEAD)"
+          for sample in 1 2 3; do
+            IMAGE_TEST_COMMIT="$before_sha" IMAGE_TEST_LABEL="before-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/before-$sample" node scripts/test-image-delivery.mjs .image-baseline/dist || failed=1
+            IMAGE_TEST_COMMIT="$after_sha" IMAGE_TEST_LABEL="after-$sample" IMAGE_TEST_OUTPUT="$RUNNER_TEMP/image-evidence/after-$sample" node scripts/test-image-delivery.mjs dist || failed=1
+          done
+          exit "$failed"
+      - name: Verify native WebP fallback and unchanged artwork
+        if: ${{ !cancelled() }}
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/image-tools/node_modules/playwright/index.mjs
+          IMAGE_TEST_OUTPUT: ${{ runner.temp }}/image-evidence/formats
+          IMAGE_TEST_COMMIT: ${{ github.sha }}
+        run: node scripts/test-image-formats.mjs dist
+      - name: Preserve measurements and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: image-delivery-evidence
+          path: ${{ runner.temp }}/image-evidence
+          retention-days: 14
+      - name: Preserve production output for visual review
+        if: ${{ !cancelled() }}
+        run: tar -czf "$RUNNER_TEMP/image-production.tar.gz" -C dist .
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: image-production
+          path: ${{ runner.temp }}/image-production.tar.gz
+          retention-days: 7
