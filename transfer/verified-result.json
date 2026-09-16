@@ -1,0 +1,211 @@
+{
+  "base_commit": "f45621ce2e7279813821efd850cf028c5570830d",
+  "candidate_tree": "be1d86e26765120f688910bf566f6ef67fb49ad2",
+  "files": [
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "054443d8d6851dd2fe47cc6775f66751ca3fc15d"
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/best-so-far.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d229899fda2b1c93039c19b5fe8fe9756322e366"
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/session-allocation.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "580318b1c3a83f629e7693995074e38205f0f46b"
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/pass-at-k-and-pass-all.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eae8973aaa4288e4e642c3773bf373fe682020f1"
+    },
+    {
+      "path": "src/assets/blog/tau-agent-architecture/tau_three_layers.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00439a5ecd752a1a25d0b6ce100cadc6ec0c1603"
+    },
+    {
+      "path": "src/assets/blog/tau-agent-loop-events/agent_event_loop.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4c022501a5772347d0ff0364c1aea62e72889d25"
+    },
+    {
+      "path": "src/content/blog/agent-budget-memory-evaluation.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "852d3bdb4e7380e566d52bc30474f2e1135f733d"
+    },
+    {
+      "path": "src/content/blog/tau-agent-architecture.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c24f62abd8eaa434c44ec8b90679877c4fe5a192"
+    },
+    {
+      "path": "src/content/blog/tau-agent-loop-events.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0eb6affafbc3c62375890623230cc2aa042a73e8"
+    }
+  ],
+  "astro_check": "passed",
+  "production_build": "passed",
+  "browser_verification": {
+    "image_checks_passed": 12,
+    "results": [
+      {
+        "viewport": "desktop",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/agent-evaluation-flow.B-tSn-V5_1KdYDN.webp",
+        "alt": "图 1，普通问答评测与 Agent 评测的区别。图片来源为 Anthropic。",
+        "naturalWidth": 4584,
+        "naturalHeight": 2834,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "desktop",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/best-so-far.CMdIf09l_Kczbz.svg",
+        "alt": "图 2，历史最好成绩与本次提交成绩。教学假设数据，不是论文实验结果。",
+        "naturalWidth": 837,
+        "naturalHeight": 444,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "desktop",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/session-allocation.Cl7ekTRG_Kczbz.svg",
+        "alt": "图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。",
+        "naturalWidth": 837,
+        "naturalHeight": 444,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "desktop",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/pass-at-k-and-pass-all.6mdQcpgn_2jaMub.webp",
+        "alt": "图 4，至少成功一次与每次都成功，是两种不同要求。图片来源为 Anthropic，图中使用原文的示例参数。",
+        "naturalWidth": 4584,
+        "naturalHeight": 2580,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "desktop",
+        "article": "tau-agent-architecture",
+        "route": "/loraSys/blog/tau-agent-architecture/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/tau_three_layers.DwTYmVkV_1KxTGG.webp",
+        "alt": "Tau 三层架构示意图。",
+        "naturalWidth": 3120,
+        "naturalHeight": 1148,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "desktop",
+        "article": "tau-agent-loop-events",
+        "route": "/loraSys/blog/tau-agent-loop-events/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/agent_event_loop.U1Vi0SDB_1S8yw3.webp",
+        "alt": "Agent 事件循环示意图。",
+        "naturalWidth": 2384,
+        "naturalHeight": 3160,
+        "width": 760,
+        "left": 200,
+        "right": 960
+      },
+      {
+        "viewport": "mobile",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/agent-evaluation-flow.B-tSn-V5_1KdYDN.webp",
+        "alt": "图 1，普通问答评测与 Agent 评测的区别。图片来源为 Anthropic。",
+        "naturalWidth": 4584,
+        "naturalHeight": 2834,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      },
+      {
+        "viewport": "mobile",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/best-so-far.CMdIf09l_Kczbz.svg",
+        "alt": "图 2，历史最好成绩与本次提交成绩。教学假设数据，不是论文实验结果。",
+        "naturalWidth": 837,
+        "naturalHeight": 444,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      },
+      {
+        "viewport": "mobile",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/session-allocation.Cl7ekTRG_Kczbz.svg",
+        "alt": "图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。",
+        "naturalWidth": 837,
+        "naturalHeight": 444,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      },
+      {
+        "viewport": "mobile",
+        "article": "agent-budget-memory-evaluation",
+        "route": "/loraSys/blog/agent-budget-memory-evaluation/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/pass-at-k-and-pass-all.6mdQcpgn_2jaMub.webp",
+        "alt": "图 4，至少成功一次与每次都成功，是两种不同要求。图片来源为 Anthropic，图中使用原文的示例参数。",
+        "naturalWidth": 4584,
+        "naturalHeight": 2580,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      },
+      {
+        "viewport": "mobile",
+        "article": "tau-agent-architecture",
+        "route": "/loraSys/blog/tau-agent-architecture/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/tau_three_layers.DwTYmVkV_1KxTGG.webp",
+        "alt": "Tau 三层架构示意图。",
+        "naturalWidth": 3120,
+        "naturalHeight": 1148,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      },
+      {
+        "viewport": "mobile",
+        "article": "tau-agent-loop-events",
+        "route": "/loraSys/blog/tau-agent-loop-events/",
+        "src": "http://127.0.0.1:37957/loraSys/_astro/agent_event_loop.U1Vi0SDB_1S8yw3.webp",
+        "alt": "Agent 事件循环示意图。",
+        "naturalWidth": 2384,
+        "naturalHeight": 3160,
+        "width": 358,
+        "left": 16,
+        "right": 374
+      }
+    ]
+  }
+}
