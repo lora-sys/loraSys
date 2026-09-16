@@ -19,6 +19,10 @@ draft: false
 
 这里的 Agent，可以理解为一个反复调用模型和工具来完成任务的程序。它会读文件、改代码、运行测试，再根据结果继续操作。评测时，要检查实际代码和环境，不能只看最后那段回答。[Anthropic 的 Agent 评测说明](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 
+![图 1，普通问答评测与 Agent 评测的区别。图片来源为 Anthropic。](../../assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png)
+
+图 1，普通问答评测与 Agent 评测的区别。图片来源为 Anthropic。
+
 普通问答评测检查回答是否正确。Agent 评测还要检查调用工具以后，实际留下的程序是否通过测试。模型说 "I did it!" 只是声明，不是验收结果。
 
 论文研究的测试时计算，指执行任务期间使用的计算。它可以花在继续修改、重新尝试、检查答案或者调用其他模型上。它不等于重新训练模型。[推理预算研究](https://arxiv.org/abs/2408.03314)
@@ -59,7 +63,13 @@ draft: false
 
 ### 先保留历史最好结果
 
-假设一次任务有下面两次提交。所有数字都是教学示例。
+假设一次任务有下面四次提交。所有数字都是教学示例。
+
+![图 2，历史最好成绩与本次提交成绩。教学假设数据，不是论文实验结果。](../../assets/blog/agent-budget-memory-evaluation/best-so-far.svg)
+
+图 2，历史最好成绩与本次提交成绩。教学假设数据，不是论文实验结果。
+
+下面摘出图中的两次提交。
 
 | 累计 token | 本次提交成绩 | 历史最好成绩 |
 | --- | --- | --- |
@@ -98,6 +108,10 @@ Elo 也有取舍。它告诉你谁更容易赢，却不告诉你快了多少毫�
 
 下面是最容易读懂的一组预算分配实验。任务是 Polyomino Packing，使用 Kimi Code 和 Kimi K2.7，总预算固定为 1 亿 token。
 
+![图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。](../../assets/blog/agent-budget-memory-evaluation/session-allocation.svg)
+
+图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。
+
 | 会话数量 | Joint-Elo |
 | --- | --- |
 | 1 个。 | 1981。 |
@@ -122,9 +136,13 @@ Elo 也有取舍。它告诉你谁更容易赢，却不告诉你快了多少毫�
 
 Anthropic 的评测文章区分了两个指标。`pass@k` 看 k 次尝试里是否至少成功一次。`pass^k` 看这 k 次是否全部成功。它们回答的不是同一件事。[指标定义](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 
+![图 4，至少成功一次与每次都成功，是两种不同要求。图片来源为 Anthropic，图中使用原文的示例参数。](../../assets/blog/agent-budget-memory-evaluation/pass-at-k-and-pass-all.png)
+
+图 4，至少成功一次与每次都成功，是两种不同要求。图片来源为 Anthropic，图中使用原文的示例参数。
+
 多试几次更容易至少成功一次。要求每一次都成功，会越来越难满足。
 
-我们用一个假设算一遍。假设每次独立运行的成功率都是 80%。运行五次，至少成功一次的概率是 99.968%，五次全部成功的概率只有 32.768%。
+我们另外用一个假设算一遍，不与原图的参数混用。假设每次独立运行的成功率都是 80%。运行五次，至少成功一次的概率是 99.968%，五次全部成功的概率只有 32.768%。
 
 | 要求 | 假设条件 | 五次运行的概率 |
 | --- | --- | --- |
