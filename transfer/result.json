@@ -1,0 +1,53 @@
+{
+  "original_images": [
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png",
+      "sha": "054443d8d6851dd2fe47cc6775f66751ca3fc15d",
+      "bytes": 303289,
+      "sha256": "7a09c7354e3e4ab6c2a30e7fb99ddf0e0817839e358988c0c2f8559275fa227c",
+      "width": 4584,
+      "height": 2834
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/best-so-far.svg",
+      "sha": "d229899fda2b1c93039c19b5fe8fe9756322e366",
+      "bytes": 2133,
+      "sha256": "8b425b1a4e37c552df3e0055ce82919a79c007c8d7bd77ee19d299bfb95af096",
+      "width": null,
+      "height": null
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/session-allocation.svg",
+      "sha": "580318b1c3a83f629e7693995074e38205f0f46b",
+      "bytes": 2183,
+      "sha256": "955c42bc1908591eb4246a469ca4be6cf59ebb255ad3f5e9d02cf42b9d0cc658",
+      "width": null,
+      "height": null
+    },
+    {
+      "path": "src/assets/blog/agent-budget-memory-evaluation/pass-at-k-and-pass-all.png",
+      "sha": "eae8973aaa4288e4e642c3773bf373fe682020f1",
+      "bytes": 270294,
+      "sha256": "9e50b40f77dd933ce883e8a998d21cfc87bf165535be123fa377101a3259e7ae",
+      "width": 4584,
+      "height": 2580
+    },
+    {
+      "path": "src/assets/blog/tau-agent-architecture/tau_three_layers.png",
+      "sha": "00439a5ecd752a1a25d0b6ce100cadc6ec0c1603",
+      "bytes": 149511,
+      "sha256": "1e06ab7e6c3c0f8780bae2c4055bc9ed3e6140a9062acf11d1d6a69e5d072b8f",
+      "width": 3120,
+      "height": 1148
+    },
+    {
+      "path": "src/assets/blog/tau-agent-loop-events/agent_event_loop.png",
+      "sha": "4c022501a5772347d0ff0364c1aea62e72889d25",
+      "bytes": 233549,
+      "sha256": "a37243618efb67bf194d41f9501e91922054a6104681e53613cde1d718125bf1",
+      "width": 2384,
+      "height": 3160
+    }
+  ],
+  "count": 6
+}
