@@ -1,0 +1,531 @@
+{
+  "base_commit": "83138d2592df83eac4db1849dba077280d3ef874",
+  "astro_check": "passed",
+  "production_build": "passed",
+  "browser_checks": [
+    {
+      "viewport": "desktop",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        }
+      ]
+    },
+    {
+      "viewport": "desktop",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 340.78125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 415.359375
+        }
+      ]
+    },
+    {
+      "viewport": "mobile",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 340.78125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 415.359375
+        }
+      ]
+    },
+    {
+      "viewport": "narrow",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 441.78125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 391.28125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 439.4375
+        }
+      ]
+    },
+    {
+      "viewport": "narrow",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 441.78125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 391.28125
+        },
+        {
+          "background": "rgb(243, 239, 232)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 304,
+          "height": 439.4375
+        }
+      ]
+    },
+    {
+      "viewport": "desktop-dark",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        }
+      ]
+    },
+    {
+      "viewport": "desktop-dark",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 200,
+          "right": 712,
+          "height": 373.46875
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 728,
+          "right": 1240,
+          "height": 373.46875
+        }
+      ]
+    },
+    {
+      "viewport": "mobile-dark",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 340.78125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 415.359375
+        }
+      ]
+    },
+    {
+      "viewport": "mobile-dark",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "background_images": 0,
+      "horizontal_overflow": false,
+      "styles": [
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 367.203125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 340.78125
+        },
+        {
+          "background": "rgb(48, 43, 39)",
+          "image": "none",
+          "before": "none",
+          "after": "none",
+          "left": 16,
+          "right": 374,
+          "height": 415.359375
+        }
+      ]
+    }
+  ],
+  "article_images_retained": {
+    "agent-budget-memory-evaluation": 4,
+    "tau-agent-architecture": 1,
+    "tau-agent-loop-events": 1
+  },
+  "files_changed": [
+    "src/components/blog/BlogListing.astro",
+    "src/components/blog/FeaturedWriting.astro"
+  ],
+  "candidate_tree": "ef4e27ebdd3ef007d7a17f94b2703b273a22c2ab",
+  "files": [
+    {
+      "path": "src/components/blog/BlogListing.astro",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43c82f62f1f6a9ffc65e6a489157a43294cddbf6"
+    },
+    {
+      "path": "src/components/blog/FeaturedWriting.astro",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d2386b72f4443814918662823cafd535efc3d4a"
+    }
+  ]
+}
