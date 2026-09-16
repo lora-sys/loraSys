@@ -1,0 +1,262 @@
+name: Verify readable featured cards
+on:
+  push:
+    branches: [fix/readable-featured-cards-20260916]
+    paths: [.github/workflows/verify-readable-featured-cards.yml]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+      OUTPUT: /tmp/readable-cards-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 0c72967a051b6466f311d59805502764202af215
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Remove unused decorative cover mappings
+        shell: python
+        run: |
+          import pathlib, re, os, hashlib
+          out = pathlib.Path(os.environ['OUTPUT'])
+          out.mkdir()
+          path = pathlib.Path('src/components/blog/BlogListing.astro')
+          raw = path.read_bytes()
+          assert hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == 'c886e30081110bf0418c382da4ddfc90fc0d6497'
+          text = raw.decode()
+          text, n = re.subn(r'^import cover[^\n]+\n', '', text, flags=re.M)
+          assert n == 7, n
+          text, n = re.subn(r'const coverForId: Record<string, ImageMetadata> = \{.*?\n\}\n', '', text, flags=re.S)
+          assert n == 1
+          start = text.index('const featuredForView = featuredPosts')
+          end = text.index('const languageTitle =', start)
+          text = text[:start] + "const featuredForView = featuredPosts\n  .filter((post) => !activeLanguage || post.data.language === activeLanguage)\n  .map((post) => ({\n    post,\n    ...(curation[post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' })\n  }))\n" + text[end:]
+          old = 'featuredForView.map(({ post, theme, whyRead, cover }) => <FeaturedWriting {post} {theme} {whyRead} {cover} />)'
+          new = 'featuredForView.map(({ post, theme, whyRead }) => <FeaturedWriting {post} {theme} {whyRead} />)'
+          assert text.count(old) == 1
+          text = text.replace(old, new)
+          assert 'coverForId' not in text and 'import cover' not in text
+          path.write_text(text)
+          print('Removed image layers and their unused mappings. Article assets and pinned order are unchanged.')
+      - name: Install and check retained snapshots
+        run: |
+          bun install --frozen-lockfile
+          bun run validate:sync
+      - name: Check and build
+        run: |
+          set -o pipefail
+          bun run check 2>&1 | tee "$OUTPUT/check.log"
+          bun run build 2>&1 | tee "$OUTPUT/build.log"
+      - name: Install isolated browser tools
+        run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Check reading cards on desktop mobile and dark mode
+        shell: python
+        run: |
+          import functools, http.server, json, os, pathlib, subprocess, tempfile, threading
+          from urllib.parse import urlsplit
+          from playwright.sync_api import sync_playwright
+          out = pathlib.Path(os.environ['OUTPUT'])
+          base_commit = '83138d2592df83eac4db1849dba077280d3ef874'
+          changed = subprocess.check_output(['git', 'diff', '--name-only', base_commit], text=True).splitlines()
+          assert sorted(changed) == ['src/components/blog/BlogListing.astro', 'src/components/blog/FeaturedWriting.astro'], changed
+          expected = ['agent-budget-memory-evaluation', 'tau-agent-architecture', 'tau-agent-loop-events', 'ai-engineering-harness']
+          article_counts = dict(zip(expected[:3], [4, 1, 1]))
+          results = []
+          with tempfile.TemporaryDirectory() as directory:
+              root = pathlib.Path(directory)
+              (root / 'loraSys').symlink_to(pathlib.Path('dist').resolve(), target_is_directory=True)
+              handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(root))
+              server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler)
+              threading.Thread(target=server.serve_forever, daemon=True).start()
+              base = f'http://127.0.0.1:{server.server_port}/loraSys'
+              try:
+                  with sync_playwright() as p:
+                      browser = p.chromium.launch()
+                      modes = [('desktop', 1440, 1000, 'light'), ('mobile', 390, 844, 'light'), ('narrow', 320, 800, 'light'), ('desktop-dark', 1440, 1000, 'dark'), ('mobile-dark', 390, 844, 'dark')]
+                      for name, width, height, theme in modes:
+                          context = browser.new_context(viewport={'width': width, 'height': height}, reduced_motion='reduce', color_scheme=theme)
+                          context.add_init_script("localStorage.setItem('theme', " + json.dumps(theme) + ")")
+                          page = context.new_page()
+                          if name in ['desktop', 'mobile']:
+                              response = page.goto('https://lora-sys.github.io/loraSys/blog', wait_until='load')
+                              assert response.status == 200
+                              section = page.locator('section.featured-writing')
+                              for image in section.locator('img').all():
+                                  image.scroll_into_view_if_needed()
+                                  image.evaluate('(img) => img.decode()')
+                              section.screenshot(path=str(out / (name + '-before.png')))
+                          for route in ['/blog', '/blog/language/zh-CN']:
+                              response = page.goto(base + route, wait_until='load')
+                              assert response.status == 200
+                              page.evaluate('document.fonts.ready')
+                              cards = page.locator('.featured-grid article')
+                              assert cards.count() == 4
+                              assert cards.locator('img, picture, canvas, svg').count() == 0
+                              actual = cards.locator('h3 a').evaluate_all('(links) => links.map(a => a.pathname.split("/").filter(Boolean).pop())')
+                              assert actual == expected, actual
+                              assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+                              assert page.locator('html').evaluate('(el) => el.classList.contains("dark")') == (theme == 'dark')
+                              styles = cards.evaluate_all('(cards) => cards.map(el => ({background: getComputedStyle(el).backgroundColor, image: getComputedStyle(el).backgroundImage, before: getComputedStyle(el, "::before").content, after: getComputedStyle(el, "::after").content, left: el.getBoundingClientRect().left, right: el.getBoundingClientRect().right, height: el.getBoundingClientRect().height}))')
+                              for s in styles:
+                                  assert s['image'] == 'none' and s['before'] in ['none', 'normal'] and s['after'] in ['none', 'normal'], s
+                                  assert s['background'] not in ['rgba(0, 0, 0, 0)', 'transparent'], s
+                                  assert s['left'] >= -1 and s['right'] <= width + 1, s
+                              for a in cards.locator('h3 a').all():
+                                  assert context.request.get(a.get_attribute('href').replace('/loraSys', base, 1)).status == 200
+                              if route == '/blog':
+                                  page.locator('section.featured-writing').screenshot(path=str(out / (name + '-after.png')))
+                                  link = cards.locator('h3 a').first
+                                  link.focus()
+                                  assert link.evaluate('(a) => a === document.activeElement && getComputedStyle(a).outlineStyle != "none"')
+                                  link.press('Enter')
+                                  page.wait_for_url(lambda url: urlsplit(url).path.rstrip('/').endswith('/blog/agent-budget-memory-evaluation'))
+                                  page.locator('.prose').wait_for()
+                                  assert page.locator('.prose img').count() == 4
+                              results.append({'viewport': name, 'route': route, 'pinned': actual, 'background_images': 0, 'horizontal_overflow': False, 'styles': styles})
+                          for route in ['/en/writing', '/blog/language/en-US']:
+                              assert page.goto(base + route, wait_until='load').status == 200
+                          if name == 'desktop':
+                              for slug, count in article_counts.items():
+                                  assert page.goto(base + '/blog/' + slug, wait_until='load').status == 200
+                                  images = page.locator('.prose img')
+                                  assert images.count() == count, slug
+                                  for image in images.all():
+                                      image.scroll_into_view_if_needed()
+                                      image.evaluate('(img) => img.decode()')
+                          context.close()
+                      browser.close()
+              finally:
+                  server.shutdown()
+                  server.server_close()
+          report = {'base_commit': base_commit, 'astro_check': 'passed', 'production_build': 'passed', 'browser_checks': results, 'article_images_retained': article_counts, 'files_changed': changed}
+          (out / 'verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+      - name: Save tested candidate tree without publishing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, json, os, pathlib, urllib.request
+          root = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY']
+          def api(path, data=None, method=None):
+              body = None if data is None else json.dumps(data).encode()
+              request = urllib.request.Request(root + path, data=body, method=method, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'})
+              with urllib.request.urlopen(request, timeout=30) as r:
+                  return json.load(r)
+          out = pathlib.Path(os.environ['OUTPUT'])
+          report = json.loads((out / 'verification.json').read_text())
+          files = []
+          for path in report['files_changed']:
+              blob = api('/git/blobs', {'content': pathlib.Path(path).read_text(), 'encoding': 'utf-8'})
+              files.append({'path': path, 'mode': '100644', 'type': 'blob', 'sha': blob['sha']})
+          tree = api('/git/trees', {'base_tree': '043c8fc34aa697742b2a0ee09bd6567e79e2b649', 'tree': files})
+          report.update({'candidate_tree': tree['sha'], 'files': files})
+          text = json.dumps(report, ensure_ascii=False, indent=2)
+          (out / 'candidate.json').write_text(text)
+          api('/contents/transfer/readable-cards-result.json', {'message': 'test(blog): record verified readable cards', 'branch': 'fix/readable-featured-cards-20260916', 'content': base64.b64encode(text.encode()).decode()}, 'PUT')
+          print('Candidate tree: ' + tree['sha'])
+      - name: Preserve screenshots and verification records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: readable-featured-cards-preview
+          path: /tmp/readable-cards-${{ github.run_id }}
+          retention-days: 2
+  live:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+    env:
+      OUTPUT: /tmp/readable-cards-live-${{ github.run_id }}
+    steps:
+      - name: Install isolated browser tools
+        run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Wait for candidate publication and deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, json, os, pathlib, time, urllib.request
+          root = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY']
+          def api(path):
+              req = urllib.request.Request(root + path, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json'})
+              with urllib.request.urlopen(req, timeout=30) as r:
+                  return json.load(r)
+          item = api('/contents/transfer/readable-cards-result.json?ref=fix%2Freadable-featured-cards-20260916')
+          candidate = json.loads(base64.b64decode(item['content']))
+          out = pathlib.Path(os.environ['OUTPUT'])
+          out.mkdir()
+          deadline = time.monotonic() + 600
+          while time.monotonic() < deadline:
+              sha = api('/git/ref/heads/main')['object']['sha']
+              commit = api('/git/commits/' + sha)
+              if commit['tree']['sha'] == candidate['candidate_tree']:
+                  runs = api('/actions/runs?head_sha=' + sha + '&per_page=10')['workflow_runs']
+                  matches = [r for r in runs if r['path'] == '.github/workflows/deploy.yml']
+                  if matches and matches[0]['status'] == 'completed':
+                      assert matches[0]['conclusion'] == 'success', matches[0]['conclusion']
+                      target = {'commit': sha, 'deployment': matches[0]['html_url'], 'homepage': 'https://lora-sys.github.io/loraSys'}
+                      (out / 'target.json').write_text(json.dumps(target))
+                      break
+              time.sleep(10)
+          else:
+              raise RuntimeError('Tested candidate has not completed publication')
+      - name: Check published cards and save real screenshots
+        shell: python
+        run: |
+          import json, os, pathlib
+          from playwright.sync_api import sync_playwright
+          out = pathlib.Path(os.environ['OUTPUT'])
+          target = json.loads((out / 'target.json').read_text())
+          expected = ['agent-budget-memory-evaluation', 'tau-agent-architecture', 'tau-agent-loop-events', 'ai-engineering-harness']
+          results = []
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              for name, width, height, theme in [('desktop', 1440, 1000, 'light'), ('mobile', 390, 844, 'light'), ('desktop-dark', 1440, 1000, 'dark')]:
+                  context = browser.new_context(viewport={'width': width, 'height': height}, reduced_motion='reduce')
+                  context.add_init_script("localStorage.setItem('theme', " + json.dumps(theme) + ")")
+                  page = context.new_page()
+                  for route in ['/blog', '/blog/language/zh-CN']:
+                      url = target['homepage'] + route + '?cards=' + target['commit'][:12]
+                      assert page.goto(url, wait_until='load').status == 200
+                      page.evaluate('document.fonts.ready')
+                      cards = page.locator('.featured-grid article')
+                      actual = cards.locator('h3 a').evaluate_all('(links) => links.map(a => a.pathname.split("/").filter(Boolean).pop())')
+                      assert actual == expected
+                      assert cards.locator('img, picture, canvas, svg').count() == 0
+                      assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+                      for link in cards.locator('h3 a').all():
+                          assert context.request.get(link.evaluate('(a) => a.href')).status == 200
+                      if route == '/blog':
+                          page.locator('section.featured-writing').screenshot(path=str(out / (name + '-cards.png')))
+                      results.append({'viewport': name, 'page': page.url, 'pinned': actual, 'background_images': 0, 'article_links': 'passed', 'horizontal_overflow': False})
+                  context.close()
+              browser.close()
+          report = {**target, 'checks': results}
+          (out / 'live-verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+      - name: Preserve live screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: readable-featured-cards-live
+          path: /tmp/readable-cards-live-${{ github.run_id }}
+          retention-days: 2
