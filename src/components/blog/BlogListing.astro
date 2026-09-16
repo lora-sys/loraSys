@@ -8,13 +8,6 @@ import { Button, Icon } from 'astro-pure/user'
 import readingMarker from '@/assets/lora-visual/v2/lora-v2-reading-marker.webp'
 import { fieldNotes } from '@/data/notes'
 import projectSnapshot from '@/data/github-projects.json'
-import coverAiEngineeringHarness from '@/assets/blog-covers/cover-1.webp'
-import coverFreeVisionSkill from '@/assets/blog-covers/cover-2.webp'
-import coverEveAgent from '@/assets/blog-covers/cover-3.webp'
-import coverWishlive from '@/assets/blog-covers/cover-4.webp'
-import coverAgentBudget from '@/assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png'
-import coverTauArchitecture from '@/assets/blog/tau-agent-architecture/tau_three_layers.png'
-import coverAgentLoop from '@/assets/blog/tau-agent-loop-events/agent_event_loop.png'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 
@@ -60,19 +53,12 @@ const curation: Record<string, { theme: string; whyRead: string }> = {
     whyRead: '从一次多智能体运行时构建，看产品原型、事件流和链上结算如何真正接起来。'
   }
 }
-const coverForId: Record<string, ImageMetadata> = {
-  'agent-budget-memory-evaluation': coverAgentBudget,
-  'tau-agent-architecture': coverTauArchitecture,
-  'tau-agent-loop-events': coverAgentLoop,
-  'ai-engineering-harness': coverAiEngineeringHarness,
-  'free-vision-skill': coverFreeVisionSkill,
-  'eve-agent': coverEveAgent,
-  'wishlive': coverWishlive
-}
 const featuredForView = featuredPosts
-  .map((post) => ({ post, cover: coverForId[post.id] }))
-  .filter((entry) => !activeLanguage || entry.post.data.language === activeLanguage)
-  .map((entry) => ({ post: entry.post, cover: entry.cover, ...(curation[entry.post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' }) }))
+  .filter((post) => !activeLanguage || post.data.language === activeLanguage)
+  .map((post) => ({
+    post,
+    ...(curation[post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' })
+  }))
 const languageTitle =
   activeLanguage === 'zh-CN'
     ? '中文文章'
@@ -155,7 +141,7 @@ const languageFilters = [
             <p>Agent 预算与评测、架构分层和事件流</p>
           </header>
           <div class='featured-grid'>
-            {featuredForView.map(({ post, theme, whyRead, cover }) => <FeaturedWriting {post} {theme} {whyRead} {cover} />)}
+            {featuredForView.map(({ post, theme, whyRead }) => <FeaturedWriting {post} {theme} {whyRead} />)}
           </div>
         </section>
       )
