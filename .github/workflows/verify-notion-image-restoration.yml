@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 20
     env:
       TRANSFER_BRANCH: fix/restore-notion-images-20260916
-      REVIEW_OUTPUT: ${{ runner.temp }}/notion-image-verification
+      REVIEW_OUTPUT: /tmp/notion-image-verification-${{ github.run_id }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -135,7 +135,6 @@ jobs:
                           response = page.goto(origin + route, wait_until='load')
                           assert response.status == 200, slug
                           expected = candidate['expected_counts'][slug]
-                          images = page.locator('img').filter(has_not=page.locator('noscript'))
                           if expected == 4:
                               images = page.locator('img[alt^="图 1，"], img[alt^="图 2，"], img[alt^="图 3，"], img[alt^="图 4，"]')
                           elif slug == 'tau-agent-architecture':
