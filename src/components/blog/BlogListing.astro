@@ -12,6 +12,9 @@ import coverAiEngineeringHarness from '@/assets/blog-covers/cover-1.webp'
 import coverFreeVisionSkill from '@/assets/blog-covers/cover-2.webp'
 import coverEveAgent from '@/assets/blog-covers/cover-3.webp'
 import coverWishlive from '@/assets/blog-covers/cover-4.webp'
+import coverAgentBudget from '@/assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png'
+import coverTauArchitecture from '@/assets/blog/tau-agent-architecture/tau_three_layers.png'
+import coverAgentLoop from '@/assets/blog/tau-agent-loop-events/agent_event_loop.png'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
 
@@ -28,6 +31,18 @@ interface Props {
 
 const { page, uniqueTags, collectionsCount, featuredPosts, activeLanguage } = Astro.props
 const curation: Record<string, { theme: string; whyRead: string }> = {
+  'agent-budget-memory-evaluation': {
+    theme: 'Agent Systems',
+    whyRead: '比较连续修改与独立尝试，按相同预算设计评测，并检查最终结果能否通过验收。'
+  },
+  'tau-agent-architecture': {
+    theme: 'Agent Systems',
+    whyRead: '分清模型适配、Agent 核心与应用层，检查工具和界面之间的依赖。'
+  },
+  'tau-agent-loop-events': {
+    theme: 'Agent Systems',
+    whyRead: '用 Python 示例观察工具调用、错误和结束事件，区分界面更新与会话记录。'
+  },
   'ai-engineering-harness': {
     theme: 'Agent Systems',
     whyRead: '看一套 Agent 工程如何从“能跑”走到可验证、可审查、可持续迭代。'
@@ -46,6 +61,9 @@ const curation: Record<string, { theme: string; whyRead: string }> = {
   }
 }
 const coverForId: Record<string, ImageMetadata> = {
+  'agent-budget-memory-evaluation': coverAgentBudget,
+  'tau-agent-architecture': coverTauArchitecture,
+  'tau-agent-loop-events': coverAgentLoop,
   'ai-engineering-harness': coverAiEngineeringHarness,
   'free-vision-skill': coverFreeVisionSkill,
   'eve-agent': coverEveAgent,
@@ -134,7 +152,7 @@ const languageFilters = [
         <section class='featured-writing animate' aria-labelledby='featured-writing-title'>
           <header class='featured-heading'>
             <div><p class='eyebrow'>精选笔记</p><h2 id='featured-writing-title'>先从这几篇读起</h2></div>
-            <p>智能体系统、多模态工具与公开构建</p>
+            <p>Agent 预算与评测、架构分层和事件流</p>
           </header>
           <div class='featured-grid'>
             {featuredForView.map(({ post, theme, whyRead, cover }) => <FeaturedWriting {post} {theme} {whyRead} {cover} />)}
