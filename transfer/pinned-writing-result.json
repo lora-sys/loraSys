@@ -1,0 +1,104 @@
+{
+  "base_commit": "4ebb3b9f2de857d5b98e6561ba0910fc48f547f4",
+  "astro_check": "passed",
+  "production_build": "passed",
+  "browser_checks": [
+    {
+      "viewport": "desktop",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "covers": 4,
+      "card_heights": [
+        280.09375,
+        280.09375,
+        300.3125,
+        300.3125
+      ],
+      "horizontal_overflow": false,
+      "links": "passed"
+    },
+    {
+      "viewport": "desktop",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "covers": 4,
+      "card_heights": [
+        280.09375,
+        280.09375,
+        300.3125,
+        300.3125
+      ],
+      "horizontal_overflow": false,
+      "links": "passed"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/blog",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "covers": 4,
+      "card_heights": [
+        296.1875,
+        275.96875,
+        274.109375,
+        296.1875
+      ],
+      "horizontal_overflow": false,
+      "links": "passed"
+    },
+    {
+      "viewport": "mobile",
+      "route": "/blog/language/zh-CN",
+      "pinned": [
+        "agent-budget-memory-evaluation",
+        "tau-agent-architecture",
+        "tau-agent-loop-events",
+        "ai-engineering-harness"
+      ],
+      "covers": 4,
+      "card_heights": [
+        296.1875,
+        275.96875,
+        274.109375,
+        296.1875
+      ],
+      "horizontal_overflow": false,
+      "links": "passed"
+    }
+  ],
+  "candidate_tree": "043c8fc34aa697742b2a0ee09bd6567e79e2b649",
+  "files": [
+    {
+      "path": "src/data/featured-posts.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de00a984e855a83412bc832658aef857179f7e28"
+    },
+    {
+      "path": "src/components/blog/BlogListing.astro",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c886e30081110bf0418c382da4ddfc90fc0d6497"
+    },
+    {
+      "path": "src/components/blog/FeaturedWriting.astro",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c3fd8c2ff30d39b6971b03fc76854d0585c0c20"
+    }
+  ]
+}
