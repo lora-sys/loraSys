@@ -1,0 +1,164 @@
+name: Verify refreshed pinned writing
+on:
+  push:
+    branches: [fix/pinned-writing-20260916]
+    paths: [.github/workflows/verify-pinned-writing.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+      OUTPUT: /tmp/pinned-writing-${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 4ebb3b9f2de857d5b98e6561ba0910fc48f547f4
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Update selected articles and their matching images
+        shell: python
+        run: |
+          import pathlib, os, hashlib
+          out = pathlib.Path(os.environ['OUTPUT'])
+          out.mkdir(parents=True, exist_ok=True)
+          def read_checked(path, expected):
+              raw = pathlib.Path(path).read_bytes()
+              sha = hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest()
+              assert sha == expected, (path, sha)
+              return raw.decode()
+          def replace_once(text, old, new):
+              assert text.count(old) == 1, old
+              return text.replace(old, new, 1)
+          ids = pathlib.Path('src/data/featured-posts.ts')
+          old = read_checked(ids, '30b32432163f7bee51fe53ddfdf1d1111861d3e2')
+          ids.write_text("// 写作页置顶文章，按数组顺序展示。ID 对应 src/content/blog 中的文章。\nexport const featuredPostIds = [\n  'agent-budget-memory-evaluation',\n  'tau-agent-architecture',\n  'tau-agent-loop-events',\n  'ai-engineering-harness'\n]\n")
+          page = pathlib.Path('src/components/blog/BlogListing.astro')
+          text = page.read_text()
+          text = replace_once(text, "import coverWishlive from '@/assets/blog-covers/cover-4.webp'", "import coverWishlive from '@/assets/blog-covers/cover-4.webp'\nimport coverAgentBudget from '@/assets/blog/agent-budget-memory-evaluation/agent-evaluation-flow.png'\nimport coverTauArchitecture from '@/assets/blog/tau-agent-architecture/tau_three_layers.png'\nimport coverAgentLoop from '@/assets/blog/tau-agent-loop-events/agent_event_loop.png'")
+          text = replace_once(text, "const curation: Record<string, { theme: string; whyRead: string }> = {", "const curation: Record<string, { theme: string; whyRead: string }> = {\n  'agent-budget-memory-evaluation': {\n    theme: 'Agent Systems',\n    whyRead: '比较连续修改与独立尝试，按相同预算设计评测，并检查最终结果能否通过验收。'\n  },\n  'tau-agent-architecture': {\n    theme: 'Agent Systems',\n    whyRead: '分清模型适配、Agent 核心与应用层，检查工具和界面之间的依赖。'\n  },\n  'tau-agent-loop-events': {\n    theme: 'Agent Systems',\n    whyRead: '用 Python 示例观察工具调用、错误和结束事件，区分界面更新与会话记录。'\n  },")
+          text = replace_once(text, 'const coverForId: Record<string, ImageMetadata> = {', "const coverForId: Record<string, ImageMetadata> = {\n  'agent-budget-memory-evaluation': coverAgentBudget,\n  'tau-agent-architecture': coverTauArchitecture,\n  'tau-agent-loop-events': coverAgentLoop,")
+          text = replace_once(text, '<p>智能体系统、多模态工具与公开构建</p>', '<p>Agent 预算与评测、架构分层和事件流</p>')
+          page.write_text(text)
+          for slug in ['agent-budget-memory-evaluation', 'tau-agent-architecture', 'tau-agent-loop-events', 'ai-engineering-harness']:
+              body = pathlib.Path('src/content/blog', slug + '.md').read_text()
+              assert 'draft: false' in body, slug
+          print('Prepared four pinned entries, three matching local covers, and reading descriptions.')
+      - name: Install locked site dependencies
+        run: bun install --frozen-lockfile
+      - name: Check and build production site
+        run: |
+          set -o pipefail
+          bun run check 2>&1 | tee "$OUTPUT/check.log"
+          bun run build 2>&1 | tee "$OUTPUT/build.log"
+      - name: Install isolated browser tools
+        run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+          npm install --prefix "$RUNNER_TEMP/pin-browser" --no-save --package-lock=false agent-browser
+      - name: Verify pinned order, images, links, and narrow screens
+        shell: python
+        run: |
+          import functools, http.server, json, os, pathlib, subprocess, threading
+          from playwright.sync_api import sync_playwright
+          out = pathlib.Path(os.environ['OUTPUT'])
+          root = out / 'server'
+          root.mkdir()
+          (root / 'loraSys').symlink_to(pathlib.Path('dist').resolve(), target_is_directory=True)
+          handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(root))
+          server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler)
+          threading.Thread(target=server.serve_forever, daemon=True).start()
+          base = f'http://127.0.0.1:{server.server_port}/loraSys'
+          expected = ['agent-budget-memory-evaluation', 'tau-agent-architecture', 'tau-agent-loop-events', 'ai-engineering-harness']
+          results = []
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              for name, width, height in [('desktop', 1440, 1000), ('mobile', 390, 844)]:
+                  context = browser.new_context(viewport={'width': width, 'height': height}, reduced_motion='reduce')
+                  page = context.new_page()
+                  response = page.goto('https://lora-sys.github.io/loraSys/blog', wait_until='load')
+                  assert response.status == 200
+                  page.evaluate('document.fonts.ready')
+                  section = page.locator('section.featured-writing')
+                  section.scroll_into_view_if_needed()
+                  for img in section.locator('img').all():
+                      img.scroll_into_view_if_needed()
+                      img.evaluate('(img) => img.decode()')
+                  section.screenshot(path=str(out / (name + '-before.png')))
+                  for route in ['/blog', '/blog/language/zh-CN']:
+                      response = page.goto(base + route, wait_until='load')
+                      assert response.status == 200, route
+                      page.evaluate('document.fonts.ready')
+                      links = page.locator('.featured-grid h3 a')
+                      actual = links.evaluate_all('(links) => links.map(a => a.pathname.split("/").filter(Boolean).pop())')
+                      assert actual == expected, actual
+                      assert page.locator('.featured-grid .why-read').count() == 4
+                      images = page.locator('.featured-grid img.featured-cover')
+                      assert images.count() == 4
+                      for img in images.all():
+                          img.scroll_into_view_if_needed()
+                          img.evaluate('(img) => img.decode()')
+                          info = img.evaluate('(img) => ({src: img.currentSrc, width: img.naturalWidth, left: img.getBoundingClientRect().left, right: img.getBoundingClientRect().right})')
+                          assert info['width'] > 0 and info['src'].startswith(base + '/_astro/'), info
+                          assert info['left'] >= 0 and info['right'] <= width, info
+                      assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), route
+                      if route == '/blog':
+                          page.locator('section.featured-writing').screenshot(path=str(out / (name + '-after.png')))
+                          links.first.focus()
+                          assert links.first.evaluate('(a) => a === document.activeElement')
+                          links.first.press('Enter')
+                          page.wait_for_url('**/blog/agent-budget-memory-evaluation*')
+                          assert page.locator('.prose img').count() >= 4
+                      results.append({'viewport': name, 'route': route, 'pinned': actual, 'covers': 4, 'horizontal_overflow': False})
+                  response = page.goto(base + '/en/writing', wait_until='load')
+                  assert response.status == 200
+                  assert page.locator('html').get_attribute('lang') == 'en-US'
+                  context.close()
+              browser.close()
+          ab = pathlib.Path(os.environ['RUNNER_TEMP']) / 'pin-browser/node_modules/.bin/agent-browser'
+          env = {**os.environ, 'AGENT_BROWSER_EXECUTABLE_PATH': p.chromium.executable_path}
+          subprocess.run([str(ab), 'open', base + '/blog'], check=True, env=env)
+          snap = subprocess.check_output([str(ab), 'snapshot', '-i'], env=env, text=True)
+          (out / 'agent-browser-snapshot.txt').write_text(snap)
+          subprocess.run([str(ab), 'close'], check=True, env=env)
+          server.shutdown()
+          report = {'base_commit': '4ebb3b9f2de857d5b98e6561ba0910fc48f547f4', 'astro_check': 'passed', 'production_build': 'passed', 'browser_checks': results}
+          (out / 'verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+      - name: Save clean candidate without publishing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, json, os, pathlib, urllib.request
+          api_root = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY']
+          def api(path, data=None, method=None):
+              body = None if data is None else json.dumps(data).encode()
+              request = urllib.request.Request(api_root + path, data=body, method=method, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+          files = []
+          for path in ['src/data/featured-posts.ts', 'src/components/blog/BlogListing.astro']:
+              blob = api('/git/blobs', {'content': pathlib.Path(path).read_text(), 'encoding': 'utf-8'})
+              files.append({'path': path, 'mode': '100644', 'type': 'blob', 'sha': blob['sha']})
+          tree = api('/git/trees', {'base_tree': 'be1d86e26765120f688910bf566f6ef67fb49ad2', 'tree': files})
+          out = pathlib.Path(os.environ['OUTPUT'])
+          report = json.loads((out / 'verification.json').read_text())
+          report.update({'candidate_tree': tree['sha'], 'files': files})
+          text = json.dumps(report, ensure_ascii=False, indent=2)
+          (out / 'candidate.json').write_text(text)
+          api('/contents/transfer/pinned-writing-result.json', {'message': 'test(blog): record verified pinned writing candidate', 'branch': 'fix/pinned-writing-20260916', 'content': base64.b64encode(text.encode()).decode()}, 'PUT')
+          print(text)
+      - name: Save screenshots and test records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinned-writing-verification
+          path: /tmp/pinned-writing-${{ github.run_id }}
+          retention-days: 2
+          if-no-files-found: warn
