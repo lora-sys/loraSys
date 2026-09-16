@@ -1,0 +1,105 @@
+name: Verify pinned writing on Pages
+on:
+  push:
+    branches: [fix/pinned-writing-20260916]
+    paths: [.github/workflows/check-pinned-writing-live.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OUTPUT: /tmp/pinned-writing-live-${{ github.run_id }}
+    steps:
+      - name: Install isolated browser tools
+        run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Wait for the verified candidate and Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, json, os, pathlib, time, urllib.error, urllib.request
+          out = pathlib.Path(os.environ['OUTPUT'])
+          out.mkdir()
+          root = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY']
+          def api(path):
+              request = urllib.request.Request(root + path, headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json'})
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+          deadline = time.monotonic() + 660
+          target = None
+          while time.monotonic() < deadline:
+              try:
+                  f = api('/contents/transfer/pinned-writing-result.json?ref=fix%2Fpinned-writing-20260916')
+                  candidate = json.loads(base64.b64decode(f['content']))
+                  sha = api('/git/ref/heads/main')['object']['sha']
+                  commit = api('/git/commits/' + sha)
+                  if commit['tree']['sha'] == candidate['candidate_tree']:
+                      runs = api('/actions/runs?head_sha=' + sha + '&per_page=10')['workflow_runs']
+                      runs = [r for r in runs if r['path'] == '.github/workflows/deploy.yml']
+                      if runs and runs[0]['status'] == 'completed':
+                          assert runs[0]['conclusion'] == 'success', 'Pages deployment failed'
+                          target = {'commit': sha, 'deployment': runs[0]['html_url']}
+                          break
+              except urllib.error.HTTPError as error:
+                  if error.code != 404:
+                      raise
+              time.sleep(10)
+          assert target, 'Verified candidate has not finished deploying'
+          (out / 'target.json').write_text(json.dumps(target))
+      - name: Check live order and local images on desktop and mobile
+        shell: python
+        run: |
+          import json, os, pathlib
+          from playwright.sync_api import sync_playwright
+          out = pathlib.Path(os.environ['OUTPUT'])
+          target = json.loads((out / 'target.json').read_text())
+          base = 'https://lora-sys.github.io/loraSys'
+          expected = ['agent-budget-memory-evaluation', 'tau-agent-architecture', 'tau-agent-loop-events', 'ai-engineering-harness']
+          results = []
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              for name, width, height in [('desktop', 1440, 1000), ('mobile', 390, 844)]:
+                  context = browser.new_context(viewport={'width': width, 'height': height}, reduced_motion='reduce')
+                  page = context.new_page()
+                  for route in ['/blog', '/blog/language/zh-CN']:
+                      response = page.goto(base + route + '?pin_update=' + target['commit'][:12], wait_until='load')
+                      assert response.status == 200
+                      page.evaluate('document.fonts.ready')
+                      links = page.locator('.featured-grid h3 a')
+                      actual = links.evaluate_all('(links) => links.map(a => a.pathname.split("/").filter(Boolean).pop())')
+                      assert actual == expected, actual
+                      images = page.locator('.featured-grid img.featured-cover')
+                      assert images.count() == 4
+                      covers = []
+                      for image in images.all():
+                          image.scroll_into_view_if_needed()
+                          image.evaluate('(img) => img.decode()')
+                          info = image.evaluate('(img) => ({src: img.currentSrc, width: img.naturalWidth})')
+                          assert info['width'] > 0 and info['src'].startswith(base + '/_astro/'), info
+                          assert context.request.get(info['src']).status == 200
+                          covers.append(info)
+                      for href in links.evaluate_all('(links) => links.map(a => a.href)'):
+                          assert context.request.get(href).status == 200
+                      assert page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1')
+                      if route == '/blog':
+                          page.locator('section.featured-writing').screenshot(path=str(out / (name + '-pinned-writing.png')))
+                      results.append({'viewport': name, 'route': route, 'pinned': actual, 'covers': covers})
+                  context.close()
+              browser.close()
+          report = {**target, 'results': results}
+          (out / 'live-verification.json').write_text(json.dumps(report, ensure_ascii=False, indent=2))
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+      - name: Save live screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinned-writing-live
+          path: /tmp/pinned-writing-live-${{ github.run_id }}
+          retention-days: 2
+          if-no-files-found: warn
