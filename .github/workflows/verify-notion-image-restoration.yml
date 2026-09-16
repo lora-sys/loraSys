@@ -1,0 +1,197 @@
+name: Verify restored Notion article images
+on:
+  push:
+    branches: [fix/restore-notion-images-20260916]
+    paths: [.github/workflows/verify-notion-image-restoration.yml]
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TRANSFER_BRANCH: fix/restore-notion-images-20260916
+      REVIEW_OUTPUT: ${{ runner.temp }}/notion-image-verification
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Restore images and patch only their article positions
+        shell: python
+        run: |
+          import hashlib, json, os, pathlib, subprocess
+          out = pathlib.Path(os.environ['REVIEW_OUTPUT'])
+          out.mkdir()
+          def git(*args):
+              return subprocess.check_output(['git', *args])
+          base = git('rev-parse', 'HEAD').decode().strip()
+          branch = os.environ['TRANSFER_BRANCH']
+          subprocess.run(['git', 'fetch', '--depth=1', 'origin', 'refs/heads/' + branch + ':refs/remotes/origin/' + branch], check=True)
+          ref = 'refs/remotes/origin/' + branch
+          sources = json.loads(git('show', ref + ':transfer/result.json'))
+          expected_counts = {'agent-budget-memory-evaluation': 4, 'tau-agent-architecture': 1, 'tau-agent-loop-events': 1}
+          assert sources['count'] == 6
+          paths = []
+          for image in sources['original_images']:
+              path = image['path']
+              assert path.startswith('src/assets/blog/') and '..' not in path
+              data = git('show', ref + ':' + path)
+              assert hashlib.sha256(data).hexdigest() == image['sha256']
+              target = pathlib.Path(path)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(data)
+              paths.append(path)
+          def replace_once(text, old, new):
+              if text.count(old) != 1:
+                  raise RuntimeError('Article insertion anchor is not unique: ' + old[:80])
+              return text.replace(old, new, 1)
+          def figure(slug, filename, caption):
+              return '![' + caption + '](../../assets/blog/' + slug + '/' + filename + ')\n\n' + caption + '\n\n'
+          slug = 'agent-budget-memory-evaluation'
+          path = pathlib.Path('src/content/blog/' + slug + '.md')
+          text = path.read_text()
+          text = replace_once(text, '普通问答评测检查回答是否正确。', figure(slug, 'agent-evaluation-flow.png', '图 1，普通问答评测与 Agent 评测的区别。图片来源为 Anthropic。') + '普通问答评测检查回答是否正确。')
+          text = replace_once(text, '假设一次任务有下面两次提交。所有数字都是教学示例。\n\n', '假设一次任务有下面四次提交。所有数字都是教学示例。\n\n' + figure(slug, 'best-so-far.svg', '图 2，历史最好成绩与本次提交成绩。教学假设数据，不是论文实验结果。') + '下面摘出图中的两次提交。\n\n')
+          text = replace_once(text, '| 会话数量 | Joint-Elo |', figure(slug, 'session-allocation.svg', '图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。') + '| 会话数量 | Joint-Elo |')
+          text = replace_once(text, '多试几次更容易至少成功一次。要求每一次都成功，会越来越难满足。', figure(slug, 'pass-at-k-and-pass-all.png', '图 4，至少成功一次与每次都成功，是两种不同要求。图片来源为 Anthropic，图中使用原文的示例参数。') + '多试几次更容易至少成功一次。要求每一次都成功，会越来越难满足。')
+          text = replace_once(text, '我们用一个假设算一遍。假设每次独立运行的成功率都是 80%。', '我们另外用一个假设算一遍，不与原图的参数混用。假设每次独立运行的成功率都是 80%。')
+          path.write_text(text)
+          slug = 'tau-agent-architecture'
+          path = pathlib.Path('src/content/blog/' + slug + '.md')
+          text = path.read_text()
+          text = replace_once(text, '## 三层分别负责什么\n\n', '## 三层分别负责什么\n\n' + figure(slug, 'tau_three_layers.png', 'Tau 三层架构示意图。'))
+          path.write_text(text)
+          slug = 'tau-agent-loop-events'
+          path = pathlib.Path('src/content/blog/' + slug + '.md')
+          text = path.read_text()
+          text = replace_once(text, '| 阶段 | 程序处理的内容 |', figure(slug, 'agent_event_loop.png', 'Agent 事件循环示意图。') + '| 阶段 | 程序处理的内容 |')
+          path.write_text(text)
+          for slug, count in expected_counts.items():
+              path = pathlib.Path('src/content/blog/' + slug + '.md')
+              text = path.read_text()
+              assert text.count('](../../assets/blog/' + slug + '/') == count
+              assert 'X-Amz-' not in text and 'prod-files-secure' not in text
+              paths.append(str(path))
+              target = out / path
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_text(text)
+          (out / 'candidate.json').write_text(json.dumps({'base_commit': base, 'paths': paths, 'expected_counts': expected_counts}, indent=2))
+          diff = git('diff', '--', 'src/content/blog').decode()
+          (out / 'articles.patch').write_text(diff)
+          print(diff)
+      - name: Install locked site dependencies
+        run: bun install --frozen-lockfile
+      - name: Check Astro types
+        run: bun run check
+      - name: Build production site
+        env:
+          NODE_OPTIONS: --max-old-space-size=3072
+        run: bun run build
+      - name: Install temporary browser verification tools
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+          sudo apt-get install -y fonts-noto-cjk
+      - name: Verify desktop and mobile image rendering
+        shell: python
+        run: |
+          import functools, http.server, json, os, pathlib, re, threading, urllib.parse
+          from playwright.sync_api import sync_playwright
+          out = pathlib.Path(os.environ['REVIEW_OUTPUT'])
+          candidate = json.loads((out / 'candidate.json').read_text())
+          root = pathlib.Path('dist').resolve()
+          config = pathlib.Path('astro.config.ts').read_text()
+          base = re.search(r"base:\s*['\"]([^'\"]+)['\"]", config).group(1).rstrip('/')
+          class Handler(http.server.SimpleHTTPRequestHandler):
+              def translate_path(self, path):
+                  p = urllib.parse.urlsplit(path).path
+                  if p == base or p.startswith(base + '/'):
+                      p = p[len(base):] or '/'
+                  return super().translate_path(p)
+              def log_message(self, *args):
+                  pass
+          handler = functools.partial(Handler, directory=str(root))
+          server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler)
+          threading.Thread(target=server.serve_forever, daemon=True).start()
+          origin = 'http://127.0.0.1:' + str(server.server_address[1])
+          pages = {}
+          for slug in candidate['expected_counts']:
+              matches = [p for p in root.rglob('*.html') if p.relative_to(root).as_posix() in ('blog/' + slug + '/index.html', 'blog/' + slug + '.html')]
+              if len(matches) != 1:
+                  raise RuntimeError('Cannot identify built article route for ' + slug)
+              rel = matches[0].relative_to(root).as_posix()
+              pages[slug] = base + '/' + (rel[:-10] if rel.endswith('index.html') else rel)
+          results = []
+          try:
+              with sync_playwright() as p:
+                  browser = p.chromium.launch()
+                  for label, width, height in [('desktop', 1440, 1000), ('mobile', 390, 844)]:
+                      context = browser.new_context(viewport={'width': width, 'height': height}, reduced_motion='reduce', device_scale_factor=1)
+                      page = context.new_page()
+                      for slug, route in pages.items():
+                          response = page.goto(origin + route, wait_until='load')
+                          assert response.status == 200, slug
+                          expected = candidate['expected_counts'][slug]
+                          images = page.locator('img').filter(has_not=page.locator('noscript'))
+                          if expected == 4:
+                              images = page.locator('img[alt^="图 1，"], img[alt^="图 2，"], img[alt^="图 3，"], img[alt^="图 4，"]')
+                          elif slug == 'tau-agent-architecture':
+                              images = page.get_by_alt_text('Tau 三层架构示意图。', exact=True)
+                          else:
+                              images = page.get_by_alt_text('Agent 事件循环示意图。', exact=True)
+                          assert images.count() == expected, slug + ': missing images'
+                          for i in range(expected):
+                              image = images.nth(i)
+                              image.scroll_into_view_if_needed()
+                              image.evaluate('(img) => img.decode()')
+                              info = image.evaluate('(img) => ({src: img.currentSrc, alt: img.alt, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight, width: img.getBoundingClientRect().width, left: img.getBoundingClientRect().left, right: img.getBoundingClientRect().right})')
+                              assert info['naturalWidth'] > 0 and info['naturalHeight'] > 0
+                              assert info['src'].startswith(origin + base + '/'), info['src']
+                              assert info['width'] > 0 and info['left'] >= -1 and info['right'] <= width + 1, 'Image overflows viewport'
+                              image.screenshot(path=str(out / (label + '-' + slug + '-' + str(i + 1) + '.png')))
+                              results.append({'viewport': label, 'article': slug, 'route': route, **info})
+                          images.first.scroll_into_view_if_needed()
+                          page.screenshot(path=str(out / (label + '-' + slug + '-context.png')))
+                      context.close()
+                  browser.close()
+          finally:
+              server.shutdown()
+          (out / 'browser-verification.json').write_text(json.dumps({'image_checks_passed': len(results), 'results': results}, ensure_ascii=False, indent=2))
+          print('Passed ' + str(len(results)) + ' original-image render checks across desktop and mobile.')
+      - name: Publish clean candidate tree metadata without changing main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import base64, json, os, pathlib, urllib.parse, urllib.request
+          out = pathlib.Path(os.environ['REVIEW_OUTPUT'])
+          candidate = json.loads((out / 'candidate.json').read_text())
+          api_root = 'https://api.github.com/repos/' + os.environ['GITHUB_REPOSITORY']
+          headers = {'Authorization': 'Bearer ' + os.environ['GH_TOKEN'], 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28'}
+          def api(path, data=None, method=None):
+              request = urllib.request.Request(api_root + path, data=None if data is None else json.dumps(data).encode(), headers=headers, method=method or ('GET' if data is None else 'POST'))
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+          base = api('/git/commits/' + candidate['base_commit'])['tree']['sha']
+          entries = []
+          for path in candidate['paths']:
+              data = pathlib.Path(path).read_bytes()
+              blob = api('/git/blobs', {'content': base64.b64encode(data).decode(), 'encoding': 'base64'})
+              entries.append({'path': path, 'mode': '100644', 'type': 'blob', 'sha': blob['sha']})
+          assert len(entries) == 9
+          tree = api('/git/trees', {'base_tree': base, 'tree': entries})
+          report = {'base_commit': candidate['base_commit'], 'candidate_tree': tree['sha'], 'files': entries, 'astro_check': 'passed', 'production_build': 'passed', 'browser_verification': json.loads((out / 'browser-verification.json').read_text())}
+          text = json.dumps(report, ensure_ascii=False, indent=2)
+          (out / 'verified-result.json').write_text(text)
+          api('/contents/transfer/verified-result.json', {'message': 'test(blog): record verified original-image candidate', 'content': base64.b64encode(text.encode()).decode(), 'branch': os.environ['TRANSFER_BRANCH']}, 'PUT')
+          print('Clean candidate tree ready: ' + tree['sha'])
+      - name: Upload visual and build verification records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-image-restoration-verification
+          path: ${{ env.REVIEW_OUTPUT }}/
+          retention-days: 1
