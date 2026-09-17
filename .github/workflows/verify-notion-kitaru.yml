@@ -1,0 +1,95 @@
+name: Verify Notion Kitaru article
+
+on:
+  push:
+    branches:
+      - automation/notion-kitaru-20260917
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Verify migrated source and SVG assets
+        run: |
+          set -euo pipefail
+          test -f src/content/blog/kitaru-agent-regression-testing.md
+          test "$(grep -c '../../assets/blog/kitaru-agent-regression-testing/' src/content/blog/kitaru-agent-regression-testing.md)" -eq 4
+          ! grep -q 'prod-files-secure.s3' src/content/blog/kitaru-agent-regression-testing.md
+          for f in src/assets/blog/kitaru-agent-regression-testing/*.svg; do
+            grep -q '<svg' "$f"
+            ! grep -Eqi '<script|<foreignObject|javascript:|https?://' "$f"
+          done
+          test "$(find src/assets/blog/kitaru-agent-regression-testing -maxdepth 1 -name '*.svg' | wc -l)" -eq 4
+      - name: Check content and build
+        run: |
+          bun run check
+          NODE_OPTIONS=--max-old-space-size=3072 bun run build
+      - name: Start preview
+        run: |
+          nohup bun run preview --host 127.0.0.1 --port 4321 >/tmp/kitaru-preview.log 2>&1 &
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/kitaru-preview.log
+          exit 1
+      - name: Install isolated browser tools
+        run: |
+          mkdir -p /tmp/kitaru-browser
+          cd /tmp/kitaru-browser
+          npm init -y >/dev/null
+          npm install playwright@1.55.0 >/dev/null
+          npx playwright install chromium
+      - name: Check desktop and mobile rendering
+        run: |
+          cat >/tmp/kitaru-browser/check.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const url = 'http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing';
+          const browser = await chromium.launch({ headless: true });
+          const results = [];
+          for (const [name, viewport] of Object.entries({ desktop: { width: 1440, height: 1000 }, mobile: { width: 390, height: 844 } })) {
+            const page = await browser.newPage({ viewportSize: viewport });
+            const response = await page.goto(url, { waitUntil: 'networkidle' });
+            if (!response || !response.ok()) throw new Error(`${name}: article HTTP ${response?.status()}`);
+            await page.getByRole('heading', { level: 1, name: /Agent 线上出过的错/ }).waitFor();
+            const data = await page.evaluate(() => {
+              const imgs = [...document.querySelectorAll('img')].filter((img) => img.src.includes('kitaru-agent-regression-testing'));
+              return {
+                images: imgs.map((img) => ({ src: img.src, complete: img.complete, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight })),
+                scrollWidth: document.documentElement.scrollWidth,
+                clientWidth: document.documentElement.clientWidth
+              };
+            });
+            if (data.images.length !== 4) throw new Error(`${name}: expected 4 migrated images, got ${data.images.length}`);
+            if (data.images.some((img) => !img.complete || img.naturalWidth <= 0 || img.naturalHeight <= 0)) throw new Error(`${name}: an image failed to decode`);
+            if (data.scrollWidth > data.clientWidth + 1) throw new Error(`${name}: horizontal overflow ${data.scrollWidth} > ${data.clientWidth}`);
+            await page.screenshot({ path: `/tmp/kitaru-browser/${name}.png`, fullPage: true });
+            results.push({ name, ...data });
+            await page.close();
+          }
+          await browser.close();
+          fs.writeFileSync('/tmp/kitaru-browser/result.json', JSON.stringify(results, null, 2));
+          EOF
+          cd /tmp/kitaru-browser
+          node check.mjs
+          cat result.json
+      - name: Upload verification screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-kitaru-verification
+          path: |
+            /tmp/kitaru-browser/desktop.png
+            /tmp/kitaru-browser/mobile.png
+            /tmp/kitaru-browser/result.json
+          if-no-files-found: error
+          retention-days: 2
