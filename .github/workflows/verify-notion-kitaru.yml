@@ -57,19 +57,21 @@ jobs:
           const url = 'http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing';
           const browser = await chromium.launch({ headless: true });
           const results = [];
+          const migratedImage = /2026-09-16-(regression-loop|tool-policy|outcome-trace|regression-set)/;
           for (const [name, viewport] of Object.entries({ desktop: { width: 1440, height: 1000 }, mobile: { width: 390, height: 844 } })) {
             const page = await browser.newPage({ viewportSize: viewport });
             const response = await page.goto(url, { waitUntil: 'networkidle' });
             if (!response || !response.ok()) throw new Error(`${name}: article HTTP ${response?.status()}`);
             await page.getByRole('heading', { level: 1, name: /Agent 线上出过的错/ }).waitFor();
-            const data = await page.evaluate(() => {
-              const imgs = [...document.querySelectorAll('img')].filter((img) => img.src.includes('kitaru-agent-regression-testing'));
+            const data = await page.evaluate((pattern) => {
+              const re = new RegExp(pattern);
+              const imgs = [...document.querySelectorAll('img')].filter((img) => re.test(img.src));
               return {
                 images: imgs.map((img) => ({ src: img.src, complete: img.complete, naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight })),
                 scrollWidth: document.documentElement.scrollWidth,
                 clientWidth: document.documentElement.clientWidth
               };
-            });
+            }, migratedImage.source);
             if (data.images.length !== 4) throw new Error(`${name}: expected 4 migrated images, got ${data.images.length}`);
             if (data.images.some((img) => !img.complete || img.naturalWidth <= 0 || img.naturalHeight <= 0)) throw new Error(`${name}: an image failed to decode`);
             if (data.scrollWidth > data.clientWidth + 1) throw new Error(`${name}: horizontal overflow ${data.scrollWidth} > ${data.clientWidth}`);
@@ -84,6 +86,7 @@ jobs:
           node check.mjs
           cat result.json
       - name: Upload verification screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: notion-kitaru-verification
@@ -91,5 +94,5 @@ jobs:
             /tmp/kitaru-browser/desktop.png
             /tmp/kitaru-browser/mobile.png
             /tmp/kitaru-browser/result.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 2
