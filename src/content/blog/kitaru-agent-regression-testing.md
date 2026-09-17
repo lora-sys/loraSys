@@ -184,3 +184,5 @@ Replay 不是时间机器。你记录下来的只是当时能观察到的输入�
 [Kitaru Regression Suite](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)：固定 cohort、experiment、CI gate 和长期维护方式。
 
 [Anthropic，Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)：Outcome、Transcript、grader、能力评测与回归评测的区分。
+
+抓取与核对日期：2026 年 9 月 16 日。本文没有运行 Kitaru，也没有复现它的端到端示例。Kitaru 的功能说明来自其官方仓库与文档，工程迁移部分是基于这些机制和当前 Zhihu Threads eval v3 状态给出的实现建议。
