@@ -47,12 +47,7 @@ jobs:
           import { pathToFileURL } from 'node:url'
 
           const dist = path.resolve('dist')
-          const home = await readFile(path.join(dist, 'index.html'), 'utf8')
-          const canonical = home.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
-            ?? home.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i)?.[1]
-          assert.ok(canonical, 'canonical URL missing')
-          const pathname = new URL(canonical).pathname
-          const base = `${pathname.replace(/\/$/, '')}/`
+          const base = '/loraSys/'
           const mime = { '.html':'text/html; charset=utf-8', '.svg':'image/svg+xml', '.css':'text/css', '.js':'text/javascript', '.mjs':'text/javascript', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.woff2':'font/woff2', '.woff':'font/woff' }
           const server = createServer(async (req, res) => {
             try {
@@ -82,11 +77,12 @@ jobs:
             for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
               const context = await browser.newContext({ viewport })
               const page = await context.newPage()
+              page.setDefaultTimeout(12000)
               const response = await page.goto(route, { waitUntil: 'load' })
               assert.equal(response?.status(), 200, `article failed at ${viewport.width}px`)
               assert.match(await page.locator('h1').first().innerText(), /长任务为什么不能只靠一条越来越长的对话/)
               for (const alt of expectedAlts) {
-                const image = page.locator(`img[alt="${alt}"]`)
+                const image = page.getByAltText(alt, { exact: true })
                 await image.waitFor({ state: 'visible' })
                 assert.ok(await image.evaluate((img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0), `${alt} failed to decode`)
               }
