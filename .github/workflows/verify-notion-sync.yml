@@ -32,44 +32,75 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/notion-sync-browser" --no-save --package-lock=false playwright@1.58.2
           node "$RUNNER_TEMP/notion-sync-browser/node_modules/playwright/cli.js" install --with-deps chromium
-          echo "PW_MODULE=$RUNNER_TEMP/notion-sync-browser/node_modules/playwright" >> "$GITHUB_ENV"
-      - name: Check article on desktop and mobile
+          echo "PLAYWRIGHT_MODULE=$RUNNER_TEMP/notion-sync-browser/node_modules/playwright/index.mjs" >> "$GITHUB_ENV"
+      - name: Run site browser regression
+        env:
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/notion-sync-regressions
+        run: node scripts/test-site-regressions.mjs
+      - name: Check new article on desktop and mobile
         run: |
-          bun run preview -- --host 127.0.0.1 --port 4321 >/tmp/notion-sync-preview.log 2>&1 &
-          preview_pid=$!
-          trap 'kill $preview_pid || true' EXIT
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4321/loraSys/blog/long-running-agent-session-context-state >/dev/null; then break; fi
-            sleep 1
-          done
-          node <<'NODE'
-          const { chromium } = require(process.env.PW_MODULE)
-          const url = 'http://127.0.0.1:4321/loraSys/blog/long-running-agent-session-context-state'
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict'
+          import { createServer } from 'node:http'
+          import { readFile, stat } from 'node:fs/promises'
+          import path from 'node:path'
+          import { pathToFileURL } from 'node:url'
+
+          const dist = path.resolve('dist')
+          const home = await readFile(path.join(dist, 'index.html'), 'utf8')
+          const canonical = home.match(/<link[^>]+rel=["']canonical["'][^>]+href=["']([^"']+)["']/i)?.[1]
+            ?? home.match(/<link[^>]+href=["']([^"']+)["'][^>]+rel=["']canonical["']/i)?.[1]
+          assert.ok(canonical, 'canonical URL missing')
+          const pathname = new URL(canonical).pathname
+          const base = `${pathname.replace(/\/$/, '')}/`
+          const mime = { '.html':'text/html; charset=utf-8', '.svg':'image/svg+xml', '.css':'text/css', '.js':'text/javascript', '.mjs':'text/javascript', '.webp':'image/webp', '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.woff2':'font/woff2', '.woff':'font/woff' }
+          const server = createServer(async (req, res) => {
+            try {
+              const url = new URL(req.url, 'http://localhost')
+              if (!url.pathname.startsWith(base)) { res.writeHead(404); res.end(); return }
+              let file = path.resolve(dist, decodeURIComponent(url.pathname.slice(base.length)))
+              let info
+              try { info = await stat(file) } catch { file += '.html'; info = await stat(file) }
+              if (info.isDirectory()) file = path.join(file, 'index.html')
+              const body = await readFile(file)
+              res.writeHead(200, { 'Content-Type': mime[path.extname(file)] ?? 'application/octet-stream' })
+              res.end(body)
+            } catch { res.writeHead(404); res.end('Not found') }
+          })
+          await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve) })
+          const origin = `http://127.0.0.1:${server.address().port}`
+          const { chromium } = await import(pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE)).href)
           const browser = await chromium.launch({ headless: true })
+          const route = `${origin}${base}blog/long-running-agent-session-context-state`
+          const expectedAlts = [
+            'Session 不等于 Context Window，长任务靠持久状态接力。',
+            '长任务要分清工作上下文、任务状态和环境状态。',
+            '交接文件应保存可继续执行的信息，而不是聊天摘要。',
+            '迁移到 Agent Harness 的最小结构。'
+          ]
           try {
             for (const viewport of [{ width: 1280, height: 900 }, { width: 390, height: 844 }]) {
-              const page = await browser.newPage({ viewport })
-              const response = await page.goto(url, { waitUntil: 'networkidle' })
-              if (!response || !response.ok()) throw new Error(`article request failed: ${response?.status()}`)
-              const title = await page.locator('h1').first().textContent()
-              if (!title?.includes('长任务为什么不能只靠一条越来越长的对话')) throw new Error('article title missing')
-              const images = page.locator('img[src*="long-running-agent-session-context-state"]')
-              const count = await images.count()
-              if (count !== 4) throw new Error(`expected 4 article images, found ${count}`)
-              for (let i = 0; i < count; i++) {
-                const ok = await images.nth(i).evaluate(img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0)
-                if (!ok) throw new Error(`article image ${i + 1} failed to decode`)
+              const context = await browser.newContext({ viewport })
+              const page = await context.newPage()
+              const response = await page.goto(route, { waitUntil: 'load' })
+              assert.equal(response?.status(), 200, `article failed at ${viewport.width}px`)
+              assert.match(await page.locator('h1').first().innerText(), /长任务为什么不能只靠一条越来越长的对话/)
+              for (const alt of expectedAlts) {
+                const image = page.locator(`img[alt="${alt}"]`)
+                await image.waitFor({ state: 'visible' })
+                assert.ok(await image.evaluate((img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0), `${alt} failed to decode`)
               }
               const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)
-              if (overflow) throw new Error(`horizontal overflow at ${viewport.width}px`)
+              assert.equal(overflow, false, `horizontal overflow at ${viewport.width}px`)
               const code = page.locator('pre').first()
               if (await code.count()) {
                 const box = await code.boundingBox()
-                if (box && box.width > viewport.width) throw new Error(`code block exceeds viewport at ${viewport.width}px`)
+                assert.ok(!box || box.width <= viewport.width, `code block exceeds ${viewport.width}px viewport`)
               }
-              await page.close()
+              await context.close()
             }
           } finally {
             await browser.close()
+            server.close()
           }
           NODE
