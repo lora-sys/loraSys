@@ -66,6 +66,21 @@ jobs:
             const response = await page.goto(url, { waitUntil: 'networkidle' });
             if (!response || !response.ok()) throw new Error(`${name}: article HTTP ${response?.status()}`);
             await page.getByRole('heading', { level: 1, name: /Agent 线上出过的错/ }).waitFor();
+            const imageHandles = await page.locator('img').all();
+            for (const image of imageHandles) {
+              const src = await image.getAttribute('src');
+              if (!src || !migratedImage.test(src)) continue;
+              await image.scrollIntoViewIfNeeded();
+              await image.evaluate(async (img) => {
+                if (!img.complete || img.naturalWidth <= 0) {
+                  await new Promise((resolve, reject) => {
+                    const timer = setTimeout(() => reject(new Error(`image load timeout: ${img.src}`)), 10000);
+                    img.addEventListener('load', () => { clearTimeout(timer); resolve(); }, { once: true });
+                    img.addEventListener('error', () => { clearTimeout(timer); reject(new Error(`image load error: ${img.src}`)); }, { once: true });
+                  });
+                }
+              });
+            }
             const data = await page.evaluate((pattern) => {
               const re = new RegExp(pattern);
               const imgs = [...document.querySelectorAll('img')].filter((img) => re.test(img.src));
