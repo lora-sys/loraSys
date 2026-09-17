@@ -33,11 +33,14 @@ jobs:
         run: |
           bun run check
           NODE_OPTIONS=--max-old-space-size=3072 bun run build
-      - name: Start preview
+      - name: Start Pages-shaped preview
         run: |
-          nohup bun run preview --host 127.0.0.1 --port 4321 >/tmp/kitaru-preview.log 2>&1 &
+          rm -rf /tmp/kitaru-site
+          mkdir -p /tmp/kitaru-site/loraSys
+          cp -a dist/. /tmp/kitaru-site/loraSys/
+          nohup python3 -m http.server 4321 --bind 127.0.0.1 --directory /tmp/kitaru-site >/tmp/kitaru-preview.log 2>&1 &
           for i in {1..30}; do
-            if curl -fsS http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing >/dev/null; then exit 0; fi
+            if curl -fsS http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing/ >/dev/null; then exit 0; fi
             sleep 1
           done
           cat /tmp/kitaru-preview.log
@@ -54,7 +57,7 @@ jobs:
           cat >/tmp/kitaru-browser/check.mjs <<'EOF'
           import { chromium } from 'playwright';
           import fs from 'node:fs';
-          const url = 'http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing';
+          const url = 'http://127.0.0.1:4321/loraSys/blog/kitaru-agent-regression-testing/';
           const browser = await chromium.launch({ headless: true });
           const results = [];
           const migratedImage = /2026-09-16-(regression-loop|tool-policy|outcome-trace|regression-set)/;
@@ -72,6 +75,7 @@ jobs:
                 clientWidth: document.documentElement.clientWidth
               };
             }, migratedImage.source);
+            console.log(name, JSON.stringify(data));
             if (data.images.length !== 4) throw new Error(`${name}: expected 4 migrated images, got ${data.images.length}`);
             if (data.images.some((img) => !img.complete || img.naturalWidth <= 0 || img.naturalHeight <= 0)) throw new Error(`${name}: an image failed to decode`);
             if (data.scrollWidth > data.clientWidth + 1) throw new Error(`${name}: horizontal overflow ${data.scrollWidth} > ${data.clientWidth}`);
