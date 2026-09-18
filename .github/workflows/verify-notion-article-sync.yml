@@ -56,25 +56,22 @@ jobs:
             const page = await browser.newPage({ viewportSize: viewport })
             const failed = []
             page.on('requestfailed', request => failed.push(`${request.url()} :: ${request.failure()?.errorText}`))
-            const response = await page.goto(url, { waitUntil: 'networkidle' })
+            const response = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 })
             if (!response || response.status() !== 200) throw new Error(`${name}: article status ${response?.status()}`)
             const title = await page.locator('h1').first().textContent()
             if (!title?.includes('Tool Search')) throw new Error(`${name}: wrong title`)
             const articleText = await page.locator('article').first().textContent()
             if (!articleText?.includes('MCP、Tool Search 和 ARD')) throw new Error(`${name}: article body missing`)
-            const imgs = page.locator('article img')
-            const snapshots = await imgs.evaluateAll(nodes => nodes.map(img => ({alt: img.alt, src: img.currentSrc || img.src, complete: img.complete, width: img.naturalWidth, height: img.naturalHeight})))
-            console.log(`${name} images`, JSON.stringify(snapshots, null, 2))
-            if (failed.length) console.log(`${name} failed requests`, JSON.stringify(failed, null, 2))
             for (const needle of expected) {
               const image = page.locator(`article img[alt*="${needle}"]`).first()
               if (await image.count() !== 1) throw new Error(`${name}: missing expected image: ${needle}`)
-              const state = await image.evaluate(async img => {
-                try { await img.decode() } catch {}
-                return {complete: img.complete, width: img.naturalWidth, height: img.naturalHeight, src: img.currentSrc || img.src}
-              })
+              await image.scrollIntoViewIfNeeded()
+              await page.waitForFunction(el => el.complete, await image.elementHandle(), { timeout: 10000 })
+              const state = await image.evaluate(img => ({complete: img.complete, width: img.naturalWidth, height: img.naturalHeight, src: img.currentSrc || img.src}))
+              console.log(`${name} ${needle}`, JSON.stringify(state))
               if (!(state.complete && state.width > 0 && state.height > 0)) throw new Error(`${name}: expected image failed to decode: ${needle} :: ${state.src}`)
             }
+            if (failed.length) console.log(`${name} failed requests`, JSON.stringify(failed, null, 2))
             const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)
             if (overflow) throw new Error(`${name}: horizontal overflow`)
             await page.screenshot({ path: `/tmp/${name}.png`, fullPage: true })
