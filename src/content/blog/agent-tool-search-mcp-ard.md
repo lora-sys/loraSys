@@ -179,7 +179,7 @@ ARD 可以在外部 Registry 中发现尚未预先接入的资源。Tool Search 
 
 [OpenAI，Introducing the Agents API，2026-09-10](https://openai.com/index/introducing-the-agents-api/)：核对 Agents API 的 Tool Search、按需加载、token 与缓存目标，以及 Programmatic Tool Calling。
 
-[Anthropic，Tool Search Tool](https://platform.cla.com/docs/en/agents-and-tools/tool-use/tool-search-tool)：核对 `defer_loading`、Regex 与 BM25、`tool_reference`、Prompt Cache、适用条件与公开示例数据。
+[Anthropic，Tool Search Tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)：核对 `defer_loading`、Regex 与 BM25、`tool_reference`、Prompt Cache、适用条件与公开示例数据。
 
 [Anthropic，Writing effective tools for AI agents，2025-09-11](https://www.anthropic.com/engineering/writing-tools-for-agents)：核对工具数量、namespacing、返回高信号上下文和工具描述设计。
 
