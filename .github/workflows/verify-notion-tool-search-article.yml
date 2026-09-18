@@ -57,8 +57,8 @@ jobs:
       - name: Capture desktop and mobile article views
         shell: bash
         run: |
-          npx --yes playwright@1.55.0 screenshot --full-page --viewport-size="1440,900" http://127.0.0.1:4321/loraSys/blog/agent-tool-search-mcp-ard /tmp/notion-sync-desktop.png
-          npx --yes playwright@1.55.0 screenshot --full-page --device="iPhone 13" http://127.0.0.1:4321/loraSys/blog/agent-tool-search-mcp-ard /tmp/notion-sync-mobile.png
+          npx --yes playwright@1.55.0 screenshot --full-page --browser=chromium --viewport-size="1440,900" http://127.0.0.1:4321/loraSys/blog/agent-tool-search-mcp-ard /tmp/notion-sync-desktop.png
+          npx --yes playwright@1.55.0 screenshot --full-page --browser=chromium --viewport-size="390,844" http://127.0.0.1:4321/loraSys/blog/agent-tool-search-mcp-ard /tmp/notion-sync-mobile.png
 
       - name: Stop preview
         if: always()
