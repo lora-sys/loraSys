@@ -46,8 +46,16 @@ jobs:
           import { chromium } from 'playwright'
           const browser = await chromium.launch({headless: true})
           const url = 'http://127.0.0.1:4321/loraSys/blog/agent-tool-search-mcp-ard/'
+          const expected = [
+            '全部预加载与按需加载的区别',
+            'defer_loading 与稳定缓存前缀',
+            'ARD、MCP 与 Tool Search 的职责分层',
+            'Tool Search 对照实验'
+          ]
           for (const [name, viewport] of Object.entries({desktop:{width:1280,height:900},mobile:{width:390,height:844}})) {
             const page = await browser.newPage({ viewportSize: viewport })
+            const failed = []
+            page.on('requestfailed', request => failed.push(`${request.url()} :: ${request.failure()?.errorText}`))
             const response = await page.goto(url, { waitUntil: 'networkidle' })
             if (!response || response.status() !== 200) throw new Error(`${name}: article status ${response?.status()}`)
             const title = await page.locator('h1').first().textContent()
@@ -55,11 +63,17 @@ jobs:
             const articleText = await page.locator('article').first().textContent()
             if (!articleText?.includes('MCP、Tool Search 和 ARD')) throw new Error(`${name}: article body missing`)
             const imgs = page.locator('article img')
-            const count = await imgs.count()
-            if (count < 4) throw new Error(`${name}: expected at least 4 article images, got ${count}`)
-            for (let i = 0; i < count; i++) {
-              const ok = await imgs.nth(i).evaluate(img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0)
-              if (!ok) throw new Error(`${name}: image ${i + 1} failed to decode`)
+            const snapshots = await imgs.evaluateAll(nodes => nodes.map(img => ({alt: img.alt, src: img.currentSrc || img.src, complete: img.complete, width: img.naturalWidth, height: img.naturalHeight})))
+            console.log(`${name} images`, JSON.stringify(snapshots, null, 2))
+            if (failed.length) console.log(`${name} failed requests`, JSON.stringify(failed, null, 2))
+            for (const needle of expected) {
+              const image = page.locator(`article img[alt*="${needle}"]`).first()
+              if (await image.count() !== 1) throw new Error(`${name}: missing expected image: ${needle}`)
+              const state = await image.evaluate(async img => {
+                try { await img.decode() } catch {}
+                return {complete: img.complete, width: img.naturalWidth, height: img.naturalHeight, src: img.currentSrc || img.src}
+              })
+              if (!(state.complete && state.width > 0 && state.height > 0)) throw new Error(`${name}: expected image failed to decode: ${needle} :: ${state.src}`)
             }
             const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)
             if (overflow) throw new Error(`${name}: horizontal overflow`)
