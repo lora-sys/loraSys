@@ -1,0 +1,210 @@
+---
+interface Props {
+  title?: string
+  items: string
+  source?: string
+}
+
+const { title, items, source } = Astro.props
+const entries = items
+  .split('|')
+  .map((item) => {
+    const [label = '', summary = '', detailText = ''] = item.split('::', 3).map((part) => part.trim())
+    return {
+      label,
+      summary,
+      details: detailText.split(';;').map((part) => part.trim()).filter(Boolean)
+    }
+  })
+  .filter((item) => item.label && item.summary)
+  .slice(0, 4)
+---
+
+{entries.length > 0 && (
+  <section class='mdx-option-tabs not-prose' data-option-tabs>
+    {title && <h3>{title}</h3>}
+    <div class='mdx-option-tablist' role='tablist' aria-label={title ?? 'Options'}>
+      {entries.map((item, index) => (
+        <button
+          type='button'
+          role='tab'
+          class='mdx-option-tab'
+          data-option-tab
+          data-index={index}
+          aria-selected={index === 0 ? 'true' : 'false'}
+          tabindex={index === 0 ? 0 : -1}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
+
+    <div class='mdx-option-panels'>
+      {entries.map((item, index) => (
+        <article
+          role='tabpanel'
+          class='mdx-option-panel'
+          data-option-panel
+          data-active={index === 0 ? 'true' : undefined}
+          hidden={index !== 0}
+        >
+          <strong>{item.summary}</strong>
+          {item.details.length > 0 && (
+            <ul>
+              {item.details.map((detail) => <li>{detail}</li>)}
+            </ul>
+          )}
+        </article>
+      ))}
+    </div>
+
+    {source && <p class='mdx-option-source'>{source}</p>}
+  </section>
+)}
+
+<script>
+  const setupOptionTabs = () => {
+    document.querySelectorAll<HTMLElement>('[data-option-tabs]').forEach((root) => {
+      if (root.dataset.optionTabsReady === 'true') return
+      root.dataset.optionTabsReady = 'true'
+      const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-option-tab]'))
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-option-panel]'))
+      if (!tabs.length || tabs.length !== panels.length) return
+
+      const activate = (index: number, moveFocus = false) => {
+        const safeIndex = Math.max(0, Math.min(index, tabs.length - 1))
+        tabs.forEach((tab, tabIndex) => {
+          const active = tabIndex === safeIndex
+          tab.setAttribute('aria-selected', active ? 'true' : 'false')
+          tab.tabIndex = active ? 0 : -1
+        })
+        panels.forEach((panel, panelIndex) => {
+          const active = panelIndex === safeIndex
+          panel.hidden = !active
+          panel.toggleAttribute('data-active', active)
+        })
+        if (moveFocus) tabs[safeIndex]?.focus()
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activate(index))
+        tab.addEventListener('keydown', (event) => {
+          let next = index
+          if (event.key === 'ArrowRight') next = (index + 1) % tabs.length
+          else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length
+          else if (event.key === 'Home') next = 0
+          else if (event.key === 'End') next = tabs.length - 1
+          else return
+          event.preventDefault()
+          activate(next, true)
+        })
+      })
+    })
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupOptionTabs, { once: true })
+  } else {
+    setupOptionTabs()
+  }
+</script>
+
+<style>
+  .mdx-option-tabs {
+    margin-block: 2rem;
+  }
+
+  .mdx-option-tabs > h3 {
+    margin: 0 0 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.92rem;
+    font-weight: 660;
+    letter-spacing: -0.015em;
+  }
+
+  .mdx-option-tablist {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding: 0 0 0.5rem;
+    scrollbar-width: thin;
+  }
+
+  .mdx-option-tab {
+    flex: none;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    background: hsl(var(--background));
+    padding: 0.48rem 0.7rem;
+    color: hsl(var(--muted-foreground));
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 620;
+    white-space: nowrap;
+  }
+
+  .mdx-option-tab[aria-selected='true'] {
+    border-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--primary) / 0.11);
+    color: hsl(var(--foreground));
+  }
+
+  .mdx-option-panel {
+    min-height: 8.2rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.95rem;
+    background: linear-gradient(150deg, hsl(var(--card) / 0.78), hsl(var(--background) / 0.62));
+    padding: 1rem;
+  }
+
+  .mdx-option-panel[hidden] {
+    display: none;
+  }
+
+  .mdx-option-panel > strong {
+    display: block;
+    color: hsl(var(--foreground));
+    font-size: 0.88rem;
+    font-weight: 650;
+  }
+
+  .mdx-option-panel ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mdx-option-panel li {
+    position: relative;
+    padding-left: 0.9rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.76rem;
+    line-height: 1.52;
+  }
+
+  .mdx-option-panel li::before {
+    content: '';
+    position: absolute;
+    top: 0.62em;
+    left: 0;
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 999px;
+    background: hsl(var(--primary) / 0.72);
+  }
+
+  .mdx-option-source {
+    margin: 0.55rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 640px) {
+    .mdx-option-panel {
+      min-height: 0;
+    }
+  }
+</style>
