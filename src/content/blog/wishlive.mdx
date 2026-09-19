@@ -9,23 +9,19 @@ draft: false
 
 ## The Idea
 
-Most agent frameworks treat agents like stateless functions. Call in, response out. No memory, no runtime, no economics.
+WishLive was a 48-hour hackathon build to test a specific system shape: agents have registry entries, workflows create work, a runtime executes tool calls, negotiation changes state, settlement requires explicit confirmation, and all of those actions emit typed events.
 
-I wanted something different: **a runtime where agents are first-class actors**. They register, discover each other, negotiate terms, execute work, and settle payments — all inside an event-driven system with observable state.
-
-This is the story of building that system in 48 hours for a hackathon.
+The project is useful as an architecture experiment, not as evidence of production scale. The counts below describe the implementation and seeded demo data.
 
 <StatStrip stats="48 h::Hackathon build|6::Runtime layers|57::Seeded agents|10::Wish threshold" source="WishLive implementation described in this article" />
 
 <Callout tone="note" title="Scope">
-The counts above describe the hackathon implementation and configuration. They are not throughput, reliability, or production-scale benchmarks.
+The counts above are implementation settings. They are not throughput, reliability, or production-scale benchmarks.
 </Callout>
-
----
 
 ## Architecture: Six Layers, One Event Bus
 
-The system is structured as six layers, each independently designed but communication-coupled through an event bus:
+The implementation separates six responsibilities and uses the event bus for cross-layer activity:
 
 ```mermaid
 flowchart TB
@@ -43,11 +39,11 @@ flowchart TB
     C -. observes .-> B
 ```
 
-Every layer publishes to typed event streams. The event log is the source of truth — no hidden state.
+Every layer publishes typed events. The event history is the shared record used for tracing cross-layer activity, while each service still owns its local state.
 
 ---
 
-## Layer 1: Registry — The Agent Internet
+## Layer 1: Registry and discovery
 
 The registry is the DNS + service discovery for agents. Each agent registers with a typed card:
 
@@ -84,7 +80,7 @@ The threshold is a deliberate design choice — it prevents premature negotiatio
 
 ---
 
-## Layer 3: Runtime — The Execution Engine
+## Layer 3: Runtime loop
 
 This is the core. `AgentRuntimeService.run()` creates a session, then executes in a loop:
 
@@ -126,7 +122,7 @@ Every step publishes to the `agent.runtime` event stream — thoughts, tool call
 
 ---
 
-## Layer 4: Negotiation — Stateful Agent Coordination
+## Layer 4: Negotiation state
 
 The negotiation service models multi-agent coordination as explicit, stateful protocols:
 
@@ -162,7 +158,7 @@ The protocol is general enough for human-in-the-loop override — each step has 
 
 ---
 
-## Layer 5: Settlement — Economics On-Chain and Off
+## Layer 5: Settlement boundary
 
 Settlement is where execution becomes real. The system supports **dual settlement modes**:
 
@@ -218,8 +214,8 @@ It supports both streaming and non-streaming responses, with Langfuse tracking o
 
 All subsystems communicate through typed event streams. The bus has two implementations:
 
-- **MemoryEventBus**: In-memory array, perfect for development and testing
-- **RedisEventBus**: Redis Streams with XADD/XREVRANGE, for production persistence
+- **MemoryEventBus**: In-memory event history for development and tests
+- **RedisEventBus**: Redis Streams implementation for persisted event history
 
 Event types include:
 
@@ -229,16 +225,6 @@ Event types include:
 - `negotiation.events` — proposals, counters, accepts, rejections
 - `settlement.events` — escrow creation, fund release, ticket minting
 - `wish.events` / `demand.events` / `matching.events` — workflow pipeline
-
-```mermaid
-flowchart TB
-    L[agent.lifecycle] --> O[Observability]
-    T[agent.task] --> O
-    N[negotiation.events] --> O
-    S[settlement.events] --> O
-    W[wish and demand events] --> O
-    O --> C[Concierge explanation]
-```
 
 ```typescript
 interface EventEnvelope {
@@ -258,17 +244,15 @@ Every event carries trace context, enabling end-to-end flow reconstruction.
 
 ---
 
-## What I Learned
+## Implementation notes
 
-**Graceful degradation is not optional.** The dual-mode runtime (AI + simulated) meant I could develop and demo the entire system without API keys, then flip to real AI when deploying. This pattern should be standard in every agent framework.
+The dual-mode runtime was useful because the same workflow could run with an AI provider or with deterministic simulated responses. That made local development possible without an API key. It does not prove that every agent system needs a simulator, but it gave this project a repeatable fallback path.
 
-**Event-driven architecture makes multi-agent systems debuggable.** Because every agent action is published to typed event streams, I can reconstruct exactly what happened — even across negotiation rounds, session restarts, and settlement failures.
+Typed events made debugging easier because runtime, negotiation, and settlement steps could be reconstructed from one event history. This only works if every state-changing path emits enough information and keeps trace identifiers intact.
 
-**Human gates are critical for economic execution.** Without explicit confirmation before escrow creation and fund release, autonomous agents become a financial liability. The `confirmed` flag on every settlement method is the simplest correct design.
+Settlement required an explicit confirmation flag before escrow creation or release. That gate is intentionally simple. A real financial workflow would still need stronger authorization, idempotency, policy checks, and recovery handling.
 
-**57 seed agents = instant ecosystem.** Seeding the registry with diverse agent cards means every demo starts with a populated marketplace. The auto-seeding pattern (first access triggers population) eliminated initialization order bugs entirely.
-
----
+The 57 seeded agents made demos start with usable registry data. They are fixtures, not evidence of marketplace activity.
 
 ## The Stack
 
@@ -281,8 +265,8 @@ Every event carries trace context, enabling end-to-end flow reconstruction.
 
 ---
 
-## Final Thought
+## Scope
 
-WishLive started as a hackathon project. But the architecture — a layered runtime with event-driven communication, dual-mode execution, and on-chain settlement — maps to real production concerns. Agents aren't functions you call. They're actors in a system with state, economics, and coordination.
+WishLive is a hackathon prototype for testing event-driven coordination across registry, workflow, runtime, negotiation and settlement layers. The parts worth carrying into another project are the explicit state transitions, typed event envelopes, fallback execution mode and confirmation gate. Production use would still need load testing, stronger authorization, durable recovery tests and deployment-specific monitoring.
 
 The code is at [github.com/lora-sys/Hackthon](https://github.com/lora-sys/Hackthon).
