@@ -23,7 +23,7 @@ const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 
       <a href={writing}>{t('浏览文章', 'Browse writing')}</a>
       <a href={locale === 'en-US' ? '/search' : '/en/search'}>{t('搜索英文内容', 'Search Chinese content')}</a>
     </nav>
-    <aside class='search-empty-custom' data-search-empty data-zero-prefix={t('没有找到', 'No results for')} hidden aria-hidden='true'>
+    <aside class='search-empty-custom' data-search-empty hidden aria-hidden='true'>
       <Image src={searchEmptyMochi} alt='' aria-hidden='true' widths={[320, 480]} sizes='8rem' loading='lazy' />
       <div><h2>{t('换个词试试', 'Try another term')}</h2><p>{t('可以缩短关键词，或从项目与文章目录继续浏览。', 'Try a shorter keyword, or continue through the project and writing directories.')}</p></div>
     </aside>
@@ -35,13 +35,17 @@ const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 
   if (shell && empty) {
     const refresh = () => {
       const input = shell.querySelector<HTMLInputElement>('.pagefind-ui__search-input')
-      const message = shell.querySelector('.pagefind-ui__message')?.textContent ?? ''
       const query = input?.value.trim() ?? ''
-      const visible = Boolean(query && message.includes(empty.dataset.zeroPrefix ?? '') && message.includes(query) && !shell.querySelector('.pagefind-ui__result'))
+      const results = shell.querySelector('.pagefind-ui__results')
+      const hasResult = Boolean(shell.querySelector('.pagefind-ui__result'))
+      const visible = Boolean(query && results && !hasResult)
       empty.hidden = !visible
       empty.setAttribute('aria-hidden', String(!visible))
     }
-    shell.addEventListener('input', () => { empty.hidden = true; empty.setAttribute('aria-hidden', 'true') })
+    shell.addEventListener('input', () => {
+      empty.hidden = true
+      empty.setAttribute('aria-hidden', 'true')
+    })
     new MutationObserver(refresh).observe(shell, { childList: true, subtree: true, characterData: true })
     refresh()
   }
