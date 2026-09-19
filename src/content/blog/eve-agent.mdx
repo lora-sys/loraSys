@@ -1,21 +1,25 @@
 ---
 title: 'Vercel Eve Agent Framework'
-description: 'A deep dive into Vercel''s filesystem-first Agent framework — architecture, API, deployment, and production adoption guide.'
+description: 'A source-backed review of Vercel Eve’s filesystem-first agent model, durable execution, tools, sandboxes, approvals, deployment, and Vercel platform tradeoffs.'
 publishDate: '2026-07-05T00:00:00Z'
 tags: ['Vercel', 'Agent', 'AI']
 language: 'en-US'
 draft: false
 ---
 
+<Callout tone="warning" title="Status snapshot">
+This article reflects Eve's documented Beta or Preview state on 2026-07-03. Recheck the current Vercel documentation before treating APIs, defaults, limits, or platform dependencies here as current.
+</Callout>
+
 ## Executive Summary
 
-Vercel Eve is an open-source Agent framework launched by Vercel in June 2026, and as of 2026-07-03 it remains in Beta/Preview. Its core proposition is not "another agent loop SDK," but modeling an Agent directly as a directory in the filesystem: `instructions.md` handles long-term system prompts, `agent.ts` handles runtime configuration and model selection, and directories like `tools/`, `skills/`, `channels/`, `connections/`, `subagents/`, `schedules/` each carry capabilities, channels, external integrations, sub-agents, and scheduled tasks; the framework compiles these files through auto-discovery into an Agent application running on Vercel Functions with production-grade features: durable execution, event streams, sandbox execution, observability, approvals, and human-in-the-loop collaboration.
+Vercel Eve is an open-source Agent framework launched by Vercel in June 2026, and as of 2026-07-03 it remains in Beta/Preview. Its core proposition is not "another agent loop SDK," but modeling an Agent directly as a directory in the filesystem: `instructions.md` handles long-term system prompts, `agent.ts` handles runtime configuration and model selection, and directories like `tools/`, `skills/`, `channels/`, `connections/`, `subagents/`, `schedules/` each carry capabilities, channels, external integrations, sub-agents, and scheduled tasks; the framework compiles these files through auto-discovery into an Agent application running on Vercel Functions with runtime features: durable execution, event streams, sandbox execution, observability, approvals, and human-in-the-loop collaboration.
 
 From a design perspective, Eve's differentiation comes down to four advantages. First, it's a strongly opinionated filesystem-first programming model that reduces the structural complexity of multi-agent, multi-channel, multi-tool systems. Second, it builds durable execution directly on Vercel Workflows, allowing sessions/turns to recover across cold starts, redeployments, and long pauses. Third, it treats sandboxes as first-class citizens, isolating untrusted code execution by default in a separate security context. Fourth, it's deeply coupled with AI Gateway, Connect, Observability, and OIDC, making model access, credential proxying, tracing, and access control smoother on the Vercel platform.
 
-If your team runs primarily on Vercel, wants to treat Agents as deployable backend systems rather than "model call scripts," and needs Slack/Web/GitHub/scheduled tasks/approvals/long-running/observable production capabilities, Eve will likely ship faster than generic frameworks. Conversely, if you need cross-cloud/self-hosted infrastructure portability, or your team prefers graph-based orchestration (LangGraph), OpenAI-native tools and containers (OpenAI Agents SDK), or framework-agnostic TypeScript AI application frameworks (Mastra), you should evaluate platform binding, runtime assumptions, and migration costs more carefully. This assessment comes from official documentation descriptions of runtime structure, persistence, sandboxes, channels, deployment, and platform service dependencies, as well as comparative analysis with other official framework documentation.
+If your team runs primarily on Vercel, wants to treat Agents as deployable backend systems rather than "model call scripts," and needs Slack/Web/GitHub/scheduled tasks/approvals/long-running/observable production capabilities, Eve may reduce integration work for teams already using Vercel services. Conversely, if you need cross-cloud/self-hosted infrastructure portability, or your team prefers graph-based orchestration (LangGraph), OpenAI-native tools and containers (OpenAI Agents SDK), or framework-agnostic TypeScript AI application frameworks (Mastra), you should evaluate platform binding, runtime assumptions, and migration costs more carefully. This assessment comes from official documentation descriptions of runtime structure, persistence, sandboxes, channels, deployment, and platform service dependencies, as well as comparative analysis with other official framework documentation.
 
-Regarding maturity, Eve's strengths are Vercel-backed ownership, comprehensive documentation, rich templates, and a growing GitHub community. As of this writing, official documentation explicitly labels it Beta, the GitHub repository has approximately 3.2k stars and 252 forks, and official/related templates already cover typical scenarios including Web Chat, Slack content assistants, personal agents, PR triage, and browser agents. This indicates a fairly clear "productized framework" outline, but it should still be treated as a rapidly evolving early-stage framework. Production adoption should be accompanied by approval strategies, authentication, evaluations, cost guardrails, and rollback plans.
+Regarding maturity, Eve's strengths are Vercel-backed ownership, comprehensive documentation, rich templates, and a growing GitHub community. As of this writing, official documentation explicitly labels it Beta, the GitHub repository has approximately 3.2k stars and 252 forks, and official/related templates already cover typical scenarios including Web Chat, Slack content assistants, personal agents, PR triage, and browser agents. This indicates a coherent framework surface, but it should still be treated as a rapidly evolving early-stage framework. Production adoption should be accompanied by approval strategies, authentication, evaluations, cost guardrails, and rollback plans.
 
 ## Design Philosophy and Overall Architecture
 
@@ -142,7 +146,7 @@ export default defineTool({
 });
 ```
 
-Approvals are also a first-class concept in Eve's programming model. The official tool documentation provides approval strategies like `always()`, and release articles demonstrate conditional approval based on input criteria. The semantics are: the tool call point durably pauses the session, waits for human approval, then resumes from exactly where it left off. This is significantly stronger than "hanging a pending state in your own application code."
+Approvals are also a first-class concept in Eve's programming model. The official tool documentation provides approval strategies like `always()`, and release articles demonstrate conditional approval based on input criteria. The semantics are: the tool call point durably pauses the session, waits for human approval, then resumes from exactly where it left off. This gives the approval state a durable place in the execution model instead of leaving it as an application-only pending flag.
 
 ```ts
 // agent/tools/refund_charge.ts
