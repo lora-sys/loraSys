@@ -363,49 +363,22 @@ jobs:
 
 之后在 GitHub 仓库的 Settings → Secrets 里配置 `PYPI_API_TOKEN`，就可以实现“打 tag 就自动发布”。
 
-## 第十步：推广到社区
+## 第十步：补齐发布入口
 
-仓库准备好了，接下来就是让更多人知道它。
+插件独立发布以后，至少要让使用者能找到安装方式、能力范围和问题入口。
 
-### GitHub 优化
+GitHub Topics 可以保留和实现直接相关的关键词：
 
-给仓库加上 Topics：
-
-```bash
+```text
 hermes-agent
 stepfun
 image-generation
 ai-plugin
-stable-diffusion
 ```
 
-更新仓库描述，让它更容易被搜索到。
+Nous Research Discord 的 `#plugins-skills-and-skins` 可以作为社区发现入口。发布说明只需要写清楚支持的模型、安装路径、所需环境变量和仓库链接，不必重新复制整篇教程。
 
-### Discord 社区
-
-Nous Research Discord 的 `#plugins-skills-and-skins` 是官方推荐的插件分享渠道。文案思路：
-
-```text
-Hi everyone! I've built a StepFun image generation plugin for Hermes Agent.
-
-Features:
-- Text-to-image with step-image-edit-2 (~1-2s)
-- Image editing
-- Image-to-image with step-2x-large / step-1x-medium
-- Drop-in plugin for ~/.hermes/plugins/image_gen/stepfun/
-
-Requires STEPFUN_API_KEY from https://platform.stepfun.com
-
-Feedback welcome!
-```
-
-### 内容平台
-
-如果你的博客已经上线，这篇文章本身就是最好的入口。还可以把 Demo GIF、生成截图、对比评测一起放进去，形成完整的宣传素材。
-
-## 小结
-
-这篇文章记录了一个完整链路：
+## 这条链路最终包含什么
 
 ```text
 Hermes Agent + StepFun API Key
@@ -415,7 +388,7 @@ Hermes Agent + StepFun API Key
     -> 独立仓库
     -> PyPI 发布
     -> CI 自动化
-    -> 社区推广
+    -> 发布入口
 ```
 
-如果你只是想**本地用起来**，重点做好前三步就够了；如果你想**分享给社区**，第七步到第十步才真正决定项目能走多远。
+只做本地接入时，前面的插件结构、模型路由、endpoint 与验证最重要。需要长期维护和公开分发时，再补包发布、CI、版本说明和问题追踪。
