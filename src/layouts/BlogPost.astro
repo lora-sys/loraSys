@@ -503,4 +503,32 @@ const articleFieldNote = {
   }
 
   .article-reading-marker{display:flex;align-items:center;gap:1rem;margin-block:2.5rem;padding:1rem;border-top:1px dashed hsl(var(--border));border-bottom:1px dashed hsl(var(--border));background:hsl(var(--card)/.45);border-radius:.8rem}.article-reading-marker .reading-marker-visual{width:clamp(5rem,12vw,9rem);height:auto;opacity:.85;filter:saturate(.9) contrast(.95)}.article-reading-marker p{margin:0;color:hsl(var(--muted-foreground));font-size:.78rem}.article-reading-marker a{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:.2rem}
+  #content details:not(.article-toc-condensed) {
+    margin-block: 1.4rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.8rem;
+    background: hsl(var(--card) / 0.55);
+    padding: 0.75rem 0.9rem;
+  }
+  #content details:not(.article-toc-condensed) > summary {
+    cursor: pointer;
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+  #content details:not(.article-toc-condensed)[open] > summary { margin-bottom: 0.7rem; }
+  #content blockquote {
+    border-left-width: 2px;
+    border-left-color: hsl(var(--primary) / 0.5);
+    background: hsl(var(--muted) / 0.28);
+    padding-block: 0.3rem;
+    padding-right: 0.8rem;
+  }
+  #content img { border-radius: 0.7rem; }
+  #content table { font-size: 0.86rem; }
+  #content figcaption {
+    margin-top: 0.55rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
 </style>
