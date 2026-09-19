@@ -76,6 +76,21 @@ Use when the article already contrasts two approaches or states.
 />
 ```
 
+### OptionTabs
+
+Use when the article has two to four real alternatives, layers, modes, or framework choices that readers benefit from inspecting one at a time. This is progressive disclosure, not a scoring widget.
+
+Each item uses `label::summary::detail one;;detail two`; items are separated with `|`.
+
+```mdx
+<OptionTabs
+  title="Three architecture layers"
+  items="tau_ai::Provider adaptation::Normalizes provider streams;;Does not know the UI|tau_agent::Agent core::Owns messages, tools and run events;;Does not render a terminal|tau_coding::Application layer::Adds coding tools, sessions and interfaces;;Consumes core events"
+/>
+```
+
+Do not use `OptionTabs` when a normal list or table is easier to scan.
+
 ### DataChart
 
 Use for a small numeric comparison or ordered series with values that are explicit in the source or are clearly labeled derived arithmetic.
