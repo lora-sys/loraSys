@@ -212,6 +212,7 @@ try {
         const selected = (await chart.locator('[data-chart-readout]').innerText()).trim()
         assert.ok(selected.length > 0, 'DataChart readout should update on keyboard focus')
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'MDX page must not create page-level horizontal overflow')
+        await chart.scrollIntoViewIfNeeded()
         await capture('mdx-free-vision')
 
         await open('blog/newtube')
