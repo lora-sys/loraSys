@@ -1,6 +1,6 @@
 ---
 title: 'Building a Full-Stack YouTube Clone with Next.js 15'
-description: 'A deep dive into architecture, core features, and problem solving strategies'
+description: 'A repository-backed walkthrough of NewTube, covering its Next.js 15 structure, tRPC and Drizzle data flow, Mux video pipeline, authentication, creator tools, and deployment tradeoffs.'
 publishDate: '2026-03-10T00:00:00Z'
 tags: ['Next.js', 'TRPC']
 language: 'en-US'
@@ -9,13 +9,15 @@ draft: false
 
 ## Introduction
 
-Building a video-sharing platform like YouTube is one of the most challenging yet rewarding projects for full-stack developers. It involves complex requirements: video processing, real-time streaming, user authentication, subscription systems, and much more.
-
-In this technical deep dive, I'll walk you through how I built **NewTube** - a fully functional YouTube clone using modern web technologies. This isn't just a UI clone; it's a production-ready application with real video processing, AI-powered features, and a scalable architecture.
+NewTube is a YouTube-style full-stack project built with Next.js 15, React, tRPC, Drizzle, Clerk, Mux and related managed services. This article focuses on how the repository is organized and how requests move through the application.
 
 **GitHub Repository**: [NewTube Clone](https://github.com/lora-sys/Newtube-clone)
 
 **Source and setup instructions**: [NewTube Clone on GitHub](https://github.com/lora-sys/Newtube-clone). A hosted demo is not currently published.
+
+<Callout tone="note" title="Verification scope">
+The article describes the repository and its intended service integrations. A hosted production deployment is not currently available, so claims about runtime scale or production behavior should be verified against the code and service configuration before reuse.
+</Callout>
 
 ---
 
@@ -23,7 +25,7 @@ In this technical deep dive, I'll walk you through how I built **NewTube** - a f
 
 ### What is NewTube?
 
-NewTube is a full-featured video-sharing platform that includes:
+NewTube is a video-sharing application that includes:
 
 - **Video Upload & Streaming**: Powered by Mux with HLS adaptive streaming
 - **User Authentication**: Complete auth flow with Clerk
@@ -32,7 +34,7 @@ NewTube is a full-featured video-sharing platform that includes:
 - **Comments & Reactions**: Full engagement features
 - **Playlists**: Create and manage video collections
 - **AI Features**: Auto-generate titles, descriptions, and thumbnails
-- **Responsive Design**: Works seamlessly on all devices
+- **Responsive Design**: Responsive layouts for desktop and mobile
 
 ### Tech Stack at a Glance
 
@@ -76,10 +78,10 @@ The application follows a **three-tier architecture** with serverless patterns o
 
 ### Project Structure
 
-I organized the codebase using a **feature-based module structure** (which I call "moubles"):
+I organized the codebase using a **feature-based module structure** :
 
 ```
-moubles/
+modules/
 ├── videos/
 │   ├── server/
 │   │   └── procedures.ts    # tRPC API endpoints
@@ -170,7 +172,7 @@ export function VideoSection({ videoId }: { videoId: string }) {
 
 **Benefits**:
 
-- Zero loading states for initial page load
+- Avoids a separate client fetch for data that was prefetched on the server
 - Better SEO with server-rendered content
 - Reduced client-side JavaScript
 
