@@ -1,0 +1,46 @@
+---
+interface Props {
+  title?: string
+  items: string
+  source?: string
+}
+const { title = 'Key points', items, source } = Astro.props
+const points = items
+  .split('|')
+  .map((item) => item.split('::', 2).map((part) => part.trim()))
+  .filter(([heading]) => Boolean(heading))
+  .slice(0, 5)
+---
+
+{points.length > 0 && (
+  <section class='mdx-key-points not-prose'>
+    <div class='mdx-key-points-heading'>
+      <span aria-hidden='true'></span>
+      <h3>{title}</h3>
+    </div>
+    <div class='mdx-key-points-grid'>
+      {points.map(([heading, body], index) => (
+        <article>
+          <small>{String(index + 1).padStart(2, '0')}</small>
+          <strong>{heading}</strong>
+          {body && <p>{body}</p>}
+        </article>
+      ))}
+    </div>
+    {source && <p class='mdx-key-points-source'>{source}</p>}
+  </section>
+)}
+
+<style>
+  .mdx-key-points { margin-block: 2rem; border: 1px solid hsl(var(--border)); border-radius: 1rem; background: hsl(var(--card) / 0.52); padding: 1rem; }
+  .mdx-key-points-heading { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.8rem; }
+  .mdx-key-points-heading > span { width: 1.4rem; height: 0.16rem; border-radius: 999px; background: hsl(var(--primary) / 0.72); }
+  .mdx-key-points h3 { margin: 0; color: hsl(var(--foreground)); font-size: 0.88rem; font-weight: 680; }
+  .mdx-key-points-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); gap: 0.6rem; }
+  .mdx-key-points article { min-width: 0; border-top: 1px solid hsl(var(--border)); padding-top: 0.65rem; }
+  .mdx-key-points small, .mdx-key-points strong { display: block; }
+  .mdx-key-points small { color: hsl(var(--primary)); font-size: 0.62rem; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .mdx-key-points strong { margin-top: 0.28rem; color: hsl(var(--foreground)); font-size: 0.8rem; font-weight: 640; }
+  .mdx-key-points article p { margin: 0.24rem 0 0; color: hsl(var(--muted-foreground)); font-size: 0.74rem; line-height: 1.52; }
+  .mdx-key-points-source { margin: 0.7rem 0 0; color: hsl(var(--muted-foreground)); font-size: 0.66rem; }
+</style>
