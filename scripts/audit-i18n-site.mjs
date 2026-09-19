@@ -122,8 +122,13 @@ try {
         await page.locator('.pagefind-ui__result-link').first().waitFor({state:'visible'})
         assert.ok((await page.locator('.pagefind-ui__result-link').allTextContents()).some(s=>s.includes('Zhihu')))
         await capture(`${lang?'en':'zh'}-search-results`)
-        await input.fill('qxzvbnmk927413nomatch')
-        await page.waitForFunction(()=>[...document.querySelectorAll('.pagefind-ui__message')].some(el=>/没有找到|No results/.test(el.textContent||'')))
+        const noMatchTerm = 'qvwxjkpzqvwxjkpzqvwxjkpz'
+        await input.fill(noMatchTerm)
+        await page.waitForFunction((term) => {
+          const input = document.querySelector('.pagefind-ui__search-input')
+          const results = document.querySelector('.pagefind-ui__results')
+          return input?.value === term && Boolean(results) && !document.querySelector('.pagefind-ui__result')
+        }, noMatchTerm)
         await page.locator('[data-search-empty]').waitFor({state:'visible'})
         await capture(`${lang?'en':'zh'}-search-empty`)
       }
