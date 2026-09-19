@@ -9,6 +9,11 @@
       "status": "reviewed"
     },
     {
+      "slug": "agent-credential-boundary-vault-broker",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
       "slug": "agent-tool-search-mcp-ard",
       "format": "mdx",
       "status": "reviewed"
