@@ -30,11 +30,13 @@ AI Engineering Harness 的目标是把这些检查变成固定流程。Agent 可
 
 ## Harness 如何组织工程闭环
 
-> **把失控的 Vibe Coding 作品，变成可验证、可维护的工程交付。**
+<Callout tone="note" title="目标">
+代码是否进入 main 由 CI、审查和证据决定，不由 Agent 自己宣布完成。
+</Callout>
 
 ### 核心工作方式
 
-AI Engineering Harness 不是一条 Prompt，而是一套**软件工程组织操作系统**。你给它一个失控的仓库，它代你组建一个由 18 类 Agent 组成的工程团队，走完整闭环：
+AI Engineering Harness 把仓库接管、Issue 分工、Worktree、CI、审查和证据目录组织成一套固定流程。当前仓库定义了 18 类 Agent 角色，但这些角色是实现细节，不是必须照搬的行业标准。
 
 ```
 Idea → PRD → Issue → Agent 认领 → Worktree → 实施计划
@@ -42,13 +44,13 @@ Idea → PRD → Issue → Agent 认领 → Worktree → 实施计划
      → 证据闸门 → 人工审批 → 合并 → 阶段总结 → 记忆沉淀 → 下一轮
 ```
 
-**合并条件**：代码只有在 **CI Pass + 至少 2 名冷启动审查员 Approved + 证据完整** 时才进入 `main`。没有"看起来跑通了"这种状态——只有**"可验证地跑通了"**。
+当前流程把 `CI Pass`、至少 2 名冷启动审查员批准和证据完整作为进入 `main` 的条件。
 
 <StatStrip stats="18::Agent 角色|2+::冷启动审查员|4::上下文层级" source="本文架构定义" />
 
 ### 四个关键机制
 
-#### 1. 证据驱动的工程纪律
+**1. 证据驱动的工程纪律**
 
 **传统开发**：
 
@@ -62,7 +64,7 @@ PR 合进去 → Done ✅
 PR → CI 绿 → 2+ 审查员 Approved → 证据齐全 → Done ✅
 ```
 
-#### 2. 18 类专业化 Agent
+**2. 18 类专业化 Agent**
 
 ```
 Coordinator
@@ -79,7 +81,7 @@ Coordinator
 └── ... (共 18 类)
 ```
 
-#### 3. 工作流隔离（Worktree）
+**3. 工作流隔离（Worktree）**
 
 每个 Issue 运行在独立的 Git Worktree 中：
 
@@ -92,11 +94,11 @@ Coordinator
 
 **好处**：
 
-- ✅ 并行开发，互不干扰
-- ✅ 冲突自动检测，Conflict Resolver 处理
-- ✅ 每个分支独立 CI 和审查
+- 并行开发，互不干扰
+- 冲突自动检测，Conflict Resolver 处理
+- 每个分支独立 CI 和审查
 
-#### 4. 上下文分层加载（L0-L3）
+**4. 上下文分层加载（L0-L3）**
 
 不让 Agent 读整个 `docs/` 目录，而是分层加载：
 
@@ -115,32 +117,32 @@ L3: PDF/图片/长报告（显式需要时才加载）
 
 ```mermaid
 graph TD
-    User[👤 User] -->|PRD| Coordinator[Coordinator]
+    User[User] -->|PRD| Coordinator[Coordinator]
     Coordinator -->|分派| Frontend[Frontend Agent]
     Coordinator -->|分派| Backend[Backend Agent]
-    Coordinator -->|分派| Database[🗄️ Database Agent]
+    Coordinator -->|分派| Database[Database Agent]
 
     Frontend -->|代码| Worktree1[Worktree #17]
     Backend -->|代码| Worktree2[Worktree #18]
     Database -->|代码| Worktree3[Worktree #19]
 
-    Worktree1 -->|PR| CI[🔴 CI Gate]
+    Worktree1 -->|PR| CI[CI Gate]
     Worktree2 -->|PR| CI
     Worktree3 -->|PR| CI
 
-    CI -->|通过| Review[🔍 Cold-Start Review]
-    Review -->|Bug Hunter| Evidence[✅ Evidence Gate]
+    CI -->|通过| Review[Cold-start review]
+    Review -->|Bug Hunter| Evidence[Evidence gate]
     Review -->|Behavior Reviewer| Evidence
     Review -->|Arch Reviewer| Evidence
 
-    Evidence -->|全绿| Merge[🔀 Merge to main]
-    Merge -->|阶段总结| Memory[💾 Memory Evolution]
-    Memory -->|沉淀| Next[🔄 Next Round]
+    Evidence -->|全绿| Merge[Merge to main]
+    Merge -->|阶段总结| Memory[Project memory]
+    Memory -->|沉淀| Next[Next issue]
 ```
 
 ### Agent 角色详解
 
-#### Coordinator（协调者）
+**Coordinator（协调者）**
 
 **职责**：
 
@@ -155,7 +157,7 @@ graph TD
 - ❌ 不做技术决策
 - ❌ 不合并代码（除非证据闸门全绿）
 
-#### Frontend Agent（前端工程师）
+**Frontend Agent（前端工程师）**
 
 **职责**：
 
@@ -181,7 +183,7 @@ docs/evidence/17/
 └── review-frontend.md
 ```
 
-#### Backend Agent（后端工程师）
+**Backend Agent（后端工程师）**
 
 **职责**：
 
@@ -200,7 +202,7 @@ docs/evidence/17/
 └── performance-baseline.json
 ```
 
-#### Bug Hunter（缺陷猎人）
+**Bug Hunter（缺陷猎人）**
 
 **职责**：
 
@@ -216,7 +218,7 @@ docs/evidence/17/
 - [ ] 资源泄漏
 - [ ] 错误处理
 
-#### Behavior Reviewer（行为审查员）
+**Behavior Reviewer（行为审查员）**
 
 **职责**：
 
@@ -234,7 +236,7 @@ docs/evidence/17/
 
 ### 9 个 Phase 详解
 
-#### Phase 0: PRD → Coordinator
+**Phase 0: PRD → Coordinator**
 
 **输入**：`PRD.md`
 
@@ -269,7 +271,7 @@ AGENTS.md
 
 ---
 
-#### Phase 1: Planning → Coordinator
+**Phase 1: Planning → Coordinator**
 
 **前提**：Issue 字段齐全
 
@@ -284,11 +286,11 @@ Owner / Estimate
 **Coordinator 检查**：
 
 - ❌ 缺字段 → 停在 Planning，不启动
-- ✅ 字段齐全 → 进入 Worktree Phase
+- 字段齐全 → 进入 Worktree Phase
 
 ---
 
-#### Phase 2: Worktree → Owner Agent
+**Phase 2: Worktree → Owner Agent**
 
 **操作**：
 
@@ -306,14 +308,14 @@ cd ../myproject-worktree-17
 
 **每个 Worktree**：
 
-- ✅ 独立分支
-- ✅ 独立 CI
-- ✅ 独立审查
-- ✅ 独立 Evidence 目录
+- 独立分支
+- 独立 CI
+- 独立审查
+- 独立 Evidence 目录
 
 ---
 
-#### Phase 3: Implementation → Owner Agent
+**Phase 3: Implementation → Owner Agent**
 
 **Owner Agent 职责**：
 
@@ -330,7 +332,7 @@ cd ../myproject-worktree-17
 
 ---
 
-#### Phase 4: CI Gate → Coordinator
+**Phase 4: CI Gate → Coordinator**
 
 **触发**：Owner 推第一个 commit
 
@@ -351,7 +353,7 @@ jobs:
 
 **红灯处理**：
 
-- 🔴 CI 失败 → 停在 Phase 4
+- CI 失败 → 停在 Phase 4
 - 🔧 派 Recovery Agent 修复
 - 🟢 CI 通过 → 进入 Phase 5
 
@@ -359,7 +361,7 @@ jobs:
 
 ---
 
-#### Phase 5: Review → Bug Hunter + Behavior Reviewer
+**Phase 5: Review → Bug Hunter + Behavior Reviewer**
 
 **Bug Hunter（冷启动）**：
 
@@ -375,14 +377,14 @@ jobs:
 
 **审查员规则**：
 
-- ✅ 必须冷启动（零上下文）
-- ✅ 必须 Approved / Changes Requested
+- 必须冷启动（零上下文）
+- 必须 Approved / Changes Requested
 - ❌ 不能"看起来可以"
 - ❌ 不能绕过任何 AC
 
 ---
 
-#### Phase 6: Evidence → Evidence Aggregator
+**Phase 6: Evidence → Evidence Aggregator**
 
 **Evidence Aggregator 检查清单**：
 
@@ -413,14 +415,14 @@ jobs:
 
 ---
 
-#### Phase 7: Merge → Coordinator
+**Phase 7: Merge → Coordinator**
 
 **合并条件**：
 
-- ✅ CI 绿
-- ✅ ≥ 2 名审查员 Approved
-- ✅ Evidence 齐全（`docs/evidence/<id>/`）
-- ✅ Aggregator ✅
+- CI 绿
+- ≥ 2 名审查员 Approved
+- Evidence 齐全（`docs/evidence/<id>/`）
+- Aggregator 
 
 **Coordinator 检查**：
 
@@ -439,7 +441,7 @@ jobs:
 
 ---
 
-#### Phase 8: Memory → Coordinator
+**Phase 8: Memory → Coordinator**
 
 **Phase Summary**：
 
@@ -511,33 +513,33 @@ docs/evidence/17/
 
 **前端**：
 
-- ✅ 6 态截图（桌面/平板/手机/空/错/加载）
-- ✅ Playwright trace
-- ✅ Console 干净
-- ✅ a11y 扫描通过
+- 6 态截图（桌面/平板/手机/空/错/加载）
+- Playwright trace
+- Console 干净
+- a11y 扫描通过
 
 **后端**：
 
-- ✅ API trace
-- ✅ 异常覆盖
-- ✅ 鉴权负面用例
-- ✅ 性能基线
+- API trace
+- 异常覆盖
+- 鉴权负面用例
+- 性能基线
 
 **数据库**：
 
-- ✅ Migration + Rollback
-- ✅ Pre/Post stats
-- ✅ Sample rows
+- Migration + Rollback
+- Pre/Post stats
+- Sample rows
 
 **审查**：
 
-- ✅ review-bug-hunter.md
-- ✅ review-behavior.md
-- ✅ fix-tasks.md Aggregator ✅
+- review-bug-hunter.md
+- review-behavior.md
+- fix-tasks.md Aggregator 
 
 **CI**：
 
-- ✅ 绿
+- 绿
 - ❌ 无 Critical/High 阻断
 
 ---
@@ -559,7 +561,7 @@ docs/evidence/17/
 
 ---
 
-### Step 1: 安装（5 分钟）
+### Step 1: 安装
 
 ```bash
 # 一行安装
@@ -568,16 +570,16 @@ npx -y skills add lora-sys/ai-engineering-harness -g --all --full-depth
 
 **装了什么**：
 
-- ✅ `ai-engineering-harness` skill
-- ✅ `build-agent-app` skill
-- ✅ `frontend-creative` skill
-- ✅ `dashboard` skill
+- `ai-engineering-harness` skill
+- `build-agent-app` skill
+- `frontend-creative` skill
+- `dashboard` skill
 
 **支持 40 个 CLI Agent**：Claude Code、Codex、Grok、Cursor、Gemini、Qwen 等。
 
 ---
 
-### Step 2: Quick Scan（2 分钟）
+### Step 2: Quick Scan
 
 ```bash
 # 干跑：只打印草稿
@@ -600,7 +602,7 @@ bash skills/dashboard/scripts/scan-to-issues.sh --create
 
 ---
 
-### Step 3: 接管（10 分钟）
+### Step 3: 接管
 
 ```bash
 # 在你的仓库里说
@@ -631,7 +633,7 @@ pieces; do not edit code yet.
 
 ---
 
-### Step 4: 推一个 Issue 到 Done（10 分钟）
+### Step 4: 推一个 Issue 到 Done
 
 ```bash
 # 推 Issue #1 到 Done
@@ -657,7 +659,7 @@ Use $ai-engineering-harness to take Issue #1 from Planning to Done.
 
 ---
 
-### Step 5: 验证（3 分钟）
+### Step 5: 验证
 
 ```bash
 # 检查证据
@@ -699,7 +701,7 @@ npx -y skills add lora-sys/ai-engineering-harness -g -s ai-engineering-harness
 npx -y skills add lora-sys/ai-engineering-harness -g -a claude-code codex grok
 ```
 
-### 兼容 40 个 CLI Agent
+### CLI Agent 兼容层
 
 | Agent       | 安装路径                     |
 | ----------- | ---------------------------- |
@@ -755,7 +757,7 @@ CI is red on PR #23. Use $ai-engineering-harness to recover.
 3. 重新跑 CI
 4. 重新走 Reviewer
 
-### 30 秒拉起新项目
+### 初始化新项目
 
 ```bash
 # 创建项目
@@ -778,9 +780,11 @@ git add . && git commit -m "feat: init"
 
 ---
 
-## 效果展示
+## 验证记录
 
-> 从「看起来能跑」到「可验证地跑通」。
+<Callout tone="data" title="记录口径">
+下表同时包含仓库记录和明确标为“示意”的案例。示意数字不当作项目实测。
+</Callout>
 
 ### 数据对比
 
@@ -834,67 +838,22 @@ git add . && git commit -m "feat: init"
 
 ---
 
-## 总结
+## 什么时候值得用
 
-### 核心价值
+这套 Harness 适合多 Issue、需要多角色审查、需要保留证据或经常由不同 Agent 接手的仓库。它不适合把一次性小改动包装成复杂流程。角色数量、审查人数和上下文层级都应该按仓库风险调整，而不是照搬默认配置。
 
-1. **从 Vibe 到 工程交付** — 把 AI 写的"能跑但不敢改"的代码变成"可验证的工程交付"
-2. **证据驱动** — 不是"我觉得可以"，而是 CI 绿 + 2+ 审查员 + 证据齐全
-3. **18 类专业化 Agent** — Coordinator、Frontend、Backend、Database、Bug Hunter、Behavior Reviewer 等
-4. **Worktree 隔离** — 并行开发互不干扰
-5. **上下文分层** — L0-L3 加载，不让 Agent 读整个 docs/
+开始接管一个仓库时，先做 Quick Scan，再选一个真实 Issue 跑完整闭环。验收时检查 CI、审查记录和 `docs/evidence/<issue>/` 是否对应同一份改动。只有这条链能稳定重复，才值得增加并行 Agent 或更多自动化。
 
-### 适用场景
-
-| 场景                   | 用 Harness? |
-| ---------------------- | :---------: |
-| 从 PRD 落地 MVP        |   ✅ 必须   |
-| 多 Issue 并行开发      |   ✅ 必须   |
-| 接手老项目、清理技术债 | ✅ 强烈推荐 |
-| 复盘失序的 repo        | ✅ 强烈推荐 |
-| 跨团队 / 跨 CLI 协作   |   ✅ 推荐   |
-| 改一行 typo            |   ❌ 不要   |
-| 一次性脚本             |   ❌ 不要   |
-
-### 快速开始
+### 最小使用路径
 
 ```bash
-# 1. 安装
 npx -y skills add lora-sys/ai-engineering-harness -g --all --full-depth
-
-# 2. 接管
-Use $ai-engineering-harness to take over this repo
-
-# 3. Quick Scan
 bash skills/dashboard/scripts/scan-to-issues.sh --create
-
-# 4. 推 Issue 到 Done
-Use $ai-engineering-harness to take Issue #1 from Planning to Done
-
-# 5. 验证
-ls docs/evidence/1/  # 证据齐全 ✅
+# 选择一个真实 Issue，跑完实现、CI、审查和证据检查
 ```
 
----
+## 项目信息
 
-## 开源与社区
-
-**GitHub**: https://github.com/lora-sys/ai-engineering-harness
-
-**版本**: 0.2.2
-
-**许可证**: MIT
-
-**贡献欢迎**：
-
-- 新 Agent 角色
-- 新 Workflow
-- 新检测器
-- 文档改进
-- Bug 报告
-
----
-
-**让每一行代码，都有证据。** 🎯
-
-**AI Engineering Harness** — Multi-agent engineering org harness for vibe-coded repos.
+- GitHub: https://github.com/lora-sys/ai-engineering-harness
+- 文章记录的版本: 0.2.2
+- License: MIT
