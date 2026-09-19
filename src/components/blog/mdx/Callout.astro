@@ -1,0 +1,95 @@
+---
+interface Props {
+  title?: string
+  tone?: 'note' | 'tip' | 'warning' | 'data'
+}
+
+const { title, tone = 'note' } = Astro.props
+const label = {
+  note: 'Note',
+  tip: 'Tip',
+  warning: 'Check',
+  data: 'Data'
+}[tone]
+---
+
+<aside class='mdx-callout not-prose' data-tone={tone}>
+  <div class='mdx-callout-heading'>
+    <span aria-hidden='true'></span>
+    <p>{title ?? label}</p>
+  </div>
+  <div class='mdx-callout-body'>
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .mdx-callout {
+    margin-block: 1.75rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    background: hsl(var(--card) / 0.72);
+    padding: 1rem 1.05rem;
+  }
+
+  .mdx-callout-heading {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .mdx-callout-heading span {
+    width: 0.6rem;
+    height: 0.6rem;
+    flex: none;
+    border: 1px solid hsl(var(--foreground) / 0.45);
+    border-radius: 999px;
+    background: hsl(var(--primary) / 0.18);
+  }
+
+  .mdx-callout[data-tone='tip'] .mdx-callout-heading span {
+    border-radius: 0.18rem;
+    background: hsl(var(--primary) / 0.28);
+  }
+
+  .mdx-callout[data-tone='warning'] .mdx-callout-heading span {
+    border-radius: 0;
+    transform: rotate(45deg);
+    background: hsl(var(--foreground) / 0.12);
+  }
+
+  .mdx-callout[data-tone='data'] .mdx-callout-heading span {
+    border-radius: 0.1rem;
+    box-shadow: inset 0 -0.18rem 0 hsl(var(--primary) / 0.42);
+  }
+
+  .mdx-callout-heading p {
+    margin: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.74rem;
+    font-weight: 650;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .mdx-callout-body {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.94rem;
+    line-height: 1.75;
+  }
+
+  .mdx-callout-body :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .mdx-callout-body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mdx-callout-heading span {
+      transform: none !important;
+    }
+  }
+</style>

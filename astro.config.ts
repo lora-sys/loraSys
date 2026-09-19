@@ -2,6 +2,7 @@ import { rehypeHeadingIds } from '@astrojs/markdown-remark'
 import AstroPureIntegration from 'astro-pure'
 import { defineConfig, fontProviders } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
+import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import remarkMath from 'remark-math'
 import remarkGfm from 'remark-gfm'
@@ -103,7 +104,7 @@ export default defineConfig({
   },
 
   // [Integrations]
-  integrations: [
+  integrations: [mdx(), 
     // Legacy article aliases redirect to /blog and must not be listed as separate content.
     sitemap({ filter: (page) => !/\/en\/writing\/[^/]+/.test(new URL(page).pathname) }),
     AstroPureIntegration(config)

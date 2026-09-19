@@ -1,0 +1,72 @@
+---
+interface Props {
+  stats: string
+  source?: string
+}
+
+const { stats, source } = Astro.props
+const items = stats
+  .split('|')
+  .map((item) => item.split('::', 2).map((part) => part.trim()))
+  .filter(([value, label]) => Boolean(value && label))
+  .slice(0, 4)
+---
+
+{items.length > 0 && (
+  <figure class='mdx-stat-strip not-prose'>
+    <div class='mdx-stat-grid'>
+      {items.map(([value, label]) => (
+        <div class='mdx-stat-item'>
+          <strong>{value}</strong>
+          <span>{label}</span>
+        </div>
+      ))}
+    </div>
+    {source && <figcaption>{source}</figcaption>}
+  </figure>
+)}
+
+<style>
+  .mdx-stat-strip {
+    margin-block: 1.8rem;
+  }
+
+  .mdx-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+    gap: 0.65rem;
+  }
+
+  .mdx-stat-item {
+    min-height: 6.4rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.85rem;
+    background: linear-gradient(145deg, hsl(var(--card) / 0.86), hsl(var(--muted) / 0.32));
+    padding: 0.95rem;
+  }
+
+  .mdx-stat-item strong {
+    display: block;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.4rem, 4vw, 2.15rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 590;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+
+  .mdx-stat-item span {
+    display: block;
+    margin-top: 0.62rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+
+  .mdx-stat-strip figcaption {
+    margin-top: 0.55rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+</style>

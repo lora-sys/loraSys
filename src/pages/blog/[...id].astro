@@ -3,6 +3,9 @@ import { type CollectionEntry, render } from 'astro:content'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PostLayout from '@/layouts/BlogPost.astro'
+import Callout from '@/components/blog/mdx/Callout.astro'
+import DataChart from '@/components/blog/mdx/DataChart.astro'
+import StatStrip from '@/components/blog/mdx/StatStrip.astro'
 
 export const prerender = true
 
@@ -20,12 +23,13 @@ type Props = {
 }
 
 const { post, posts } = Astro.props
+const mdxComponents = { Callout, DataChart, StatStrip }
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---
 
 <PostLayout {post} {posts} {headings} {remarkPluginFrontmatter}>
   <div class='reading-progress' aria-hidden='true'><i data-reading-progress></i></div>
-  <Content />
+  <Content components={mdxComponents} />
   <script>
     const progress=document.querySelector<HTMLElement>('[data-reading-progress]'); const updateReadingProgress=()=>{if(!progress)return;const max=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform=`scaleX(${max>0?window.scrollY/max:0})`}; window.addEventListener('scroll',updateReadingProgress,{passive:true}); window.addEventListener('resize',updateReadingProgress); updateReadingProgress()
   </script>

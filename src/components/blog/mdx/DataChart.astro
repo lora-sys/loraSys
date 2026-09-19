@@ -1,0 +1,256 @@
+---
+interface Props {
+  title: string
+  labels: string
+  values: string
+  description?: string
+  prefix?: string
+  suffix?: string
+  source?: string
+}
+
+const { title, labels, values, description, prefix = '', suffix = '', source } = Astro.props
+const parsedLabels = labels.split('|').map((item) => item.trim())
+const parsedValues = values.split('|').map((item) => Number(item.trim()))
+const count = Math.min(parsedLabels.length, parsedValues.length, 12)
+const data = Array.from({ length: count }, (_, index) => ({
+  label: parsedLabels[index],
+  value: parsedValues[index]
+})).filter((item) => item.label && Number.isFinite(item.value) && item.value >= 0)
+const maxValue = Math.max(1, ...data.map((item) => item.value))
+const formatValue = (value: number) => {
+  const formatted = new Intl.NumberFormat('zh-CN', {
+    maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    notation: Math.abs(value) >= 10000 ? 'compact' : 'standard'
+  }).format(value)
+  return `${prefix}${formatted}${suffix}`
+}
+---
+
+{data.length > 0 && (
+  <figure class='mdx-data-chart not-prose' data-mdx-chart>
+    <div class='mdx-data-chart-heading'>
+      <div>
+        <h3>{title}</h3>
+        {description && <p>{description}</p>}
+      </div>
+      <output data-chart-readout aria-live='polite'>
+        <span>{data[0].label}</span>
+        <strong>{formatValue(data[0].value)}</strong>
+      </output>
+    </div>
+
+    <div class='mdx-data-chart-bars' role='list' aria-label={title}>
+      {data.map((item, index) => (
+        <button
+          type='button'
+          role='listitem'
+          class='mdx-data-chart-row'
+          style={`--bar-size: ${(item.value / maxValue) * 100}%`}
+          data-chart-point
+          data-active={index === 0 ? 'true' : undefined}
+          data-label={item.label}
+          data-value={formatValue(item.value)}
+          aria-label={`${item.label}: ${formatValue(item.value)}`}
+        >
+          <span class='mdx-data-chart-label'>{item.label}</span>
+          <span class='mdx-data-chart-track' aria-hidden='true'><i></i></span>
+          <strong>{formatValue(item.value)}</strong>
+        </button>
+      ))}
+    </div>
+
+    {source && <figcaption>{source}</figcaption>}
+  </figure>
+)}
+
+<script>
+  const setupMdxCharts = () => {
+    document.querySelectorAll<HTMLElement>('[data-mdx-chart]').forEach((chart) => {
+      if (chart.dataset.chartReady === 'true') return
+      chart.dataset.chartReady = 'true'
+      const readout = chart.querySelector<HTMLOutputElement>('[data-chart-readout]')
+      const label = readout?.querySelector('span')
+      const value = readout?.querySelector('strong')
+      const points = chart.querySelectorAll<HTMLElement>('[data-chart-point]')
+
+      const activate = (point: HTMLElement) => {
+        if (label) label.textContent = point.dataset.label ?? ''
+        if (value) value.textContent = point.dataset.value ?? ''
+        points.forEach((item) => item.removeAttribute('data-active'))
+        point.setAttribute('data-active', 'true')
+      }
+
+      points.forEach((point) => {
+        point.addEventListener('focus', () => activate(point))
+        point.addEventListener('pointerenter', () => activate(point))
+        point.addEventListener('click', () => activate(point))
+      })
+    })
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMdxCharts, { once: true })
+  } else {
+    setupMdxCharts()
+  }
+</script>
+
+<style>
+  .mdx-data-chart {
+    margin-block: 2rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    background: hsl(var(--card) / 0.72);
+    padding: 1rem;
+  }
+
+  .mdx-data-chart-heading {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .mdx-data-chart-heading h3,
+  .mdx-data-chart-heading p {
+    margin: 0;
+  }
+
+  .mdx-data-chart-heading h3 {
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    font-weight: 620;
+    letter-spacing: -0.02em;
+  }
+
+  .mdx-data-chart-heading p {
+    max-width: 42rem;
+    margin-top: 0.28rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.76rem;
+    line-height: 1.45;
+  }
+
+  .mdx-data-chart output {
+    min-width: 7.6rem;
+    border-left: 1px solid hsl(var(--border));
+    padding-left: 0.85rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.2;
+    text-align: right;
+  }
+
+  .mdx-data-chart output span,
+  .mdx-data-chart output strong {
+    display: block;
+  }
+
+  .mdx-data-chart output strong {
+    margin-top: 0.24rem;
+    color: hsl(var(--foreground));
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 620;
+  }
+
+  .mdx-data-chart-bars {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .mdx-data-chart-row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.9fr) minmax(8rem, 2fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    border: 0;
+    border-radius: 0.55rem;
+    background: transparent;
+    padding: 0.45rem;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mdx-data-chart-row:hover,
+  .mdx-data-chart-row:focus-visible,
+  .mdx-data-chart-row[data-active='true'] {
+    background: hsl(var(--muted) / 0.45);
+    outline: none;
+  }
+
+  .mdx-data-chart-label {
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mdx-data-chart-track {
+    height: 0.7rem;
+    overflow: hidden;
+    border-radius: 999px;
+    background: hsl(var(--muted));
+  }
+
+  .mdx-data-chart-track i {
+    display: block;
+    width: var(--bar-size);
+    height: 100%;
+    border-radius: inherit;
+    background: hsl(var(--primary) / 0.68);
+  }
+
+  .mdx-data-chart-row strong {
+    min-width: 4.5rem;
+    color: hsl(var(--foreground));
+    font-size: 0.74rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 620;
+    text-align: right;
+  }
+
+  .mdx-data-chart figcaption {
+    margin-top: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 640px) {
+    .mdx-data-chart-heading {
+      display: grid;
+    }
+
+    .mdx-data-chart output {
+      min-width: 0;
+      border-top: 1px solid hsl(var(--border));
+      border-left: 0;
+      padding-top: 0.6rem;
+      padding-left: 0;
+      text-align: left;
+    }
+
+    .mdx-data-chart-row {
+      grid-template-columns: 1fr auto;
+    }
+
+    .mdx-data-chart-track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mdx-data-chart-row,
+    .mdx-data-chart-track i {
+      transition: none;
+    }
+  }
+</style>

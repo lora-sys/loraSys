@@ -6,6 +6,7 @@
       "name": "astro-theme-pure",
       "dependencies": {
         "@astrojs/check": "^0.9.6",
+        "@astrojs/mdx": "^4.3.13",
         "@astrojs/rss": "^4.0.15",
         "@unocss/astro": "^66.5.10",
         "@waline/client": "^3.12.2",
