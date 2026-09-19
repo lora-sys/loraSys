@@ -270,10 +270,25 @@ const articleFieldNote = {
 
   const loadMermaid = () => {
     mermaidLoader ??= import('mermaid').then(({ default: mermaid }) => {
+      const styles = getComputedStyle(document.documentElement)
+      const themeColor = (name: string, fallback: string) => {
+        const value = styles.getPropertyValue(name).trim().split(/\s+/)
+        return value.length >= 3 ? `hsl(${value[0]}, ${value[1]}, ${value[2]})` : fallback
+      }
       mermaid.initialize({
         startOnLoad: false,
         securityLevel: 'strict',
-        theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default'
+        theme: 'base',
+        themeVariables: {
+          darkMode: document.documentElement.classList.contains('dark'),
+          primaryColor: themeColor('--card', '#f2ece2'),
+          primaryTextColor: themeColor('--foreground', '#211d1a'),
+          primaryBorderColor: themeColor('--border', '#cec4b8'),
+          lineColor: themeColor('--muted-foreground', '#5b544f'),
+          secondaryColor: themeColor('--muted', '#ebe4d9'),
+          tertiaryColor: themeColor('--background', '#fbf8f1'),
+          edgeLabelBackground: themeColor('--background', '#fbf8f1')
+        }
       })
       return mermaid
     })
@@ -544,6 +559,17 @@ const articleFieldNote = {
     min-width: 36rem;
     height: auto;
     margin-inline: auto;
+  }
+
+  @media (max-width: 640px) {
+    .mermaid-diagram {
+      padding: 0.75rem;
+      overscroll-behavior-inline: contain;
+    }
+
+    .mermaid-diagram svg {
+      min-width: 28rem;
+    }
   }
 
   .article-reading-marker{display:flex;align-items:center;gap:1rem;margin-block:2.5rem;padding:1rem;border-top:1px dashed hsl(var(--border));border-bottom:1px dashed hsl(var(--border));background:hsl(var(--card)/.45);border-radius:.8rem}.article-reading-marker .reading-marker-visual{width:clamp(5rem,12vw,9rem);height:auto;opacity:.85;filter:saturate(.9) contrast(.95)}.article-reading-marker p{margin:0;color:hsl(var(--muted-foreground));font-size:.78rem}.article-reading-marker a{color:hsl(var(--foreground));text-decoration:underline;text-underline-offset:.2rem}
