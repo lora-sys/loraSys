@@ -309,6 +309,40 @@ const articleFieldNote = {
     }
   }
 
+  const setupCurrentSection = () => {
+    const content = document.getElementById('content')
+    const sidebar = document.getElementById('sidebar')
+    if (!content || !sidebar) return
+
+    const headings = Array.from(content.querySelectorAll<HTMLElement>('h2[id], h3[id]'))
+    const links = Array.from(sidebar.querySelectorAll<HTMLAnchorElement>('a[href^="#"]'))
+    if (!headings.length || !links.length) return
+
+    let frame = 0
+    const update = () => {
+      frame = 0
+      let active = headings[0]
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= 180) active = heading
+        else break
+      }
+      const hash = '#' + active.id
+      links.forEach((link) => {
+        const current = link.getAttribute('href') === hash
+        link.toggleAttribute('data-current', current)
+        if (current) link.setAttribute('aria-current', 'location')
+        else link.removeAttribute('aria-current')
+      })
+    }
+    const requestUpdate = () => {
+      if (frame) return
+      frame = requestAnimationFrame(update)
+    }
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    update()
+  }
+
   const observeMermaidDiagrams = () => {
     const blocks = Array.from(document.querySelectorAll<HTMLElement>(mermaidSelector))
     if (!blocks.length) return
@@ -334,9 +368,13 @@ const articleFieldNote = {
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', observeMermaidDiagrams, { once: true })
+    document.addEventListener('DOMContentLoaded', () => {
+      observeMermaidDiagrams()
+      setupCurrentSection()
+    }, { once: true })
   } else {
     observeMermaidDiagrams()
+    setupCurrentSection()
   }
 </script>
 
@@ -381,6 +419,12 @@ const articleFieldNote = {
     text-decoration: none;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .article-toc-overview > nav a[data-current],
+  #sidebar :global(a[aria-current='location']) {
+    color: hsl(var(--foreground));
+    font-weight: 650;
   }
 
   .article-toc-overview > nav a:hover,
@@ -516,15 +560,30 @@ const articleFieldNote = {
     font-weight: 600;
   }
   #content details:not(.article-toc-condensed)[open] > summary { margin-bottom: 0.7rem; }
-  #content blockquote {
-    border-left-width: 2px;
-    border-left-color: hsl(var(--primary) / 0.5);
-    background: hsl(var(--muted) / 0.28);
-    padding-block: 0.3rem;
-    padding-right: 0.8rem;
+  #content > :where(p, ul, ol) {
+    max-width: 72ch;
   }
-  #content img { border-radius: 0.7rem; }
-  #content table { font-size: 0.86rem; }
+  #content > h2 {
+    margin-top: 2.7rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1.35rem;
+    scroll-margin-top: 6rem;
+    letter-spacing: -0.025em;
+  }
+  #content > h2:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+  #content > h3 {
+    scroll-margin-top: 6rem;
+    letter-spacing: -0.015em;
+  }
+  #content img {
+    display: block;
+    max-width: 100%;
+    margin-inline: auto;
+    border-radius: 0.7rem;
+  }
   #content figcaption {
     margin-top: 0.55rem;
     color: hsl(var(--muted-foreground));
