@@ -122,13 +122,38 @@ try {
         await page.locator('.pagefind-ui__result-link').first().waitFor({state:'visible'})
         assert.ok((await page.locator('.pagefind-ui__result-link').allTextContents()).some(s=>s.includes('Zhihu')))
         await capture(`${lang?'en':'zh'}-search-results`)
-        const noMatchTerm = 'qvwxjkpzqvwxjkpzqvwxjkpz'
+        const noMatchTerm = await page.evaluate(async (basePath) => {
+          const pagefind = await import(`${location.origin}${basePath}pagefind/pagefind.js`)
+          const candidates = [
+            'qvwxjkpzqvwxjkpzqvwxjkpz',
+            'zzzzqjvxzzzzqjvxzzzzqjvx',
+            'xkqvwjpzmxkqvwjpzmxkqvwjpzm'
+          ]
+          for (const term of candidates) {
+            try {
+              const result = await pagefind.search(term)
+              if (result.results.length === 0) return term
+            } catch {}
+          }
+          throw new Error('Could not find a deterministic zero-result Pagefind term')
+        }, base)
         await input.fill(noMatchTerm)
-        await page.waitForFunction((term) => {
-          const input = document.querySelector('.pagefind-ui__search-input')
-          const results = document.querySelector('.pagefind-ui__results')
-          return input?.value === term && Boolean(results) && !document.querySelector('.pagefind-ui__result')
-        }, noMatchTerm)
+        try {
+          await page.waitForFunction((term) => {
+            const input = document.querySelector('.pagefind-ui__search-input')
+            const results = document.querySelector('.pagefind-ui__results')
+            return input?.value === term && Boolean(results) && !document.querySelector('.pagefind-ui__result')
+          }, noMatchTerm)
+        } catch (error) {
+          const state = await page.evaluate(() => ({
+            value: document.querySelector('.pagefind-ui__search-input')?.value ?? '',
+            message: document.querySelector('.pagefind-ui__message')?.textContent?.trim() ?? '',
+            resultsContainer: Boolean(document.querySelector('.pagefind-ui__results')),
+            resultCount: document.querySelectorAll('.pagefind-ui__result').length,
+            drawerHidden: document.querySelector('.pagefind-ui__drawer')?.classList.contains('pagefind-ui__hidden') ?? null
+          }))
+          throw new Error(`Zero-result UI did not settle: ${JSON.stringify(state)}\n${String(error)}`)
+        }
         await page.locator('[data-search-empty]').waitFor({state:'visible'})
         await capture(`${lang?'en':'zh'}-search-empty`)
       }
