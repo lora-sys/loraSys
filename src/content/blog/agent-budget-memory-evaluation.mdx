@@ -119,11 +119,13 @@ Elo 也有取舍。它告诉你谁更容易赢，却不告诉你快了多少毫�
 
 图 3，依据论文 Figure 8 右下图数值重绘。横轴为六种离散配置，连线只帮助阅读，不代表测过中间配置。
 
-| 会话数量 | Joint-Elo |
-| --- | --- |
-| 1 个。 | 1981。 |
-| 3 个。 | 2245。 |
-| 10 个。 | 1890。 |
+<DataChart
+  title="固定 1 亿 token 预算下的三个配置"
+  description="Polyomino Packing，Kimi Code + Kimi K2.7。数值来自论文 Figure 8 的同一次 Joint-Elo 拟合；越高只表示该拟合里的相对表现更高，不是质量百分比。"
+  labels="1 个会话|3 个会话|10 个会话"
+  values="1981|2245|1890"
+  source="Source: When Agents Slow Down, Figure 8。本文只抽取正在讨论的三个离散配置。"
+/>
 
 表中列出本文讨论的三个配置。三个会话的 Joint-Elo 为 2245，比一个会话高 264，比十个会话高 355。这是同一次拟合中的比较，不是质量百分比。完整配置见[论文 Figure 8](https://arxiv.org/pdf/2609.15309#page=14)。
 
