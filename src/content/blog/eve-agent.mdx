@@ -19,6 +19,11 @@ The framework is most relevant when an Agent already depends on Vercel services.
 
 This article is a dated technical survey. The repository and documentation were moving quickly when it was written. API names, defaults, limits and GitHub counts should be rechecked before reuse. The article focuses on programming model, lifecycle, state, security boundaries, deployment assumptions and migration work rather than treating the framework's marketing claims as measured production results.
 
+<KeyPoints
+  title="What matters before adoption"
+  items="Filesystem-first model::Agent identity, tools, skills, channels and schedules live in predictable project files|Durability is a platform feature::Long-running turns rely on Vercel Workflows rather than one in-memory loop|Sandboxing is explicit::Untrusted execution has a separate runtime boundary and still needs permission design|Portability has a cost::Deep integration with Vercel services can reduce glue code while increasing platform coupling"
+/>
+
 ## Design Philosophy and Overall Architecture
 
 Eve's basic abstraction is: "an agent is a directory." Both the official documentation and repository emphasize that Eve doesn't use one giant configuration object to declare a system; instead, each concern of an agent is placed in an explicit file location, and the framework convention-discovers these files, compiling them into applications that can run locally, be exposed via HTTP, connect to Slack and other channels, and persist across multiple durable turns.

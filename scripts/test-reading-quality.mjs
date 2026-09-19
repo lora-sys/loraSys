@@ -247,6 +247,34 @@ try {
         await capture('mdx-key-points')
       })
 
+      await check(`${label} second MDX component pass stays readable`, page, async () => {
+        await open('blog/long-running-agent-session-context-state')
+        await page.locator('.mdx-key-points').first().waitFor({ state: 'visible' })
+        assert.equal(await page.locator('.mdx-key-points article').count(), 3)
+
+        await open('blog/kitaru-agent-regression-testing')
+        const replaySteps = page.locator('.mdx-process-steps').first()
+        await replaySteps.waitFor({ state: 'visible' })
+        assert.equal(await replaySteps.locator('li').count(), 5)
+        await replaySteps.scrollIntoViewIfNeeded()
+        await capture('mdx-kitaru-process')
+
+        await open('blog/tau-agent-loop-events')
+        const messageComparison = page.locator('.mdx-compare-panel').first()
+        await messageComparison.waitFor({ state: 'visible' })
+        await messageComparison.scrollIntoViewIfNeeded()
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
+        await capture('mdx-tau-compare')
+
+        await open('blog/eve-agent')
+        const evePoints = page.locator('.mdx-key-points').first()
+        await evePoints.waitFor({ state: 'visible' })
+        assert.equal(await evePoints.locator('article').count(), 4)
+        await evePoints.scrollIntoViewIfNeeded()
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
+        await capture('mdx-eve-key-points')
+      })
+
       await check(`${label} no uncaught application errors`, page, async () => assert.deepEqual(pageErrors, []))
       await context.close()
     }

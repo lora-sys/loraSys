@@ -4,7 +4,7 @@
     {
       "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
       "slug": "kitaru-agent-regression-testing",
-      "content_fingerprint": "git-blob:e8c40124b34e5662ee2fe6dc6e2e98a559fc9a11",
+      "content_fingerprint": "git-blob:a2649a0702fccda398e292d20e129b4e79dd4f7d",
       "source_last_edited_at": "2026-09-17T01:13:36.189Z",
       "status": "synced"
     },
@@ -12,7 +12,7 @@
       "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
       "source_section_sha256": "1c6c028e6e1d092558e36893ad98cacab7ae7920089daf45b7266e2a01f5045a",
       "slug": "long-running-agent-session-context-state",
-      "content_fingerprint": "git-blob:4213e97cd97ff930b18c3e110e31d211de72dd91",
+      "content_fingerprint": "git-blob:6baa940301d0eb103ca64bd08df0ecf2fb643220",
       "source_last_edited_at": "2026-09-17T01:18:44.722Z",
       "status": "synced"
     },

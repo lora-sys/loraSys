@@ -34,6 +34,15 @@ Agent 事件循环示意图。
 
 流式增量让前端立即显示新内容。最终助手消息用于保存、恢复会话和构造下一次请求。这两种数据不能互相替代。[1]
 
+<ComparePanel
+  title="同一次运行里的两种消息职责"
+  leftTitle="流式增量"
+  left="尽快更新页面上的文字和状态|允许用户看到运行进度|不能单独作为会话恢复依据"
+  rightTitle="最终消息"
+  right="保存完整助手输出和工具调用信息|用于恢复会话与构造下一次模型请求|不需要替代前端的实时增量显示"
+  source="依据 Tau Agent Loop 文档中 MessageUpdateEvent 与 MessageEndEvent 的职责划分"
+/>
+
 例如，页面已经显示了一段文本，不代表完整的工具调用记录已经保存。会话恢复应该读取最终消息，而不是把页面显示过的所有文本片段重新拼接。
 
 Tau 的可复用核心提供 `MessageUpdateEvent` 和 `MessageEndEvent` 等事件。消息更新事件包含具体的流式变化，消息结束事件包含最终助手消息。工具生命周期使用 `ToolExecutionStartEvent`、`ToolExecutionUpdateEvent` 和 `ToolExecutionEndEvent`。[1]

@@ -112,5 +112,15 @@
       "agent-budget-memory-evaluation"
     ],
     "rule": "Use structural components only when they expose information already present in the article. Do not decorate every section."
+  },
+  "mdx_component_pass_2": {
+    "reviewed_at": "2026-09-19",
+    "changed": [
+      "long-running-agent-session-context-state",
+      "kitaru-agent-regression-testing",
+      "tau-agent-loop-events",
+      "eve-agent"
+    ],
+    "rule": "Add only one structural MDX surface when it exposes an existing state boundary, workflow, comparison, or adoption decision."
   }
 }
