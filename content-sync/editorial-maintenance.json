@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "reviewed_at": "2026-09-19",
+  "policy": "Reopen an article only for a source change, factual correction, broken media, or a documented MDX content-contract violation.",
+  "entries": [
+    {
+      "slug": "agent-budget-memory-evaluation",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "agent-tool-search-mcp-ard",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "ai-engineering-harness",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "eve-agent",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "free-vision-skill",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "hermes-minimax-media",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "hermes-stepfun-imagegen",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "kitaru-agent-regression-testing",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "long-running-agent-session-context-state",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "loop-engineering-harness",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "newtube",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "sandbox",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "tau-agent-architecture",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "tau-agent-loop-events",
+      "format": "mdx",
+      "status": "reviewed"
+    },
+    {
+      "slug": "wishlive",
+      "format": "mdx",
+      "status": "reviewed"
+    }
+  ]
+}
