@@ -18,6 +18,7 @@ const data = Array.from({ length: count }, (_, index) => ({
   value: parsedValues[index]
 })).filter((item) => item.label && Number.isFinite(item.value) && item.value >= 0)
 const maxValue = Math.max(1, ...data.map((item) => item.value))
+const midpoint = maxValue / 2
 const formatValue = (value: number) => {
   const formatted = new Intl.NumberFormat('zh-CN', {
     maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
@@ -40,11 +41,14 @@ const formatValue = (value: number) => {
       </output>
     </div>
 
-    <div class='mdx-data-chart-bars' role='list' aria-label={title}>
+    <div class='mdx-data-chart-scale' aria-hidden='true'>
+      <span>0</span><span>{formatValue(midpoint)}</span><span>{formatValue(maxValue)}</span>
+    </div>
+
+    <div class='mdx-data-chart-bars' aria-label={title}>
       {data.map((item, index) => (
         <button
           type='button'
-          role='listitem'
           class='mdx-data-chart-row'
           style={`--bar-size: ${(item.value / maxValue) * 100}%`}
           data-chart-point
@@ -52,6 +56,7 @@ const formatValue = (value: number) => {
           data-label={item.label}
           data-value={formatValue(item.value)}
           aria-label={`${item.label}: ${formatValue(item.value)}`}
+          aria-pressed={index === 0 ? 'true' : 'false'}
         >
           <span class='mdx-data-chart-label'>{item.label}</span>
           <span class='mdx-data-chart-track' aria-hidden='true'><i></i></span>
@@ -77,8 +82,12 @@ const formatValue = (value: number) => {
       const activate = (point: HTMLElement) => {
         if (label) label.textContent = point.dataset.label ?? ''
         if (value) value.textContent = point.dataset.value ?? ''
-        points.forEach((item) => item.removeAttribute('data-active'))
+        points.forEach((item) => {
+          item.removeAttribute('data-active')
+          item.setAttribute('aria-pressed', 'false')
+        })
         point.setAttribute('data-active', 'true')
+        point.setAttribute('aria-pressed', 'true')
       }
 
       points.forEach((point) => {
@@ -155,6 +164,18 @@ const formatValue = (value: number) => {
     font-variant-numeric: tabular-nums;
     font-weight: 620;
   }
+
+  .mdx-data-chart-scale {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 4.95rem 0.35rem min(7.7rem, 34%);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.6rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mdx-data-chart-scale span:nth-child(2) { text-align: center; }
+  .mdx-data-chart-scale span:last-child { text-align: right; }
 
   .mdx-data-chart-bars {
     display: grid;
@@ -235,6 +256,11 @@ const formatValue = (value: number) => {
       padding-top: 0.6rem;
       padding-left: 0;
       text-align: left;
+    }
+
+    .mdx-data-chart-scale {
+      margin-right: 0;
+      margin-left: 0;
     }
 
     .mdx-data-chart-row {
