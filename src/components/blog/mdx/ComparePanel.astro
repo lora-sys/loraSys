@@ -1,0 +1,44 @@
+---
+interface Props {
+  title?: string
+  leftTitle: string
+  rightTitle: string
+  left: string
+  right: string
+  source?: string
+}
+const { title, leftTitle, rightTitle, left, right, source } = Astro.props
+const parse = (value: string) => value.split('|').map((item) => item.trim()).filter(Boolean).slice(0, 6)
+const leftItems = parse(left)
+const rightItems = parse(right)
+---
+
+<section class='mdx-compare-panel not-prose'>
+  {title && <h3>{title}</h3>}
+  <div class='mdx-compare-grid'>
+    <section>
+      <p class='mdx-compare-label'>{leftTitle}</p>
+      <ul>{leftItems.map((item) => <li>{item}</li>)}</ul>
+    </section>
+    <section>
+      <p class='mdx-compare-label'>{rightTitle}</p>
+      <ul>{rightItems.map((item) => <li>{item}</li>)}</ul>
+    </section>
+  </div>
+  {source && <p class='mdx-compare-source'>{source}</p>}
+</section>
+
+<style>
+  .mdx-compare-panel { margin-block: 2rem; }
+  .mdx-compare-panel > h3 { margin: 0 0 0.75rem; color: hsl(var(--foreground)); font-size: 0.92rem; font-weight: 650; }
+  .mdx-compare-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+  .mdx-compare-grid > section { border: 1px solid hsl(var(--border)); border-radius: 0.9rem; background: hsl(var(--card) / 0.56); padding: 0.95rem; }
+  .mdx-compare-grid > section:last-child { box-shadow: inset 0 0.18rem hsl(var(--primary) / 0.32); }
+  .mdx-compare-label { margin: 0 0 0.6rem; color: hsl(var(--foreground)); font-size: 0.76rem; font-weight: 680; letter-spacing: 0.02em; }
+  .mdx-compare-grid ul { display: grid; gap: 0.45rem; margin: 0; padding: 0; list-style: none; }
+  .mdx-compare-grid li { position: relative; padding-left: 0.9rem; color: hsl(var(--muted-foreground)); font-size: 0.76rem; line-height: 1.5; }
+  .mdx-compare-grid li::before { content: ''; position: absolute; top: 0.62em; left: 0; width: 0.34rem; height: 0.34rem; border-radius: 999px; background: hsl(var(--foreground) / 0.38); }
+  .mdx-compare-grid > section:last-child li::before { background: hsl(var(--primary) / 0.75); }
+  .mdx-compare-source { margin: 0.55rem 0 0; color: hsl(var(--muted-foreground)); font-size: 0.66rem; }
+  @media (max-width: 640px) { .mdx-compare-grid { grid-template-columns: 1fr; } }
+</style>
