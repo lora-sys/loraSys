@@ -122,5 +122,22 @@
       "eve-agent"
     ],
     "rule": "Add only one structural MDX surface when it exposes an existing state boundary, workflow, comparison, or adoption decision."
+  },
+  "interactive_mdx_pass": {
+    "reviewed_at": "2026-09-19",
+    "changed": [
+      "agent-budget-memory-evaluation",
+      "tau-agent-architecture",
+      "hermes-stepfun-imagegen",
+      "hermes-minimax-media",
+      "eve-agent"
+    ],
+    "framework_change": "Added OptionTabs for two-to-four real alternatives or architecture layers.",
+    "principles": [
+      "replace duplicate static tables when the interactive view is easier to inspect",
+      "keep numeric visualizations source-backed",
+      "use keyboard-accessible tabs and preserve mobile no-overflow",
+      "do not add interaction to code-heavy articles when it does not reduce reading cost"
+    ]
   }
 }
