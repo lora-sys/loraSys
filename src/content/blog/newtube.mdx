@@ -23,20 +23,20 @@ The article describes the repository and its intended service integrations. A ho
 
 ## Project Overview
 
-### What is NewTube?
+### Implemented surface
 
-NewTube is a video-sharing application that includes:
+NewTube implements the following repository features:
 
-- **Video Upload & Streaming**: Powered by Mux with HLS adaptive streaming
-- **User Authentication**: Complete auth flow with Clerk
-- **Creator Studio**: Dashboard for video management and analytics
-- **Subscription System**: Follow your favorite creators
-- **Comments & Reactions**: Full engagement features
-- **Playlists**: Create and manage video collections
-- **AI Features**: Auto-generate titles, descriptions, and thumbnails
-- **Responsive Design**: Responsive layouts for desktop and mobile
+- Video upload and HLS playback through Mux
+- Clerk-backed sign-in and user mapping
+- Creator screens for video management
+- Creator subscriptions
+- Comments and reactions
+- Playlists
+- Hooks for generating titles, descriptions, and thumbnails
+- Responsive layouts for desktop and mobile
 
-### Tech Stack at a Glance
+### Tech stack
 
 | Layer    | Technology                                     |
 | -------- | ---------------------------------------------- |
@@ -51,29 +51,20 @@ NewTube is a video-sharing application that includes:
 
 ---
 
-## Architecture Deep Dive
+## Architecture
 
-### System Architecture
+### System architecture
 
-The application follows a **three-tier architecture** with serverless patterns optimized for modern cloud deployment:
+The repository separates the browser and React layer, the tRPC API layer, and data or external-service access. The important boundary is that UI code calls typed procedures instead of reaching directly into database or service clients.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      CLIENT LAYER                                │
-│  Browser / Mobile → React Components → tRPC Client              │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────────────────────────────────────────────────┐
-│                      API LAYER (tRPC)                            │
-│  - protectedProcedure middleware                                 │
-│  - Input validation (Zod)                                        │
-│  - Rate limiting (Upstash)                                       │
-└─────────────────────────────────────────────────────────────────┘
-                              ↓
-┌─────────────────────���───────────────────────────────────────────┐
-│                      DATA LAYER                                  │
-│  PostgreSQL (Drizzle ORM) ←→ Redis Cache ←→ External Services   │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    U[Browser and React UI] --> T[tRPC client]
+    T --> A[tRPC procedures]
+    A --> V[Zod validation and auth checks]
+    V --> D[Drizzle and PostgreSQL]
+    V --> M[Mux and other external services]
+    V --> C[Redis and background services]
 ```
 
 ### Project Structure
@@ -94,7 +85,7 @@ modules/
 └── ... (other features)
 ```
 
-This approach keeps related code together, making the codebase more maintainable as it grows.
+This layout keeps server procedures, UI code, and feature types close to the feature that uses them.
 
 ### Request Flow Example
 
@@ -303,7 +294,7 @@ export async function POST(req: Request) {
 }
 ```
 
-### 5. AI-Powered Content Generation
+### 5. AI-assisted metadata generation
 
 Using QStash for async AI tasks:
 
@@ -340,7 +331,7 @@ export async function POST(req: Request) {
 }
 ```
 
-### 6. Optimistic Updates for Better UX
+### 6. Optimistic updates and rollback
 
 ```typescript
 const utils = trpc.useUtils();
@@ -377,7 +368,7 @@ const likeMutation = trpc.videoReactions.like.useMutation({
 
 ---
 
-## Challenges and Solutions
+## Problems encountered
 
 ### Challenge 1: SSR Authentication with Protected Routes
 
@@ -515,37 +506,19 @@ useEffect(() => {
 
 ---
 
-## Conclusion
+## What the repository demonstrates
 
-Building NewTube was an incredible learning experience that pushed me to solve real-world problems at scale. Here's what I learned:
+The useful part of this project is the set of boundaries it makes explicit. React components do not query PostgreSQL directly. tRPC procedures own input validation and authorization. Mux handles video processing outside the request path. Client mutations can update optimistically, but they also keep rollback and invalidation paths.
 
-### Key Takeaways
+The repository also shows several limits that still need production verification. A hosted deployment is not published, so this article does not claim measured scale, latency, cache hit rate, or SEO improvement. The three-tier auth cache, polling loop, and CORS configuration should be treated as implementation choices to test under the deployment that actually uses them.
 
-1. **Type Safety is Non-Negotiable**: tRPC + TypeScript + Zod eliminated entire categories of bugs
-2. **Server Components are Game-Changers**: SSR prefetching dramatically improved UX and SEO
-3. **Caching Strategy Matters**: The three-tier auth caching reduced database queries by 90%
-4. **Webhooks Enable Async Workflows**: Critical for video processing and AI tasks
-5. **Feature-Based Architecture Scales**: The "moubles" structure kept the codebase maintainable
+## Next work
 
-### What's Next?
+The next useful steps are concrete: publish a hosted environment, measure the video-processing path, replace polling where event delivery is available, add failure tests around upload and auth boundaries, and document which AI metadata features are enabled in production.
 
-Future improvements I'm planning:
+## Resources
 
-- Real-time notifications with Server-Sent Events
-- Video chapters and timestamps
-- Live streaming support
-- Advanced analytics dashboard
-- Mobile app with React Native
-
-### Resources
-
-- **GitHub Repository**: [NewTube Clone](https://github.com/lora-sys/Newtube-clone)
-- **Next.js Documentation**: [nextjs.org/docs](https://nextjs.org/docs)
-- **tRPC Documentation**: [trpc.io/docs](https://trpc.io/docs)
-- **Drizzle ORM**: [orm.drizzle.team](https://orm.drizzle.team/)
-
----
-
-Thank you for reading! If you found this article helpful, please give the [repository](https://github.com/lora-sys/Newtube-clone) a ⭐ and feel free to reach out with questions.
-
-**Happy coding! 🚀**
+- [NewTube Clone repository](https://github.com/lora-sys/Newtube-clone)
+- [Next.js documentation](https://nextjs.org/docs)
+- [tRPC documentation](https://trpc.io/docs)
+- [Drizzle ORM documentation](https://orm.drizzle.team/)
