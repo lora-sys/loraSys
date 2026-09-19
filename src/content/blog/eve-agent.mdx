@@ -13,27 +13,11 @@ This article reflects Eve's documented Beta or Preview state on 2026-07-03. Rech
 
 ## Executive Summary
 
-Vercel Eve is an open-source Agent framework launched by Vercel in June 2026, and as of 2026-07-03 it remains in Beta/Preview.
+Vercel Eve is an open-source Agent framework that was still documented as Beta or Preview on 2026-07-03. Its main programming model is filesystem-based: instructions, runtime configuration, tools, skills, channels, connections, subagents and schedules live in predictable files and directories that Eve discovers at build time.
 
-Its core proposition is not "another agent loop SDK," but modeling an Agent directly as a directory in the filesystem: `instructions.md` handles long-term system prompts, `agent.ts` handles runtime configuration and model selection, and directories like `tools/`, `skills/`, `channels/`, `connections/`, `subagents/`, `schedules/` each carry capabilities, channels, external integrations, sub-agents, and scheduled tasks; the framework compiles these files through auto-discovery into an Agent application running on Vercel Functions with runtime features: durable execution, event streams, sandbox execution, observability, approvals, and human-in-the-loop collaboration.
+The framework is most relevant when an Agent already depends on Vercel services. Durable execution uses Vercel Workflows, model access can use AI Gateway, external connections can use Connect, and deployment targets Vercel Functions. That integration reduces glue code for a Vercel-centered stack, but it also creates a real portability cost that should be evaluated before adoption.
 
-From a design perspective, Eve's differentiation comes down to four advantages. First, it's a strongly opinionated filesystem-first programming model that reduces the structural complexity of multi-agent, multi-channel, multi-tool systems.
-
-Second, it builds durable execution directly on Vercel Workflows, allowing sessions/turns to recover across cold starts, redeployments, and long pauses. Third, it treats sandboxes as first-class citizens, isolating untrusted code execution by default in a separate security context.
-
-Fourth, it's deeply coupled with AI Gateway, Connect, Observability, and OIDC, making model access, credential proxying, tracing, and access control smoother on the Vercel platform.
-
-If your team runs primarily on Vercel, wants to treat Agents as deployable backend systems rather than "model call scripts," and needs Slack/Web/GitHub/scheduled tasks/approvals/long-running/observable production capabilities, Eve may reduce integration work for teams already using Vercel services.
-
-Conversely, if you need cross-cloud/self-hosted infrastructure portability, or your team prefers graph-based orchestration (LangGraph), OpenAI-native tools and containers (OpenAI Agents SDK), or framework-agnostic TypeScript AI application frameworks (Mastra), you should evaluate platform binding, runtime assumptions, and migration costs more carefully.
-
-This assessment comes from official documentation descriptions of runtime structure, persistence, sandboxes, channels, deployment, and platform service dependencies, as well as comparative analysis with other official framework documentation.
-
-Regarding maturity, Eve's strengths are Vercel-backed ownership, comprehensive documentation, rich templates, and a growing GitHub community.
-
-As of this writing, official documentation explicitly labels it Beta, the GitHub repository has approximately 3.2k stars and 252 forks, and official/related templates already cover typical scenarios including Web Chat, Slack content assistants, personal agents, PR triage, and browser agents.
-
-This indicates a coherent framework surface, but it should still be treated as a rapidly evolving early-stage framework. Production adoption should be accompanied by approval strategies, authentication, evaluations, cost guardrails, and rollback plans.
+This article is a dated technical survey. The repository and documentation were moving quickly when it was written. API names, defaults, limits and GitHub counts should be rechecked before reuse. The article focuses on programming model, lifecycle, state, security boundaries, deployment assumptions and migration work rather than treating the framework's marketing claims as measured production results.
 
 ## Design Philosophy and Overall Architecture
 
@@ -562,8 +546,10 @@ If your existing system comes from LangGraph, custom agent loops, OpenAI Agents 
 | Idempotency and rollback               | Design idempotency keys and compensation logic for all external side effects, since interrupted steps may re-run        |
 | Observability and privacy              | Enable Agent Runs, integrate OTel if needed, and assess sensitive data tracking disclosure obligations                  |
 
-## Final Recommendation
+## When Eve is a reasonable fit
 
-If your tech stack is centered around Vercel, my recommendation is clear: you can adopt Eve, but proceed as a "production framework pilot" rather than a "prototype tool." Prioritize landing in internal assistants, content workflows, retrieval/knowledge assistants, PR triage, and browser/file-type agents; for financial, legal, medical, and external write-operation scenarios, must-frontload approvals, idempotency, auditing, and permissions as design constraints rather than post-launch patches.
+Eve is worth evaluating when a project already runs on Vercel and needs several of the following at the same time: long-running turns, channels, scheduled tasks, sandboxed execution, subagents, approvals and platform observability. In that situation the framework can replace custom integration code with conventions that are already wired to Vercel services.
 
-Comprehensive official documentation, templates, and platform capabilities indicate that Eve's greatest value isn't making Agents "smarter," but making Agents more like genuinely operable backend systems.
+It is a weaker fit when self-hosting, cross-cloud portability or framework-independent runtime control is a primary requirement. Beta or Preview status also means migration cost is not only a future concern. Teams should pin versions, test upgrade paths, keep authorization outside model prompts, add idempotency around side effects, and define a rollback path before moving a critical workflow onto it.
+
+For production evaluation, start with one bounded workflow and measure failure recovery, duplicate side effects, permission handling, trace quality and operating cost. Expand only after those behaviors are stable under the deployment you actually use.
