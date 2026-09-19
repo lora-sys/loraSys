@@ -1,22 +1,22 @@
 ---
 title: '用 MiniMax 为 Hermes Agent 接入图片与视频生成'
-description: '这篇教程记录了从零到 PyPI 的完整流程：本地开发两个 minimax 插件（image-01 T2I+I2I、Hailuo-2.3 T2V+I2V 异步轮询），CI 自动化、CN endpoint 优先、双 region 自动 fallback，3 张示例图 + 1 个 demo.gif 让你看效果。'
+description: '记录 Hermes 的 MiniMax 图片与视频插件实现，包括 image-01、Hailuo 异步任务、CN 与 global endpoint fallback、端到端测试和 PyPI 发布。'
 publishDate: '2026-07-10T00:00:00Z'
 tags: ['Hermes Agent', 'MiniMax', 'Image Generation', 'Video Generation', 'Plugin', 'AI']
 language: 'zh-CN'
 draft: false
 ---
 
-如果你已经在用 Hermes Agent，但没有本地 GPU、也不想折腾 ComfyUI，那么这篇教程很适合你。我会把 [MiniMax（海螺 / minimax）](https://www.minimax.io) 的图片和视频生成能力同时接进 Hermes，并且在一个 pip 包里发布两套后端：**`hermes-minimax-media`**，覆盖文生图、图生图、文生视频、图生视频、人物参考视频五种模式。
+这篇记录如何把 MiniMax 的图片和视频生成能力接入 Hermes，并在一个 pip 包中提供图片与视频两个后端。实现覆盖文生图、图生图、文生视频、图生视频和人物参考视频。
 
-整个过程我用的是真实的 CN endpoint（`api.minimaxi.com`）和真实的 API key 跑通端到端。
+文中的返回时间、文件大小和分辨率来自当时的端到端测试记录。API 行为和模型限制会变化，实际接入时仍应以当前官方文档和接口返回为准。
 
 ## 为什么选 MiniMax
 
 Hermes Agent 内置的 `image_generate` 工具原本只支持少数几个海外后端（FAL、xAI、OpenAI、Krea、Replicate）。MiniMax 海螺这边有两个我特别想用的能力：
 
 - **`image-01`**：单 API 同时支持文生图和图生图（`subject_reference` 单参考图），出图质量稳定，单张图消耗低
-- **Hailuo 系列视频模型**：异步任务模型，支持文生视频、图生视频、首尾帧视频、人物参考视频。1080P 25fps 真实可用，不是 demo 玩具
+- **Hailuo 系列视频模型**：异步任务模型，支持文生视频、图生视频、首尾帧视频、人物参考视频。1080P 25fps 真实可用，可以用于真实接口测试
 
 而且 MiniMax 有两个 endpoint：
 
@@ -107,7 +107,7 @@ kind: backend
 | `MiniMax-Hailuo-02`  | ✅    | ✅         | ✅  | ✅  | ❌       |
 | `S2V-01`             | 只 6s | 只 1080P   | ❌  | ❌  | ✅       |
 
-⚠️ 一个坑：官方文档示例里写的是 `720P`，但**实际 API 不接受**。提交 `720P` 会立刻报错 `does not support resolution 720P, supported resolutions: 768P, 1080P`。我的插件把 `720P` 自动 coerce 成 `768P`，调用方可以无感。
+一个 API 参数兼容问题：官方文档示例里写的是 `720P`，但**实际 API 不接受**。提交 `720P` 会立刻报错 `does not support resolution 720P, supported resolutions: 768P, 1080P`。我的插件把 `720P` 自动 coerce 成 `768P`，调用方可以无感。
 
 ## 端到端测试效果
 
