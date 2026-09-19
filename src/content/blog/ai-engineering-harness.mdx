@@ -115,9 +115,9 @@ L3: PDF/图片/长报告（显式需要时才加载）
 
 ```mermaid
 graph TD
-    User[👤 User] -->|PRD| Coordinator[🧠 Coordinator]
-    Coordinator -->|分派| Frontend[🎨 Frontend Agent]
-    Coordinator -->|分派| Backend[⚙️ Backend Agent]
+    User[👤 User] -->|PRD| Coordinator[Coordinator]
+    Coordinator -->|分派| Frontend[Frontend Agent]
+    Coordinator -->|分派| Backend[Backend Agent]
     Coordinator -->|分派| Database[🗄️ Database Agent]
 
     Frontend -->|代码| Worktree1[Worktree #17]
@@ -140,7 +140,7 @@ graph TD
 
 ### Agent 角色详解
 
-#### 🧠 Coordinator（协调者）
+#### Coordinator（协调者）
 
 **职责**：
 
@@ -155,7 +155,7 @@ graph TD
 - ❌ 不做技术决策
 - ❌ 不合并代码（除非证据闸门全绿）
 
-#### 🎨 Frontend Agent（前端工程师）
+#### Frontend Agent（前端工程师）
 
 **职责**：
 
@@ -181,7 +181,7 @@ docs/evidence/17/
 └── review-frontend.md
 ```
 
-#### ⚙️ Backend Agent（后端工程师）
+#### Backend Agent（后端工程师）
 
 **职责**：
 
@@ -200,7 +200,7 @@ docs/evidence/17/
 └── performance-baseline.json
 ```
 
-#### 🐛 Bug Hunter（缺陷猎人）
+#### Bug Hunter（缺陷猎人）
 
 **职责**：
 
@@ -216,7 +216,7 @@ docs/evidence/17/
 - [ ] 资源泄漏
 - [ ] 错误处理
 
-#### 👁️ Behavior Reviewer（行为审查员）
+#### Behavior Reviewer（行为审查员）
 
 **职责**：
 

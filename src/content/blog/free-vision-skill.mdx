@@ -312,7 +312,7 @@ Hit Rate:     87.5% (7/8)
 Misses:       1
 Evictions:    0
 Size:         8 entries
-✅ Cache is effective (>50% hit rate)
+ Cache is effective (>50% hit rate)
 ```
 
 ### 并发控制
@@ -440,23 +440,23 @@ free-vision see --image ./screenshot.png --auto-crop \
 
 Free Vision Skill 不绑定某个主模型，适合所有文本-only 的 Agent：
 
-### 🤖 Claude Code
+### Claude Code
 
 ```bash
 # Claude Code Hook 自动检测图片
 npx skills add lora-sys/free-vision-skill
 ```
 
-## 🤖 Codex
-### 🤖 Codex
+## Codex
+### Codex
 
 ```bash
 # 一键安装脚本
 curl -fsSL https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/installers/codex-install.sh | bash
 ```
 
-## 🤖 OpenCode
-### 🤖 OpenCode
+## OpenCode
+### OpenCode
 
 ```json
 {
@@ -473,7 +473,7 @@ curl -fsSL https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/ins
 }
 ```
 
-### 🤖 DeepSeek / 其他
+### DeepSeek / 其他
 
 ```bash
 # 通用调用
@@ -484,7 +484,7 @@ free-vision see --image ./screenshot.png --question "你的问题"
 
 ## 开发历程与未来规划
 
-### v0.1.0 — MVP（已完成 ✅）
+### v0.1.0 — MVP（已完成）
 
 - [x] Provider registry（13 个 Provider）
 - [x] VEP/1 协议
@@ -492,20 +492,20 @@ free-vision see --image ./screenshot.png --question "你的问题"
 - [x] SHA-256 本地缓存
 - [x] .env 和 Keychain
 
-### v0.2 — 集成增强版（已完成 ✅）
+### v0.2 — 集成增强版（已完成）
 
 - [x] Claude Code Hook 智能识别
 - [x] Provider 健康检查
 - [x] Codex 一键安装脚本
 - [x] OpenCode Agent 集成
 
-### v0.3 — 高级功能（已完成 ✅）
+### v0.3 — 高级功能（已完成）
 
 - [x] Windows Credential Manager
 - [x] VEP Schema Validator
 - [x] Image auto-crop（--auto-crop）
 
-### v0.4 — 性能优化（已完成 ✅）
+### v0.4 — 性能优化（已完成）
 
 - [x] Cache TTL + LRU eviction
 - [x] Request pool with configurable concurrency
@@ -539,12 +539,12 @@ Free Vision Skill 解决了一个**真实且迫切的问题**：如何让文本-
 
 ### 适用场景
 
-- ✅ 报错截图分析
-- ✅ UI 审查和设计稿分析
-- ✅ OCR 表格提取
-- ✅ 图表数据提取
-- ✅ 代码截图理解
-- ✅ 任何需要视觉理解的文本 Agent
+- 报错截图分析
+- UI 审查和设计稿分析
+- OCR 表格提取
+- 图表数据提取
+- 代码截图理解
+- 任何需要视觉理解的文本 Agent
 
 ### 开源与社区
 
