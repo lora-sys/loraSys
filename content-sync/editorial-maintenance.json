@@ -83,5 +83,24 @@
       "format": "mdx",
       "status": "reviewed"
     }
-  ]
+  ],
+  "second_pass": {
+    "reviewed_at": "2026-09-19",
+    "scope": "16 MDX posts",
+    "changed": [
+      "newtube",
+      "free-vision-skill",
+      "ai-engineering-harness",
+      "sandbox",
+      "wishlive",
+      "eve-agent"
+    ],
+    "focus": [
+      "remove promotional and generic AI-style copy",
+      "qualify benchmark and maturity claims",
+      "reduce heading noise",
+      "replace low-information ASCII or duplicate diagrams",
+      "add source-backed interactive chart where useful"
+    ]
+  }
 }
