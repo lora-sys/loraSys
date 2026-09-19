@@ -35,6 +35,12 @@ Anthropic 的 Tool Search 文档给了一个具体例子。GitHub、Slack、Sent
 
 <StatStrip stats="55k::示例工具定义 token|85%+::文档报告的上下文缩减|3–5::每次按需加载工具数" source="Anthropic Tool Search 文档，数字只适用于其公开示例与说明" />
 
+<ProcessSteps
+  title="一轮 Tool Search 的实际路径"
+  steps="理解任务::先判断当前问题需要哪类能力|搜索工具目录::用名称、描述和参数信息缩小候选范围|加载完整定义::只把命中的工具 Schema 放回当前上下文|调用并校验::执行工具后继续检查权限、结果和错误"
+  source="根据 Anthropic Tool Search 文档和本文机制拆解"
+/>
+
 ## Tool Search 到底做了什么
 
 以 Anthropic 的公开实现为例，工具可以设置 `defer_loading: true`。这个字段很容易被误解。它不是说这个工具从 API 请求里消失了。

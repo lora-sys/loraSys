@@ -17,6 +17,11 @@ draft: false
 
 本文依据 2026 年 9 月 14 日提交的 When Agents Slow Down 初版，并结合推理预算分配、Reflexion、Hyperband 和 Agent 评测研究。[论文原文](https://arxiv.org/abs/2609.15309)
 
+<KeyPoints
+  title="先记住这三个判断"
+  items="预算分法不同::继续一个会话和重新开独立尝试测到的不是同一种能力|记忆要证明因果::后续操作真的因历史经验改善，才能说记忆有用|选择器也是系统的一部分::候选里出现好结果，不等于最终一定能把它选出来并交付"
+/>
+
 ## 1. 先分清楚，你到底在增加什么
 
 这里的 Agent，可以理解为一个反复调用模型和工具来完成任务的程序。它会读文件、改代码、运行测试，再根据结果继续操作。评测时，要检查实际代码和环境，不能只看最后那段回答。[Anthropic 的 Agent 评测说明](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)

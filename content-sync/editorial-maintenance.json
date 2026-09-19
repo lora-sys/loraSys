@@ -102,5 +102,15 @@
       "replace low-information ASCII or duplicate diagrams",
       "add source-backed interactive chart where useful"
     ]
+  },
+  "mdx_component_pass": {
+    "reviewed_at": "2026-09-19",
+    "framework": "native Markdown tables and blockquotes plus ComparePanel, ProcessSteps, KeyPoints",
+    "trial_articles": [
+      "agent-credential-boundary-vault-broker",
+      "agent-tool-search-mcp-ard",
+      "agent-budget-memory-evaluation"
+    ],
+    "rule": "Use structural components only when they expose information already present in the article. Do not decorate every section."
   }
 }
