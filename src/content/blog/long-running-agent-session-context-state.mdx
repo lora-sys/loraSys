@@ -67,6 +67,8 @@ OpenAI 的 Agents API 在 2026 年 9 月 10 日进入 public beta。官方提供
 
 Anthropic 的 Managed Agents 则把 brain、hands 和 session 拆开。brain 是模型与 harness，hands 是 sandbox 和工具，session 是持久事件记录。这样 harness 崩溃时，可以重新启动并从 session log 恢复；sandbox 也可以替换，而不是把所有状态绑死在同一个容器里。Anthropic 报告其解耦架构把 p50 首 token 延迟降低约 60%，p95 降低超过 90%。这个数字只代表他们文中描述的 Managed Agents 架构，不应推广成所有 Agent 系统的性能收益。[Anthropic Managed Agents](https://www.anthropic.com/engineering/managed-agents)
 
+<StatStrip stats="~60%::p50 首 token 延迟降低|>90%::p95 首 token 延迟降低" source="Anthropic Managed Agents 文中报告，仅代表该架构与测试条件" />
+
 两份材料放在一起看，真正值得迁移的不是某个 SDK 方法名，而是状态边界。模型上下文、任务记录和执行环境应该能分别管理。
 
 ## 放进自己的 Agent Harness 怎么做
