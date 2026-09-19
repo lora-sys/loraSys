@@ -25,7 +25,7 @@ draft: false
 图片 → 视觉模型 → 长描述 → 主模型
 ```
 
-但这种方法会带来**四大问题**：
+但这种方法会带来几个直接问题：
 
 | 问题                | 影响                         | 数据       |
 | ------------------- | ---------------------------- | ---------- |
@@ -55,17 +55,19 @@ VEP/1|src=zhipu/glm-4.6v-flash|m=error|a="ModuleNotFoundError: No module named '
 → 约 130 tokens
 ```
 
-**节省**: 95%+ token 消耗 🎯
+这个示例从约 3000 tokens 降到约 130 tokens，约减少 95.7%。它只代表这张截图和这组提示词。
 
 ---
 
 ## Free Vision Skill 的做法
 
-Free Vision Skill 是一个**低 Token 消耗的视觉证据编译器**，专门为文本-only 的 AI Agent 设计。
+Free Vision Skill 把视觉模型的输出压缩成面向当前任务的证据包，再交给文本 Agent 继续推理。
 
 ### 职责边界
 
-> **视觉模型只负责"看见"，主模型继续负责"思考"。**
+<Callout tone="note" title="职责边界">
+视觉模型负责提取当前问题需要的可见证据。主模型继续负责判断、规划和后续动作。
+</Callout>
 
 ### 工作流程
 
@@ -79,19 +81,15 @@ Free Vision Skill 是一个**低 Token 消耗的视觉证据编译器**，专门
 DeepSeek / Codex / Claude Code / OpenCode 继续推理
 ```
 
-### 关键特性
+### 当前实现
 
-| 特性                  | 说明                                                             |
-| --------------------- | ---------------------------------------------------------------- |
-| 🎯 **低 Token 消耗**  | 50-150 tokens，比完整描述节省 90-95%                             |
-| 🔄 **自动降级**       | Provider 限流时自动切换到备用服务                                |
-| 💾 **智能缓存**       | TTL + LRU 策略，命中率可达 90%+                                  |
-| 🔐 **安全存储**       | macOS Keychain、Linux Secret Service、Windows Credential Manager |
-| 🌍 **13 个 Provider** | 国内 4 个 + 全球 9 个，全面覆盖                                  |
-| ⚡ **性能优化**       | 32.5x 加速（健康检查从 65s → 2s）                                |
-| 🔌 **VEP/1 协议**     | 极简视觉证据包格式                                               |
-
----
+| 能力 | 当前实现 |
+| --- | --- |
+| 视觉证据压缩 | VEP/1 把回答、OCR 文本、对象、问题和关键值压成短记录 |
+| Provider fallback | 按区域与优先级选择 Provider，失败时切换备用项 |
+| 本地缓存 | SHA-256 key，TTL 与 LRU 淘汰 |
+| 凭据存储 | 支持 macOS Keychain、Linux Secret Service 和 Windows Credential Manager |
+| 并发控制 | RequestPool 限制同时请求数并做退避重试 |
 
 <StatStrip stats="13::Provider 数量|24 h::缓存 TTL|3::最大并发" source="本文记录的项目配置" />
 
@@ -135,46 +133,36 @@ c=0.97
 | **OCR 表格** | ~500 chars | ~120 tokens | 4000+ tokens | **97%** ⬇️ |
 | **图表分析** | ~300 chars | ~70 tokens  | 2500+ tokens | **97%** ⬇️ |
 
+<DataChart
+  title="项目样例中的主模型输入 token"
+  description="传统方案使用表格中 2000+、3000+、4000+、2500+ 的下限绘制，因此柱长是保守下限，不是精确测量。"
+  labels="错误 VEP|错误 传统|UI VEP|UI 传统|表格 VEP|表格 传统|图表 VEP|图表 传统"
+  values="50|2000|80|3000|120|4000|70|2500"
+  suffix=" tokens"
+  source="本文项目样例。VEP 数值和传统方案下限来自上表。"
+/>
+
 ---
 
 ## 架构设计
 
 ### 系统架构
 
+```mermaid
+flowchart TB
+    C[CLI commands] --> P[Provider registry]
+    P --> K[Cache lookup]
+    K --> Q[Request pool and rate limit]
+    Q --> V[Vision API]
+    V --> E[VEP encoder]
+    E --> O[Compact evidence packet]
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     CLI Layer (free-vision)                  │
-│  see | doctor | providers | login | logout | cache          │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    Provider Registry                         │
-│  13 providers (zhipu, modelscope, openrouter, groq, ...)    │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                  Smart Cache (TTL + LRU)                     │
-│  - SHA-256 key based on image+question+provider+model       │
-│  - TTL: 24 hours, Max: 1000 entries                         │
-│  - Hit rate: 90%+ achievable                                │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│              Concurrency Control (RequestPool)               │
-│  - Max concurrency: 3                                       │
-│  - Exponential backoff retry                                │
-│  - Rate limiting (token bucket)                             │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                    Vision API Layer                          │
-│  OpenAI-compatible API endpoints                            │
-└─────────────────────────────────────────────────────────────┘
-```
+
+缓存和并发控制位于 Provider 调用前后。VEP 编码只处理已经返回的视觉结果，不负责替主模型做后续决策。
 
 ### 核心模块
 
-#### 1. **Provider System** (`src/providers.ts`)
+### Provider System (`src/providers.ts`)
 
 ```typescript
 // 13 个 Provider 配置
@@ -194,7 +182,7 @@ export function resolveProviderOrder(requested: string, region: Region): Provide
 }
 ```
 
-#### 2. **智能缓存** (`src/cache.ts`)
+### 智能缓存 (`src/cache.ts`)
 
 ```typescript
 interface CacheEntry {
@@ -222,7 +210,7 @@ async get(key: string): Promise<string | null> {
 }
 ```
 
-#### 3. **并发控制** (`src/pool.ts`)
+### 并发控制 (`src/pool.ts`)
 
 ```typescript
 class RequestPool<T> {
@@ -242,7 +230,7 @@ class RequestPool<T> {
 }
 ```
 
-#### 4. **VEP 生成** (`src/vep.ts`)
+### VEP 生成 (`src/vep.ts`)
 
 ```typescript
 export function toVep(result: VisionResult, maxChars: number): string {
@@ -264,9 +252,12 @@ export function toVep(result: VisionResult, maxChars: number): string {
 
 ---
 
-## 性能优化：32.5x 加速
+## 本地性能记录
 
 ### 健康检查优化
+
+下面的 65 秒和约 2 秒来自项目中的本地样例。它说明串行探测可以改成有限并发，不代表不同网络或 Provider 条件下都能得到 32.5 倍提升。
+
 
 **优化前**（v0.3 及以前）:
 
@@ -291,15 +282,17 @@ for (let i = 0; i < providers.length; i += batchSize) {
 }
 // 13 个 provider: [3 + 3 + 3 + 1] = ~2s
 
-// 加速倍数: 32.5x 🚀
+// 本地样例: 65s -> ~2s
 ```
 
 ### 缓存性能
 
+缓存命中率取决于图片、问题和 Provider 是否重复。下面的 7/8 只是一组很小的项目测试，不把它写成稳定的 90% 命中率承诺。
+
+
 **TTL + LRU 策略**:
 
 ```
-缓存命中率: 90%+
 TTL: 24 小时
 最大条目: 1000
 LRU 淘汰: 最少访问优先
@@ -312,7 +305,7 @@ Hit Rate:     87.5% (7/8)
 Misses:       1
 Evictions:    0
 Size:         8 entries
- Cache is effective (>50% hit rate)
+
 ```
 
 ### 并发控制
@@ -341,7 +334,7 @@ Size:         8 entries
 
 ## 实际使用场景
 
-### 1️⃣ 错误截图分析
+### 1. 错误截图分析
 
 ```bash
 free-vision see --image ./error.png \
@@ -364,7 +357,7 @@ c=0.98
 
 ---
 
-### 2️⃣ UI 审查
+### 2. UI 审查
 
 ```bash
 free-vision see --image ./ui-screenshot.png \
@@ -381,7 +374,7 @@ c=0.95
 
 ---
 
-### 3️⃣ OCR 表格提取
+### 3. OCR 表格提取
 
 ```bash
 free-vision see --image ./table.png \
@@ -399,7 +392,7 @@ c=0.92
 
 ---
 
-### 4️⃣ 图表数据提取
+### 4. 图表数据提取
 
 ```bash
 free-vision see --image ./chart.png \
@@ -417,7 +410,7 @@ c=0.96
 
 ---
 
-### 5️⃣ 自动裁剪优化
+### 5. 自动裁剪优化
 
 ```bash
 free-vision see --image ./screenshot.png --auto-crop \
@@ -447,7 +440,6 @@ Free Vision Skill 不绑定某个主模型，适合所有文本-only 的 Agent�
 npx skills add lora-sys/free-vision-skill
 ```
 
-## Codex
 ### Codex
 
 ```bash
@@ -455,7 +447,6 @@ npx skills add lora-sys/free-vision-skill
 curl -fsSL https://raw.githubusercontent.com/lora-sys/free-vision-skill/main/installers/codex-install.sh | bash
 ```
 
-## OpenCode
 ### OpenCode
 
 ```json
@@ -525,58 +516,10 @@ free-vision see --image ./screenshot.png --question "你的问题"
 
 ---
 
-## 总结
+## 适用边界
 
-Free Vision Skill 解决了一个**真实且迫切的问题**：如何让文本-only 的 AI Agent 低成本地理解图片。
+Free Vision Skill 适合主模型本身不直接读取图片，但任务又需要从截图、UI、表格或图表中取得少量可验证信息的场景。它的主要作用是缩短送回主模型的视觉上下文，并把 Provider、缓存和失败切换收在一个工具里。
 
-### 核心价值
+文中的 token、缓存和时延数字都来自项目样例或本地测试。它们可以说明实现取舍，但不能作为跨模型、跨网络条件的固定性能承诺。真正使用时应记录输入图片、问题、Provider、VEP 长度、总耗时和任务是否完成，再判断压缩是否值得。
 
-1. **90-95% Token 节省** — 从 2000-5000 tokens 降至 50-150 tokens
-2. **智能缓存** — 90%+ 命中率，TTL + LRU 双重策略
-3. **性能优化** — 32.5x 加速（健康检查 65s → 2s）
-4. **跨平台支持** — macOS、Linux、Windows
-5. **13 个 Provider** — 国内 4 + 全球 9，自动降级
-
-### 适用场景
-
-- 报错截图分析
-- UI 审查和设计稿分析
-- OCR 表格提取
-- 图表数据提取
-- 代码截图理解
-- 任何需要视觉理解的文本 Agent
-
-### 开源与社区
-
-**GitHub**: https://github.com/lora-sys/free-vision-skill
-
-**许可证**: MIT
-
-**贡献欢迎**:
-
-- 新 Provider Adapter
-- VEP 压缩改进
-- 本地模型支持（Ollama 等）
-- Windows Keychain 支持
-- Agent 集成示例
-
----
-
-## 致谢
-
-感谢以下开源视觉模型和 API 提供商：
-
-- [智谱 AI (Zhipu AI)](https://open.bigmodel.cn/) — GLM 系列模型
-- [阿里 ModelScope](https://modelscope.cn/) — 魔搭社区
-- [OpenRouter](https://openrouter.ai/) — 统一 API 网关
-- [Groq](https://groq.com/) — 高速推理
-- [Google Gemini](https://gemini.google.com/) — 多模态 AI
-- [Mistral AI](https://mistral.ai/) — 欧洲开源 AI
-- [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) — 边缘 AI
-- [Ollama](https://ollama.com/) — 本地模型运行
-
----
-
-**先看见，再压缩，再推理。** 👁️
-
-**Free Vision Skill** — low-token visual evidence compiler for text-only coding agents.
+项目地址：[lora-sys/free-vision-skill](https://github.com/lora-sys/free-vision-skill)。许可证为 MIT。
