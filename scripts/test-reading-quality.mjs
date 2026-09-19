@@ -223,6 +223,30 @@ try {
         await capture('mdx-newtube')
       })
 
+      await check(`${label} explicit MDX components render on article content`, page, async () => {
+        await open('blog/agent-credential-boundary-vault-broker')
+        const comparison = page.locator('.mdx-compare-panel').first()
+        await comparison.waitFor({ state: 'visible' })
+        await comparison.scrollIntoViewIfNeeded()
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
+        await capture('mdx-compare-panel')
+
+        await open('blog/agent-tool-search-mcp-ard')
+        const process = page.locator('.mdx-process-steps').first()
+        await process.waitFor({ state: 'visible' })
+        assert.equal(await page.locator('.mdx-process-steps li').count(), 4)
+        await process.scrollIntoViewIfNeeded()
+        await capture('mdx-process-steps')
+
+        await open('blog/agent-budget-memory-evaluation')
+        const keyPoints = page.locator('.mdx-key-points').first()
+        await keyPoints.waitFor({ state: 'visible' })
+        assert.equal(await page.locator('.mdx-key-points article').count(), 3)
+        await keyPoints.scrollIntoViewIfNeeded()
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
+        await capture('mdx-key-points')
+      })
+
       await check(`${label} no uncaught application errors`, page, async () => assert.deepEqual(pageErrors, []))
       await context.close()
     }
