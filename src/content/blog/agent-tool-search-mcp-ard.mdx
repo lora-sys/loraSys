@@ -33,6 +33,8 @@ Anthropic 的 Tool Search 文档给了一个具体例子。GitHub、Slack、Sent
 
 图 1 只看左右两边。左边把全部工具定义先塞进模型上下文。右边先理解任务，再搜索工具目录，只把相关工具定义加载进来。Tool Search 解决的是“这轮推理应该让模型看到哪些工具”，不是重新发明工具调用协议。
 
+<StatStrip stats="55k::示例工具定义 token|85%+::文档报告的上下文缩减|3–5::每次按需加载工具数" source="Anthropic Tool Search 文档，数字只适用于其公开示例与说明" />
+
 ## Tool Search 到底做了什么
 
 以 Anthropic 的公开实现为例，工具可以设置 `defer_loading: true`。这个字段很容易被误解。它不是说这个工具从 API 请求里消失了。
