@@ -427,7 +427,7 @@ I will explicitly mark these as architectural inferences rather than official be
 | Dimension                 | Eve                                                                          | LangGraph                                                                      | OpenAI Agents SDK                                                          | Mastra                                                                                                |
 | ------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | Design Center             | Filesystem-first, agent is a directory; production capabilities built-in     | Graph/state-machine-first, low-level orchestration runtime                     | SDK-first, agents/runs/handoffs/sessions defined in code                   | TypeScript AI application framework, agents/workflows/memory equally emphasized                       |
-| Durable Execution         | Built-in, based on Vercel Workflows                                          | Strong suit,主打 durable execution/persistence                                 | SDK manages turns/tools/sessions; also supports sandbox agents             | Has durable agents, but docs still label Beta                                                         |
+| Durable Execution         | Built-in, based on Vercel Workflows                                          | Strong focus on durable execution and persistence                                 | SDK manages turns/tools/sessions; also supports sandbox agents             | Has durable agents, but docs still label Beta                                                         |
 | Concurrency & Multi-Agent | Built-in subagents, folder-style specialists, default depth limits           | Most flexible for complex orchestration with graph nodes and state transitions | Strong handoffs/specialists, ideal for OpenAI-native runtimes              | Composable workflows, memory, multi-agent patterns                                                    |
 | Channels/Multi-Surface    | Built-in HTTP + multi-platform channels + custom channels                    | Typically requires self-integration of Web/Slack surfaces                      | Primarily SDK/runtime semantics, channel layer needs app-level integration | More app-framework oriented, deploys anywhere, but channels aren't a first-class abstraction like Eve |
 | Platform Binding          | Strong, Vercel-native best                                                   | Relatively neutral                                                             | Most friendly to OpenAI ecosystem, but can pair with other providers       | Deploys anywhere, stronger framework neutrality                                                       |
@@ -461,12 +461,11 @@ In other words, Eve's advantage isn't "fastest," but "making high-complexity pro
 
 ### When to Choose Which
 
-| Your Primary Need                                                                            | Recommendation    |
-| -------------------------------------------------------------------------------------------- | ----------------- |
-| I'm on Vercel, need a shippable durable agent backend with Web/Slack/approvals/observability | Eve               |
-| I need fine-grained control over state graphs, branching, and custom orchestration           | LangGraph         |
-| I deeply use OpenAI platform-native tools/sandbox/realtime                                   | OpenAI Agents SDK |
-| I want a TypeScript full-stack AI framework with agents/workflows/memory unified             | Mastra            |
+<OptionTabs
+  title="Architecture fit at a glance"
+  items="Eve::Vercel-centered durable agent backend::Filesystem-first conventions;;Workflows-based durability;;Channels, approvals, sandboxing and observability are integrated into the framework shape|LangGraph::Fine-grained graph and state orchestration::Graph and state-machine first;;Strong control over branching and persistence;;Usually leaves more channel and application integration to your code|OpenAI Agents SDK::Code-first OpenAI-native agent runtime::Handoffs, sessions and tool execution live in SDK code;;Fits OpenAI platform-native tools and sandbox workflows;;Less opinionated about a filesystem application shape|Mastra::Broad TypeScript AI application framework::Agents, workflows and memory live in one TypeScript framework;;Deploys across more environments;;Framework surface is broader than Eve's channel-centered model"
+  source="Derived from the official-documentation comparison above. This is an architecture-fit summary, not a benchmark ranking."
+/>
 
 ## Limitations, Pitfalls, Troubleshooting, Ecosystem, and Production Adoption Advice
 
