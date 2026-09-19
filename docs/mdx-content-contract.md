@@ -10,6 +10,7 @@ Synchronized MDX is declarative content, not executable application code.
 - Do not add JavaScript expressions with `{}`.
 - Do not add scripts, inline event handlers, client directives, iframes, objects, embeds, `set:html`, or `is:inline`.
 - Custom article components are injected by `src/pages/blog/[...id].astro` and must stay on the allowlist enforced by `scripts/validate-blog-mdx.mjs`.
+- Native Markdown blockquotes and tables are mapped to site-level renderers. Articles keep ordinary Markdown syntax while the route supplies the visual shell.
 - Keep Mermaid in fenced `mermaid` code blocks. `BlogPost.astro` already renders those blocks with Mermaid's strict security level.
 
 ## Approved components
@@ -38,6 +39,42 @@ Use when the source already contains two to four compact headline values. Do not
 ```
 
 Each item uses `value::label`; items are separated with `|`.
+
+### KeyPoints
+
+Use for three to five compact takeaways that are already supported by the article.
+
+```mdx
+<KeyPoints
+  title="读完先记住"
+  items="工具发现::先缩小候选范围|权限控制::搜索结果不等于调用权限|上下文预算::只加载当前任务需要的定义"
+/>
+```
+
+### ProcessSteps
+
+Use for a real ordered workflow. Each step uses `heading::body`, separated by `|`.
+
+```mdx
+<ProcessSteps
+  title="一轮工具发现"
+  steps="理解任务::判断需要哪类能力|搜索目录::只找相关工具|加载定义::把候选 Schema 放回上下文|执行校验::调用后检查结果与权限"
+/>
+```
+
+### ComparePanel
+
+Use when the article already contrasts two approaches or states.
+
+```mdx
+<ComparePanel
+  title="两种凭据路径"
+  leftTitle="Secret 进入 sandbox"
+  left="原始值可读|日志可能泄露"
+  rightTitle="Host boundary 注入"
+  right="sandbox 不持有原始值|只对批准目标注入"
+/>
+```
 
 ### DataChart
 
