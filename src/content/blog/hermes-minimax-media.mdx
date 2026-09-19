@@ -13,10 +13,10 @@ draft: false
 
 ## 为什么选 MiniMax
 
-Hermes Agent 内置的 `image_generate` 工具原本只支持少数几个海外后端（FAL、xAI、OpenAI、Krea、Replicate）。MiniMax 海螺这边有两个我特别想用的能力：
+Hermes Agent 内置的 `image_generate` 工具原本只支持少数几个海外后端（FAL、xAI、OpenAI、Krea、Replicate）。这次接入 MiniMax，主要为了补齐两个能力：
 
-- **`image-01`**：单 API 同时支持文生图和图生图（`subject_reference` 单参考图），出图质量稳定，单张图消耗低
-- **Hailuo 系列视频模型**：异步任务模型，支持文生视频、图生视频、首尾帧视频、人物参考视频。1080P 25fps 真实可用，可以用于真实接口测试
+- **`image-01`**：单 API 同时支持文生图和图生图（`subject_reference` 单参考图），可以复用同一套 Hermes 图片后端接口
+- **Hailuo 系列视频模型**：采用异步任务模式，覆盖文生视频、图生视频、首尾帧和人物参考等路径。本文实际跑通的是 Hailuo-2.3 的 6 秒 768P 文生视频
 
 而且 MiniMax 有两个 endpoint：
 
@@ -29,7 +29,7 @@ Hermes Agent 内置的 `image_generate` 工具原本只支持少数几个海外�
 
 ## 实现一个插件要做什么
 
-Hermes 提供的 `ImageGenProvider` 和 `VideoGenProvider` 两个抽象类都已经把脏活干完了（环境变量加载、URL 缓存、错误格式化）。我们只需要写两个文件：
+Hermes 的 `ImageGenProvider` 和 `VideoGenProvider` 已经封装环境变量加载、URL 缓存和错误格式化。这个插件主要补两个 provider 的请求与响应逻辑：
 
 ```text
 ~/.hermes/plugins/image_gen/minimax/
@@ -240,7 +240,9 @@ hermes gateway restart
 
 而且两个插件可以**同时启用**，在 `config.yaml` 里改 `image_gen.provider` 就能切换，不需要卸载任何一个。
 
-> **如果你用 StepFun 的话记得也看一眼那边的"避坑"**：StepFun 同一个 key 有 `/v1/` 和 `/step_plan/v1/` 两套 endpoint，分别扣现金和扣订阅 Credit。我自己第一次发版没注意，被按张扣了两周余额才发现。StepFun 那篇的"避坑"小节和 [GitHub README](https://github.com/lora-sys/hermes-stepfun-imagegen#troubleshooting) 里有完整诊断 + 1 段可直接粘贴给你自己 agent 的排查 prompt。
+<Callout tone="warning" title="StepFun 的计费路径另算">
+StepFun 的 `/v1/` 和 `/step_plan/v1/` 使用同一个 key 也可能都认证成功，但分别走账户余额和订阅 Credit。切换 provider 时要同时检查 endpoint 与账单来源。完整排查记录在 [StepFun 文章](/blog/hermes-stepfun-imagegen) 和对应 README。
+</Callout>
 
 ## 下一步计划
 
@@ -248,4 +250,4 @@ hermes gateway restart
 - 跑 `S2V-01` 人物参考视频的真实样例
 - 适配 `Hailuo-02` 的 start-end frame 模式（传 first_frame_image + last_frame_image 两个 url）
 
-如果你也想接 MiniMax、但懒得自己写包，[`hermes-minimax-media`](https://github.com/lora-sys/hermes-minimax-media) 直接 `pip install` 就能用，遇到问题在 GitHub 提 issue 即可。
+项目包已发布为 [`hermes-minimax-media`](https://github.com/lora-sys/hermes-minimax-media)。仓库保留安装方式、当前支持范围和后续适配项。
