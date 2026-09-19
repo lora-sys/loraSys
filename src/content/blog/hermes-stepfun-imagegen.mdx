@@ -134,10 +134,15 @@ def generate(self, prompt, model=None, aspect_ratio="square", steps=4, seed=None
 
 **StepFun 对同一个 API key 提供两套独立的 endpoint，走不同的计费通道**：
 
-| 路径                                       | 计费方式                        | 适用                   |
-| ------------------------------------------ | ------------------------------- | ---------------------- |
-| `https://api.stepfun.com/v1/...`           | 账户余额按张扣钱（现金）        | 开放平台用户           |
-| `https://api.stepfun.com/step_plan/v1/...` | 扣 Step Plan 订阅的 Credit 额度 | **Step Plan 订阅用户** |
+<OptionTabs
+  title="先按账户类型选 endpoint"
+  items="Step Plan 订阅::使用 /step_plan/v1::同一个 API key 可以通过认证;;消耗 Step Plan 的 Credit 额度;;插件 v0.1.1+ 已修正订阅用户的默认路径|开放平台充值::使用 /v1::同一个 API key 可以通过认证;;从账户余额按张扣费;;适合普通开放平台充值账户"
+  source="依据本文 v0.1.1 的实际账单排查与修复记录"
+/>
+
+<Callout tone="warning" title="认证相同，不代表计费相同">
+同一个 key 在两套 endpoint 上都能认证成功，所以“请求成功”不能证明走对了计费通道。排查时要同时看实际请求 URL 和对应账户的余额或 Credit 变化。
+</Callout>
 
 **两个路径用同一个 key 都能通过认证**，但账单走完全不同的通道。我最初插件的默认 `STEPFUN_BASE_URL` 写的是 `/v1/...`，所以 Step Plan 订阅用户（包括我自己）也在被按张扣钱。
 
