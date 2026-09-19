@@ -1,0 +1,43 @@
+---
+interface Props {
+  title?: string
+  steps: string
+  source?: string
+}
+const { title, steps, source } = Astro.props
+const items = steps
+  .split('|')
+  .map((item) => item.split('::', 2).map((part) => part.trim()))
+  .filter(([heading]) => Boolean(heading))
+  .slice(0, 7)
+---
+
+{items.length > 0 && (
+  <section class='mdx-process-steps not-prose' aria-label={title ?? 'Process'}>
+    {title && <h3>{title}</h3>}
+    <ol>
+      {items.map(([heading, body], index) => (
+        <li>
+          <span class='mdx-process-index' aria-hidden='true'>{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <strong>{heading}</strong>
+            {body && <p>{body}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+    {source && <p class='mdx-process-source'>{source}</p>}
+  </section>
+)}
+
+<style>
+  .mdx-process-steps { margin-block: 2rem; border-block: 1px solid hsl(var(--border)); padding-block: 1rem; }
+  .mdx-process-steps > h3 { margin: 0 0 0.85rem; color: hsl(var(--foreground)); font-size: 0.9rem; font-weight: 650; letter-spacing: -0.01em; }
+  .mdx-process-steps ol { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+  .mdx-process-steps li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.7rem; position: relative; padding: 0.75rem 0; }
+  .mdx-process-steps li:not(:last-child)::after { content: ''; position: absolute; top: 2.3rem; bottom: -0.15rem; left: 1rem; width: 1px; background: hsl(var(--border)); }
+  .mdx-process-index { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); color: hsl(var(--primary)); font-size: 0.66rem; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .mdx-process-steps strong { display: block; color: hsl(var(--foreground)); font-size: 0.88rem; font-weight: 620; }
+  .mdx-process-steps li p { margin: 0.2rem 0 0; color: hsl(var(--muted-foreground)); font-size: 0.78rem; line-height: 1.55; }
+  .mdx-process-source { margin: 0.7rem 0 0; color: hsl(var(--muted-foreground)); font-size: 0.66rem; line-height: 1.45; }
+</style>
