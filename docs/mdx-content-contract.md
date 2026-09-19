@@ -64,3 +64,12 @@ Use for a small numeric comparison or ordered series with values that are explic
 - Use Mermaid only for a real flow, sequence, state model, or architecture already described by the article.
 - Use `StatStrip` or `DataChart` only when the source provides suitable numbers. If the article has no suitable data, omit them.
 - Do not change the author's factual claims or add unsupported numbers for presentation.
+
+
+## Legacy article maintenance
+
+- Existing published articles may move from `.md` to the same-slug `.mdx` file. The route and public URL must not change.
+- Prefer Mermaid, local images, `Callout`, `StatStrip`, and `DataChart` over large hand-written inline SVG blocks.
+- Editorial maintenance may shorten repetitive prose, split long paragraphs, remove promotional claims, and clarify whether numbers are measured, illustrative, or source-reported.
+- Do not silently turn illustrative numbers into measured results. Remove unsupported precision or label the teaching example.
+- Record completed reviews in `content-sync/editorial-maintenance.json`. Reopen an entry only for source changes, factual corrections, broken media, or a documented content-contract violation.
