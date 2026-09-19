@@ -1,0 +1,37 @@
+---
+const { class: className, ...props } = Astro.props
+---
+
+<blockquote {...props} class:list={['mdx-article-quote not-prose', className]}>
+  <span class='mdx-article-quote-mark' aria-hidden='true'>“</span>
+  <div class='mdx-article-quote-body'><slot /></div>
+</blockquote>
+
+<style>
+  .mdx-article-quote {
+    position: relative;
+    margin-block: 1.8rem;
+    border: 1px solid hsl(var(--border));
+    border-left: 0.22rem solid hsl(var(--primary) / 0.72);
+    border-radius: 0.85rem;
+    background: hsl(var(--card) / 0.55);
+    padding: 1rem 1.1rem 1rem 2.8rem;
+    color: hsl(var(--foreground));
+    font-style: normal;
+  }
+  .mdx-article-quote-mark {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.9rem;
+    color: hsl(var(--primary) / 0.72);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 2.1rem;
+    line-height: 1;
+  }
+  .mdx-article-quote-body { font-size: 0.96rem; line-height: 1.75; }
+  .mdx-article-quote-body :global(p:first-child) { margin-top: 0; }
+  .mdx-article-quote-body :global(p:last-child) { margin-bottom: 0; }
+  @media (max-width: 640px) {
+    .mdx-article-quote { padding-right: 0.9rem; padding-left: 2.45rem; }
+  }
+</style>
