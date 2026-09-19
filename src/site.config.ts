@@ -138,7 +138,7 @@ export const integ: IntegrationUserConfig = {
   // A lightbox library that can add zoom effect
   mediumZoom: {
     enable: true, // disable it will not load the whole library
-    selector: '.prose .zoomable',
+    selector: '.prose img:not([data-no-zoom])',
     options: {
       className: 'zoomable'
     }
