@@ -38,6 +38,9 @@ function validateFile(file, source) {
   }
 
   const bannedPatterns = [
+    [/<https?:\/\/[^>]+>/i, 'angle-bracket autolinks are not MDX-safe; use Markdown links'],
+    [/<table_of_contents\b/i, 'Notion table_of_contents placeholders are not allowed'],
+    [/<mention-page\b/i, 'Notion mention-page placeholders are not allowed'],
     [/<script\b/i, '<script>'],
     [/<style\b/i, '<style>'],
     [/<iframe\b/i, '<iframe>'],
