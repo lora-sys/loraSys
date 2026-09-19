@@ -215,6 +215,8 @@ try {
         await capture('mdx-free-vision')
 
         await open('blog/newtube')
+        const mermaidSource = page.locator('[data-language="mermaid"] pre code, code.language-mermaid').first()
+        await mermaidSource.scrollIntoViewIfNeeded()
         await page.locator('.mermaid-diagram svg').first().waitFor({ state: 'visible', timeout: 12000 })
         assert.equal(await page.locator('[data-language="mermaid"] pre code, code.language-mermaid').count(), 0, 'Rendered Mermaid should replace source code')
         await capture('mdx-newtube')
