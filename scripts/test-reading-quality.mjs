@@ -198,6 +198,28 @@ try {
         }
       })
 
+      await check(`${label} MDX reading surfaces render and stay responsive`, page, async () => {
+        await open('blog/free-vision-skill')
+        const tableShell = page.locator('[data-mdx-table]').first()
+        await tableShell.waitFor({ state: 'visible' })
+        assert.ok(await page.locator('[data-mdx-table]').count() >= 1, 'Markdown tables should use the MDX table renderer')
+        const chart = page.locator('[data-mdx-chart]').first()
+        await chart.waitFor({ state: 'visible' })
+        const points = chart.locator('[data-chart-point]')
+        assert.ok(await points.count() >= 2, 'DataChart needs interactive points')
+        await points.nth(1).focus()
+        assert.equal(await points.nth(1).getAttribute('aria-pressed'), 'true')
+        const selected = (await chart.locator('[data-chart-readout]').innerText()).trim()
+        assert.ok(selected.length > 0, 'DataChart readout should update on keyboard focus')
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'MDX page must not create page-level horizontal overflow')
+        await capture('mdx-free-vision')
+
+        await open('blog/newtube')
+        await page.locator('.mermaid-diagram svg').first().waitFor({ state: 'visible', timeout: 12000 })
+        assert.equal(await page.locator('[data-language="mermaid"] pre code, code.language-mermaid').count(), 0, 'Rendered Mermaid should replace source code')
+        await capture('mdx-newtube')
+      })
+
       await check(`${label} no uncaught application errors`, page, async () => assert.deepEqual(pageErrors, []))
       await context.close()
     }
