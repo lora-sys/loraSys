@@ -12,6 +12,7 @@ import ProjectCard from '@/components/projects/ProjectCard.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import ProjectSection from '@/components/projects/ProjectSection.astro'
 import ThemeRoadmap from '@/components/projects/ThemeRoadmap.astro'
+import ThemeQuickNav from '@/components/projects/ThemeQuickNav.astro'
 import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { getProjectStories } from '@/data/project-stories'
@@ -19,9 +20,18 @@ import { getContentOpportunities } from '@/data/content-intelligence'
 import { getThemeRoadmap } from '@/data/theme-roadmap'
 import { demoByRepo } from '@/data/project-demos'
 
-const selectedWork = projects
-  .filter((project) => project.featuredRank !== undefined)
-  .sort((left, right) => (left.featuredRank ?? 99) - (right.featuredRank ?? 99))
+const selectedRepositories = [
+  'Glassbox-Agent-Harness',
+  'zhihu-threads',
+  'skills',
+  'AgentArena',
+  'trustops',
+  'mossguard'
+]
+const selectedWork = selectedRepositories.flatMap((repository) => {
+  const project = projects.find((item) => item.repository === repository)
+  return project ? [project] : []
+})
 const [leadProject, ...supportingProjects] = selectedWork
 const graphProjects = projects.filter((project) => getProjectStories(project.repository).length > 0)
 const linkedRepositories = new Set(graphProjects.map((project) => project.repository))
@@ -95,17 +105,17 @@ const directoryItems: DirectoryItem[] = [
     <header class='work-hero'>
       <p class='eyebrow'>精选作品</p>
       <div class='hero-grid'>
-        <h1>Agent 系统、开发者工具与公开实验。</h1>
+        <h1>我做过的一些项目。</h1>
         <div class='hero-copy'>
-          <p>查看项目说明、源码、演示与构建笔记。</p>
-          <p class='hero-note'>完整项目和外部贡献保留在下方档案中，可按关键词、来源和状态筛选。</p>
+          <p>有个人 Agent、学习产品、开发工具，也有黑客松和开源实验。每个项目都可以继续看源码、说明、演示和相关笔记。</p>
+          <p class='hero-note'>下面先放最有代表性的几个。完整项目和外部贡献仍保留在档案里。</p>
         </div>
       </div>
     </header>
 
     <section class='selected-work' aria-labelledby='selected-work-title'>
       <header class='section-heading'>
-        <div><p class='eyebrow'>{selectedWork.length} 个项目</p><h2 id='selected-work-title'>精选作品</h2></div>
+        <div><p class='eyebrow'>{selectedWork.length} 个项目</p><h2 id='selected-work-title'>先看这些</h2></div>
         <div class='heading-side'>
           <span>产品、仓库与相关记录</span>
           <HapticsToggle />
@@ -131,10 +141,12 @@ const directoryItems: DirectoryItem[] = [
     </section>
 
     <aside class='work-principle'>
-      <span>项目说明</span>
-      <p>每个案例从一个具体产品问题出发：可观测性、评测、视觉证据、工程协作或多智能体模拟。</p>
-      <a href='/blog'>查看相关笔记 <span aria-hidden='true'>→</span></a>
+      <span>怎么浏览</span>
+      <p>不需要按时间翻项目。可以直接按你感兴趣的主题进去看。</p>
+      <a href='/blog'>也可以先读文章 <span aria-hidden='true'>→</span></a>
     </aside>
+
+    <ThemeQuickNav themes={themeRoadmap} />
 
     <details class='work-archive' id='archive' data-work-archive>
       <summary class='tactile-action'><span><b>展开完整档案</b><small>查看全部同步项目、贡献关系、内容路线与筛选工具</small></span><em data-archive-state aria-live='polite'>目录已收起</em><i aria-hidden='true'>+</i></summary>
