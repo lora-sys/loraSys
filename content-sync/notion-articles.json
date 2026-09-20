@@ -265,6 +265,14 @@
       "source_last_edited_at": "2026-09-09T08:51:40.188Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "1451ce2e45e96d7fde0547c8d331e899d7aad7bee9069b58dc163d7e6b8bf66e",
+      "slug": "agent-demo-harness-control-layer",
+      "content_fingerprint": "git-blob:a8c1a377012812daad873c668d9a76f19b99574a",
+      "source_last_edited_at": "2026-09-08T13:05:47.226Z",
+      "status": "synced",
+      "note": "One-time backfill from 内容创作中枢 historical topic library; complete article body and original Notion visual preserved."
     }
   ]
 }
