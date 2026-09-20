@@ -1,7 +1,7 @@
 ---
 // 产品微演示：默认可见，进入视口单次播放，支持访客点击/Tab 互动探索。
 // 只动 transform 与 opacity；reduced-motion 下展示静态终态，不循环播放。
-type DemoKind = 'timeline' | 'pipeline' | 'terminal'
+import type { ProjectDemoKind as DemoKind } from '@/data/project-demos'
 type Props = { kind: DemoKind; locale?: 'zh-CN' | 'en-US' }
 const { kind, locale = 'zh-CN' } = Astro.props
 
@@ -15,8 +15,24 @@ const meta: Record<DemoKind, Record<'zh-CN' | 'en-US', { name: string; note: str
     'en-US': { name: 'Harness · Closed loop', note: 'Illustrative engineering flow. Select a step to inspect.' }
   },
   terminal: {
-    'zh-CN': { name: 'Glassbox · 能力概览', note: '仓库能力说明，规划项尚未实现。点击可复制。' },
-    'en-US': { name: 'Glassbox · Capabilities', note: 'Repository summary, not a live run. Planned items are not available.' }
+    'zh-CN': { name: 'Glassbox · 能力概览', note: '当前能力与规划分开显示。点击可复制。' },
+    'en-US': { name: 'Glassbox · Capabilities', note: 'Available and planned capabilities are separated. Click to copy.' }
+  },
+  learning: {
+    'zh-CN': { name: 'Zhihu Threads · 学习线', note: '选来源，再生成学习线。点击步骤查看说明。' },
+    'en-US': { name: 'Zhihu Threads · Learning thread', note: 'Choose sources first, then build a learning thread.' }
+  },
+  gate: {
+    'zh-CN': { name: 'MossGuard · 签名前验证', note: 'Agent 提议，证据验证，人类最后签名。' },
+    'en-US': { name: 'MossGuard · Pre-sign gate', note: 'Agent proposes, evidence verifies, the human signs last.' }
+  },
+  economy: {
+    'zh-CN': { name: 'EcoMatrix · Agent 经济', note: 'Agent 发布需求、协商并执行交易。' },
+    'en-US': { name: 'EcoMatrix · Agent economy', note: 'Agents publish needs, negotiate and execute trades.' }
+  },
+  evidence: {
+    'zh-CN': { name: 'TrustOps · 承诺证据链', note: '从问题到证据、审批和可验证导出。' },
+    'en-US': { name: 'TrustOps · Evidence chain', note: 'Question, evidence, approval and verified export.' }
   }
 }
 
@@ -55,19 +71,79 @@ const pipelineData = {
 const terminalData = {
   'zh-CN': [
     { line: '当前 · Codex / Claude Code', tip: '已复制当前支持的 Agent 适配器说明' },
-    { line: '当前 · 回放、审批与画布检查', tip: '已复制当前工作台能力说明' },
-    { line: '规划 · 微信、QQ、长期任务、学习沉淀', tip: '已复制规划说明，这些功能尚未实现' }
+    { line: '当前 · 回放、审批与过程检查', tip: '已复制当前个人 Agent 能力说明' },
+    { line: '规划 · 远程入口、长期任务、学习沉淀', tip: '已复制规划说明，这些功能仍在建设' }
   ],
   'en-US': [
     { line: 'Available: Codex / Claude Code', tip: 'Copied the available provider adapters' },
-    { line: 'Available: replay, approvals, canvas', tip: 'Copied the available workbench capabilities' },
-    { line: 'Planned: channels, long tasks, learning', tip: 'Copied planned capabilities; these are not available yet' }
+    { line: 'Available: replay, approvals, run inspection', tip: 'Copied the available personal-agent capabilities' },
+    { line: 'Planned: remote channels, long tasks, learning', tip: 'Copied planned capabilities; these are still being built' }
   ]
+}
+
+const extraData: Record<Exclude<DemoKind, 'timeline' | 'pipeline' | 'terminal'>, Record<'zh-CN' | 'en-US', { label: string; note: string }[]>> = {
+  learning: {
+    'zh-CN': [
+      { label: '提问', note: '先把模糊问题整理成明确的学习目标。' },
+      { label: '选来源', note: '用户自己勾选要引用的知乎回答和专栏摘录。' },
+      { label: '学习线', note: '系统把选中的证据整理成顺序清楚的学习节点。' },
+      { label: '追问与自测', note: '后续回答只基于当前线程证据，并提供自测。' }
+    ],
+    'en-US': [
+      { label: 'Question', note: 'Turn a vague question into a clear learning goal.' },
+      { label: 'Sources', note: 'The reader explicitly selects the Zhihu excerpts to use.' },
+      { label: 'Thread', note: 'Selected evidence becomes an ordered learning thread.' },
+      { label: 'Practice', note: 'Follow-up answers stay grounded and add self-tests.' }
+    ]
+  },
+  gate: {
+    'zh-CN': [
+      { label: '意图', note: '用户先确认自己真正想执行的动作。' },
+      { label: 'Agent', note: 'Agent 只能调用受限工具提出操作。' },
+      { label: '证据', note: 'Moss 返回链上模拟和结构化证据。' },
+      { label: '签名门禁', note: '确定性检查通过后才进入人工钱包审查。' }
+    ],
+    'en-US': [
+      { label: 'Intent', note: 'The user confirms the intended action first.' },
+      { label: 'Agent', note: 'The agent can only propose through restricted tools.' },
+      { label: 'Evidence', note: 'Moss returns simulation and structured on-chain evidence.' },
+      { label: 'Sign gate', note: 'Deterministic checks must pass before wallet review.' }
+    ]
+  },
+  economy: {
+    'zh-CN': [
+      { label: '需求', note: '不同 Agent 根据角色和生存目标发布需求。' },
+      { label: '协商', note: 'Agent 通过 A2A 协议协商资源与价格。' },
+      { label: '交易', note: '交易进入后端并更新余额、活力和信用。' },
+      { label: '观察', note: 'God’s Eye 界面展示整体经济与每次运行。' }
+    ],
+    'en-US': [
+      { label: 'Needs', note: 'Agents publish needs based on roles and survival goals.' },
+      { label: 'Negotiate', note: 'Agents negotiate resources and prices over A2A.' },
+      { label: 'Trade', note: 'Trades update balances, vitality and credit.' },
+      { label: 'Observe', note: 'The God’s Eye UI exposes the whole economy and run traces.' }
+    ]
+  },
+  evidence: {
+    'zh-CN': [
+      { label: '问题', note: '从客户真正提出的安全与合规问题开始。' },
+      { label: '证据', note: '政策、系统控制和历史承诺分别保留来源。' },
+      { label: '审批', note: '人工批准绑定到具体答案版本和风险结果。' },
+      { label: '导出', note: '只有全部门禁通过才生成可交付的导出清单。' }
+    ],
+    'en-US': [
+      { label: 'Question', note: 'Start from the customer’s actual trust question.' },
+      { label: 'Evidence', note: 'Policies, controls and prior commitments keep separate sources.' },
+      { label: 'Approval', note: 'Human approval binds to an exact answer and risk result.' },
+      { label: 'Export', note: 'A deliverable manifest exists only after every gate passes.' }
+    ]
+  }
 }
 
 const currentTimeline = timelineData[locale]
 const currentPipeline = pipelineData[locale]
 const currentTerminal = terminalData[locale]
+const currentExtra = kind === 'timeline' || kind === 'pipeline' || kind === 'terminal' ? [] : extraData[kind][locale]
 const copy = meta[kind][locale]
 ---
 
@@ -97,6 +173,24 @@ const copy = meta[kind][locale]
       kind === 'pipeline' && (
         <div class='demo-chips'>
           {currentPipeline.map((item, index) => (
+            <button
+              type='button'
+              class='demo-chip tactile-action'
+              data-chip={index}
+              data-note={item.note}
+              style={`--i:${index}`}
+              aria-label={`${item.label} · ${item.note}`}
+            >
+              <span>{item.label}</span>
+            </button>
+          ))}
+        </div>
+      )
+    }
+    {
+      currentExtra.length > 0 && (
+        <div class='demo-chips'>
+          {currentExtra.map((item, index) => (
             <button
               type='button'
               class='demo-chip tactile-action'
