@@ -16,7 +16,8 @@ const parsedHeight = Number.parseInt(height, 10)
 const frameHeight = Number.isFinite(parsedHeight)
   ? Math.min(900, Math.max(360, parsedHeight))
   : 620
-const resolvedSrc = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const resolvedSrc = `${base}${src}`
 ---
 
 <figure class='article-media interactive-html' data-interactive-html>
