@@ -5,8 +5,13 @@ import type { Project } from '@/data/projects'
 import { Icon } from 'astro-pure/user'
 import ProjectCard from './ProjectCard.astro'
 
-interface Props { projects: Project[] }
-const projects = Astro.props.projects.map((project) => localizeProject(project, 'zh-CN'))
+interface Props {
+  projects: Project[]
+  canonicalRepositories?: string[]
+}
+const { projects: rawProjects, canonicalRepositories = [] } = Astro.props
+const projects = rawProjects.map((project) => localizeProject(project, 'zh-CN'))
+const externalCanonicalRepositories = new Set(canonicalRepositories)
 const featured = projects
   .filter((project) => project.featuredRank !== undefined)
   .sort((left, right) => (left.featuredRank ?? 99) - (right.featuredRank ?? 99))
@@ -69,14 +74,20 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
     </div>
   </section>
 
-  {/* Featured projects already own their canonical anchors above the archive. */}
   {leadProject && (
     <section class='project-block lead-block' data-project-section aria-labelledby='lead-title'>
       <header class='section-heading'>
         <div><p class='eyebrow'>首个项目</p><h2 id='lead-title'>主推项目</h2></div>
         <span data-section-count>1 个项目</span>
       </header>
-      <ProjectCard project={leadProject} variant='lead' priority lens filterable />
+      <ProjectCard
+        project={leadProject}
+        variant='lead'
+        priority
+        lens
+        filterable
+        anchor={!externalCanonicalRepositories.has(leadProject.repository)}
+      />
     </section>
   )}
   {featuredProjects.length > 0 && (
@@ -86,7 +97,15 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
         <span data-section-count>{featuredProjects.length} 个项目</span>
       </header>
       <div class='featured-grid'>
-        {featuredProjects.map((project) => <ProjectCard {project} variant='featured' lens filterable />)}
+        {featuredProjects.map((project) => (
+          <ProjectCard
+            {project}
+            variant='featured'
+            lens
+            filterable
+            anchor={!externalCanonicalRepositories.has(project.repository)}
+          />
+        ))}
       </div>
     </section>
   )}
@@ -97,7 +116,14 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
         <span data-section-count>{maintainedProjects.length} 个项目</span>
       </header>
       <div class='project-grid'>
-        {maintainedProjects.map((project) => <ProjectCard {project} variant='grid' filterable anchor />)}
+        {maintainedProjects.map((project) => (
+          <ProjectCard
+            {project}
+            variant='grid'
+            filterable
+            anchor={!externalCanonicalRepositories.has(project.repository)}
+          />
+        ))}
       </div>
     </section>
   )}
@@ -112,7 +138,7 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
           const website = websiteFor(project)
           const technologies = project.technologies.slice(0, 2)
           return (
-            <article id={project.repository} class='archive-row' data-project-item
+            <article id={externalCanonicalRepositories.has(project.repository) ? undefined : project.repository} class='archive-row' data-project-item
               data-category={project.categories.join('|')} data-status={project.status}
               data-source={project.source} data-search={searchValue(project)}>
               <div class='archive-main'>

@@ -4,6 +4,7 @@ import journeyFragment from '@/assets/lora-visual/v2/lora-v2-about-journey.webp'
 import { profileZh as profile, projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 import { socialLinks } from '@/data/social'
+import { getCurrentFocusSections } from '@/data/current-focus'
 
 import { Button, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
@@ -17,6 +18,7 @@ const headings = [
   { depth: 2, slug: 'open-source', text: '正在构建' },
   { depth: 2, slug: 'records', text: '履历与公开记录' },
   { depth: 2, slug: 'contributions', text: '公开贡献' },
+  { depth: 2, slug: 'personal', text: '工作之外' },
   { depth: 2, slug: 'elsewhere', text: '其他平台' }
 ]
 const capabilityGroups = [
@@ -42,6 +44,7 @@ const capabilityGroups = [
   }
 ]
 const openSourceProjects = homepageFeatured(projects.filter((project) => project.featured))
+const personalNow = getCurrentFocusSections('zh-CN').filter((section) => ['reading', 'listening'].includes(section.id))
 ---
 
 <PageLayout
@@ -122,6 +125,18 @@ const openSourceProjects = homepageFeatured(projects.filter((project) => project
   <p>持续提交比单次冲刺更接近我理解的建设过程：小步验证、留下证据、再继续推进。</p>
   <div class='not-prose contribution-wrap'><ContributionGraph /></div>
 
+  <h2 id='personal'>工作之外</h2>
+  <p>网站也会留一点不和项目 KPI 有关的东西。最近在读什么、反复听什么，会跟着近况一起慢慢更新。</p>
+  <div class='not-prose personal-now'>
+    {personalNow.map((section) => (
+      <article>
+        <span>{section.category}</span>
+        <h3>{section.title}</h3>
+        <ul>{section.items.map((item) => <li>{item}</li>)}</ul>
+      </article>
+    ))}
+  </div>
+
   <h2 id='elsewhere'>其他平台</h2>
   <p>不同平台承载不同密度的内容，也可以直接通过联系页开始一段对话。</p>
   <div class='not-prose social-wrap'><SocialGrid links={socialLinks} compact /></div>
@@ -158,6 +173,11 @@ const openSourceProjects = homepageFeatured(projects.filter((project) => project
   .record-links small { grid-column:1; line-height:1.55; }
   .record-links b { grid-column:2; grid-row:1/4; align-self:center; font-weight:400; }
   .contribution-wrap,.social-wrap { margin-block:1.3rem 3rem; }
-  @media(max-width:700px){ .capability-list article{grid-template-columns:1.6rem 1fr}.capability-list article>p{grid-column:2}.record-links{grid-template-columns:1fr}.project-index a{grid-template-columns:auto 1fr auto}.project-index small{display:none} }
+  .personal-now { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; margin-block:1.3rem 3rem; }
+  .personal-now article { border:1px solid hsl(var(--border)); border-radius:1rem; padding:1rem; background:hsl(var(--card)); }
+  .personal-now article>span { color:hsl(var(--field-amber)); font-size:.64rem; font-weight:680; letter-spacing:.1em; text-transform:uppercase; }
+  .personal-now h3 { margin:.5rem 0 .55rem; font-size:1rem; }
+  .personal-now ul { display:grid; gap:.35rem; margin:0; padding-left:1rem; color:hsl(var(--muted-foreground)); font-size:.78rem; line-height:1.55; }
+  @media(max-width:700px){ .personal-now{grid-template-columns:1fr}.capability-list article{grid-template-columns:1.6rem 1fr}.capability-list article>p{grid-column:2}.record-links{grid-template-columns:1fr}.project-index a{grid-template-columns:auto 1fr auto}.project-index small{display:none} }
   @media(prefers-reduced-motion:reduce){ .journey-fragment{transform:none}.project-index a{transition:none} }
 </style>

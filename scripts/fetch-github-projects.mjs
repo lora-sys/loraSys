@@ -89,6 +89,7 @@ const curatedExternalProjects = {
 
 const buildingRepositories = new Set([
   'glassbox-agent-harness',
+  'lora-pi-kit',
   'free-vision-skill',
   'nano-vllm-interactive-guide',
   'mulitimodal',
@@ -97,8 +98,9 @@ const buildingRepositories = new Set([
 ])
 
 const summaryOverrides = new Map([
-  // Reviewed against Glassbox c191401 on 2026-09-10; roadmap capabilities are not shipped.
-  ['glassbox-agent-harness', '正在演进为长期运行的个人 Agent 工作台。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；微信、QQ、长期任务和学习沉淀仍在规划。'],
+  // Reviewed against the public Glassbox and Pi Kit repositories on 2026-09-20.
+  ['glassbox-agent-harness', '正在演进为长期运行的个人 Agent 系统。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；远程渠道、长期任务和学习沉淀仍在继续建设。'],
+  ['lora-pi-kit', 'Lora 的可复现 Pi 发行版，把个人 Agent、Coding Agent 与委派 Worker 需要的 Skills、MCP、Profiles 和运行配置固定下来。'],
   ['zhihu-threads', '从知乎回答与专栏摘录中选择来源，生成可追问、自测和导出的学习线。'],
   ['lorasys', '基于 Astro 的个人站，收录项目、构建笔记和公开贡献，通过 GitHub Pages 发布。'],
   [
@@ -130,6 +132,7 @@ const summaryOverrides = new Map([
 const titleOverrides = new Map([
   ['zhihu-threads', 'Zhihu Threads'],
   ['glassbox-agent-harness', 'Glassbox'],
+  ['lora-pi-kit', 'Lora Pi Kit'],
   ['ai-engineering-harness', 'AI Engineering Harness'],
   ['nano-vllm-interactive-guide', 'nano-vLLM Interactive Guide'],
   ['trandingos', 'TradingOS'],

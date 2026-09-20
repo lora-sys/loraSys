@@ -33,6 +33,13 @@ Agent Harness 处理的是另一层：
 - 输出怎么进入 Eval。
 Strands 当前 README 直接列出 context management、execution limits、observability、hooks、guardrails、MCP、streaming、multi-agent 和 structured output。
 这些能力的共同点不是“让 Demo 更炫”，而是让 Agent 在真实环境里可控。
+
+<EvidenceFlow
+  title="一次受控 Agent 运行要留下什么"
+  items="意图::先明确用户真正允许执行的动作和目标|权限::在工具调用前检查当前 Agent 可以访问什么|执行::让模型和工具完成任务，但限制时间、次数和预算|证据::保留工具输入、结果、审批与关键状态变化|评测::用可重复的检查判断结果是否达到要求"
+  source="根据本文讨论的 Harness 控制面整理"
+ />
+
 ## 为什么现在开始强调 Harness
 模型能力一直在提高，模型供应商也越来越多。Builder 很难把产品壁垒放在“我会调用某个模型”上。
 真正容易积累的，是模型之外的控制层。

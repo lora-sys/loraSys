@@ -86,11 +86,14 @@ try {
         }
       })
     }
-    await check(`${viewport.width}: featured English descriptions and new project`,async()=>{
+    await check(`${viewport.width}: curated English project set stays localized`,async()=>{
       await open('en/work/')
-      const descriptions=await page.locator('[data-project-card] .project-body > p').allTextContents()
-      assert.ok(descriptions.length>=13,'New project must be included with existing selected work')
+      const cards=page.locator('[data-project-card]')
+      const descriptions=await cards.locator('.project-body > p').allTextContents()
+      assert.equal(await cards.count(),6,'English work page should keep the six curated public projects')
       assert.equal(descriptions.filter(x=>/[\u3400-\u9fff]/.test(x)).length,0)
+      const titles=await cards.locator('.project-heading h3').allTextContents()
+      for(const expected of ['Glassbox','Zhihu Threads','Lora Skills','AgentArena','TrustOps','MossGuard']) assert.ok(titles.includes(expected),`Missing curated project: ${expected}`)
       const link=page.locator('a[href$="/en/projects/zhihu-threads"]').first();await link.click();await page.locator('[data-zhihu-case]').waitFor()
       assert.ok(page.url().includes('/en/projects/zhihu-threads'))
     })

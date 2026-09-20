@@ -1,8 +1,8 @@
 export const homepageFeaturedRepositories = [
   'Glassbox-Agent-Harness',
-  'AgentArena',
+  'zhihu-threads',
   'skills',
-  'zhihu-threads'
+  'AgentArena'
 ] as const
 
 /**

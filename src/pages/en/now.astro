@@ -1,6 +1,10 @@
 ---
 import PageLayout from '@/layouts/BaseLayout.astro'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
+import projectSnapshot from '@/data/github-projects.json'
+import syncReport from '@/data/sync-report.json'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 const sections = getCurrentFocusSections('en-US')
 const reviewed = new Intl.DateTimeFormat('en-US', {
@@ -9,19 +13,144 @@ const reviewed = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
   timeZone: 'UTC'
 }).format(new Date(`${currentFocus.reviewedAt}T00:00:00Z`))
+const projectChanges = Object.values(projectSnapshot.projects)
+  .filter((project) => !project.archived && !project.fork)
+  .sort((a, b) => String(b.pushedAt).localeCompare(String(a.pushedAt)))
+const recentPushes = projectChanges.slice(0, 5)
+const allPosts = sortMDByDate(await getBlogCollection())
+const recentWriting = allPosts.slice(0, 4)
+const projectUpdatePayload = projectChanges.map((project) => ({ name: project.name, pushedAt: project.pushedAt }))
+const writingUpdatePayload = allPosts.map((post) => ({
+  title: post.data.title,
+  publishDate: post.data.publishDate.toISOString()
+}))
+const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))
 ---
 
 <PageLayout lang='en-US' meta={{ title: 'Now', description: 'What Lora is building, learning, reading, and listening to now.' }} highlightColor='#d99a33'>
   <main class='now-page'>
-    <header>
-      <p>NOW</p>
-      <h1>A public snapshot of where my attention is going.</h1>
-      <span>Reviewed {reviewed}. Updated when the work meaningfully changes, not on every commit.</span>
+    <header class='now-hero'>
+      <div>
+        <p>NOW</p>
+        <h1>What I've been up to lately.</h1>
+        <span>Reviewed {reviewed}. I update this when the work meaningfully changes, not on every commit.</span>
+      </div>
+      <LoraVisual asset='nowWorkbench' class='now-visual' />
     </header>
-    <section>
-      {sections.map((item, index) => <article><span>0{index + 1} · {item.category.toUpperCase()}</span><h2>{item.title}</h2><ul>{item.items.map((line) => <li>{line}</li>)}</ul><small>{item.frequency}</small></article>)}
+
+    <div
+      class='return-note'
+      data-now-visit
+      data-project-updates={JSON.stringify(projectUpdatePayload)}
+      data-writing-updates={JSON.stringify(writingUpdatePayload)}
+    >
+      <strong>Lately</strong>
+      <span>I'm focusing on a personal agent, reusable Skills, and a learning product while continuing to publish what I learn.</span>
+      <small data-now-return>First visit? Start with the Building section.</small>
+    </div>
+
+    <section class='now-grid' aria-label='Current interests'>
+      {sections.map((item, index) => (
+        <article>
+          <span>0{index + 1} · {item.category.toUpperCase()}</span>
+          <h2>{item.title}</h2>
+          <ul>{item.items.map((line) => <li>{line}</li>)}</ul>
+          <small>{item.frequency}</small>
+        </article>
+      ))}
     </section>
+
+    <div class='recent-grid'>
+      <aside>
+        <header><strong>Recent public updates</strong><span>Synced {synced}</span></header>
+        <ul>
+          {recentPushes.map((project) => (
+            <li>
+              <a href={project.url} target='_blank' rel='noopener noreferrer'>{project.fullName}</a>
+              <time datetime={String(project.pushedAt).slice(0, 10)}>
+                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}
+              </time>
+            </li>
+          ))}
+        </ul>
+      </aside>
+      <aside>
+        <header><strong>Recent writing</strong><a href='/en/writing'>All writing →</a></header>
+        <ul>
+          {recentWriting.map((post) => (
+            <li>
+              <a
+                href={`/blog/${post.id}`}
+                lang={post.data.language === 'zh-CN' ? 'zh-CN' : 'en-US'}
+              >
+                {post.data.title}
+              </a>
+              <time datetime={post.data.publishDate.toISOString()}>
+                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(post.data.publishDate)}
+              </time>
+            </li>
+          ))}
+        </ul>
+      </aside>
+    </div>
+
     <a class='back' href='/now'>Read the Chinese update</a>
   </main>
 </PageLayout>
-<style>.now-page{display:grid;gap:2rem}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p,article>span{color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.12em}h1{max-width:16ch;margin:0;font-size:clamp(2.6rem,6vw,5.7rem);font-weight:580;letter-spacing:-.07em;line-height:.92}header span{max-width:52ch;color:hsl(var(--muted-foreground));line-height:1.7}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid hsl(var(--border))}article{min-height:14rem;border-right:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));padding:1.35rem}article:nth-child(even){border-right:0}h2{margin:1.1rem 0 .6rem;font-size:1.2rem}article ul{display:grid;gap:.45rem;margin:0;padding-left:1rem;color:hsl(var(--muted-foreground));font-size:.8rem;line-height:1.65}article small{display:block;margin-top:1rem;color:hsl(var(--muted-foreground));font-size:.66rem}.back{width:max-content;color:hsl(var(--foreground));font-size:.75rem}@media(max-width:640px){section{grid-template-columns:1fr}article,article:nth-child(even){border-right:0}}</style>
+
+<script>
+  const visitKey = 'lora:now:last-visit'
+  const root = document.querySelector<HTMLElement>('[data-now-visit]')
+  const marker = root?.querySelector<HTMLElement>('[data-now-return]')
+  if (root && marker) {
+    const previous = localStorage.getItem(visitKey)
+    if (previous) {
+      const previousTime = Date.parse(previous)
+      const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{ name: string; pushedAt: string }>
+      const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{ title: string; publishDate: string }>
+      const changedProjects = projects.filter((item) => Date.parse(item.pushedAt) > previousTime)
+      const newWriting = writing.filter((item) => Date.parse(item.publishDate) > previousTime)
+      if (changedProjects.length || newWriting.length) {
+        const parts = []
+        if (changedProjects.length) parts.push(`${changedProjects.length} public project updates`)
+        if (newWriting.length) parts.push(`${newWriting.length} new article${newWriting.length === 1 ? '' : 's'}`)
+        marker.textContent = 'Since your last visit: ' + parts.join(' and ') + '.'
+      } else {
+        marker.textContent = 'Welcome back. There are no newer public project or writing records since your last visit.'
+      }
+    }
+    localStorage.setItem(visitKey, new Date().toISOString())
+  }
+</script>
+
+<style>
+  .now-page{display:grid;gap:2rem}
+  .now-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(14rem,.8fr);gap:1.5rem;align-items:end;padding-block:clamp(1rem,4vw,3rem)}
+  .now-hero>div{display:grid;gap:.75rem}
+  .now-hero p,.now-grid article>span{margin:0;color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.12em}
+  h1{max-width:15ch;margin:0;font-size:clamp(2.5rem,6vw,5.4rem);font-weight:580;letter-spacing:-.065em;line-height:.94}
+  .now-hero>div>span{max-width:52ch;color:hsl(var(--muted-foreground));line-height:1.7}
+  .now-visual{width:min(100%,25rem);justify-self:end;opacity:.94}
+  .return-note{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.4))}
+  .return-note strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+  .return-note span,.return-note small{color:hsl(var(--muted-foreground));line-height:1.55}
+  .return-note small{font-size:.72rem}
+  .now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid hsl(var(--border))}
+  .now-grid article{min-height:14rem;border-right:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));padding:1.35rem}
+  .now-grid article:nth-child(even){border-right:0}
+  h2{margin:1.1rem 0 .6rem;font-size:1.2rem}
+  .now-grid ul{display:grid;gap:.45rem;margin:0;padding-left:1rem;color:hsl(var(--muted-foreground));font-size:.8rem;line-height:1.65}
+  .now-grid article small{display:block;margin-top:1rem;color:hsl(var(--muted-foreground));font-size:.66rem}
+  .recent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+  .recent-grid aside{display:grid;gap:.6rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:hsl(var(--card)/.7)}
+  .recent-grid header{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
+  .recent-grid header strong{font-size:.67rem;letter-spacing:.1em;text-transform:uppercase}
+  .recent-grid header span,.recent-grid header a{color:hsl(var(--muted-foreground));font-size:.68rem}
+  .recent-grid ul{display:grid;gap:.45rem;margin:0;padding:0;list-style:none}
+  .recent-grid li{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
+  .recent-grid li a{min-width:0;color:hsl(var(--foreground));font-size:.74rem;text-decoration:none}
+  .recent-grid li a:hover,.recent-grid li a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
+  .recent-grid time{flex:none;color:hsl(var(--muted-foreground));font-size:.67rem}
+  .back{width:max-content;color:hsl(var(--foreground));font-size:.75rem}
+  @media(max-width:760px){.now-hero,.recent-grid,.now-grid{grid-template-columns:1fr}.now-visual{justify-self:start;width:min(70vw,18rem)}.now-grid article,.now-grid article:nth-child(even){border-right:0}}
+</style>

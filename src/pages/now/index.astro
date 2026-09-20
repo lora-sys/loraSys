@@ -5,6 +5,7 @@ import nowCurrentDeskHero from '@/assets/lora-visual/v2/lora-v2-now-workbench.we
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 const lastUpdated = currentFocus.reviewedAt
 const lastUpdatedLabel = new Intl.DateTimeFormat('zh-CN', {
@@ -14,10 +15,17 @@ const lastUpdatedLabel = new Intl.DateTimeFormat('zh-CN', {
   timeZone: 'UTC'
 }).format(new Date(`${lastUpdated}T00:00:00Z`))
 // 同步事实区：来自 GitHub 快照的最近推送仓库；数据旧就如实显示旧，不伪造新鲜。
-const recentPushes = Object.values(projectSnapshot.projects)
+const projectChanges = Object.values(projectSnapshot.projects)
   .filter((project) => !project.archived && !project.fork)
   .sort((a, b) => String(b.pushedAt).localeCompare(String(a.pushedAt)))
-  .slice(0, 3)
+const recentPushes = projectChanges.slice(0, 5)
+const allPosts = sortMDByDate(await getBlogCollection())
+const recentWriting = allPosts.slice(0, 4)
+const projectUpdatePayload = projectChanges.map((project) => ({ name: project.name, pushedAt: project.pushedAt }))
+const writingUpdatePayload = allPosts.map((post) => ({
+  title: post.data.title,
+  publishDate: post.data.publishDate.toISOString()
+}))
 const syncedLabel = new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(
   new Date(syncReport.syncedAt)
 )
@@ -25,8 +33,8 @@ const sections = getCurrentFocusSections('zh-CN')
 const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: section.title }))
 ---
 <PageLayout
-  title='正在构建'
-  description='Lora 当前正在构建、学习、阅读和反复思考的内容快照。'
+  title='最近在做'
+  description='Lora 最近在做的项目、写作、学习、阅读与音乐。'
   {headings}
 >
  <section class='not-prose now-hero' aria-labelledby='now-intro'>
@@ -36,20 +44,42 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
    <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>{lastUpdatedLabel}</time>，完成重要变化时更新。</p>
   </div>
  </section>
- <div class='now-recent' data-now-visit><strong>当前主线</strong><span>{currentFocus.description}</span><small data-now-return>欢迎回来，继续看看最近的构建。</small></div>
- <aside class='now-sync' aria-label='来自 GitHub 同步的最近活动'>
-   <header><strong>来自 GitHub 同步</strong><span>档案同步于 {syncedLabel}</span></header>
+ <div
+   class='now-recent'
+   data-now-visit
+   data-project-updates={JSON.stringify(projectUpdatePayload)}
+   data-writing-updates={JSON.stringify(writingUpdatePayload)}
+ >
+   <strong>最近在忙</strong>
+   <span>{currentFocus.description}</span>
+   <small data-now-return>第一次来？从“最近在做”开始就好。</small>
+ </div>
+ <aside class='now-sync' aria-label='最近的公开项目更新'>
+   <header><strong>最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
    <ul>
      {recentPushes.map((project) => (
        <li>
          <a href={project.url} target='_blank' rel='noopener noreferrer'>{project.fullName}</a>
-         <time datetime={String(project.pushedAt).slice(0, 10)}>
+         <time datetime={String(project.pushedAt).slice(0, 10)} data-pushed-at={project.pushedAt}>
            {new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}
          </time>
        </li>
      ))}
    </ul>
-   <small>最近推送自动来自仓库快照；上面的人工记录仍由我按里程碑更新。</small>
+   <small>这里显示最近的公开仓库更新；上面的近况仍由我自己按阶段复核。</small>
+ </aside>
+ <aside class='now-writing' aria-label='最近发布的文章'>
+   <header><strong>最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
+   <ul>
+     {recentWriting.map((post) => (
+       <li>
+         <a href={`/blog/${post.id}`}>{post.data.title}</a>
+         <time datetime={post.data.publishDate.toISOString()} data-published-at={post.data.publishDate.toISOString()}>
+           {new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(post.data.publishDate)}
+         </time>
+       </li>
+     ))}
+   </ul>
  </aside>
  <div class='not-prose now-grid'>{sections.map(section=><section id={section.id}><header><span>{section.category}</span><div><i></i>{section.status}</div></header><h2>{section.title}</h2><ul>{section.items.map(item=><li>{item}</li>)}</ul><footer>更新频率 · {section.frequency}</footer></section>)}</div>
  <p>也可以在 <a href='https://peerlist.io/mierpiter' target='_blank' rel='noopener noreferrer'>PeerList</a>、<a href='https://www.youtube.com/@MierPiter33280' target='_blank' rel='noopener noreferrer'>YouTube</a> 和 <a href='https://space.bilibili.com/431821023' target='_blank' rel='noopener noreferrer'>Bilibili</a> 找到我。</p>
@@ -64,5 +94,38 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
 .now-sync a{color:hsl(var(--foreground));font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:.74rem;text-decoration:none}
 .now-sync a:hover,.now-sync a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
 .now-sync time{color:hsl(var(--muted-foreground));font-size:.7rem;white-space:nowrap}
-.now-sync > small{color:hsl(var(--muted-foreground));font-size:.68rem;line-height:1.5}@media(max-width:600px){.now-hero{min-height:15.5rem}.now-hero-image{object-position:68% center}.now-hero-copy{max-width:100%;background:linear-gradient(90deg,hsl(var(--background)/.96) 0%,hsl(var(--background)/.78) 68%,hsl(var(--background)/.22) 100%)}.now-grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.now-hero-image{transform:none}}</style>
- <script>const visitKey='lora:now:last-visit';const marker=document.querySelector<HTMLElement>('[data-now-return]');if(marker){const previous=localStorage.getItem(visitKey);marker.textContent=previous?'欢迎回来，看看这次有什么变化。':'第一次来？从 Building 区开始。';localStorage.setItem(visitKey,new Date().toISOString())}</script>
+.now-sync > small{color:hsl(var(--muted-foreground));font-size:.68rem;line-height:1.5}
+.now-writing{display:grid;gap:.55rem;margin-top:1rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:.95rem 1rem;background:hsl(var(--card)/.72);font-size:.8rem}
+.now-writing header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.now-writing header strong{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}
+.now-writing header a{color:hsl(var(--foreground));font-size:.7rem;text-decoration:none}
+.now-writing header a:hover,.now-writing header a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
+.now-writing ul{display:grid;gap:.45rem;margin:0;padding:0;list-style:none}
+.now-writing li{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
+.now-writing li a{min-width:0;color:hsl(var(--foreground));font-size:.76rem;text-decoration:none}
+.now-writing li a:hover,.now-writing li a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
+.now-writing time{flex:none;color:hsl(var(--muted-foreground));font-size:.68rem}
+@media(max-width:600px){.now-hero{min-height:15.5rem}.now-hero-image{object-position:68% center}.now-hero-copy{max-width:100%;background:linear-gradient(90deg,hsl(var(--background)/.96) 0%,hsl(var(--background)/.78) 68%,hsl(var(--background)/.22) 100%)}.now-grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.now-hero-image{transform:none}}</style>
+ <script>
+   const visitKey = 'lora:now:last-visit'
+   const root = document.querySelector<HTMLElement>('[data-now-visit]')
+   const marker = root?.querySelector<HTMLElement>('[data-now-return]')
+   if (root && marker) {
+     const previous = localStorage.getItem(visitKey)
+     if (previous) {
+       const previousTime = Date.parse(previous)
+       const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{ name: string; pushedAt: string }>
+       const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{ title: string; publishDate: string }>
+       const changedProjects = projects.filter((item) => Date.parse(item.pushedAt) > previousTime)
+       const newWriting = writing.filter((item) => Date.parse(item.publishDate) > previousTime)
+       if (changedProjects.length || newWriting.length) {
+         const projectText = changedProjects.length ? `${changedProjects.length} 个公开项目有更新` : ''
+         const writingText = newWriting.length ? `${newWriting.length} 篇新文章` : ''
+         marker.textContent = '上次来之后，' + [projectText, writingText].filter(Boolean).join('，') + '。'
+       } else {
+         marker.textContent = '欢迎回来。公开项目和文章里暂时没有比你上次访问更新的记录。'
+       }
+     }
+     localStorage.setItem(visitKey, new Date().toISOString())
+   }
+ </script>
