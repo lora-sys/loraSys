@@ -12,7 +12,7 @@
 
 ### 2. 静态数据有明确来源边界
 
-`src/data/github-projects.json`、`src/data/contributions.json`、`src/data/external-contributions.json` 和 `src/data/sync-report.json` 是同步快照。项目排序、精选资格、人工摘要和本地封面映射由 `scripts/fetch-github-projects.mjs` 管理；不要手工改快照来绕过脚本规则。Notion、HTML 或其他外部文章只能先进入 `content-drafts/review/`，人工审核后才可移动到 `src/content/blog/`。
+`src/data/github-projects.json`、`src/data/contributions.json`、`src/data/external-contributions.json` 和 `src/data/sync-report.json` 是同步快照。项目排序、精选资格、人工摘要和本地封面映射由 `scripts/fetch-github-projects.mjs` 管理；不要手工改快照来绕过脚本规则。普通手动导入的 HTML 或外部文章先进入 `content-drafts/review/`。已被维护者明确授权的 Notion→网站自动发布任务可以按 `content-sync/` 清单、当前 MDX contract 和发布检查直接更新 `src/content/blog/`，但不能借此修改 CI、部署或站点框架。
 
 ### 3. 视觉资产必须原创、真实、轻量
 
@@ -80,6 +80,15 @@
 5. 生成资产必须先在仓库外做轻量通过/不通过审查，再转为 WebP 接入。
 
 异步交互要等待真实的状态完成或 DOM 状态变化，不能用任意 `sleep` 让测试看上去通过。
+
+## 自动内容同步与 CI 边界
+
+- 内容自动化只能复用仓库已经存在的验证命令、测试脚本和 GitHub Actions。不得创建日期型 `.github/workflows/verify-*.yml`、临时 Playwright workflow 或复制整套 CI。
+- 已授权直接发布到 `main` 的同步任务，不得为了“先验稿”再创建 `verify/notion-sync-*`、`test/*`、`tmp/*` 等临时验证分支。若已有仓库 CI 失败，读取真实 job log 并修根因。
+- 更新已有 MDX 文章时必须先与当前 `main` 比较。Notion 源事实变化不等于删除站点侧已经验证有效的 `Callout`、`StatStrip`、`DataChart`、`KeyPoints`、`ProcessSteps`、`ComparePanel`、`OptionTabs`、Mermaid 或其他阅读增强。
+- 对 lazy-loaded 图片的浏览器检查应先把目标图片滚入视口，再等待 `complete` / `naturalWidth`。不要要求整个文档所有懒加载图片在固定短超时内同时加载。
+- 连续提交造成的 `cancelled` / `skipped` run 不是失败。只把 `conclusion=failure` 的 Action 当作需要修复的红灯。
+- 内容同步任务不得修改 `.github/workflows/`、依赖、MDX 组件实现、站点配置或部署策略；发现框架层问题时报告给维护者，由单独任务处理。
 
 ## Git、PR 与发布
 
