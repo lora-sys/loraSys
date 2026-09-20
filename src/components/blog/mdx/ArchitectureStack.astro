@@ -1,0 +1,67 @@
+---
+interface Props {
+  title?: string
+  layers: string
+  source?: string
+}
+const { title, layers, source } = Astro.props
+const entries = layers.split('|').map((item) => {
+  const [label = '', summary = '', detail = ''] = item.split('::', 3).map((part) => part.trim())
+  return { label, summary, detail }
+}).filter((item) => item.label && item.summary).slice(0, 6)
+---
+
+{entries.length > 0 && (
+  <section class='architecture-stack not-prose' data-architecture-stack>
+    {title && <h3>{title}</h3>}
+    <div class='stack-shell'>
+      <div class='stack-layers' role='list' aria-label={title ?? 'Architecture layers'}>
+        {entries.map((item, index) => (
+          <button type='button' role='listitem' data-stack-layer aria-pressed={index === 0 ? 'true' : 'false'}>
+            <span>{String(entries.length - index).padStart(2, '0')}</span>
+            <strong>{item.label}</strong>
+            <small>{item.summary}</small>
+          </button>
+        ))}
+      </div>
+      <div class='stack-detail' data-stack-detail>{entries[0].detail || entries[0].summary}</div>
+      <div hidden>{entries.map((item) => <span data-stack-copy>{item.detail || item.summary}</span>)}</div>
+    </div>
+    {source && <small class='stack-source'>{source}</small>}
+  </section>
+)}
+
+<script>
+  const setupArchitectureStack = () => {
+    document.querySelectorAll<HTMLElement>('[data-architecture-stack]').forEach((root) => {
+      if (root.dataset.ready === 'true') return
+      root.dataset.ready = 'true'
+      const layers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-stack-layer]'))
+      const copy = Array.from(root.querySelectorAll<HTMLElement>('[data-stack-copy]'))
+      const detail = root.querySelector<HTMLElement>('[data-stack-detail]')
+      if (!detail) return
+      layers.forEach((layer, index) => layer.addEventListener('click', () => {
+        layers.forEach((item, i) => item.setAttribute('aria-pressed', i === index ? 'true' : 'false'))
+        detail.textContent = copy[index]?.textContent ?? ''
+      }))
+    })
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupArchitectureStack, { once: true })
+  else setupArchitectureStack()
+</script>
+
+<style>
+  .architecture-stack{display:grid;gap:.8rem;margin-block:2rem}
+  .architecture-stack>h3{margin:0;font-size:.92rem;font-weight:660}
+  .stack-shell{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(12rem,.9fr);gap:1rem;align-items:stretch}
+  .stack-layers{display:flex;flex-direction:column-reverse;gap:.35rem}
+  .stack-layers button{display:grid;grid-template-columns:2rem minmax(7rem,.45fr) minmax(0,1fr);gap:.55rem;align-items:center;border:1px solid hsl(var(--border));border-radius:.75rem;padding:.7rem;background:hsl(var(--card));color:hsl(var(--muted-foreground));text-align:left;font:inherit;cursor:pointer}
+  .stack-layers button:nth-child(2n){margin-inline:.45rem}
+  .stack-layers button[aria-pressed='true']{border-color:hsl(var(--field-amber)/.65);background:hsl(var(--field-amber)/.08);color:hsl(var(--foreground))}
+  .stack-layers span{font-size:.58rem;font-weight:700;color:hsl(var(--field-amber))}
+  .stack-layers strong{font-size:.75rem;font-weight:650}
+  .stack-layers small{font-size:.68rem;line-height:1.4;color:inherit}
+  .stack-detail{display:flex;align-items:center;border:1px dashed hsl(var(--border));border-radius:.85rem;padding:1rem;color:hsl(var(--muted-foreground));font-size:.76rem;line-height:1.6;background:hsl(var(--background)/.6)}
+  .stack-source{color:hsl(var(--muted-foreground));font-size:.66rem}
+  @media(max-width:640px){.stack-shell{grid-template-columns:1fr}.stack-layers button{grid-template-columns:1.5rem minmax(6rem,.45fr) minmax(0,1fr)}.stack-layers button:nth-child(2n){margin-inline:0}}
+</style>

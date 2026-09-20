@@ -5,15 +5,18 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PostLayout from '@/layouts/BlogPost.astro'
 import ArticleQuote from '@/components/blog/mdx/ArticleQuote.astro'
 import ArticleTable from '@/components/blog/mdx/ArticleTable.astro'
+import ArchitectureStack from '@/components/blog/mdx/ArchitectureStack.astro'
 import Callout from '@/components/blog/mdx/Callout.astro'
 import ComparePanel from '@/components/blog/mdx/ComparePanel.astro'
 import DataChart from '@/components/blog/mdx/DataChart.astro'
+import EvidenceFlow from '@/components/blog/mdx/EvidenceFlow.astro'
 import InteractiveHtml from '@/components/blog/mdx/InteractiveHtml.astro'
 import KeyPoints from '@/components/blog/mdx/KeyPoints.astro'
 import MediaVideo from '@/components/blog/mdx/MediaVideo.astro'
 import OptionTabs from '@/components/blog/mdx/OptionTabs.astro'
 import ProcessSteps from '@/components/blog/mdx/ProcessSteps.astro'
 import StatStrip from '@/components/blog/mdx/StatStrip.astro'
+import TraceExplorer from '@/components/blog/mdx/TraceExplorer.astro'
 
 export const prerender = true
 
@@ -34,15 +37,18 @@ const { post, posts } = Astro.props
 const mdxComponents = {
   blockquote: ArticleQuote,
   table: ArticleTable,
+  ArchitectureStack,
   Callout,
   ComparePanel,
   DataChart,
+  EvidenceFlow,
   InteractiveHtml,
   KeyPoints,
   MediaVideo,
   OptionTabs,
   ProcessSteps,
-  StatStrip
+  StatStrip,
+  TraceExplorer
 }
 const { Content, headings, remarkPluginFrontmatter } = await render(post)
 ---

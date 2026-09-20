@@ -16,39 +16,39 @@ export interface FocusSection {
 }
 
 const focusCopy = {
-  reviewedAt: '2026-09-14',
+  reviewedAt: '2026-09-20',
   summary: {
     'zh-CN': [
       {
-        title: 'Glassbox · Personal Agent 工作台',
-        description: '推进身份、授权、会话与可追溯执行地基，同时保留现有 Coding Agent Harness 能力。',
+        title: 'Glassbox · 个人 Agent 系统',
+        description: '继续推进长期运行的个人 Agent 基础，同时用 Lora Pi Kit 固定可复现的运行环境、Skills 与权限边界。',
         href: '/projects#Glassbox-Agent-Harness'
       },
       {
         title: 'Lora Skills',
-        description: '维护一组可安装的 Agent Skills，把个人站发布、AI 工程和内容工作流沉淀成可复用能力。',
+        description: '维护一组可安装的 Agent Skills，把个人站发布、AI 工程、视觉与内容工作流沉淀成可复用能力。',
         href: '/projects#skills'
       },
       {
         title: 'Zhihu Threads',
-        description: '从用户选择的知乎摘录构建可追问、自测、可检查证据边界的学习线。',
+        description: '把用户自己选择的知乎摘录整理成可以继续追问、自测和回看的学习线。',
         href: '/projects/zhihu-threads'
       }
     ],
     'en-US': [
       {
-        title: 'Glassbox · Personal Agent workbench',
-        description: 'Building the identity, authorization, conversation and traceable execution foundation while keeping the existing coding-agent harness useful.',
+        title: 'Glassbox · Personal Agent',
+        description: 'Building the foundation for a long-running personal agent, with Lora Pi Kit keeping its runtime, Skills and permission boundaries reproducible.',
         href: '/en/work#Glassbox-Agent-Harness'
       },
       {
         title: 'Lora Skills',
-        description: 'Maintaining installable Agent Skills that turn publishing, AI engineering and content workflows into reusable capabilities.',
+        description: 'Maintaining installable Agent Skills for publishing, AI engineering, visual work and repeatable content workflows.',
         href: '/en/work#skills'
       },
       {
         title: 'Zhihu Threads',
-        description: 'Building evidence-bounded learning threads from excerpts the user explicitly selects.',
+        description: 'Turning excerpts selected by the reader into a learning thread that can be questioned, tested and revisited.',
         href: '/en/projects/zhihu-threads'
       }
     ]
@@ -58,27 +58,28 @@ const focusCopy = {
       {
         id: 'building',
         category: 'Building',
-        title: '营造中',
+        title: '最近在做',
         status: 'In progress',
-        frequency: '随项目里程碑更新',
+        frequency: '有明显进展时更新',
         items: [
-          'Glassbox：Personal Agent Foundation，优先推进身份、授权、会话和可追溯执行。',
+          'Glassbox：继续做个人 Agent 的身份、授权、会话和可追溯执行基础。',
+          'Lora Pi Kit：把 Pi、Skills、MCP、运行配置和不同使用场景整理成可复现的个人发行版。',
           'Lora Skills：继续整理、验证并发布可安装的 Agent Skills。',
-          'Zhihu Threads：收紧来源选择、学习线与评测记录之间的证据边界。'
+          'Zhihu Threads：优化来源选择、学习线、自测和评测记录之间的关系。'
         ]
       },
       {
         id: 'learning',
         category: 'Learning',
-        title: '学习中',
+        title: '最近在学',
         status: 'Exploring',
-        frequency: '有可复用结论时更新',
-        items: ['Agent 授权与长期记忆边界', '可观测、可评测的 Agent 运行与工具调用']
+        frequency: '形成可复用结论时更新',
+        items: ['长期运行 Agent 的授权、记忆与任务恢复', '怎样让 Agent 的运行过程更容易观察、评测和复盘']
       },
       {
         id: 'reading',
         category: 'Reading',
-        title: '阅读中',
+        title: '最近在读',
         status: 'On my desk',
         frequency: '随阅读进展更新',
         items: ['Designing Data-Intensive Applications']
@@ -86,7 +87,7 @@ const focusCopy = {
       {
         id: 'listening',
         category: 'Listening',
-        title: '共鸣中',
+        title: '最近在听',
         status: 'On repeat',
         frequency: '不定期更新',
         items: ['Tame Impala — Currents']
@@ -98,11 +99,12 @@ const focusCopy = {
         category: 'Building',
         title: 'Building',
         status: 'In progress',
-        frequency: 'Updated at meaningful project milestones',
+        frequency: 'Updated when the work meaningfully changes',
         items: [
-          'Glassbox: Personal Agent Foundation with identity, authorization, conversation and traceable execution first.',
+          'Glassbox: identity, authorization, conversation and traceable execution for a personal agent.',
+          'Lora Pi Kit: a reproducible Pi distribution that packages Skills, MCP, profiles and runtime configuration.',
           'Lora Skills: keep validating and publishing reusable Agent Skills.',
-          'Zhihu Threads: tighten the evidence boundary between selected excerpts, learning threads and evaluation records.'
+          'Zhihu Threads: improve the connection between selected sources, learning threads, self-tests and evaluation records.'
         ]
       },
       {
@@ -111,7 +113,7 @@ const focusCopy = {
         title: 'Learning',
         status: 'Exploring',
         frequency: 'Updated when the learning becomes reusable',
-        items: ['Agent authorization and long-term memory boundaries', 'Observable and evaluable runs and tool use']
+        items: ['Authorization, memory and recovery for long-running agents', 'Observable and evaluable agent runs and tool use']
       },
       {
         id: 'reading',
@@ -136,14 +138,14 @@ const focusCopy = {
 export const currentFocus = {
   reviewedAt: focusCopy.reviewedAt,
   eyebrow: 'Current focus',
-  title: 'Building reliable personal-agent infrastructure.',
-  description: '从身份、授权、会话和可观察执行开始，把真实构建沉淀成可复用的系统、技能和公开记录。',
+  title: 'Building useful AI tools and writing down what I learn.',
+  description: '最近主要在做个人 Agent、可复用 Skills 和学习工具，也继续把构建过程写成可以公开检查的记录。',
   themeTitle: 'AI Agent Infrastructure',
   themeHref: '/projects#theme-roadmap',
   projectTitle: 'Glassbox',
   projectHref: '/projects#Glassbox-Agent-Harness',
-  writingTitle: 'AI Engineering Harness: 从 Vibe Coding 到工程化',
-  writingHref: '/blog/ai-engineering-harness',
+  writingTitle: 'Agent Demo 不难，难的是 Harness',
+  writingHref: '/blog/agent-demo-harness-control-layer',
   primaryLabel: 'Explore Glassbox',
   primaryHref: '/projects#Glassbox-Agent-Harness'
 } as const

@@ -30,9 +30,71 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
       external: true
     },
     {
+      kind: 'Project',
+      label: 'Pi 运行环境',
+      href: 'https://github.com/lora-sys/lora-pi-kit/blob/main/README.md',
+      external: true
+    },
+    {
       kind: 'Channel',
       label: 'Bilibili channel',
       href: 'https://space.bilibili.com/431821023',
+      external: true
+    }
+  ],
+  'lora-pi-kit': [
+    {
+      kind: 'Project',
+      label: 'Pi 运行环境',
+      href: 'https://github.com/lora-sys/lora-pi-kit/blob/main/README.md',
+      external: true
+    }
+  ],
+  trustops: [
+    {
+      kind: 'Project',
+      label: '可信证据链',
+      href: 'https://github.com/lora-sys/trustops/blob/main/README.md',
+      external: true
+    }
+  ],
+  mossguard: [
+    {
+      kind: 'Project',
+      label: '链上验证证据',
+      href: 'https://github.com/lora-sys/mossguard/blob/main/README.md',
+      external: true
+    }
+  ],
+  ecomatrix: [
+    {
+      kind: 'Project',
+      label: '多智能体经济模拟',
+      href: 'https://github.com/lora-sys/ecomatrix/blob/main/README.md',
+      external: true
+    }
+  ],
+  'packify-skill': [
+    {
+      kind: 'Project',
+      label: 'Packify 展示',
+      href: 'https://github.com/lora-sys/packify-skill/blob/main/README.md',
+      external: true
+    }
+  ],
+  'shape-up-project-shaping': [
+    {
+      kind: 'Project',
+      label: 'Shape Up Skill',
+      href: 'https://github.com/lora-sys/shape-up-project-shaping/blob/main/README.md',
+      external: true
+    }
+  ],
+  sysclean: [
+    {
+      kind: 'Project',
+      label: 'Linux 工具说明',
+      href: 'https://github.com/lora-sys/sysclean/blob/main/README.md',
       external: true
     }
   ],
@@ -81,6 +143,13 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
 const storyLabels: Record<string, [string, string]> = {
   '13 个可安装 Agent Skills': ['13 个可安装 Agent Skills', '13 installable Agent Skills'],
   '当前能力与规划': ['当前能力与规划', 'Available capabilities and roadmap'],
+  'Pi 运行环境': ['Pi 运行环境', 'Pi runtime distribution'],
+  '可信证据链': ['可信证据链', 'Trust evidence chain'],
+  '链上验证证据': ['链上验证证据', 'On-chain verification evidence'],
+  '多智能体经济模拟': ['多智能体经济模拟', 'Multi-agent economy simulation'],
+  'Packify 展示': ['Packify 展示', 'Packify showcase'],
+  'Shape Up Skill': ['Shape Up Skill', 'Shape Up skill'],
+  'Linux 工具说明': ['Linux 工具说明', 'Linux tool overview'],
   '来源选择与学习线': ['来源选择与学习线', 'Source selection and learning threads'],
   'Bilibili channel': ['哔哩哔哩主页', 'Bilibili profile'],
   '小红书 channel': ['小红书主页', 'Xiaohongshu profile'],
