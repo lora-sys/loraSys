@@ -40,6 +40,7 @@ bunfig.toml
 /src/content/blog/test.*
 /test/
 .playwright-cli/
+/output/
 
 # Local HTML/MDX conversion candidates — never commit or deploy until a human approves a migration to src/content.
 /content-drafts/review/*.md
