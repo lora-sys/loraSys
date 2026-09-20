@@ -1,0 +1,46 @@
+---
+interface Props {
+  src: string
+  title: string
+  caption?: string
+}
+
+const { src, title, caption } = Astro.props
+
+if (!src.startsWith('/media/blog/')) {
+  throw new Error('MediaVideo only accepts local /media/blog/ sources')
+}
+
+const resolvedSrc = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`
+const type = src.endsWith('.webm')
+  ? 'video/webm'
+  : src.endsWith('.mov')
+    ? 'video/quicktime'
+    : 'video/mp4'
+---
+
+<figure class='article-media article-video' data-media-video>
+  <video controls preload='metadata' playsinline aria-label={title}>
+    <source src={resolvedSrc} type={type} />
+    <a href={resolvedSrc}>{title}</a>
+  </video>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .article-media { margin: 1.5rem 0 1.9rem; }
+  .article-video video {
+    display: block;
+    width: 100%;
+    max-height: min(70vh, 720px);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    background: hsl(var(--muted) / 0.35);
+  }
+  .article-video figcaption {
+    margin-top: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+</style>

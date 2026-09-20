@@ -17,6 +17,12 @@ Tau 把模型适配、Agent 核心和应用拆开。应用使用核心，核心�
 
 Tau 三层架构示意图。
 
+<MediaVideo
+  src="/media/blog/tau-agent-architecture/tau-architecture-site-recreation.mp4"
+  title="Tau 三层依赖与事件流"
+  caption="站点重建版动画：依据 Notion 原附件 tau_architecture_explainer.mp4 的三层依赖与事件流说明重建。当前 Notion 连接只返回历史附件的内部 file:// 引用，无法导出原 MP4 字节，因此这里不冒充原文件。"
+/>
+
 <OptionTabs
   title="切换查看三层职责"
   items="tau_ai::模型适配层::调用模型供应商并把流式响应转换成统一事件;;不依赖具体界面和编程工作流|tau_agent::Agent 核心::组织消息、工具、事件、循环控制和会话基础能力;;不依赖命令行界面、Textual、Rich 或应用资源加载|tau_coding::应用层::提供编程助手的命令行、工具、项目说明、技能、磁盘会话和终端界面;;消费核心事件，不继续向界面暴露供应商原始协议"

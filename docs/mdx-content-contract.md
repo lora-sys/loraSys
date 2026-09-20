@@ -108,11 +108,41 @@ Use for a small numeric comparison or ordered series with values that are explic
 
 `labels` and `values` use `|` as the separator. The component accepts at most 12 non-negative values and renders a compact interactive bar chart.
 
+### MediaVideo
+
+Use for a local article video stored under `public/media/blog/<slug>/`. The component accepts only `/media/blog/` paths, uses native controls and `preload="metadata"`, and never autoplays or loops.
+
+```mdx
+<MediaVideo
+  src="/media/blog/example/demo.mp4"
+  title="Demo"
+  caption="Source note"
+/>
+```
+
+### InteractiveHtml
+
+Use for a self-contained interactive HTML artifact stored under `public/artifacts/blog/<slug>/`. The component accepts only `/artifacts/blog/` paths and renders the artifact in a sandboxed frame with scripts allowed but without same-origin privileges.
+
+```mdx
+<InteractiveHtml
+  src="/artifacts/blog/example/dashboard.html"
+  title="Interactive dashboard"
+  height="620"
+  caption="Data scope matches the article."
+/>
+```
+
+Do not use either component for arbitrary remote embeds. Interactive HTML must be self-contained and must not contain secrets, analytics, remote scripts, form submission, or privileged browser APIs. Keep a readable text/table fallback in the article for RSS and accessibility.
+
 ## Conversion rules for Notion
 
 - Headings, paragraphs, lists, quotes, links, GFM tables, code blocks, equations, images, and `details` should stay native Markdown or HTML where possible.
 - Remove Notion-only placeholders such as `<table_of_contents/>`; the site already generates its own table of contents.
+- Before declaring a Notion page fully synchronized, build a media inventory for image, file, video, audio, embed, and HTML-attachment blocks.
 - Copy source images into `src/assets/blog/<slug>/` and reference the local asset exactly as the current sync flow does.
+- Copy videos into `public/media/blog/<slug>/` and render them with `MediaVideo`. Copy self-contained interactive HTML into `public/artifacts/blog/<slug>/` and render it with `InteractiveHtml`.
+- If a historical Notion attachment is exposed only as an internal `file://` reference and its bytes cannot be retrieved, record that limitation. A source-backed site reconstruction may restore the reader experience, but it must be labeled as a reconstruction and never represented as the original file.
 - Use Mermaid only for a real flow, sequence, state model, or architecture already described by the article.
 - Use `StatStrip` or `DataChart` only when the source provides suitable numbers. If the article has no suitable data, omit them.
 - Do not change the author's factual claims or add unsupported numbers for presentation.

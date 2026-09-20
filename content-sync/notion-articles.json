@@ -2,26 +2,10 @@
   "version": 1,
   "entries": [
     {
-      "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
-      "slug": "kitaru-agent-regression-testing",
-      "content_fingerprint": "git-blob:fd4be103abdad3c4184a4c12953d9e9217df4d3a",
-      "source_last_edited_at": "2026-09-17T06:44:08.275Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
-      "source_section_sha256": "1c6c028e6e1d092558e36893ad98cacab7ae7920089daf45b7266e2a01f5045a",
-      "slug": "long-running-agent-session-context-state",
-      "content_fingerprint": "git-blob:6baa940301d0eb103ca64bd08df0ecf2fb643220",
-      "source_last_edited_at": "2026-09-17T01:18:44.722Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "0dfe3e689ba1d086422f9c6055ad24d30aff8af829a8bc110579491f599cac01",
-      "slug": "agent-tool-search-mcp-ard",
-      "content_fingerprint": "git-blob:bf5e53306fb1b54b8ef1968a66800431480e66dd",
-      "source_last_edited_at": "2026-09-17T15:56:49.285Z",
-      "status": "synced"
+      "source_page_id_sha256": "2c5e51568b762fd80f499263d07567ece8645e38e2facd6cf9b721cea3b252dd",
+      "slug": "agent-budget-memory-evaluation",
+      "status": "superseded",
+      "note": "Earlier content-package topic is covered by the dedicated budget/memory/evaluation article."
     },
     {
       "source_page_id_sha256": "4acc2e088e77812ed4446d5af22bf4e7be100bf67533a22f83752af7bd262f61",
@@ -31,73 +15,18 @@
       "status": "synced"
     },
     {
+      "source_page_id_sha256": "1451ce2e45e96d7fde0547c8d331e899d7aad7bee9069b58dc163d7e6b8bf66e",
+      "slug": "agent-demo-harness-control-layer",
+      "content_fingerprint": "git-blob:a8c1a377012812daad873c668d9a76f19b99574a",
+      "source_last_edited_at": "2026-09-08T13:05:47.226Z",
+      "status": "synced",
+      "note": "One-time backfill from 内容创作中枢 historical topic library; complete article body and original Notion visual preserved."
+    },
+    {
       "source_page_id_sha256": "a47f36ea0f60ec9a2d81ea2a024c42faba7059e832a252058396c05522eb5e8b",
       "slug": "agent-durable-execution-step-idempotency",
       "content_fingerprint": "git-blob:1fbcc77fae00fd299ad69db01e3663d1382a187c",
       "source_last_edited_at": "2026-09-19T15:25:32.587Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "de45ec8196f66c5f1f9a852277b7cdaef2f173b0021e46153f009b9f2ea30dd3",
-      "slug": "foreman-coding-agent-supervisor",
-      "content_fingerprint": "git-blob:3247b7a9b020b4967a656c0bc9dd4b78df9f23f2",
-      "source_last_edited_at": "2026-09-18T01:25:38.724Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "910ae32c86da93c3fc0f0824e077d65be4d1f47a1417f4a9ee324ed0842555d2",
-      "slug": "skills-manager-multi-agent-skill-sync",
-      "content_fingerprint": "git-blob:054c49637d5f3a9b03b1e64b10a1db1cb372ff76",
-      "source_last_edited_at": "2026-09-16T02:02:10.242Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "3dafd66e76c9966412065103416b3dac5e3f285f9e82f56979d480cdb460a570",
-      "slug": "aws-agent-proposal-validation",
-      "content_fingerprint": "git-blob:3d73905d43fbaba50e51c9b9298468e0cb5665d6",
-      "source_last_edited_at": "2026-09-15T00:25:27.947Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "be816aa10c2a89a83d253069a717af5138a6ab6322cd6fd457313f0b39c8ded0",
-      "slug": "agentic-workflows-noop-triage",
-      "content_fingerprint": "git-blob:4c86b4edb46ef4968c3a1164395eed8d7024a18d",
-      "source_last_edited_at": "2026-09-14T00:47:17.980Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "7e72c17fba7018c6746f439dbe54a0496c82f1df236f0d3df9116e06a0fbb01e",
-      "slug": "hyperframes-html-video-engineering",
-      "content_fingerprint": "git-blob:1288edce1176890026d7ce5d686b8d3eced1faea",
-      "source_last_edited_at": "2026-09-14T01:21:56.374Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "d19abdeca0c551279b8bd0d82d83c5338c161e07e79200a241a20d171a1e781c",
-      "slug": "herdr-coding-agent-runtime",
-      "content_fingerprint": "git-blob:08cca69a155f2decbdb58c0726217b6fdfad2e10",
-      "source_last_edited_at": "2026-09-13T01:06:12.256Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "1222a0848da1c6df1dc04964381679edc750350f789c482429208c5cd23d729b",
-      "slug": "rtk-agent-shell-output-filter",
-      "content_fingerprint": "git-blob:466d9e7b576b6e790fabd0795ce474d9ffe68c47",
-      "source_last_edited_at": "2026-09-13T01:23:46.650Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "edcc063d80c2032b9ce299ad2e4b8c9eba8645d0417acb33d6a337f008715023",
-      "slug": "google-agent-plugins-skills-mcp",
-      "content_fingerprint": "git-blob:d8c6cf4c464c5b3bd322e0045c0a172ddb698584",
-      "source_last_edited_at": "2026-09-12T01:02:51.306Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "b5cefc3050b5b9b1a6ac8ce878084a72caefbdb1250a24fa3eccfd82d7a011bd",
-      "slug": "munim-accessibility-computer-use",
-      "content_fingerprint": "git-blob:3b4ed33a1d2b74e1cbd0c4eb2c5b8d02e91bdd64",
-      "source_last_edited_at": "2026-09-10T01:25:05.526Z",
       "status": "synced"
     },
     {
@@ -108,51 +37,23 @@
       "status": "synced"
     },
     {
-      "source_page_id_sha256": "e31f7729cc0807f97be58bfb3a2ebda9277a178e739d4ea3c0969b47b2bd213d",
-      "slug": "jcode-agent-harness",
-      "content_fingerprint": "git-blob:e2e9cdfbef2136f241d802145fea06ed78154a3c",
-      "source_last_edited_at": "2026-09-09T08:50:04.558Z",
+      "source_page_id_sha256": "0dfe3e689ba1d086422f9c6055ad24d30aff8af829a8bc110579491f599cac01",
+      "slug": "agent-tool-search-mcp-ard",
+      "content_fingerprint": "git-blob:bf5e53306fb1b54b8ef1968a66800431480e66dd",
+      "source_last_edited_at": "2026-09-17T15:56:49.285Z",
       "status": "synced"
     },
     {
-      "source_page_id_sha256": "420274834f7c5d2d17831bb6a25f0df8308b59f8198913e24b03e9c536ef0885",
-      "slug": "github-agentic-workflows",
-      "content_fingerprint": "git-blob:85a74ee265d0ddce490ed09042df464073897280",
-      "source_last_edited_at": "2026-09-08T13:05:12.731Z",
+      "source_page_id_sha256": "be816aa10c2a89a83d253069a717af5138a6ab6322cd6fd457313f0b39c8ded0",
+      "slug": "agentic-workflows-noop-triage",
+      "content_fingerprint": "git-blob:4c86b4edb46ef4968c3a1164395eed8d7024a18d",
+      "source_last_edited_at": "2026-09-14T00:47:17.980Z",
       "status": "synced"
     },
     {
-      "source_page_id_sha256": "d120fb66f0076d6e57d2796876dbc0fffd33f3d6306d5f4c8b0d3d4e5529fe35",
-      "slug": "coding-agent-supply-chain-security",
-      "content_fingerprint": "git-blob:351b7cb1739aff0433a12a7fbc449e9f628a030f",
-      "source_last_edited_at": "2026-09-09T00:58:18.308Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "d21f41b89ec8f4e8bbb6744b6849a50260b94dc65ca15e75ea5ee5aca6022b51",
-      "slug": "fde-enterprise-ai-engineering-role",
-      "content_fingerprint": "git-blob:df083680ef75ace96ceb571dd6d123d7388ac5bd",
-      "source_last_edited_at": "2026-09-20T02:45:54.319Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "60d6de724da1e64f6e3c09a5e2256fa24ec98a580ab850dd50bff7222fa4083b",
-      "slug": "ai-agent-engineering-news-2026-09-18-19",
-      "content_fingerprint": "git-blob:7727e9b8593daedb5ac86728d38a42529480c7a2",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "3e57d322d25043bf31df15fe4052a75b233b44ff39729d191460de1b0ef80251",
-      "slug": "ai-agent-engineering-news-2026-09-11-18",
-      "content_fingerprint": "git-blob:0340295887ccf87be8933a8e2148942e2b32a5db",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "9fee585e651e9de270237b51188873fada1df13be19b7408c14cba2bf2e7fd96",
-      "slug": "ai-agent-engineering-news-2026-09-11-17",
-      "content_fingerprint": "git-blob:71eebd507d74e0ef7be7a4791b779634647bf79f",
+      "source_page_id_sha256": "ebc21f7e23886dcab38ec5bf6abe9bb14f71a8c01a4af792ae9627309fd10119",
+      "slug": "ai-agent-engineering-news-2026-09-04-10",
+      "content_fingerprint": "git-blob:161f88b7b201866c1ce061c4da6b2a7c8b3b028c",
       "source_last_edited_at": "2026-09-20T02:44:30.992Z",
       "status": "synced"
     },
@@ -164,10 +65,136 @@
       "status": "synced"
     },
     {
-      "source_page_id_sha256": "ebc21f7e23886dcab38ec5bf6abe9bb14f71a8c01a4af792ae9627309fd10119",
-      "slug": "ai-agent-engineering-news-2026-09-04-10",
-      "content_fingerprint": "git-blob:161f88b7b201866c1ce061c4da6b2a7c8b3b028c",
+      "source_page_id_sha256": "9fee585e651e9de270237b51188873fada1df13be19b7408c14cba2bf2e7fd96",
+      "slug": "ai-agent-engineering-news-2026-09-11-17",
+      "content_fingerprint": "git-blob:71eebd507d74e0ef7be7a4791b779634647bf79f",
       "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "3e57d322d25043bf31df15fe4052a75b233b44ff39729d191460de1b0ef80251",
+      "slug": "ai-agent-engineering-news-2026-09-11-18",
+      "content_fingerprint": "git-blob:0340295887ccf87be8933a8e2148942e2b32a5db",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "60d6de724da1e64f6e3c09a5e2256fa24ec98a580ab850dd50bff7222fa4083b",
+      "slug": "ai-agent-engineering-news-2026-09-18-19",
+      "content_fingerprint": "git-blob:7727e9b8593daedb5ac86728d38a42529480c7a2",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "2dcd0557fc015c0f03d2dca1dd4966cfef4c545f30642f5ced249e6dad1fa449",
+      "slug": "anthropic-embedded-evaluator-access",
+      "content_fingerprint": "git-blob:d877568220676d8223d447de1628d9b0239953f9",
+      "source_last_edited_at": "2026-09-19T01:03:03.294Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "3dafd66e76c9966412065103416b3dac5e3f285f9e82f56979d480cdb460a570",
+      "slug": "aws-agent-proposal-validation",
+      "content_fingerprint": "git-blob:3d73905d43fbaba50e51c9b9298468e0cb5665d6",
+      "source_last_edited_at": "2026-09-15T00:25:27.947Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "f8172caa6a515734dbff00e2c8e7c7be621f71fb33e34b33939df4d2cdba2393",
+      "slug": "claude-chat-cowork-unified-mode",
+      "content_fingerprint": "git-blob:51891a01730a7c9b9a2a81ab60c5e1ff32504af4",
+      "source_last_edited_at": "2026-09-17T00:58:23.297Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "d120fb66f0076d6e57d2796876dbc0fffd33f3d6306d5f4c8b0d3d4e5529fe35",
+      "slug": "coding-agent-supply-chain-security",
+      "content_fingerprint": "git-blob:351b7cb1739aff0433a12a7fbc449e9f628a030f",
+      "source_last_edited_at": "2026-09-09T00:58:18.308Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "d21f41b89ec8f4e8bbb6744b6849a50260b94dc65ca15e75ea5ee5aca6022b51",
+      "slug": "fde-enterprise-ai-engineering-role",
+      "content_fingerprint": "git-blob:98215732cb88a557dec206a56d086aa85c24f932",
+      "source_last_edited_at": "2026-09-20T02:45:54.319Z",
+      "status": "synced",
+      "media": [
+        {
+          "kind": "html",
+          "source_name": "fde-research-dashboard-2026-09.html",
+          "source_block_id": "d05d6435-a352-4ebe-8c19-c73094e5dd25",
+          "site_path": "/artifacts/blog/fde-enterprise-ai-engineering-role/dashboard.html",
+          "status": "site-reconstruction",
+          "note": "Historical Notion embed is exposed only as an internal file:// reference by the current connector; the site artifact recreates the same three reader views from the article's verified data and sources."
+        }
+      ]
+    },
+    {
+      "source_page_id_sha256": "de45ec8196f66c5f1f9a852277b7cdaef2f173b0021e46153f009b9f2ea30dd3",
+      "slug": "foreman-coding-agent-supervisor",
+      "content_fingerprint": "git-blob:3247b7a9b020b4967a656c0bc9dd4b78df9f23f2",
+      "source_last_edited_at": "2026-09-18T01:25:38.724Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "1533841c4ac18b1fa550c48b7671afd2b2059465c8c72f59f85510799c88071e",
+      "slug": "gemini-live-background-reasoning",
+      "content_fingerprint": "git-blob:45abdd28184638d67eca5c5a67fcf2202b1849c6",
+      "source_last_edited_at": "2026-09-16T02:00:08.171Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "420274834f7c5d2d17831bb6a25f0df8308b59f8198913e24b03e9c536ef0885",
+      "slug": "github-agentic-workflows",
+      "content_fingerprint": "git-blob:85a74ee265d0ddce490ed09042df464073897280",
+      "source_last_edited_at": "2026-09-08T13:05:12.731Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "edcc063d80c2032b9ce299ad2e4b8c9eba8645d0417acb33d6a337f008715023",
+      "slug": "google-agent-plugins-skills-mcp",
+      "content_fingerprint": "git-blob:d8c6cf4c464c5b3bd322e0045c0a172ddb698584",
+      "source_last_edited_at": "2026-09-12T01:02:51.306Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "d19abdeca0c551279b8bd0d82d83c5338c161e07e79200a241a20d171a1e781c",
+      "slug": "herdr-coding-agent-runtime",
+      "content_fingerprint": "git-blob:08cca69a155f2decbdb58c0726217b6fdfad2e10",
+      "source_last_edited_at": "2026-09-13T01:06:12.256Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "7e72c17fba7018c6746f439dbe54a0496c82f1df236f0d3df9116e06a0fbb01e",
+      "slug": "hyperframes-html-video-engineering",
+      "content_fingerprint": "git-blob:1288edce1176890026d7ce5d686b8d3eced1faea",
+      "source_last_edited_at": "2026-09-14T01:21:56.374Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "e31f7729cc0807f97be58bfb3a2ebda9277a178e739d4ea3c0969b47b2bd213d",
+      "slug": "jcode-agent-harness",
+      "content_fingerprint": "git-blob:e2e9cdfbef2136f241d802145fea06ed78154a3c",
+      "source_last_edited_at": "2026-09-09T08:50:04.558Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "6939a50daaa068c8a86c550b50c6fc9b8c4b0ec6e06b37f138282f6de8141652",
+      "slug": "jev-typed-agent-decisions",
+      "content_fingerprint": "git-blob:845536ccacf90707e78205024bddf6663a662fdf",
+      "source_last_edited_at": "2026-09-20T00:39:10.738Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
+      "slug": "kitaru-agent-regression-testing",
+      "content_fingerprint": "git-blob:fd4be103abdad3c4184a4c12953d9e9217df4d3a",
+      "source_last_edited_at": "2026-09-17T06:44:08.275Z",
       "status": "synced"
     },
     {
@@ -177,28 +204,25 @@
       "note": "Content-package source is covered by the later dedicated article source."
     },
     {
-      "source_page_id_sha256": "2c5e51568b762fd80f499263d07567ece8645e38e2facd6cf9b721cea3b252dd",
-      "slug": "agent-budget-memory-evaluation",
-      "status": "superseded",
-      "note": "Earlier content-package topic is covered by the dedicated budget/memory/evaluation article."
+      "source_page_id_sha256": "1b8202a10d697339c5bde49b34fb5604e358d08569f71fa4240472f5cd078fd2",
+      "source_section_sha256": "1c6c028e6e1d092558e36893ad98cacab7ae7920089daf45b7266e2a01f5045a",
+      "slug": "long-running-agent-session-context-state",
+      "content_fingerprint": "git-blob:6baa940301d0eb103ca64bd08df0ecf2fb643220",
+      "source_last_edited_at": "2026-09-17T01:18:44.722Z",
+      "status": "synced"
     },
     {
-      "source_page_id_sha256": "888105956614f6599dfb05a7ee6e435c66298418001993d7e4ae00da6226df0c",
-      "slug": "tau-agent-loop-events",
-      "status": "duplicate",
-      "note": "Content-library wrapper points to an already published source article."
+      "source_page_id_sha256": "b5cefc3050b5b9b1a6ac8ce878084a72caefbdb1250a24fa3eccfd82d7a011bd",
+      "slug": "munim-accessibility-computer-use",
+      "content_fingerprint": "git-blob:3b4ed33a1d2b74e1cbd0c4eb2c5b8d02e91bdd64",
+      "source_last_edited_at": "2026-09-10T01:25:05.526Z",
+      "status": "synced"
     },
     {
-      "source_page_id_sha256": "5a22a861b7c0bee068ae18db5929bd9ad05f8eec8fa30496bd486fff17ce661d",
-      "slug": "tau-agent-architecture",
-      "status": "duplicate",
-      "note": "Content-library wrapper points to an already published source article."
-    },
-    {
-      "source_page_id_sha256": "6939a50daaa068c8a86c550b50c6fc9b8c4b0ec6e06b37f138282f6de8141652",
-      "slug": "jev-typed-agent-decisions",
-      "content_fingerprint": "git-blob:845536ccacf90707e78205024bddf6663a662fdf",
-      "source_last_edited_at": "2026-09-20T00:39:10.738Z",
+      "source_page_id_sha256": "ef6e230213f413113a51ead769a91d71e154ab534c8f3878c69064b0e831d6dc",
+      "slug": "openai-research-agent-workdays",
+      "content_fingerprint": "git-blob:ca8715475ea20e9a989903ee550721f3c8f3fe70",
+      "source_last_edited_at": "2026-09-09T08:51:40.188Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
     },
@@ -211,12 +235,19 @@
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
     },
     {
-      "source_page_id_sha256": "2dcd0557fc015c0f03d2dca1dd4966cfef4c545f30642f5ced249e6dad1fa449",
-      "slug": "anthropic-embedded-evaluator-access",
-      "content_fingerprint": "git-blob:d877568220676d8223d447de1628d9b0239953f9",
-      "source_last_edited_at": "2026-09-19T01:03:03.294Z",
+      "source_page_id_sha256": "22ccc21a4c8218b5f3ea55cc3a861aee805dc12645f256c61442ba05b99e2bfb",
+      "slug": "opencompany-versioned-agent-config",
+      "content_fingerprint": "git-blob:909fe3d2ed180a65c2528948f8483c6b7e7ad34a",
+      "source_last_edited_at": "2026-09-12T01:59:09.908Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "1222a0848da1c6df1dc04964381679edc750350f789c482429208c5cd23d729b",
+      "slug": "rtk-agent-shell-output-filter",
+      "content_fingerprint": "git-blob:466d9e7b576b6e790fabd0795ce474d9ffe68c47",
+      "source_last_edited_at": "2026-09-13T01:23:46.650Z",
+      "status": "synced"
     },
     {
       "source_page_id_sha256": "849eb1aa74dde1eaf5a312d8212193ec6c77706f07b6a46b99479379122c3b96",
@@ -227,6 +258,13 @@
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
     },
     {
+      "source_page_id_sha256": "910ae32c86da93c3fc0f0824e077d65be4d1f47a1417f4a9ee324ed0842555d2",
+      "slug": "skills-manager-multi-agent-skill-sync",
+      "content_fingerprint": "git-blob:054c49637d5f3a9b03b1e64b10a1db1cb372ff76",
+      "source_last_edited_at": "2026-09-16T02:02:10.242Z",
+      "status": "synced"
+    },
+    {
       "source_page_id_sha256": "b889fcd2f869cc2a5eb857a35f57241b4b7db0abe08b93dff9790843e45e1755",
       "slug": "splash-model-specific-local-llm",
       "content_fingerprint": "git-blob:8d7e4dfc3e7b3c2cfe8896b7028ea74abb6f95d3",
@@ -235,44 +273,33 @@
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
     },
     {
-      "source_page_id_sha256": "f8172caa6a515734dbff00e2c8e7c7be621f71fb33e34b33939df4d2cdba2393",
-      "slug": "claude-chat-cowork-unified-mode",
-      "content_fingerprint": "git-blob:51891a01730a7c9b9a2a81ab60c5e1ff32504af4",
-      "source_last_edited_at": "2026-09-17T00:58:23.297Z",
-      "status": "synced",
-      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+      "source_page_id_sha256": "5a22a861b7c0bee068ae18db5929bd9ad05f8eec8fa30496bd486fff17ce661d",
+      "slug": "tau-agent-architecture",
+      "status": "duplicate",
+      "note": "Content-library wrapper points to an already published source article."
     },
     {
-      "source_page_id_sha256": "1533841c4ac18b1fa550c48b7671afd2b2059465c8c72f59f85510799c88071e",
-      "slug": "gemini-live-background-reasoning",
-      "content_fingerprint": "git-blob:45abdd28184638d67eca5c5a67fcf2202b1849c6",
-      "source_last_edited_at": "2026-09-16T02:00:08.171Z",
+      "source_page_id_sha256": "febeb51abd1520a164cce48c720a0cfafde9de0faf279b689d1bfab027dd8845",
+      "slug": "tau-agent-architecture",
+      "source_last_edited_at": "2026-08-19T02:58:54.782Z",
       "status": "synced",
-      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+      "content_fingerprint": "git-blob:3f49cb89d2fa7fd1ddc46f7cf69890cbe4e981a1",
+      "media": [
+        {
+          "kind": "video",
+          "source_name": "tau_architecture_explainer.mp4",
+          "source_block_id": "d7d633df-b63a-4360-9953-bae0a0229ce3",
+          "site_path": "/media/blog/tau-agent-architecture/tau-architecture-site-recreation.mp4",
+          "status": "site-reconstruction",
+          "note": "Historical Notion file is exposed only as an internal file:// reference by the current connector; the site video recreates the same three-layer dependency/event-flow explanation and is explicitly labeled as a reconstruction."
+        }
+      ]
     },
     {
-      "source_page_id_sha256": "22ccc21a4c8218b5f3ea55cc3a861aee805dc12645f256c61442ba05b99e2bfb",
-      "slug": "opencompany-versioned-agent-config",
-      "content_fingerprint": "git-blob:909fe3d2ed180a65c2528948f8483c6b7e7ad34a",
-      "source_last_edited_at": "2026-09-12T01:59:09.908Z",
-      "status": "synced",
-      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
-    },
-    {
-      "source_page_id_sha256": "ef6e230213f413113a51ead769a91d71e154ab534c8f3878c69064b0e831d6dc",
-      "slug": "openai-research-agent-workdays",
-      "content_fingerprint": "git-blob:ca8715475ea20e9a989903ee550721f3c8f3fe70",
-      "source_last_edited_at": "2026-09-09T08:51:40.188Z",
-      "status": "synced",
-      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
-    },
-    {
-      "source_page_id_sha256": "1451ce2e45e96d7fde0547c8d331e899d7aad7bee9069b58dc163d7e6b8bf66e",
-      "slug": "agent-demo-harness-control-layer",
-      "content_fingerprint": "git-blob:a8c1a377012812daad873c668d9a76f19b99574a",
-      "source_last_edited_at": "2026-09-08T13:05:47.226Z",
-      "status": "synced",
-      "note": "One-time backfill from 内容创作中枢 historical topic library; complete article body and original Notion visual preserved."
+      "source_page_id_sha256": "888105956614f6599dfb05a7ee6e435c66298418001993d7e4ae00da6226df0c",
+      "slug": "tau-agent-loop-events",
+      "status": "duplicate",
+      "note": "Content-library wrapper points to an already published source article."
     }
   ]
 }
