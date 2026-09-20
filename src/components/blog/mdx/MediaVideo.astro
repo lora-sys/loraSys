@@ -11,7 +11,8 @@ if (!src.startsWith('/media/blog/')) {
   throw new Error('MediaVideo only accepts local /media/blog/ sources')
 }
 
-const resolvedSrc = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const resolvedSrc = `${base}${src}`
 const type = src.endsWith('.webm')
   ? 'video/webm'
   : src.endsWith('.mov')
