@@ -1,0 +1,85 @@
+---
+import type { ThemeRoadmapItem } from '@/data/theme-roadmap'
+
+interface Props {
+  themes: ThemeRoadmapItem[]
+}
+
+const { themes } = Astro.props
+---
+
+<nav class='theme-quick-nav' aria-label='按兴趣浏览作品'>
+  <span>按兴趣逛</span>
+  <div>
+    {themes.map((theme) => (
+      <a href={`#theme-${theme.slug}`} data-theme-shortcut={theme.slug}>
+        {theme.title}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  document.querySelectorAll<HTMLAnchorElement>('[data-theme-shortcut]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const slug = link.dataset.themeShortcut
+      const target = slug ? document.getElementById('theme-' + slug) : null
+      const archive = document.querySelector<HTMLDetailsElement>('[data-work-archive]')
+      if (!target || !archive) return
+      event.preventDefault()
+      archive.open = true
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' })
+        history.replaceState(null, '', '#theme-' + slug)
+      })
+    })
+  })
+</script>
+
+<style>
+  .theme-quick-nav {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    align-items: start;
+    gap: .9rem 1.25rem;
+    border-block: 1px solid hsl(var(--border));
+    padding-block: 1rem;
+  }
+  .theme-quick-nav > span {
+    padding-top: .42rem;
+    color: hsl(var(--muted-foreground));
+    font-size: .66rem;
+    font-weight: 680;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .theme-quick-nav > div { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .theme-quick-nav a {
+    display: inline-flex;
+    min-height: 2.35rem;
+    align-items: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: .4rem .7rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font-size: .72rem;
+    font-weight: 620;
+    text-decoration: none;
+    transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  }
+  .theme-quick-nav a:hover,.theme-quick-nav a:focus-visible {
+    border-color: hsl(var(--field-amber) / .65);
+    background: hsl(var(--field-amber) / .08);
+    transform: translateY(-1px);
+  }
+  @media(max-width:640px) {
+    .theme-quick-nav { grid-template-columns: 1fr; }
+    .theme-quick-nav > span { padding-top: 0; }
+  }
+  @media(prefers-reduced-motion:reduce) {
+    .theme-quick-nav a { transition: none; }
+    .theme-quick-nav a:hover,.theme-quick-nav a:focus-visible { transform: none; }
+  }
+</style>
