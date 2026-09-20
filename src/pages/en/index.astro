@@ -1,5 +1,5 @@
 ---
-import { projects, profile } from '@/data/profile'
+import { projects } from '@/data/profile'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
@@ -31,7 +31,7 @@ const sectionNav = [
   { id: 'about', label: 'About' },
   { id: 'work', label: 'Work' },
   { id: 'writing', label: 'Notes' },
-  { id: 'now', label: 'Now' },
+  { id: 'now', label: 'Lately' },
   { id: 'personal-signals', label: 'Favorites' },
   { id: 'contact', label: 'Contact' }
 ]
