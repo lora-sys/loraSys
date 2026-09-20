@@ -23,7 +23,7 @@ const 创作主页ByName = new Map(socialLinks.map((channel) => [channel.name, c
 
   <div class='theme-grid'>
     {themes.map((theme, index) => (
-      <article class='theme-card' data-theme={theme.slug}>
+      <article id={`theme-${theme.slug}`} class='theme-card' data-theme={theme.slug}>
         <div class='theme-card-head'>
           <span class='theme-index'>{String(index + 1).padStart(2, '0')}</span>
           <span class='theme-format'>{theme.nextFormat}</span>
