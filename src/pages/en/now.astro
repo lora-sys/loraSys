@@ -79,7 +79,12 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
         <ul>
           {recentWriting.map((post) => (
             <li>
-              <a href={`/blog/${post.id}`}>{post.data.title}</a>
+              <a
+                href={`/blog/${post.id}`}
+                lang={post.data.language === 'zh-CN' ? 'zh-CN' : 'en-US'}
+              >
+                {post.data.title}
+              </a>
               <time datetime={post.data.publishDate.toISOString()}>
                 {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(post.data.publishDate)}
               </time>
