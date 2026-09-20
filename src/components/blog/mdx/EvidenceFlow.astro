@@ -1,0 +1,82 @@
+---
+interface Props {
+  title?: string
+  items: string
+  source?: string
+}
+const { title, items, source } = Astro.props
+const entries = items.split('|').map((item) => {
+  const [label = '', detail = ''] = item.split('::', 2).map((part) => part.trim())
+  return { label, detail }
+}).filter((item) => item.label && item.detail).slice(0, 6)
+---
+
+{entries.length > 1 && (
+  <section class='evidence-flow not-prose' data-evidence-flow>
+    {title && <h3>{title}</h3>}
+    <div class='flow-track' role='list' aria-label={title ?? 'Evidence flow'}>
+      {entries.map((item, index) => (
+        <button
+          type='button'
+          role='listitem'
+          class='flow-step'
+          data-flow-step
+          data-index={index}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+        >
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <strong>{item.label}</strong>
+        </button>
+      ))}
+    </div>
+    <p class='flow-detail' data-flow-detail aria-live='polite'>{entries[0].detail}</p>
+    <div hidden>
+      {entries.map((item) => <span data-flow-copy>{item.detail}</span>)}
+    </div>
+    {source && <small>{source}</small>}
+  </section>
+)}
+
+<script>
+  const setupEvidenceFlows = () => {
+    document.querySelectorAll<HTMLElement>('[data-evidence-flow]').forEach((root) => {
+      if (root.dataset.ready === 'true') return
+      root.dataset.ready = 'true'
+      const steps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-flow-step]'))
+      const copy = Array.from(root.querySelectorAll<HTMLElement>('[data-flow-copy]'))
+      const detail = root.querySelector<HTMLElement>('[data-flow-detail]')
+      if (!detail || !steps.length) return
+      const activate = (index: number) => {
+        steps.forEach((step, i) => step.setAttribute('aria-pressed', i === index ? 'true' : 'false'))
+        detail.textContent = copy[index]?.textContent ?? ''
+      }
+      steps.forEach((step, index) => {
+        step.addEventListener('click', () => activate(index))
+        step.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return
+          event.preventDefault()
+          const next = event.key === 'ArrowRight'
+            ? (index + 1) % steps.length
+            : (index - 1 + steps.length) % steps.length
+          activate(next)
+          steps[next]?.focus()
+        })
+      })
+    })
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupEvidenceFlows, { once: true })
+  else setupEvidenceFlows()
+</script>
+
+<style>
+  .evidence-flow{display:grid;gap:.75rem;margin-block:2rem}
+  .evidence-flow h3{margin:0;font-size:.92rem;font-weight:660}
+  .flow-track{display:grid;grid-template-columns:repeat(var(--flow-count,6),minmax(0,1fr));grid-auto-flow:column;gap:.4rem;overflow-x:auto;padding-bottom:.25rem}
+  .flow-step{display:grid;min-width:7.2rem;gap:.28rem;border:1px solid hsl(var(--border));border-radius:.85rem;padding:.7rem;background:hsl(var(--card));color:hsl(var(--muted-foreground));text-align:left;font:inherit;cursor:pointer}
+  .flow-step span{font-size:.58rem;font-weight:700;letter-spacing:.08em;color:hsl(var(--field-amber))}
+  .flow-step strong{font-size:.75rem;font-weight:650;color:inherit}
+  .flow-step[aria-pressed='true']{border-color:hsl(var(--field-amber)/.65);background:hsl(var(--field-amber)/.08);color:hsl(var(--foreground))}
+  .flow-detail{min-height:3.2rem;margin:0;border-left:2px solid hsl(var(--field-amber));padding:.65rem .8rem;color:hsl(var(--muted-foreground));font-size:.76rem;line-height:1.55}
+  .evidence-flow>small{color:hsl(var(--muted-foreground));font-size:.66rem;line-height:1.45}
+  @media(max-width:640px){.flow-track{grid-auto-columns:minmax(8rem,1fr);grid-template-columns:none}.flow-detail{min-height:0}}
+</style>
