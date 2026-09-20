@@ -1,0 +1,106 @@
+name: Verify Notion sync candidate
+
+on:
+  push:
+    branches: [verify/notion-sync-20260920-0918]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      NODE_OPTIONS: --max-old-space-size=3072
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bun install --frozen-lockfile
+      - name: Validate MDX contract
+        run: bun run content:validate
+      - name: Type and content check
+        run: bun run check
+      - name: Production build
+        run: NODE_OPTIONS=--max-old-space-size=3072 bun run build
+      - name: Install isolated browser tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/reading-tools" --no-save --package-lock=false playwright@1.58.2
+          node "$RUNNER_TEMP/reading-tools/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Run existing reading quality suite
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/reading-tools/node_modules/playwright/index.mjs
+          SITE_TEST_OUTPUT: ${{ runner.temp }}/reading-quality
+        run: node scripts/test-reading-quality.mjs dist
+      - name: Check synced articles on desktop and mobile
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/reading-tools/node_modules/playwright/index.mjs
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict'
+          import { createServer } from 'node:http'
+          import { readFile, stat } from 'node:fs/promises'
+          import path from 'node:path'
+          import { pathToFileURL } from 'node:url'
+
+          const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href)
+          const dist = path.resolve('dist')
+          const base = '/loraSys/'
+          const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' }
+          const server = createServer(async (req, res) => {
+            try {
+              const url = new URL(req.url, 'http://127.0.0.1')
+              if (!url.pathname.startsWith(base)) { res.writeHead(404); return res.end() }
+              let file = path.resolve(dist, decodeURIComponent(url.pathname.slice(base.length)))
+              if (file !== dist && !file.startsWith(`${dist}${path.sep}`)) { res.writeHead(403); return res.end() }
+              let info
+              try { info = await stat(file) } catch { file += '.html'; info = await stat(file) }
+              if (info.isDirectory()) file = path.join(file, 'index.html')
+              res.writeHead(200, { 'Content-Type': mime[path.extname(file)] ?? 'application/octet-stream' })
+              res.end(await readFile(file))
+            } catch { res.writeHead(404); res.end('Not found') }
+          })
+          await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve) })
+          const origin = `http://127.0.0.1:${server.address().port}${base}`
+          const browser = await chromium.launch({ headless: true, channel: 'chromium' })
+          try {
+            for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+              const context = await browser.newContext({ viewport })
+              const page = await context.newPage()
+              for (const item of [
+                { slug: 'agent-durable-execution-step-idempotency', images: 4, process: false },
+                { slug: 'kitaru-agent-regression-testing', images: 4, process: true }
+              ]) {
+                const response = await page.goto(`${origin}blog/${item.slug}`, { waitUntil: 'load' })
+                assert.equal(response?.status(), 200, `${item.slug} must return 200`)
+                await page.locator('#content').waitFor({ state: 'visible' })
+                const metrics = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, viewport: innerWidth }))
+                assert.ok(metrics.width <= metrics.viewport + 1, `${item.slug} horizontal overflow: ${JSON.stringify(metrics)}`)
+                const images = page.locator('#content img')
+                assert.equal(await images.count(), item.images, `${item.slug} image count`)
+                for (let i = 0; i < item.images; i += 1) {
+                  await images.nth(i).scrollIntoViewIfNeeded()
+                  await images.nth(i).evaluate((image) => image.complete || new Promise((resolve) => image.addEventListener('load', resolve, { once: true })))
+                  assert.ok(await images.nth(i).evaluate((image) => image.naturalWidth > 0 && image.naturalHeight > 0), `${item.slug} image ${i + 1} must decode`)
+                }
+                if (item.process) {
+                  const process = page.locator('.mdx-process-steps').first()
+                  await process.waitFor({ state: 'visible' })
+                  assert.equal(await page.locator('.mdx-process-steps li').count(), 5)
+                  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
+                }
+              }
+              await context.close()
+            }
+          } finally {
+            await browser.close()
+            await new Promise((resolve) => server.close(resolve))
+          }
+          NODE
