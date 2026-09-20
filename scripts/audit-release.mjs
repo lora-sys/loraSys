@@ -42,6 +42,20 @@ const required = [
 
 const failures = []
 
+const workflowsDir = join(root, '.github', 'workflows')
+if (existsSync(workflowsDir)) {
+  for (const name of readdirSync(workflowsDir)) {
+    if (!/\.ya?ml$/i.test(name)) continue
+    const workflow = readFileSync(join(workflowsDir, name), 'utf8')
+    if (/^verify-notion-sync-\d{8}\.ya?ml$/i.test(name)) {
+      failures.push(`.github/workflows/${name}: date-specific Notion verification workflows are not allowed`)
+    }
+    if (/^\s*name:\s*Verify Notion article \d{4}-\d{2}-\d{2}\s*$/im.test(workflow)) {
+      failures.push(`.github/workflows/${name}: use the repository's existing CI instead of a per-article workflow`)
+    }
+  }
+}
+
 if (!existsSync(dist)) failures.push('dist/ does not exist; run the production build first')
 
 for (const output of required) {
