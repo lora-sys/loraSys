@@ -1,0 +1,100 @@
+---
+interface Props {
+  title?: string
+  steps: string
+  source?: string
+}
+const { title, steps, source } = Astro.props
+const entries = steps.split('|').map((item) => {
+  const [label = '', state = '', detail = ''] = item.split('::', 3).map((part) => part.trim())
+  return { label, state, detail }
+}).filter((item) => item.label && item.detail).slice(0, 8)
+---
+
+{entries.length > 0 && (
+  <section class='trace-explorer not-prose' data-trace-explorer>
+    {title && <h3>{title}</h3>}
+    <div class='trace-layout'>
+      <div class='trace-list' role='tablist' aria-label={title ?? 'Run trace'}>
+        {entries.map((item, index) => (
+          <button
+            type='button'
+            role='tab'
+            class='trace-step'
+            data-trace-step
+            aria-selected={index === 0 ? 'true' : 'false'}
+            tabindex={index === 0 ? 0 : -1}
+          >
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{item.label}</strong>
+            <em>{item.state}</em>
+          </button>
+        ))}
+      </div>
+      <div class='trace-panel'>
+        {entries.map((item, index) => (
+          <article data-trace-panel hidden={index !== 0}>
+            <span>{item.state}</span>
+            <strong>{item.label}</strong>
+            <p>{item.detail}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+    {source && <small>{source}</small>}
+  </section>
+)}
+
+<script>
+  const setupTraceExplorer = () => {
+    document.querySelectorAll<HTMLElement>('[data-trace-explorer]').forEach((root) => {
+      if (root.dataset.ready === 'true') return
+      root.dataset.ready = 'true'
+      const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-trace-step]'))
+      const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-trace-panel]'))
+      const activate = (index: number, focus = false) => {
+        tabs.forEach((tab, i) => {
+          const active = i === index
+          tab.setAttribute('aria-selected', active ? 'true' : 'false')
+          tab.tabIndex = active ? 0 : -1
+          panels[i].hidden = !active
+        })
+        if (focus) tabs[index]?.focus()
+      }
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => activate(index))
+        tab.addEventListener('keydown', (event) => {
+          let next = index
+          if (event.key === 'ArrowDown' || event.key === 'ArrowRight') next = (index + 1) % tabs.length
+          else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length
+          else if (event.key === 'Home') next = 0
+          else if (event.key === 'End') next = tabs.length - 1
+          else return
+          event.preventDefault()
+          activate(next, true)
+        })
+      })
+    })
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupTraceExplorer, { once: true })
+  else setupTraceExplorer()
+</script>
+
+<style>
+  .trace-explorer{display:grid;gap:.8rem;margin-block:2rem}
+  .trace-explorer>h3{margin:0;font-size:.92rem;font-weight:660}
+  .trace-layout{display:grid;grid-template-columns:minmax(10rem,.72fr) minmax(0,1.28fr);border:1px solid hsl(var(--border));border-radius:1rem;overflow:hidden;background:hsl(var(--card)/.55)}
+  .trace-list{display:grid;align-content:start;border-right:1px solid hsl(var(--border))}
+  .trace-step{display:grid;grid-template-columns:2rem minmax(0,1fr) auto;gap:.5rem;align-items:center;border:0;border-bottom:1px solid hsl(var(--border));padding:.72rem;background:transparent;color:hsl(var(--muted-foreground));text-align:left;font:inherit;cursor:pointer}
+  .trace-step span{font-size:.58rem;font-weight:700;color:hsl(var(--field-amber))}
+  .trace-step strong{font-size:.73rem;font-weight:640;color:inherit}
+  .trace-step em{font-size:.6rem;font-style:normal;color:hsl(var(--muted-foreground))}
+  .trace-step[aria-selected='true']{background:hsl(var(--field-amber)/.08);color:hsl(var(--foreground))}
+  .trace-panel{min-height:12rem;padding:1rem}
+  .trace-panel article{display:grid;gap:.55rem}
+  .trace-panel article>span{width:max-content;border-radius:999px;padding:.2rem .45rem;background:hsl(var(--muted));color:hsl(var(--muted-foreground));font-size:.6rem}
+  .trace-panel strong{font-size:.92rem}
+  .trace-panel p{margin:0;color:hsl(var(--muted-foreground));font-size:.76rem;line-height:1.6}
+  .trace-explorer>small{color:hsl(var(--muted-foreground));font-size:.66rem}
+  @media(max-width:640px){.trace-layout{grid-template-columns:1fr}.trace-list{border-right:0;border-bottom:1px solid hsl(var(--border));grid-template-columns:repeat(2,minmax(0,1fr))}.trace-step{grid-template-columns:1.5rem minmax(0,1fr)}.trace-step em{display:none}.trace-panel{min-height:0}}
+</style>
