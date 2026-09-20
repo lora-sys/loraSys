@@ -1,0 +1,23 @@
+---
+title: 'Anthropic 让第三方 Eval 进入内部，模型评测开始看过程'
+description: 'Anthropic 与 Accenture 的 embedded evaluator 计划把评测范围从模型输出扩展到训练、部署、监控和事故流程，也暴露出独立性边界。'
+publishDate: '2026-09-19T00:00:00Z'
+tags: ['AI', 'Evaluation', 'Anthropic', 'Agent Eval', 'Safety']
+language: 'zh-CN'
+draft: false
+---
+
+9 月 18 日，Anthropic 和 Accenture 同时宣布建立 embedded evaluator 团队。Faculty 会参与模型评测、红队测试、alignment assessment 和 safeguards 测试。两家公司各自预计未来五年投入至少 10 亿美元。[Anthropic 公告](https://www.anthropic.com/news/accenture-embedded-evaluation) 与 [Accenture 公告](https://newsroom.accenture.com/news/2026/accenture-and-anthropic-partner-to-build-team-of-embedded-evaluators-at-anthropic) 对这些事实给出了相同描述。
+这件事最值得看的部分不是投入金额，而是评测者能看到什么。
+Anthropic 写得很具体。embedded evaluator 会在 AI 公司内部工作，获得接近员工级的访问。他们可以观察模型在训练中如何成形，跟踪模型怎样被构建和部署，并直接和员工交流。
+传统外部 Eval 很容易被模型接口限制。评测者可以提交测试题、观察行为、做红队攻击，也可以比较不同模型的表现。但如果风险来自训练数据处理、部署策略、权限设置、内部监控或者事故上报流程，只看模型输出很难定位问题。
+embedded evaluation 试图补这一块信息。
+它把评测对象分成两层。第一层仍然是模型行为。第二层是模型背后的流程。评测者要看公司是否真的执行了写下来的安全承诺，是否有监控盲区，事故出现后是否能被发现和报告。
+这和 Agent Eval 有一个很直接的连接。
+我们做 Agent Eval 时，也经常只看最终任务是否完成。这个指标太粗。一个 Agent 可能给出了正确答案，但中间访问了不该访问的数据。它也可能工具调用成功，但重试机制重复执行了真实操作。监控器还可能漏掉本该报警的轨迹。
+更完整的 Agent Eval 应该保存并检查执行轨迹、工具调用、权限变化、失败恢复、监控结果和人工介入记录。评测器也要被评测。最近几次真实事故已经说明，只看最终结果会漏掉很多过程问题。
+但 embedded evaluation 现在仍然是早期方案。
+Anthropic 明确承认，目前没有统一标准规定评测者应该访问哪些信息，也没有统一方式规定他们怎样公开结果。资金问题也没有解决。当前 Anthropic 会直接为 Accenture 的工作付费。长期看，Anthropic 希望资金来自 pooled 或 government sources。
+这里还有一个不能跳过的问题。评测者进入公司内部后，信息更多了，但独立性不会自动变强。访问范围由谁决定，哪些结果能公开，出现利益冲突时谁有最终决定权，这些都需要后续规则。
+所以我不会把这次合作写成“AI 安全有答案了”。更准确的说法是，frontier AI Eval 正在尝试解决一个长期存在的信息问题。评测者如果只能站在 API 外面，很难判断模型为什么出现某种行为，也很难核验公司内部是否真的执行了自己的安全流程。
+对 Builder 来说，可以先把这个思路缩小到自己的 Agent 系统。不要只保留最终答案和成功率。至少保存任务轨迹、工具调用、权限、重试、错误、人工接管和监控结果。然后让 Eval 能回到这些证据上，而不是只给最后一条回复打分。

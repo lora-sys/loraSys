@@ -1,0 +1,43 @@
+---
+title: 'Claude 把 Chat 和 Cowork 合并后，Agent 产品开始减少模式选择'
+description: 'Claude 把 Chat 与 Cowork 合并到同一会话，把能力路由交给系统，同时保留任务状态和权限确认，给 Agent 产品一个具体 UX 边界。'
+publishDate: '2026-09-17T00:00:00Z'
+tags: ['AI', 'Agent', 'Claude', 'UX', 'Anthropic']
+language: 'zh-CN'
+draft: false
+---
+
+Anthropic 在 9 月 16 日做了一个看起来很小的产品改动：Claude Chat 和 Cowork 合并了。
+官方公告的说法很直接。用户不需要先决定一个任务应该去 Chat 还是 Cowork。Claude 会根据任务决定需要什么能力。[Anthropic 官方公告](https://claude.com/blog/cowork-is-now-claude)
+Claude Help Center 把这件事写得更具体。一个普通会话现在可以搜索网页、读取文件、运行代码，也可以生成文档、表格和演示文稿。用户只描述结果，不需要先把工作拆成“问答”“研究”“文件处理”或“代码执行”。[Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+我更在意的不是它多了什么能力，而是 Anthropic 删掉了一个产品决策。
+## 模式选择本质上是用户替系统做路由
+当一个 AI 产品只有聊天和搜索两种能力时，单独的模式入口很容易理解。能力继续增加后，模式会越来越多。研究、文件、代码、浏览器、设计、演示文稿、定时任务都可能变成独立入口。
+问题是，大多数用户并不关心内部应该调用哪套能力。他们关心结果。比如“把这五份访谈整理成主题，并做成一份可以开会用的文档”。这句话同时可能需要读取文件、分析内容和生成成品。
+Claude 的新体验把路由决定移回系统。用户描述目标，系统决定是否调用网页、文件、代码和成品生成能力。官方帮助页还明确写了，一个会话可以同时运行多个任务。
+这类设计的价值不是“界面更简单”这么抽象。它直接减少了一个失败点：用户选错模式。
+## 长任务进入同一会话后，状态管理更重要
+合并模式不代表所有任务都变成普通聊天。
+Claude 的复杂任务仍可以在云端继续运行。用户关闭网页或合上电脑后，任务可以继续。涉及本地文件、浏览器或电脑应用时，Claude Desktop 必须保持打开。[Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+这意味着一个统一会话里同时存在两种时间尺度。快速问答可能几秒结束，研究、表格、演示文稿可能持续更久。
+如果界面取消模式选择，却没有明确的任务状态，用户会遇到新的问题。他不知道 Agent 是否还在工作，也不知道什么时候需要回来确认。
+所以能力路由可以隐藏，任务状态不能隐藏。
+## 权限不能跟着模式一起消失
+Anthropic 没有因为合并 Chat 和 Cowork 就取消权限边界。
+官方公告说明，Claude 默认会在采取动作前询问。帮助页把权限分成 Manual 和 Auto。Manual 是默认值，Claude 在动作前询问。Auto 允许 Claude 继续执行，并在安全检查后采取动作。用户可以随时停止或改向。[Anthropic 官方公告](https://claude.com/blog/cowork-is-now-claude)
+这给 Agent 产品一个清楚的分工。
+系统可以负责选择能力。用户仍然要控制真实动作的权限。
+如果产品把“自动选工具”和“自动执行高风险动作”绑在一起，减少模式只会把风险藏得更深。
+## Claude Code 并没有被合并
+这次更新也有明确边界。
+Claude Help Center 写明，模型选择器和 Code 标签仍然存在。Add from GitHub 暂时不支持，对话分支也还不可用，Incognito 仍进入旧体验。[Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+所以这次变化不能写成“Anthropic 把所有产品都塞进一个聊天框”。更准确的说法是，Anthropic 把普通 Claude 会话和 Cowork 的工作入口合并了，同时保留 Code 和一部分明确边界。
+## Builder 可以直接检查四件事
+如果你正在做 Agent 产品，可以检查当前界面是否把过多内部实现暴露给用户。
+第一，用户能不能只描述结果，而不需要先知道该用什么工具。
+第二，系统选错能力后，用户能不能看见并改向。
+第三，长任务有没有独立、明确的运行状态，而不是只剩一个聊天气泡在转圈。
+第四，能力路由和权限控制是不是两套机制。系统可以自动选工具，但真实动作仍应该按风险决定是否确认。
+不是所有 Agent 产品都应该删除模式。医疗、财务、企业审批和高成本任务可能需要更明确的入口和预期。模式是否应该存在，要看它是在帮助用户表达意图，还是让用户替系统理解内部架构。
+Anthropic 这次更新给出的信号很具体。能力越多，产品不一定要增加更多按钮。系统可以承担能力选择，但状态和权限仍要让用户看见。
+---

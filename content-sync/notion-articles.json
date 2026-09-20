@@ -47,7 +47,7 @@
     {
       "source_page_id_sha256": "910ae32c86da93c3fc0f0824e077d65be4d1f47a1417f4a9ee324ed0842555d2",
       "slug": "skills-manager-multi-agent-skill-sync",
-      "content_fingerprint": "git-blob:3ab62d03a900c826c6ec16bf8adf7786e25348eb",
+      "content_fingerprint": "git-blob:054c49637d5f3a9b03b1e64b10a1db1cb372ff76",
       "source_last_edited_at": "2026-09-16T02:02:10.242Z",
       "status": "synced"
     },
@@ -193,6 +193,78 @@
       "slug": "tau-agent-architecture",
       "status": "duplicate",
       "note": "Content-library wrapper points to an already published source article."
+    },
+    {
+      "source_page_id_sha256": "6939a50daaa068c8a86c550b50c6fc9b8c4b0ec6e06b37f138282f6de8141652",
+      "slug": "jev-typed-agent-decisions",
+      "content_fingerprint": "git-blob:845536ccacf90707e78205024bddf6663a662fdf",
+      "source_last_edited_at": "2026-09-20T00:39:10.738Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "673fea874c35bbec7c2e1a1bccd27bf1cb6123a72ea6a5b70db7891ce0b47050",
+      "slug": "opencloak-local-pii-redaction",
+      "content_fingerprint": "git-blob:abb048db30e73f597fc57ff3d37132d829b4a79d",
+      "source_last_edited_at": "2026-09-20T01:51:07.040Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "2dcd0557fc015c0f03d2dca1dd4966cfef4c545f30642f5ced249e6dad1fa449",
+      "slug": "anthropic-embedded-evaluator-access",
+      "content_fingerprint": "git-blob:d877568220676d8223d447de1628d9b0239953f9",
+      "source_last_edited_at": "2026-09-19T01:03:03.294Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "849eb1aa74dde1eaf5a312d8212193ec6c77706f07b6a46b99479379122c3b96",
+      "slug": "skill-up-stateful-multiturn-eval",
+      "content_fingerprint": "git-blob:7a8cf58825eba1edf9e1fbda51bba88bb26b631b",
+      "source_last_edited_at": "2026-09-18T00:48:38.120Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "b889fcd2f869cc2a5eb857a35f57241b4b7db0abe08b93dff9790843e45e1755",
+      "slug": "splash-model-specific-local-llm",
+      "content_fingerprint": "git-blob:2bde7117555a466716d4ee6b40f95e627ca35e2c",
+      "source_last_edited_at": "2026-09-19T01:35:19.994Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "f8172caa6a515734dbff00e2c8e7c7be621f71fb33e34b33939df4d2cdba2393",
+      "slug": "claude-chat-cowork-unified-mode",
+      "content_fingerprint": "git-blob:51891a01730a7c9b9a2a81ab60c5e1ff32504af4",
+      "source_last_edited_at": "2026-09-17T00:58:23.297Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "1533841c4ac18b1fa550c48b7671afd2b2059465c8c72f59f85510799c88071e",
+      "slug": "gemini-live-background-reasoning",
+      "content_fingerprint": "git-blob:45abdd28184638d67eca5c5a67fcf2202b1849c6",
+      "source_last_edited_at": "2026-09-16T02:00:08.171Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "22ccc21a4c8218b5f3ea55cc3a861aee805dc12645f256c61442ba05b99e2bfb",
+      "slug": "opencompany-versioned-agent-config",
+      "content_fingerprint": "git-blob:e769d10a7060e1b6e46d2610e2a4ebea90af15c8",
+      "source_last_edited_at": "2026-09-12T01:59:09.908Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
+    },
+    {
+      "source_page_id_sha256": "ef6e230213f413113a51ead769a91d71e154ab534c8f3878c69064b0e831d6dc",
+      "slug": "openai-research-agent-workdays",
+      "content_fingerprint": "git-blob:b3785fe10240df15615a090b33fc8e78e18c5784",
+      "source_last_edited_at": "2026-09-09T08:51:40.188Z",
+      "status": "synced",
+      "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
     }
   ]
 }

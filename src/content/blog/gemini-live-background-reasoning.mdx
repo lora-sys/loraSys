@@ -1,0 +1,45 @@
+---
+title: 'Gemini Live 把推理放到后台：turnComplete 不再等于结束'
+description: 'Gemini Live Extended Thinking 把对话回合与后台任务生命周期拆开，客户端需要用 interaction_status 管理真正的完成状态。'
+publishDate: '2026-09-16T00:00:00Z'
+tags: ['AI', 'Agent', 'Gemini', 'Realtime', 'State Machine']
+language: 'zh-CN'
+draft: false
+---
+
+9 月 15 日，Google 发布 Gemini 3.8 Live 和 Gemini 3.8 Live Extended Thinking。
+Model Card 里可以看到常规升级：原生多模态输入、实时音频、复杂推理。对开发者更重要的变化藏在 Live API 文档里。
+Google 明确提醒：在 Extended Thinking 模式下，`turnComplete: true` 不再表示整个任务已经结束。
+这句话会直接改掉很多实时 Agent 的实现。
+## 以前的实时对话状态很简单
+多数实时语音应用可以按一条直线理解：用户说话，模型处理，模型回答，这一轮结束。
+因此前端经常把“模型这轮答完了”和“任务完成了”当成同一个事件。收到一个回合完成信号之后，就可以停止 loading、恢复输入、释放资源，或者结束当前监听。
+但 Extended Thinking 把这两个状态拆开了。
+Google 的 [Live API Thinking 文档](https://ai.google.dev/gemini-api/docs/live-api/thinking) 说明，模型可以一边保持语音交互，一边在后台继续 reasoning，并执行 asynchronous tool calls。模型甚至可以先说一句类似“我正在检查”，然后继续在后台处理任务。
+所以，用户听到这一轮语音结束，只能证明表面回复结束了。后台可能还没结束。
+## `turnComplete` 现在只负责一层状态
+Gemini 3.8 Live Extended Thinking 的 [模型文档](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-live-extended-thinking) 特别写到：`turnComplete: true` 不再代表模型已经 idle。
+客户端要继续监听后续 server message。
+Google 增加的关键状态是 `interaction_status`：
+- `IN_PROGRESS`：后台仍在 reasoning 或处理工具调用。
+- `IDLE`：整个交互已经完成。
+这个设计把实时 Agent 分成两个生命周期。第一层是 conversation turn，也就是用户听到的对话回合。第二层是 interaction，也就是一次完整任务，包括后台推理、工具调用和后续结果。
+这两个生命周期以前可以重合，现在不能再默认重合。
+## 最容易出问题的是前端
+假设用户说：“帮我查一下今晚去上海的航班，再比较价格。”
+模型先回答：“好的，我正在检查。”
+这一轮语音可以很快结束，但后台可能同时调用航班工具、等待结果、继续筛选，再回来给最终回答。
+如果前端收到 `turnComplete: true` 就把任务标成 done，会出现几个直接问题：loading 提前消失；页面可能允许用户再次提交同一任务；客户端可能停止监听，错过后续工具结果；取消按钮会提前消失；重连逻辑不知道应该恢复对话状态还是任务状态。
+这些问题都不是模型回答质量问题，而是状态机问题。
+## Builder 应该怎么改
+第一，不要用 `turnComplete` 直接关闭整个任务。它只负责 conversation turn。真正的任务完成要看 `interaction_status == IDLE`。
+第二，把前台回复和后台任务分开显示。用户可以已经听完当前一句话，但界面仍显示“正在查询航班”或“正在等待工具结果”。
+第三，异步工具调用要有独立 task id。一个 interaction 里可能出现多个工具调用。每个调用都需要状态、超时和结果绑定，否则重连后很难恢复。
+第四，取消操作要取消后台任务，不只是停止音频。如果只停掉前端播放，工具调用仍可能继续运行。
+第五，日志里区分 turn 和 interaction。调试语音 Agent 时，要能回答哪一轮话已经结束，哪一个后台任务还没结束，哪个工具还在等待。
+## 这个变化的边界
+这不是说所有语音 Agent 都必须采用 Google 的协议，也不能直接说“语音 Agent 已经进入完全异步时代”。
+Google 当前公开的是 Gemini Live API 的具体实现。其他供应商可能用不同事件名、不同生命周期或不同工具协议。
+真正可以带走的工程判断只有一个：**当模型开始把推理和工具调用放到实时对话后台之后，“说完了”和“做完了”不能再是同一个状态。**
+主要一手来源：[Gemini 3.8 Audio Model Card](https://deepmind.google/models/model-cards/gemini-3-8-audio/)；[Gemini 3.8 Live Extended Thinking](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-live-extended-thinking)；[Thinking in the Live API](https://ai.google.dev/gemini-api/docs/live-api/thinking)。
+---

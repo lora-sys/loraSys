@@ -1,0 +1,50 @@
+---
+title: '多轮 Skill Eval 不该把对话压成一包：skill-up 开始续接真实 Session'
+description: 'Alibaba skill-up 的 stateful 多轮模式逐轮恢复真实 Session，让 Agent Skill Eval 能检查上下文连续性、中间状态和逐轮断言。'
+publishDate: '2026-09-18T00:00:00Z'
+tags: ['AI', 'Agent', 'Evaluation', 'Skills', 'Session']
+language: 'zh-CN'
+draft: false
+---
+
+多轮 Eval 有一个容易忽略的问题。配置里写了三轮消息，不代表系统真的测了三次连续会话。
+Alibaba 的 `skill-up` 在 9 月 17 日合并 PR #250，给 custom engine 增加 stateful 多轮模式。这个改动不大，但它修的是评测路径本身。
+## batch 多轮和真实多轮不是一回事
+以前 custom engine 的多轮 case 默认按 batch 处理。假设测试有三步：先读仓库，再基于第一步的结果改代码，最后根据前两步生成报告。batch 模式会把这些消息一起交给 Agent。
+这样可以检查最终输出，却没有经过真实服务的 session 恢复过程。第二轮有没有拿到第一轮的服务端状态，远端 Agent 能不能正确 resume，上一轮生成的中间文件会不会被覆盖，这些问题都可能被绕过去。
+`skill-up` 的新模式把执行拆回真实轮次。第一轮调用 custom engine 时没有 `session_id`。Agent 返回 `SessionResult` 后，下一轮收到上一轮返回的 `session_id`。如果后面还有轮次却没有拿到这个 ID，评测直接报错。
+官方 Custom Engine 文档已经写明这套契约：[Custom Engine Design](https://alibaba.github.io/skill-up/design/custom-engine)。写 eval 的配置和逐轮 assertion 规则在 [Writing Evals](https://alibaba.github.io/skill-up/guide/writing-evals)。
+## 为什么 session 恢复值得单独测
+真实 Agent 产品很少只执行一条 prompt。用户会追问，工具会返回结果，代码会在中间被修改，下一轮要读取前一轮留下的状态。
+如果 Eval 只验证最终答案，至少会漏掉三类故障。
+第一类是上下文断裂。第二轮看似继续，实际启动了一个新 session。
+第二类是中间状态污染。两轮生成同名 artifact，后一轮把前一轮证据覆盖了。
+第三类是逐轮约束失效。最终答案看起来正确，但第一轮已经调用了不该调用的工具，或者第二轮没有满足必须先完成的条件。
+PR #250 对这三类问题都增加了执行层支持。stateful 结果按轮次增量累计 transcript、token usage 和 artifacts。同名 path artifact 会先做快照。评测器也可以继续执行 post-condition 和 per-turn assertion。
+## 不同 Agent 的 resume 方式并不一样
+`skill-up` 官方支持矩阵目前不是一套统一实现。
+Claude Code 有自己的 session resume。Codex 使用 thread resume。Qoder CLI 也有 session 恢复参数。custom engine 需要显式启用 `conversation_mode: stateful`。Qwen Code 当前没有原生 session resume，官方文档写的是回退到 batch。
+这也是为什么 Eval 不能只比较最终文本。不同 harness 的会话生命周期不同，失败点也不同。
+## 一个很容易写错的版本事实
+最新公开 release 是 v0.11.0，发布时间是 9 月 14 日。stateful custom engine 的 PR 在 9 月 17 日才合并。
+所以现在不能写“v0.11.0 已经加入 stateful 多轮”。能够确认的是 main 分支代码和官方文档已经包含这项能力。使用固定 release 的团队要等后续 release，或者明确使用 main 对应提交。
+这个时间边界来自 [v0.11.0 Release](https://github.com/alibaba/skill-up/releases/tag/v0.11.0) 和 [PR #250](https://github.com/alibaba/skill-up/pull/250)。
+## 我会怎么给 Skill 补多轮 Eval
+先选一个必须依赖上一轮状态的任务，不要写三条互相独立的问题。
+第一轮让 Agent 创建可验证状态，例如读取仓库并生成一个文件。第二轮要求它基于第一轮结果修改内容。第三轮再让它验证或导出结果。
+然后给每一轮单独写 assertion。不要只在最后看一个 pass 或 fail。
+如果接的是 custom Agent 服务，再打开 stateful 模式：
+```yaml
+engine:
+  type: custom
+  custom:
+    conversation_mode: stateful
+    response_format: session_result
+```
+服务端需要返回 `session_id`，后续轮次必须用这个 ID 恢复同一会话。
+最后再做 baseline。Agent Skills 官方评测指南建议同一 case 分别运行 with skill 和 without skill，并记录 assertions、token 和时间。这样才能回答 Skill 到底增加了什么，而不是只看一次成功 Demo。
+官方评测方法：[Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills)。
+## 边界
+stateful 模式解决的是评测真实性，不解决 judge 准确率，也不会自动修复不稳定 case。多轮任务还需要检查 assertion 是否可验证、环境是否隔离、重试是否污染状态，以及 baseline 是否公平。
+今天真正新增的信息很具体。Agent Skill Eval 开始把“多轮消息”与“多轮 session”分开处理。对正在做 Skill、Harness 和 Eval 的 Builder，这个区别值得直接写进测试用例。
+---

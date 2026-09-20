@@ -1,0 +1,23 @@
+---
+title: 'Agent 里不是每个判断都需要生成文本：Jev 把决策交给代码'
+description: 'TypeSafe Jev 用 Choice、Score 和 Noul 处理 Agent 的受约束决策，让模型负责模糊判断，代码继续掌握合法动作和副作用。'
+publishDate: '2026-09-20T00:00:00Z'
+tags: ['AI', 'Agent', 'Jev', 'Routing', 'Decision']
+language: 'zh-CN'
+draft: false
+---
+
+很多 Agent 系统里都有一类很小但频繁的判断：下一步调用哪个工具，要不要继续，要不要重试，当前结果是否需要人工接管。
+常见实现是把状态交给生成模型，再要求模型返回 JSON。应用随后解析 JSON，检查 schema，读取字段，最后进入代码分支。这套做法能用，但模型本身仍在做一次自由文本生成，只是输出被强制压进结构化格式。
+TypeSafe 在 9 月 15 日发布 Jev，给了另一种接口。官方把 Jev 称为 System One model。它接收一份 state 和一组 typed questions，直接返回 Choice、Score 或 Noul。多个问题共享同一份状态，并在一次调用中独立评估。官方文档没有要求模型先生成解释文本再解析。来源：[TypeSafe 官方发布](https://typesafe.ai/blog/introducing-system-one-models-and-jev) 和 [TypeSafe Docs](https://docs.typesafe.ai/introduction)。
+这套接口对 Agent Builder 最有用的地方，不是“又多了一个模型”，而是它重新划分了模型和代码的职责。
+假设一个 Agent 完成一轮工具调用后，需要决定下一步。应用已经知道合法动作只有四种：继续当前计划、重试工具、向用户补充提问、停止。这个问题的答案空间是固定的。生成模型当然可以回答，但应用最终还是要把回答映射回这四个动作。
+Jev 的思路是直接问一个 Choice。对于风险、质量或优先级，可以用 Score。对于“是否需要人工接管”这种真假判断，可以用 Noul。模型返回概率后，阈值和最终副作用仍由代码决定。
+9 月 16 日，Vercel AI Gateway 接入 Jev。Vercel 列出的 Agent 示例正好包括选择下一工具或子 Agent，以及决定继续、重试、询问用户或停止。来源：[Vercel Changelog](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway)。这说明这种接口已经开始进入通用开发者模型网关，而不只停留在 TypeSafe 自己的产品页面。
+它不能替代生成模型。
+用户要求写邮件、解释代码、规划复杂任务时，答案空间无法提前列完。此时需要生成模型。Jev 适合的是另一类问题：软件已经知道有哪些合法动作，只需要模型在模糊输入里做判断。
+这也是我不会直接复述 TypeSafe 性能数字的原因。TypeSafe 在自己的 workflow eval 中报告最高 193.6 倍速度差异和 444.6 倍成本差异，但公司同时写明，这些结果处于真实工作负载收益的较高端，评测工作流也由本公司能力团队设计。来源：[TypeSafe 技术说明](https://typesafe.ai/blog/introducing-system-one-models-and-jev)。这组数字可以说明他们在优化什么，不能证明你的 Agent 一定获得相同比例的收益。
+更实用的验证方式是从一个固定答案空间的节点开始。先选每天调用最多的路由判断，保留现有生成模型作为基线。用真实历史数据比较准确率、错误类型、延迟和置信度校准。再设一个明确的人工升级阈值。只有这些数据稳定后，才替换生产路径。
+对我来说，Jev 最值得记住的不是“System One”这个名字。真正有用的是一个工程问题：Agent loop 里的每一步，究竟需要生成内容，还是只需要做一个受约束的判断。
+这两个任务不必强行交给同一种模型。
+---
