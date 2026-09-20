@@ -143,7 +143,8 @@ const extraData: Record<Exclude<DemoKind, 'timeline' | 'pipeline' | 'terminal'>,
 const currentTimeline = timelineData[locale]
 const currentPipeline = pipelineData[locale]
 const currentTerminal = terminalData[locale]
-const currentExtra = kind === 'timeline' || kind === 'pipeline' || kind === 'terminal' ? [] : extraData[kind][locale]
+const currentExtra =
+  kind in extraData ? extraData[kind as keyof typeof extraData][locale] : []
 const copy = meta[kind][locale]
 ---
 
