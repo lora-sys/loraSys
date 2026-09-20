@@ -1,0 +1,58 @@
+---
+interface Props {
+  src: string
+  title: string
+  caption?: string
+  height?: string
+}
+
+const { src, title, caption, height = '620' } = Astro.props
+
+if (!src.startsWith('/artifacts/blog/')) {
+  throw new Error('InteractiveHtml only accepts local /artifacts/blog/ sources')
+}
+
+const parsedHeight = Number.parseInt(height, 10)
+const frameHeight = Number.isFinite(parsedHeight)
+  ? Math.min(900, Math.max(360, parsedHeight))
+  : 620
+const resolvedSrc = `${import.meta.env.BASE_URL}${src.replace(/^\//, '')}`
+---
+
+<figure class='article-media interactive-html' data-interactive-html>
+  <iframe
+    src={resolvedSrc}
+    title={title}
+    loading='lazy'
+    sandbox='allow-scripts'
+    referrerpolicy='no-referrer'
+    style={`height:${frameHeight}px`}
+  ></iframe>
+  <figcaption>
+    {caption && <span>{caption}</span>}
+    <a href={resolvedSrc} target='_blank' rel='noopener noreferrer'>单独打开交互面板</a>
+  </figcaption>
+</figure>
+
+<style>
+  .article-media { margin: 1.5rem 0 1.9rem; }
+  .interactive-html iframe {
+    display: block;
+    width: 100%;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.9rem;
+    background: hsl(var(--background));
+  }
+  .interactive-html figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.9rem;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-top: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .interactive-html a { white-space: nowrap; }
+</style>

@@ -89,6 +89,7 @@
 - 对 lazy-loaded 图片的浏览器检查应先把目标图片滚入视口，再等待 `complete` / `naturalWidth`。不要要求整个文档所有懒加载图片在固定短超时内同时加载。
 - 连续提交造成的 `cancelled` / `skipped` run 不是失败。只把 `conclusion=failure` 的 Action 当作需要修复的红灯。
 - 内容同步任务不得修改 `.github/workflows/`、依赖、MDX 组件实现、站点配置或部署策略；发现框架层问题时报告给维护者，由单独任务处理。
+- Notion 内容同步的“完整”必须包含媒体对账：图片、文件、视频、音频、embed 和交互 HTML 都要枚举。缺少任一附件时必须在同步记录里标记 blocked 或 reconstruction，不能只同步正文和图片后声称 1:1 完成。
 
 ## Git、PR 与发布
 

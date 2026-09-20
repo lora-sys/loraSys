@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const BLOG_DIR = path.resolve('src/content/blog')
-const allowedComponents = new Set(['ArchitectureStack', 'Callout', 'ComparePanel', 'DataChart', 'EvidenceFlow', 'KeyPoints', 'OptionTabs', 'ProcessSteps', 'StatStrip', 'TraceExplorer'])
+const allowedComponents = new Set(['ArchitectureStack', 'Callout', 'ComparePanel', 'DataChart', 'EvidenceFlow', 'InteractiveHtml', 'KeyPoints', 'MediaVideo', 'OptionTabs', 'ProcessSteps', 'StatStrip', 'TraceExplorer'])
 
 async function collectMdxFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true })
