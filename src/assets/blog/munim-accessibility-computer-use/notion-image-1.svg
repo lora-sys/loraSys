@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#F4EDDF"/>
+<rect x="45" y="45" width="1510" height="810" rx="36" fill="#FBF7EF" stroke="#1C1916" stroke-width="4"/>
+<text x="95" y="135" font-family="Arial, sans-serif" font-size="58" font-weight="700" fill="#1C1916">Computer Use</text>
+<text x="95" y="198" font-family="Arial, sans-serif" font-size="34" font-weight="600" fill="#6C5948">元素 ID，不猜坐标</text>
+<rect x="95" y="255" width="430" height="500" rx="28" fill="#EFE5D6" stroke="#1C1916" stroke-width="3"/>
+<text x="130" y="310" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1C1916">像素坐标</text>
+<g stroke="#C9B8A2" stroke-width="2"><path d="M130 350H490 M130 410H490 M130 470H490 M130 530H490 M130 590H490 M130 650H490 M130 710H490"/><path d="M190 350V710 M250 350V710 M310 350V710 M370 350V710 M430 350V710"/></g>
+<circle cx="356" cy="486" r="18" fill="#D5963C"/><path d="M338 468L374 504M374 468L338 504" stroke="#1C1916" stroke-width="5" stroke-linecap="round"/>
+<text x="150" y="735" font-family="Arial, sans-serif" font-size="23" fill="#6C5948">截图后再猜点击位置</text>
+<rect x="570" y="255" width="470" height="500" rx="28" fill="#1C1916"/>
+<text x="610" y="310" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#FBF7EF">可访问性树</text>
+<g font-family="monospace" font-size="24" fill="#E8DCC9"><text x="615" y="375">Window</text><text x="650" y="430">Button  id=42</text><text x="650" y="485">TextField  id=57</text><text x="650" y="540">MenuItem  id=61</text></g>
+<rect x="635" y="575" width="330" height="95" rx="18" fill="#D5963C"/><text x="800" y="630" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#1C1916">click id=42</text>
+<text x="610" y="718" font-family="Arial, sans-serif" font-size="23" fill="#E8DCC9">先找控件，再按 ID 操作</text>
+<circle cx="1265" cy="355" r="108" fill="#2A211C"/><path d="M1168 350 Q1185 215 1270 235 Q1370 235 1376 357 Q1340 312 1290 305 Q1220 330 1168 350" fill="#1B1715"/><circle cx="1265" cy="370" r="78" fill="#F1D6C1"/><ellipse cx="1238" cy="370" rx="8" ry="11" fill="#3B2A21"/><ellipse cx="1296" cy="370" rx="8" ry="11" fill="#3B2A21"/><path d="M1244 410 Q1265 425 1288 410" fill="none" stroke="#8E5E45" stroke-width="4" stroke-linecap="round"/><path d="M1197 342 Q1230 318 1258 327 M1284 327 Q1317 315 1341 343" stroke="#1B1715" stroke-width="10" fill="none" stroke-linecap="round"/>
+<rect x="1130" y="475" width="290" height="205" rx="46" fill="#4B4037"/><path d="M1110 625 Q1260 565 1440 640 L1400 760 L1130 760 Z" fill="#6E5A48"/><rect x="1158" y="555" width="235" height="145" rx="14" fill="#2A2521" stroke="#D5963C" stroke-width="4"/><circle cx="1275" cy="626" r="13" fill="#D5963C"/>
+<ellipse cx="1450" cy="715" rx="90" ry="70" fill="#D99A54"/><path d="M1383 676 L1402 607 L1440 665 Z" fill="#D99A54"/><path d="M1518 676 L1498 607 L1460 665 Z" fill="#D99A54"/><ellipse cx="1450" cy="722" rx="60" ry="45" fill="#FFF4E5"/><circle cx="1428" cy="704" r="7" fill="#1C1916"/><circle cx="1473" cy="704" r="7" fill="#1C1916"/><ellipse cx="1450" cy="722" rx="9" ry="7" fill="#1C1916"/><path d="M1450 730 Q1438 742 1429 734 M1450 730 Q1462 742 1471 734" fill="none" stroke="#1C1916" stroke-width="3"/>
+<path d="M1455 520 L1490 600 L1510 572 L1540 610 L1557 594 L1527 556 L1558 544 Z" fill="#FBF7EF" stroke="#1C1916" stroke-width="4"/>
+<text x="1110" y="815" font-family="Arial, sans-serif" font-size="22" fill="#6C5948">lora + Mochi · Mode B</text>
+</svg>

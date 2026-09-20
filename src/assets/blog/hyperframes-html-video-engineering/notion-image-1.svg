@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#F4EBDD"/>
+<rect x="38" y="38" width="1524" height="824" rx="34" fill="#FCF7EE" stroke="#2B2622" stroke-width="6"/>
+<rect x="72" y="70" width="1456" height="142" rx="24" fill="#24211F"/>
+<text x="118" y="145" font-family="Arial,sans-serif" font-weight="700" font-size="72" fill="#F8F0E3">HyperFrames</text>
+<text x="118" y="188" font-family="Arial,sans-serif" font-size="28" fill="#D7B47B">Brief · HTML · MP4</text>
+<g transform="translate(100 270)">
+  <rect width="330" height="410" rx="30" fill="#EFE4D2" stroke="#332D29" stroke-width="5"/>
+  <text x="36" y="62" font-family="Arial,sans-serif" font-weight="700" font-size="42" fill="#2B2622">Brief</text>
+  <rect x="35" y="105" width="260" height="18" rx="9" fill="#B98B57"/>
+  <rect x="35" y="146" width="215" height="14" rx="7" fill="#CDB89C"/>
+  <rect x="35" y="178" width="245" height="14" rx="7" fill="#CDB89C"/>
+  <rect x="35" y="210" width="185" height="14" rx="7" fill="#CDB89C"/>
+  <circle cx="88" cy="310" r="42" fill="#2B2622"/>
+  <path d="M67 306 q21 -28 42 0 v35 h-42z" fill="#D7B47B"/>
+  <circle cx="76" cy="300" r="5" fill="#FCF7EE"/><circle cx="100" cy="300" r="5" fill="#FCF7EE"/>
+  <text x="145" y="305" font-family="Arial,sans-serif" font-size="25" fill="#51473F">plan</text>
+  <text x="145" y="338" font-family="Arial,sans-serif" font-size="25" fill="#51473F">assets</text>
+</g>
+<path d="M458 475 H548" stroke="#A8753B" stroke-width="12" stroke-linecap="round"/><path d="M530 452 l34 23 -34 23" fill="none" stroke="#A8753B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(585 270)">
+  <rect width="430" height="410" rx="30" fill="#292522" stroke="#332D29" stroke-width="5"/>
+  <text x="36" y="62" font-family="Arial,sans-serif" font-weight="700" font-size="42" fill="#F8F0E3">HTML</text>
+  <rect x="36" y="102" width="358" height="236" rx="20" fill="#171513" stroke="#6F6257" stroke-width="3"/>
+  <text x="64" y="150" font-family="monospace" font-size="23" fill="#D7B47B">&lt;section class="clip"&gt;</text>
+  <text x="84" y="194" font-family="monospace" font-size="23" fill="#F2E6D4">data-start="0"</text>
+  <text x="84" y="238" font-family="monospace" font-size="23" fill="#F2E6D4">data-end="8"</text>
+  <text x="64" y="282" font-family="monospace" font-size="23" fill="#D7B47B">&lt;/section&gt;</text>
+  <rect x="36" y="360" width="112" height="24" rx="12" fill="#B98B57"/>
+  <rect x="165" y="360" width="82" height="24" rx="12" fill="#78695D"/>
+  <rect x="264" y="360" width="130" height="24" rx="12" fill="#D1B891"/>
+</g>
+<path d="M1046 475 H1136" stroke="#A8753B" stroke-width="12" stroke-linecap="round"/><path d="M1118 452 l34 23 -34 23" fill="none" stroke="#A8753B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<g transform="translate(1175 270)">
+  <rect width="325" height="410" rx="30" fill="#EAD9BE" stroke="#332D29" stroke-width="5"/>
+  <text x="36" y="62" font-family="Arial,sans-serif" font-weight="700" font-size="42" fill="#2B2622">MP4</text>
+  <rect x="36" y="105" width="253" height="178" rx="18" fill="#2B2622"/>
+  <polygon points="136,145 136,242 215,194" fill="#D7B47B"/>
+  <rect x="36" y="315" width="253" height="18" rx="9" fill="#B98B57"/>
+  <rect x="36" y="350" width="196" height="14" rx="7" fill="#C0A98A"/>
+</g>
+<g transform="translate(580 714)">
+  <circle cx="75" cy="62" r="49" fill="#3A332E"/>
+  <circle cx="59" cy="50" r="6" fill="#F4EBDD"/><circle cx="91" cy="50" r="6" fill="#F4EBDD"/>
+  <path d="M52 72 q23 20 46 0" fill="none" stroke="#D7B47B" stroke-width="6" stroke-linecap="round"/>
+  <path d="M36 20 q12 -23 29 -5" fill="#3A332E"/><path d="M114 20 q-12 -23 -29 -5" fill="#3A332E"/>
+  <text x="145" y="60" font-family="Arial,sans-serif" font-weight="700" font-size="30" fill="#2B2622">lora</text>
+  <text x="145" y="95" font-family="Arial,sans-serif" font-size="23" fill="#756658">checks the frame</text>
+</g>
+<g transform="translate(910 715)">
+  <ellipse cx="72" cy="62" rx="60" ry="46" fill="#C88A4B"/>
+  <path d="M25 42 L40 5 L63 38" fill="#C88A4B" stroke="#2B2622" stroke-width="4"/><path d="M80 38 L104 5 L120 43" fill="#C88A4B" stroke="#2B2622" stroke-width="4"/>
+  <circle cx="54" cy="58" r="6" fill="#241F1C"/><circle cx="88" cy="58" r="6" fill="#241F1C"/><circle cx="71" cy="72" r="6" fill="#241F1C"/>
+  <text x="155" y="60" font-family="Arial,sans-serif" font-weight="700" font-size="30" fill="#2B2622">Mochi</text>
+  <text x="155" y="95" font-family="Arial,sans-serif" font-size="23" fill="#756658">verify before render</text>
+</g>
+<text x="118" y="820" font-family="Arial,sans-serif" font-size="24" fill="#76695E">Code the video. Inspect the output.</text>
+</svg>

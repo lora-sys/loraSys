@@ -36,6 +36,163 @@
       "content_fingerprint": "git-blob:1fbcc77fae00fd299ad69db01e3663d1382a187c",
       "source_last_edited_at": "2026-09-19T15:25:32.587Z",
       "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "de45ec8196f66c5f1f9a852277b7cdaef2f173b0021e46153f009b9f2ea30dd3",
+      "slug": "foreman-coding-agent-supervisor",
+      "content_fingerprint": "git-blob:3247b7a9b020b4967a656c0bc9dd4b78df9f23f2",
+      "source_last_edited_at": "2026-09-18T01:25:38.724Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "910ae32c86da93c3fc0f0824e077d65be4d1f47a1417f4a9ee324ed0842555d2",
+      "slug": "skills-manager-multi-agent-skill-sync",
+      "content_fingerprint": "git-blob:4993411fabd319a645841fc2f05ebaa397b19149",
+      "source_last_edited_at": "2026-09-16T02:02:10.242Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "3dafd66e76c9966412065103416b3dac5e3f285f9e82f56979d480cdb460a570",
+      "slug": "aws-agent-proposal-validation",
+      "content_fingerprint": "git-blob:3d73905d43fbaba50e51c9b9298468e0cb5665d6",
+      "source_last_edited_at": "2026-09-15T00:25:27.947Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "be816aa10c2a89a83d253069a717af5138a6ab6322cd6fd457313f0b39c8ded0",
+      "slug": "agentic-workflows-noop-triage",
+      "content_fingerprint": "git-blob:4c86b4edb46ef4968c3a1164395eed8d7024a18d",
+      "source_last_edited_at": "2026-09-14T00:47:17.980Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "7e72c17fba7018c6746f439dbe54a0496c82f1df236f0d3df9116e06a0fbb01e",
+      "slug": "hyperframes-html-video-engineering",
+      "content_fingerprint": "git-blob:1288edce1176890026d7ce5d686b8d3eced1faea",
+      "source_last_edited_at": "2026-09-14T01:21:56.374Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "d19abdeca0c551279b8bd0d82d83c5338c161e07e79200a241a20d171a1e781c",
+      "slug": "herdr-coding-agent-runtime",
+      "content_fingerprint": "git-blob:08cca69a155f2decbdb58c0726217b6fdfad2e10",
+      "source_last_edited_at": "2026-09-13T01:06:12.256Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "1222a0848da1c6df1dc04964381679edc750350f789c482429208c5cd23d729b",
+      "slug": "rtk-agent-shell-output-filter",
+      "content_fingerprint": "git-blob:466d9e7b576b6e790fabd0795ce474d9ffe68c47",
+      "source_last_edited_at": "2026-09-13T01:23:46.650Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "edcc063d80c2032b9ce299ad2e4b8c9eba8645d0417acb33d6a337f008715023",
+      "slug": "google-agent-plugins-skills-mcp",
+      "content_fingerprint": "git-blob:d8c6cf4c464c5b3bd322e0045c0a172ddb698584",
+      "source_last_edited_at": "2026-09-12T01:02:51.306Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "b5cefc3050b5b9b1a6ac8ce878084a72caefbdb1250a24fa3eccfd82d7a011bd",
+      "slug": "munim-accessibility-computer-use",
+      "content_fingerprint": "git-blob:3b4ed33a1d2b74e1cbd0c4eb2c5b8d02e91bdd64",
+      "source_last_edited_at": "2026-09-10T01:25:05.526Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "33db6d48a8ae00191f52618ac9dfeb747039b84c35b8e43a7d67b9e3066f68af",
+      "slug": "agent-eval-monitor-coverage",
+      "content_fingerprint": "git-blob:1b36b7cb14b00490c169a1ff3b7f3de82d8d865b",
+      "source_last_edited_at": "2026-09-11T00:50:17.709Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "e31f7729cc0807f97be58bfb3a2ebda9277a178e739d4ea3c0969b47b2bd213d",
+      "slug": "jcode-agent-harness",
+      "content_fingerprint": "git-blob:e2e9cdfbef2136f241d802145fea06ed78154a3c",
+      "source_last_edited_at": "2026-09-09T08:50:04.558Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "420274834f7c5d2d17831bb6a25f0df8308b59f8198913e24b03e9c536ef0885",
+      "slug": "github-agentic-workflows",
+      "content_fingerprint": "git-blob:85a74ee265d0ddce490ed09042df464073897280",
+      "source_last_edited_at": "2026-09-08T13:05:12.731Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "d120fb66f0076d6e57d2796876dbc0fffd33f3d6306d5f4c8b0d3d4e5529fe35",
+      "slug": "coding-agent-supply-chain-security",
+      "content_fingerprint": "git-blob:351b7cb1739aff0433a12a7fbc449e9f628a030f",
+      "source_last_edited_at": "2026-09-09T00:58:18.308Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "d21f41b89ec8f4e8bbb6744b6849a50260b94dc65ca15e75ea5ee5aca6022b51",
+      "slug": "fde-enterprise-ai-engineering-role",
+      "content_fingerprint": "git-blob:df083680ef75ace96ceb571dd6d123d7388ac5bd",
+      "source_last_edited_at": "2026-09-20T02:45:54.319Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "60d6de724da1e64f6e3c09a5e2256fa24ec98a580ab850dd50bff7222fa4083b",
+      "slug": "ai-agent-engineering-news-2026-09-18-19",
+      "content_fingerprint": "git-blob:7727e9b8593daedb5ac86728d38a42529480c7a2",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "3e57d322d25043bf31df15fe4052a75b233b44ff39729d191460de1b0ef80251",
+      "slug": "ai-agent-engineering-news-2026-09-11-18",
+      "content_fingerprint": "git-blob:0340295887ccf87be8933a8e2148942e2b32a5db",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "9fee585e651e9de270237b51188873fada1df13be19b7408c14cba2bf2e7fd96",
+      "slug": "ai-agent-engineering-news-2026-09-11-17",
+      "content_fingerprint": "git-blob:71eebd507d74e0ef7be7a4791b779634647bf79f",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "dc66fe4fc7c7f2c587c2c56b0b9e66f3dbfe961925b987013f5b676063b5646b",
+      "slug": "ai-agent-engineering-news-2026-09-11-16",
+      "content_fingerprint": "git-blob:cf2cc20accb4ccb1eaf61d6510b36134e44a7a35",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "ebc21f7e23886dcab38ec5bf6abe9bb14f71a8c01a4af792ae9627309fd10119",
+      "slug": "ai-agent-engineering-news-2026-09-04-10",
+      "content_fingerprint": "git-blob:161f88b7b201866c1ce061c4da6b2a7c8b3b028c",
+      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
+      "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "850302838438ec8c7eba9e2ed98055c66bc36e53af69904e629f15b09dac1000",
+      "slug": "kitaru-agent-regression-testing",
+      "status": "superseded",
+      "note": "Content-package source is covered by the later dedicated article source."
+    },
+    {
+      "source_page_id_sha256": "2c5e51568b762fd80f499263d07567ece8645e38e2facd6cf9b721cea3b252dd",
+      "slug": "agent-budget-memory-evaluation",
+      "status": "superseded",
+      "note": "Earlier content-package topic is covered by the dedicated budget/memory/evaluation article."
+    },
+    {
+      "source_page_id_sha256": "888105956614f6599dfb05a7ee6e435c66298418001993d7e4ae00da6226df0c",
+      "slug": "tau-agent-loop-events",
+      "status": "duplicate",
+      "note": "Content-library wrapper points to an already published source article."
+    },
+    {
+      "source_page_id_sha256": "5a22a861b7c0bee068ae18db5929bd9ad05f8eec8fa30496bd486fff17ce661d",
+      "slug": "tau-agent-architecture",
+      "status": "duplicate",
+      "note": "Content-library wrapper points to an already published source article."
     }
   ]
 }

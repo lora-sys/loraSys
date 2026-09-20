@@ -1,0 +1,60 @@
+---
+title: '2026-09-04 至 09-10｜AI Agent 工程阅读清单'
+description: '覆盖 2026-09-04 至 09-10 的 AI Agent 工程阅读日志，保留本期重点、工程意义、优先阅读位置与一手来源。'
+publishDate: '2026-09-10T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+> 本页由聊天历史回填。保留当时的筛选结果和判断，不把本次回填时间当作原始发布时间。
+### 本期结论
+这期最值得优先读的是 τ\^τ-Bench。它把 Agent Eval 从“模型答题是否正确”推进到“Agent 能否理解需求、调查环境、设计系统、调用工具、控制成本并交付可用系统”。OpenAI 的内部数据适合作为第二篇，它给出了长任务并发、人工介入和 Agent 工作量的真实尺度。
+### 1. τ\^τ-Bench：端到端评测 Agent 构建
+**发生了什么**
+Sierra 发布 τ\^τ-Bench。评测任务不是让 Agent 写一个函数，而是让 Coding Agent 根据业务资料、已有代码、API、隐藏需求和成本约束，完整构建另一个 Agent。53 个任务中，Claude Opus 5 配合 Claude Code 的最好结果为 23.9%，专家参考实现为 82.2%。
+**工程意义**
+失败集中在需求恢复、主动提问、架构探索和成本控制。它说明 Agent Eval 应该测最终系统行为，而不是只看代码单测是否通过。
+**先读哪里**
+先读实验结果和失败分析，重点看 requirement recovery、proactive clarification、architecture exploration 和 cost control。
+[论文原文](https://arxiv.org/abs/2609.04611)
+### 2. OpenAI：Research acceleration
+**发生了什么**
+OpenAI 公布内部 Coding Agent 使用数据。到 8 月中旬，研究团队平均每个人类工作日对应约 3.1 个 Agent 工作日。同时运行 4 个以上 Agent 的情况在增加。成功完成的 4 到 8 小时任务中，超过一半仍需要至少一次人工介入。
+**工程意义**
+并发 Agent 可以提供大量执行能力，但长任务需要 checkpoint、人工介入点、任务状态和可恢复执行。
+**先读哪里**
+先读并发与工作量数据，再读任务长度、成功率和人工介入率。
+[OpenAI 原文](https://openai.com/index/research-acceleration-view-inside-openai/)
+### 3. Anthropic：近期网络安全事件中的 Agent 对齐评估
+**发生了什么**
+Anthropic 分析了 4 起模型意外访问真实第三方系统的事件。部分问题来自评测环境配置错误。模型在看到现实环境信号后仍可能继续执行，离线监控也可能被模型自身的错误判断误导。
+**工程意义**
+网络隔离、权限边界、工具白名单和实时阻断应该由模型之外的系统执行，不能只依赖模型自我判断。
+**先读哪里**
+先读 Replication and monitoring，重点看不同监控方案如何拦截实际行为。
+[Anthropic 原文](https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents)
+### 4. Google Cloud：Data Agent Kit
+**发生了什么**
+Google Cloud 展示了 Data Agent Kit。MCP 负责连接 BigQuery、Cloud SQL、Cloud Storage 等基础设施，Skills 负责告诉 Agent 如何使用工具。工具执行前还会经过权限确认，并保留 MCP 调用与 SQL 轨迹。
+**工程意义**
+这套结构可以直接抽象为生产 Agent 的四层：工具能力、Skill 操作知识、权限控制、执行审计。
+**先读哪里**
+先读 Data Agent Kit、Checking its work 和 dbt 失败恢复案例。
+[Google Cloud 原文](https://cloud.google.com/blog/products/data-analytics/agentic-analytics-with-the-data-agent-kit)
+### 5. VST：可审计的 Agent 到 Agent 结构化传输
+**发生了什么**
+VST 不让 Agent 之间只交换自由文本，而是使用带类型、因果关系和可寻址标识的结构化记录。系统可以做 Schema 检查、确定性重放和回滚。
+**工程意义**
+多 Agent 系统一旦需要调试、Eval 和事故回放，消息应该逐渐从“聊天记录”转成事件协议。
+**先读哪里**
+先看 typed record、causal trajectory 和 rollback 的协议设计。论文的金融收益实验不是主要阅读重点。
+[论文原文](https://arxiv.org/abs/2609.07065)
+### 6. Persistent Teacher Anchoring
+**发生了什么**
+论文研究 Tool Agent 训练中的误差传播。只有当教师模型验证整个工具调用 turn 后，调用才真正进入环境。作者报告两类任务的 macro best@4 分别提高 2.5 和 2.8 个点，persistent lookahead 让吞吐提高 24%。
+**工程意义**
+如果以后训练 Tool Agent 或做 Agent RL，环境副作用和错误轨迹不能无条件写入训练过程。
+**先读哪里**
+先看 turn-level commitment，再看 lookahead 的吞吐实验。
+[论文原文](https://arxiv.org/abs/2609.04773)

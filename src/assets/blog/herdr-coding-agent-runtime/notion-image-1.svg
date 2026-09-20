@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#F5EDDC"/>
+<rect width="900" height="900" fill="#1D1916"/>
+<g font-family="Noto Sans CJK SC, Arial, sans-serif">
+<text x="66" y="112" fill="#E0A23E" font-size="28">CODING AGENT RUNTIME</text>
+<text x="62" y="245" fill="#FCF8EE" font-size="82" font-weight="700">Herdr 不替换 Agent</text>
+<text x="62" y="355" fill="#E0A23E" font-size="82" font-weight="700">它接管终端</text>
+<text x="66" y="432" fill="#E8DED0" font-size="31">Claude Code、Codex、Cursor、OpenCode 继续照常运行。</text>
+<text x="66" y="480" fill="#E8DED0" font-size="31">Herdr 管终端、会话状态和跨机器连接。</text>
+<rect x="66" y="540" width="235" height="140" rx="24" fill="#2B2521" stroke="#655345" stroke-width="2"/>
+<text x="86" y="595" fill="#FCF8EE" font-size="31" font-weight="700">持续终端</text>
+<text x="86" y="645" fill="#D9CCBC" font-size="21">断开客户端，任务继续</text>
+<rect x="336" y="540" width="235" height="140" rx="24" fill="#2B2521" stroke="#655345" stroke-width="2"/>
+<text x="356" y="595" fill="#FCF8EE" font-size="31" font-weight="700">阻塞状态</text>
+<text x="356" y="645" fill="#D9CCBC" font-size="21">working / blocked / idle</text>
+<rect x="606" y="540" width="235" height="140" rx="24" fill="#593C2B" stroke="#8A654B" stroke-width="2"/>
+<text x="626" y="595" fill="#E0A23E" font-size="31" font-weight="700">跨机器</text>
+<text x="626" y="645" fill="#E2D0BF" font-size="21">本地与 SSH 同一窗口</text>
+<text x="66" y="805" fill="#B8AA98" font-size="20">herdrdev/herdr · Apache 2.0</text>
+<text x="66" y="845" fill="#827466" font-size="20">终端持久化 · 状态检测 · 跨机器 · CLI / socket API</text>
+<rect x="900" width="700" height="900" fill="#F5EDDC"/>
+<rect x="1040" y="80" width="460" height="680" rx="92" fill="#E8D8BE" stroke="#6D503C" stroke-width="3"/>
+<circle cx="1260" cy="325" r="162" fill="#30251F"/>
+<circle cx="1370" cy="210" r="78" fill="#30251F"/>
+<ellipse cx="1260" cy="390" rx="136" ry="156" fill="#F0C7A6"/>
+<path d="M1128 355 Q1148 210 1265 225 Q1400 230 1395 380 Q1340 325 1280 320 Q1195 317 1128 355Z" fill="#352720"/>
+<ellipse cx="1208" cy="402" rx="17" ry="24" fill="#3B2A22"/>
+<ellipse cx="1308" cy="402" rx="17" ry="24" fill="#3B2A22"/>
+<circle cx="1203" cy="395" r="5" fill="#FCF8EE"/>
+<circle cx="1303" cy="395" r="5" fill="#FCF8EE"/>
+<path d="M1238 462 Q1260 478 1285 462" stroke="#9B6555" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M1110 600 Q1145 515 1230 500 Q1335 500 1415 585 L1460 720 L1080 720Z" fill="#28221F"/>
+<path d="M1160 510 Q1088 515 1055 558 Q1062 595 1104 605 Q1160 594 1200 548Z" fill="#F0C7A6" stroke="#6D503C" stroke-width="3"/>
+<rect x="1355" y="282" width="82" height="108" rx="8" fill="#E0A23E" transform="rotate(8 1396 336)"/>
+<text x="1370" y="318" fill="#2B2420" font-size="15" transform="rotate(8 1396 336)">BUILD</text>
+<text x="1369" y="341" fill="#2B2420" font-size="15" transform="rotate(8 1396 336)">RUN</text>
+<text x="1368" y="364" fill="#2B2420" font-size="15" transform="rotate(8 1396 336)">CHECK</text>
+<rect x="1030" y="625" width="500" height="165" rx="30" fill="#28221F"/>
+<text x="1070" y="675" fill="#FCF8EE" font-size="32" font-weight="700">Herdr</text>
+<text x="1070" y="720" fill="#E0A23E" font-size="23">终端运行时</text>
+<text x="1070" y="758" fill="#D8CBBB" font-size="21">Agent 可通过 CLI 和 socket API 协作</text>
+<rect x="925" y="690" width="285" height="176" rx="82" fill="#FCF8EE" stroke="#6D503C" stroke-width="3"/>
+<ellipse cx="1064" cy="790" rx="92" ry="52" fill="#C6A68A"/>
+<circle cx="1068" cy="752" r="54" fill="#F8F0E5"/>
+<path d="M1028 720 l18 -34 21 38 M1096 721 l26 -34 12 42" fill="#C6A68A"/>
+<path d="M1043 754 q9 9 18 0 M1082 754 q9 9 18 0" stroke="#3B2A22" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M1064 773 q7 7 14 0" stroke="#C98272" stroke-width="3" fill="none" stroke-linecap="round"/>
+<text x="948" y="845" fill="#6D503C" font-size="20">Mochi</text>
+</g>
+</svg>

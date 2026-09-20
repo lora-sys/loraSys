@@ -1,0 +1,68 @@
+---
+title: '2026-09-11 至 09-16｜AI Agent 工程阅读清单'
+description: '覆盖 2026-09-11 至 09-16 的 AI Agent 工程阅读日志，保留本期重点、工程意义、优先阅读位置与一手来源。'
+publishDate: '2026-09-16T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+> 本页由聊天历史回填。保留当时版本，不与后续增量版本合并。
+### 本期结论
+优先读 Coding Agents Have Converged、Emergence World 和 Authorization Architectures。三篇分别对应 Coding Agent 排行榜可信度、长时多 Agent 风险、Tool Agent 权限传播。
+### 1. Coding Agents Have Converged
+**发生了什么**
+作者审计 254 个 SWE-bench 提交。前 30 名相邻系统之间没有任何一对通过配对 McNemar 检验得到显著差异。相同模型更换 scaffold 时，分数差距最高达到 29.8 个百分点。
+**工程意义**
+Coding Agent 的得分不能直接等价成模型能力。Harness、上下文策略、工具和执行环境可能比榜单上几分的差距更重要。
+**先读哪里**
+先读 model-scaffold interaction、paired comparison 和五步 benchmark audit protocol。
+[论文原文](https://arxiv.org/abs/2609.17394)
+### 2. Emergence World
+**发生了什么**
+作者运行 8 个持续世界，每个世界有 10 个 Agent，总运行时间 16 天，产生超过 85 万次 LLM 调用。攻击包括间接提示词攻击、错误信息和私有记忆泄漏。没有一个世界同时抵抗住三类攻击，部分污染信息在 46 小时后仍继续影响行为。
+**工程意义**
+短任务测试正常，不代表运行几天后仍然正常。持久记忆、Agent 间传播、共享工具和环境状态都会放大延迟风险。
+**先读哪里**
+先看三组 stress event，以及污染信息如何进入 persistent memory 并继续传播。
+[论文原文](https://arxiv.org/abs/2609.17320)
+### 3. HazardAuditor
+**发生了什么**
+作者实际运行 Claude Code、Codex、Hermes 和 OpenClaw，把浏览器、终端、文件系统和工具调用统一转成标准事件，再进行风险检测。
+**工程意义**
+不同 Coding Agent 的内部格式不同，但最终都能归一成文件修改、Shell 命令、网络请求、工具调用和权限请求。跨 Harness Eval 应该建立统一执行事件层。
+**先读哪里**
+先读 canonical event representation，再看 GuardPO 的 sequence-level optimization。
+[论文原文](https://arxiv.org/abs/2609.15134)
+### 4. Authorization Architectures for Tool-Using AI Agents
+**发生了什么**
+论文梳理 Tool Agent 的授权链，将其拆成 human、operator、orchestrator、sub-agent 和 tool endpoint。重点问题是运行时授权和多级代理后的权限聚合。
+**工程意义**
+OAuth 登录不能解决多 Agent 的权限传播问题。用户授权 Agent 做 A，不代表 Sub-Agent 应自动获得 A、B、C 的工具权限。
+**先读哪里**
+先看 principal hierarchy、delegation and scope propagation、runtime policy enforcement point。
+[论文原文](https://arxiv.org/abs/2609.15906)
+### 5. RSIAgent
+**发生了什么**
+RSIAgent 让 curriculum agent、actor 和 verifier 主动探索陌生环境，把成功条件、失败原因和操作规律写入外部记忆，再冻结并复用到正式任务。
+**工程意义**
+陌生代码库、企业软件和 GUI Agent 的学习可以拆成探索、验证、记忆沉淀和正式执行，不必把所有试错都混在任务阶段。
+**先读哪里**
+先看 broad-then-deep exploration 和相关消融实验。
+[论文原文](https://arxiv.org/abs/2609.15364)
+### 6. Vercel AI SDK Harness 原生订阅认证
+**发生了什么**
+HarnessAgent 可以复用 Claude Code、Codex、Cursor、GitHub Copilot、OpenCode、Pi 等宿主机已有认证。真实凭据保留在 Host，Sandbox 只接收占位凭据，再由 Host 替换。
+**工程意义**
+统一 Coding Agent Runtime 时，Harness 接口和 Credential Boundary 可以分开设计，不需要把真实 Token 塞进 Sandbox。
+**先读哪里**
+先看 direct、auto、ai-gateway 三种认证模式和 Host Boundary。
+[Vercel 原文](https://vercel.com/changelog/ai-sdk-harness-native-subscription-authentication)
+### 7. GitHub Copilot Code Review 的 Agent Ensemble
+**发生了什么**
+GitHub 更新 Copilot Code Review。Lite effort 下由多个 Agent 联合 Review，并增加 Shell 工具验证。后续提交修复问题后，Copilot 可以自动关闭原评论。
+**工程意义**
+代码 Review 正在从单次模型判断变成工具验证、多 Agent 分析和修复后复验的循环。
+**先读哪里**
+先看 Shell 工具如何验证 Review，以及 rereview 如何判断问题已经解决。
+[GitHub 原文](https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review/)

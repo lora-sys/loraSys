@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#F3EBDD"/>
+<rect x="45" y="45" width="1510" height="810" rx="34" fill="#E8DDCC" stroke="#171512" stroke-width="8"/>
+<text x="90" y="120" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#171512">GitHub Agentic Workflows</text>
+<text x="90" y="162" font-family="Arial, sans-serif" font-size="24" fill="#6D5A46">Markdown → Agent → Safe Actions</text>
+
+<!-- left card -->
+<rect x="95" y="245" width="390" height="455" rx="28" fill="#FFF9EF" stroke="#171512" stroke-width="7"/>
+<text x="135" y="305" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#171512">Markdown</text>
+<rect x="140" y="350" width="300" height="250" rx="18" fill="#F8F0E3" stroke="#6D5A46" stroke-width="4"/>
+<text x="170" y="395" font-family="monospace" font-size="20" fill="#171512">name: fix-issues</text>
+<text x="170" y="430" font-family="monospace" font-size="20" fill="#171512">on: issue_comment</text>
+<text x="170" y="465" font-family="monospace" font-size="20" fill="#171512">agent: claude</text>
+<line x1="170" y1="500" x2="410" y2="500" stroke="#B88A44" stroke-width="3"/>
+<text x="170" y="545" font-family="Arial, sans-serif" font-size="22" fill="#171512">Read issue</text>
+<text x="170" y="578" font-family="Arial, sans-serif" font-size="22" fill="#171512">Plan fix</text>
+
+<!-- center card -->
+<rect x="605" y="220" width="390" height="505" rx="30" fill="#24211D" stroke="#171512" stroke-width="8"/>
+<text x="650" y="290" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#F6EEDF">Agent</text>
+<!-- lora face -->
+<circle cx="800" cy="430" r="112" fill="#F2D0B3" stroke="#171512" stroke-width="6"/>
+<path d="M700 420 Q720 300 820 305 Q910 315 900 430 Q860 380 820 370 Q755 400 700 420Z" fill="#3A2C25" stroke="#171512" stroke-width="5"/>
+<path d="M715 390 Q725 320 790 300 Q730 310 700 360Z" fill="#221B18"/>
+<ellipse cx="760" cy="435" rx="10" ry="15" fill="#171512"/>
+<ellipse cx="840" cy="435" rx="10" ry="15" fill="#171512"/>
+<path d="M770 485 Q800 505 830 485" fill="none" stroke="#7A4F33" stroke-width="5" stroke-linecap="round"/>
+<!-- hoodie -->
+<path d="M660 640 Q700 540 800 540 Q900 540 940 640 L940 690 L660 690Z" fill="#171512"/>
+<text x="725" y="670" font-family="Arial, sans-serif" font-size="24" fill="#D49A48">lora</text>
+<!-- mochi -->
+<circle cx="950" cy="575" r="62" fill="#D59A55" stroke="#171512" stroke-width="5"/>
+<path d="M907 535 L930 490 L952 535 M972 535 L994 490 L1010 545" fill="#D59A55" stroke="#171512" stroke-width="5"/>
+<ellipse cx="932" cy="580" rx="7" ry="9" fill="#171512"/>
+<ellipse cx="970" cy="580" rx="7" ry="9" fill="#171512"/>
+<path d="M947 596 Q953 603 960 596" fill="none" stroke="#171512" stroke-width="4"/>
+<!-- shield -->
+<path d="M902 605 L950 580 L998 605 L992 665 Q950 710 908 665Z" fill="#B8792E" stroke="#171512" stroke-width="5"/>
+<rect x="938" y="622" width="25" height="25" rx="4" fill="#FFF7E8"/>
+<path d="M942 622 Q942 604 950 604 Q958 604 958 622" fill="none" stroke="#FFF7E8" stroke-width="5"/>
+
+<!-- right card -->
+<rect x="1115" y="245" width="390" height="455" rx="28" fill="#FFF9EF" stroke="#171512" stroke-width="7"/>
+<text x="1160" y="305" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#171512">Safe Actions</text>
+<g font-family="Arial, sans-serif" font-size="24" fill="#171512">
+<rect x="1170" y="360" width="280" height="62" rx="18" fill="#F3EBDD" stroke="#6D5A46" stroke-width="3"/><text x="1210" y="400">Build</text><text x="1400" y="400">✓</text>
+<rect x="1170" y="445" width="280" height="62" rx="18" fill="#F3EBDD" stroke="#6D5A46" stroke-width="3"/><text x="1210" y="485">Test</text><text x="1400" y="485">✓</text>
+<rect x="1170" y="530" width="280" height="62" rx="18" fill="#F3EBDD" stroke="#6D5A46" stroke-width="3"/><text x="1210" y="570">Review</text><text x="1400" y="570">✓</text>
+<rect x="1170" y="615" width="280" height="62" rx="18" fill="#F3EBDD" stroke="#6D5A46" stroke-width="3"/><text x="1210" y="655">Deploy</text><text x="1400" y="655">✓</text>
+</g>
+
+<!-- arrows -->
+<path d="M505 470 H575" stroke="#171512" stroke-width="12" stroke-linecap="round"/><path d="M560 445 L592 470 L560 495" fill="none" stroke="#171512" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1015 470 H1085" stroke="#171512" stroke-width="12" stroke-linecap="round"/><path d="M1070 445 L1102 470 L1070 495" fill="none" stroke="#171512" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+
+<text x="90" y="805" font-family="Arial, sans-serif" font-size="25" fill="#6D5A46">Agent 先过权限边界，再进入执行轨道。</text>
+<circle cx="1490" cy="795" r="16" fill="#C8862A"/>
+</svg>

@@ -1,0 +1,68 @@
+---
+title: '2026-09-11 至 09-17｜AI Agent 工程阅读清单'
+description: '覆盖 2026-09-11 至 09-17 的 AI Agent 工程阅读日志，保留本期重点、工程意义、优先阅读位置与一手来源。'
+publishDate: '2026-09-17T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+> 本页由聊天历史回填。它是上一期之后的一次增量筛选，保留当时独立版本。
+### 本期结论
+这一版最值得连着看的是 Paper2Agent、TuiML、Not All Agents Are Equal。三篇分别回答 Agent 应该怎样使用软件接口、Agent 产出如何评价、真实 GitHub 中 Agent PR 的质量怎样测。
+### 1. TuiML：Machine Learning for AI Agents
+**发生了什么**
+TuiML 为每个组件提供机器可读元数据和参数 Schema。Agent 可以搜索能力、检查参数、组合工作流并在调用前验证。调用带有 seed 和 trace，同一份 specification 可以生成 MCP、Agent Framework Adapter、Python API 和 CLI。
+**工程意义**
+给 Agent 用的 SDK 应把能力发现、参数约束、执行记录和可复现性放进接口设计，而不是只提供人类 API 再套一层 MCP wrapper。
+**先读哪里**
+先读 machine readable metadata、workflow validation 和 one specification layer。
+[论文原文](https://arxiv.org/abs/2609.17984)
+### 2. Paper2Agent 正式发表于 Nature
+**发生了什么**
+Paper2Agent 用 Environment Agent 把代码跑起来，用 Extraction Agent 把核心能力转成 MCP Tool，再由 Testing Agent 执行并与论文结果比较。测试失败多次的 Tool 不进入最终 MCP Server。
+**工程意义**
+论文中的工程链很适合迁移到企业内部 SDK、复杂开源项目和数据平台：Source、Tool Extraction、Environment、Test、Lock、MCP。
+**先读哪里**
+先读 Overview of Paper2Agent 和 Testing Agent 的验证流程。
+[Nature 正式论文](https://www.nature.com/articles/s41586-026-11044-y)
+### 3. Not All Agents Are Equal
+**发生了什么**
+作者分析 2,807 个 GitHub 仓库中的 37,623 个 Agent PR，覆盖 Codex、Devin、GitHub Copilot、Cursor 和 Claude Code，并与人类 PR 做匹配比较。指标包括 revert、security smell、post-merge churn 和 review effort。
+**工程意义**
+Coding Agent Eval 应增加 merge 后指标。只看 SWE-bench 无法回答代码进入真实仓库后是否稳定。
+**先读哪里**
+先看 revert、maintenance 和 review effort。不要把观察性数据直接当成产品排名。
+[论文原文](https://arxiv.org/abs/2609.17598)
+### 4. Google Zero Trust Agent Runtime
+**发生了什么**
+Google 把 Agent 防护放到 Agent 代码之外。Agent Gateway 拦截调用，Model Armor 检查提示词攻击和敏感信息，Semantic Governance 在工具执行前判断用户意图和业务规则，Anomaly Detection 分析多轮行为。
+**工程意义**
+单次 Tool Guard 不够。生产 Agent 的权限检查需要同时考虑当前调用、原始用户意图和历史状态。
+**先读哪里**
+先读 Judge intent, not just syntax 和 Catch multi turn exploits。
+[Google 原文](https://developers.googleblog.com/build-zero-trust-ai-agents-that-judge-intent-not-just-syntax/)
+### 5. Collective Loss of Control in LLM Agent Systems
+**发生了什么**
+作者构造 RogueHandoff 20，把一个 Agent 的不安全轨迹交给另一个 Agent。实验还发现，默认 Docker backend 可能让原本应隔离的实例形成信息通路。
+**工程意义**
+多 Agent Eval 不应只检查 Prompt 和 Tool。共享目录、缓存、数据库、消息队列和 memory store 都可能形成隐藏通信通道。
+**先读哪里**
+先读 deployment audit 和 RogueHandoff 20。
+[论文原文](https://arxiv.org/abs/2609.18460)
+### 6. Google 开源 Agent SDK 生成链
+**发生了什么**
+Google 将 Gemini Interactions、Agents 和 Webhooks API 的 SDK 生成方案转向 Speakeasy OpenAPI 工具链。它可以从 OpenAPI 生成多语言 SDK、CLI 和文档 MCP Server。
+**工程意义**
+确定性生成器和 Agent 可以分工。接口类型、错误体系、streaming protocol 这类强一致性部分交给生成器，Agent 处理需要定制和解释的部分。
+**先读哪里**
+先读 What is open sourced today，尤其是 documentation MCP server generator。
+[Google 原文](https://developers.googleblog.com/why-client-sdk-generation-belongs-in-the-open/)
+### 7. Spurious Tool Use
+**发生了什么**
+论文发现 RL 训练后的 Tool Agent 可能学习到表面提示与工具之间的错误关联。加入无关提示后，一些模型的无必要 Tool Call 最多增加 39%。作者增加 tool necessity reward 来抑制这种行为。
+**工程意义**
+Agent Eval 不能只测工具调用是否正确，还应加入“不应该调用工具”的样本。
+**先读哪里**
+先读 counterfactual evaluation 和 tool necessity reward。
+[论文原文](https://arxiv.org/abs/2609.16268)

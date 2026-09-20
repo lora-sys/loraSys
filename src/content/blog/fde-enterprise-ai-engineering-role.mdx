@@ -1,0 +1,215 @@
+---
+title: 'FDE 正在成为企业 AI 的一线工程岗位'
+description: '结合 OpenAI、Anthropic、Palantir、中国上市公司报告和公开 JD，解释 FDE 的职责、能力边界、国内外落地和职业判断。'
+publishDate: '2026-09-20T00:00:00Z'
+tags: ['AI', 'FDE', 'Enterprise AI', 'Agent', 'Career', 'Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+> **结论先放前面。** 2026 年的 FDE 已经不是 Palantir 的特殊岗位名称。OpenAI、Anthropic 等 AI 公司已经把它变成正式的企业 AI 交付岗位，并按医疗、法律、政府等行业继续细分。中国还处在岗位定义和组织扩散阶段，但用友、宇信科技、零一万物已经公开采用 FDE 方法，上海也开始把 FDE 作为急需紧缺复合型人才培养。[\[1\]](https://openai.com/careers/forward-deployed-engineer-%28fde%29-seattle-seattle/)[\[2\]](https://job-boards.greenhouse.io/anthropic/jobs/5423029008)[\[3\]](https://static.cninfo.com.cn/finalpage/2026-08-22/1225490345.PDF)[\[4\]](https://static.cninfo.com.cn/finalpage/2026-08-26/1225506640.PDF)[\[5\]](https://rsj.sh.gov.cn/txh_17094/20260916/27117c0df6e0471fa58c97e7d6511ba4.html)
+> Notion 原文包含一个交互调研面板。网站版本保留正文中的数据、口径与来源，不嵌入该附件。
+| 指标 | 公开数据 | 说明 |
+| --- | --- | --- |
+| 2026 年 1 至 8 月“forward-deployed”工程岗位同比 | **增长超过 1000%** | 对比 2025 年同期 |
+| 相较 2023 年 | **增长超过 4600%** | 说明这个 Title 正在快速扩散 |
+| FDE 广告薪资中位数 | **超过 18.8 万美元** | 美国招聘广告口径 |
+| 传统软件工程师广告薪资 | **约 14.5 万美元** | 同一报道对照数据 |
+按这两个薪资数字简单计算，FDE 的广告薪资中位数至少高约 29.7%。但这不是总包数据，也不能直接拿来推算中国薪资。[\[7\]](https://fortune.com/2026/09/03/forward-deployed-engineers-fast-growing-six-figure-silicon-valley-job-integrate-ai-with-customers-tech-careers-palantir/)
+> 上面的交互面板已经把这组数字做成图表。文章没有使用“FDE 市场规模”之类无法稳定核验的数据，也没有用招聘平台搜索结果直接估算全国岗位数量。
+## 国外已经怎么用了
+### Palantir：FDE 的原型
+Palantir 很早就采用工程师深入客户现场的工作方式。
+它现在的 FDSE 招聘仍然强调：
+- 工程师直接和客户一起工作。
+- 快速理解高价值问题。
+- 围绕关键数据设计并构建系统。
+- 小团队自己负责执行，而不是只给建议。
+这套工作方式后来被越来越多 AI 公司采用。[\[6\]](https://jobs.lever.co/palantir/dab396d4-2f14-4796-aac0-0d82883dccf0)
+Pragmatic Engineer 在 2025 年的一篇专题文章里把 FDE 概括为会在客户团队和核心产品工程团队之间来回工作的工程师，并观察到 AI Startup 正在明显增加这类招聘。[\[8\]](https://newsletter.pragmaticengineer.com/p/forward-deployed-engineers)
+### OpenAI：已经形成正式 FDE 组织
+OpenAI 当前公开的 FDE 岗位已经不是一个通用职位。
+它已经按行业拆分出 Healthcare、Legal、Government 等方向。
+Healthcare FDE 是一个很具体的例子。岗位要求工程师负责从 technical discovery、architecture、implementation、evaluation、productionization 一直到 handoff，还需要把 AI 系统接入企业 API、数据平台、电子病历、理赔系统和运营工具。[\[9\]](https://openai.com/careers/forward-deployed-engineer-%28fde%29-healthcare-sf-san-francisco/)
+Legal FDE 则直接进入律所和法务团队，寻找高价值 workflow，完成 PoC，再把系统推到生产采用。[\[10\]](https://openai.com/careers/forward-deployed-engineer-%28fde%29-legal-nyc-new-york-city/)
+这说明 FDE 正在继续行业化。
+以后企业真正需要的可能不是一个“懂所有东西的 FDE”，而是：
+- AI + 医疗
+- AI + 法律
+- AI + 金融
+- AI + 制造
+- AI + 政府业务
+### Anthropic：Agent、MCP 和 Eval 已经进入 FDE 工作内容
+Anthropic 的公开 FDE 职位写得更直接。
+工程师需要：
+- 在客户系统里构建 Claude 的生产应用。
+- 为客户交付 MCP Server、Sub-agent 和 Agent Skill。
+- 总结可以重复使用的部署模式。
+- 把现场信息反馈给 Product 和 Engineering。
+- 频繁到客户现场工作。
+岗位还明确要求有 LLM 生产经验，包括 Prompt Engineering、Agent Development、Evaluation Framework 和规模化部署。[\[2\]](https://job-boards.greenhouse.io/anthropic/jobs/5423029008)
+这和过去“实施一个确定功能的软件”已经不是同一类工程问题。
+## 中国已经走到哪里
+国内目前没有统一的 FDE 职业标准。
+但从 2026 年公开资料看，至少已经出现四个清晰信号。
+### [01.AI](http://01.AI)：把 FDE 共创写进企业 AI 交付方法
+零一万物官网现在把“FDE co-creation”直接写进企业 AI 转型方法。
+它描述的流程是：
+进入一线业务，和客户团队一起拆需求，连接数据，做 Prototype，再验证部署。[\[11\]](https://www.01.ai/)
+这说明 FDE 不再只是招聘 Title，而是开始进入公司的交付方法。
+### 用友：把 FDE 写进上市公司半年报
+用友网络 2026 年半年报直接使用了“企业 AI 部署走向 FDE 范式”这句话。
+报告将 FDE 定义为复合型技术团队长期驻场客户，前置挖掘真实业务问题，完成定制集成、持续迭代，并对业务价值负责。[\[3\]](https://static.cninfo.com.cn/finalpage/2026-08-22/1225490345.PDF)
+这个信号很重要。
+因为用友不是大模型实验室，而是典型的企业软件公司。FDE 进入这类公司的公开报告，说明它正在进入传统企业软件交付体系。
+### 宇信科技：已经在银行客户项目中验证
+宇信科技 2026 年半年报披露：
+公司 FDE 团队已经形成需求沟通、产品配置、问题排查等实践路径，并在银行客户项目中得到验证。
+公司还建立了 FDE 培训体系，内容包括：
+- 提示工程
+- RAG 2.0
+- Agent 智能体开发
+- 行业现场交付
+- 综合考核
+[\[4\]](https://static.cninfo.com.cn/finalpage/2026-08-26/1225506640.PDF)
+金融可能是国内最适合 FDE 的行业之一。
+原因很具体。银行内部系统多、权限复杂、数据约束严格、业务规则差异大，而且很难把所有数据直接交给一个通用 SaaS。
+### 上海开始把 FDE 当作人才类别培养
+2026 年 9 月 16 日，上海市人社部门发布的信息把 FDE 称为“急需紧缺复合型人才”。
+徐汇区和上海交通大学共同开展了“人工智能前沿部署与产业落地高级研修班”，面向 AI、数字经济、智能制造和智慧服务相关技术人员。[\[5\]](https://rsj.sh.gov.cn/txh_17094/20260916/27117c0df6e0471fa58c97e7d6511ba4.html)
+这说明 FDE 已经开始进入地方人才培养体系。
+## 看一个国内真实 JD，会更容易理解
+出门问问当前公开的 AI FDE 岗位要求非常典型。
+它要求工程师进入客户现场，把模糊业务问题转成技术方案，并掌握：
+- RAG
+- Function Calling
+- Agent Framework
+- MCP
+- Python
+- Linux
+- Docker
+- Kubernetes
+- API 集成
+- 数据管道
+- ERP、CRM、MES 接口
+技术只是其中一部分。
+岗位还要求候选人可以在 CTO、业务负责人和一线员工之间切换沟通方式，量化技术商业价值、评估 ROI，并对上线后的业务结果负责。[\[12\]](https://cn.linkedin.com/jobs/view/ai%E5%89%8D%E6%B2%BF%E9%83%A8%E7%BD%B2%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88fde%EF%BC%89-at-%E5%87%BA%E9%97%A8%E9%97%AE%E9%97%AE-4454176279)
+Michael Page 在上海发布的 AI FDE 岗位也出现了类似要求，包括生产级 LLM / Agent、RAG、CRM / ERP / Data Warehouse 集成、自动化工作流，以及 Prompt、召回、延迟和成本评估。[\[13\]](https://www.michaelpage.com.cn/job-detail/ai-forward-deployed-engineer%EF%BC%88fde%EF%BC%89/ref/jn-062026-7029518)
+所以国内 FDE 的技术栈正在出现一个稳定轮廓：
+| 能力层 | 常见内容 | 为什么需要 |
+| --- | --- | --- |
+| 软件工程 | Python、TypeScript、API、数据库、Linux、Docker、K8s | 需要自己把系统真正跑起来 |
+| AI Engineering | LLM、RAG、Agent、MCP、Eval、Prompt、Context | 处理模型和 Agent 的不确定性 |
+| 企业集成 | ERP、CRM、MES、数据仓库、权限系统 | AI 必须进入现有工作流 |
+| 产品能力 | 需求拆解、优先级、验收指标、采用率 | 客户经常只知道“想用 AI”，不知道该做什么 |
+| 业务能力 | 行业流程、ROI、指标、管理层沟通 | 最终需要解释技术为什么值得投入 |
+## 社交媒体里看到的是另一面
+官方 JD 会强调 ownership、customer impact 和 production。
+真正进入现场以后，还有很多不会写进职位说明的工作。
+财新在 2026 年 7 月报道过深圳 FDE 从业者吴明泽。他在小红书记录 FDE 工作日常，其中一个很现实的内容是商务应酬和客户关系。他从 5 月开始分享相关内容，一个多月账号增加超过 8000 个粉丝。[\[14\]](https://www.caixin.com/2026-07-14/102463955.html)
+这件事说明中国 ToB 环境中的 FDE 可能还会遇到：
+- 甲乙方沟通
+- 项目验收
+- 高层汇报
+- 现场排障
+- 商务关系
+- 私有化环境
+- 数据与权限协调
+- 不同部门之间的目标冲突
+Reddit 的工程师讨论里也一直存在同一个争议。
+有人把自己的 FDE 工作描述成“强 Generalist 工程师 + 客户沟通”，需要快速进入陌生代码库、做深度集成并向业务人员解释技术决策。也有人认为一些公司只是把 Solutions Engineer、Consultant 或实施岗位重新包装成 FDE。[\[15\]](https://www.reddit.com/r/ExperiencedDevs/comments/1u1ytv7/i_keep_seeing_forward_deployed_engineer_openings/)[\[16\]](https://www.reddit.com/r/cscareerquestions/comments/1qxtz6a/forward_deployed_engineer_role/)
+这些社区讨论不是统计数据，但它们暴露出一个真实问题：
+**FDE 这个 Title 已经开始混用。**
+## 怎么判断一个岗位是真 FDE，还是换名字的实施岗
+我会重点检查下面六个问题。
+1. **你会不会直接写生产代码。**  
+如果主要工作是 PPT、培训、配置和收集需求，它更接近售前或实施。
+1. **你能不能参与问题定义。**  
+FDE 不应该只接已经写好的需求单。它需要自己进入现场判断真正的问题是什么。
+1. **项目上线以后，你是否继续负责采用效果。**  
+Demo 完成就离场，与持续追踪 adoption 和业务指标，是完全不同的工作。
+1. **现场经验能不能反馈进 Core Product。**  
+真正的 FDE 会把重复出现的问题变成产品、组件、工具或平台能力。
+1. **公司有没有可以复用的核心产品。**  
+如果每个客户都从零做一套定制系统，长期很容易变成普通项目外包。
+1. **成功标准是什么。**  
+如果 KPI 只有“按时验收”，需要继续追问。如果 KPI 包括实际使用率、成本、准确率、处理时间、收入或其他业务指标，更接近 FDE 模式。
+> **一个实用判断：** 真 FDE 应该同时拥有“工程执行权”和“问题定义权”。只有客户沟通，没有生产工程能力，更像 Solutions；只有写代码，没有客户和业务 ownership，更像普通 SWE。
+## FDE 和几个相邻岗位到底差在哪
+| 工作 | 普通 SWE | Solutions Architect | 实施工程师 | FDE |
+| --- | --- | --- | --- | --- |
+| 直接发现客户问题 | 较少 | 多 | 中 | **核心工作** |
+| 写生产代码 | **核心工作** | 视岗位而定 | 部分 | **核心工作** |
+| 负责生产部署 | 是 | 多为架构指导 | 是 | **是** |
+| 对业务采用负责 | 间接 | 部分 | 常以验收为主 | **直接关注** |
+| 反向影响产品 | 通过内部产品流程 | 有 | 较少 | **核心职责之一** |
+| 驻场和出差 | 较少 | 有 | 常见 | **常见** |
+OpenAI 多个 FDE 岗位写明最高 50% 出差，Anthropic 的公开岗位写明 25% 到 50%。客户现场不是附属任务，而是岗位结构的一部分。[\[1\]](https://openai.com/careers/forward-deployed-engineer-%28fde%29-seattle-seattle/)[\[2\]](https://job-boards.greenhouse.io/anthropic/jobs/5423029008)
+## 我认为 FDE 最值得关注的能力
+技术框架会换得很快。
+今天岗位里写的是 RAG、Agent、MCP、Eval。几年以后这些名词很可能继续变化。
+更稳定的是下面这条能力链：
+**发现问题 → 定义指标 → 快速构建 → 集成企业系统 → Eval → 上生产 → 观察真实使用 → 修失败样本 → 抽象复用。**
+如果准备这个岗位，我会优先积累三类可展示项目。
+### 1. 做一个真正进入工作流的 Agent
+不要只做聊天页面。
+至少要有：
+- Tool Calling
+- 权限
+- 数据源
+- Eval
+- Trace
+- 错误处理
+- Human in the loop
+- 业务指标
+### 2. 做一个企业集成项目
+例如把 Agent 接进：
+CRM、工单系统、内部知识库、飞书、ERP、GitHub、数据库或已有后台。
+面试时可以讲清楚“为什么这样接”“权限怎么处理”“坏了怎么回滚”。
+### 3. 做一次真实用户交付
+哪怕客户只是学校社团、小公司、朋友的业务或自己运营的项目，也比虚构需求更有价值。
+因为 FDE 面试真正关心的经常不是“你会不会调一个模型 API”，而是：
+**面对一个说不清需求的人，你怎么找到问题，做出系统，再证明系统有用。**
+## 国内和国外目前最大的区别
+国外已经进入“职业规模化”阶段。
+Palantir 有长期岗位体系。OpenAI 和 Anthropic 已经有独立 FDE 组织，并继续按行业拆岗。
+中国目前更像“工作方式已经存在，Title 正在形成”。
+用友、宇信科技、[01.AI](http://01.AI) 等公司开始公开使用 FDE 这个词，但大量做类似工作的工程师仍然可能叫：
+- AI 解决方案工程师
+- AI 应用工程师
+- 交付工程师
+- 技术顾问
+- 解决方案架构师
+- 企业 AI 工程师
+所以在国内找 FDE 岗位时，只搜索“FDE”会漏掉大量相邻职位。
+真正该搜索的是职责：
+**客户现场 + AI/Agent + 生产开发 + 企业集成 + 业务结果。**
+## 最后的判断
+FDE 不是一个因为 AI 才出现的新工作。
+Palantir 很早就证明了“工程师直接进入客户问题”的组织方式。
+AI 把这个岗位放大，是因为模型从 Demo 进入企业系统以后，不确定性、系统集成和业务适配的问题明显增加。
+现在企业缺的不是另一个会调用模型 API 的人。
+它们缺的是能进入真实流程，把模型、数据、系统、权限和业务指标接在一起，并且自己把东西做完的人。
+这就是 2026 年 FDE 快速扩张背后的实际原因。
+---
+## 调研方法与限制 
+- 调研与数据核对日期：2026-09-20。
+- 美国岗位增长与薪资数据采用 Fortune 转引的 Lightcast 数据。它是招聘广告数据，不代表全部就业市场，也不是实际薪资发放数据。
+- 中国没有统一公开的 FDE 岗位统计，因此文章没有估算“中国 FDE 市场规模”。
+- 中国落地情况优先使用上市公司半年报、政府公开资料和公司官网，其次使用真实公开 JD。
+- Reddit、小红书相关内容只用于补充从业体验，不作为市场规模或薪资统计证据。
+- 交互面板中的 JD 技能矩阵是对 4 组公开岗位的人工编码，只用于观察岗位结构，不代表全市场。
+## 主要来源
+1. [OpenAI · Forward Deployed Engineer](https://openai.com/careers/forward-deployed-engineer-%28fde%29-seattle-seattle/)
+2. [OpenAI · Healthcare FDE](https://openai.com/careers/forward-deployed-engineer-%28fde%29-healthcare-sf-san-francisco/)
+3. [Anthropic · Forward Deployed Engineer](https://job-boards.greenhouse.io/anthropic/jobs/5423029008)
+4. [Palantir · Forward Deployed Software Engineer](https://jobs.lever.co/palantir/dab396d4-2f14-4796-aac0-0d82883dccf0)
+5. [Fortune · Lightcast FDE 招聘增长与薪资数据](https://fortune.com/2026/09/03/forward-deployed-engineers-fast-growing-six-figure-silicon-valley-job-integrate-ai-with-customers-tech-careers-palantir/)
+6. [Pragmatic Engineer · What are Forward Deployed Engineers](https://newsletter.pragmaticengineer.com/p/forward-deployed-engineers)
+7. [01.AI 企业 AI 转型与 FDE 共创](https://www.01.ai/)
+8. [用友网络 2026 年半年度报告](https://static.cninfo.com.cn/finalpage/2026-08-22/1225490345.PDF)
+9. [宇信科技 2026 年半年度报告](https://static.cninfo.com.cn/finalpage/2026-08-26/1225506640.PDF)
+10. [上海市人社局 · FDE 人才培养](https://rsj.sh.gov.cn/txh_17094/20260916/27117c0df6e0471fa58c97e7d6511ba4.html)
+11. [财新 · 大模型急招 FDE](https://www.caixin.com/2026-07-14/102463955.html)
+12. [出门问问 · AI 前沿部署工程师公开职位](https://cn.linkedin.com/jobs/view/ai%E5%89%8D%E6%B2%BF%E9%83%A8%E7%BD%B2%E5%B7%A5%E7%A8%8B%E5%B8%88%EF%BC%88fde%EF%BC%89-at-%E5%87%BA%E9%97%A8%E9%97%AE%E9%97%AE-4454176279)
+13. [Michael Page · 上海 AI FDE](https://www.michaelpage.com.cn/job-detail/ai-forward-deployed-engineer%EF%BC%88fde%EF%BC%89/ref/jn-062026-7029518)

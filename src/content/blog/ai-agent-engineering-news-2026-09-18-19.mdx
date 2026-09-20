@@ -1,0 +1,52 @@
+---
+title: '2026-09-18 至 09-19｜AI Agent 工程阅读清单'
+description: '覆盖 2026-09-18 至 09-19 的 AI Agent 工程阅读日志，保留本期重点、工程意义、优先阅读位置与一手来源。'
+publishDate: '2026-09-19T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+> 本页由聊天历史回填。它记录上一版之后的增量内容。
+### 本期结论
+优先读 An Empirical Study of Harness Design for Coding Agents 和 RAFT。前者回答 Harness 哪些组件真的有用，后者回答长任务历史经验应该按什么状态粒度检索。
+### 1. An Empirical Study of Harness Design for Coding Agents
+**发生了什么**
+作者固定 Agent 主循环，只改变规划、工具接口和上下文管理。实验覆盖 4 个模型、SWE-bench Verified、Terminal-Bench 2.1，共测试 176 组配置。
+**工程意义**
+Context management 的主要价值是避免长任务 context overflow。规则删除加必要时模型总结的性价比较好。规划对弱模型更能提高成功率，对强模型更多是降低成本。工具集也应根据模型的 Bash 能力决定。
+**先读哪里**
+先看 context management 的五组消融，再看 planning、action space 和 trajectory analysis。
+[论文原文](https://arxiv.org/abs/2609.20804)
+### 2. Amazon Bedrock AgentCore Runtime V2
+**发生了什么**
+AWS 更新 AgentCore Runtime。新版本会动态分配并回收 Session 内存，并加入环境快照来缩短新实例启动。每个 Session 继续使用 microVM 隔离。
+**工程意义**
+长任务 Agent 的内存峰值通常只出现在某些阶段。按阶段回收资源和 snapshot restore 更接近真正适合 Agent 的 serverless runtime。
+**先读哪里**
+先看 elastic memory reclamation、snapshot based cold start、session isolation 和 persistence。
+[AWS 官方公告](https://aws.amazon.com/about-aws/whats-new/2026/09/new-agentcore-runtime-generally-available/)
+### 3. Vercel mcp-handler 支持实验性 WebMCP
+**发生了什么**
+mcp-handler 2.2.0 可以把已有 MCP Tool 显式暴露给浏览器中的 Agent。调用仍代理回服务器端 MCP Endpoint，并复用当前登录用户身份。
+**工程意义**
+网页开始成为 Agent 可以直接操作的结构化环境。已有 MCP Tool 可以复用到浏览器 Agent，但必须明确限制哪些 Tool 能暴露到前端。
+**先读哪里**
+先看登录态如何复用，以及 MCP Tool 到 WebMCP Tool 的映射方式。
+[Vercel 原文](https://vercel.com/changelog/webmcp-mcp-handler)
+### 4. OpenAI Codex CLI 0.155.0 与 0.155.1
+**发生了什么**
+Codex 增加 MCP 请求的 Touch ID 验证、OAuth 凭据过期提示、更完整的 authorization evidence、账号切换时的远程状态清理，以及 daemon 重启后的 Thread 和 Goal 恢复。0.155.1 又修复了 reasoning summary 默认行为带来的 Provider 兼容问题。
+**工程意义**
+Coding Agent 正在形成真正的执行控制面，包括身份、审批证据、Session 恢复、远程状态和 MCP 凭据生命周期。
+**先读哪里**
+先看 MCP verification、authorization evidence、daemon recovery 和 identity invalidation。
+[Codex 官方 Releases](https://github.com/openai/codex/releases)
+### 5. RAFT：Stateful Retrieval for Troubleshooting Agents
+**发生了什么**
+RAFT 不把历史工单只当静态文档，而是将每个 Case 转成 timeline state chain。Agent 根据当前中间状态检索相似历史状态，再读取该 Case 后续的解决轨迹。
+**工程意义**
+代码调试、运维、客服和数据分析都是状态不断变化的长任务。真正有用的检索条件往往是“现在运行到什么状态”，而不是整张工单语义有多相似。
+**先读哪里**
+先读 timeline entry abstraction 和 entry level retrieval。case graph 可以后读。
+[论文原文](https://arxiv.org/abs/2609.20754)

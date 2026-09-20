@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<rect width="1600" height="900" fill="#F5EDDC"/>
+<rect width="930" height="900" fill="#1D1916"/>
+<g font-family="Noto Sans CJK SC, Arial, sans-serif">
+<text x="72" y="110" fill="#E0A23E" font-size="28">AGENT PLUGINS</text>
+<text x="68" y="238" fill="#FCF8EE" font-size="86" font-weight="700">Skill 和 MCP</text>
+<text x="68" y="348" fill="#E0A23E" font-size="86" font-weight="700">变成一个插件</text>
+<text x="72" y="430" fill="#E8DED0" font-size="34">Google Cloud 开始用统一包管理 Agent 扩展。</text>
+<text x="72" y="480" fill="#E8DED0" font-size="34">同一套能力可装进 Claude Code、Codex 和 Antigravity。</text>
+<rect x="72" y="548" width="230" height="140" rx="24" fill="#2D2722" stroke="#6C594B" stroke-width="2"/>
+<text x="96" y="602" fill="#FCF8EE" font-size="36" font-weight="700">Skill</text>
+<text x="96" y="650" fill="#DCCFBE" font-size="24">可复用指令</text>
+<rect x="340" y="548" width="230" height="140" rx="24" fill="#2D2722" stroke="#6C594B" stroke-width="2"/>
+<text x="364" y="602" fill="#FCF8EE" font-size="36" font-weight="700">MCP</text>
+<text x="364" y="650" fill="#DCCFBE" font-size="24">工具和数据</text>
+<rect x="608" y="548" width="230" height="140" rx="24" fill="#5A3D2B" stroke="#A67A55" stroke-width="2"/>
+<text x="632" y="602" fill="#E0A23E" font-size="36" font-weight="700">Plugin</text>
+<text x="632" y="650" fill="#E7D6C5" font-size="24">统一安装包</text>
+<text x="72" y="806" fill="#B7AA98" font-size="22">google/skills · Apache 2.0 · 2026.09.11</text>
+<text x="72" y="846" fill="#827466" font-size="22">Google Cloud Developer Plugin</text>
+<rect x="980" y="78" width="540" height="744" rx="56" fill="#E9D9BE" stroke="#805D45" stroke-width="3"/>
+<text x="1030" y="132" fill="#6C4B36" font-size="25">lora</text>
+<rect x="1010" y="690" width="480" height="86" rx="20" fill="#7B563F"/>
+<rect x="1040" y="638" width="360" height="110" rx="18" fill="#302925" stroke="#6C594B" stroke-width="3"/>
+<text x="1080" y="688" fill="#FCF8EE" font-size="29" font-weight="700">google-cloud-developer</text>
+<text x="1080" y="724" fill="#DCCFBE" font-size="22">Skill + MCP + rules</text>
+<circle cx="1280" cy="345" r="170" fill="#2E241F"/>
+<circle cx="1385" cy="230" r="82" fill="#2E241F"/>
+<ellipse cx="1270" cy="405" rx="142" ry="164" fill="#F2C8A7"/>
+<path d="M1134 360 Q1150 205 1285 225 Q1432 230 1420 385 Q1364 322 1288 320 Q1205 317 1134 360Z" fill="#352720"/>
+<path d="M1138 430 Q1080 550 1120 660 L1210 665 Q1160 570 1175 495Z" fill="#2E241F"/>
+<path d="M1405 425 Q1460 555 1416 660 L1335 665 Q1388 572 1372 496Z" fill="#2E241F"/>
+<ellipse cx="1220" cy="413" rx="18" ry="25" fill="#3A2A22"/>
+<ellipse cx="1320" cy="413" rx="18" ry="25" fill="#3A2A22"/>
+<circle cx="1214" cy="405" r="5" fill="#FCF8EE"/>
+<circle cx="1314" cy="405" r="5" fill="#FCF8EE"/>
+<path d="M1245 472 Q1270 489 1295 472" stroke="#9C6556" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M1130 560 Q1250 520 1410 570 L1450 690 L1090 690Z" fill="#27211E"/>
+<path d="M1175 525 Q1110 520 1072 563 Q1066 598 1105 610 Q1160 600 1205 555Z" fill="#F2C8A7" stroke="#805D45" stroke-width="3"/>
+<circle cx="1082" cy="575" r="10" fill="#F2C8A7"/>
+<rect x="1362" y="308" width="76" height="102" rx="8" fill="#E0A23E" transform="rotate(8 1400 359)"/>
+<text x="1375" y="342" fill="#2B2420" font-family="Arial, sans-serif" font-size="15" transform="rotate(8 1400 359)">BUILD</text>
+<text x="1374" y="365" fill="#2B2420" font-family="Arial, sans-serif" font-size="15" transform="rotate(8 1400 359)">PACK</text>
+<text x="1372" y="388" fill="#2B2420" font-family="Arial, sans-serif" font-size="15" transform="rotate(8 1400 359)">SHIP</text>
+<rect x="1030" y="160" width="300" height="96" rx="22" fill="#FCF8EE" stroke="#805D45" stroke-width="3"/>
+<text x="1065" y="205" fill="#2B2420" font-size="29" font-weight="700">Agent Plugin</text>
+<text x="1065" y="236" fill="#805D45" font-size="21">统一清单和目录结构</text>
+<rect x="1350" y="168" width="130" height="70" rx="18" fill="#2D2722"/>
+<text x="1383" y="211" fill="#FCF8EE" font-size="23">Skill</text>
+<rect x="1350" y="253" width="130" height="70" rx="18" fill="#5A3D2B"/>
+<text x="1383" y="296" fill="#E0A23E" font-size="23">MCP</text>
+<ellipse cx="1052" cy="745" rx="62" ry="54" fill="#FCF8EE" stroke="#805D45" stroke-width="3"/>
+<path d="M1010 714 l18 -33 19 37 M1061 716 l25 -33 13 40" fill="#C9A88A"/>
+<ellipse cx="1052" cy="748" rx="43" ry="37" fill="#F8F0E5"/>
+<path d="M1032 746 q8 9 16 0 M1057 746 q8 9 16 0" stroke="#3A2A22" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M1047 764 q6 7 12 0" stroke="#C98272" stroke-width="3" fill="none" stroke-linecap="round"/>
+<text x="1018" y="818" fill="#805D45" font-size="20">Mochi</text>
+</g>
+</svg>

@@ -1,0 +1,64 @@
+---
+title: 'Skills Manager：把一份 Skill 同步给多个 Coding Agent'
+description: '介绍 Skills Manager 如何用本地 Skill Library 统一分发到 Claude Code、Codex、Cursor 和 Gemini CLI，并处理版本与配置一致性。'
+publishDate: '2026-09-16T00:00:00Z'
+tags: ['AI', 'Agent', 'Skills', 'Coding Agent', 'DevTools']
+language: 'zh-CN'
+draft: false
+---
+
+![](../../assets/blog/skills-manager-multi-agent-skill-sync/notion-image-1.svg)
+
+## 30 秒看懂
+如果你同时用 Claude Code、Codex 和 Cursor，Skill 很容易变成三份文件。改一次规则，还得记得同步三次。
+Skills Manager 把这些 Skill 收进一个本地中央库。你选择哪些 Skill 要给哪个 Agent，再按全局或项目作用域同步。它还支持 Preset、Git 备份和 CLI。
+所以它解决的不是“怎么写 Skill”，而是“写完以后怎么长期管理”。
+## 为什么有意思
+Agent Skills 正在变成真实的配置资产。它们有来源、版本、项目作用域、同步状态和备份需求。
+Skills Manager 没有重新设计 Skill 格式。它把管理层补上了。这个方向和包管理器很像，但对象换成了 Agent 的行为说明、工具规则和工作流。
+v1.39.0 里那个 CRLF、LF 修复很说明问题。多台电脑、多种 Agent 一起用时，真正麻烦的往往不是 Prompt 怎么写，而是文件怎样保持一致。
+## 3 个值得借鉴的设计
+### 中央库和目标目录分开
+Skill 先进入中央库，再同步到各个 Agent。这样修改源内容时，不需要手工维护多份副本。
+### 工作区有明确作用域
+它区分全局、项目和链接工作区。通用 Skill 可以全局启用，项目专用 Skill 留在项目里。这个边界比把所有规则塞进一个目录更容易维护。
+### 同步策略允许选择
+用户可以选择复制或符号链接。复制更独立，链接更容易保持实时一致。v1.39.0 还处理了 Windows 和 macOS 行尾差异造成的假更新。
+## 与我的连接
+你现在已经在 Notion 里维护 `unslop` 和 `lora-visual`。你也会同时使用不同 Coding Agent。
+Skills Manager 不适合直接替代 Notion Skill。更合理的分工是：
+- Notion 保存可读、可编辑的 Skill 源内容和参考材料。
+- 需要给本地 Coding Agent 执行的 Skill 导出成标准目录。
+- Skills Manager 负责把这些目录同步到 Claude Code、Codex、Cursor 等工具。
+这样 Notion 继续做内容中枢，Skills Manager 处理本地分发和版本一致性。
+
+## 来源与事实核验
+项目：Skills Manager  
+仓库所有者：xingkongliang  
+官网：[https://skillsmanager.dev](https://skillsmanager.dev)  
+仓库：[https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager)  
+许可证：MIT  
+当前状态：可安装、可使用。提供桌面应用和 CLI，支持 macOS、Windows、Linux。  
+最新正式版：v1.39.0，GitHub Release 发布于 2026-09-15 01:19 UTC。  
+最近代码推送：GitHub API 显示 `pushed_at` 为 2026-09-15 00:59 UTC。  
+内置 Agent 数量：官方 README 截至 2026-09-16 标注 54 个，包括 Claude Code、Codex、Cursor、Copilot 和 Gemini CLI。
+核心能力：
+- 用一个本地中央库保存 Skills。
+- 将 Skills 同步到不同 Coding Agent。
+- 支持全局、项目和链接工作区。
+- 支持 Preset，按组合启用一组 Skills。
+- 支持复制或符号链接两种同步方式。
+- 支持 Git 备份。
+- 桌面应用和 CLI 共用核心逻辑。
+v1.39.0 的可见更新：
+- 新增 GitLab Duo 内置 Agent。
+- Preset 标签过多时可以自动换行。
+- Windows 和 macOS 只存在 CRLF、LF 行尾差异时，不再误判为 Skill 更新。
+- 修复确认弹框按钮滚出屏幕和导入 Skill 持续显示原路径丢失的问题。
+## 证据卡
+1. [Skills Manager 官网](https://skillsmanager.dev)  
+说明产品定位、中央 Skill Library、工作区、Preset、Git 备份和 CLI。
+1. [GitHub 官方仓库](https://github.com/xingkongliang/skills-manager)  
+核验支持的 Agent、安装方式、MIT License 和当前代码状态。
+1. [v1.39.0 Release](https://github.com/xingkongliang/skills-manager/releases/tag/v1.39.0)  
+核验 2026-09-15 发布、GitLab Duo、新的跨平台行尾处理和 UI 修复。
