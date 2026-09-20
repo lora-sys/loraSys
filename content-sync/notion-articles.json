@@ -29,6 +29,13 @@
       "content_fingerprint": "git-blob:775d317bf07e2dba1a420b98396d011033f5e44f",
       "source_last_edited_at": "2026-09-18T15:27:48.195Z",
       "status": "synced"
+    },
+    {
+      "source_page_id_sha256": "a47f36ea0f60ec9a2d81ea2a024c42faba7059e832a252058396c05522eb5e8b",
+      "slug": "agent-durable-execution-step-idempotency",
+      "content_fingerprint": "git-blob:e945f4c9b79561076ee3c38ae7e8a46f3d728dbf",
+      "source_last_edited_at": "2026-09-19T15:25:32.587Z",
+      "status": "synced"
     }
   ]
 }
