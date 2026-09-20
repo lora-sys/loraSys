@@ -9,186 +9,191 @@ draft: false
 
 系列：每日 AI 图文精读
 
-今天读的是 Kitaru 的 Replay、Evaluator 和 Regression Suite 设计。它解决一个很实际的问题：Agent 在线上犯过一次错以后，怎样让这个错误以后每次改模型、提示词或代码时都自动重跑，而不是等用户再次踩中。
+今天只研究一个问题。Agent 线上犯过一次错以后，怎样让这个真实错误变成以后每次改模型、提示词或代码时都会自动重跑的测试。
 
-这次选它还有一个原因。Kitaru 的官方仓库在 2026 年 9 月 16 日仍在快速更新。当天提交包括 TypeScript 与 Mastra scorer evaluator，以及 record replay 相关属性。仓库由 `zenml-io` 维护，当前公开，LICENSE 为 Apache 2.0。这里研究的是它的测试机制，不把项目方自己的产品描述当成独立验证。[官方仓库](https://github.com/zenml-io/kitaru) [当天 evaluator 提交](https://github.com/zenml-io/kitaru/commit/4916aef8f158b27601f37e380d8038996ab4b037)
+主材料是 Kitaru 的 Replay、Evaluator 和 Regression Suite。仓库由 `zenml-io` 维护，默认开发分支为 `develop`，许可证为 Apache 2.0。2026 年 9 月 16 日仓库仍有功能和依赖更新。本文还用 Anthropic 的 Agent Eval 方法，以及 OpenAI 对评测数据质量和生产反馈闭环的公开文章交叉检查。本文没有复现 Kitaru 的完整实验环境，也不把项目方的产品描述当成独立验证。
 
-## 先从一个线上错误开始
+[Kitaru 官方仓库](https://github.com/zenml-io/kitaru)
 
-假设你做了一个客服 Agent。用户说“这笔订单重复扣款，请退款”。Agent 查订单、核对状态、调用退款工具，最后回复“已经退款”。
+## 先从一个线上退款错误开始
 
-第二天用户回来，说钱根本没退。
+假设你做了一个客服 Agent。用户说“这笔订单重复扣款，请退款”。Agent 查订单，调用退款工具，然后回复“已经退款”。第二天用户回来，钱并没有退。
 
-你修了提示词，又升级了模型，然后自己手动试了一遍。刚好成功。问题看起来解决了。
+你修了 system prompt，手工测试一次，刚好成功。几天后，同类问题再次出现。
 
-几天以后，另一个订单又出了类似问题。
+这里缺的是一条回归链路。第一次事故发生后，要把当时的任务输入、工具调用、工具结果和最终状态保存下来。以后每次改 Agent，都让新版本回到尽量相同的测试现场重新做一次。
 
-这里真正缺的不是一句更好的提示词，而是一条固定的回归链路。第一次事故发生以后，这个真实任务应该进入测试集。以后每次改 Agent，都用同样的输入和尽量相同的外部条件再跑一遍。只有旧问题没有重新出现，新方案才有资格继续上线。
+Anthropic 在 2026 年 1 月发布的 Agent Eval 文章里区分了能力评测和回归评测。能力评测问“Agent 现在还能解决哪些更难的问题”。回归评测问“以前已经会做的事情，现在是不是还会做”。回归集的目的就是阻止旧问题回来。[Anthropic 官方文章](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 
-Anthropic 在 2026 年 1 月的 Agent eval 文章里把这类测试分得很清楚。能力评测回答“现在还能学会什么新任务”，回归评测回答“以前会做的事情，现在是不是还会做”。回归集接近 100% 通过才有意义，因为它本来就是为了防止已经解决的问题重新出现。[Anthropic 官方说明](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
+![线上失败怎样变成回归测试](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-regression-loop.svg)
 
-![图 1，把线上失败变成回归测试。](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-regression-loop.svg)
+图 1 是本文绘制的机制示意。先看最左和最右。线上失败留下 Session，固定一批 Session 成为 Cohort。基线先重放一次。确认现场能稳定复现以后，只改一个变量，再让候选版本跑同一批任务。评测没有通过，CI 就不放行。
 
-图 1 先看中间这条线。真实运行留下完整记录，固定成测试样本，然后只改一个变量，再重放、评测、决定是否允许进入 CI。最重要的是“只改一个变量”。如果你同时换模型、改提示词、改检索逻辑，最后变好也无法知道是哪一项起作用。
+## Replay 不是把旧答案重新打一遍分
 
-<ProcessSteps
-  title="一次线上事故怎样进入回归链路"
-  steps="保存真实运行::保留任务输入、工具结果、最终状态和必要轨迹|先重放旧版本::确认原版本能在固定条件下复现，建立可比较基线|只改一个变量::模型、提示词、代码或采样参数一次只换一项|重新执行并评分::同时检查 outcome 和 transcript，不只看最后一句话|进入回归集::把稳定样本固定到 suite 版本，并在后续 CI 重跑"
-  source="根据 Kitaru Replay、Evaluator、Regression Suite 文档与本文事故示例整理"
-/>
+普通单元测试很容易固定输入和输出。Agent 不一样。它可能先搜索，再读数据库，再调用外部 API，然后根据每一步结果决定下一步。
 
-## Replay 到底是什么
+Kitaru 把一次运行保存成 Session。Replay 会重新执行 Agent 的真实代码，再用记录下来的外部结果回答它。模型会重新生成，代码也会重新走完整流程。被固定的是测试现场，不是 Agent 的输出。[Kitaru Replay 文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)
 
-普通单元测试经常直接写固定输入和固定输出。Agent 更麻烦，因为一次任务中间会调用搜索、数据库、文件系统、第三方 API，还会根据每一步结果决定下一步。
+这和“把昨天的最终答案重新送给评分器”差很多。后者只能告诉你昨天的答案能得多少分。Replay 能观察新版本今天会怎样走完整决策路径。
 
-所以，重放不是“把上次最终答案再拿出来打一遍分”。Kitaru 的做法是保存一次完整 Session。里面有任务输入、Agent 调用、工具返回、最终结果等信息。重放时重新执行 Agent 的真实代码，再让记录下来的外部世界回答它。
+Kitaru 当前从任务开头重新运行，不提供从某个中间节点直接继续的 Replay。这样做有一个好处。候选版本必须自己重新完成整条路径，不能借用旧版本已经完成的前半段。
 
-这意味着模型仍然会重新思考，代码仍然会重新走一遍，只是外部条件尽量固定。你可以把它理解成把“当时发生过的现场”保存下来，再让新版本回到这个现场重新处理一次。
+## 为什么第一步必须重放原版本
 
-Kitaru 文档要求先做一件很容易被忽略的事：修改之前，先用原版本原样重放。如果原版本自己都不能稳定复现原运行，那么后面的新旧比较没有可靠基线。然后再建立 fork，一次只换模型、提示词、代码或采样参数中的一项。[Replay 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)
+Kitaru 文档把顺序写得很明确。修改任何东西之前，先让原版本原样 Replay。
 
-Kitaru 的 replay 目前是从任务开头重新执行，不支持从中间某一步直接切进去。这反而减少了一个歧义。新版本必须自己重新走完整决策路径，不能借用旧版本前半段已经做好的推理。
+原因很简单。假设原运行通过，但原版本重放十次只能通过六次。你换模型以后通过八次，不能直接说新模型带来了两个任务的提升。测试现场本身就不稳定。
 
-## 最难的一步是控制工具
+所以第一问不是“候选版本多少分”。第一问是“基线能不能复现”。只有基线可信，后面的差异才有解释价值。
 
-重放最大的坑不是模型，而是工具。
+然后一次只改一项。只换模型，就不要同时改检索。只改提示词，就不要同时重写 evaluator。否则即使结果变好，也不知道是哪项改动起作用。
 
-还拿退款 Agent 举例。原运行里，Agent 查询订单 `A1024`，工具当时返回“已支付，未退款”。如果回归测试重新调用线上数据库，几天后这笔订单可能已经退款了。你以为模型行为变了，其实只是外部状态变了。
+## 最容易出事的是工具
 
-更危险的是，测试 Agent 真的再次调用退款接口。那就不是测试，是在修改生产数据。
+退款任务最危险的部分不是模型，而是退款工具。
 
-Kitaru 把这件事做成 Tool Policy。`history` 返回历史记录中的工具结果。`static` 返回你指定的固定结果。`passthrough` 才会真正访问工具。文档还支持用 `on_miss` 规定遇到历史里没有的新工具调用时怎么办。[Tool Policy 说明](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)
+昨天订单还是“已支付，未退款”。今天重新查询生产数据库，订单也许已经被人工退款。测试结果因此改变。更糟的是，候选 Agent 真的再次执行退款接口。那已经不是测试，而是在修改生产状态。
 
-![图 2，Kitaru 重放中的工具策略。](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-tool-policy.svg)
+Kitaru 的工具策略解决这个问题。[Replay 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)
 
-图 2 的重点在最右边。回归测试默认应该让未知工具调用直接失败，而不是偷偷访问生产系统。失败本身也是信息。它说明新版本走出了一条旧轨迹里没有的路径，这时应该人工检查，再决定给它什么测试数据。
+![Kitaru Replay 的三种工具策略](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-tool-policy.svg)
 
-这里还有一个具体限制。Kitaru 文档写明，OpenAI Agents adapter 目前不能直接把默认工具策略全部设成 `history`，需要对直接函数工具分别配置 history override。这类框架限制不能忽略，否则你以为做的是离线回放，实际可能仍有工具走实时路径。[Replay 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)
+图 2 只画官方文档里的三种核心策略。`history` 按工具名和参数查历史记录，返回当时的结果。`static` 返回预先指定的固定结果。`passthrough` 才会访问真实工具。
 
-## 为什么只看最终答案也不够
+回归测试想保证不碰生产系统时，可以用 `history`，并把未匹配调用设置为 `fail`。这时新版本突然走出一条旧记录里没有的工具路径，测试会停下来。这个失败不一定说明新版本更差。它说明旧测试现场不足以解释这条新路径，需要人工检查。
 
-回归测试下一步是评分。
+还有一个容易漏掉的实现细节。Kitaru 当前的 OpenAI Agents adapter 不能把默认工具策略直接设成 `history`。默认策略必须保留为 `passthrough`，需要对希望重放的直接 `FunctionTool` 逐个配置具名 `history`。Hosted tool、MCP、handoff 目标等替换目前也有限制。[OpenAI Agents adapter 文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/adapters/openai-agents.md)
 
-退款 Agent 最后说“退款成功”，这句话本身没有证明任何事情。真正的 Outcome 是退款记录是否存在，订单状态是否改变，金额是否正确。
+这类限制很重要。配置写错以后，你以为正在离线回归，实际可能仍有调用走向真实外部系统。
 
-Anthropic 在 Agent eval 里明确区分 Transcript 和 Outcome。Transcript 是整个执行过程。Outcome 是任务执行以后环境留下的最终状态。对 Coding Agent 来说，“我已经修复 Bug”只是 transcript 的一句话，真正的 outcome 是代码是否保存、测试是否通过、目标行为是否修复。[Anthropic 官方说明](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
+## 先验收结果，再读执行轨迹
 
-Kitaru 的 evaluator 也是这个思路。Evaluator 读取完整 session，可以产生布尔结果、数字分数、分类结果和解释。官方还提供成本、延迟、工具调用模式、输出契约、工具健康等确定性检查。人工标签也可以作为 evaluation 存在同一个 session 上，用来校准自动评分器。[Evaluator 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/evaluators.md)
+Agent 最后说“退款成功”不代表退款真的发生。
 
-![图 3，Agent 评测同时检查 Outcome 和 Transcript。](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-outcome-trace.svg)
+Anthropic 把 Outcome 和 Transcript 分开。Outcome 是任务执行后环境留下的最终状态。Transcript 是完整执行过程，包括可观察的模型输出、工具调用和中间结果。对 Coding Agent 来说，“Bug 已修复”只是输出。代码是否保存，测试是否通过，目标行为是否恢复，才是可以验收的结果。[Anthropic 官方文章](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)
 
-图 3 可以直接记成一句话。先验收最终状态，再用执行轨迹解释为什么成功或失败。
+![评分时先看 Outcome，再读 Transcript](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-outcome-transcript.svg)
 
-能用代码判断的条件，优先用代码。比如数据库里是否多了一条退款记录、输出 JSON 是否符合 Schema、单元测试是否全部通过。这类检查便宜、稳定、可复现。只有“回答是否清楚”“是否真正理解用户意图”这类开放问题，再交给模型裁判，并定期和人工判断对照。
+图 3 的阅读顺序就是评分顺序。先检查最终状态。通过以后，再读轨迹解释它为什么成功。失败时也一样，先确定哪项验收条件没满足，再从轨迹里找原因。
 
-## 测试集不能只收事故
+能用程序判断的条件优先用程序。例如数据库记录是否存在、JSON 是否符合 Schema、单元测试是否通过。回答是否清楚、有没有理解用户意图这类开放问题，再交给模型裁判，并定期拿人工判断校准。
 
-一个常见做法是每出一个线上事故，就加一个测试。这是对的，但还不够。
+Kitaru 的 Evaluator 读取完整 Session，可以写布尔值、数字、分类结果和解释。每条 Evaluation 还记录 evaluator 版本。人工判断也可以作为 evaluation 保存，用来和自动 evaluator 对照。[Kitaru Evaluator 文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/evaluators.md)
 
-如果测试集只有历史失败，Agent 会越来越擅长不重犯旧错，却可能对新用户场景完全没有保护。反过来，如果只抽近期真实流量，很多低概率但高风险的问题可能一个都没抽到。
+## 回归测试集不能只收事故
 
-Kitaru 的 regression suite 文档建议把 recorded session 和 synthetic fixture 配合使用。固定的一批 session 会组成 cohort version。版本固定以后不再偷偷改变。如果要增删样本，就建立新版本。这样两次实验使用的是不是同一批任务，一眼能查出来。[Regression Suite 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)
+每次线上出错就增加一个测试，这是正确动作，但测试集不能只有事故。
 
-![图 4，回归测试集由近期真实流量、历史失败和人工边界样本组成。](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-regression-set.svg)
+Kitaru 的 Regression Suite 建议把真实记录和人工构造的 fixture 配合使用。可以先取近期真实流量，再补过去的失败案例。还没有在生产中出现、但风险明确的条件，可以用人工边界案例补齐。[Regression Suite 文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)
 
-图 4 里的三个来源各自解决不同问题。真实流量负责贴近实际使用。历史失败负责保证修过的问题不回来。人工边界样本负责覆盖还没发生但你已经知道危险的情况，例如空输入、越权参数、超时和工具返回异常。
+![回归测试集不能只收事故](../../assets/blog/kitaru-agent-regression-testing/2026-09-16-regression-cohort.svg)
 
-所以，“真实数据”不等于“完整测试集”。好的回归集本身就是一种产品风险清单。
+真实流量覆盖常见使用方式，但低概率风险可能一直没出现。历史失败能防止旧问题复发，但会让测试长期盯着过去。人工边界案例负责覆盖空输入、超时、权限错误、工具异常等已知风险。
 
-## Kitaru 真正值得迁移的是这套数据关系
+Kitaru 用 Cohort Version 固定测试人群。版本创建后保持不变。要增删 Session，就建立新版本。这样两次实验使用的到底是不是同一批任务，可以查清楚。
 
-不要先纠结要不要直接引入 Kitaru。先把它的数据关系学走。
+## 评测本身也可能有 Bug
 
-| 对象 | 大白话 | 为什么要单独保存 |
+这里要再加一层防线。Agent 失败，不一定是 Agent 真错了。
+
+OpenAI 在 2026 年 7 月审计 SWE-Bench Pro 时，自动数据质量流程标记了 200 个破损任务，占 27.4%。人工标注发现 249 个，占 34.1%。OpenAI 因此估计大约 30% 的任务存在问题。主要问题包括测试过度严格、题目要求不足、测试覆盖太低，以及提示与真正验收条件冲突。[OpenAI 官方研究](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)
+
+这组数字只描述 OpenAI 对该 Benchmark 的审计，不能外推成“所有 Agent Eval 都有 30% 错误”。它能说明一个工程问题。回归测试失败后，要打开失败样本和轨迹检查，不能只相信总分。
+
+这也解释了为什么 Anthropic 强调读 transcript。一个 evaluator 如果把合理的新路径判错，会稳定地阻止好改动上线。自动化不会修复错误标准，只会更快执行错误标准。
+
+## 生产反馈怎样形成长期改进
+
+OpenAI 在 2026 年 5 月公开 Tax AI 的工程过程时，用了另一套实现，但反馈闭环和这里相通。真实业务中的人工修正被保存成结构化信号，生产 trace 帮团队定位失败，再用针对性的 eval 验证修复，最后跑更广的 regression。[OpenAI Tax AI 工程文章](https://openai.com/index/building-self-improving-tax-agents-with-codex/)
+
+这说明生产 trace 的价值不只是排障。只要任务定义、验收标准和数据权限处理得当，真实失败可以逐步变成下一版的测试材料。
+
+## 迁移到 Zhihu Threads eval v3
+
+你的 Zhihu Threads eval v3 已经把不少基础工作做好了。当前记录显示，execution input 和 expected 已经分开。每次尝试会保留。引文存在、来源绑定和语义支持分别检查。逐轮证据快照也会保存。
+
+现有工程 CI 已记录 28 个测试文件、436 项测试通过。独立驱动记录了 80 项契约检查和 10 个合成场景规则检查通过。真实语义工作流因为缺少 `OPENAI_API_KEY`、`OPENAI_BASE_URL`、`OPENAI_MODEL` 和 `ZHIHU_ACCESS_SECRET` 等配置，没有得到真实模型和知乎业务结果。因此，这 10 个合成场景现在适合作为确定性契约集，不能写成生产回归集。
+
+下一步不需要重写 evaluator。先补 Session 和 Replay 这一层。
+
+| 现在已有 | 建议新增 | 目的 |
 | --- | --- | --- |
-| Session | 一次真实或测试运行的完整记录 | 以后能复现现场 |
-| Cohort Version | 固定的一批测试 Session | 保证不同实验在同一批样本上比较 |
-| Experiment | 这次到底改了什么 | 防止一次混进多个变量 |
-| Replay | 新版本重新处理旧 Session | 得到候选版本的新轨迹和结果 |
-| Evaluation | 对一次 Session 的一个具体判断 | 同一任务可以分别看正确性、成本、工具行为 |
+| ExecutionInput | session_id | 把一次真实运行固定下来 |
+| source snapshot | tool call 与 tool result | 重放当时的外部现场 |
+| 规则和语义评分 | evaluator_version | 知道是哪版规则给的结论 |
+| 尝试记录 | cohort_version | 固定同一批回归任务 |
+| token 与耗时 | baseline_session_id 与 candidate_session_id | 直接比较同一个任务的新旧版本 |
 
-关系理顺以后，CI 只是最后一层。PR 建好候选 Agent 版本，用固定 cohort 跑 experiment。基线和候选都执行同样 evaluator。如果出现回归，CI 直接失败，再打开具体 session 看哪一步出了问题。
+等真实语义运行可执行以后，从真实任务里挑代表性成功案例和失败案例，冻结成 `regression_v1`。以后改模型、提示词、检索策略或 Agent 行为时，先让当前基线在 `regression_v1` 重跑。基线稳定以后，再只改一项重跑候选版本。
 
-Kitaru 官方示例也是这样做。它建议 PR 用较小 cohort，定时任务用更大的流量样本。发现新失败后，把这个 session 加到新的 cohort version，之后的测试都会包含它。[Regression Suite 官方文档](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)
+知乎搜索和内容读取会随时间变化。回归阶段应优先使用保存下来的 source snapshot。候选版本出现旧记录里没有的新外部调用时，先标记 replay miss，不自动访问真实业务系统。
 
-## 迁移到你的 Zhihu Threads eval v3
+## 一个今天就能做的小实验
 
-你现在的 Zhihu Threads eval v3 已经有几个很重要的基础。执行输入和 expected 已经分开。每次尝试都会保留。引用存在、来源绑定和语义支持分开评分。逐轮证据快照也已经保存。离线契约和真实语义验收也没有混写成同一个完成率。
+选 5 个已有固定输入、expected 和 source snapshot 的任务。先用当前版本各跑一次，保存完整记录作为 baseline。确认 evaluator 能读取这 5 次运行。
 
-这意味着你不用重做 evaluator。下一步更值得补的是“真实 Session 进入长期回归集”的链路。
+然后只修改 system prompt。模型、检索代码、题目、evaluator 都保持不变。外部写操作全部关闭。能用保存的 source snapshot 回答的调用就使用保存结果。候选版本出现新的外部调用时直接记录 replay miss。
 
-现在真实语义工作流还因为缺少 `OPENAI_API_KEY`、`ZHIHU_ACCESS_SECRET` 等配置，没有取得真实模型和知乎业务结果。因此不要把现有 10 个合成场景直接写成“生产回归集”。它们应该继续承担确定性契约测试。
+每个任务保存这些字段：`task_id`、`baseline_session_id`、`candidate_session_id`、规则结果、语义结果、工具调用序列、replay miss、token、耗时、错误原因。
 
-等真实语义运行能够执行以后，可以这样接：每个真实任务保存 `session_id`、execution input、当轮 source snapshot、工具调用与参数、工具结果摘要、最终输出、规则 evaluator 结果、语义 evaluator 结果、token、费用、耗时。然后挑一批代表性成功案例和真实失败案例冻结成 `regression_v1`。
+第一轮成功标准可以很朴素。5 个任务不能新增确定性失败。来源绑定不能新增错误。语义 evaluator 如果实际运行，候选通过数不能低于基线。所有 replay miss 都要人工看一遍。
 
-以后你修改检索、模型、提示词或者 Agent 策略时，不直接拿新版本去线上试。先让基线版本在 `regression_v1` 原样跑一遍，确认基线能复现。然后只改一个变量，重跑同一批任务。
+最容易误判的情况有三个。基线还不稳定就直接比较候选。测试过程偷偷访问了会变化的线上工具。只看总通过率，没有打开失败 Session 检查 evaluator 是否公平。
 
-知乎相关的外部调用默认不要 passthrough。对于已经记录过的搜索或内容读取，优先返回当时的 source snapshot。出现历史里没有的新外部调用时先 fail，并把新轨迹标出来。这样可以避免回归测试因为知乎内容变化或线上状态变化产生假回归，也避免测试任务真的修改业务状态。
+## 这套方法的边界
 
-你的 v3 还有一个现成优势。你已经把“规则通过”和“语义未评判”分开。所以第一版 CI 门禁不需要重新发明分数。可以先规定：原来通过的确定性契约不得新增失败；来源绑定不得新增错误；真实语义 evaluator 必须实际运行，候选版本通过数不得低于同一 cohort 的基线。token 和费用先记录，不在没有稳定基线时硬设阈值。
+Replay 只能复现已经记录下来的世界。如果原 Session 少记了关键状态，之后无法自动补回来。
 
-## 一个可以实际做的小实验
+`history` 也可能挡住合理的新行为。候选 Agent 新增一次必要工具调用时，`on_miss=fail` 会让测试失败。这里的正确解释是“需要检查这条新路径”，不是直接判候选更差。
 
-不用先搭完整平台。拿 Zhihu Threads 现有 eval v3 就能做一个最小实验。
+回归集会老化。产品能力、工具和用户分布改变以后，要建立新的 Cohort Version。旧版本保留下来，用于知道测试分布在哪个时间点发生了改变。
 
-起始条件是选 5 个任务。优先使用已经有固定输入、固定 expected、固定 source snapshot 的任务。先用当前版本各跑一次，保存完整运行记录，记为 baseline。确认这 5 个 baseline 都能被 evaluator 正确读出。
+Evaluator 同样需要版本和回归。评分标准错了，Agent 再好也会被判错。
 
-然后只改一个变量。例如，只修改 Agent 的 system prompt，不换模型，不改检索，不改 evaluator。
+## 记住这四句话
 
-工具层禁止真实写操作。能用保存的 source snapshot 回答就使用保存结果。候选运行出现旧记录中没有的工具调用时，标记为 replay miss，不自动放行。
+线上失败最好留下 Session，而不是只留一张工单截图。
 
-每个任务记录这些字段：`task_id`、`baseline_session_id`、`candidate_session_id`、规则结果、语义结果、工具调用序列、replay miss、token、耗时、错误原因。
+Replay 的目标是固定测试现场，让新旧 Agent 面对同样的问题。
 
-成功标准不要写“感觉更好”。第一轮可以用这个规则：5 个任务不能新增确定性失败；来源绑定不能新增错误；语义 evaluator 的通过数不得低于基线；任何 replay miss 必须人工检查。满足以后，才值得扩大到 20 个或 50 个任务。
+评分时先验收最终状态，再读执行轨迹解释原因。
 
-这里最容易误判的是三个地方。第一次重放没有先验证基线，却直接比较新版本。测试时访问了会变化的线上工具。最后只看总通过率，没有打开失败 session 看真正原因。
-
-## 这套方法也有边界
-
-Replay 不是时间机器。你记录下来的只是当时能观察到的输入、工具结果和环境状态。如果原 Session 少记了一项关键状态，后面无法凭 replay 自动补回来。
-
-固定历史工具结果也会产生另一个问题。新版本也许合理地想调用一个过去没有调用过的新工具。`on_miss=fail` 会把它拦住。这个失败不能直接解释成候选 Agent 更差。它表示“旧测试现场不足以覆盖这条新路径”，需要补测试环境或人工判断。
-
-回归集也会老化。产品、新工具和用户行为变化以后，需要建立新的 cohort version，而不是永远守着第一批样本。旧版本不要删，因为它能告诉你测试分布什么时候发生过变化。
-
-最后，Replay 只解决“怎样公平复测”。它不会自动告诉你什么才是好结果。Evaluator 的标准仍然来自产品要求、真实用户和人工校准。如果评分器错了，自动化只会更稳定地给出错误结论。
-
-## 今天应该记住什么
-
-线上失败最有价值的处理方式，是把它变成以后每次改动都会自动重跑的测试。
-
-做 Agent 回归时，先固定测试样本和外部工具结果，再改变模型、提示词或代码。先看最终 Outcome 是否真的正确，再读 Transcript 定位行为问题。真实流量、历史失败和人工边界样本要组合使用。
-
-如果要把这套方法迁移到现有项目，先补 Session、固定测试集版本和 Replay 三个概念，不需要一开始就换掉整个 eval 框架。
+回归集需要真实流量、历史失败和人工边界案例共同组成。
 
 <details>
-<summary>自测 1：为什么不能直接拿新模型在今天的线上 API 上重跑昨天的任务？</summary>
+<summary>自测 1：为什么不能直接让新模型在今天的线上 API 上重跑昨天的任务？</summary>
 
-因为外部状态已经变化。最后的差异可能来自 API、数据库或内容变化，而不是新模型本身。回归比较要尽量固定外部条件。
+因为外部状态已经变化。分数差异可能来自数据变化，而不是模型变化。真实写工具还可能产生副作用。
+
 </details>
 
 <details>
-<summary>自测 2：Agent 最后回复“完成了”，为什么还不能算任务通过？</summary>
+<summary>自测 2：为什么要先重放原版本？</summary>
 
-那只是执行轨迹中的一句输出。要检查环境最终状态，例如数据库、文件、测试结果或真实业务状态。
+先确认测试现场本身稳定。否则候选和基线的差异无法可靠归因。
+
 </details>
 
 <details>
-<summary>自测 3：为什么测试集不能只有历史失败案例？</summary>
+<summary>自测 3：Replay miss 一定代表候选变差了吗？</summary>
 
-只看历史失败容易过度拟合旧问题。还需要近期真实流量覆盖常见场景，并用人工边界样本覆盖尚未发生的高风险情况。
+不一定。它也可能表示候选走出了一条旧记录没有覆盖的新路径，需要补现场或人工判断。
+
 </details>
 
-## 主要来源
+## 主要一手来源
 
-[Kitaru 官方仓库](https://github.com/zenml-io/kitaru)：核对项目维护方、当前代码和 LICENSE。
+[Kitaru Replay](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)：核对重放定义、基线重放、override、工具策略和从头重跑。
 
-[Kitaru Replay](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/replay.md)：重放定义、fork、工具策略和限制。
+[Kitaru Evaluators](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/evaluators.md)：核对 Evaluation 结构、版本、人工标签和批量评分。
 
-[Kitaru Evaluators](https://github.com/zenml-io/kitaru/blob/develop/docs/book/concepts/evaluators.md)：Evaluator 数据结构、版本和批量评测方式。
+[Kitaru Regression Suite](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)：核对 Cohort Version、Experiment、CI gate 和真实 Session 与人工 fixture 的组合。
 
-[Kitaru Regression Suite](https://github.com/zenml-io/kitaru/blob/develop/docs/book/guides/regression-suite.md)：固定 cohort、experiment、CI gate 和长期维护方式。
+[Kitaru OpenAI Agents adapter](https://github.com/zenml-io/kitaru/blob/develop/docs/book/adapters/openai-agents.md)：核对具名 `history`、默认 `passthrough` 以及当前替换限制。
 
-[Anthropic，Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)：Outcome、Transcript、grader、能力评测与回归评测的区分。
+[Anthropic，Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents)：核对 Outcome、Transcript、grader、能力评测、回归评测和人工校准。
 
-抓取与核对日期：2026 年 9 月 16 日。本文没有运行 Kitaru，也没有复现它的端到端示例。Kitaru 的功能说明来自其官方仓库与文档，工程迁移部分是基于这些机制和当前 Zhihu Threads eval v3 状态给出的实现建议。
+[OpenAI，Separating signal from noise in coding evaluations](https://openai.com/index/separating-signal-from-noise-coding-evaluations/)：核对 Benchmark 破损任务审计和评测有效性问题。
+
+[OpenAI，Building self-improving tax agents with Codex](https://openai.com/index/building-self-improving-tax-agents-with-codex/)：核对生产 trace、专家修正、针对性 eval 和更广回归之间的改进闭环。

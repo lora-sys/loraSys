@@ -1,4 +1,4 @@
-name: Verify Notion article 2026-09-19
+name: Verify Notion article 2026-09-20
 
 on:
   push:
@@ -33,12 +33,12 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/browser" --no-save --package-lock=false playwright@1.58.2
           node "$RUNNER_TEMP/browser/node_modules/playwright/cli.js" install --with-deps chromium
-      - name: Check new article on desktop and mobile
+      - name: Check changed articles on desktop and mobile
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/browser/node_modules/playwright/index.mjs
           EVIDENCE_DIR: ${{ runner.temp }}/notion-article-evidence
         run: |
-          cat > "$RUNNER_TEMP/check-new-article.mjs" <<'EOF'
+          cat > "$RUNNER_TEMP/check-changed-articles.mjs" <<'EOF'
           import assert from 'node:assert/strict'
           import { createServer } from 'node:http'
           import { readFile, stat, mkdir } from 'node:fs/promises'
@@ -65,31 +65,40 @@ jobs:
           const browser = await chromium.launch({headless:true, channel:'chromium'})
           const evidence = process.env.EVIDENCE_DIR
           await mkdir(evidence,{recursive:true})
+          const cases = [
+            { slug:'agent-durable-execution-step-idempotency', images:4, details:3, table:false },
+            { slug:'kitaru-agent-regression-testing', images:4, details:3, table:true }
+          ]
           try {
-            for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
-              const context = await browser.newContext({viewport})
-              const page = await context.newPage()
-              const errors = []
-              page.on('pageerror', e => errors.push(e.message))
-              const response = await page.goto(`${root}blog/agent-durable-execution-step-idempotency`, {waitUntil:'load'})
-              assert.equal(response?.status(), 200)
-              await page.waitForFunction(() => [...document.images].every(img => img.complete && img.naturalWidth > 0), null, {timeout:12000})
-              assert.equal(await page.locator('article img').count(), 4, 'article should render four original figures')
-              assert.equal(await page.locator('article details').count(), 3, 'self-test should retain three details blocks')
-              assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'page-level horizontal overflow')
-              assert.deepEqual(errors, [], `page errors: ${errors.join('; ')}`)
-              const first = page.locator('article details').first()
-              await first.locator('summary').click()
-              assert.ok(await first.getAttribute('open') !== null, 'details should open')
-              await page.screenshot({path:path.join(evidence,`${viewport.width}.png`), fullPage:true, animations:'disabled'})
-              await context.close()
+            for (const testCase of cases) {
+              for (const viewport of [{width:1440,height:1000},{width:390,height:844}]) {
+                const context = await browser.newContext({viewport})
+                const page = await context.newPage()
+                const errors = []
+                page.on('pageerror', e => errors.push(e.message))
+                const response = await page.goto(`${root}blog/${testCase.slug}`, {waitUntil:'load'})
+                assert.equal(response?.status(), 200)
+                const images = page.locator('article img')
+                assert.equal(await images.count(), testCase.images, `${testCase.slug} image count`)
+                for (let i = 0; i < await images.count(); i++) await images.nth(i).scrollIntoViewIfNeeded()
+                await page.waitForFunction(() => [...document.querySelectorAll('article img')].every(img => img.complete && img.naturalWidth > 0), null, {timeout:12000})
+                assert.equal(await page.locator('article details').count(), testCase.details, `${testCase.slug} details count`)
+                if (testCase.table) assert.ok(await page.locator('article table').count() >= 1, 'Kitaru native Markdown table should render')
+                assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${testCase.slug} page-level horizontal overflow`)
+                assert.deepEqual(errors, [], `${testCase.slug} page errors: ${errors.join('; ')}`)
+                const first = page.locator('article details').first()
+                await first.locator('summary').click()
+                assert.ok(await first.getAttribute('open') !== null, `${testCase.slug} details should open`)
+                await page.screenshot({path:path.join(evidence,`${testCase.slug}-${viewport.width}.png`), fullPage:true, animations:'disabled'})
+                await context.close()
+              }
             }
           } finally {
             await browser.close()
             server.close()
           }
           EOF
-          node "$RUNNER_TEMP/check-new-article.mjs"
+          node "$RUNNER_TEMP/check-changed-articles.mjs"
       - name: Run site regression suite
         env:
           SITE_TEST_OUTPUT: ${{ runner.temp }}/site-regression-evidence
