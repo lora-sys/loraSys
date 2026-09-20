@@ -20,8 +20,12 @@ const descriptions: Record<string, Record<SiteLocale, string>> = {
     "en-US": "Compiles images into compact visual evidence packets for coding agents without a connected vision input."
   },
   "glassbox-agent-harness": {
-    "zh-CN": "正在演进为长期运行的个人 Agent 工作台。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；微信、QQ、长期任务和学习沉淀仍在规划。",
-    "en-US": "Evolving into a long-lived personal agent workbench. Available today: Codex, Claude Code, local sessions, replay, approvals and canvas inspection. WeChat, QQ, long tasks and learning remain planned."
+    "zh-CN": "正在演进为长期运行的个人 Agent 系统。当前支持 Codex、Claude Code、本地会话、运行回放、审批与过程检查；远程入口、长期任务和学习沉淀仍在继续建设。",
+    "en-US": "Evolving into a long-running personal agent system. Available today: Codex, Claude Code, local sessions, replay, approvals and run inspection. Remote channels, long tasks and learning are still being built."
+  },
+  "lora-pi-kit": {
+    "zh-CN": "Lora 的可复现 Pi 发行版，把个人 Agent、Coding Agent 与委派 Worker 使用的 Skills、MCP、Profiles 和运行配置固定下来。",
+    "en-US": "Lora's reproducible Pi distribution for personal agents, coding agents and delegated workers, with pinned Skills, MCP, profiles and runtime configuration."
   },
   "ai-engineering-harness": {
     "zh-CN": "用 18 类智能体和 9 条工作流组织需求、规划、构建、审查、证据与合并。",
