@@ -205,7 +205,7 @@
     {
       "source_page_id_sha256": "673fea874c35bbec7c2e1a1bccd27bf1cb6123a72ea6a5b70db7891ce0b47050",
       "slug": "opencloak-local-pii-redaction",
-      "content_fingerprint": "git-blob:abb048db30e73f597fc57ff3d37132d829b4a79d",
+      "content_fingerprint": "git-blob:f93e83f5fc26d672717db54304fffd7bbf8e1689",
       "source_last_edited_at": "2026-09-20T01:51:07.040Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
@@ -229,7 +229,7 @@
     {
       "source_page_id_sha256": "b889fcd2f869cc2a5eb857a35f57241b4b7db0abe08b93dff9790843e45e1755",
       "slug": "splash-model-specific-local-llm",
-      "content_fingerprint": "git-blob:2bde7117555a466716d4ee6b40f95e627ca35e2c",
+      "content_fingerprint": "git-blob:8d7e4dfc3e7b3c2cfe8896b7028ea74abb6f95d3",
       "source_last_edited_at": "2026-09-19T01:35:19.994Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
@@ -253,7 +253,7 @@
     {
       "source_page_id_sha256": "22ccc21a4c8218b5f3ea55cc3a861aee805dc12645f256c61442ba05b99e2bfb",
       "slug": "opencompany-versioned-agent-config",
-      "content_fingerprint": "git-blob:e769d10a7060e1b6e46d2610e2a4ebea90af15c8",
+      "content_fingerprint": "git-blob:909fe3d2ed180a65c2528948f8483c6b7e7ad34a",
       "source_last_edited_at": "2026-09-12T01:59:09.908Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
@@ -261,7 +261,7 @@
     {
       "source_page_id_sha256": "ef6e230213f413113a51ead769a91d71e154ab534c8f3878c69064b0e831d6dc",
       "slug": "openai-research-agent-workdays",
-      "content_fingerprint": "git-blob:b3785fe10240df15615a090b33fc8e78e18c5784",
+      "content_fingerprint": "git-blob:ca8715475ea20e9a989903ee550721f3c8f3fe70",
       "source_last_edited_at": "2026-09-09T08:51:40.188Z",
       "status": "synced",
       "note": "Source record remained 已研究 only because its original content-production visual/Notion-cover gate was incomplete; article body and fact gate were complete."
