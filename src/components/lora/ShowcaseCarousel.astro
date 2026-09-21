@@ -297,7 +297,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     track.addEventListener('pointermove', (event) => {
       if (!track.dataset.dragging) return
       const delta = event.clientX - startX
-      if (Math.abs(delta) > 4) dragged = true
+      if (Math.abs(delta) > 10) dragged = true
       track.scrollLeft = startLeft - delta
     })
     const stopDragging = (event: PointerEvent) => {
