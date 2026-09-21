@@ -137,6 +137,27 @@ try {
         assert.ok(await page.locator('h1').count(), 'Search destination should contain a heading')
       })
 
+      await check(`${label}: homepage freshness and one scroll progress system`, async () => {
+        await open()
+        assert.equal(await page.locator('[data-freshness-status]').count(), 1, 'Homepage should expose one freshness summary')
+        assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
+        assert.equal(await page.locator('[data-site-header] [data-scroll-progress]').count(), 1, 'Header scroll progress should remain the single page-progress indicator')
+        const sectionNavPosition = await page.locator('.section-nav').evaluate((element) => getComputedStyle(element).position)
+        assert.equal(sectionNavPosition, viewport.width >= 900 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
+      })
+
+      await check(`${label}: Now separates reviewed focus from automatic snapshots`, async () => {
+        await open('now')
+        assert.equal(await page.locator('[data-freshness-status]').count(), 1)
+        assert.equal(await page.locator('[data-information-origin="human"]').count(), 1)
+        assert.equal(await page.locator('[data-information-origin="automatic"]').count(), 2)
+      })
+
+      await check(`${label}: featured writing exposes project context`, async () => {
+        await open('blog')
+        assert.ok(await page.locator('.related-context').count() > 0, 'Featured writing should surface related projects when curated links exist')
+      })
+
       await check(`${label}: source labels filtering empty state and browser history`, async () => {
         await open('projects?q=loraSys')
         const archive = page.locator('[data-work-archive]')
