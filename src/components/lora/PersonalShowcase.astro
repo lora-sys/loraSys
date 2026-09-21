@@ -423,13 +423,19 @@ const viewerCopy = isEnglish
     else closeTimer = window.setTimeout(finish, 540)
   }
 
-  triggers.forEach((trigger, index) => {
-    trigger.addEventListener('click', (event) => {
-      if (trigger.dataset.spotify) return
+  animeRoot?.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target instanceof Element ? event.target : null
+      const trigger = target?.closest<HTMLAnchorElement>('.lens')
+      if (!trigger || trigger.dataset.spotify || animeRoot.dataset.suppressClick === 'true') return
+      const index = triggers.indexOf(trigger)
+      if (index < 0) return
       event.preventDefault()
       openViewer(trigger, index)
-    })
-  })
+    },
+    true
+  )
 
   close?.addEventListener('click', closeViewer)
   previous?.addEventListener('click', () => syncViewer(activeIndex - 1))
