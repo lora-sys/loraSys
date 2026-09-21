@@ -2,6 +2,8 @@
 import { displayLabel } from '@/i18n/ui'
 import type { CollectionEntry } from 'astro:content'
 import FormattedDate from './LocalDate.astro'
+import { projects } from '@/data/projects'
+import { getProjectsForStory } from '@/data/project-stories'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -11,6 +13,10 @@ interface Props {
 
 const { post, theme, whyRead } = Astro.props
 const postDate = post.data.updatedDate ?? post.data.publishDate
+const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((repository) => {
+  const project = projects.find((item) => item.repository === repository)
+  return project ? [project] : []
+})
 ---
 
 <article class='featured-writing'>
@@ -21,6 +27,20 @@ const postDate = post.data.updatedDate ?? post.data.publishDate
   <h3 lang={post.data.language}><a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a></h3>
   <p class='description' lang={post.data.language}>{post.data.description}</p>
   <p class='why-read'><b>阅读要点</b>{whyRead}</p>
+  {
+    relatedProjects.length > 0 && (
+      <div class='related-context' aria-label='关联项目'>
+        <span>关联项目</span>
+        <div>
+          {relatedProjects.map((project) => (
+            <a href={`/projects#${project.repository}`} data-astro-prefetch>
+              {project.title} <span aria-hidden='true'>↗</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )
+  }
   <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch>阅读文章 <span aria-hidden='true'>↗</span></a>
 </article>
 
@@ -111,6 +131,47 @@ const postDate = post.data.updatedDate ?? post.data.publishDate
     color: hsl(var(--foreground));
     font-size: 0.72rem;
     font-weight: 600;
+  }
+
+  .related-context {
+    display: grid;
+    gap: .4rem;
+    margin-top: .85rem;
+    border-top: 1px dashed hsl(var(--border));
+    padding-top: .75rem;
+  }
+
+  .related-context > span {
+    color: hsl(var(--muted-foreground));
+    font-size: .66rem;
+    font-weight: 650;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .related-context > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+
+  .related-context a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2rem;
+    border: 1px solid hsl(var(--field-teal) / .28);
+    border-radius: 999px;
+    padding: .3rem .55rem;
+    background: hsl(var(--field-teal) / .07);
+    color: hsl(var(--foreground));
+    font-size: .68rem;
+    font-weight: 620;
+    text-decoration: none;
+  }
+
+  .related-context a:hover,
+  .related-context a:focus-visible {
+    border-color: hsl(var(--field-teal) / .62);
   }
 
   .read-link {
