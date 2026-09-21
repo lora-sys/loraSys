@@ -29,11 +29,16 @@ const { items } = Astro.props
 
 <style>
   .section-nav {
-    position: relative;
-    z-index: 1;
+    position: sticky;
+    z-index: 35;
+    top: 5.15rem;
     width: min(100%, 70rem);
     margin-top: clamp(2.2rem, 6vw, 4.5rem);
-    padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+    border-block: 1px solid hsl(var(--border) / 0.55);
+    padding: 0.55rem clamp(0.35rem, 2vw, 1.25rem);
+    background: hsl(var(--background) / 0.9);
+    box-shadow: 0 14px 30px -32px hsl(var(--foreground) / 0.55);
+    backdrop-filter: blur(14px);
   }
   .section-nav ul {
     display: flex;
@@ -95,8 +100,16 @@ const { items } = Astro.props
 
   @media (max-width: 760px) {
     .section-nav {
+      position: relative;
+      top: auto;
+      z-index: 1;
       width: min(100%, 70rem);
       margin-top: 1.65rem;
+      border-block: 0;
+      padding-inline: clamp(0.35rem, 2vw, 1.25rem);
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
       overflow-x: auto;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;

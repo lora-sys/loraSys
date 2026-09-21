@@ -36,6 +36,26 @@ export const projectStories: Record<string, ProjectStoryLink[]> = {
       external: true
     },
     {
+      kind: 'Writing',
+      label: 'Agent 预算、记忆与评测',
+      href: '/blog/agent-budget-memory-evaluation'
+    },
+    {
+      kind: 'Writing',
+      label: '把 AI Agent 拆成三层',
+      href: '/blog/tau-agent-architecture'
+    },
+    {
+      kind: 'Writing',
+      label: 'Agent Loop 与事件流',
+      href: '/blog/tau-agent-loop-events'
+    },
+    {
+      kind: 'Writing',
+      label: 'Agent Demo 不难，难的是 Harness',
+      href: '/blog/ai-engineering-harness'
+    },
+    {
       kind: 'Channel',
       label: 'Bilibili channel',
       href: 'https://space.bilibili.com/431821023',

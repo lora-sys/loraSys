@@ -5,6 +5,7 @@ import nowCurrentDeskHero from '@/assets/lora-visual/v2/lora-v2-now-workbench.we
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 const lastUpdated = currentFocus.reviewedAt
@@ -44,18 +45,20 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
    <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>{lastUpdatedLabel}</time>，完成重要变化时更新。</p>
   </div>
  </section>
+ <div class='not-prose now-freshness'><FreshnessStatus /></div>
  <div
-   class='now-recent'
+   class='now-recent now-source now-source--human'
+   data-information-origin='human'
    data-now-visit
    data-project-updates={JSON.stringify(projectUpdatePayload)}
    data-writing-updates={JSON.stringify(writingUpdatePayload)}
  >
-   <strong>最近在忙</strong>
+   <strong>人工复核 · 最近在忙</strong>
    <span>{currentFocus.description}</span>
    <small data-now-return>第一次来？从“最近在做”开始就好。</small>
  </div>
- <aside class='now-sync' aria-label='最近的公开项目更新'>
-   <header><strong>最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
+ <aside class='now-sync now-source now-source--automatic' data-information-origin='automatic' aria-label='自动同步的最近公开项目更新'>
+   <header><strong>自动同步 · 最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
    <ul>
      {recentPushes.map((project) => (
        <li>
@@ -68,8 +71,8 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
    </ul>
    <small>这里显示最近的公开仓库更新；上面的近况仍由我自己按阶段复核。</small>
  </aside>
- <aside class='now-writing' aria-label='最近发布的文章'>
-   <header><strong>最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
+ <aside class='now-writing now-source now-source--automatic' data-information-origin='automatic' aria-label='自动汇总的最近发布文章'>
+   <header><strong>自动汇总 · 最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
    <ul>
      {recentWriting.map((post) => (
        <li>
@@ -84,7 +87,7 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
  <div class='not-prose now-grid'>{sections.map(section=><section id={section.id}><header><span>{section.category}</span><div><i></i>{section.status}</div></header><h2>{section.title}</h2><ul>{section.items.map(item=><li>{item}</li>)}</ul><footer>更新频率 · {section.frequency}</footer></section>)}</div>
  <p>也可以在 <a href='https://peerlist.io/mierpiter' target='_blank' rel='noopener noreferrer'>PeerList</a>、<a href='https://www.youtube.com/@MierPiter33280' target='_blank' rel='noopener noreferrer'>YouTube</a> 和 <a href='https://space.bilibili.com/431821023' target='_blank' rel='noopener noreferrer'>Bilibili</a> 找到我。</p>
 </PageLayout>
-<style>.now-hero{position:relative;isolation:isolate;min-height:clamp(14rem,31vw,22rem);margin-bottom:1.25rem;overflow:hidden;border:1px solid hsl(var(--border));border-radius:1.1rem;background:hsl(var(--muted)/.35)}.now-hero-image{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover}.now-hero-copy{display:grid;align-content:end;min-height:inherit;max-width:min(35rem,65%);padding:clamp(1.1rem,4vw,2.25rem);background:linear-gradient(90deg,hsl(var(--background)/.94) 0%,hsl(var(--background)/.78) 58%,transparent 100%)}.now-hero-label{color:hsl(var(--muted-foreground));font-size:.64rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase}.now-hero-copy p{max-width:34rem;margin:.55rem 0 0;font-size:clamp(1rem,2.1vw,1.28rem);line-height:1.45}.now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.now-grid section{border:1px solid hsl(var(--border));border-radius:1rem;padding:1.1rem;background:hsl(var(--card))}.now-grid header{display:flex;justify-content:space-between;color:hsl(var(--muted-foreground));font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.now-grid header div{display:flex;align-items:center;gap:.35rem;text-transform:none;letter-spacing:0}.now-grid i{width:.4rem;height:.4rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal) / .12)}.now-grid h2{margin:.8rem 0 .5rem;font-size:1.15rem}.now-grid ul{margin:0;padding-left:1.2rem;color:hsl(var(--muted-foreground));font-size:.88rem}.now-grid footer{margin-top:1rem;padding-top:.7rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem}.now-recent{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.45));font-size:.84rem}.now-recent strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}.now-recent span,.now-recent small{color:hsl(var(--muted-foreground));line-height:1.55}.now-recent small{font-size:.7rem}
+<style>.now-hero{position:relative;isolation:isolate;min-height:clamp(14rem,31vw,22rem);margin-bottom:1.25rem;overflow:hidden;border:1px solid hsl(var(--border));border-radius:1.1rem;background:hsl(var(--muted)/.35)}.now-hero-image{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover}.now-hero-copy{display:grid;align-content:end;min-height:inherit;max-width:min(35rem,65%);padding:clamp(1.1rem,4vw,2.25rem);background:linear-gradient(90deg,hsl(var(--background)/.94) 0%,hsl(var(--background)/.78) 58%,transparent 100%)}.now-hero-label{color:hsl(var(--muted-foreground));font-size:.64rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase}.now-hero-copy p{max-width:34rem;margin:.55rem 0 0;font-size:clamp(1rem,2.1vw,1.28rem);line-height:1.45}.now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.now-grid section{border:1px solid hsl(var(--border));border-radius:1rem;padding:1.1rem;background:hsl(var(--card))}.now-grid header{display:flex;justify-content:space-between;color:hsl(var(--muted-foreground));font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.now-grid header div{display:flex;align-items:center;gap:.35rem;text-transform:none;letter-spacing:0}.now-grid i{width:.4rem;height:.4rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal) / .12)}.now-grid h2{margin:.8rem 0 .5rem;font-size:1.15rem}.now-grid ul{margin:0;padding-left:1.2rem;color:hsl(var(--muted-foreground));font-size:.88rem}.now-grid footer{margin-top:1rem;padding-top:.7rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem}.now-freshness{margin:-.25rem 0 1rem}.now-source{position:relative}.now-source::before{position:absolute;top:.9rem;bottom:.9rem;left:0;width:2px;border-radius:999px;background:hsl(var(--field-teal));content:''}.now-source--automatic::before{background:hsl(var(--field-amber))}.now-recent{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.45));font-size:.84rem}.now-recent strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}.now-recent span,.now-recent small{color:hsl(var(--muted-foreground));line-height:1.55}.now-recent small{font-size:.7rem}
 .now-sync{display:grid;gap:.55rem;margin-top:1rem;border:1px dashed hsl(var(--border));border-radius:1rem;padding:.95rem 1rem;background:hsl(var(--card)/.6);font-size:.8rem}
 .now-sync header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
 .now-sync header strong{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}

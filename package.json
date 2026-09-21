@@ -6,14 +6,14 @@
   "scripts": {
     "dev": "astro dev",
     "dev:check": "astro check --watch & astro dev",
-    "build": "bun run content:validate && astro-pure check && astro check && astro build && node scripts/prefix-base.mjs && node scripts/audit-release.mjs",
+    "build": "bun run content:validate && bun run showcase:validate && astro-pure check && astro check && astro build && node scripts/prefix-base.mjs && node scripts/audit-release.mjs",
     "sync:github": "bun scripts/fetch-contributions.mjs && bun scripts/fetch-github-projects.mjs && bun scripts/fetch-external-contributions.mjs && bun run validate:sync && bun run report:sync",
     "validate:sync": "bun scripts/validate-sync-data.mjs",
     "report:sync": "bun scripts/generate-sync-report.mjs",
     "article:import": "bun scripts/import-article-html.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
-    "check": "bun run content:validate && astro check",
+    "check": "bun run content:validate && bun run showcase:validate && astro check",
     "astro": "astro",
     "pure": "astro-pure",
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
@@ -21,7 +21,8 @@
     "yijiansilian": "bun lint && bun sync && bun check && bun format",
     "clean": "rm -rf .astro .vercel dist",
     "cache:avatars": "tsx preset/scripts/cacheAvatars.ts",
-    "content:validate": "bun scripts/validate-blog-mdx.mjs"
+    "content:validate": "bun scripts/validate-blog-mdx.mjs",
+    "showcase:validate": "bun scripts/validate-showcase-media.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
