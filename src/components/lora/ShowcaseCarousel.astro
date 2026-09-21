@@ -302,10 +302,13 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     })
     const stopDragging = (event: PointerEvent) => {
       if (!track.dataset.dragging) return
+      const didDrag = dragged
       track.releasePointerCapture?.(event.pointerId)
       delete track.dataset.dragging
+      if (didDrag) root.dataset.suppressClick = 'true'
       window.setTimeout(() => {
         dragged = false
+        delete root.dataset.suppressClick
       }, 0)
     }
     track.addEventListener('pointerup', stopDragging)
