@@ -291,19 +291,25 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
       startX = event.clientX
       startLeft = track.scrollLeft
       dragged = false
-      track.setPointerCapture(event.pointerId)
-      track.dataset.dragging = 'true'
+      track.dataset.dragCandidate = 'true'
     })
     track.addEventListener('pointermove', (event) => {
-      if (!track.dataset.dragging) return
+      if (!track.dataset.dragCandidate && !track.dataset.dragging) return
       const delta = event.clientX - startX
-      if (Math.abs(delta) > 10) dragged = true
-      track.scrollLeft = startLeft - delta
+      if (!dragged && Math.abs(delta) > 10) {
+        dragged = true
+        delete track.dataset.dragCandidate
+        track.dataset.dragging = 'true'
+        track.setPointerCapture(event.pointerId)
+      }
+      if (dragged) track.scrollLeft = startLeft - delta
     })
     const stopDragging = (event: PointerEvent) => {
-      if (!track.dataset.dragging) return
+      if (!track.dataset.dragCandidate && !track.dataset.dragging) return
       const didDrag = dragged
-      track.releasePointerCapture?.(event.pointerId)
+      if (track.dataset.dragging && track.hasPointerCapture?.(event.pointerId))
+        track.releasePointerCapture?.(event.pointerId)
+      delete track.dataset.dragCandidate
       delete track.dataset.dragging
       if (didDrag) root.dataset.suppressClick = 'true'
       window.setTimeout(() => {
