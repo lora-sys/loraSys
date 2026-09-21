@@ -13,7 +13,7 @@ import HeroScene from '@/components/lora/HeroScene.astro'
 import HomeSectionNav from '@/components/lora/HomeSectionNav.astro'
 import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
-import ScrollProgressRail from '@/components/lora/ScrollProgressRail.astro'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import { socialLinks } from '@/data/social'
 import { demoByRepo } from '@/data/project-demos'
@@ -60,8 +60,6 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       <span class='ambient-stamp ambient-stamp--experiment'><LoraVisual asset='stampExperiment' /></span>
       <span class='ambient-stamp ambient-stamp--contribution'><LoraVisual asset='stampContribution' /></span>
     </div>
-    <ScrollProgressRail />
-
     <section class='manifesto' aria-labelledby='home-title' data-field-notes-hero>
       <div class='manifesto-head'>
         <p class='eyebrow'>Lora · 学生开发者 · 西安</p>
@@ -93,6 +91,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
           <a href='/contact'>联系我 <span aria-hidden='true'>↗</span></a>
           <ResumePreview triggerLabel='查看简历' />
         </div>
+        <FreshnessStatus compact />
         <HapticsToggle />
         <nav class='social-rail' aria-label='主要社交主页'>
           {
