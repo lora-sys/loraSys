@@ -1,6 +1,7 @@
 ---
 import PageLayout from '@/layouts/BaseLayout.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
@@ -38,13 +39,16 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
       <LoraVisual asset='nowWorkbench' class='now-visual' />
     </header>
 
+    <FreshnessStatus locale='en-US' />
+
     <div
-      class='return-note'
+      class='return-note information-source information-source--human'
+      data-information-origin='human'
       data-now-visit
       data-project-updates={JSON.stringify(projectUpdatePayload)}
       data-writing-updates={JSON.stringify(writingUpdatePayload)}
     >
-      <strong>Lately</strong>
+      <strong>Human-reviewed · Lately</strong>
       <span>I'm focusing on a personal agent, reusable Skills, and a learning product while continuing to publish what I learn.</span>
       <small data-now-return>First visit? Start with the Building section.</small>
     </div>
@@ -61,8 +65,8 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
     </section>
 
     <div class='recent-grid'>
-      <aside>
-        <header><strong>Recent public updates</strong><span>Synced {synced}</span></header>
+      <aside class='information-source information-source--automatic' data-information-origin='automatic'>
+        <header><strong>Automatic · Recent public updates</strong><span>Synced {synced}</span></header>
         <ul>
           {recentPushes.map((project) => (
             <li>
@@ -74,8 +78,8 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
           ))}
         </ul>
       </aside>
-      <aside>
-        <header><strong>Recent writing</strong><a href='/en/writing'>All writing →</a></header>
+      <aside class='information-source information-source--automatic' data-information-origin='automatic'>
+        <header><strong>Automatic · Recent writing</strong><a href='/en/writing'>All writing →</a></header>
         <ul>
           {recentWriting.map((post) => (
             <li>
@@ -131,6 +135,7 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
   h1{max-width:15ch;margin:0;font-size:clamp(2.5rem,6vw,5.4rem);font-weight:580;letter-spacing:-.065em;line-height:.94}
   .now-hero>div>span{max-width:52ch;color:hsl(var(--muted-foreground));line-height:1.7}
   .now-visual{width:min(100%,25rem);justify-self:end;opacity:.94}
+  .information-source{position:relative}.information-source::before{position:absolute;top:.9rem;bottom:.9rem;left:0;width:2px;border-radius:999px;background:hsl(var(--field-teal));content:''}.information-source--automatic::before{background:hsl(var(--field-amber))}
   .return-note{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.4))}
   .return-note strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
   .return-note span,.return-note small{color:hsl(var(--muted-foreground));line-height:1.55}
