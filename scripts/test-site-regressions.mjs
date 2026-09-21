@@ -94,7 +94,7 @@ async function check(name, fn) {
 }
 
 try {
-  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const label = `${viewport.width}-${reducedMotion}`
       const context = await browser.newContext({ viewport, reducedMotion })
@@ -143,7 +143,7 @@ try {
         assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
         assert.equal(await page.locator('[data-site-header] [data-scroll-progress]').count(), 1, 'Header scroll progress should remain the single page-progress indicator')
         const sectionNavPosition = await page.locator('.section-nav').evaluate((element) => getComputedStyle(element).position)
-        assert.equal(sectionNavPosition, viewport.width >= 900 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
+        assert.equal(sectionNavPosition, viewport.width >= 768 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
       })
 
       await check(`${label}: Now separates reviewed focus from automatic snapshots`, async () => {
@@ -163,6 +163,8 @@ try {
         const stage = page.locator('[data-lead-project-stage]')
         await stage.scrollIntoViewIfNeeded()
         await page.waitForFunction(() => document.querySelector('[data-lead-project-stage]')?.getAttribute('data-active') === 'true')
+        const progress = Number(await stage.getAttribute('data-stage-progress'))
+        assert.ok(progress >= 0 && progress <= 1, 'Lead stage progress must stay bounded')
         assert.ok(await stage.locator('[data-project-card]').count(), 'Lead project stage should contain the existing project card')
       })
 
@@ -174,6 +176,8 @@ try {
         const viewer = page.locator('[data-anime-broadcast]')
         await viewer.waitFor({ state: 'visible' })
         assert.equal(await viewer.evaluate((element) => element.open), true)
+        assert.ok(await viewer.locator('[data-broadcast-image]').getAttribute('alt'), 'Broadcast poster needs alt text')
+        assert.ok(await viewer.locator('[data-broadcast-media-status]').count(), 'Broadcast needs a media status region')
         const initial = await viewer.locator('[data-broadcast-count]').textContent()
         await page.keyboard.press('ArrowRight')
         const changed = await viewer.locator('[data-broadcast-count]').textContent()
