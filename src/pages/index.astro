@@ -15,6 +15,7 @@ import HomeSectionNav from '@/components/lora/HomeSectionNav.astro'
 import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
+import EvidenceBadge from '@/components/layout/EvidenceBadge.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import { socialLinks } from '@/data/social'
 import { demoByRepo } from '@/data/project-demos'
@@ -147,7 +148,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <h2 id='work-title'>先看这几个我最想分享的项目。</h2>
           </div>
           <a class='text-link' href='/projects'>查看全部 {allSelectedProjects.length} 个作品 <span aria-hidden='true'>↗</span></a>
-          <div class='section-meta'><span class='archive-badge archive-badge--verified'>已验证</span><time datetime={syncReport.syncedAt.slice(0,10)}>同步于 {new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))}</time></div>
+          <div class='section-meta'><EvidenceBadge kind='verified' /><time datetime={syncReport.syncedAt.slice(0,10)}>同步于 {new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))}</time></div>
         </header>
         {leadProject && <LeadProjectStage project={leadProject} locale='zh-CN' />}
         <div class='supporting-work'>
@@ -167,7 +168,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <h2 id='writing-title'>最近写了什么。</h2>
           </div>
           <a class='text-link' href='/blog'>全部写作 <span aria-hidden='true'>↗</span></a>
-          {latestPostDate && <div class='section-meta'><span class='archive-badge archive-badge--field'>现场记录</span><time>最新 {latestPostDate}</time></div>}
+          {latestPostDate && <div class='section-meta'><EvidenceBadge kind='field-note' /><time>最新 {latestPostDate}</time></div>}
         </header>
         <LoraVisual asset='readingMarker' class='section-scene' />
         {

@@ -17,7 +17,9 @@ const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 
     <a class='back' href={writing}>{t('返回写作', 'Back to writing')}</a>
     <h1>{t('搜索', 'Search')}</h1>
     <p>{intro}</p>
-    {integ.pagefind ? <div class='search-shell'><LocalSearch {locale} /></div> : <p>{t('本站暂未启用搜索。', 'Search is not enabled.')}</p>}
+    {integ.pagefind ? <div class='search-shell' data-search-shell><div class='search-filters' role='group' aria-label={t('按内容类型筛选', 'Filter by content type')}>
+      {['all', 'project', 'article', 'note', 'lab', 'page', 'talk', 'archive'].map((kind) => <button type='button' data-search-type={kind} aria-pressed={kind === 'all'}>{t(kind === 'all' ? '全部' : kind.toUpperCase(), kind === 'all' ? 'All' : kind.toUpperCase())}</button>)}
+    </div><LocalSearch {locale} /></div> : <p>{t('本站暂未启用搜索。', 'Search is not enabled.')}</p>}
     <nav class='search-help' aria-label={t('其他浏览方式', 'Other ways to browse')}>
       <a href={work}>{t('浏览作品', 'Explore projects')}</a>
       <a href={writing}>{t('浏览文章', 'Browse writing')}</a>
@@ -33,11 +35,25 @@ const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 
   const shell = document.querySelector('.search-shell')
   const empty = document.querySelector<HTMLElement>('.search-empty-custom')
   if (shell && empty) {
+    const filters = [...shell.querySelectorAll<HTMLButtonElement>('[data-search-type]')]
+    let activeType = 'all'
+    const applyType = () => {
+      shell.querySelectorAll<HTMLElement>('.pagefind-ui__result').forEach((result) => {
+        const text = result.textContent?.toLowerCase() ?? ''
+        result.hidden = activeType !== 'all' && !text.includes(activeType)
+      })
+    }
+    filters.forEach((button) => button.addEventListener('click', () => {
+      activeType = button.dataset.searchType || 'all'
+      filters.forEach((item) => item.setAttribute('aria-pressed', String(item === button)))
+      applyType()
+    }))
     const refresh = () => {
+      applyType()
       const input = shell.querySelector<HTMLInputElement>('.pagefind-ui__search-input')
       const query = input?.value.trim() ?? ''
       const results = shell.querySelector('.pagefind-ui__results')
-      const hasResult = Boolean(shell.querySelector('.pagefind-ui__result'))
+      const hasResult = Boolean(shell.querySelector('.pagefind-ui__result:not([hidden])'))
       const visible = Boolean(query && results && !hasResult)
       empty.hidden = !visible
       empty.setAttribute('aria-hidden', String(!visible))
@@ -51,5 +67,5 @@ const intro = t('搜索中文项目、文章、短笔记与实验记录。按 / 
   }
 </script>
 <style>
-  main{max-width:58rem;margin:0 auto}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.2;margin:1rem 0}.back,.search-help a{color:hsl(var(--foreground));text-underline-offset:.2em}p{line-height:1.75;color:hsl(var(--muted-foreground))}.search-shell{margin-top:1.5rem}.search-help{display:flex;flex-wrap:wrap;gap:.6rem 1.25rem}.search-help a{min-height:2.75rem;display:inline-flex;align-items:center;font-size:.85rem}.search-empty-custom{display:flex;align-items:center;gap:1.2rem;margin-top:1.5rem;border:1px dashed hsl(var(--border));border-radius:1rem;padding:1rem}.search-empty-custom[hidden]{display:none}.search-empty-custom :global(img){width:7rem;height:auto}.search-empty-custom h2{font-size:1.25rem;margin:0}.search-empty-custom p{font-size:.88rem}.search-shell :global(.pagefind-ui__result){border-radius:.6rem;transition:transform 160ms ease}.search-shell :global(.pagefind-ui__result:focus-within){outline:2px solid hsl(var(--ring));outline-offset:3px}@media(hover:hover){.search-shell :global(.pagefind-ui__result:hover){transform:translateX(2px)}}@media(max-width:480px){.search-empty-custom{align-items:start;flex-direction:column}}@media(prefers-reduced-motion:reduce){.search-shell :global(.pagefind-ui__result){transition:none}.search-shell :global(.pagefind-ui__result:hover){transform:none}}
+  main{max-width:58rem;margin:0 auto}h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.2;margin:1rem 0}.back,.search-help a{color:hsl(var(--foreground));text-underline-offset:.2em}p{line-height:1.75;color:hsl(var(--muted-foreground))}.search-shell{margin-top:1.5rem}.search-filters{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}.search-filters button{min-height:2.25rem;border:1px solid hsl(var(--border));border-radius:999px;padding:.35rem .7rem;background:hsl(var(--background));color:hsl(var(--foreground));font-size:.7rem}.search-filters button[aria-pressed='true']{background:hsl(var(--foreground));color:hsl(var(--background))}.search-help{display:flex;flex-wrap:wrap;gap:.6rem 1.25rem}.search-help a{min-height:2.75rem;display:inline-flex;align-items:center;font-size:.85rem}.search-empty-custom{display:flex;align-items:center;gap:1.2rem;margin-top:1.5rem;border:1px dashed hsl(var(--border));border-radius:1rem;padding:1rem}.search-empty-custom[hidden]{display:none}.search-empty-custom :global(img){width:7rem;height:auto}.search-empty-custom h2{font-size:1.25rem;margin:0}.search-empty-custom p{font-size:.88rem}.search-shell :global(.pagefind-ui__result){border-radius:.6rem;transition:transform 160ms ease}.search-shell :global(.pagefind-ui__result:focus-within){outline:2px solid hsl(var(--ring));outline-offset:3px}@media(hover:hover){.search-shell :global(.pagefind-ui__result:hover){transform:translateX(2px)}}@media(max-width:480px){.search-empty-custom{align-items:start;flex-direction:column}}@media(prefers-reduced-motion:reduce){.search-shell :global(.pagefind-ui__result){transition:none}.search-shell :global(.pagefind-ui__result:hover){transform:none}}
 </style>
