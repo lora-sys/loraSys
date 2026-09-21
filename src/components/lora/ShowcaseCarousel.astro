@@ -87,12 +87,15 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
             }
           >
             <img
-              src={`${base}${item.image}`}
+              src={item.image.startsWith('http') ? item.image : `${base}${item.image}`}
               alt={`${item.name} — ${item.description}`}
               width='600'
               height='840'
               loading='lazy'
               decoding='async'
+              referrerpolicy={item.image.startsWith('http') ? 'no-referrer' : undefined}
+              style={`--showcase-object-position:${item.objectPosition ?? '50% 50%'}`}
+              data-media-kind={item.mediaKind ?? (id === 'anime' ? 'poster' : 'cover')}
             />
             <span class='lens-pane' aria-hidden='true'></span>
             <span class='lens-glass' aria-hidden='true'></span>
@@ -395,6 +398,12 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
   .showcase header { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
   .showcase header p { margin: 0; color: hsl(var(--muted-foreground)); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; }
   .showcase h2 { font-size: 1.25rem; font-weight: 600; }
+  .magic-card img {
+    object-position: var(--showcase-object-position, 50% 50%);
+  }
+  .magic-card img[data-media-kind='poster'] {
+    background: hsl(var(--muted));
+  }
   .controls { display: flex; flex-wrap: wrap; justify-content: end; gap: 0.4rem; }
   .controls button { min-height: 2.25rem; border: 1px solid hsl(var(--border)); border-radius: 999px; background: hsl(var(--background)); padding-inline: 0.68rem; transition: background 0.2s, transform 0.16s cubic-bezier(0.23, 1, 0.32, 1); }
   .controls button[data-prev], .controls button[data-next] { width: 2.25rem; padding: 0; }
