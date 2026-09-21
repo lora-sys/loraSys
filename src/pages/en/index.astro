@@ -10,7 +10,7 @@ import HeroScene from '@/components/lora/HeroScene.astro'
 import HomeSectionNav from '@/components/lora/HomeSectionNav.astro'
 import HapticsToggle from '@/components/lora/HapticsToggle.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
-import ScrollProgressRail from '@/components/lora/ScrollProgressRail.astro'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import SocialIcon from '@/components/contact/SocialIcon.astro'
 import { socialLinks } from '@/data/social'
 import { demoByRepo } from '@/data/project-demos'
@@ -54,8 +54,6 @@ const nowItems = getCurrentFocusSummary('en-US')
       <span class='ambient-stamp ambient-stamp--experiment'><LoraVisual asset='stampExperiment' /></span>
       <span class='ambient-stamp ambient-stamp--contribution'><LoraVisual asset='stampContribution' /></span>
     </div>
-    <ScrollProgressRail />
-
     <section class='manifesto' aria-labelledby='en-title' data-field-notes-hero>
       <div class='manifesto-head'>
         <p class='eyebrow'>Lora · Student developer · Xi'an, China</p>
@@ -82,6 +80,7 @@ const nowItems = getCurrentFocusSummary('en-US')
           <a href='/en/contact'>Get in touch <span aria-hidden='true'>↗</span></a>
           <ResumePreview lang='en-US' triggerLabel='Preview résumé' />
         </div>
+        <FreshnessStatus locale='en-US' compact />
         <HapticsToggle locale='en-US' />
         <nav class='social-rail' aria-label='Primary social profiles'>
           {
