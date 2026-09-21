@@ -3,6 +3,8 @@ import LoraVisual from './LoraVisual.astro'
 ---
 
 <div class='hero-scene' data-hero-scene data-hero-ready='true' aria-hidden='true'>
+  <span class='hero-glow'></span>
+  <span class='hero-orbit'></span>
   <div class='hero-props'><LoraVisual asset='heroProps' priority /></div>
   <div class='hero-lora'><LoraVisual asset='heroLora' priority /></div>
   <div class='hero-mochi'>
@@ -53,7 +55,48 @@ import LoraVisual from './LoraVisual.astro'
 
 <style>
   /* 宽度完全由外层容器决定，避免 vw 双重约束互相打架。 */
-  .hero-scene { position: relative; width: 100%; aspect-ratio: 3 / 2; pointer-events: none; isolation: isolate; }
+  .hero-scene { position: relative; width: 100%; aspect-ratio: 3 / 2; pointer-events: none; isolation: isolate; perspective: 900px; }
+  .hero-glow {
+    position: absolute;
+    z-index: 0;
+    inset: 10% 6% 7% 12%;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at calc(58% + var(--hx, 0) * 4%) calc(38% + var(--hy, 0) * 4%), hsl(var(--field-amber) / .22), transparent 48%),
+      radial-gradient(circle at 34% 70%, hsl(var(--field-teal) / .12), transparent 42%);
+    filter: blur(18px);
+    transform: translate3d(calc(var(--hx, 0) * -3px), calc(var(--hy, 0) * -2px), -24px);
+    transition: transform var(--motion-story, 280ms) var(--motion-spring, cubic-bezier(0.23, 1, 0.32, 1));
+  }
+  .hero-orbit {
+    position: absolute;
+    z-index: 0;
+    inset: 13% 8% 10% 15%;
+    border: 1px solid hsl(var(--field-ink) / .10);
+    border-radius: 50%;
+    transform: rotateX(64deg) rotateZ(-10deg) translateZ(-34px);
+    opacity: .72;
+  }
+  .hero-orbit::before,
+  .hero-orbit::after {
+    position: absolute;
+    width: .42rem;
+    height: .42rem;
+    border-radius: 50%;
+    content: '';
+  }
+  .hero-orbit::before {
+    top: 17%;
+    left: 14%;
+    background: hsl(var(--field-amber));
+    box-shadow: 0 0 0 .45rem hsl(var(--field-amber) / .10);
+  }
+  .hero-orbit::after {
+    right: 16%;
+    bottom: 10%;
+    background: hsl(var(--field-teal));
+    box-shadow: 0 0 0 .45rem hsl(var(--field-teal) / .09);
+  }
   .hero-lora,.hero-mochi,.hero-props {
     position: absolute;
     inset: 0;
@@ -63,16 +106,16 @@ import LoraVisual from './LoraVisual.astro'
       transform var(--motion-story, 280ms) var(--motion-spring, cubic-bezier(0.23, 1, 0.32, 1));
   }
   .hero-props {
-    z-index: 0;
+    z-index: 1;
     opacity: .82;
     transform: translate3d(calc(var(--hx, 0) * 2px), calc(var(--hy, 0) * 1.5px), 0);
   }
   .hero-lora {
-    z-index: 1;
+    z-index: 2;
     transform: translate3d(calc(var(--hx, 0) * 4.5px), calc(var(--hy, 0) * 3.5px), 0);
   }
   .hero-mochi {
-    z-index: 2;
+    z-index: 3;
     width: 48%;
     left: 52%;
     top: 32%;
@@ -83,14 +126,26 @@ import LoraVisual from './LoraVisual.astro'
   .hero-scene[data-hero-ready='true'] .hero-lora,
   .hero-scene[data-hero-ready='true'] .hero-mochi { opacity: 1; }
   .hero-scene :global(img) { width: 100%; height: 100%; object-fit: contain; }
+  .hero-mochi :global(.lora-visual--heroMochi) {
+    transform-origin: 50% 76%;
+    animation: mochi-breathe 4.8s ease-in-out infinite;
+  }
+  @keyframes mochi-breathe {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.008) translateY(-1px); }
+  }
 
   @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
     .hero-lora,.hero-mochi,.hero-props { will-change: auto; transform: none !important; }
+    .hero-glow { transform: none !important; }
+    .hero-orbit { transform: rotateX(64deg) rotateZ(-10deg); }
     .hero-scene :global(img) { filter: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-lora,.hero-mochi,.hero-props { transition: none; transform: none !important; }
+    .hero-lora,.hero-mochi,.hero-props,
+    .hero-glow { transition: none; transform: none !important; }
+    .hero-mochi :global(.lora-visual--heroMochi) { animation: none; }
     .hero-scene[data-hero-ready='false'] > div { opacity: 1; }
   }
 </style>
