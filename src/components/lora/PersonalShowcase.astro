@@ -79,6 +79,7 @@ const viewerCopy = isEnglish
           <h3 data-broadcast-title></h3>
           <p data-broadcast-description></p>
           <span class='broadcast-media-status' data-broadcast-media-status role='status'></span>
+          <button class='broadcast-video' type='button' data-broadcast-video hidden>Play official trailer</button>
         </div>
         <div class='broadcast-foot'>
           <span>{viewerCopy.hint}</span>
@@ -282,6 +283,8 @@ const viewerCopy = isEnglish
     color: rgb(255 255 255 / .72);
     font-size: .72rem;
   }
+  .broadcast-video { display:block; margin-top:.65rem; border:1px solid rgb(255 255 255 / .28); border-radius:999px; padding:.45rem .7rem; background:rgb(0 0 0 / .28); color:white; font-size:.72rem; }
+  .broadcast-video-frame { position:absolute; z-index:3; right:1rem; bottom:4rem; width:min(34rem,calc(100% - 2rem)); aspect-ratio:16/9; border:1px solid rgb(255 255 255 / .25); border-radius:.7rem; background:#000; }
   .broadcast-foot {
     position: absolute;
     right: clamp(1.25rem, 4vw, 2.5rem);
@@ -353,6 +356,7 @@ const viewerCopy = isEnglish
   const previous = viewer?.querySelector<HTMLButtonElement>('[data-broadcast-prev]')
   const next = viewer?.querySelector<HTMLButtonElement>('[data-broadcast-next]')
   const mediaStatus = viewer?.querySelector<HTMLElement>('[data-broadcast-media-status]')
+  const videoButton = viewer?.querySelector<HTMLButtonElement>('[data-broadcast-video]')
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
   const triggers = animeRoot
     ? [...animeRoot.querySelectorAll<HTMLAnchorElement>('.lens')]
@@ -400,6 +404,7 @@ const viewerCopy = isEnglish
     const card = trigger.closest<HTMLElement>('[data-magic]')
     const motion = card?.dataset.motion ? JSON.parse(card.dataset.motion) as { duration: number; x: number; y: number; scale: number } : null
     const palette = card?.dataset.palette?.split('|')
+    const videoId = card?.dataset.videoId
     image.src = poster?.currentSrc || poster?.src || ''
     image.alt = poster?.alt || heading?.textContent || ''
     image.onload = () => {
@@ -420,6 +425,10 @@ const viewerCopy = isEnglish
     count.textContent = `ANIME ARCHIVE / ${String(activeIndex + 1).padStart(2, '0')}`
     details.href = trigger.href
     if (mediaStatus) mediaStatus.textContent = ''
+    if (videoButton) {
+      videoButton.hidden = !videoId || reducedMotion.matches
+      videoButton.dataset.videoId = videoId || ''
+    }
     if (switchTimer) window.clearTimeout(switchTimer)
     surface.dataset.switching = 'true'
     switchTimer = window.setTimeout(() => {
@@ -454,6 +463,8 @@ const viewerCopy = isEnglish
     delete surface.dataset.switching
     if (image) image.onload = null
     if (image) image.onerror = null
+    surface?.querySelector('.broadcast-video-frame')?.remove()
+    if (videoButton) videoButton.hidden = true
     if (source) setRect(source.getBoundingClientRect())
     const finish = () => {
       viewer.close()
@@ -478,6 +489,20 @@ const viewerCopy = isEnglish
     true
   )
 
+  const openOfficialVideo = () => {
+    const id = videoButton?.dataset.videoId
+    if (!id || !viewer) return
+    const video = document.createElement('iframe')
+    video.title = 'Official anime trailer'
+    video.src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&rel=0`
+    video.loading = 'lazy'
+    video.allow = 'autoplay; encrypted-media; picture-in-picture'
+    video.className = 'broadcast-video-frame'
+    videoButton.hidden = true
+    surface?.append(video)
+    if (mediaStatus) mediaStatus.textContent = 'Official trailer · muted'
+  }
+  videoButton?.addEventListener('click', openOfficialVideo)
   close?.addEventListener('click', closeViewer)
   previous?.addEventListener('click', () => syncViewer(activeIndex - 1))
   next?.addEventListener('click', () => syncViewer(activeIndex + 1))

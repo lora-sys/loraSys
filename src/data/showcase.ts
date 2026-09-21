@@ -11,6 +11,11 @@ export interface ShowcaseItem {
   sourceLabel?: string
   broadcastPalette?: [string, string]
   broadcastMotion?: { duration: number; x: number; y: number; scale: number }
+  video?: {
+    provider: 'youtube'
+    id: string
+    sourceLabel: string
+  }
   cta?: string
   spotify?: boolean
   artist?: string
@@ -32,6 +37,7 @@ export const anime: ShowcaseItem[] = [
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#d99a33', '#4c8177'],
     broadcastMotion: { duration: 9, x: .7, y: -.4, scale: 1.055 },
+    video: { provider: 'youtube', id: 'Sy7cLG6XHRY', sourceLabel: 'Official Made in Abyss anime website' },
   },
   {
     name: '相聚一刻',

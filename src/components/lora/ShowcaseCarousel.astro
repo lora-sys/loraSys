@@ -81,6 +81,7 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
           data-source-label={item.sourceLabel}
           data-palette={item.broadcastPalette?.join('|')}
           data-motion={item.broadcastMotion ? JSON.stringify(item.broadcastMotion) : undefined}
+          data-video-id={item.video?.provider === 'youtube' ? item.video.id : undefined}
         >
           <a
             href={item.href}
