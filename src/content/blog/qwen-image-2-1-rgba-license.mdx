@@ -1,0 +1,86 @@
+---
+title: 'Qwen-Image 2.1 原生透明图很适合做资产，但商用要另取许可'
+description: 'Qwen-Image 2.1 支持原生 RGBA、统一生成编辑、最多 10 张参考图和 2K 输出，但仓库许可证默认只授权非商业研究与评测。'
+publishDate: '2026-09-21T00:00:00Z'
+tags: ['AI Builder', 'Qwen', 'Image Generation', 'License', 'Developer Tools']
+language: 'zh-CN'
+draft: false
+---
+
+Qwen 团队在 2026 年 9 月 20 日发布 Qwen-Image 2.1。对 Builder 来说，最值得先验证的能力之一是原生 RGBA。它可以直接生成透明背景图，也能编辑透明图层和从照片里提取主体。
+
+但技术能力和商业可用性要分开核验。Qwen-Image 2.1 仓库使用 Qwen Research License Agreement。协议默认授权的是非商业研究和评测，商业使用需要另行取得许可。
+
+## 30 秒看懂
+
+Qwen-Image 2.1 把文生图和图像编辑放进同一模型，支持普通图和 RGBA 透明图、最多 10 张参考图，以及官方 README 推荐的原生 2K 输出。
+
+这对海报、贴纸、商品素材和游戏资产有直接意义。原本常见的流程是先生成普通 RGB 图，再跑一次抠图或分割。原生 alpha 如果在你的素材类型上足够稳定，可以减少一层模型和一次边缘处理。
+
+不过，权重能下载、代码能跑、生态已经适配，不等于可以直接放进收费产品。生产接入前必须先检查许可证。
+
+## 事实核验
+
+1. Qwen-Image 2.1 在 2026 年 9 月 20 日发布。
+2. 官方仓库称视觉生成部分为 7B 参数和 32 层 Single-Stream DiT。7B 指视觉生成组件，不是整套流水线的全部参数。
+3. 模型原生支持普通图和 RGBA 透明图生成，也能编辑透明图层和提取主体。
+4. 图像编辑支持最多 10 张参考图。
+5. 官方 README 给出原生 2K 推荐尺寸。
+6. Diffusers 在发布当天加入 `QwenImage21Pipeline`。官方 Diffusers 文档支持多张 condition image。
+7. ComfyUI、vLLM-Omni、SGLang 和 LightX2V 也在发布当天给出支持。
+8. 仓库 `LICENSE` 是 Qwen Research License Agreement，发布日期也是 2026 年 9 月 20 日。
+9. 该协议默认只授权非商业研究或评测用途。商业使用需要单独取得许可。
+10. 旧版 Qwen-Image 的 Hugging Face 页面标注 Apache-2.0。Qwen-Image 2.1 使用的是不同许可，不能把旧版许可直接套到 2.1。
+
+本次事实抓取时间为 2026 年 9 月 21 日 08:41，UTC+8。
+
+## 原生 RGBA 为什么值得单独测
+
+很多设计和电商流程会先生成一张普通 RGB 图，再运行抠图或分割，把主体变成透明 PNG。每多一层处理，就会增加一次边缘误差、颜色污染和延迟。
+
+Qwen-Image 2.1 如果能在你的素材类型上稳定生成 alpha 通道，就可以把透明素材直接放进生成阶段。这里的关键是“在你的素材类型上”。官方支持 RGBA 不等于所有透明边缘都稳定。
+
+更合理的验证方法是固定一批困难对象，例如头发、玻璃、毛绒、半透明商品和细线图标，然后比较原生 RGBA 与普通生成后再抠图的边缘质量。
+
+## 统一生成和编辑减少了什么
+
+官方仓库把 Qwen-Image 2.1 定义为统一的文生图和图像编辑模型。它支持最多 10 张参考图。Diffusers 的 `QwenImage21Pipeline` 文档还说明，条件图会和文本一起进入 Qwen3-VL 编码流程，多张条件图可以作为独立 block 放进联合序列。
+
+这使同一条资产管线可以处理生成、参考图编辑和透明素材，而不用因为任务类型不同立刻切换模型。
+
+这仍然是能力边界，不是质量保证。最多 10 张参考图表示接口支持上限，不代表 10 张图一定能保持身份一致，也不代表任何场景都比少量参考图更好。
+
+## 许可证才是商业接入门禁
+
+仓库 README 使用了 `open-source` 这个词，但真正决定授权范围的是仓库里的许可证文件。
+
+Qwen-Image 2.1 使用 Qwen Research License Agreement。协议把 Non-Commercial 定义为研究或评测，并明确规定默认授权只限非商业用途。商业使用需要另外取得许可。
+
+旧版 Qwen-Image 的 Hugging Face 页面目前标注 Apache-2.0。这不能证明 2.1 也采用 Apache-2.0。接入 2.1 时应该直接检查 2.1 自己的 LICENSE。
+
+因此下面这些说法都不能直接成立：
+
+- “Qwen-Image 2.1 是 OSI 意义上的开源模型。”
+- “Qwen-Image 2.1 可以免费商用。”
+- “Qwen-Image 2.1 整个模型只有 7B 参数。”
+- “最多 10 张参考图就一定能保持身份一致。”
+- “Qwen-Image 2.1 已经超过所有闭源模型。”
+
+本次材料也没有足够信息判断商业许可证的价格、审批条件或可获得性。
+
+## 如果今天要接进产品
+
+我会先做两组实验。
+
+第一组只测素材质量。准备透明边缘困难的固定样本，比较原生 RGBA 和“普通生成加抠图”两条管线的边缘、颜色、文字和耗时。
+
+第二组只做授权门禁。研究和原型环境可以按当前许可范围验证能力。如果目标是收费功能，先确认商业许可，再决定是否投入模型适配、推理优化和资产迁移。
+
+许可证应该和显存、延迟、质量一起进入模型接入清单。Demo 跑通以后再看许可，通常会把迁移成本推到更晚、更贵的位置。
+
+## 一手来源
+
+- [Qwen-Image 2.1 官方仓库](https://github.com/QwenLM/Qwen-Image-2.1)
+- [Qwen Research License](https://github.com/QwenLM/Qwen-Image-2.1/blob/main/LICENSE)
+- [Hugging Face Diffusers Qwen-Image 2.1](https://huggingface.co/docs/diffusers/main/api/pipelines/qwenimage21)
+- [Qwen-Image 旧版模型页](https://huggingface.co/Qwen/Qwen-Image)

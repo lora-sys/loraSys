@@ -1,0 +1,74 @@
+---
+title: 'AI Agent 工程阅读清单｜2026-09-18 至 09-20'
+description: '本期收录 OpenAI Agents SDK 运行时边界修复、AdaRepair-Mem 阶段化记忆检索，以及 Agent Lint 静态配置检查。'
+publishDate: '2026-09-20T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Memory', 'Security', 'Developer Tools']
+language: 'zh-CN'
+draft: false
+---
+
+本期覆盖 2026 年 9 月 18 日至 9 月 20 日。已与前几期新闻日志去重，9 月 18 日至 19 日已记录的 Harness Design、AgentCore Runtime V2、WebMCP、Codex CLI 0.155.x 和 RAFT 不再重复。本期保留 3 条。
+
+## OpenAI Agents SDK 在主分支补运行时边界
+
+### 发生了什么
+
+OpenAI 的 `openai-agents-python` 在 9 月 20 日合入一批运行时修复。当前最新正式 Release 仍是 9 月 17 日的 0.22.3，所以这些内容应当按主分支进展理解，不能写成已经发布的新版本。
+
+其中一个修复给 Agent 作为 Tool 时的流式回调增加待处理事件上限，默认上限为 1024。慢回调持续追不上事件产生速度时，SDK 会取消嵌套运行和回调分发，而不是让队列无限增长。
+
+同一天的提交还覆盖 Realtime WebSocket 入站消息大小限制、Sandbox 主机授权路径规范化、Sandbox manifest 的 host source 校验、Trace 限流重试，以及持久化时保留结构化 Guardrail 诊断。
+
+### 工程意义
+
+这些改动集中在生产 Agent 常见的边界问题。流式回调需要背压，Sandbox 权限判断需要在规范化路径后执行，网络输入需要大小限制，Trace 导出失败需要明确重试策略，Guardrail 结果进入持久状态时也不能丢失结构化诊断。
+
+Harness 如果只处理正常路径，这些问题通常会在长任务、嵌套 Agent、慢消费者和异常恢复时出现。
+
+### 先读哪里
+
+先看 [流式回调背压修复](https://github.com/openai/openai-agents-python/commit/f23da76)，重点看 `on_stream_max_pending_events`、有界 `asyncio.Queue`、队列满时的取消逻辑和失败传播。再浏览 [9 月 20 日提交列表](https://github.com/openai/openai-agents-python/commits) 里的 Sandbox、Realtime、Tracing 和 Persistence 修复。
+
+## AdaRepair-Mem 把 Coding Agent 经验检索按修复阶段拆开
+
+### 发生了什么
+
+AdaRepair-Mem 在 9 月 18 日进入 arXiv 更新批次。论文研究仓库级自动修复中的经验记忆。作者指出三个问题。不同仓库积累的历史经验数量差异很大，检索更多记忆不会稳定提高修复成功率，不同修复阶段需要的经验也不同。
+
+论文因此加入 coverage-aware retrieval、quality-aware selection 和 stage-aware routing，分别处理复现、定位、补丁生成、补丁细化和验证阶段的记忆。
+
+作者在 SWE-Bench-Lite 和 SWE-Bench-Verified 上评估该方法，并报告它对历史经验较少的仓库更有效，也能减少噪声检索，并帮助失败补丁进入后续细化。这些数字和结论来自论文作者实验，不应扩展成所有 Coding Agent 的普遍结论。
+
+### 工程意义
+
+Agent Memory 不适合只放一个统一向量库，再按相似度固定取一批历史轨迹。Coding Agent 所处阶段不同，需要的经验类型也不同。仓库历史不足时，还需要明确的跨仓库回退策略。
+
+这套设计可以迁移到调试 Agent。复现失败、定位代码、生成修改、测试失败后的再修复，可以使用不同的 Memory 池和排序规则。
+
+### 先读哪里
+
+先读作者对三个 Memory 失败模式的分析，再看 coverage-aware retrieval、quality-aware selection 和 stage-aware routing。实验部分重点看历史覆盖较少的仓库，以及失败补丁进入 refinement 后的变化。
+
+一手来源是 [AdaRepair-Mem 论文](https://arxiv.org/abs/2609.20130)。
+
+## Agent Lint 开始把 Agent 配置当成静态分析对象
+
+### 发生了什么
+
+Agent Lint 当前公开版本示例使用 4.0.3。项目检查 Claude Code、Cursor 和 Codex 的配置文件，也覆盖 `AGENTS.md`、Agent Skills 和 MCP 配置。仓库当前列出 294 条规则，分为 19 类，并提供 GitHub Action、pre-commit 和 JSON 诊断输出。
+
+它检查的是静态配置，不会真正执行 Agent，也不会判断运行结果是否正确。项目 README 明确说明，lint 通过不能证明 Agent 安全或正确。
+
+### 工程意义
+
+Coding Agent 项目已经有一批可以在提交阶段检查的问题，例如 Skill 元数据、MCP 配置、Codex 配置、路径和命名约束。这些问题没有必要等 Agent 运行以后再通过 Eval 发现。
+
+更合适的分层是先用静态检查拦截确定性配置错误，再用运行时 Eval 检查工具选择、任务完成率和副作用。Agent Lint 适合作为前一层。
+
+### 先读哪里
+
+先看 [Agent Lint 仓库](https://github.com/zhupanov/agent-lint) 的 Rules Reference，重点看 Codex、Skills 和 MCP 三类规则。准备接入持续集成时，应固定具体版本，不要直接跟随浮动版本。
+
+## 本期结论
+
+OpenAI Agents SDK 这一组提交最适合直接检查现有 Agent Runtime 的边界处理。AdaRepair-Mem 更适合补 Memory 设计。Agent Lint 则提供了一层成本更低的静态门禁。三者解决的问题不同，不应互相替代。
