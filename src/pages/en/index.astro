@@ -4,6 +4,7 @@ import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
+import LeadProjectStage from '@/components/projects/LeadProjectStage.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
@@ -136,16 +137,7 @@ const nowItems = getCurrentFocusSummary('en-US')
           </div>
           <a class='text-link' href='/en/work'>All work <span aria-hidden='true'>↗</span></a>
         </header>
-        <LoraVisual asset='projectsMap' class='section-scene section-scene--wide' />
-        {
-          featured[0] && (
-            <div class='lead-work'>
-              <ProjectCard project={featured[0]} variant='lead' lens compact compactLocale='en-US'>
-                {demoFor(featured[0]) && <ProjectDemo kind={demoFor(featured[0])!} locale='en-US' slot='demo' />}
-              </ProjectCard>
-            </div>
-          )
-        }
+        {featured[0] && <LeadProjectStage project={featured[0]} locale='en-US' />}
         <div class='supporting-work'>
           {
             featured.slice(1).map((project) => (

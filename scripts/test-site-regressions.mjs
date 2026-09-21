@@ -158,6 +158,31 @@ try {
         assert.ok(await page.locator('.related-context').count() > 0, 'Featured writing should surface related projects when curated links exist')
       })
 
+      await check(`${label}: lead project unfolds from the curated map`, async () => {
+        await open()
+        const stage = page.locator('[data-lead-project-stage]')
+        await stage.scrollIntoViewIfNeeded()
+        await page.waitForFunction(() => document.querySelector('[data-lead-project-stage]')?.getAttribute('data-active') === 'true')
+        assert.ok(await stage.locator('[data-project-card]').count(), 'Lead project stage should contain the existing project card')
+      })
+
+      await check(`${label}: Anime Archive opens and returns from broadcast mode`, async () => {
+        await open()
+        const trigger = page.locator('[data-showcase-id="anime"] .lens').first()
+        await trigger.scrollIntoViewIfNeeded()
+        await trigger.click()
+        const viewer = page.locator('[data-anime-broadcast]')
+        await viewer.waitFor({ state: 'visible' })
+        assert.equal(await viewer.evaluate((element) => element.open), true)
+        const initial = await viewer.locator('[data-broadcast-count]').textContent()
+        await page.keyboard.press('ArrowRight')
+        const changed = await viewer.locator('[data-broadcast-count]').textContent()
+        assert.notEqual(changed, initial, 'Broadcast arrow navigation should change channel')
+        await page.keyboard.press('Escape')
+        await viewer.waitFor({ state: 'hidden' })
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus to the originating card')
+      })
+
       await check(`${label}: source labels filtering empty state and browser history`, async () => {
         await open('projects?q=loraSys')
         const archive = page.locator('[data-work-archive]')
