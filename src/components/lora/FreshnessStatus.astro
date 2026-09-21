@@ -1,0 +1,122 @@
+---
+import syncReport from '@/data/sync-report.json'
+import { currentFocus } from '@/data/current-focus'
+
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+  compact?: boolean
+}
+
+const { locale = 'zh-CN', compact = false } = Astro.props
+const reviewedAt = new Date(`${currentFocus.reviewedAt}T00:00:00Z`)
+const syncedAt = new Date(syncReport.syncedAt)
+const format = (date: Date) =>
+  new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC'
+  }).format(date)
+const copy =
+  locale === 'en-US'
+    ? {
+        label: 'Freshness',
+        reviewed: 'Human-reviewed',
+        synced: 'Public data synced',
+        ok: 'verified',
+        warning: 'check sync'
+      }
+    : {
+        label: '新鲜度',
+        reviewed: '人工复核',
+        synced: '公开数据同步',
+        ok: '已验证',
+        warning: '需检查同步'
+      }
+const healthy = syncReport.status === 'ok'
+---
+
+<div
+  class:list={['freshness-status', { 'freshness-status--compact': compact }]}
+  data-freshness-status
+  aria-label={copy.label}
+>
+  <span class='freshness-item freshness-item--reviewed'>
+    <i aria-hidden='true'></i>
+    <b>{copy.reviewed}</b>
+    <time datetime={currentFocus.reviewedAt}>{format(reviewedAt)}</time>
+  </span>
+  <span class:list={['freshness-item', { 'freshness-item--warning': !healthy }]}>
+    <i aria-hidden='true'></i>
+    <b>{copy.synced}</b>
+    <time datetime={syncReport.syncedAt}>{format(syncedAt)}</time>
+  </span>
+  <em>{healthy ? copy.ok : copy.warning}</em>
+</div>
+
+<style>
+  .freshness-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem .7rem;
+    border: 1px solid hsl(var(--border) / .78);
+    border-radius: .85rem;
+    padding: .65rem .75rem;
+    background: hsl(var(--background) / .72);
+    color: hsl(var(--muted-foreground));
+    font-size: .65rem;
+  }
+  .freshness-item {
+    display: inline-flex;
+    align-items: center;
+    gap: .28rem;
+  }
+  .freshness-item i {
+    width: .38rem;
+    height: .38rem;
+    border-radius: 999px;
+    background: hsl(var(--field-amber));
+    box-shadow: 0 0 0 3px hsl(var(--field-amber) / .11);
+  }
+  .freshness-item--reviewed i {
+    background: hsl(var(--field-teal));
+    box-shadow: 0 0 0 3px hsl(var(--field-teal) / .12);
+  }
+  .freshness-item--warning i {
+    background: hsl(var(--field-clay));
+    box-shadow: 0 0 0 3px hsl(var(--field-clay) / .12);
+  }
+  .freshness-item b {
+    color: hsl(var(--foreground));
+    font-size: .64rem;
+    font-weight: 650;
+  }
+  .freshness-item time {
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: .6rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .freshness-status em {
+    margin-left: auto;
+    color: hsl(var(--field-teal));
+    font-size: .58rem;
+    font-style: normal;
+    font-weight: 680;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .freshness-status--compact {
+    border: 0;
+    padding: 0;
+    background: transparent;
+  }
+  .freshness-status--compact em {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .freshness-status em {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+</style>
