@@ -1,0 +1,214 @@
+---
+import type { Project } from '@/data/projects'
+import ProjectCard from '@/components/projects/ProjectCard.astro'
+import ProjectDemo from '@/components/projects/ProjectDemo.astro'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
+import { demoByRepo } from '@/data/project-demos'
+
+interface Props {
+  project: Project
+  locale?: 'zh-CN' | 'en-US'
+  rationale?: string
+}
+
+const { project, locale = 'zh-CN', rationale } = Astro.props
+const demo = demoByRepo[project.repository]
+const copy =
+  locale === 'en-US'
+    ? {
+        label: 'Current route',
+        rationale:
+          rationale ??
+          'Start here if this is your first visit. The full work archive stays organized by theme and evidence.'
+      }
+    : {
+        label: '当前路线',
+        rationale:
+          rationale ??
+          '第一次来可以从这里开始。完整作品页继续按主题、证据和项目关系整理。'
+      }
+---
+
+<div class='lead-project-stage' data-lead-project-stage>
+  <div class='lead-map-layer'>
+    <LoraVisual asset='projectsMap' class='lead-project-map' />
+    <span class='lead-map-label'>{copy.label}</span>
+    <span class='lead-map-pin' aria-hidden='true'></span>
+    <svg class='lead-map-route' viewBox='0 0 720 240' aria-hidden='true'>
+      <path d='M575 62 C538 96 500 106 452 128 C398 153 356 176 304 198' />
+    </svg>
+  </div>
+  <div class='lead-work'>
+    <ProjectCard project={project} variant='lead' lens compact compactLocale={locale}>
+      {demo && <ProjectDemo kind={demo} locale={locale} slot='demo' />}
+    </ProjectCard>
+    <p class='work-rationale'>{copy.rationale}</p>
+  </div>
+</div>
+
+<script>
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+  document.querySelectorAll<HTMLElement>('[data-lead-project-stage]').forEach((stage) => {
+    if (reducedMotion.matches) {
+      stage.dataset.active = 'true'
+      return
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        stage.dataset.active = 'true'
+        observer.disconnect()
+      },
+      { threshold: 0.3 }
+    )
+    observer.observe(stage)
+  })
+</script>
+
+<style>
+  .lead-project-stage {
+    position: relative;
+    display: grid;
+    gap: .85rem;
+    isolation: isolate;
+  }
+  .lead-map-layer {
+    position: relative;
+    min-height: clamp(10rem, 24vw, 15rem);
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / .72);
+    border-radius: 1rem;
+    background: hsl(var(--card) / .42);
+  }
+  .lead-project-map {
+    position: absolute;
+    inset: 0 0 auto auto;
+    width: min(100%, 32rem);
+    height: 100%;
+    object-fit: contain;
+    opacity: .74;
+    transform: translate3d(0, .4rem, 0) scale(.97);
+    transition:
+      opacity 420ms ease,
+      transform 680ms var(--motion-spring);
+  }
+  .lead-map-label {
+    position: absolute;
+    top: .75rem;
+    left: .8rem;
+    z-index: 2;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: .25rem .48rem;
+    background: hsl(var(--background) / .84);
+    color: hsl(var(--muted-foreground));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: .58rem;
+    font-weight: 680;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+  }
+  .lead-map-pin {
+    position: absolute;
+    z-index: 3;
+    top: 29%;
+    right: 17%;
+    width: .58rem;
+    height: .58rem;
+    border-radius: 50%;
+    background: hsl(var(--field-amber));
+    box-shadow: 0 0 0 .48rem hsl(var(--field-amber) / .12);
+    opacity: .58;
+    transform: scale(.76);
+    transition:
+      opacity 260ms ease,
+      transform 520ms var(--motion-spring),
+      box-shadow 520ms ease;
+  }
+  .lead-map-route {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .lead-map-route path {
+    fill: none;
+    stroke: hsl(var(--field-amber-strong) / .58);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-dasharray: 5 9;
+    stroke-dashoffset: 120;
+    vector-effect: non-scaling-stroke;
+    transition: stroke-dashoffset 900ms 120ms var(--motion-spring);
+  }
+  .lead-work {
+    position: relative;
+    z-index: 4;
+    margin-top: clamp(-4.2rem, -7vw, -2.2rem);
+    padding-inline: clamp(.45rem, 4vw, 2.5rem);
+    opacity: .7;
+    transform: translateY(1.3rem) scale(.985);
+    transform-origin: 50% 100%;
+    transition:
+      opacity 420ms ease,
+      transform 720ms 120ms var(--motion-spring);
+  }
+  .work-rationale {
+    max-width: 44rem;
+    margin: .8rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: .8rem;
+    line-height: 1.7;
+  }
+  .lead-project-stage[data-active='true'] .lead-project-map {
+    opacity: .94;
+    transform: none;
+  }
+  .lead-project-stage[data-active='true'] .lead-map-pin {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 .7rem hsl(var(--field-amber) / .08);
+  }
+  .lead-project-stage[data-active='true'] .lead-map-route path {
+    stroke-dashoffset: 0;
+  }
+  .lead-project-stage[data-active='true'] .lead-work {
+    opacity: 1;
+    transform: none;
+  }
+  @media (max-width: 760px) {
+    .lead-map-layer {
+      min-height: 9rem;
+    }
+    .lead-project-map {
+      width: 100%;
+      opacity: .62;
+    }
+    .lead-map-pin {
+      right: 12%;
+    }
+    .lead-work {
+      margin-top: -1.5rem;
+      padding-inline: .35rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lead-project-map,
+    .lead-map-pin,
+    .lead-map-route path,
+    .lead-work {
+      transition: none;
+    }
+    .lead-project-map,
+    .lead-work {
+      transform: none;
+      opacity: 1;
+    }
+    .lead-map-route path {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>
