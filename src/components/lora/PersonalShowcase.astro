@@ -394,9 +394,16 @@ const viewerCopy = isEnglish
     hudTimer = window.setTimeout(() => hud.classList.add('is-hidden'), 2800)
   }
 
+  // Only one player may exist at a time: switching channels or closing unloads it.
+  const teardownVideo = () => {
+    surface?.querySelector('.broadcast-video-frame')?.remove()
+    if (videoButton) videoButton.hidden = true
+  }
+
   const syncViewer = (index: number) => {
     if (!viewer || !surface || !image || !title || !description || !count || !details || triggers.length === 0) return
     activeIndex = (index + triggers.length) % triggers.length
+    teardownVideo()
     const trigger = triggers[activeIndex]
     const poster = trigger.querySelector<HTMLImageElement>('img')
     const heading = trigger.querySelector<HTMLElement>('.copy h3')
@@ -463,8 +470,7 @@ const viewerCopy = isEnglish
     delete surface.dataset.switching
     if (image) image.onload = null
     if (image) image.onerror = null
-    surface?.querySelector('.broadcast-video-frame')?.remove()
-    if (videoButton) videoButton.hidden = true
+    teardownVideo()
     if (source) setRect(source.getBoundingClientRect())
     const finish = () => {
       viewer.close()

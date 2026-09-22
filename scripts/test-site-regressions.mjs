@@ -187,6 +187,39 @@ try {
         assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus to the originating card')
       })
 
+      await check(`${label}: official trailer stays optional and never outlives its channel`, async () => {
+        await open()
+        const trigger = page.locator('[data-showcase-id="anime"] .lens').first()
+        await trigger.scrollIntoViewIfNeeded()
+        await trigger.click()
+        const viewer = page.locator('[data-anime-broadcast]')
+        await viewer.waitFor({ state: 'visible' })
+        // The poster is the default; no iframe may exist before the reader asks for the trailer.
+        assert.equal(await viewer.locator('iframe').count(), 0, 'Broadcast must not load a player before activation')
+        const playButton = viewer.locator('[data-broadcast-video]')
+        if (await playButton.isVisible()) {
+          await playButton.click()
+          await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
+          assert.equal(await viewer.locator('iframe').count(), 1, 'Only one player may be active')
+          // Switching channels must unload the previous player immediately.
+          await viewer.locator('[data-broadcast-next]').click()
+          await page.waitForFunction(() => !document.querySelector('[data-anime-broadcast] .broadcast-video-frame'))
+          assert.equal(await viewer.locator('iframe').count(), 0, 'Channel change must unload the previous player')
+          // Playing it again and closing must leave nothing behind.
+          await viewer.locator('[data-broadcast-prev]').click()
+          const replay = viewer.locator('[data-broadcast-video]')
+          if (await replay.isVisible()) {
+            await replay.click()
+            await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
+          }
+        }
+        await viewer.locator('[data-broadcast-close]').click()
+        await viewer.waitFor({ state: 'hidden' })
+        await page.waitForFunction(() => document.querySelectorAll('[data-anime-broadcast] iframe, [data-anime-broadcast] audio, [data-anime-broadcast] video').length === 0)
+        assert.equal(await viewer.locator('iframe, audio, video').count(), 0, 'Closing broadcast must leave no player behind')
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus after video playback')
+      })
+
       await check(`${label}: source labels filtering empty state and browser history`, async () => {
         await open('projects?q=loraSys')
         const archive = page.locator('[data-work-archive]')
