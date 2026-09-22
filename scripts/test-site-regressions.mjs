@@ -79,7 +79,7 @@ await new Promise((resolve, reject) => {
   server.listen(0, '127.0.0.1', resolve)
 })
 const origin = `http://127.0.0.1:${server.address().port}`
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' })
 
 async function check(name, fn) {
   try {
