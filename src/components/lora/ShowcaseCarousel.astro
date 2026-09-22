@@ -75,7 +75,14 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
   <div class='track' tabindex='0' data-track aria-label={title} aria-describedby={`${id}-carousel-instructions`}>
     {
       items.map((item, i) => (
-        <article class:list={['magic-card', { stagger: i % 2 }]} data-magic>
+        <article
+          class:list={['magic-card', { stagger: i % 2, 'magic-card--anime': id === 'anime' }]}
+          data-magic
+          data-source-label={item.sourceLabel}
+          data-palette={item.broadcastPalette?.join('|')}
+          data-motion={item.broadcastMotion ? JSON.stringify(item.broadcastMotion) : undefined}
+          data-video-id={item.video?.provider === 'youtube' ? item.video.id : undefined}
+        >
           <a
             href={item.href}
             target={item.spotify ? undefined : '_blank'}
@@ -431,7 +438,10 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
   .track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(15rem, 42%); gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0.2rem 1rem; scrollbar-width: none; cursor: grab; }
   .track[data-dragging] { cursor: grabbing; scroll-snap-type: none; user-select: none; }
   .track::-webkit-scrollbar { display: none; }
-  .magic-card { position: relative; min-height: 22rem; overflow: hidden; border: .45rem solid hsl(var(--field-warm)); border-radius: 1rem; outline: 1px solid hsl(var(--field-ink) / .28); background: hsl(var(--card)); scroll-snap-align: start; }
+  .magic-card { position: relative; min-height: 22rem; overflow: hidden; border: .45rem solid hsl(var(--field-warm)); border-radius: 1rem; outline: 1px solid hsl(var(--field-ink) / .28); background: hsl(var(--card)); scroll-snap-align: start; transition: transform 260ms var(--motion-spring, cubic-bezier(0.23, 1, 0.32, 1)); }
+  .magic-card--anime { transform: perspective(900px) rotateY(-1.2deg) translateY(var(--card-lift, 0)); }
+  .magic-card--anime:nth-child(2n) { transform: perspective(900px) rotateY(1.2deg) translateY(var(--card-lift, 0)); }
+  .magic-card--anime:has(.lens:focus-visible), .magic-card--anime:hover { --card-lift: -0.35rem; }
   .magic-card::after { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(240px circle at var(--mx, -100px) var(--my, -100px), hsl(var(--primary) / 0.13), transparent 70%); content: ''; }
   .lens { position: absolute; inset: 0; display: block; color: white; }
   .lens img { width: 100%; height: 100%; object-fit: cover; }
@@ -462,10 +472,12 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
     .drift-state { min-height: 1.8rem; }
     .track { grid-auto-columns: 82%; cursor: auto; }
     .stagger { transform: none; }
+    .magic-card--anime, .magic-card--anime:nth-child(2n) { transform: none; }
     .lens-glass { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .lens-glass, .controls button { transition: none; }
+    .lens-glass, .controls button, .magic-card { transition: none; }
+    .magic-card--anime, .magic-card--anime:nth-child(2n) { transform: none; }
     .drift-state[data-state='playing'] i { animation: none; }
     .track { cursor: auto; }
     .controls button:hover, .controls button:focus-visible, .controls button:active { transform: none; }

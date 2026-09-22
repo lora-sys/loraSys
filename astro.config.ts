@@ -103,8 +103,19 @@ export default defineConfig({
     }
   },
 
+  // [Vite]
+  // `astro-pure` is a local `file:` dependency that imports its own virtual module
+  // (`virtual:config`). Vite pre-bundles anything it finds under `node_modules`, and
+  // esbuild cannot resolve virtual modules, so the client scripts that import
+  // `astro-pure/utils` fail to load. Excluding it keeps those modules in Vite's own
+  // pipeline, where the theme's resolveId hook can answer. Windows without Developer
+  // Mode is where this shows up: bun copies `file:` deps instead of linking them.
+  vite: {
+    optimizeDeps: { exclude: ['astro-pure'] }
+  },
+
   // [Integrations]
-  integrations: [mdx(), 
+  integrations: [mdx(),
     // Legacy article aliases redirect to /blog and must not be listed as separate content.
     sitemap({ filter: (page) => !/\/en\/writing\/[^/]+/.test(new URL(page).pathname) }),
     AstroPureIntegration(config)

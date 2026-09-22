@@ -6,6 +6,7 @@ import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
 import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
+import EvidenceBadge from '@/components/layout/EvidenceBadge.astro'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 
 const lastUpdated = currentFocus.reviewedAt
@@ -53,12 +54,12 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
    data-project-updates={JSON.stringify(projectUpdatePayload)}
    data-writing-updates={JSON.stringify(writingUpdatePayload)}
  >
-   <strong>人工复核 · 最近在忙</strong>
+   <strong><EvidenceBadge kind='human-reviewed' /> · 最近在忙</strong>
    <span>{currentFocus.description}</span>
    <small data-now-return>第一次来？从“最近在做”开始就好。</small>
  </div>
  <aside class='now-sync now-source now-source--automatic' data-information-origin='automatic' aria-label='自动同步的最近公开项目更新'>
-   <header><strong>自动同步 · 最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
+   <header><strong><EvidenceBadge kind='synced' /> · 最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
    <ul>
      {recentPushes.map((project) => (
        <li>
@@ -72,7 +73,7 @@ const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: 
    <small>这里显示最近的公开仓库更新；上面的近况仍由我自己按阶段复核。</small>
  </aside>
  <aside class='now-writing now-source now-source--automatic' data-information-origin='automatic' aria-label='自动汇总的最近发布文章'>
-   <header><strong>自动汇总 · 最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
+   <header><strong><EvidenceBadge kind='synced' /> · 最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
    <ul>
      {recentWriting.map((post) => (
        <li>

@@ -10,6 +10,8 @@ interface Props {
 const { locale = 'zh-CN', compact = false } = Astro.props
 const reviewedAt = new Date(`${currentFocus.reviewedAt}T00:00:00Z`)
 const syncedAt = new Date(syncReport.syncedAt)
+const daysSinceReview = Math.max(0, Math.floor((Date.now() - reviewedAt.getTime()) / 86400000))
+const daysSinceSync = Math.max(0, Math.floor((Date.now() - syncedAt.getTime()) / 86400000))
 const format = (date: Date) =>
   new Intl.DateTimeFormat(locale, {
     month: 'short',
@@ -22,6 +24,9 @@ const copy =
         label: 'Freshness',
         reviewed: 'Human-reviewed',
         synced: 'Public data synced',
+        sinceReview: 'since review',
+        sinceSync: 'since sync',
+        days: 'd',
         ok: 'verified',
         warning: 'check sync'
       }
@@ -29,6 +34,9 @@ const copy =
         label: '新鲜度',
         reviewed: '人工复核',
         synced: '公开数据同步',
+        sinceReview: '距复核',
+        sinceSync: '距同步',
+        days: '天',
         ok: '已验证',
         warning: '需检查同步'
       }
@@ -44,11 +52,13 @@ const healthy = syncReport.status === 'ok'
     <i aria-hidden='true'></i>
     <b>{copy.reviewed}</b>
     <time datetime={currentFocus.reviewedAt}>{format(reviewedAt)}</time>
+    <small>{copy.sinceReview} {daysSinceReview}{copy.days}</small>
   </span>
   <span class:list={['freshness-item', { 'freshness-item--warning': !healthy }]}>
     <i aria-hidden='true'></i>
     <b>{copy.synced}</b>
     <time datetime={syncReport.syncedAt}>{format(syncedAt)}</time>
+    <small>{copy.sinceSync} {daysSinceSync}{copy.days}</small>
   </span>
   <em>{healthy ? copy.ok : copy.warning}</em>
 </div>
@@ -96,6 +106,7 @@ const healthy = syncReport.status === 'ok'
     font-size: .6rem;
     font-variant-numeric: tabular-nums;
   }
+  .freshness-item small { color: hsl(var(--muted-foreground)); font-size: .56rem; white-space: nowrap; }
   .freshness-status em {
     margin-left: auto;
     color: hsl(var(--field-teal));

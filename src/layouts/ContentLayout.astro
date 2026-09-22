@@ -177,6 +177,7 @@ const {
       }
     }
     aside {
+      display: none !important;
       animation: 300ms fade-in-side !important;
       animation-fill-mode: forwards;
       right: 0;
@@ -198,5 +199,26 @@ const {
       min-width: 55vw !important;
     }
   }
+  @media (max-width: 900px) {
+    main {
+      flex-direction: column;
+    }
+    main > aside {
+      display: none !important;
+    }
+    #sidebar-btn {
+      display: flex !important;
+    }
+    #content,
+    article {
+      min-width: 0 !important;
+      width: 100%;
+    }
+    .bottom > .flex-1,
+    .bottom > .min-w-48 {
+      min-width: 0;
+    }
+  }
   @media(prefers-reduced-motion:reduce){aside,#sidebar-shade{animation:none!important}}
+
 </style>

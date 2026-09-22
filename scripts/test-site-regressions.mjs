@@ -79,7 +79,7 @@ await new Promise((resolve, reject) => {
   server.listen(0, '127.0.0.1', resolve)
 })
 const origin = `http://127.0.0.1:${server.address().port}`
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' })
 
 async function check(name, fn) {
   try {
@@ -94,7 +94,7 @@ async function check(name, fn) {
 }
 
 try {
-  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const label = `${viewport.width}-${reducedMotion}`
       const context = await browser.newContext({ viewport, reducedMotion })
@@ -143,7 +143,7 @@ try {
         assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
         assert.equal(await page.locator('[data-site-header] [data-scroll-progress]').count(), 1, 'Header scroll progress should remain the single page-progress indicator')
         const sectionNavPosition = await page.locator('.section-nav').evaluate((element) => getComputedStyle(element).position)
-        assert.equal(sectionNavPosition, viewport.width >= 900 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
+        assert.equal(sectionNavPosition, viewport.width >= 768 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
       })
 
       await check(`${label}: Now separates reviewed focus from automatic snapshots`, async () => {
@@ -163,6 +163,8 @@ try {
         const stage = page.locator('[data-lead-project-stage]')
         await stage.scrollIntoViewIfNeeded()
         await page.waitForFunction(() => document.querySelector('[data-lead-project-stage]')?.getAttribute('data-active') === 'true')
+        const progress = Number(await stage.getAttribute('data-stage-progress'))
+        assert.ok(progress >= 0 && progress <= 1, 'Lead stage progress must stay bounded')
         assert.ok(await stage.locator('[data-project-card]').count(), 'Lead project stage should contain the existing project card')
       })
 
@@ -174,6 +176,9 @@ try {
         const viewer = page.locator('[data-anime-broadcast]')
         await viewer.waitFor({ state: 'visible' })
         assert.equal(await viewer.evaluate((element) => element.open), true)
+        assert.ok(await viewer.locator('[data-broadcast-image]').getAttribute('alt'), 'Broadcast poster needs alt text')
+        assert.ok(await viewer.locator('[data-broadcast-media-status]').count(), 'Broadcast needs a media status region')
+        assert.equal(await viewer.locator('[data-broadcast-backdrop]').count(), 1, 'Broadcast needs a letterbox backdrop so posters are not cropped')
         const initial = await viewer.locator('[data-broadcast-count]').textContent()
         await page.keyboard.press('ArrowRight')
         const changed = await viewer.locator('[data-broadcast-count]').textContent()
@@ -181,6 +186,47 @@ try {
         await page.keyboard.press('Escape')
         await viewer.waitFor({ state: 'hidden' })
         assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus to the originating card')
+      })
+
+      await check(`${label}: official trailer stays optional and never outlives its channel`, async () => {
+        await open()
+        const trigger = page.locator('[data-showcase-id="anime"] .lens').first()
+        await trigger.scrollIntoViewIfNeeded()
+        await trigger.click()
+        const viewer = page.locator('[data-anime-broadcast]')
+        await viewer.waitFor({ state: 'visible' })
+        // The poster is the default; no iframe may exist before the reader asks for the trailer.
+        assert.equal(await viewer.locator('iframe').count(), 0, 'Broadcast must not load a player before activation')
+        const playButton = viewer.locator('[data-broadcast-video]')
+        // A channel without a verified official video must not offer the control at all.
+        await viewer.locator('[data-broadcast-next]').click()
+        await page.waitForFunction(() => {
+          const button = document.querySelector('[data-anime-broadcast] [data-broadcast-video]')
+          return button instanceof HTMLElement && getComputedStyle(button).display === 'none'
+        })
+        assert.equal(await playButton.isVisible(), false, 'Channels without a verified video must hide the trailer control')
+        await viewer.locator('[data-broadcast-prev]').click()
+        if (await playButton.isVisible()) {
+          await playButton.click()
+          await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
+          assert.equal(await viewer.locator('iframe').count(), 1, 'Only one player may be active')
+          // Switching channels must unload the previous player immediately.
+          await viewer.locator('[data-broadcast-next]').click()
+          await page.waitForFunction(() => !document.querySelector('[data-anime-broadcast] .broadcast-video-frame'))
+          assert.equal(await viewer.locator('iframe').count(), 0, 'Channel change must unload the previous player')
+          // Playing it again and closing must leave nothing behind.
+          await viewer.locator('[data-broadcast-prev]').click()
+          const replay = viewer.locator('[data-broadcast-video]')
+          if (await replay.isVisible()) {
+            await replay.click()
+            await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
+          }
+        }
+        await viewer.locator('[data-broadcast-close]').click()
+        await viewer.waitFor({ state: 'hidden' })
+        await page.waitForFunction(() => document.querySelectorAll('[data-anime-broadcast] iframe, [data-anime-broadcast] audio, [data-anime-broadcast] video').length === 0)
+        assert.equal(await viewer.locator('iframe, audio, video').count(), 0, 'Closing broadcast must leave no player behind')
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus after video playback')
       })
 
       await check(`${label}: source labels filtering empty state and browser history`, async () => {

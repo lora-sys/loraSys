@@ -19,9 +19,14 @@ for (const [group, items] of groups) {
     }
 
     const isRemote = /^https:\/\//.test(item.image)
+    if (!item.name || !item.description || !item.href) errors.push(`${label} is missing archive identity copy`)
+    if (item.href && /^https:\/\//.test(item.href) === false) errors.push(`${label} has a non-HTTPS external destination`)
     if (isRemote) {
       if (!item.posterSource) errors.push(`${label} uses remote media without posterSource provenance`)
+      if (!item.sourceLabel) errors.push(`${label} uses remote media without sourceLabel provenance`)
     } else {
+      if (!item.posterSource) errors.push(`${label} is missing posterSource provenance`)
+      if (!item.sourceLabel) errors.push(`${label} is missing sourceLabel provenance`)
       const relative = item.image.replace(/^\//, '')
       const file = path.resolve('public', relative)
       try {
@@ -29,6 +34,12 @@ for (const [group, items] of groups) {
       } catch {
         errors.push(`${label} references missing local media: ${item.image}`)
       }
+    }
+
+    if (group === 'anime') {
+      if (!item.objectPosition) errors.push(`${label} is missing a focal point`)
+      if (!item.broadcastPalette || item.broadcastPalette.length !== 2) errors.push(`${label} needs two broadcast palette colors`)
+      if (!item.broadcastMotion || item.broadcastMotion.duration < 6 || item.broadcastMotion.duration > 14) errors.push(`${label} needs a bounded broadcast motion duration`)
     }
 
     if (group === 'anime' && /-card\.svg$/i.test(item.image)) {

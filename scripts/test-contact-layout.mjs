@@ -24,7 +24,7 @@ const server = createServer(async (req, res) => {
 })
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
 const base = `http://127.0.0.1:${server.address().port}/loraSys/`
-const browser = await chromium.launch({ headless: true, channel: 'chromium' })
+const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' })
 
 try {
   for (const viewport of [

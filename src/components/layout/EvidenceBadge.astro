@@ -1,0 +1,28 @@
+---
+interface Props {
+  kind: 'verified' | 'field-note' | 'experiment' | 'building' | 'maintained' | 'archived' | 'external' | 'human-reviewed' | 'synced'
+  locale?: 'zh-CN' | 'en-US'
+}
+const { kind, locale = 'zh-CN' } = Astro.props
+const labels = {
+  verified: ['已验证', 'Verified'],
+  'field-note': ['现场记录', 'Field note'],
+  experiment: ['实验', 'Experiment'],
+  building: ['构建中', 'Building'],
+  maintained: ['持续维护', 'Maintained'],
+  archived: ['已归档', 'Archived'],
+  external: ['外部贡献', 'External'],
+  'human-reviewed': ['人工复核', 'Human reviewed'],
+  synced: ['已同步', 'Synced']
+} as const
+---
+<span class:list={['evidence-badge', `evidence-badge--${kind}`]} data-evidence-kind={kind}>
+  <i aria-hidden='true'></i>{labels[kind][locale === 'en-US' ? 1 : 0]}
+</span>
+<style>
+  .evidence-badge{display:inline-flex;align-items:center;gap:.32rem;width:max-content;border:1px solid hsl(var(--border));border-radius:999px;padding:.2rem .5rem;color:hsl(var(--foreground));font-size:.62rem;font-weight:650;line-height:1.2;white-space:nowrap}
+  .evidence-badge i{width:.38rem;height:.38rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal)/.12)}
+  .evidence-badge--experiment i,.evidence-badge--building i{background:hsl(var(--field-amber));box-shadow:0 0 0 3px hsl(var(--field-amber)/.12)}
+  .evidence-badge--archived i{background:hsl(var(--muted-foreground));box-shadow:none}
+  .evidence-badge--external i{background:hsl(var(--field-clay));box-shadow:0 0 0 3px hsl(var(--field-clay)/.12)}
+</style>

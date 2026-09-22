@@ -31,7 +31,7 @@ if (!site) {
   site = `http://127.0.0.1:${server.address().port}${base}`
 }
 const report = { site, startedAt:new Date().toISOString(), checks:[], screenshots:[] }
-const browser = await chromium.launch({ channel:'chromium' })
+const browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' })
 const save = () => writeFile(path.join(output, 'interactions.json'), JSON.stringify(report, null, 2))
 async function check(name, fn) {
   try { await fn(); report.checks.push({name, passed:true}); console.log('PASS',name) }
