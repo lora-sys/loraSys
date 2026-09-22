@@ -70,6 +70,7 @@ const viewerCopy = isEnglish
     aria-label={viewerCopy.label}
   >
     <div class='broadcast-surface' data-broadcast-surface>
+      <img data-broadcast-backdrop alt='' aria-hidden='true' />
       <img data-broadcast-image alt='' />
       <span class='broadcast-scanlines' aria-hidden='true'></span>
       <div class='broadcast-hud' data-broadcast-hud>
@@ -193,19 +194,34 @@ const viewerCopy = isEnglish
   .broadcast-surface[data-expanded='true'] {
     border-radius: .75rem;
   }
-  .broadcast-surface > img {
+  /* A portrait poster in a landscape frame is shown whole, never cropped.
+     The blurred copy behind it fills the letterbox so the frame still reads as a channel. */
+  .broadcast-surface > [data-broadcast-backdrop] {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    filter: blur(34px) saturate(.9) brightness(.42);
+    transform: scale(1.12);
+    opacity: .9;
+  }
+  .broadcast-surface > [data-broadcast-image] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     object-position: var(--broadcast-position, 50% 50%);
-    filter: saturate(.92) contrast(1.03) brightness(.82);
+    filter: saturate(.96) contrast(1.02) brightness(.94);
     transform: scale(var(--broadcast-scale, 1.025));
     transition: filter 220ms ease, opacity 180ms ease;
   }
-  .broadcast-surface[data-expanded='true'] > img {
+  .broadcast-surface[data-expanded='true'] > [data-broadcast-image] {
     animation: broadcast-drift var(--broadcast-duration, 9s) ease-in-out infinite alternate;
   }
-  .broadcast-surface[data-switching='true'] > img { opacity: .18; }
+  .broadcast-surface[data-switching='true'] > [data-broadcast-image] { opacity: .18; }
   .broadcast-surface[data-switching='true'] .broadcast-copy { opacity: .45; }
   .broadcast-surface[data-switching='true'] .broadcast-scanlines { opacity: .9; }
   @keyframes broadcast-drift {
@@ -284,6 +300,7 @@ const viewerCopy = isEnglish
     font-size: .72rem;
   }
   .broadcast-video { display:block; margin-top:.65rem; border:1px solid rgb(255 255 255 / .28); border-radius:999px; padding:.45rem .7rem; background:rgb(0 0 0 / .28); color:white; font-size:.72rem; }
+  .broadcast-video[hidden] { display: none; }
   .broadcast-video-frame { position:absolute; z-index:3; right:1rem; bottom:4rem; width:min(34rem,calc(100% - 2rem)); aspect-ratio:16/9; border:1px solid rgb(255 255 255 / .25); border-radius:.7rem; background:#000; }
   .broadcast-foot {
     position: absolute;
@@ -334,7 +351,7 @@ const viewerCopy = isEnglish
     .broadcast-hud {
       transition: none;
     }
-    .broadcast-surface[data-expanded='true'] > img {
+    .broadcast-surface[data-expanded='true'] > [data-broadcast-image] {
       animation: none;
       transform: none;
     }
@@ -347,6 +364,7 @@ const viewerCopy = isEnglish
   const animeRoot = document.querySelector<HTMLElement>('[data-showcase-id="anime"]')
   const surface = viewer?.querySelector<HTMLElement>('[data-broadcast-surface]')
   const image = viewer?.querySelector<HTMLImageElement>('[data-broadcast-image]')
+  const backdrop = viewer?.querySelector<HTMLImageElement>('[data-broadcast-backdrop]')
   const title = viewer?.querySelector<HTMLElement>('[data-broadcast-title]')
   const description = viewer?.querySelector<HTMLElement>('[data-broadcast-description]')
   const count = viewer?.querySelector<HTMLElement>('[data-broadcast-count]')
@@ -414,6 +432,7 @@ const viewerCopy = isEnglish
     const videoId = card?.dataset.videoId
     image.src = poster?.currentSrc || poster?.src || ''
     image.alt = poster?.alt || heading?.textContent || ''
+    if (backdrop) backdrop.src = image.src
     image.onload = () => {
       if (mediaStatus) mediaStatus.textContent = ''
     }

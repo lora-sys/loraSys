@@ -178,6 +178,7 @@ try {
         assert.equal(await viewer.evaluate((element) => element.open), true)
         assert.ok(await viewer.locator('[data-broadcast-image]').getAttribute('alt'), 'Broadcast poster needs alt text')
         assert.ok(await viewer.locator('[data-broadcast-media-status]').count(), 'Broadcast needs a media status region')
+        assert.equal(await viewer.locator('[data-broadcast-backdrop]').count(), 1, 'Broadcast needs a letterbox backdrop so posters are not cropped')
         const initial = await viewer.locator('[data-broadcast-count]').textContent()
         await page.keyboard.press('ArrowRight')
         const changed = await viewer.locator('[data-broadcast-count]').textContent()
@@ -197,6 +198,14 @@ try {
         // The poster is the default; no iframe may exist before the reader asks for the trailer.
         assert.equal(await viewer.locator('iframe').count(), 0, 'Broadcast must not load a player before activation')
         const playButton = viewer.locator('[data-broadcast-video]')
+        // A channel without a verified official video must not offer the control at all.
+        await viewer.locator('[data-broadcast-next]').click()
+        await page.waitForFunction(() => {
+          const button = document.querySelector('[data-anime-broadcast] [data-broadcast-video]')
+          return button instanceof HTMLElement && getComputedStyle(button).display === 'none'
+        })
+        assert.equal(await playButton.isVisible(), false, 'Channels without a verified video must hide the trailer control')
+        await viewer.locator('[data-broadcast-prev]').click()
         if (await playButton.isVisible()) {
           await playButton.click()
           await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
