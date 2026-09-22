@@ -1,0 +1,70 @@
+---
+title: 'AI Agent 工程阅读清单｜2026-09-21'
+description: '本期收录 LangGraph 人工审批结构约束、Deep Agents 同文件并行写保护，以及 MCP Ruby SDK OAuth 边界收紧。'
+publishDate: '2026-09-21T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Harness', 'MCP', 'Multi-Agent', 'Security']
+language: 'zh-CN'
+draft: false
+---
+
+本期只看 2026 年 9 月 21 日新增或当天正式发布的内容，并和前几期新闻日志去重。最终保留 3 条。LangGraph 1.2.12 解决人工审批输入缺少类型约束的问题。Deep Agents 0.7.16 处理多个执行分支并行修改同一文件产生的冲突。MCP Ruby SDK 1.6.0 收紧 OAuth 元数据发现和跨源请求边界。
+
+## LangGraph 1.2.12 给 interrupt 增加 response_schema
+
+### 发生了什么
+
+LangGraph Python 1.2.12 在 9 月 21 日发布。这个版本给 `interrupt()` 增加 `response_schema`。Agent 暂停等待人工输入时，可以声明恢复值的结构。客户端可以据此显示结构化表单，而不是只提供自由 JSON 输入。
+
+如果传入 Pydantic 模型、TypedDict 或 dataclass，LangGraph 会把类型转换成 JSON Schema，并在恢复时验证输入。验证后的对象会成为 `interrupt()` 的返回值。如果传入的是原始 JSON Schema 字典，Schema 会暴露给客户端，但运行时不会自动验证恢复值。
+
+### 工程意义
+
+人工审批通常是 Agent 长任务里容易出现非结构化输入的地方。以前 Harness 往往要自己维护审批表单和恢复值校验。现在图定义本身可以携带恢复值 Schema，前端和执行层可以共享同一份结构约束。
+
+使用时要区分两种情况。需要运行时强校验时，应传 Python 类型。只传 JSON Schema 字典适合生成界面，但不能把它当成后端校验。
+
+### 先读哪里
+
+先看 [LangGraph 1.2.12 Release](https://github.com/langchain-ai/langgraph/releases/tag/1.2.12) 里的 `add response_schema to interrupt()`。然后看 [LangGraph types.py](https://github.com/langchain-ai/langgraph/blob/main/libs/langgraph/langgraph/types.py) 中 `Interrupt.response_schema` 和 `interrupt()` 的说明，重点看不同 Schema 类型的验证差异。
+
+## Deep Agents 0.7.16 拒绝同一文件的并行修改
+
+### 发生了什么
+
+Deep Agents Python 0.7.16 在 9 月 21 日发布。这个版本有两个与 Harness 直接相关的变化。第一，系统会拒绝对同一文件的并行编辑，避免多个执行分支同时修改一个文件产生冲突。第二，当 `skills_metadata` 被重置为 `None` 时，系统会重新加载 Skills。
+
+### 工程意义
+
+多 Agent 并行不代表写操作可以无条件并行。多个子 Agent 同时读取旧版本文件并提交修改时，即使每个修改单独正确，也可能互相覆盖。Deep Agents 现在直接拒绝这一类并行写入，说明文件级并发控制应该放在 Harness，而不是交给模型自行协调。
+
+如果自己实现 Coding Agent，可以让读取、搜索和独立验证并行执行，但对同一文件的写入需要串行化、加锁，或者提前分配互不重叠的文件所有权。
+
+Skills 重新加载的改动也说明动态 Skill 系统需要明确失效机制。只更新磁盘内容而不让运行时元数据失效，Agent 可能继续使用旧 Skill 状态。
+
+### 先读哪里
+
+先看 [Deep Agents Changelog](https://github.com/langchain-ai/deepagents/blob/main/libs/deepagents/CHANGELOG.md)。重点看 `Reject parallel edits to the same file` 和 `Reload skills when skills_metadata is reset to None` 两项。再结合 Deep Agents 的 filesystem 和 subagent 设计，看写冲突应该在哪一层拦截。
+
+## MCP Ruby SDK 1.6.0 收紧 OAuth 发现和请求边界
+
+### 发生了什么
+
+Model Context Protocol 官方 Ruby SDK 1.6.0 在 9 月 21 日发布。OAuth Provider 新增 `token_request_params`，允许添加授权服务器要求的额外 Token 参数。它还新增 `http_client_customizer`，允许为发现、注册和 Token 请求配置 HTTP 中间件。
+
+这个自定义能力带有来源限制。SDK 会拒绝离开当前 OAuth 流目标 Origin 的请求。
+
+版本同时修改了旧版发现回退逻辑。只有服务器确实没有发布 Protected Resource Metadata 时，SDK 才使用 2025-03-26 的旧发现路径。如果元数据请求无法到达服务器，或者返回 5xx、429，SDK 会抛出 `Flow::MetadataUnreachableError`，不再把网络错误或服务异常当成“没有元数据”然后回退。旧路径返回的授权服务器元数据还必须把 MCP Server 的 Origin 声明为 issuer。
+
+### 工程意义
+
+OAuth 发现代码需要区分“资源不存在”和“资源暂时取不到”。如果把超时、限流和服务端错误都当成缺少新元数据，再自动回退旧流程，安全约束可能在故障时被绕开。
+
+HTTP 客户端可扩展时也需要限制重定向和跨源访问。MCP Client 可能携带客户端凭据、Token 请求参数和授权上下文。如果自定义中间件能把请求带到其他 Origin，风险会直接进入凭据处理链。
+
+### 先读哪里
+
+先看 [MCP Ruby SDK v1.6.0](https://github.com/modelcontextprotocol/ruby-sdk/releases/tag/v1.6.0) 的 Added 和 Changed。重点读 `http_client_customizer`、legacy authorization server metadata issuer 校验，以及 Protected Resource Metadata 不可达时停止回退的逻辑。
+
+## 本期结论
+
+LangGraph 这次更新补的是人工介入的结构约束。Deep Agents 处理的是并行写冲突。MCP Ruby SDK 处理的是 OAuth 发现和跨源请求边界。三项改动都落在 Agent Runtime 和 Harness 的边界处理上，但解决的是不同故障。
