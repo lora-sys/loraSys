@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect width="1440" height="900" fill="#F7F1E7"/>
+<text x="720" y="68" text-anchor="middle" font-size="42" font-family="sans-serif" font-weight="700" fill="#2B241F">论文主结果：任务结构决定多 Agent 是否占优</text>
+<text x="720" y="110" text-anchor="middle" font-size="21" font-family="sans-serif" fill="#806B59">只比较同一 benchmark 内的 Single-Agent 与 SAIGE。四个 benchmark 的指标定义不同。</text>
+<line x1="150" y1="735" x2="1340" y2="735" stroke="#3A312B" stroke-width="2"/>
+<line x1="150" y1="185" x2="150" y2="735" stroke="#3A312B" stroke-width="2"/>
+<line x1="150" y1="735.0" x2="1340" y2="735.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="742.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">0</text><line x1="150" y1="625.0" x2="1340" y2="625.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="632.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">20</text><line x1="150" y1="515.0" x2="1340" y2="515.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="522.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">40</text><line x1="150" y1="405.0" x2="1340" y2="405.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="412.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">60</text><line x1="150" y1="295.0" x2="1340" y2="295.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="302.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">80</text><line x1="150" y1="185.0" x2="1340" y2="185.0" stroke="#D8CEC1" stroke-width="1"/><text x="125" y="192.0" text-anchor="end" font-family="sans-serif" font-size="17" fill="#806B59">100</text>
+<g font-family="sans-serif">
+<rect x="230" y="313.095" width="82" height="421.905" fill="#B8AEA2"/><rect x="320" y="319.75" width="82" height="415.25" fill="#D89B3C"/>
+<text x="271" y="298.095" text-anchor="middle" font-size="18" fill="#2B241F">76.71</text><text x="361" y="304.75" text-anchor="middle" font-size="18" fill="#2B241F">75.50</text>
+<text x="316" y="775" text-anchor="middle" font-size="21" fill="#2B241F">Terminal Bench 2.1</text><text x="316" y="807" text-anchor="middle" font-size="17" fill="#806B59">紧密依赖</text>
+<rect x="505" y="466.93" width="82" height="268.07" fill="#B8AEA2"/><rect x="595" y="464.235" width="82" height="270.765" fill="#D89B3C"/>
+<text x="546" y="451.93" text-anchor="middle" font-size="18" fill="#2B241F">48.74</text><text x="636" y="449.235" text-anchor="middle" font-size="18" fill="#2B241F">49.23</text>
+<text x="591" y="775" text-anchor="middle" font-size="21" fill="#2B241F">NL2Repo</text><text x="591" y="807" text-anchor="middle" font-size="17" fill="#806B59">紧密依赖</text>
+<rect x="780" y="451.805" width="82" height="283.195" fill="#B8AEA2"/><rect x="870" y="431.235" width="82" height="303.765" fill="#D89B3C"/>
+<text x="821" y="436.805" text-anchor="middle" font-size="18" fill="#2B241F">51.49</text><text x="911" y="416.235" text-anchor="middle" font-size="18" fill="#2B241F">55.23</text>
+<text x="866" y="775" text-anchor="middle" font-size="21" fill="#2B241F">Deep Research II</text><text x="866" y="807" text-anchor="middle" font-size="17" fill="#806B59">稀疏依赖</text>
+<rect x="1055" y="440.365" width="82" height="294.635" fill="#B8AEA2"/><rect x="1145" y="340.1" width="82" height="394.9" fill="#D89B3C"/>
+<text x="1096" y="425.365" text-anchor="middle" font-size="18" fill="#2B241F">53.57</text><text x="1186" y="325.1" text-anchor="middle" font-size="18" fill="#2B241F">71.80</text>
+<text x="1141" y="775" text-anchor="middle" font-size="21" fill="#2B241F">AgentIF-OneDay</text><text x="1141" y="807" text-anchor="middle" font-size="17" fill="#806B59">稀疏依赖</text>
+</g>
+<rect x="1030" y="135" rx="16" width="300" height="70" fill="#FFF9EF" stroke="#806B59"/>
+<rect x="1055" y="155" width="24" height="24" fill="#B8AEA2"/><text x="1090" y="175" font-family="sans-serif" font-size="18" fill="#2B241F">Single-Agent</text>
+<rect x="1190" y="155" width="24" height="24" fill="#D89B3C"/><text x="1225" y="175" font-family="sans-serif" font-size="18" fill="#2B241F">SAIGE</text>
+<text x="720" y="862" text-anchor="middle" font-size="18" font-family="sans-serif" fill="#806B59">来源：Yuan 等，Rethinking Multi-Agent Collaboration，Table 1。默认多 Agent 配置最多 4 个 Agent，递归深度 1。</text>
+</svg>

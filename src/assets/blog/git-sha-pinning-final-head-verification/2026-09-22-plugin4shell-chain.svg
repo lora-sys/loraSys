@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<rect width="1400" height="820" fill="#F6EEDF"/>
+<rect x="42" y="42" width="1316" height="100" rx="24" fill="#2E251F"/>
+<text x="78" y="102" font-family="Noto Sans CJK SC, sans-serif" font-size="44" font-weight="700" fill="#FFF9EF">Plugin4Shell 的核心链路</text>
+<text x="78" y="134" font-family="Noto Sans CJK SC, sans-serif" font-size="20" fill="#E9D8BE">问题不在 SHA 本身。问题在安装器把“请求的名字”当成了“最终落点”。</text>
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="54" y="190" width="238" height="430" rx="24" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<text x="80" y="240" font-size="24" font-weight="700" fill="#2E251F">1 记录固定 SHA</text>
+<text x="80" y="292" font-size="20" fill="#51443A">插件先通过审核</text><text x="80" y="326" font-size="20" fill="#51443A">市场记录提交 ID</text>
+<rect x="80" y="370" width="186" height="80" rx="14" fill="#EFE1CA"/><text x="98" y="405" font-size="18" fill="#76512F">reviewed commit</text><text x="98" y="432" font-family="monospace" font-size="17" fill="#76512F">bbb...bbb</text>
+
+<rect x="327" y="190" width="238" height="430" rx="24" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<text x="353" y="240" font-size="24" font-weight="700" fill="#2E251F">2 仓库被控制</text>
+<text x="353" y="292" font-size="20" fill="#51443A">攻击者拿到上游</text><text x="353" y="326" font-size="20" fill="#51443A">仓库写入权限</text>
+<rect x="353" y="370" width="186" height="112" rx="14" fill="#F6D9D2"/><text x="371" y="405" font-size="18" fill="#963F32">默认分支改成</text><text x="371" y="438" font-family="monospace" font-size="17" fill="#963F32">bbb...bbb</text><text x="371" y="468" font-size="17" fill="#963F32">指向不同提交</text>
+
+<rect x="600" y="190" width="238" height="430" rx="24" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<text x="626" y="240" font-size="24" font-weight="700" fill="#2E251F">3 安装器 checkout</text>
+<rect x="626" y="290" width="186" height="125" rx="14" fill="#2E251F"/><text x="642" y="330" font-family="monospace" font-size="17" fill="#FFF9EF">git clone repo</text><text x="642" y="366" font-family="monospace" font-size="17" fill="#FFF9EF">git checkout</text><text x="642" y="394" font-family="monospace" font-size="17" fill="#E9D8BE">bbb...bbb</text>
+<text x="626" y="466" font-size="19" fill="#51443A">只检查命令状态</text><text x="626" y="500" font-size="19" fill="#51443A">没有读取最终 HEAD</text>
+
+<rect x="873" y="190" width="238" height="430" rx="24" fill="#FFF9EF" stroke="#963F32" stroke-width="3"/>
+<text x="899" y="240" font-size="24" font-weight="700" fill="#2E251F">4 Git 给出警告</text>
+<rect x="899" y="290" width="186" height="110" rx="14" fill="#F6D9D2"/><text x="917" y="326" font-size="17" fill="#963F32">refname is</text><text x="917" y="358" font-size="17" fill="#963F32">ambiguous</text><text x="917" y="388" font-size="16" fill="#963F32">但 checkout 仍成功</text>
+<text x="899" y="466" font-size="19" fill="#51443A">程序忽略警告</text><text x="899" y="500" font-size="19" fill="#51443A">继续后续加载</text>
+
+<rect x="1146" y="190" width="200" height="430" rx="24" fill="#FFF9EF" stroke="#963F32" stroke-width="3"/>
+<text x="1172" y="240" font-size="24" font-weight="700" fill="#2E251F">5 错误落点</text>
+<text x="1172" y="300" font-size="19" fill="#51443A">工作树来自</text><text x="1172" y="334" font-size="19" fill="#51443A">另一个提交</text>
+<rect x="1172" y="380" width="148" height="92" rx="14" fill="#F6D9D2"/><text x="1190" y="418" font-size="18" fill="#963F32">actual HEAD</text><text x="1190" y="450" font-size="18" fill="#963F32">≠ pinned SHA</text>
+<text x="1172" y="526" font-size="19" font-weight="700" fill="#963F32">仍然加载插件</text>
+
+<g fill="#6F5A48"><polygon points="327,405 305,391 305,419"/><polygon points="600,405 578,391 578,419"/><polygon points="873,405 851,391 851,419"/><polygon points="1146,405 1124,391 1124,419"/></g>
+<g stroke="#6F5A48" stroke-width="7"><line x1="292" y1="405" x2="315" y2="405"/><line x1="565" y1="405" x2="588" y2="405"/><line x1="838" y1="405" x2="861" y2="405"/><line x1="1111" y1="405" x2="1134" y2="405"/></g>
+
+<rect x="54" y="672" width="1292" height="96" rx="22" fill="#E8D4B4"/>
+<text x="86" y="714" font-size="24" font-weight="700" fill="#2E251F">关键限制</text>
+<text x="220" y="714" font-size="21" fill="#51443A">这一 40 位十六进制分支名变体要求托管平台允许这种分支名。GitHub 官方明确禁止它。</text>
+<text x="86" y="750" font-size="21" fill="#51443A">AIR 的披露还给出了 Gemini CLI 的 FETCH_HEAD 变体。两类问题的共同点都是缺少 checkout 后的最终状态校验。</text>
+</g></svg>

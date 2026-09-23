@@ -1,0 +1,81 @@
+---
+title: 'json-render：先锁组件目录，再让 AI 生成界面'
+description: 'Vercel Labs 的 json-render 先定义组件、动作和数据绑定目录，再让模型生成符合 schema 的 JSON。生成式 UI 的边界因此可以验证、记录和回放。'
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['Generative UI', 'AI App', 'Vercel', 'Frontend Infra', 'Developer Tools']
+language: 'zh-CN'
+draft: false
+---
+
+普通的 AI 前端生成经常让模型直接写 JSX。模型能改结构，也可能顺手造一个不存在的组件或属性。
+
+[Vercel Labs 的 json-render](https://github.com/vercel-labs/json-render) 换了控制点。开发者先列出允许使用的组件、动作和数据绑定，再给这些组件定义 schema。模型只负责产出符合约束的 JSON。真正渲染界面的还是开发者自己的组件。
+
+## 30 秒看懂
+
+开发者先定义 catalog。catalog 规定模型可以使用哪些组件、动作和数据绑定。模型根据自然语言生成 JSON。JSON 必须符合 schema，再由真实组件渲染。
+
+所以它的核心不是 AI 会画 UI，而是 AI 只能在开发者给出的 UI 零件范围内组合。
+
+这和 Tool Calling 的思路很接近。模型有选择权，但执行边界由开发者控制。
+
+## 事实核验
+
+项目仓库是 [vercel-labs/json-render](https://github.com/vercel-labs/json-render)，官方站是 [json-render.dev](https://json-render.dev/)。GitHub 将 Vercel Labs 标记为 Verified，并确认该组织控制 vercel.com。
+
+官方 README 描述的核心流程很明确。开发者先定义 catalog。catalog 规定模型可以使用哪些组件、动作和数据绑定。模型生成 JSON。JSON 通过 schema 约束，再由真实组件渲染。官方也支持边生成边渲染。
+
+当前仓库提供 React、shadcn、React Native、Remotion、React PDF、React Email、Vue、Svelte、Solid、Ink、Next.js 和 React Three Fiber 等渲染包，也有 MCP Apps 集成包。
+
+官网首页本身就是可交互示例。页面展示 catalog、JSON、live render 和 static code，并支持导出独立 React 代码。
+
+仓库许可证为 Apache-2.0。仓库公开，当前可通过 npm 安装。
+
+动态 star 数可以反映某个时间点的关注度，但不能当作用户量，因此本文不把 star 数写成采用规模。
+
+## 为什么要先锁组件目录
+
+生成式 UI 有一个直接冲突。用户希望界面能根据任务动态变化，产品又不能接受模型随意创造组件、属性和交互。
+
+json-render 没有把这个问题交给提示词约束，而是缩小模型能表达的空间。
+
+catalog 是能力白名单。schema 是结构约束。renderer 是真实执行边界。
+
+模型可以决定 Card、Metric、Button 怎么组合，但组件实现仍由产品代码控制。设计系统、权限和交互规则不会因为一次模型生成就自动失效。
+
+## 结构化 spec 有什么用
+
+Prompt 不直接变成 JSX，中间先经过 JSON spec。
+
+这层结构可以做验证。如果字段或组件不在 schema 里，可以在渲染以前拒绝。也可以把 spec 保存下来做日志、diff、回放和 Eval。
+
+对于 Agent 产品，这一点很实用。模型生成什么和前端真正执行什么之间有一份可检查的中间结果。出问题时可以直接比较两次 spec，而不是只看最终 DOM 或截图。
+
+## 一份 spec 可以对接多个 renderer
+
+json-render 把 spec 和 renderer 分开。官方已经提供 Web、移动端、PDF、邮件、视频、终端和 3D 等方向的适配。
+
+这意味着产品可以把模型决定内容与结构，和不同端如何渲染拆开。同一类业务状态不必让模型为每个平台重新生成一套任意代码。
+
+这类设计适合 Agent 产品里的动态工作区。可以先定义候选卡、报价卡、风险提示、确认按钮和时间线等可信组件。Agent 只生成结构化 spec。前端根据 spec 渲染，并把可执行动作限制在 catalog 里。
+
+## 这套约束不能保证什么
+
+schema 和 catalog 能限制输出空间，但不能保证 AI 永远生成正确界面。业务逻辑、数据和组件实现本身仍可能出错。
+
+官方材料也没有给出统一 benchmark，因此不能据此声称它比直接生成 React 代码更快、更便宜或质量更高。
+
+真正可以确认的是，它把一部分原本依赖模型自觉遵守的 UI 边界，改成了代码可以验证的结构边界。
+
+## 可以直接借鉴的设计
+
+第一，把自由度放在组合，不放在组件实现。模型可以组合已有组件，但不能随意创造产品没有实现的能力。
+
+第二，用结构化中间层。JSON spec 能校验、记录、diff、回放，也适合进入 Eval。
+
+第三，把 spec 和 renderer 分开。模型决定内容和结构，不同平台的组件层负责真实渲染。
+
+## 一手来源
+
+- [Vercel Labs：json-render GitHub 仓库](https://github.com/vercel-labs/json-render)
+- [json-render 官方站](https://json-render.dev/)

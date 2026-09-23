@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<rect width="1400" height="820" fill="#F6EEDF"/>
+<rect x="42" y="42" width="1316" height="100" rx="24" fill="#2E251F"/>
+<text x="78" y="102" font-family="Noto Sans CJK SC, sans-serif" font-size="42" font-weight="700" fill="#FFF9EF">安全的插件安装器应该在哪一步验证</text>
+<text x="78" y="134" font-family="Noto Sans CJK SC, sans-serif" font-size="20" fill="#E9D8BE">命令成功只能说明 Git 做完了操作。加载代码之前，还要验证实际 HEAD。</text>
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="55" y="190" width="610" height="500" rx="28" fill="#FFF9EF" stroke="#A9503E" stroke-width="3"/>
+<text x="88" y="242" font-size="30" font-weight="700" fill="#963F32">弱流程</text><text x="210" y="242" font-size="24" fill="#51443A">checkout 成功就加载</text>
+<g font-size="21" fill="#2E251F"><text x="94" y="310">1 读取 pinned SHA</text><text x="94" y="380">2 clone 仓库</text><text x="94" y="450">3 git checkout pinned SHA</text><text x="94" y="520">4 看到退出码 0</text><text x="94" y="590">5 直接加载插件</text></g>
+<line x1="415" y1="292" x2="415" y2="600" stroke="#A9503E" stroke-width="4" stroke-dasharray="10 10"/>
+<rect x="445" y="304" width="176" height="92" rx="14" fill="#F6D9D2"/><text x="468" y="340" font-size="19" fill="#963F32">缺少校验</text><text x="468" y="372" font-size="18" fill="#963F32">actual HEAD</text>
+<rect x="445" y="500" width="176" height="90" rx="14" fill="#F6D9D2"/><text x="468" y="538" font-size="18" fill="#963F32">错误提交也可能</text><text x="468" y="570" font-size="18" fill="#963F32">进入执行阶段</text>
+
+<rect x="735" y="190" width="610" height="500" rx="28" fill="#FFF9EF" stroke="#647154" stroke-width="3"/>
+<text x="768" y="242" font-size="30" font-weight="700" fill="#536044">强流程</text><text x="890" y="242" font-size="24" fill="#51443A">验证一致才加载</text>
+<g font-size="21" fill="#2E251F"><text x="774" y="310">1 读取 pinned SHA</text><text x="774" y="370">2 clone 与 checkout</text><text x="774" y="430">3 读取 git rev-parse HEAD</text><text x="774" y="490">4 比较 actual 与 expected</text><text x="774" y="550">5 一致才加载</text><text x="774" y="610">6 不一致立即终止并记录</text></g>
+<rect x="1090" y="318" width="210" height="120" rx="14" fill="#E7EBDD"/><text x="1112" y="353" font-size="18" fill="#2E251F">expected</text><text x="1112" y="385" font-family="monospace" font-size="17" fill="#536044">abc123...</text><text x="1112" y="419" font-size="18" fill="#2E251F">actual HEAD</text>
+<rect x="1090" y="480" width="210" height="110" rx="14" fill="#E7EBDD"/><text x="1112" y="520" font-size="20" font-weight="700" fill="#536044">相等</text><text x="1112" y="554" font-size="18" fill="#51443A">允许加载</text>
+
+<rect x="55" y="724" width="1290" height="62" rx="20" fill="#E8D4B4"/>
+<text x="85" y="764" font-size="24" font-weight="700" fill="#2E251F">验收条件：任何名称解析、镜像同步或自动更新之后，执行对象的真实 ID 都必须等于策略记录的 ID。</text>
+</g></svg>

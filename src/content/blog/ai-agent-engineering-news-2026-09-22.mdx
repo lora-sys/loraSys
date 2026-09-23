@@ -1,0 +1,118 @@
+---
+title: 'AI Agent 工程阅读清单｜2026-09-22'
+description: '本期收录 Claude Opus 5.5 的 Agent API 兼容变化、RRSI 的 Harness 过拟合控制、Harness-Zero 的行为蒸馏，以及 Strands harness 的默认策略。'
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Harness', 'Agent Eval', 'AI Software Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+本期覆盖 2026 年 9 月 22 日。上一期已经覆盖到 9 月 21 日。去重后保留 4 条。
+
+Claude Opus 5.5 是 9 月 22 日的新发布。RRSI、Harness-Zero 和 Strands harness 都在 9 月 21 日发布或提交，但上一期日志没有收录，因此本期作为漏收补入，不把它们写成 9 月 22 日新发布。
+
+## Claude Opus 5.5 改变 Tool Agent 的兼容层
+
+### 发生了什么
+
+Anthropic 在 9 月 22 日发布 Claude Opus 5.5。Anthropic 表示，它在多数工作上的表现接近 Fable 5.1，典型工作负载的运行成本比 Opus 5 低约 40%，缓存读取价格低 60%，输出速度快 30% 以上。Anthropic 还扩大了长任务、不可完成任务和真实事故类场景的安全测试。
+
+Vercel 同日给出了两个直接影响 Agent Harness 的 API 变化。第一，Opus 5.5 始终使用 adaptive thinking。关闭 thinking 或设置固定 thinking budget 的请求会被拒绝。第二，模型不再支持强制 `any` tool 或指定某个 tool。旧 Harness 如果依赖 forced tool choice，可能直接收到 HTTP 400。
+
+### 工程意义
+
+Agent Runtime 的 Provider 适配层不能继续假设所有 Anthropic 模型都支持固定推理预算和强制工具选择。
+
+对于必须调用某个业务工具的流程，Harness 应该在模型返回以后校验实际工具调用，再根据业务规则重试或失败。只需要稳定 JSON 输出时，可以优先使用 structured outputs。
+
+现有集成还需要补 thinking 配置和 `tool_choice` 配置的兼容性测试，避免模型升级以后才在运行时发现 400 错误。
+
+### 先读哪里
+
+先读 Vercel 的 breaking API changes，再读 Anthropic 页面里的 Performance and cost-effectiveness，以及对应 System Card 中的长任务和安全评测。
+
+### 一手来源
+
+- [Anthropic：Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)
+- [Vercel AI Gateway 兼容说明](https://vercel.com/changelog/claude-opus-5-5-now-available-on-ai-gateway)
+
+## RRSI 给自动优化 Harness 加上过拟合控制
+
+### 发生了什么
+
+RRSI 在 9 月 21 日提交到 arXiv，上一期日志没有收录。论文研究自动修改 Agent Harness 时出现的 benchmark 过拟合问题，并对 proposal 和 selection 两个阶段都加了约束。
+
+Proposal 阶段使用逐步退火的修改预算，限制一次候选方案打包过多改动，并鼓励探索此前没有尝试过的轨迹。Selection 阶段加入 critic，筛掉明显依赖特定 benchmark 的方案，再用 pruner 删除收益太小、成本太高或者已经不再有价值的 Harness 改动。
+
+作者在 8 个 coding、agentic workspace 和 engineering design benchmark 上测试。论文报告 evolve split 最多提升 14.1 个百分点，在 5 个分布外 benchmark 上最多提升 4.7 个百分点，同时比未正则化的 harness evolution 少用约 30% 的 policy tokens。
+
+这些数字来自论文作者实验，只能按论文的模型、任务和评测设置理解。
+
+### 工程意义
+
+如果系统会自动修改 Prompt、Tool 集合、上下文管理或控制流，不能只用同一组任务来生成修改并挑选修改。否则 Harness 很容易把 benchmark 特征写进策略。
+
+实际实现可以直接借两层控制。第一层限制单次 Harness patch 的范围。第二层使用独立任务和 critic 检查修改是否只对训练集有效。发布前还要保留分布外 Eval。
+
+### 先读哪里
+
+先看 proposal budget、critic 和 pruner 的设计，再看分布外 benchmark 结果和消融实验，判断各个正则化组件分别解决了什么问题。
+
+### 一手来源
+
+- [RRSI 论文](https://arxiv.org/abs/2609.24972)
+
+## Harness-Zero 把部分 Harness 行为蒸馏进模型
+
+### 发生了什么
+
+Harness-Zero 在 9 月 21 日提交到 arXiv，上一期日志没有收录。
+
+训练阶段保留一个能力更强的专用 Harness。一个 harnessing agent 会检查学生模型的输出，并在真正执行以前把输出修正成目标 Harness 可以执行的动作。这些修正轨迹随后用于微调学生模型。
+
+训练结束以后，专用 Harness 可以移除。作者报告，在固定目标 Harness 下，宏平均任务成功率从 23.3% 提高到 44.3%。论文还报告，模型平均恢复了 28 类 Harness 行为模式中的 82.3%。
+
+这些数字来自论文作者实验。
+
+### 工程意义
+
+这给长期维护大量领域专用 Harness 提供了另一种路线。稳定、可学习的工具使用和流程行为可以在训练阶段蒸馏进模型，从而减少推理时对复杂 Harness 行为层的依赖。
+
+这不等于可以删除运行时基础设施。权限控制、Sandbox、凭据边界、重试、审计和副作用控制仍然需要由 Harness 或 Runtime 提供。论文处理的是行为迁移，不是运行时安全边界。
+
+### 先读哪里
+
+先看 agent-as-harness correction 的训练流程，再看行为恢复分析和固定目标 Harness 下的成功率结果。最后看 limitations，确认哪些 Harness 能力适合蒸馏，哪些仍必须留在运行时。
+
+### 一手来源
+
+- [Harness-Zero 论文](https://arxiv.org/abs/2609.24974)
+
+## Strands harness 给出一套可比较的默认 Harness 策略
+
+### 发生了什么
+
+Strands 在 9 月 21 日发布开源 general-purpose harness，上一期日志没有收录。项目使用 Apache 2.0 许可，并提供 Python 和 TypeScript 接口。
+
+默认 Harness 包含 Shell、文件操作、Web、上下文管理、长期记忆、Session 恢复、辅助 Agent、Checklist 和 Skills。
+
+上下文管理的默认值很具体。工具结果超过约 1500 tokens 时会截断。上下文使用量超过约 85% 时会触发 compaction。发生 context overflow 后还有恢复逻辑。
+
+Strands 自己公布了 6 个 benchmark 的结果。项目方报告称，在使用相同 Claude 或 GPT 模型时，Strands harness 的成本平均低 28%，总体 benchmark 分数接近对照 Harness。这里的数字来自项目方自己的测试，不是独立复现结果。
+
+### 工程意义
+
+这套实现适合用来检查现有 Harness 的默认参数。工具结果截断阈值、compaction 触发比例、overflow recovery、Session 恢复和长期记忆都可以直接做对照实验，而不是只比较最终任务成功率。
+
+### 先读哪里
+
+先读官方博客里的 benchmark setup 和 default context management，再看文档中的 What the default harness does，检查 Shell、filesystem、memory、skills、helper agent 和 session resume 的默认组合。
+
+### 一手来源
+
+- [Strands 官方发布](https://strandsagents.com/blog/introducing-strands-harness/)
+- [Strands harness 文档](https://strandsagents.com/latest/documentation/docs/user-guide/concepts/harness/)
+
+## 本期结论
+
+本期四条内容落在不同层。Claude Opus 5.5 需要先处理 Provider 兼容性。RRSI 处理自动改 Harness 时的过拟合。Harness-Zero 研究哪些行为能从 Harness 迁到模型。Strands 则提供一套可直接拿来做默认参数对照的开源 Harness。

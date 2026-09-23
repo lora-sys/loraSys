@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="800" viewBox="0 0 1400 800">
+<rect width="1400" height="800" fill="#F6EEDF"/>
+<rect x="42" y="42" width="1316" height="100" rx="24" fill="#2E251F"/>
+<text x="78" y="100" font-family="Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" fill="#FFF9EF">本地无害复现：checkout 返回成功，但 HEAD 不是期望的提交</text>
+<text x="78" y="132" font-family="Noto Sans CJK SC, sans-serif" font-size="20" fill="#E9D8BE">本次实际运行只改 marker.txt，没有执行插件代码，也没有访问外部系统。</text>
+<g font-family="Noto Sans CJK SC, sans-serif">
+<rect x="60" y="190" width="600" height="430" rx="26" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<text x="95" y="245" font-size="30" font-weight="700" fill="#2E251F">实验设置</text>
+<text x="95" y="304" font-size="22" fill="#51443A">期望提交</text><text x="95" y="338" font-family="monospace" font-size="17" fill="#76512F">f14dcf86f2c2ad34aaa47828eee80301e339950b</text>
+<text x="95" y="405" font-size="22" fill="#51443A">创建同名本地分支，并让它指向另一提交</text><text x="95" y="442" font-family="monospace" font-size="17" fill="#963F32">acae36d63f588241ab723a0348530f413626dc7a</text>
+<text x="95" y="508" font-size="21" fill="#51443A">把这个分支设为默认分支后重新 clone</text><text x="95" y="548" font-size="21" fill="#51443A">marker.txt 的内容是 different</text>
+
+<rect x="740" y="190" width="600" height="430" rx="26" fill="#FFF9EF" stroke="#A9503E" stroke-width="3"/>
+<text x="775" y="245" font-size="30" font-weight="700" fill="#2E251F">实际结果</text>
+<text x="775" y="304" font-size="22" fill="#51443A">git checkout 期望 SHA 的退出状态</text><text x="1220" y="304" font-size="24" font-weight="700" fill="#536044">0</text>
+<rect x="775" y="340" width="500" height="74" rx="14" fill="#F6D9D2"/><text x="800" y="386" font-family="monospace" font-size="21" fill="#963F32">warning: refname is ambiguous</text>
+<text x="775" y="468" font-size="22" fill="#51443A">checkout 后实际 HEAD</text><text x="775" y="505" font-family="monospace" font-size="17" fill="#963F32">acae36d63f588241ab723a0348530f413626dc7a</text>
+<text x="775" y="566" font-size="25" font-weight="700" fill="#963F32">actual HEAD ≠ expected SHA</text>
+
+<rect x="60" y="662" width="1280" height="84" rx="20" fill="#E8D4B4"/>
+<text x="90" y="700" font-size="21" fill="#2E251F">结论：Git 的警告出现了，命令仍返回成功。如果安装器只看退出码，它就会错过真正的安全条件。</text>
+<text x="90" y="730" font-size="18" fill="#51443A">限制：GitHub 托管仓库禁止 40 位十六进制分支名，所以这一具体分支名变体不适用于 GitHub。</text>
+</g></svg>

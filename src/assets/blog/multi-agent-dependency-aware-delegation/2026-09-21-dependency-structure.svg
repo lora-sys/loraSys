@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect width="1440" height="900" fill="#F7F1E7"/>
+<text x="720" y="72" text-anchor="middle" font-size="44" font-family="sans-serif" font-weight="700" fill="#2B241F">什么时候该拆成多个 Agent？</text>
+<text x="720" y="112" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#806B59">先看任务依赖，再决定协作方式</text>
+<rect x="50" y="160" rx="26" width="640" height="620" fill="#FFF9EF" stroke="#806B59" stroke-width="2"/>
+<rect x="750" y="160" rx="26" width="640" height="620" fill="#FFF9EF" stroke="#806B59" stroke-width="2"/>
+<text x="370" y="215" text-anchor="middle" font-size="31" font-family="sans-serif" font-weight="700" fill="#2B241F">紧密耦合：继续单 Agent</text>
+<text x="1070" y="215" text-anchor="middle" font-size="31" font-family="sans-serif" font-weight="700" fill="#2B241F">依赖稀疏：可以委派子 Agent</text>
+<g font-family="sans-serif" font-size="23" fill="#2B241F">
+<rect x="180" y="275" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="320" text-anchor="middle">读失败测试</text>
+<line x1="370" y1="345" x2="370" y2="380" stroke="#D89B3C" stroke-width="6"/><polygon points="360,374 380,374 370,390" fill="#D89B3C"/>
+<rect x="180" y="390" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="435" text-anchor="middle">检查实现</text>
+<line x1="370" y1="460" x2="370" y2="495" stroke="#D89B3C" stroke-width="6"/><polygon points="360,489 380,489 370,505" fill="#D89B3C"/>
+<rect x="180" y="505" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="550" text-anchor="middle">修改代码</text>
+<line x1="370" y1="575" x2="370" y2="610" stroke="#D89B3C" stroke-width="6"/><polygon points="360,604 380,604 370,620" fill="#D89B3C"/>
+<rect x="180" y="620" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="665" text-anchor="middle">重跑测试</text>
+</g>
+<rect x="160" y="715" rx="16" width="420" height="40" fill="#C77C66" opacity="0.18"/>
+<text x="370" y="743" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#2B241F">后一步强依赖前一步，拆开会增加协调</text>
+<g font-family="sans-serif" font-size="22" fill="#2B241F">
+<rect x="960" y="260" rx="18" width="220" height="64" fill="#F1C77C"/><text x="1070" y="300" text-anchor="middle">主 Agent</text>
+<line x1="1070" y1="324" x2="1070" y2="360" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="360" x2="1290" y2="360" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="360" x2="850" y2="400" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="360" x2="1070" y2="400" stroke="#806B59" stroke-width="4"/>
+<line x1="1290" y1="360" x2="1290" y2="400" stroke="#806B59" stroke-width="4"/>
+<rect x="785" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="850" y="445" text-anchor="middle">部署</text><text x="850" y="480" text-anchor="middle">变化</text>
+<rect x="1005" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="1070" y="445" text-anchor="middle">错误</text><text x="1070" y="480" text-anchor="middle">日志</text>
+<rect x="1225" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="1290" y="445" text-anchor="middle">依赖</text><text x="1290" y="480" text-anchor="middle">状态</text>
+<line x1="850" y1="520" x2="850" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="520" x2="1070" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1290" y1="520" x2="1290" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="570" x2="1290" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="570" x2="1070" y2="610" stroke="#806B59" stroke-width="4"/>
+<rect x="940" y="610" rx="18" width="260" height="70" fill="#F1C77C"/><text x="1070" y="655" text-anchor="middle">主 Agent 汇总</text>
+</g>
+<rect x="870" y="715" rx="16" width="400" height="40" fill="#8DAA91" opacity="0.25"/>
+<text x="1070" y="743" text-anchor="middle" font-size="20" font-family="sans-serif" fill="#2B241F">子任务能独立推进，最后只交换必要结果</text>
+<text x="720" y="840" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="700" fill="#2B241F">拆 Agent 的依据是依赖结构，不是角色数量</text>
+</svg>

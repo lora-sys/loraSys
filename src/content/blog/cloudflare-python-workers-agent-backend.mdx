@@ -1,0 +1,100 @@
+---
+title: 'Cloudflare Python Workers GA 后，Agent 后端怎么部署'
+description: 'Python Workers 已进入 GA，FastAPI、Django、Flask 以及 openai、langchain、mcp 可以直接运行在 Workers。真正的迁移边界仍是 WebAssembly 包兼容性。'
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['AI Builder', 'AI Agent', 'Cloudflare Workers', 'Python', 'Developer Tools']
+language: 'zh-CN'
+draft: false
+---
+
+Cloudflare 把 Python Workers 推到 GA。变化不是 Workers 终于能运行 Python。Python Workers 两年前已经出现。现在真正改变的是支持等级和工程路径。
+
+Cloudflare 把 Python 定义成 Developer Platform 的正式支持语言。FastAPI、Django、Flask 可以直接跑在 Workers。Python 代码也能直接使用 Workers AI、R2、D1、Hyperdrive、Durable Objects、Queues 和 Workflows。
+
+对 Agent 后端来说，这件事值得重新看一次部署架构。
+
+## 30 秒看懂
+
+Cloudflare 官方现在明确支持 Python Web 框架和一批 Agent 常用库。`openai`、`langchain` 和 `mcp` 都被列为可以在 Python Workers 中运行的库。
+
+这意味着一个轻量 Agent API 可以继续用 Python 写，同时直接接 Cloudflare 的队列、对象存储、数据库和工作流能力。
+
+边界也很清楚。Python Workers 运行在 Pyodide 和 WebAssembly 环境。带 C、C++、Rust 原生扩展的包，需要有可用的 WebAssembly 构建。GA 不等于任何 `pip` 包都能直接运行。
+
+## 以前的问题不在 Python 语法
+
+Python 很适合写 Agent。模型 SDK、数据处理、评测、MCP、RAG 和大量机器学习工具都优先提供 Python 支持。
+
+问题出在部署边界。Cloudflare Workers 的核心运行环境是 V8 isolate。早期 Python Workers 基于 Pyodide，把 CPython 编译到 WebAssembly。Python 能运行，但调用 Workers 平台能力时经常要处理 Python 对象和 JavaScript 对象之间的转换。
+
+Cloudflare 在 GA 版本里把这层类型转换放进运行时和 Python SDK。官方给出的例子很具体。以前把 Python 字典发送到 Queue，需要先转换成 JavaScript 对象。现在可以直接把 Python 字典传给 Queue binding。
+
+这会减少一类没有业务价值的胶水代码。
+
+## FastAPI 可以直接进 Workers
+
+Cloudflare 现在提供 `workers.asgi` 和 `workers.wsgi`。FastAPI 通过 ASGI 接入，Django 和其他同步框架可以通过 WSGI 接入。
+
+传统部署会让 Uvicorn 或 Gunicorn 负责连接和并发。Workers 的做法不同。Cloudflare 平台负责接收请求和扩缩容，ASGI 或 WSGI connector 负责把 Workers 请求转换成 Python Web 框架能理解的结构，再把响应送回运行时。
+
+这意味着一个已有的 FastAPI Agent API，至少在框架层面，不需要先改写成 TypeScript 才能部署到 Workers。
+
+来源是 [Cloudflare Python Workers GA 公告](https://blog.cloudflare.com/python-workers-ga/)。
+
+## Agent 常用库也开始能直接运行
+
+Cloudflare 官方专门提到 `openai`、`langchain` 和 `mcp`。
+
+过去的障碍之一是网络栈。很多 Python AI 库依赖 `requests` 或 `httpx`。这些库通常依赖底层 socket，而 WebAssembly 环境没有普通 Linux 的 POSIX socket。
+
+Cloudflare 为 Python Workers 补了网络路径，让这些 HTTP 客户端可以通过 Workers 能力完成请求。官方因此明确写出，`openai`、`langchain` 和 `mcp` 现在可以在 Python Workers 中运行。
+
+这让一个轻量 Agent 服务可以继续使用 Python 生态，同时把外围基础设施放进 Workers 平台。
+
+例如，一个异步 Agent 任务可以由 FastAPI 接请求，把任务放进 Queue，用 Workflows 管多步执行，用 Workers AI 或外部模型完成推理，再把结果写入 R2。Cloudflare 官方 examples 已经提供纯 Python 的异步 AI 编排案例和 MCP Server 示例。
+
+## 但它还不是普通 Python 服务器
+
+Python Workers 使用 Pyodide。Python 解释器运行在 WebAssembly 沙箱里。纯 Python 包通常问题较少，Pyodide 已包含的包也能直接使用。
+
+真正需要检查的是原生扩展。
+
+很多 Python 包包含 C、C++ 或 Rust 代码。在普通 Linux 环境里，`pip` 可以下载对应平台的 wheel。到了 WebAssembly 环境，这些原生代码需要重新编译成 WebAssembly。
+
+Cloudflare 正在推动 PyEmscripten，并给 `cibuildwheel` 增加相关支持，但官方也明确说明包生态仍在适配阶段。
+
+所以 Python Workers GA 不能翻译成 `pip install` 什么都能跑。
+
+来源是 [Cloudflare Python packages 文档](https://developers.cloudflare.com/workers/languages/python/packages/)。
+
+## 我会怎么选部署位置
+
+先看依赖，不先看框架名字。
+
+如果项目主要是 FastAPI、HTTP 模型调用、MCP、Webhook、队列、R2、D1、Durable Objects 和 Workflows，可以直接测试 Python Workers。这样能保留 Python Agent 代码，同时减少外围基础设施拼接。
+
+如果项目依赖大量系统库、CUDA、本地 GPU、复杂音视频处理、难以交叉编译的原生扩展，或者需要普通 Linux 进程能力，容器或虚拟机仍然更合适。
+
+还有一类项目适合拆开。把公开 API、认证、Webhook 和异步调度放在 Workers，把重计算留在 GPU 服务。Python Workers 通过 Queue、HTTP 或 Service Binding 连接两边。
+
+## 部署前检查四件事
+
+1. 核心依赖是不是纯 Python，或者已经有 Pyodide、PyEmscripten 构建。
+2. 网络和数据库访问是不是 Cloudflare 当前支持的路径。
+3. 持久状态应该放 D1、R2、Durable Objects，还是外部数据库。
+4. 重计算是否应该留在独立 GPU 服务。
+
+Python Workers GA 的价值很具体。它让 Python Agent 后端进入 Cloudflare 平台时少写一层胶水。它没有消除 WebAssembly 的运行环境边界。
+
+## 事实边界
+
+本次材料支持这些事实。Python Workers 已进入 GA。FastAPI、Django、Flask 可以运行。Python Workers 可以直接使用多种 Cloudflare bindings。Cloudflare 官方明确列出 `openai`、`langchain` 和 `mcp` 的运行路径。
+
+本次材料不支持几种更强的说法。不能写任何 Python 包都能直接运行，不能把 Python Workers 写成普通 Linux Python 服务器，也不能声称迁移 FastAPI 项目完全不需要改代码。官方资料也没有提供足够统一的数据来证明 Python Workers 比容器更快或更便宜。
+
+## 一手来源
+
+- [Cloudflare Blog：Python Workers are now generally available](https://blog.cloudflare.com/python-workers-ga/)
+- [Cloudflare Docs：Python Workers](https://developers.cloudflare.com/workers/languages/python/)
+- [Cloudflare Docs：Python packages](https://developers.cloudflare.com/workers/languages/python/packages/)
+- [Cloudflare Docs：How Python Workers Work](https://developers.cloudflare.com/workers/languages/python/how-python-workers-work/)
