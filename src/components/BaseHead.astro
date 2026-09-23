@@ -49,13 +49,12 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self'",
+  "connect-src 'self' https://giscus.app",
   "frame-src https://giscus.app https://www.youtube.com https://open.spotify.com",
   "media-src 'self' https:",
   "worker-src 'self' blob:",
   "manifest-src 'self'",
-  "form-action 'self'",
-  'upgrade-insecure-requests'
+  "form-action 'self'"
 ].join('; ')
 const structuredSiteDescription =
   locale === 'zh-CN'
