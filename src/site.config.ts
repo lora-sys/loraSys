@@ -28,7 +28,7 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/lora-visual/v1/lora-v1-avatar.webp',
+    src: '/src/assets/lora-visual/v2/lora-v2-avatar.webp',
     alt: 'Lora 在工作台前的插画头像'
   },
 
