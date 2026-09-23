@@ -1,5 +1,7 @@
 ---
 import { projects, profile } from '@/data/profile'
+import { getImage } from 'astro:assets'
+import heroPropsAsset from '@/assets/lora-visual/v2/lora-v2-hero-workbench-props.webp'
 
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
@@ -34,6 +36,11 @@ const heroSocials = socialLinks.filter((link) =>
   ['GitHub', 'LinkedIn', 'X', 'Email'].includes(link.name)
 )
 const focusSummary = getCurrentFocusSummary('zh-CN')
+const mobileHeroPropsPreload = await getImage({
+  src: heroPropsAsset,
+  width: 384,
+  quality: 72
+})
 
 const sectionNav = [
   { id: 'about', label: '关于我' },
@@ -55,6 +62,15 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }}
   highlightColor='#d99a33'
 >
+  <Fragment slot='head'>
+    <link
+      rel='preload'
+      as='image'
+      href={mobileHeroPropsPreload.src}
+      media='(max-width: 760px)'
+      fetchpriority='high'
+    />
+  </Fragment>
   <main class='v2-home'>
     <div class='grid-paper' aria-hidden='true'></div>
     <div class='ambient-field' aria-hidden='true'>
