@@ -1,0 +1,70 @@
+---
+title: 'LobsterAI：手机发任务，本机 Agent 继续干活'
+description: 'LobsterAI 把手机消息接到本机桌面 Agent。手机负责下任务和确认，本机继续处理文件、终端、浏览器和项目。'
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'Desktop Agent', 'LobsterAI', 'Open Source', 'Automation']
+language: 'zh-CN'
+draft: false
+---
+
+LobsterAI 最值得看的地方，是它把“发任务的位置”和“真正执行任务的位置”分开了。
+
+手机可以通过消息渠道发指令、看进度和处理确认。真正接触文件、终端、浏览器和项目的执行仍留在电脑上。对桌面 Agent 来说，这种分工比把完整工作台塞进手机更直接。
+
+项目由 NetEase Youdao 维护。官方仓库是 [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI)。本次核验以官方 README、GitHub Releases 和官方网站为准。
+
+## 30 秒看懂
+
+LobsterAI 是桌面 Agent。官方 README 把 Cowork 作为产品和会话层，把 OpenClaw 作为底层运行时和 gateway。
+
+桌面应用负责保存本地状态，包括会话、权限、UI 状态、产物、Agent、Memory 和消息渠道绑定。OpenClaw 负责 Agent 执行。
+
+电脑端可以接触本地文件、终端、浏览器工作流、文档、表格、幻灯片、定时任务和项目工作区。人离开电脑后，可以继续从手机消息渠道发送任务。涉及敏感文件、终端命令或网络操作时，需要先确认。
+
+手机因此只是任务入口。真正的执行环境仍是本机。
+
+## 事实核验
+
+官方 README 明确列出本地文件、终端命令、浏览器工作流、文档、表格、幻灯片、消息渠道、定时任务和项目工作区。会话和应用数据保存在本地 SQLite。
+
+远程控制方面，README 当前列出微信、企业微信、钉钉、飞书、QQ、Telegram、Discord、网易云信、网易蜂巢、POPO 和邮箱。不同账号或频道可以绑定给不同 Agent。
+
+官方站也把手机控制电脑作为主要能力之一，并提供产品 Demo。
+
+GitHub Releases 页面显示，最新 Release 为 `2026.9.22`，发布时间为 2026 年 9 月 22 日。这次更新恢复原生定时任务和飞书投递。仓库许可证为 MIT。
+
+这些事实说明 LobsterAI 当前的产品边界，但不能据此推导它在任意桌面任务上都比其他 Agent 更可靠，也不能把“本地数据”理解为所有模型请求都只在本地完成。
+
+## 为什么这种结构有用
+
+很多远程 Agent 产品首先解决“手机上也能聊天”。LobsterAI 更具体地处理另一件事。手机负责输入任务、接收状态和处理人工确认，电脑负责访问真实工作环境。
+
+这样做有两个直接结果。
+
+第一，移动端不需要复制完整的文件系统、终端和浏览器工作台。任务可以从轻量入口进入，但执行上下文仍留在原电脑。
+
+第二，权限确认可以放在动作发生之前。敏感文件操作、终端命令和网络访问不是执行完以后再记录，而是在执行路径里先等待确认。
+
+## 产品层和运行时分开
+
+LobsterAI 的另一个可借鉴点，是产品状态和 Agent 执行没有混成一层。
+
+Cowork 维护会话、权限、UI 状态、产物、Memory 和消息渠道绑定。OpenClaw 负责底层执行。这种分层让桌面产品可以持续维护用户状态，同时单独处理 Agent 运行时的升级和变化。
+
+对需要长期运行的桌面 Agent，这比让一个进程同时承担界面、会话、权限、消息接入和工具执行更容易检查故障位置。
+
+## 一个适合先验证的小流程
+
+如果要验证这类结构，不必先做完整远程办公系统。
+
+可以先让手机发送一个范围很窄的任务，例如“把今天生成的三篇草稿导出成一个本地检查包”。桌面 Agent 只读取指定目录，生成一个 HTML 汇总页和附件清单。涉及上传、删除或额外网络访问时停下来等待确认。
+
+验收只看三个结果。输入目录是否正确，输出文件是否完整，敏感动作是否真的在执行前被拦住。
+
+这个小实验可以直接验证远程入口、本地执行和权限门禁有没有真正连起来。
+
+## 一手来源
+
+- [LobsterAI 官方 GitHub](https://github.com/netease-youdao/LobsterAI)
+- [LobsterAI GitHub Releases](https://github.com/netease-youdao/LobsterAI/releases)
+- [LobsterAI 官方网站](https://lobsterai.youdao.com/)

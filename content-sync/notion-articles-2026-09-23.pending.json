@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "reason": "The GitHub connector returned content-sync/notion-articles.json as a truncated single-line response, so this run preserves the two new source mappings separately rather than replacing the canonical ledger with incomplete data. A later run with full file-byte access must merge these entries into content-sync/notion-articles.json and delete this file.",
+  "entries": [
+    {
+      "source_page_id_sha256": "c0bdc43975684ced6c296328638b066a192b61576bbb4acfa75f9d7f19ecaf10",
+      "slug": "lobsterai-mobile-desktop-agent",
+      "content_fingerprint": "git-blob:253f5486cf6b9f086247b302f8fcc9ddbbddcef9",
+      "source_last_edited_at": "2026-09-23T01:17:03.830Z",
+      "status": "synced",
+      "note": "Source remained 已研究 only because the generated cover failed semantic QA. The public article body and fact gate were complete, and the source page contains no media blocks.",
+      "media": []
+    },
+    {
+      "source_page_id_sha256": "921b465d6b59ae34b8eb3cb1eefc7e736b5752dce47e68f7a4ee1f1fe6592c1a",
+      "slug": "gpt6-prompt-cache-agent-state-layer",
+      "content_fingerprint": "git-blob:0bee07e1446b42d3ba568cf85bae08a5e2cb5419",
+      "source_last_edited_at": "2026-09-23T00:25:36.784Z",
+      "status": "synced",
+      "note": "Source remained 已研究 only because generated visuals could not be uploaded to Notion. The public long-form article and fact gate were complete, and the source page contains no media blocks.",
+      "media": []
+    }
+  ]
+}

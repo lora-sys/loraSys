@@ -1,0 +1,91 @@
+---
+title: 'GPT-6 Prompt Cache 变成了 Agent 的状态层'
+description: 'GPT-6 增加 cache breakpoint、诊断、预热和可变配置。长跑 Agent 需要主动保持共享前缀稳定，并监控缓存命中率。'
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'GPT-6', 'Prompt Caching', 'Context Engineering', 'Agent Infra']
+language: 'zh-CN'
+draft: false
+---
+
+长时间运行的 Agent 会反复带上同一批内容。系统规则、工具定义、仓库说明、历史对话和参考材料都会出现在后续请求里。
+
+如果这些前缀保持一致，模型可以复用已经计算过的中间状态。问题在于 Agent 的请求结构会不断变化。工具会切换，推理强度会调整，任务会分叉，新规则也会追加。只要共享前缀被改掉，原本可以复用的计算就可能失效。
+
+OpenAI 在 2026 年 9 月 22 日发布 GPT-6 prompt caching 更新。对 Agent 开发来说，变化集中在四件事：可以显式划定缓存断点，可以查看命中率和 miss 原因，可以在不重写共享前缀的情况下调整部分运行配置，还可以预热稳定上下文。
+
+## 先区分缓存和记忆
+
+Prompt cache 不是 Agent 的长期记忆。
+
+它解决的是重复计算。同一段稳定前缀再次出现时，模型可以复用已经完成的中间计算。业务状态、用户偏好、任务历史和需要长期保存的事实，仍然要由会话状态、数据库、检索或其它记忆机制管理。
+
+因此，Agent 设计里应该把两个问题分开。什么内容需要长期保存，和什么内容会在后续请求里重复出现，不是同一个判断。
+
+## 显式 cache breakpoint 改变了上下文组织方式
+
+GPT-6 支持显式 cache breakpoint。开发者可以决定稳定前缀在哪里结束。
+
+这让 prompt 的排列顺序变得重要。长期不变的 developer instructions、共享参考材料和工具定义应该尽量靠前。用户输入、临时状态和频繁变化的任务信息放在后面。
+
+如果动态内容插进稳定前缀中间，后面原本不变的部分也无法继续作为同一个前缀复用。
+
+所以长跑 Agent 的上下文不能只按“语义上是否正确”来组织，还要看哪些内容会反复计算，哪些内容每轮都会变化。
+
+## 工具变化不要每轮重建 definitions
+
+Agent 每一轮需要的工具可能不同。
+
+最直接的实现是重新生成一份 tools 数组，只保留本轮需要的工具。但工具定义、schema 或顺序一旦变化，共享前缀也会变化。
+
+OpenAI 的建议是尽量保持 tool definitions、schema 和顺序稳定，再用 `allowed_tools` 或 `tool_choice` 控制当前允许调用的工具。这样可以改变本轮可执行范围，同时保留前面的稳定工具上下文。
+
+这里的目标不是让 Agent 永远加载所有工具，而是避免为了切换可调用范围，顺手把已经稳定的工具定义前缀全部改写。
+
+## reasoning effort 也可以不改写前缀
+
+复杂任务和普通跟进不一定需要相同的 reasoning effort。
+
+GPT-6 可以通过 `configuration_update` 调整 reasoning effort，而不要求重新写前面的共享上下文。对持续运行的 Agent，这意味着运行参数变化不一定要破坏已经稳定的缓存前缀。
+
+同样的思路也适用于工具范围。把会频繁变化的控制信息放到专门的配置入口，比每轮重新拼接一整份系统上下文更容易保持缓存结构稳定。
+
+## 先看 cache miss，再猜成本问题
+
+OpenAI 新增 Prompt Caching Dashboard 和 cache miss diagnostics。
+
+Dashboard 可以看缓存命中情况。Diagnostics 会比较当前请求和近期响应，帮助定位模型、工具、设置或输入变化是否导致缓存失效，并指出受影响的 token 范围。
+
+这对 Agent 成本排查很有用。请求突然变贵或首 token 延迟上升时，不应该先假设模型价格或上下文长度变了。先检查共享前缀是不是被应用自己的请求结构打断，更容易找到直接原因。
+
+需要注意的是，维持同一个 session 不代表一定命中缓存。OpenAI 文档明确提醒，开发者仍要观察 `cached_tokens`、cache write 和命中率。
+
+## prewarm 适合稳定的大前缀
+
+`prewarm` 可以在真实用户请求到达前，提前准备稳定上下文。
+
+如果应用启动后就能确定一批长期不变的 instructions、工具定义和参考材料，可以先把这部分送进缓存。等真实任务开始时，再追加动态输入。
+
+这种做法适合共享前缀大、后续请求重复率高的 Agent。对于上下文很短、每次任务差异很大的请求，预热未必有明显价值。
+
+## 这些能力不能被写成什么
+
+缓存输入 token 的最高折扣不能直接写成“整个 Agent 任务节省同样比例的成本”。任务还包含未缓存输入、输出、工具调用和其它运行成本。
+
+Session 持续存在也不能写成“缓存一定命中”。共享前缀仍要满足缓存复用条件。
+
+工具控制能力也不能写成“任意修改工具都不会破坏缓存”。如果定义、schema 或顺序发生变化，前缀仍可能改变。
+
+Prompt cache 更不能替代长期记忆。它保存的是重复前缀的计算结果，不是应用需要长期维护的业务状态。
+
+## 如果要检查自己的 Agent
+
+可以先记录每轮请求的共享前缀指纹、`cached_tokens`、工具定义版本和 reasoning 配置。
+
+当命中率下降时，先比较四类变化：模型是否改变，工具定义是否改变，配置是否改变，输入前缀是否改变。只有知道是哪一层打断缓存，后续优化才有明确对象。
+
+对于长期运行的 Agent，这些字段应该和延迟、错误率、工具失败一样进入运行记录。
+
+## 一手来源
+
+- [OpenAI：Better prompt caching for GPT-6](https://openai.com/index/better-prompt-caching-for-gpt-6/)
+- [OpenAI API Prompt Caching Guide](https://developers.openai.com/api/docs/guides/prompt-caching)
