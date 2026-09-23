@@ -99,11 +99,14 @@ const mobileAutoplayDelay = id === 'anime' ? 7600 : 8400
               alt={`${item.name} — ${item.description}`}
               width='600'
               height='840'
-              loading='lazy'
+              loading={item.imageEager ? 'eager' : 'lazy'}
               decoding='async'
+              fetchpriority={item.imageEager ? 'high' : undefined}
               referrerpolicy={item.image.startsWith('http') ? 'no-referrer' : undefined}
               style={`--showcase-object-position:${item.objectPosition ?? '50% 50%'}`}
               data-media-kind={item.mediaKind ?? (id === 'anime' ? 'poster' : 'cover')}
+              data-fallback={item.imageFallback}
+              onerror={item.imageFallback ? `if(this.dataset.fallbackUsed!=='1'){this.dataset.fallbackUsed='1';this.src=this.dataset.fallback}` : undefined}
             />
             <span class='lens-pane' aria-hidden='true'></span>
             <span class='lens-glass' aria-hidden='true'></span>

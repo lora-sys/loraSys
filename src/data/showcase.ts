@@ -4,6 +4,10 @@ export interface ShowcaseItem {
   description: string
   descriptionEn?: string
   image: string
+  /** Local path (with base) used when the remote `image` fails to load. */
+  imageFallback?: string
+  /** Force eager loading for posters that must be available without scroll, e.g. third-party CDN. */
+  imageEager?: boolean
   href: string
   mediaKind?: 'poster' | 'cover' | 'artwork'
   objectPosition?: string
@@ -139,6 +143,8 @@ export const anime: ShowcaseItem[] = [
     name: '天元突破红莲螺岩',
     description: '从地底钻出自己的天空。',
     image: 'https://cdn.myanimelist.net/images/anime/4/5123l.jpg',
+    imageEager: true,
+    imageFallback: '/loraSys/images/anime/gurren-lagann.jpg',
     href: 'https://zh.wikipedia.org/wiki/%E5%A4%A9%E5%85%83%E7%AA%81%E7%A0%B4_%E7%BA%A2%E8%8E%B2%E8%9E%BA%E5%B2%A9',
     mediaKind: 'poster',
     objectPosition: '50% 35%',
@@ -151,6 +157,8 @@ export const anime: ShowcaseItem[] = [
     name: '四月是你的谎言',
     description: '有些旋律，会把青春重新点亮。',
     image: 'https://cdn.myanimelist.net/images/anime/1405/143284l.jpg',
+    imageEager: true,
+    imageFallback: '/loraSys/images/anime/your-lie-in-april.jpg',
     href: 'https://zh.wikipedia.org/wiki/%E5%9B%9B%E6%9C%88%E6%98%AF%E4%BD%A0%E7%9A%84%E8%B0%8E%E8%A8%80',
     mediaKind: 'poster',
     objectPosition: '50% 32%',
