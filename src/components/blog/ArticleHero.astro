@@ -80,19 +80,12 @@ const category = tags?.[0] ?? t('文章', 'Article')
 
 <style>
   .article-info {
-    --article-serif: 'Iowan Old Style', 'Charter', 'Palatino Linotype', 'Book Antiqua',
-      'Noto Serif CJK SC', 'Source Han Serif SC', 'Songti SC', STSong, Georgia, serif;
-    --article-sans: var(--font-satoshi), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-      'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-    --article-mono: 'SFMono-Regular', 'Cascadia Code', 'JetBrains Mono', 'Roboto Mono',
-      ui-monospace, Menlo, Consolas, monospace;
     width: min(100%, 48rem);
   }
 
   .article-kicker {
     margin: 0 0 0.95rem;
     color: hsl(var(--muted-foreground));
-    font-family: var(--article-mono);
     font-size: 0.7rem;
     font-weight: 650;
     letter-spacing: 0.11em;
@@ -104,7 +97,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     max-width: 19ch;
     margin: 0;
     color: hsl(var(--foreground));
-    font-family: var(--article-serif);
     font-size: clamp(2.55rem, 6.7vw, 4.8rem);
     font-weight: 520;
     letter-spacing: -0.045em;
@@ -116,7 +108,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     max-width: 42rem;
     margin: 1.2rem 0 0;
     color: hsl(var(--muted-foreground));
-    font-family: var(--article-sans);
     font-size: clamp(1.02rem, 0.97rem + 0.25vw, 1.16rem);
     line-height: 1.62;
     text-wrap: pretty;
@@ -143,7 +134,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
   .article-meta-grid dt {
     margin: 0 0 0.28rem;
     color: hsl(var(--muted-foreground));
-    font-family: var(--article-mono);
     font-size: 0.6rem;
     font-weight: 650;
     letter-spacing: 0.1em;
@@ -155,7 +145,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     margin: 0;
     overflow-wrap: anywhere;
     color: hsl(var(--foreground));
-    font-family: var(--article-sans);
     font-size: 0.77rem;
     font-weight: 530;
     line-height: 1.45;
@@ -166,7 +155,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     flex-wrap: wrap;
     gap: 0.45rem 0.9rem;
     margin-top: 0.85rem;
-    font-family: var(--article-mono);
     font-size: 0.67rem;
     line-height: 1.45;
   }
@@ -185,7 +173,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
 
   .article-support {
     margin-top: 0.45rem;
-    font-family: var(--article-sans);
   }
 
   .article-header-rule {
@@ -198,7 +185,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     display: inline-block;
     margin-bottom: 0.75rem;
     color: hsl(var(--field-clay));
-    font-family: var(--article-mono, ui-monospace, monospace);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.08em;
