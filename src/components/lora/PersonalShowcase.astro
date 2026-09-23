@@ -11,6 +11,9 @@ interface Props {
 const { locale = 'zh-CN' } = Astro.props
 const isEnglish = locale === 'en-US'
 const localizeItems = (items: ShowcaseItem[]) => items.map((item) => localizeShowcase(item, isEnglish))
+const localizedAnime = localizeItems(anime)
+const localizedFavorites = localizeItems(favorites)
+const initialAnimeHref = localizedAnime[0]?.href
 const copy = isEnglish
   ? {
       eyebrow: 'Outside the build log',
@@ -61,7 +64,7 @@ const viewerCopy = isEnglish
     id='anime'
     title={copy.animeTitle}
     eyebrow={copy.animeEyebrow}
-    items={localizeItems(anime)}
+    items={localizedAnime}
     locale={locale}
   />
   <dialog
@@ -87,7 +90,7 @@ const viewerCopy = isEnglish
           <div class='broadcast-actions'>
             <button type='button' data-broadcast-prev aria-label={viewerCopy.previous}>←</button>
             <button type='button' data-broadcast-next aria-label={viewerCopy.next}>→</button>
-            <a data-broadcast-link target='_blank' rel='noopener noreferrer'>{viewerCopy.details} ↗</a>
+            <a data-broadcast-link href={initialAnimeHref} target='_blank' rel='noopener noreferrer'>{viewerCopy.details} ↗</a>
           </div>
         </div>
       </div>
@@ -97,7 +100,7 @@ const viewerCopy = isEnglish
     id='favorites'
     title={copy.favoritesTitle}
     eyebrow={copy.favoritesEyebrow}
-    items={localizeItems(favorites)}
+    items={localizedFavorites}
     locale={locale}
   />
 </section>

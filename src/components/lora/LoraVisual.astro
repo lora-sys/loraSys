@@ -10,6 +10,9 @@ interface Props {
   alt?: string
   quality?: number
   widths?: number[]
+  loading?: 'eager' | 'lazy'
+  fetchpriority?: 'high' | 'low' | 'auto'
+  decoding?: 'sync' | 'async' | 'auto'
 }
 
 const englishAlt: Record<LoraVisualKey, string> = {
@@ -39,7 +42,17 @@ const englishAlt: Record<LoraVisualKey, string> = {
   wayfinding404: 'Lora points toward the way home while Mochi inspects a broken path.',
   stampVerified: '', stampExperiment: '', stampContribution: ''
 }
-const { asset, class: className, priority = false, alt, quality, widths } = Astro.props
+const {
+  asset,
+  class: className,
+  priority = false,
+  alt,
+  quality,
+  widths,
+  loading,
+  fetchpriority,
+  decoding
+} = Astro.props
 const visual: VisualEntry = loraVisuals[asset]
 const resolvedAlt = alt ?? (uiLocale(Astro.url.pathname) === 'en-US' ? englishAlt[asset] : visual.alt)
 const decorative = visual.decorative ?? resolvedAlt === ''
@@ -52,10 +65,10 @@ const decorative = visual.decorative ?? resolvedAlt === ''
   class:list={['lora-visual', `lora-visual--${asset}`, className]}
   widths={widths ?? visual.widths}
   sizes={visual.sizes}
-  loading={priority ? 'eager' : 'lazy'}
-  fetchpriority={priority ? 'high' : 'auto'}
+  loading={loading ?? (priority ? 'eager' : 'lazy')}
+  fetchpriority={fetchpriority ?? (priority ? 'high' : 'auto')}
   quality={quality ?? visual.quality}
-  decoding='async'
+  decoding={decoding ?? (priority ? 'sync' : 'async')}
 />
 
 <style>
