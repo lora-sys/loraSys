@@ -61,6 +61,7 @@ import LoraVisual from './LoraVisual.astro'
     aspect-ratio: 3 / 2;
     pointer-events: none;
     isolation: isolate;
+    contain: layout paint;
     perspective: 900px;
     --hero-depth-props: -18px;
     --hero-depth-lora: 12px;
@@ -144,7 +145,10 @@ import LoraVisual from './LoraVisual.astro'
 
   @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
     .hero-lora,.hero-mochi,.hero-props { will-change: auto; transform: none !important; }
-    .hero-glow { transform: none !important; }
+    .hero-glow {
+      filter: none;
+      transform: none !important;
+    }
     .hero-orbit { transform: rotateX(64deg) rotateZ(-10deg); }
     .hero-lora::after, .hero-mochi::after { display: none; }
     .hero-scene :global(img) { filter: none; }
