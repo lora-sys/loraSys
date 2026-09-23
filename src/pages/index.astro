@@ -502,7 +502,18 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     padding-inline: clamp(0.35rem, 2vw, 1.25rem);
   }
   .v2-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 42rem;
     scroll-margin-top: 5.5rem;
+  }
+  #about { contain-intrinsic-size: auto 28rem; }
+  #work { contain-intrinsic-size: auto 72rem; }
+  #writing { contain-intrinsic-size: auto 36rem; }
+  #now { contain-intrinsic-size: auto 34rem; }
+  #personal-signals { contain-intrinsic-size: auto 76rem; }
+  .contact-anchor {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 36rem;
   }
   .section-heading {
     position: relative;
