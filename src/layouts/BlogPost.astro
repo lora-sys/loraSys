@@ -620,18 +620,11 @@ const articleFieldNote = {
 
   /* Editorial long-form reading layer */
   #content {
-    --article-serif: 'Iowan Old Style', 'Charter', 'Palatino Linotype', 'Book Antiqua',
-      'Noto Serif CJK SC', 'Source Han Serif SC', 'Songti SC', STSong, Georgia, serif;
-    --article-sans: var(--font-satoshi), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-      'Segoe UI', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-    --article-mono: 'SFMono-Regular', 'Cascadia Code', 'JetBrains Mono', 'Roboto Mono',
-      ui-monospace, Menlo, Consolas, monospace;
     width: min(100%, 46rem);
     max-width: 46rem;
     overflow-x: hidden;
     overflow-y: visible;
     color: hsl(var(--foreground) / 0.94);
-    font-family: var(--article-serif);
     font-size: clamp(1.04rem, 1rem + 0.22vw, 1.14rem);
     font-kerning: normal;
     line-height: 1.78;
@@ -689,7 +682,6 @@ const articleFieldNote = {
   #content > :where(h2, h3, h4) {
     max-width: 30ch;
     color: hsl(var(--foreground));
-    font-family: var(--article-sans);
     text-wrap: balance;
   }
 
@@ -723,7 +715,6 @@ const articleFieldNote = {
   #content > h4 {
     margin-top: 1.7rem;
     margin-bottom: 0.55rem;
-    font-family: var(--article-mono);
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.07em;
@@ -742,7 +733,6 @@ const articleFieldNote = {
 
   #content :where(ul, ol) li::marker {
     color: hsl(var(--primary) / 0.78);
-    font-family: var(--article-mono);
     font-size: 0.82em;
     font-weight: 650;
   }
@@ -760,7 +750,6 @@ const articleFieldNote = {
     border-radius: 0;
     background: transparent;
     padding: 0.85rem 0;
-    font-family: var(--article-sans);
   }
 
   #content details:not(.article-toc-condensed) > summary {
@@ -780,7 +769,6 @@ const articleFieldNote = {
     background: hsl(var(--muted) / 0.56);
     padding: 0.08em 0.32em;
     color: hsl(var(--foreground));
-    font-family: var(--article-mono);
     font-size: 0.82em;
     font-weight: 520;
   }
@@ -792,7 +780,6 @@ const articleFieldNote = {
     border-radius: 0.42rem;
     background: hsl(var(--card) / 0.66) !important;
     box-shadow: none;
-    font-family: var(--article-mono);
     font-size: 0.8rem;
     line-height: 1.62;
   }
@@ -805,7 +792,6 @@ const articleFieldNote = {
   #content .astro-code .language,
   #content .astro-code .title,
   #content .astro-code button.copy {
-    font-family: var(--article-mono);
     font-size: 0.64rem;
     letter-spacing: 0.05em;
   }
@@ -833,7 +819,6 @@ const articleFieldNote = {
     max-width: 62ch;
     margin-top: 0.65rem;
     color: hsl(var(--muted-foreground));
-    font-family: var(--article-sans);
     font-size: 0.72rem;
     line-height: 1.55;
   }
@@ -853,7 +838,6 @@ const articleFieldNote = {
   }
 
   #content .mdx-article-quote-body {
-    font-family: var(--article-serif);
     font-size: 1.02em;
     line-height: 1.72;
   }
@@ -876,14 +860,12 @@ const articleFieldNote = {
   }
 
   #content .mdx-callout-heading p {
-    font-family: var(--article-mono);
     font-size: 0.66rem;
     letter-spacing: 0.08em;
   }
 
   #content .mdx-callout-body {
     color: hsl(var(--foreground) / 0.88);
-    font-family: var(--article-serif);
     font-size: 1em;
     line-height: 1.72;
   }
@@ -898,14 +880,12 @@ const articleFieldNote = {
   }
 
   #content .mdx-table {
-    font-family: var(--article-sans);
     font-size: 0.8rem;
     line-height: 1.5;
   }
 
   #content .mdx-table th {
     background: transparent;
-    font-family: var(--article-mono);
     font-size: 0.66rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -935,7 +915,6 @@ const articleFieldNote = {
   }
 
   #content .mdx-key-points h3 {
-    font-family: var(--article-mono);
     font-size: 0.7rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -960,19 +939,16 @@ const articleFieldNote = {
 
   #content .mdx-key-points article small {
     grid-row: 1 / span 2;
-    font-family: var(--article-mono);
     font-size: 0.62rem;
   }
 
   #content .mdx-key-points article strong {
-    font-family: var(--article-sans);
     font-size: 0.82rem;
     font-weight: 650;
   }
 
   #content .mdx-key-points article p {
     margin-top: 0.24rem;
-    font-family: var(--article-serif);
     font-size: 0.88rem;
     line-height: 1.58;
   }
@@ -987,7 +963,6 @@ const articleFieldNote = {
   }
 
   #sidebar :where(nav, ol, ul, a, summary, small, span) {
-    font-family: var(--article-mono, ui-monospace, monospace);
   }
 
   #sidebar a {
