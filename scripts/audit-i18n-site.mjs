@@ -53,7 +53,14 @@ try {
     })
     const page = await context.newPage()
     page.setDefaultTimeout(15000)
-    const errors=[]; page.on('pageerror',error => errors.push(error.message))
+    const errors=[]
+    const cspErrors=[]
+    page.on('pageerror',error => errors.push(error.message))
+    page.on('console', message => {
+      const value = message.text()
+      if (/content security policy|violates the following content security policy directive|refused to (load|execute|connect|frame)/i.test(value))
+        cspErrors.push(value)
+    })
     async function open(route='') { const response=await page.goto(new URL(route,site).href,{waitUntil:'load'}); assert.equal(response.status(),200); await page.evaluate(() => document.fonts.ready); return response }
     async function capture(name) { const file=`${viewport.width}-${name}.png`; await page.screenshot({path:path.join(output,file),animations:'disabled'}); report.screenshots.push(file) }
     for (const route of keyRoutes) {
@@ -158,6 +165,21 @@ try {
         await capture(`dark-${route.replaceAll('/','-')||'home'}`)
         assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1))
       }
+    })
+    await check(`${viewport.width}: CSP meta is first and browser reports no policy violations`,async()=>{
+      await open('')
+      const policy = await page.evaluate(() => {
+        const metas = [...document.head.querySelectorAll('meta')]
+        const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]')
+        return {
+          first: metas[0] === csp,
+          content: csp?.getAttribute('content') || ''
+        }
+      })
+      assert.equal(policy.first,true,'CSP must be the first meta element in head')
+      for (const required of ["default-src 'self'","object-src 'none'","https://giscus.app","https://www.youtube.com","https://open.spotify.com"])
+        assert.ok(policy.content.includes(required),`CSP missing ${required}`)
+      assert.deepEqual(cspErrors,[],'Browser reported CSP violations during audited interactions')
     })
     await check(`${viewport.width}: no uncaught application exceptions`,async()=>assert.deepEqual(errors,[]))
     await context.close()
