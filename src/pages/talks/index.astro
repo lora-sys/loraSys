@@ -1,9 +1,13 @@
 ---
 import { appearances } from '@/data/talks'
+import CredentialsArchive from '@/components/about/CredentialsArchive.astro'
 
 import PageLayout from '@/layouts/CommonPage.astro'
 
-const headings = [{ depth: 2, slug: 'appearances', text: '公开分享' }]
+const headings = [
+  { depth: 2, slug: 'appearances', text: '公开分享' },
+  { depth: 2, slug: 'credentials', text: '证书档案' }
+]
 ---
 
 <PageLayout title='活动与黑客松' heading='分享与黑客松' {headings} view>
@@ -44,6 +48,9 @@ const headings = [{ depth: 2, slug: 'appearances', text: '公开分享' }]
       ))
     }
   </div>
+
+  <h2 id='credentials'>证书档案</h2>
+  <CredentialsArchive />
 </PageLayout>
 
 <style>

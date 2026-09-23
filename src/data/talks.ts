@@ -44,5 +44,13 @@ export const appearances: Appearance[] = [
     role: '项目开发者',
     description: '在 48 小时内迭代并交付可运行原型。',
     project: '限时原型开发'
+  },
+  {
+    title: '知乎黑客松 · 校园新锐季',
+    date: '2026 年 9 月 19 日',
+    location: '知乎平台 · 线上',
+    role: '参赛选手',
+    description: '在 48 小时极限开发中探索 AI 与知识社区共创，获知乎官方参赛凭证。',
+    project: '校园新锐季'
   }
 ]
