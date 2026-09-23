@@ -685,6 +685,14 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     }
   }
   @media (max-width: 760px) {
+    .grid-paper {
+      height: 92rem;
+      background-image:
+        linear-gradient(hsl(var(--field-ink) / 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, hsl(var(--field-ink) / 0.04) 1px, transparent 1px);
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
     .supporting-work {
       grid-template-columns: 1fr;
     }
