@@ -5,7 +5,7 @@ import LoraVisual from './LoraVisual.astro'
 <div class='hero-scene' data-hero-scene data-hero-ready='true' aria-hidden='true'>
   <span class='hero-glow'></span>
   <span class='hero-orbit'></span>
-  <div class='hero-props'><LoraVisual asset='heroProps' priority decoding='sync' /></div>
+  <div class='hero-props'><LoraVisual asset='heroProps' priority decoding='async' /></div>
   <div class='hero-lora'>
     <LoraVisual asset='heroLora' loading='lazy' fetchpriority='low' decoding='async' />
   </div>
