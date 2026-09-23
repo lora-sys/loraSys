@@ -28,8 +28,8 @@ export const theme: ThemeUserConfig = {
   },
   /** Set a logo image to show in the homepage. */
   logo: {
-    src: '/src/assets/lora-visual/v2/lora-v2-avatar.webp',
-    alt: 'Lora 在工作台前的插画头像'
+    src: '/loraSys/favicon/lora-v4-mark-512.png',
+    alt: 'Lora 的站点品牌标志'
   },
 
   titleDelimiter: '•',
