@@ -146,6 +146,7 @@ import LoraVisual from './LoraVisual.astro'
   }
 
   @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .hero-scene { perspective: none; }
     .hero-lora,.hero-mochi,.hero-props { will-change: auto; transform: none !important; }
     .hero-glow {
       filter: none;
