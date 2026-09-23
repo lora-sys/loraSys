@@ -66,7 +66,7 @@ const category = tags?.[0] ?? t('文章', 'Article')
   {!!tags?.length && (
     <nav class='article-tags' aria-label={t('文章标签', 'Article tags')}>
       {tags.map((tag: string) => (
-        <a href={`/tags/${tag}`}>#{tag}</a>
+        <a data-pagefind-filter={t('标签', 'Tags')} href={`/tags/${tag}`}>#{tag}</a>
       ))}
     </nav>
   )}
@@ -234,6 +234,12 @@ const category = tags?.[0] ?? t('文章', 'Article')
 
     .article-meta-grid > div:nth-child(4) {
       border-top: 1px solid hsl(var(--border));
+    }
+
+    .article-meta-grid > div:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      border-left: 0;
+      padding-left: 0;
     }
   }
 
