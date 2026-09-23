@@ -41,6 +41,22 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 const alternateURL = alternateWithBase ? new URL(alternateWithBase, Astro.site) : undefined
 const socialProfiles = socialLinks.filter((link) => link.href.startsWith('http')).map((link) => link.href)
 const twitterCreator = socialLinks.find((link) => link.name === 'X')?.handle
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline' https://giscus.app",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-src https://giscus.app https://www.youtube.com https://open.spotify.com",
+  "media-src 'self' https:",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "form-action 'self'",
+  'upgrade-insecure-requests'
+].join('; ')
 const structuredSiteDescription =
   locale === 'zh-CN'
     ? 'AI Agent 开发者与全栈工程师的个人网站，记录项目、技术写作、公开构建与正在进行的实验。'
@@ -75,6 +91,7 @@ const profileJsonLd = {
 }
 ---
 
+<meta http-equiv='Content-Security-Policy' content={contentSecurityPolicy} />
 <meta charset='utf-8' />
 <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover' name='viewport' />
 <meta content='IE=edge' http-equiv='X-UA-Compatible' />
