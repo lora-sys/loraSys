@@ -33,11 +33,17 @@ const { class: className } = Astro.props
         this.remove()
         return
       }
-      // Because virtual:config can only be accessed using json string, function cannot work, so we need to use new Function
-      const targetFunction = new Function('data', `return (${quote.target})(data)`)
+      // virtual:config serializes the selector as text. Support the safe
+      // property-access form used by this site instead of executing configuration.
+      const match = quote.target.trim().match(/^\(?\s*data\s*\)?\s*=>\s*data((?:\.[A-Za-z_$][\w$]*)+)$/)
+      if (!match) throw new Error('Quote target must be a simple data property selector')
+      const keys = match[1].slice(1).split('.')
       fetch(quote.server)
         .then((response) => response.json())
-        .then((data) => this.render(targetFunction(data)))
+        .then((data) => keys.reduce((value, key) => value?.[key], data))
+        .then((sentence) => {
+          if (typeof sentence === 'string') this.render(sentence)
+        })
     }
   }
   customElements.define('quote-component', Quote)
