@@ -643,6 +643,18 @@ const articleFieldNote = {
     max-width: 66ch;
   }
 
+  #content > *,
+  #content .not-prose {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  #content .mdx-compare-grid > section,
+  #content .mdx-compare-grid li {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   #content > p {
     margin-block: 1.08em;
     text-wrap: pretty;
