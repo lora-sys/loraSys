@@ -110,10 +110,14 @@ try {
       const open = async (route = '') => {
         const response = await page.goto(`${origin}${base}${route}`, { waitUntil: 'load' })
         assert.equal(response?.status(), 200, `Route must load: ${route}`)
+        // Keep actionability checks deterministic when the site uses smooth scrolling
+        // together with scroll-linked transforms. The interaction assertions below
+        // still exercise the same controls and focus behavior.
+        await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })
       }
       const capture = async (name) => {
         const filename = `${label}-${name}.png`
-        await page.screenshot({ path: path.join(evidence, filename), fullPage: false })
+        await page.screenshot({ path: path.join(evidence, filename), fullPage: false, animations: 'disabled' })
         report.screenshots.push(filename)
       }
 
