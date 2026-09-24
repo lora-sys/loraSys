@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "reason": "The GitHub connector returned content-sync/notion-articles.json as a truncated single-line response, so this run preserves the two new source mappings separately rather than replacing the canonical ledger with incomplete data. A later run with full file-byte access must merge these entries into content-sync/notion-articles.json and delete this file.",
+  "status": "pending-canonical-merge",
   "entries": [
     {
       "source_page_id_sha256": "c0bdc43975684ced6c296328638b066a192b61576bbb4acfa75f9d7f19ecaf10",
@@ -8,7 +8,6 @@
       "content_fingerprint": "git-blob:253f5486cf6b9f086247b302f8fcc9ddbbddcef9",
       "source_last_edited_at": "2026-09-23T01:17:03.830Z",
       "status": "synced",
-      "note": "Source remained 已研究 only because the generated cover failed semantic QA. The public article body and fact gate were complete, and the source page contains no media blocks.",
       "media": []
     },
     {
@@ -17,7 +16,61 @@
       "content_fingerprint": "git-blob:0bee07e1446b42d3ba568cf85bae08a5e2cb5419",
       "source_last_edited_at": "2026-09-23T00:25:36.784Z",
       "status": "synced",
-      "note": "Source remained 已研究 only because generated visuals could not be uploaded to Notion. The public long-form article and fact gate were complete, and the source page contains no media blocks.",
+      "media": []
+    },
+    {
+      "source_page_id_sha256": "ac37ebca1102ee9db1adb6b42812d5a158702da439f457e5f27f89e28a827a71",
+      "slug": "agent-observability-trace-span-opentelemetry",
+      "content_fingerprint": "git-blob:13452b342b7f1d0f607d0e14fb7c7c1d2c1a7c80",
+      "source_last_edited_at": "2026-09-23T15:53:00.000Z",
+      "status": "synced",
+      "note": "Root-discovered daily learning article. All four original Notion SVG illustrations were recovered through current signed attachment URLs and localized without redrawing.",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-23-agent-trace-vs-logs.svg",
+          "source_block_id": "3d1f4d41-b83e-4f11-bb57-066e357b3a21",
+          "position": 1,
+          "site_path": "src/assets/blog/agent-observability-trace-span-opentelemetry/2026-09-23-agent-trace-vs-logs.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the Notion source and localized."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-23-agent-observability-signals.svg",
+          "source_block_id": "147b71be-d89a-4ca4-bfc3-6dbb6b3919cc",
+          "position": 2,
+          "site_path": "src/assets/blog/agent-observability-trace-span-opentelemetry/2026-09-23-agent-observability-signals.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the Notion source and localized."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-23-agent-observability-content-boundary.svg",
+          "source_block_id": "fb3578de-263c-46e3-a29d-d2d38a9316f7",
+          "position": 3,
+          "site_path": "src/assets/blog/agent-observability-trace-span-opentelemetry/2026-09-23-agent-observability-content-boundary.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the Notion source and localized."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-23-lora-pi-otel-mapping.svg",
+          "source_block_id": "3225bae6-1057-4ebe-9eb1-25299150ca45",
+          "position": 4,
+          "site_path": "src/assets/blog/agent-observability-trace-span-opentelemetry/2026-09-23-lora-pi-otel-mapping.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the Notion source and localized."
+        }
+      ]
+    },
+    {
+      "source_page_id_sha256": "34ef5cc8e3b61c9e08766f25efb502e7be41bfa8e65228ba9611f57400cd2532",
+      "slug": "ai-agent-engineering-news-2026-09-23",
+      "content_fingerprint": "git-blob:d555b0320f9976a9c850ff6ff366511ab8e006da",
+      "source_last_edited_at": "2026-09-24T00:04:53.540Z",
+      "status": "synced",
+      "note": "News log status 已沉淀. publishDate follows the coverage end date 2026-09-23; Sep 22 late submissions are explicitly labeled as previous-log omissions. The source page contains no media blocks.",
       "media": []
     }
   ]

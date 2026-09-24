@@ -1,0 +1,120 @@
+---
+title: 'AI Agent 工程阅读清单｜2026-09-23'
+description: '本期收录 GitHub Copilot 本地 Sandbox、Agensh、CliffCompaction、SWE-Serve，以及 Copilot OpenTelemetry。'
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Multi-Agent', 'Agent Eval', 'Harness', 'Security']
+language: 'zh-CN'
+draft: false
+---
+
+上一期覆盖到 2026 年 9 月 22 日。本轮只收录上一期之后的新发布，以及 9 月 22 日晚提交但上一期未收录的材料。最终保留 5 条。
+
+今天值得先读的是 GitHub Copilot 本地 Sandbox、Agensh 和 CliffCompaction。它们分别对应 Agent 执行边界、多 Agent 扩展方式和长任务上下文压缩。
+
+## GitHub Copilot 本地 Sandbox 增加项目级权限边界
+
+### 发生了什么
+
+GitHub 在 9 月 23 日发布 Copilot app 的本地 Sandbox。每个项目可以单独限制文件系统、外网、本地网络、Git 凭据和 GitHub CLI 凭据。企业策略可以进一步收紧权限。如果当前操作系统无法执行所请求的隔离策略，Sandbox Shell 会直接失败，不会退回到未隔离执行。
+
+### 工程意义
+
+这是 Agent Runtime 中值得直接参考的 fail closed 设计。文件、网络和凭据应分别授权，策略无法执行时应拒绝运行。不能因为隔离初始化失败就让 Agent 获得宿主机完整权限。
+
+配置变化只对新 Session 或重启后的 Session 生效，也说明 Runtime 需要明确管理 Session 与策略版本的绑定。
+
+### 先读哪里
+
+先看 Filesystem、Network、Credentials 三组项目设置。然后看操作系统无法强制策略时直接失败的行为，以及项目默认策略和当前 Session 策略的区别。
+
+### 一手来源
+
+- [GitHub 官方更新](https://github.blog/changelog/2026-09-23-local-sandboxing-in-the-github-copilot-app/)
+
+## Agensh 把多 Agent 扩展到 1024 个 Worker
+
+### 发生了什么
+
+Microsoft Research 团队在 9 月 22 日晚提交 Agensh，上一期未收录。它取消中央 orchestrator，让 Worker 自己读取共享上下文、认领任务、执行、共享发现、验证结果并异步合并进度。系统使用共享 Workspace、消息接口和共享 Context 维持协作状态。
+
+作者使用 GPT-5.6-sol high 测试 ProgramBench 最难的 5 个任务。Agent 数量从 1 增加到 128 时，平均最终测试通过率从 19.31% 增加到 28.78%。在 pandoc 任务上，从 1 个 Agent 扩展到 1024 个 Agent 后，最终测试通过率从 33.89% 增加到 55.06%。
+
+这些数字来自论文作者实验，只能按论文的模型、任务和评测设置理解。
+
+### 工程意义
+
+中央调度器会成为大规模多 Agent 系统的协调瓶颈。Agensh 更接近分布式任务系统。真正需要设计的是任务认领、共享状态、冲突处理、结果验证和异步合并，而不是继续增加一个更复杂的总控 Agent。
+
+### 先读哪里
+
+先读 multi-agent cooperation loop 和三个基础组件。然后看 1 到 128 Agent 的 ProgramBench 扩展实验，以及 1024 Agent 的 pandoc 实验。
+
+### 一手来源
+
+- [Agensh 论文](https://arxiv.org/abs/2609.26781)
+
+## CliffCompaction 避免对压缩结果继续压缩
+
+### 发生了什么
+
+CliffCompaction 在 9 月 22 日晚提交，上一期未收录。它面向百万 Token 级 Coding Agent 长任务。方法只删除或截断原始内容，不重写已有内容。每次压缩都重新处理原始上下文，不对上一次压缩结果继续压缩，避免多轮摘要造成信息漂移。
+
+论文报告，在有限上下文条件下，成本最多降低 50%，同时保持或提高 Terminal-Bench 表现。使用 test-time scaling 时，它以不到两次完整上下文运行的成本增加超过 10 个百分点。KernelBench 中，200 步和 400 步后的 CUDA kernel 加速分别达到 2.23 倍和 3.58 倍。作者还开源了可接 Claude Code、Codex 等 Harness 的 API Proxy。
+
+这些结果来自论文作者实验。
+
+### 工程意义
+
+长任务 Context Manager 不应该反复总结已经总结过的文本。更稳的实现是保留原始事件和工具输出，每次根据当前预算重新选择原始片段。这样可以降低长期运行中的语义漂移，也方便回放和审计。
+
+### 先读哪里
+
+先读 compaction 算法和 never compact a compaction 规则。然后看 Terminal-Bench 的成本与成功率曲线，以及 KernelBench 的长程实验。
+
+### 一手来源
+
+- [CliffCompaction 论文](https://arxiv.org/abs/2609.26779)
+
+## SWE-Serve 把 Coding Agent Eval 拉到生产推理栈
+
+### 发生了什么
+
+SWE-Serve 在 9 月 22 日晚提交，上一期未收录。它包含 53 个来自 SGLang 近期真实改动的仓库级任务，覆盖 6 类推理工程工作。任务运行在 CPU 或单张 H100 上，并使用隐藏功能测试、回归测试、端到端 Serving 测试和性能门槛。
+
+11 个模型、31 组配置中，最好配置的平均 pass@1 为 75%。在有端到端测试的 19 个任务上，如果去掉端到端测试，通过率是 69.4%。加入端到端验证后只有 45.9%。约三分之一原本通过其他测试的 Patch 会被真实 Serving 流程拒绝。
+
+这些数字来自论文作者实验。
+
+### 工程意义
+
+Coding Agent 在仓库里通过单测，不代表改动能进入生产。涉及推理服务、数据库、队列或外部 API 的 Eval 应增加真正的端到端服务启动、请求验证、回归检查和性能门槛。
+
+### 先读哪里
+
+先读任务构造、no-op 与 oracle control、adversarial verifier review。然后看 19 个带端到端覆盖任务的 69.4% 与 45.9% 差距。
+
+### 一手来源
+
+- [SWE-Serve 论文](https://arxiv.org/abs/2609.26777)
+
+## GitHub Copilot app 支持企业级 OpenTelemetry
+
+### 发生了什么
+
+GitHub 在 9 月 22 日发布 Copilot app 的 OpenTelemetry 配置，上一期未收录。企业管理员可以通过 `managed-settings.json` 的 telemetry 配置，把 Agent Session、模型请求和工具调用发送到现有监控系统。Prompt 和 Response 内容默认不采集，需要单独开启内容采集设置。
+
+### 工程意义
+
+生产 Agent 的可观测性需要记录 Session、模型调用和 Tool Call 的因果链，但不必默认复制完整 Prompt 和输出。默认排除内容可以降低隐私和敏感数据风险。企业还可以统一配置采集策略，不需要依赖每个开发者自行设置。
+
+### 先读哪里
+
+先看 telemetry 配置入口、Session Trace 的范围，以及 Prompt 和 Response 默认不采集的设置。
+
+### 一手来源
+
+- [GitHub 官方更新](https://github.blog/changelog/2026-09-22-opentelemetry-in-the-github-copilot-app/)
+
+## 本期结论
+
+本期五条内容分别落在执行隔离、多 Agent 协作、上下文压缩、生产级 Coding Agent Eval 和可观测性。它们解决的问题不同，不应互相替代。
