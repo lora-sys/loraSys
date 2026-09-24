@@ -25,15 +25,20 @@ function stripCode(source) {
     .replace(/`[^`\n]*`/g, '')
 }
 
+function stripDisplayMath(source) {
+  return source.replace(/\$\$[\s\S]*?\$\$/g, '')
+}
+
 function validateFile(file, source) {
   const body = stripCode(source)
+  const expressionScanBody = stripDisplayMath(body)
   const errors = []
 
   if (/^\s*(?:import|export)\b/m.test(body)) {
     errors.push('imports and exports are not allowed; route-level component injection owns the MDX surface')
   }
 
-  if (/[{}]/.test(body)) {
+  if (/[{}]/.test(expressionScanBody)) {
     errors.push('JavaScript expressions are not allowed in synchronized MDX')
   }
 
