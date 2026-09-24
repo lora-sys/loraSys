@@ -25,8 +25,7 @@ Skill 先进入中央库，再同步到各个 Agent。这样修改源内容时�
 ### 同步策略允许选择
 用户可以选择复制或符号链接。复制更独立，链接更容易保持实时一致。v1.39.0 还处理了 Windows 和 macOS 行尾差异造成的假更新。
 ## 与我的连接
-你现在已经在 Notion 里维护 `unslop` 和 `lora-visual`。你也会同时使用不同 Coding Agent。
-Skills Manager 不适合直接替代 Notion Skill。更合理的分工是：
+如果团队已经在 Notion 维护可读、可编辑的 Skill 源内容，同时还要给多个 Coding Agent 分发同一套 Skill，Skills Manager 更适合负责本地同步，而不是替代内容源。可以这样分工：
 - Notion 保存可读、可编辑的 Skill 源内容和参考材料。
 - 需要给本地 Coding Agent 执行的 Skill 导出成标准目录。
 - Skills Manager 负责把这些目录同步到 Claude Code、Codex、Cursor 等工具。
