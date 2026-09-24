@@ -96,14 +96,18 @@ bun preview         # 预览生产构建
 
 ```text
 src/content/              已发布长文
-src/data/                 个人资料、短笔记、项目策展、快照、当前关注
+src/data/                 个人资料、短笔记、项目策展、证书记录、快照、当前关注
 src/pages/                首页、blog、projects、lab、notes、now、talks、links、resume
-src/components/           建立在 Pure 之上的个人组件
+src/components/           建立在 Pure 之上的个人组件，按页面领域组织
+src/assets/certificates/  证书原图，由 src/data/certificates.ts 编目
+src/components/talks/     活动与证书档案组件
 packages/pure/            锁定版本的 Astro Theme Pure 源码
 assets/readme/             README 专用视觉资产
 scripts/                  同步、验证、发布和审计脚本
 .github/workflows/        PR 验证与 GitHub Pages 部署
 ```
+
+证书素材保存在 `src/assets/certificates/`。标题、颁发方和描述由 `src/data/certificates.ts` 管理，档案显示在 `src/pages/talks/` 的“证书档案”部分。
 
 ## 设计取舍
 

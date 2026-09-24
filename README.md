@@ -97,14 +97,18 @@ bun preview         # preview production output
 
 ```text
 src/content/              published essays
-src/data/                 profile, notes, project curation, snapshots, current focus
+src/data/                 profile, notes, project curation, certificates, snapshots, current focus
 src/pages/                home, blog, projects, lab, notes, now, talks, links, resume
-src/components/           personal sections layered on Pure
+src/components/           personal sections layered on Pure, organized by page domain
+src/assets/certificates/  certificate source images catalogued by src/data/certificates.ts
+src/components/talks/     appearances and certificate archive components
 packages/pure/            pinned Astro Theme Pure source
 assets/readme/            README-native visual assets
 scripts/                  sync, validation, release, and audit tooling
 .github/workflows/        PR verification and GitHub Pages deployment
 ```
+
+Certificate images live in `src/assets/certificates/`. Their titles, issuers, and descriptions are maintained in `src/data/certificates.ts`; the archive is rendered on `src/pages/talks/`.
 
 ## Design decisions
 

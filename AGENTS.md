@@ -111,7 +111,9 @@ Astro 负责把 `src/pages/` 和 `src/layouts/` 渲染为静态页面。`src/com
 - `src/pages/`：路由级页面。首页重点是 `src/pages/index.astro`；作品、写作、About、Contact、搜索和多语言路由应一起检查。
 - `src/layouts/`：页面骨架、文章布局、元数据和全局导航装配。
 - `src/components/`：可复用 UI。`components/projects/` 管理项目卡片与媒体，`components/lora/` 管理贡献和收藏体验，`components/layout/` 管理导航与页脚。
+- `src/components/talks/`：活动与证书档案组件。
 - `src/data/`：站点配置、项目与贡献同步快照、社交链接、当前关注方向与展示数据。
+- `src/data/certificates.ts`：证书元数据；证书原图位于 `src/assets/certificates/`。
 - `src/content/blog/`：已经审核、会被构建为公开文章的内容。
 - `src/assets/`：项目封面、原创视觉资产和其他随构建优化的媒体。
 - `scripts/`：同步、校验、报告、内容导入和发布审计脚本。
