@@ -1,5 +1,7 @@
 ---
 import { projects, profile } from '@/data/profile'
+import { getImage } from 'astro:assets'
+import heroPropsAsset from '@/assets/lora-visual/v2/lora-v2-hero-workbench-props.webp'
 
 import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
@@ -34,6 +36,15 @@ const heroSocials = socialLinks.filter((link) =>
   ['GitHub', 'LinkedIn', 'X', 'Email'].includes(link.name)
 )
 const focusSummary = getCurrentFocusSummary('zh-CN')
+const heroPropsWidths = [384, 480, 768, 1152, 1536]
+const heroPropsCandidates = await Promise.all(
+  heroPropsWidths.map(async (width) => ({
+    width,
+    src: (await getImage({ src: heroPropsAsset, width, quality: 72 })).src
+  }))
+)
+const heroPropsImageSrcset = heroPropsCandidates.map(({ width, src }) => `${src} ${width}w`).join(', ')
+const heroPropsImageSizes = '(max-width: 760px) 88vw, 42rem'
 
 const sectionNav = [
   { id: 'about', label: '关于我' },
@@ -55,6 +66,18 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }}
   highlightColor='#d99a33'
 >
+  <Fragment slot='head'>
+    <link
+      rel='preload'
+      as='image'
+      type='image/webp'
+      href={heroPropsCandidates[0].src}
+      imagesrcset={heroPropsImageSrcset}
+      imagesizes={heroPropsImageSizes}
+      media='(max-width: 760px)'
+      fetchpriority='high'
+    />
+  </Fragment>
   <main class='v2-home'>
     <div class='grid-paper' aria-hidden='true'></div>
     <div class='ambient-field' aria-hidden='true'>
