@@ -1,0 +1,89 @@
+---
+title: 'Cloudflare 说自动流量超过人类，网站要为 Agent 算账'
+description: '结合 Cloudflare 与 Fastly 的网络数据，分析机器流量的重复抓取、回源成本、访问策略和价值回报。'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI Agent', 'Cloudflare', 'Web Infrastructure', 'AI Crawler', 'Agent Web']
+language: 'zh-CN'
+draft: false
+---
+
+## 事实与来源
+### 主要一手来源
+1. [Cloudflare 2026 Annual Founders’ Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/)，2026 年 9 月 27 日。
+2. [Fastly AI Traffic Grew 6.5x Faster Than Human Traffic This Year](https://www.fastly.com/blog/ai-traffic-grew-6-5x-faster-than-human-traffic-this-year)，2026 年 6 月 9 日。
+3. [Cloudflare Agent Readiness](https://blog.cloudflare.com/agent-readiness/)，2026 年 4 月 17 日。
+4. [Cloudflare Monetization Gateway](https://blog.cloudflare.com/monetization-gateway/)，2026 年 7 月 1 日。
+### 已确认事实
+1. Cloudflare 在 2026 年 9 月 27 日的年度创始人信中表示，它原本预计自动化流量会在 2027 年下半年超过人类流量，实际观察到的拐点提前到了 2026 年 5 月。
+2. Cloudflare 还表示，它的数据里超过一半 good bot 抓取的内容和上一次访问时相比没有变化。
+3. Cloudflare 给出的“未来五年自动化流量可能达到人类流量 1000 倍”是预测，不是已经发生的事实。
+4. Fastly 在自己的全球网络中观察到，2026 年 1 月到 5 月 AI 请求增长约 30%，增速约为人类流量的 6.5 倍。
+5. Fastly 的 2026 年 5 月数据里，超过一半 AI 请求需要访问源站，比例为 51%。人类请求访问源站的比例低于 9%。
+6. Cloudflare 已经提供 Agent Readiness 检查工具和 Radar 数据集，用于检查站点的机器可发现性、内容格式、访问控制、认证和支付能力。
+7. Cloudflare 的 Monetization Gateway 允许站点对网页、数据集、API 和 MCP 工具设置机器支付访问策略。
+### 不能写成事实
+1. 不写“整个互联网已经由机器人主导”。Cloudflare 和 Fastly 的数据来自各自网络，覆盖面很大，但不能直接等同于整个互联网。
+2. 不写“AI 流量已经是人类流量的 1000 倍”。Cloudflare 给出的 1000 倍是未来五年的预测。
+3. 不写“所有 AI Agent 都在浪费一半请求”。超过一半内容未变化是 Cloudflare 对 good bot 抓取的观察，不代表每个 Agent 或每个网站。
+4. 不写“网站应该全面阻止 AI crawler”。不同机器流量有搜索、训练、实时 fetch 和用户委托等不同目的，策略不能混成一个开关。
+5. 不写“Agent Readiness 或 Monetization Gateway 已经解决了 Agent Web 的商业模式”。这些是当前实现和产品方向，不是行业最终标准。
+### 一句核心判断
+Agent 时代的网站性能预算里，需要单独出现一项机器访问成本。站点要知道机器为什么来、读了什么、有没有重复抓取，以及这次访问有没有带来引用、交易或付费。
+
+### 推荐平台
+知乎。这个题同时涉及网站基础设施、AI Agent、内容分发和商业模式。知乎适合保留数据来源、工程边界和站点策略。
+## Cloudflare 说自动流量已经超过人类，网站开始要为 Agent 算账
+Cloudflare 在 2026 年 9 月 27 日发布年度创始人信，其中有一个比产品发布更值得注意的数据。
+Cloudflare 原本预计自动化流量要到 2027 年下半年才会超过人类流量。它现在表示，这个拐点已经在 2026 年 5 月出现。
+来源：[Cloudflare 2026 Annual Founders’ Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/)。
+这个数字不能直接写成“整个互联网已经由机器人主导”。它是 Cloudflare 自己网络里的观察。但另一家大型边缘网络 Fastly 也看到了相同方向。
+Fastly 在 2026 年 6 月公布的数据里，2026 年 1 月到 5 月 AI 请求增长约 30%，增速约是人类流量的 6.5 倍。Fastly 还发现，51% 的 AI 请求需要访问源站，而人类请求访问源站的比例低于 9%。
+来源：[Fastly AI Traffic Grew 6.5x Faster Than Human Traffic This Year](https://www.fastly.com/blog/ai-traffic-grew-6-5x-faster-than-human-traffic-this-year)。
+两家公司使用的流量分类和网络样本不同，数字不能直接拼成一条统一曲线。但它们都指向同一个工程问题。机器流量在增长，而且它和人类浏览器流量的成本结构不一样。
+## 一个 Agent 的一次回答，可能让很多站点承担请求成本
+人类搜索餐厅时，通常会打开几个结果。Agent 可以在很短时间内读取更多页面，再只返回一个答案。
+Cloudflare 在创始人信里用了一个餐厅例子。一个 Agent 为了推荐一家餐厅，可能读取大量菜单。最后得到订单的只有一家，其余站点仍然要处理请求。
+这里真正的变化不是“爬虫变多了”。搜索爬虫一直存在。变化在于请求的触发频率、用途和回报路径开始分化。
+训练 crawler 会批量收集内容。搜索 crawler 需要维护索引。AI fetcher 会因为用户的一次提问临时访问站点。执行型 Agent 还可能继续读取 API、价格、库存和账户状态。
+把这些流量全部按传统 bot 处理，会丢掉很重要的业务信息。
+## 重复抓取已经开始变成浪费
+Cloudflare 这次还给出另一个数字。它表示，good bot 抓取的内容里，超过一半和上一次访问时相比没有变化。
+来源：[Cloudflare 2026 Annual Founders’ Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/)。
+如果页面没有变化，重复完整抓取会消耗站点带宽、缓存层和源站资源。对抓取方也一样，这些请求会占用网络、解析和推理前处理成本。
+所以 Agent Web 有一个比“给页面加 Markdown”更基础的问题。机器需要知道什么内容变了，而不是每次把所有内容重新拿走。
+Cloudflare 在创始人信里说，它正在做让 crawler 看到更多网站，同时只抓取发生变化内容的机制。文章没有公布完整技术细节，因此现在不能把它写成已经上线的通用标准。
+但这个方向很明确。面向 Agent 的网站优化会增加“变化检测”和“增量获取”这一层。
+## 站点需要给机器流量单独记账
+传统网站性能指标主要围绕真实用户。页面加载时间、缓存命中率、转化率和跳出率都能对应到一次人的访问。
+Agent 请求不一定带来页面浏览，也不一定带来点击。
+所以同一条请求需要多看几个字段。
+第一，访问者是什么类型。它是训练 crawler、搜索 crawler、实时 fetcher，还是代表真实用户执行任务的 Agent。
+第二，请求是否命中边缘缓存。如果机器请求大量回源，站点成本会很快放大。
+第三，这次访问有没有对应的回报。回报可能是搜索曝光、AI 引用、订单、API 调用或直接支付。
+第四，站点愿意给它什么权限。公开文档和高成本查询不应该使用同一套访问策略。
+这就是为什么机器流量不能只放进一个 Bot Traffic 图表里。
+## Agent Readiness 解决的是怎么被机器正确访问
+Cloudflare 在今年 4 月发布 Agent Readiness 工具。它会检查站点在可发现性、内容格式、bot 访问控制、认证和支付等方面有没有机器可用入口。
+来源：[Cloudflare Agent Readiness](https://blog.cloudflare.com/agent-readiness/)。
+其中有些检查很简单，比如 robots.txt、sitemap 和 Markdown 输出。有些检查直接进入权限问题，比如 OAuth 发现和 Web Bot Auth。还有一部分已经进入机器支付和工具发现。
+这套工具的重要价值不是一个分数。它把 Agent 能不能用这个网站拆成可以检查的协议和接口。
+对于 Builder，最实用的做法是先检查自己的文档站、产品站和 API。不要一上来就做一个 MCP Server。先看现有 HTTP 资源是不是容易发现、容易解析、权限是否清楚。
+## Monetization Gateway 解决的是机器访问值多少钱
+机器访问增长以后，网站还有一个更现实的问题。
+如果大量 Agent 请求不带点击，也不带广告展示，内容和 API 的成本怎么回收。
+Cloudflare 7 月发布 Monetization Gateway，允许客户给网页、数据集、API 和 MCP 工具设置支付策略。当前实现使用 x402。
+来源：[Cloudflare Monetization Gateway](https://blog.cloudflare.com/monetization-gateway/)。
+这并不意味着 x402 会成为最终标准，也不能说明所有内容都应该收费。它至少证明机器访问已经被当成独立的计费对象。
+对于 API 和高成本数据源，这个变化尤其实际。以前 API key 主要解决认证和配额。以后还可能需要同时表达机器身份、调用目的、价格和支付凭证。
+## Builder 现在可以做什么
+如果你在做网站、SaaS 或 Agent 产品，先把机器流量单独拉出来看。
+记录 user agent、验证身份、访问路径、缓存状态、回源比例和请求目的。不要只统计总请求数。
+然后把公开内容和高成本资源分开。产品文档可以开放给搜索和 Agent。昂贵查询、私有数据和有明确商业价值的 API 应该有认证、限流和必要的计费。
+再检查内容有没有适合机器读取的稳定格式。Markdown、结构化数据和清楚的 API 描述可以降低解析成本，但不要为了 Agent SEO 复制一套和网页内容不同的事实。
+最后看重复抓取。对频繁更新的资源提供版本、时间戳、ETag 或增量接口，让机器能判断有没有必要重新获取。
+## 这次数据的边界
+Cloudflare 的“自动化流量已超过人类”来自它自己的网络。Fastly 的增长数据也来自 Fastly 网络。两家公司覆盖大量互联网业务，但都不是整个互联网的完整采样。
+Cloudflare 预测五年后自动化流量可能达到人类流量的 1000 倍。这个数字是基于当前趋势的预测，不能当作已经确定的增长路径。
+还有一个容易混淆的问题。自动化流量不等于 AI Agent。传统 bot、API 驱动系统、crawler 和 Agent 的目的不同。
+今天可以确定的事情更窄。机器请求正在快速增长，AI 请求更容易打到源站，重复抓取存在明显浪费。站点需要开始单独测量和管理这类流量。
+这已经足够改变网站的工程预算。
