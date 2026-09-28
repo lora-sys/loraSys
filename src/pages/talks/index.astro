@@ -1,8 +1,9 @@
 ---
 import { appearances } from '@/data/talks'
-import CredentialsArchive from '@/components/talks/CredentialsArchive.astro'
 
 import PageLayout from '@/layouts/CommonPage.astro'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
+import CredentialsArchive from '@/components/talks/CredentialsArchive.astro'
 
 const headings = [
   { depth: 2, slug: 'appearances', text: '公开分享' },
@@ -11,9 +12,10 @@ const headings = [
 ---
 
 <PageLayout title='活动与黑客松' heading='分享与黑客松' {headings} view>
+  <div class='not-prose talks-visual'><LoraVisual asset='talksPodium' alt='' /></div>
   <p>
-    公开构建、黑客松与项目展示记录。这里不会把参赛经历包装成演讲；只有真实存在的 源码、视频或
-    幻灯片 才会显示对应入口。尚无正式演讲时，也欢迎学生社群和开源社区邀请项目演示。
+    公开构建、黑客松与项目展示记录。这里不会把参赛经历包装成演讲；只有真实存在的 源码、视频或 幻灯片
+    才会显示对应入口。尚无正式演讲时，也欢迎学生社群和开源社区邀请项目演示。
   </p>
 
   <h2 id='appearances'>公开分享</h2>
@@ -54,6 +56,18 @@ const headings = [
 </PageLayout>
 
 <style>
+  .talks-visual {
+    float: right;
+    width: min(28vw, 12rem);
+    margin: 0 0 1rem 1.5rem;
+  }
+  @media (max-width: 640px) {
+    .talks-visual {
+      float: none;
+      width: min(60vw, 10rem);
+      margin: 0 auto 1rem;
+    }
+  }
   .appearances {
     margin-top: 2rem;
     border-top: 1px solid hsl(var(--foreground));

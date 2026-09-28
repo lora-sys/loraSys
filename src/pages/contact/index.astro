@@ -1,26 +1,32 @@
 ---
+import { Image } from 'astro:assets'
 import { primarySocialLinks, secondarySocialLinks } from '@/data/social'
 
-import { Image } from 'astro:assets'
 import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/CommonPage.astro'
-import contactCorrespondenceHero from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
-import CopyAction from '@/components/layout/CopyAction.astro'
 import SocialLedger from '@/components/contact/SocialLedger.astro'
+import CopyAction from '@/components/layout/CopyAction.astro'
+import contactCorrespondenceHero from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
 
 const email = 'lorasys@outlook.com'
 const headings = [
   { depth: 2, slug: 'start-here', text: '联系方式' },
-  { depth: 2, slug: 'good-conversations', text: '交流主题' },
   { depth: 2, slug: 'elsewhere', text: '其他平台' }
 ]
 ---
 
-<PageLayout title='联系' heading='联系' {headings}>
+<PageLayout title='联系' heading='想聊点什么？' {headings}>
   <div class='not-prose contact-intro'>
-    <Image src={contactCorrespondenceHero} alt='' aria-hidden='true' class='contact-visual' widths={[480, 768, 1152]} sizes='(max-width: 620px) 100vw, (max-width: 960px) 50vw, 31rem' loading='eager' fetchpriority='high' />
-    <span class='eyebrow'>联系与合作</span>
-    <h2>想聊点什么？</h2>
+    <Image
+      src={contactCorrespondenceHero}
+      alt=''
+      aria-hidden='true'
+      class='contact-visual'
+      widths={[480, 768, 1152]}
+      sizes='(max-width: 620px) 100vw, (max-width: 960px) 50vw, 31rem'
+      loading='eager'
+      fetchpriority='high'
+    />
     <p>
       项目、技术、开源、学习、内容合作，或者只是打个招呼都可以。邮件里简单说一下你是谁、想聊什么就好。
     </p>
@@ -31,7 +37,8 @@ const headings = [
 
   <h2 id='start-here'>联系方式</h2>
   <p>
-    新话题最适合发邮件。已有仓库或 Issue 的技术讨论可以直接在 GitHub 继续，职业交流也可以通过 LinkedIn 联系。
+    新话题最适合发邮件。已有仓库或 Issue 的技术讨论可以直接在 GitHub 继续，职业交流也可以通过
+    LinkedIn 联系。
   </p>
   <div class='not-prose primary-channels'>
     <SocialLedger links={primarySocialLinks} />
@@ -43,53 +50,27 @@ const headings = [
     </div>
     <CopyAction value={email} label='复制邮箱' />
   </div>
-  <div class='not-prose subscribe-card'>
-    <div>
-      <span class='eyebrow'>关注更新</span>
-      <strong>通过 RSS 接收新文章与项目笔记。</strong>
-    </div>
-    <a class='tactile-action' href='/rss.xml' data-interaction='subscribe_feed'>订阅 RSS <span aria-hidden='true'>↗</span></a>
-  </div>
-
-  <h2 id='good-conversations'>交流主题</h2>
-  <div class='not-prose conversation-grid'>
-    <article>
-      <span>01</span>
-      <h3>项目与技术</h3>
-      <p>
-        AI Agent、全栈产品、开发工具，或者你正在卡住的一个具体工程问题。
-      </p>
-    </article>
-    <article>
-      <span>02</span>
-      <h3>开源与合作</h3>
-      <p>
-        仓库协作、产品尝试、黑客松、内容合作和实现反馈。
-      </p>
-    </article>
-    <article>
-      <span>03</span>
-      <h3>学习与交流</h3>
-      <p>读到同一篇文章、在学相似的东西，或者单纯想交换一些想法，也欢迎来聊。</p>
-    </article>
-  </div>
-  <blockquote>
-    第一封消息不用写得很正式。给一点上下文，我就知道从哪里接着聊。
-  </blockquote>
-
   <h2 id='elsewhere'>其他平台</h2>
-  <p>
-    不同平台分别记录短笔记、项目演示和长篇文章。
-  </p>
+  <p>不同平台分别记录短笔记、项目演示和长篇文章。</p>
   <div class='not-prose secondary-channels'>
     <SocialLedger links={secondarySocialLinks} startAt={primarySocialLinks.length + 1} />
   </div>
-
-
 </PageLayout>
 
 <style>
-  .copy-toast{position:fixed;right:1rem;bottom:1rem;z-index:20;border:1px solid hsl(var(--border));border-radius:999px;padding:.55rem .75rem;background:hsl(var(--foreground));color:hsl(var(--background));font-size:.72rem;box-shadow:0 12px 30px hsl(var(--foreground)/.18)}
+  .copy-toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 20;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.55rem 0.75rem;
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-size: 0.72rem;
+    box-shadow: 0 12px 30px hsl(var(--foreground) / 0.18);
+  }
   .contact-intro {
     position: relative;
     min-height: 28rem;
@@ -288,10 +269,17 @@ const headings = [
       height: 17rem;
       object-position: 58% center;
       opacity: 0.9;
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.24) 11%, #000 34%);
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        rgb(0 0 0 / 0.24) 11%,
+        #000 34%
+      );
       mask-image: linear-gradient(to bottom, transparent 0, rgb(0 0 0 / 0.24) 11%, #000 34%);
     }
-    .contact-intro h2 { max-width: 10ch; }
+    .contact-intro h2 {
+      max-width: 10ch;
+    }
     .conversation-grid {
       grid-template-columns: 1fr;
       gap: 1.25rem;
@@ -314,5 +302,40 @@ const headings = [
       transform: none;
     }
   }
-  .subscribe-card .eyebrow { color:hsl(var(--foreground)); }
+  .contact-intro {
+    min-height: 19rem;
+    border: 0;
+    border-block: 1px solid hsl(var(--border));
+    border-radius: 0;
+    background: transparent;
+    padding: clamp(1rem, 4vw, 2rem) clamp(12rem, 34vw, 20rem) clamp(1rem, 4vw, 2rem) 0;
+  }
+  .contact-intro p {
+    margin: 0;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+    color: hsl(var(--foreground));
+  }
+  .contact-visual {
+    width: min(48%, 24rem);
+    object-fit: contain;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .mail-cta {
+    margin-top: 1.25rem;
+  }
+  @media (max-width: 620px) {
+    .contact-intro {
+      padding: 1.25rem 0 13rem;
+    }
+    .contact-visual {
+      inset: auto 0 0;
+      width: 100%;
+      height: 12rem;
+      object-fit: contain;
+      opacity: 1;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
 </style>

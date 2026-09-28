@@ -14,8 +14,10 @@ const { entry } = Astro.props
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const headings = [
   { depth: 2, slug: 'question', text: '问题' },
-  { depth: 2, slug: 'result', text: '实现与结果' },
-  { depth: 2, slug: 'inspect', text: '查看实现' }
+  { depth: 2, slug: 'implementation', text: '实现与可检查依据' },
+  { depth: 2, slug: 'result', text: '结果' },
+  { depth: 2, slug: 'limits', text: '记录边界' },
+  { depth: 2, slug: 'source', text: '源码与项目入口' }
 ]
 ---
 
@@ -26,16 +28,25 @@ const headings = [
   <h2 id='question'>问题</h2>
   <blockquote>{entry.question}</blockquote>
 
-  <h2 id='result'>实现与结果</h2>
-  <p>{entry.result}</p>
+  <h2 id='implementation'>实现与可检查依据</h2>
+  <p>{entry.summary}</p>
   <div class='not-prose technology-list' aria-label='使用的技术栈'>
     {entry.technologies.map((technology) => <span>{technology}</span>)}
   </div>
-
-  <h2 id='inspect'>查看实现</h2>
-  <p>
-    这份记录对应 <strong>{entry.project}</strong> 中的一部分实现，当前功能以源码为准。
+  <p class='evidence-note'>
+    本页提供技术栈和项目源码作为检查入口。记录中没有测试设置、运行输出或独立测量数据。
   </p>
+
+  <h2 id='result'>结果</h2>
+  <p>{entry.result}</p>
+
+  <h2 id='limits'>记录边界</h2>
+  <p>
+    本页只整理已有的问题、摘要、结果说明、技术栈和链接。它不提供测试过程或线上效果证明。实现状态以仓库当前内容为准。
+  </p>
+
+  <h2 id='source'>源码与项目入口</h2>
+  <p>查看 <strong>{entry.project}</strong> 的源仓库；有独立演示网站时，也可以直接打开。</p>
   <div class='not-prose actions'>
     <a class='primary' href={entry.source} target='_blank' rel='noopener noreferrer'
       >查看源码 <span aria-hidden='true'>↗</span></a

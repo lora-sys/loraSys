@@ -6,7 +6,7 @@ import { text } from '@/i18n/ui'
 import type { SiteLocale } from '@/i18n/site'
 interface Props { locale: SiteLocale }
 const { locale } = Astro.props
-const policyTitle = (title: string) => title === 'Site Policy' ? text(locale, '站点政策', 'Site policy in Chinese') : title
+const policyTitle = (title: string) => title === 'Site Policy' ? text(locale, '站点政策', 'Chinese site policy') : title
 
 const footerConf = config.footer
 let social = footerConf.social || {}

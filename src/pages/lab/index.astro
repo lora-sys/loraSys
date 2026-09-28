@@ -82,12 +82,14 @@ const headings = [{ depth: 2, slug: 'experiments', text: '实验记录' }]
   }
   .lab-ledger-asset {
     display: block;
-    width: min(100%, 46rem);
+    width: min(100%, 35rem);
+    max-height: 14rem;
     height: auto;
+    object-fit: contain;
+    object-position: left center;
     margin: 1.35rem 0 2rem;
     overflow: hidden;
-    border: 1px solid hsl(var(--border));
-    border-radius: 0.9rem;
+    border: 0;
   }
   .lab-ledger {
     margin-top: 2.25rem;

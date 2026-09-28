@@ -1,8 +1,8 @@
 ---
-import { Button, CardList } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
+import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { integ, terms } from '@/site-config'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
+import { terms } from '@/site-config'
 
 const meta = {
   title: '站点政策',
@@ -12,15 +12,90 @@ const meta = {
 
 <PageLayout {meta}>
   <Button title='返回' href='/' variant='back' />
-  <main class='mt-6 lg:mt-10'>
-    <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>站点政策</h1>
+  <main class='terms-page'>
+    <div class='terms-intro'>
+      <div><h1>站点政策</h1><p>这里说明内容使用、第三方服务与隐私边界。</p></div><LoraVisual
+        asset='termsLedger'
+        alt=''
+      />
     </div>
-
-    <div id='content' class={cn('animate mt-8 max-w-none md:min-w-[45ch]', integ.typography.class)}>
-      <h2 class='text-xl font-medium'>站点政策说明</h2>
-      <p>这里说明内容使用、第三方服务与隐私边界。</p>
-      <CardList {...terms} />
-    </div>
+    <nav aria-label='站点政策列表'>
+      <ol>
+        {
+          terms.list.map((item, index) => (
+            <li>
+              <a href={item.link}>
+                <>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{item.title}</strong>
+                  <span aria-hidden='true'>↗</span>
+                </>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
   </main>
 </PageLayout>
+<style>
+  .terms-page {
+    max-width: 46rem;
+    margin: 2rem auto 0;
+  }
+  .terms-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 8rem;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .terms-intro h1 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    letter-spacing: -0.05em;
+  }
+  .terms-intro p {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.7;
+  }
+  .terms-intro :global(img) {
+    width: 8rem;
+    height: auto;
+  }
+  ol {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid hsl(var(--border));
+    list-style: none;
+  }
+  li {
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  li a {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 4rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  li a span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  li a:hover strong,
+  li a:focus-visible strong {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  @media (max-width: 520px) {
+    .terms-intro {
+      grid-template-columns: 1fr 6rem;
+    }
+    .terms-intro :global(img) {
+      width: 6rem;
+    }
+  }
+</style>

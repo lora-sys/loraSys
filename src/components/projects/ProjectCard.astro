@@ -36,10 +36,12 @@ const caseHref = project.repository.toLowerCase() === 'zhihu-threads' ? `${impor
 const source = project.links.find((link) => link.type === 'source')
 const website = project.links.find((link) => link.type === 'website')
 const contribution = project.links.find((link) => link.type === 'contribution')
+const stories = getProjectStories(project.repository, compactLocale)
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
 const projectPath = compactLocale === 'en-US' ? '/en/work' : '/projects'
-const projectHref = caseHref ?? website?.href ?? `${base}${projectPath}#${project.repository}`
-const projectIsExternal = !caseHref && Boolean(website)
+const leadStory = compact && anchor ? stories.find((story) => story.kind === 'Project') : undefined
+const projectHref = caseHref ?? website?.href ?? leadStory?.href ?? `${base}${projectPath}#${project.repository}`
+const projectIsExternal = !caseHref && Boolean(website || leadStory?.external)
 const interactionLabel = compactLocale === 'zh-CN' ? '查看项目' : {
   'Glassbox-Agent-Harness': 'TRACE RUN',
   AgentArena: 'JUDGE VERDICT',
@@ -66,7 +68,6 @@ const primaryCategory =
   'Open Source'
 const visibleTechnologies = project.technologies.slice(0, 3)
 const technologyOverflow = Math.max(0, project.technologies.length - visibleTechnologies.length)
-const stories = getProjectStories(project.repository, compactLocale)
 const pushedAt = new Intl.DateTimeFormat(compactLocale, {
   month: 'short',
   year: 'numeric',
@@ -134,7 +135,7 @@ const filterAttributes = filterable
             data-interaction='project_website'
             data-destination={project.repository}
           >
-            {compactLocale === 'zh-CN' ? '项目页' : 'Project'} <span aria-hidden='true'>↗</span>
+            {leadStory ? t('项目说明', 'Project notes') : compactLocale === 'zh-CN' ? '项目页' : 'Project'} <span aria-hidden='true'>↗</span>
           </a>
           {source && (
             <a
@@ -494,8 +495,12 @@ const filterAttributes = filterable
     align-items: center;
   }
 
+  .project-card--compact .project-body {
+    padding: clamp(0.85rem, 2.2vw, 1.2rem);
+  }
+
   .project-card--compact .project-heading {
-    margin-top: 0.62rem;
+    margin-top: 0.45rem;
   }
 
   .project-card--compact .project-heading h3 {
@@ -508,7 +513,7 @@ const filterAttributes = filterable
   }
 
   .project-card--compact .project-actions {
-    margin-top: 1.15rem;
+    margin-top: 0.8rem;
   }
 
   .project-eyebrow,

@@ -1,11 +1,12 @@
 ---
-import PageLayout from '@/layouts/BaseLayout.astro'
-import LoraVisual from '@/components/lora/LoraVisual.astro'
-import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
+
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
+import LoraVisual from '@/components/lora/LoraVisual.astro'
 
 const sections = getCurrentFocusSections('en-US')
 const reviewed = new Intl.DateTimeFormat('en-US', {
@@ -20,21 +21,38 @@ const projectChanges = Object.values(projectSnapshot.projects)
 const recentPushes = projectChanges.slice(0, 5)
 const allPosts = sortMDByDate(await getBlogCollection())
 const recentWriting = allPosts.slice(0, 4)
-const projectUpdatePayload = projectChanges.map((project) => ({ name: project.name, pushedAt: project.pushedAt }))
+const projectUpdatePayload = projectChanges.map((project) => ({
+  name: project.name,
+  pushedAt: project.pushedAt
+}))
 const writingUpdatePayload = allPosts.map((post) => ({
   title: post.data.title,
   publishDate: post.data.publishDate.toISOString()
 }))
-const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(syncReport.syncedAt))
+const synced = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(syncReport.syncedAt))
 ---
 
-<PageLayout lang='en-US' meta={{ title: 'Now', description: 'What Lora is building, learning, reading, and listening to now.' }} highlightColor='#d99a33'>
+<PageLayout
+  lang='en-US'
+  meta={{
+    title: 'Now',
+    description: 'What Lora is building, learning, reading, and listening to now.'
+  }}
+  highlightColor='#d99a33'
+>
   <main class='now-page'>
     <header class='now-hero'>
       <div>
         <p>NOW</p>
-        <h1>What I've been up to lately.</h1>
-        <span>Reviewed {reviewed}. I update this when the work meaningfully changes, not on every commit.</span>
+        <h1>A snapshot of right now.</h1>
+        <span
+          >Reviewed {reviewed}. I update this when the work meaningfully changes, not on every
+          commit.</span
+        >
       </div>
       <LoraVisual asset='nowWorkbench' class='now-visual' />
     </header>
@@ -49,51 +67,89 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
       data-writing-updates={JSON.stringify(writingUpdatePayload)}
     >
       <strong>Human-reviewed · Lately</strong>
-      <span>I'm focusing on a personal agent, reusable Skills, and a learning product while continuing to publish what I learn.</span>
+      <span
+        >I'm focusing on a personal agent, reusable Skills, and a learning product while continuing
+        to publish what I learn.</span
+      >
       <small data-now-return>First visit? Start with the Building section.</small>
     </div>
 
     <section class='now-grid' aria-label='Current interests'>
-      {sections.map((item, index) => (
-        <article>
-          <span>0{index + 1} · {item.category.toUpperCase()}</span>
-          <h2>{item.title}</h2>
-          <ul>{item.items.map((line) => <li>{line}</li>)}</ul>
-          <small>{item.frequency}</small>
-        </article>
-      ))}
+      {
+        sections.map((item, index) => (
+          <article>
+            <span>
+              0{index + 1} · {item.category.toUpperCase()}
+            </span>
+            <h2>{item.title}</h2>
+            <ul>
+              {item.items.map((line) => (
+                <li>{line}</li>
+              ))}
+            </ul>
+            <small>{item.frequency}</small>
+          </article>
+        ))
+      }
     </section>
 
     <div class='recent-grid'>
-      <aside class='information-source information-source--automatic' data-information-origin='automatic'>
-        <header><strong>Automatic · Recent public updates</strong><span>Synced {synced}</span></header>
+      <aside
+        class='information-source information-source--automatic'
+        data-information-origin='automatic'
+      >
+        <header>
+          <strong>Automatic · Recent public updates</strong><span>Synced {synced}</span>
+        </header>
         <ul>
-          {recentPushes.map((project) => (
-            <li>
-              <a href={project.url} target='_blank' rel='noopener noreferrer'>{project.fullName}</a>
-              <time datetime={String(project.pushedAt).slice(0, 10)}>
-                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}
-              </time>
-            </li>
-          ))}
+          {
+            recentPushes.map((project) => (
+              <li>
+                <a href={project.url} target='_blank' rel='noopener noreferrer'>
+                  {project.fullName}
+                </a>
+                <time datetime={String(project.pushedAt).slice(0, 10)}>
+                  {new Intl.DateTimeFormat('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: 'UTC'
+                  }).format(new Date(project.pushedAt))}
+                </time>
+              </li>
+            ))
+          }
         </ul>
       </aside>
-      <aside class='information-source information-source--automatic' data-information-origin='automatic'>
-        <header><strong>Automatic · Recent writing</strong><a href='/en/writing'>All writing →</a></header>
+      <aside
+        class='information-source information-source--automatic'
+        data-information-origin='automatic'
+      >
+        <header>
+          <strong>Automatic · Recent writing</strong><a href='/blog'>All writing, in Chinese and English →</a>
+        </header>
         <ul>
-          {recentWriting.map((post) => (
-            <li>
-              <a
-                href={`/blog/${post.id}`}
-                lang={post.data.language === 'zh-CN' ? 'zh-CN' : 'en-US'}
-              >
-                {post.data.title}
-              </a>
-              <time datetime={post.data.publishDate.toISOString()}>
-                {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(post.data.publishDate)}
-              </time>
-            </li>
-          ))}
+          {
+            recentWriting.map((post) => (
+              <li>
+                <div>
+                  <a
+                    href={`/blog/${post.id}`}
+                    lang={post.data.language === 'zh-CN' ? 'zh-CN' : 'en-US'}
+                  >
+                    {post.data.title}
+                  </a>
+                  {post.data.language === 'zh-CN' && <span class='writing-language'>Chinese original</span>}
+                </div>
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {new Intl.DateTimeFormat('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    timeZone: 'UTC'
+                  }).format(post.data.publishDate)}
+                </time>
+              </li>
+            ))
+          }
         </ul>
       </aside>
     </div>
@@ -110,17 +166,25 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
     const previous = localStorage.getItem(visitKey)
     if (previous) {
       const previousTime = Date.parse(previous)
-      const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{ name: string; pushedAt: string }>
-      const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{ title: string; publishDate: string }>
+      const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{
+        name: string
+        pushedAt: string
+      }>
+      const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{
+        title: string
+        publishDate: string
+      }>
       const changedProjects = projects.filter((item) => Date.parse(item.pushedAt) > previousTime)
       const newWriting = writing.filter((item) => Date.parse(item.publishDate) > previousTime)
       if (changedProjects.length || newWriting.length) {
         const parts = []
         if (changedProjects.length) parts.push(`${changedProjects.length} public project updates`)
-        if (newWriting.length) parts.push(`${newWriting.length} new article${newWriting.length === 1 ? '' : 's'}`)
+        if (newWriting.length)
+          parts.push(`${newWriting.length} new article${newWriting.length === 1 ? '' : 's'}`)
         marker.textContent = 'Since your last visit: ' + parts.join(' and ') + '.'
       } else {
-        marker.textContent = 'Welcome back. There are no newer public project or writing records since your last visit.'
+        marker.textContent =
+          'Welcome back. There are no newer public project or writing records since your last visit.'
       }
     }
     localStorage.setItem(visitKey, new Date().toISOString())
@@ -128,34 +192,246 @@ const synced = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric'
 </script>
 
 <style>
-  .now-page{display:grid;gap:2rem}
-  .now-hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(14rem,.8fr);gap:1.5rem;align-items:end;padding-block:clamp(1rem,4vw,3rem)}
-  .now-hero>div{display:grid;gap:.75rem}
-  .now-hero p,.now-grid article>span{margin:0;color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.12em}
-  h1{max-width:15ch;margin:0;font-size:clamp(2.5rem,6vw,5.4rem);font-weight:580;letter-spacing:-.065em;line-height:.94}
-  .now-hero>div>span{max-width:52ch;color:hsl(var(--muted-foreground));line-height:1.7}
-  .now-visual{width:min(100%,25rem);justify-self:end;opacity:.94}
-  .information-source{position:relative}.information-source::before{position:absolute;top:.9rem;bottom:.9rem;left:0;width:2px;border-radius:999px;background:hsl(var(--field-teal));content:''}.information-source--automatic::before{background:hsl(var(--field-amber))}
-  .return-note{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.4))}
-  .return-note strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
-  .return-note span,.return-note small{color:hsl(var(--muted-foreground));line-height:1.55}
-  .return-note small{font-size:.72rem}
-  .now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid hsl(var(--border))}
-  .now-grid article{min-height:14rem;border-right:1px solid hsl(var(--border));border-bottom:1px solid hsl(var(--border));padding:1.35rem}
-  .now-grid article:nth-child(even){border-right:0}
-  h2{margin:1.1rem 0 .6rem;font-size:1.2rem}
-  .now-grid ul{display:grid;gap:.45rem;margin:0;padding-left:1rem;color:hsl(var(--muted-foreground));font-size:.8rem;line-height:1.65}
-  .now-grid article small{display:block;margin-top:1rem;color:hsl(var(--muted-foreground));font-size:.66rem}
-  .recent-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-  .recent-grid aside{display:grid;gap:.6rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:hsl(var(--card)/.7)}
-  .recent-grid header{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
-  .recent-grid header strong{font-size:.67rem;letter-spacing:.1em;text-transform:uppercase}
-  .recent-grid header span,.recent-grid header a{color:hsl(var(--muted-foreground));font-size:.68rem}
-  .recent-grid ul{display:grid;gap:.45rem;margin:0;padding:0;list-style:none}
-  .recent-grid li{display:flex;justify-content:space-between;gap:1rem;align-items:baseline}
-  .recent-grid li a{min-width:0;color:hsl(var(--foreground));font-size:.74rem;text-decoration:none}
-  .recent-grid li a:hover,.recent-grid li a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
-  .recent-grid time{flex:none;color:hsl(var(--muted-foreground));font-size:.67rem}
-  .back{width:max-content;color:hsl(var(--foreground));font-size:.75rem}
-  @media(max-width:760px){.now-hero,.recent-grid,.now-grid{grid-template-columns:1fr}.now-visual{justify-self:start;width:min(70vw,18rem)}.now-grid article,.now-grid article:nth-child(even){border-right:0}}
+  .now-page {
+    display: grid;
+    gap: 2rem;
+  }
+  .now-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(14rem, 0.8fr);
+    gap: 1.5rem;
+    align-items: end;
+    padding-block: clamp(1rem, 4vw, 3rem);
+  }
+  .now-hero > div {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .now-hero p,
+  .now-grid article > span {
+    margin: 0;
+    color: hsl(var(--field-amber));
+    font-size: 0.67rem;
+    font-weight: 680;
+    letter-spacing: 0.12em;
+  }
+  h1 {
+    max-width: 15ch;
+    margin: 0;
+    font-size: clamp(2.5rem, 6vw, 5.4rem);
+    font-weight: 580;
+    letter-spacing: -0.065em;
+    line-height: 0.94;
+  }
+  .now-hero > div > span {
+    max-width: 52ch;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.7;
+  }
+  .now-visual {
+    width: min(100%, 25rem);
+    justify-self: end;
+    opacity: 0.94;
+  }
+  .information-source {
+    position: relative;
+  }
+  .information-source::before {
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    left: 0;
+    width: 2px;
+    border-radius: 999px;
+    background: hsl(var(--field-teal));
+    content: '';
+  }
+  .information-source--automatic::before {
+    background: hsl(var(--field-amber));
+  }
+  .return-note {
+    display: grid;
+    gap: 0.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1rem;
+    background: linear-gradient(120deg, hsl(var(--card)), hsl(var(--muted) / 0.4));
+  }
+  .return-note strong {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .return-note span,
+  .return-note small {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.55;
+  }
+  .return-note small {
+    font-size: 0.72rem;
+  }
+  .now-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid hsl(var(--border));
+  }
+  .now-grid article {
+    min-height: 14rem;
+    border-right: 1px solid hsl(var(--border));
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 1.35rem;
+  }
+  .now-grid article:nth-child(even) {
+    border-right: 0;
+  }
+  h2 {
+    margin: 1.1rem 0 0.6rem;
+    font-size: 1.2rem;
+  }
+  .now-grid ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding-left: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.65;
+  }
+  .now-grid article small {
+    display: block;
+    margin-top: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+  }
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .recent-grid aside {
+    display: grid;
+    gap: 0.6rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1rem;
+    background: hsl(var(--card) / 0.7);
+  }
+  .recent-grid header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .recent-grid header strong {
+    font-size: 0.67rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .recent-grid header span,
+  .recent-grid header a {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .recent-grid ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .recent-grid li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  .recent-grid li a {
+    min-width: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.74rem;
+    text-decoration: none;
+  }
+  .recent-grid li a:hover,
+  .recent-grid li a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  .recent-grid li > div {
+    display: grid;
+    min-width: 0;
+    gap: 0.2rem;
+  }
+  .writing-language {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+  }
+  .recent-grid time {
+    flex: none;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+  }
+  .back {
+    width: max-content;
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+  }
+  .now-hero {
+    max-width: 58rem;
+    border-block: 1px solid hsl(var(--border));
+  }
+  .now-grid {
+    grid-template-columns: 1fr;
+  }
+  .now-grid article,
+  .now-grid article:nth-child(even) {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.45fr) minmax(0, 1fr);
+    gap: 0 2rem;
+    min-height: 0;
+    border-right: 0;
+    padding: 1.25rem 0;
+  }
+  .now-grid article > span {
+    grid-row: 1/4;
+  }
+  .now-grid h2 {
+    margin: 0 0 0.5rem;
+  }
+  .now-grid ul,
+  .now-grid article small {
+    grid-column: 2;
+  }
+  .recent-grid aside,
+  .return-note {
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+    border-radius: 0;
+    padding-inline: 0;
+    background: transparent;
+  }
+  .information-source::before {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .now-hero,
+    .recent-grid,
+    .now-grid {
+      grid-template-columns: 1fr;
+    }
+    .now-visual {
+      justify-self: start;
+      width: min(70vw, 18rem);
+    }
+    .now-grid article,
+    .now-grid article:nth-child(even) {
+      grid-template-columns: 1fr;
+    }
+    .now-grid article > span {
+      grid-row: auto;
+    }
+    .now-grid ul,
+    .now-grid article small {
+      grid-column: 1;
+    }
+  }
 </style>

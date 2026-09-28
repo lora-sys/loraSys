@@ -16,6 +16,7 @@ interface Props {
   back?: string
   lang?: string
   showSidebar?: boolean
+  showMobileSidebarButton?: boolean
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   back = '/',
   lang = uiLocale(Astro.url.pathname),
   showSidebar = Astro.slots.has('sidebar'),
+  showMobileSidebarButton = showSidebar,
   ...props
 } = Astro.props
 ---
@@ -88,7 +90,7 @@ const {
 
   <BackToTop label={lang === 'en-US' ? 'Back to top' : '返回顶部'} header='content-header' content='content'>
     {
-      showSidebar && (
+      showSidebar && showMobileSidebarButton && (
         <button
           slot='other-icons'
           aria-label={lang === 'en-US' ? 'Toggle table of contents' : '展开或收起目录'}

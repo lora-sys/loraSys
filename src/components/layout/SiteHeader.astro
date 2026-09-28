@@ -1,15 +1,32 @@
 ---
+import {
+  footerNavigation,
+  getLocale,
+  hasAlternate,
+  localeMeta,
+  localizedPath,
+  primaryNavigation
+} from '@/i18n/site'
+
 import { Icon } from 'astro-pure/user'
-import { getLocale, hasAlternate, localeMeta, localizedPath, primaryNavigation } from '@/i18n/site'
 
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
-interface Props { locale?: 'zh-CN' | 'en-US' }
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+}
 const locale = Astro.props.locale ?? getLocale(pathname)
 const copy = localeMeta(locale)
 const menu = primaryNavigation(locale)
+const mainMenu = menu.filter((item) => !item.href.endsWith('/links'))
+const moreMenu = [
+  ...menu.filter((item) => item.href.endsWith('/links')),
+  ...footerNavigation(locale)
+]
 const otherLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
 // 无对应路由的页面不提供语言切换，避免把访客丢回对方语言首页。
-const alternate = hasAlternate(pathname, otherLocale) ? localizedPath(pathname, otherLocale) : undefined
+const alternate = hasAlternate(pathname, otherLocale)
+  ? localizedPath(pathname, otherLocale)
+  : undefined
 const home = locale === 'en-US' ? '/en' : '/'
 const search = locale === 'en-US' ? '/en/search' : '/search'
 ---
@@ -17,29 +34,98 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
 <header class='site-header' data-site-header>
   <a class='brand' href={home} aria-label={locale === 'en-US' ? 'Lora home' : 'Lora 首页'}>Lora</a>
 
-  <nav class='primary-nav' aria-label={locale === 'en-US' ? 'Primary navigation' : '主导航'} data-primary-nav>
-    {menu.map((item) => <a class='tactile-action' href={item.href} data-nav-note={item.title}>{item.title}</a>)}
+  <nav
+    class='primary-nav'
+    aria-label={locale === 'en-US' ? 'Primary navigation' : '主导航'}
+    data-primary-nav
+  >
+    {
+      mainMenu.map((item) => (
+        <a class='tactile-action' href={item.href}>
+          {item.title}
+        </a>
+      ))
+    }
+    <div class='more-menu'>
+      <button
+        class='more-toggle'
+        type='button'
+        data-more-toggle
+        aria-expanded='false'
+        aria-controls='more-navigation'
+      >
+        {locale === 'en-US' ? 'More' : '更多'}
+        <span class='more-caret' aria-hidden='true'>⌄</span>
+      </button>
+      <nav
+        id='more-navigation'
+        class='more-nav'
+        aria-label={locale === 'en-US' ? 'More pages' : '更多页面'}
+        data-more-nav
+        hidden
+      >
+        {moreMenu.map((item) => <a href={item.href}>{item.title}</a>)}
+        <a href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
+      </nav>
+    </div>
   </nav>
 
   <div class='header-tools'>
-    <a class='contact-cta tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
-    {alternate && <a class='locale-toggle' href={alternate} hreflang={otherLocale} lang={otherLocale}>{copy.switchLabel}</a>}
-    <a class='search-link' href={search} title={`${copy.searchLabel} /`} aria-label={copy.searchLabel} aria-keyshortcuts='/'><Icon name='search' class='size-4' /></a>
-    <button id='toggleDarkMode' type='button' aria-label={locale === 'en-US' ? 'Theme: system. Activate to change theme.' : '主题：跟随系统。点击切换主题。'}>
+    <a
+      class='search-link'
+      href={search}
+      title={`${copy.searchLabel} /`}
+      aria-label={copy.searchLabel}
+      aria-keyshortcuts='/'><Icon name='search' class='size-4' /></a
+    >
+    {
+      alternate && (
+        <a class='locale-toggle' href={alternate} hreflang={otherLocale} lang={otherLocale}>
+          {copy.switchLabel}
+        </a>
+      )
+    }
+    <button
+      id='toggleDarkMode'
+      type='button'
+      aria-label={locale === 'en-US'
+        ? 'Theme: system. Activate to change theme.'
+        : '主题：跟随系统。点击切换主题。'}
+    >
       <Icon class='system size-4' name='computer' />
       <Icon class='light hidden size-4' name='sun' />
       <Icon class='dark hidden size-4' name='moon' />
     </button>
-    <button class='menu-toggle' type='button' data-menu-toggle aria-expanded='false' aria-controls='mobile-navigation'>
-      <span class='sr-only' data-menu-label>{locale === 'en-US' ? 'Open menu' : '打开菜单'}</span><Icon name='menu' class='size-5' />
+    <button
+      class='menu-toggle'
+      type='button'
+      data-menu-toggle
+      aria-expanded='false'
+      aria-controls='mobile-navigation'
+    >
+      <span class='sr-only' data-menu-label>{locale === 'en-US' ? 'Open menu' : '打开菜单'}</span
+      ><Icon name='menu' class='size-5' />
     </button>
   </div>
 
-  <span class='scroll-progress' data-scroll-progress aria-hidden='true'></span>
-  <nav id='mobile-navigation' class='mobile-nav' aria-label={locale === 'en-US' ? 'Mobile navigation' : '移动端导航'} data-mobile-nav hidden>
-    {menu.map((item) => <a class='tactile-action' href={item.href}>{item.title}</a>)}
-    <a class='tactile-action' href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
-    {alternate && <a href={alternate} hreflang={otherLocale} lang={otherLocale}>{locale === 'en-US' ? '中文' : 'English'}</a>}
+  <nav
+    id='mobile-navigation'
+    class='mobile-nav'
+    aria-label={locale === 'en-US' ? 'Mobile navigation' : '移动端导航'}
+    data-mobile-nav
+    hidden
+  >
+    {mainMenu.map((item) => <a href={item.href}>{item.title}</a>)}
+    <span class='mobile-nav-label'>{locale === 'en-US' ? 'More pages' : '更多页面'}</span>
+    {moreMenu.map((item) => <a href={item.href}>{item.title}</a>)}
+    <a href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
+    {
+      alternate && (
+        <a href={alternate} hreflang={otherLocale} lang={otherLocale}>
+          {locale === 'en-US' ? '中文' : 'English'}
+        </a>
+      )
+    }
   </nav>
 </header>
 
@@ -67,7 +153,8 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]')
   const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]')
   const themeButton = document.querySelector<HTMLButtonElement>('#toggleDarkMode')
-  const scrollProgress = document.querySelector<HTMLElement>('[data-scroll-progress]')
+  const moreToggle = document.querySelector<HTMLButtonElement>('[data-more-toggle]')
+  const moreNav = document.querySelector<HTMLElement>('[data-more-nav]')
   const menuLabel = menuToggle?.querySelector<HTMLElement>('[data-menu-label]')
   const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
   let menuReturnFocus: HTMLElement | null = null
@@ -85,47 +172,100 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
 
   const updateScrollState = () => {
     if (!header) return
-    header.toggleAttribute('data-scrolled', window.scrollY > 18)
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-    const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0
-    scrollProgress?.style.setProperty('--page-scroll', progress.toFixed(4))
+    header.toggleAttribute('data-scrolled', window.scrollY > 24)
   }
 
   const setMenu = (open: boolean, restoreFocus = false) => {
     if (!menuToggle || !mobileNav) return
     if (open && menuToggle.getAttribute('aria-expanded') !== 'true') {
       const activeElement = document.activeElement
-      menuReturnFocus = activeElement instanceof HTMLElement && activeElement !== document.body ? activeElement : menuToggle
+      menuReturnFocus =
+        activeElement instanceof HTMLElement && activeElement !== document.body
+          ? activeElement
+          : menuToggle
     }
     menuToggle.setAttribute('aria-expanded', open.toString())
-    if (menuLabel) menuLabel.textContent = open ? (isEnglish ? 'Close menu' : '关闭菜单') : (isEnglish ? 'Open menu' : '打开菜单')
+    if (menuLabel)
+      menuLabel.textContent = open
+        ? isEnglish
+          ? 'Close menu'
+          : '关闭菜单'
+        : isEnglish
+          ? 'Open menu'
+          : '打开菜单'
     mobileNav.hidden = !open
     header?.classList.toggle('menu-open', open)
     if (open) window.requestAnimationFrame(() => mobileNav.querySelector<HTMLElement>('a')?.focus())
     if (!open && restoreFocus) menuReturnFocus?.focus()
   }
 
-  menuToggle?.addEventListener('click', () => setMenu(menuToggle.getAttribute('aria-expanded') !== 'true'))
-  mobileNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)))
+  menuToggle?.addEventListener('click', () =>
+    setMenu(menuToggle.getAttribute('aria-expanded') !== 'true')
+  )
+  mobileNav
+    ?.querySelectorAll('a')
+    .forEach((link) => link.addEventListener('click', () => setMenu(false)))
+  const setMore = (open: boolean) => {
+    if (!moreToggle || !moreNav) return
+    moreToggle.setAttribute('aria-expanded', String(open))
+    moreNav.hidden = !open
+    if (open) window.requestAnimationFrame(() => moreNav.querySelector<HTMLElement>('a')?.focus())
+  }
+  moreToggle?.addEventListener('click', () =>
+    setMore(moreToggle.getAttribute('aria-expanded') !== 'true')
+  )
+  moreNav
+    ?.querySelectorAll('a')
+    .forEach((link) => link.addEventListener('click', () => setMore(false)))
   const currentPath = window.location.pathname.replace(/\/$/, '') || '/'
-  document.querySelectorAll<HTMLAnchorElement>('[data-primary-nav] a, [data-mobile-nav] a').forEach((link) => {
-    const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '') || '/'
-    if (linkPath === currentPath) link.setAttribute('aria-current', 'page')
-  })
+  document
+    .querySelectorAll<HTMLAnchorElement>(
+      '[data-primary-nav] a, [data-more-nav] a, [data-mobile-nav] a'
+    )
+    .forEach((link) => {
+      const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '') || '/'
+      if (linkPath === currentPath) link.setAttribute('aria-current', 'page')
+    })
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && menuToggle?.getAttribute('aria-expanded') === 'true') setMenu(false, true)
+    if (event.key !== 'Escape') return
+    if (menuToggle?.getAttribute('aria-expanded') === 'true') setMenu(false, true)
+    if (moreToggle?.getAttribute('aria-expanded') === 'true') {
+      setMore(false)
+      moreToggle.focus()
+    }
   })
   document.addEventListener('pointerdown', (event) => {
-    if (header && event.target instanceof Node && !header.contains(event.target)) setMenu(false)
+    if (header && event.target instanceof Node && !header.contains(event.target)) {
+      setMenu(false)
+      setMore(false)
+    }
   })
-  window.addEventListener('resize', () => { if (matchMedia('(min-width: 900px)').matches) setMenu(false) })
+  window.addEventListener('resize', () => {
+    if (matchMedia('(min-width: 900px)').matches) setMenu(false)
+    else setMore(false)
+  })
   window.addEventListener('scroll', updateScrollState, { passive: true })
   updateScrollState()
 
   document.addEventListener('keydown', (event) => {
-    if (event.key !== '/' || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.defaultPrevented) return
-    if (event.target instanceof Element && event.target.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]')) return
+    if (
+      event.key !== '/' ||
+      event.isComposing ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.shiftKey ||
+      event.defaultPrevented
+    )
+      return
+    if (
+      event.target instanceof Element &&
+      event.target.closest(
+        'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="textbox"]'
+      )
+    )
+      return
     if (document.querySelector('dialog[open]')) return
     const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input')
     event.preventDefault()
@@ -167,5 +307,253 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
 </script>
 
 <style>
-  .site-header{position:sticky;top:1rem;z-index:50;display:flex;align-items:center;min-height:3.3rem;margin-bottom:clamp(2.75rem,7vw,5rem);border:1px solid hsl(var(--border) / .72);border-radius:1rem;padding:.42rem .55rem .42rem .85rem;background:hsl(var(--background) / .78);box-shadow:0 10px 34px -28px hsl(var(--foreground) / .45);backdrop-filter:blur(18px);transition:border-color var(--motion-base,190ms) ease,background var(--motion-base,190ms) ease,box-shadow var(--motion-base,190ms) ease,transform var(--motion-quick,140ms) var(--motion-spring,cubic-bezier(.23,1,.32,1))}.scroll-progress{position:absolute;right:.6rem;bottom:-.22rem;left:.6rem;height:2px;border-radius:999px;background:hsl(var(--field-amber));box-shadow:0 2px 9px hsl(var(--field-amber) / .25);opacity:.72;pointer-events:none;transform:scaleX(var(--page-scroll,0));transform-origin:left;transition:transform 120ms linear,opacity 160ms ease}.site-header:not([data-scrolled]) .scroll-progress{opacity:0}.site-header[data-scrolled]{border-color:hsl(var(--field-amber) / .24);background:hsl(var(--background) / .92);box-shadow:0 18px 44px -32px hsl(var(--foreground) / .52);transform:translateY(-.08rem)}.brand{margin-right:auto;color:hsl(var(--foreground));font-family:ui-sans-serif,system-ui,sans-serif;font-size:1.12rem;font-weight:650;letter-spacing:-.05em;text-decoration:none}.primary-nav{display:flex;align-items:center;gap:.12rem}.primary-nav a,.mobile-nav a{border-radius:.5rem;padding:.46rem .58rem;color:hsl(var(--muted-foreground));font-size:.72rem;font-weight:590;text-decoration:none;transition:background 160ms ease,color 160ms ease,transform 160ms ease}.primary-nav a:hover,.primary-nav a:focus-visible,.mobile-nav a:hover,.mobile-nav a:focus-visible{background:hsl(var(--muted));color:hsl(var(--foreground));transform:translateY(-1px)}.primary-nav a[aria-current='page'],.mobile-nav a[aria-current='page']{background:hsl(var(--field-amber) / .12);box-shadow:inset 0 -2px hsl(var(--field-amber));color:hsl(var(--foreground))}.header-tools{display:flex;align-items:center;gap:.28rem;margin-left:.55rem}.contact-cta,.locale-toggle,.search-link,#toggleDarkMode,.menu-toggle{display:inline-grid;min-height:2rem;place-items:center;border:1px solid hsl(var(--border));border-radius:.55rem;background:transparent;color:hsl(var(--foreground));font-size:.67rem;font-weight:650;text-decoration:none}.contact-cta{padding-inline:.58rem;background:hsl(var(--foreground));color:hsl(var(--background));border-color:hsl(var(--foreground));transition:transform 160ms cubic-bezier(.23,1,.32,1),opacity 160ms ease}.contact-cta:hover,.contact-cta:focus-visible{opacity:.84;transform:translateY(-1px)}.contact-cta:active,.primary-nav a:active,.mobile-nav a:active,.locale-toggle:active,.search-link:active,#toggleDarkMode:active,.menu-toggle:active{transform:scale(.97)}.locale-toggle{min-width:2rem;padding-inline:.42rem;color:hsl(var(--field-amber))}.search-link,#toggleDarkMode,.menu-toggle{width:2rem;padding:0}.menu-toggle{display:none}.mobile-nav[hidden]{display:none}.mobile-nav{position:absolute;top:calc(100% + .5rem);right:0;left:0;display:grid;gap:.2rem;border:1px solid hsl(var(--border));border-radius:.9rem;padding:.45rem;background:hsl(var(--background));box-shadow:0 18px 46px -28px hsl(var(--foreground) / .45)}.mobile-nav a{padding:.72rem .75rem;font-size:.82rem}.mobile-nav a:nth-last-child(2){margin-top:.18rem;background:hsl(var(--foreground));color:hsl(var(--background))}#toggleDarkMode[data-theme='dark'] .system,#toggleDarkMode[data-theme='light'] .system{display:none}#toggleDarkMode[data-theme='dark'] .dark,#toggleDarkMode[data-theme='light'] .light{display:block}@media(max-width:1040px){.primary-nav a{padding-inline:.42rem;font-size:.67rem}}@media(max-width:899px){.primary-nav,.contact-cta,.header-tools>.locale-toggle{display:none}.menu-toggle{display:grid}.site-header{margin-bottom:2rem}.header-tools{gap:.5rem}.search-link,#toggleDarkMode,.menu-toggle{position:relative;min-width:2.75rem;min-height:2.75rem}.mobile-nav a{display:flex;align-items:center;min-height:2.75rem}}@media(prefers-reduced-motion:reduce){.site-header,.scroll-progress,.primary-nav a,.mobile-nav a,.contact-cta{transition:none}.primary-nav a:hover,.primary-nav a:focus-visible,.mobile-nav a:hover,.mobile-nav a:focus-visible,.contact-cta:hover,.contact-cta:focus-visible,.contact-cta:active,.primary-nav a:active,.mobile-nav a:active,.locale-toggle:active,.search-link:active,#toggleDarkMode:active,.menu-toggle:active{transform:none}}
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    min-height: 3.4rem;
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+    border: 1px solid transparent;
+    border-radius: 0;
+    padding: 0.35rem 0;
+    background: transparent;
+    transition:
+      border-color var(--motion-base) ease,
+      background var(--motion-base) ease,
+      box-shadow var(--motion-base) ease;
+  }
+
+  .site-header[data-scrolled] {
+    border-color: hsl(var(--border) / 0.68);
+    border-radius: 0 0 0.8rem 0.8rem;
+    background: hsl(var(--background) / 0.94);
+    box-shadow: 0 10px 30px -26px hsl(var(--foreground) / 0.48);
+    backdrop-filter: blur(12px);
+  }
+
+  .brand {
+    margin-right: auto;
+    color: hsl(var(--foreground));
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 650;
+    letter-spacing: -0.05em;
+    text-decoration: none;
+  }
+
+  .primary-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .primary-nav a,
+  .mobile-nav a,
+  .more-nav a {
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.62rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.77rem;
+    font-weight: 590;
+    text-decoration: none;
+    transition:
+      background-color var(--motion-base) ease,
+      color var(--motion-base) ease,
+      transform var(--motion-quick) ease;
+  }
+
+  .primary-nav a:hover,
+  .primary-nav a:focus-visible,
+  .mobile-nav a:hover,
+  .mobile-nav a:focus-visible,
+  .more-nav a:hover,
+  .more-nav a:focus-visible {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    transform: translateY(-1px);
+  }
+
+  .primary-nav a[aria-current='page'],
+  .mobile-nav a[aria-current='page'],
+  .more-nav a[aria-current='page'] {
+    background: hsl(var(--field-amber) / 0.12);
+    box-shadow: inset 0 -2px hsl(var(--field-amber));
+    color: hsl(var(--foreground));
+  }
+
+  .more-menu {
+    position: relative;
+  }
+
+  .more-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 0;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.62rem;
+    background: transparent;
+    color: hsl(var(--muted-foreground));
+    font: inherit;
+    font-size: 0.77rem;
+  }
+
+  .more-toggle:hover,
+  .more-toggle:focus-visible,
+  .more-toggle[aria-expanded='true'] {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+  }
+  .more-caret {
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .more-nav[hidden],
+  .mobile-nav[hidden] {
+    display: none;
+  }
+
+  .more-nav {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    right: 0;
+    z-index: 60;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
+    gap: 0.12rem;
+    min-width: 19rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    padding: 0.4rem;
+    background: hsl(var(--background));
+    box-shadow: 0 14px 36px -24px hsl(var(--foreground) / 0.4);
+  }
+
+  .more-nav a {
+    padding: 0.56rem 0.62rem;
+    font-size: 0.76rem;
+  }
+  .header-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: 0.7rem;
+  }
+
+  .locale-toggle,
+  .search-link,
+  #toggleDarkMode,
+  .menu-toggle {
+    display: inline-grid;
+    min-width: 2.25rem;
+    min-height: 2.25rem;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 0.55rem;
+    background: transparent;
+    color: hsl(var(--foreground));
+    font-size: 0.72rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .locale-toggle {
+    color: hsl(var(--field-amber-strong));
+  }
+  .search-link {
+    width: 2.25rem;
+  }
+  .menu-toggle {
+    display: none;
+  }
+  .mobile-nav-label {
+    display: none;
+  }
+  #toggleDarkMode[data-theme='dark'] .system,
+  #toggleDarkMode[data-theme='light'] .system {
+    display: none;
+  }
+  #toggleDarkMode[data-theme='dark'] .dark,
+  #toggleDarkMode[data-theme='light'] .light {
+    display: block;
+  }
+
+  @media (max-width: 899px) {
+    .site-header {
+      margin-bottom: 1.75rem;
+      padding-block: 0.2rem;
+    }
+    .primary-nav,
+    .header-tools > .locale-toggle {
+      display: none;
+    }
+    .header-tools {
+      gap: 0.2rem;
+      margin-left: 0.5rem;
+    }
+    .search-link,
+    #toggleDarkMode,
+    .menu-toggle {
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+    }
+    .menu-toggle {
+      display: inline-grid;
+    }
+
+    .mobile-nav {
+      position: absolute;
+      top: 100%;
+      right: calc(-1 * (1rem + env(safe-area-inset-right)));
+      left: calc(-1 * (1rem + env(safe-area-inset-left)));
+      z-index: 60;
+      display: grid;
+      gap: 0.12rem;
+      max-height: calc(100dvh - 4.5rem);
+      overflow: auto;
+      border: 1px solid hsl(var(--border));
+      border-radius: 0 0 0.8rem 0.8rem;
+      padding: 0.75rem max(1rem, env(safe-area-inset-right)) 1rem
+        max(1rem, env(safe-area-inset-left));
+      background: hsl(var(--background));
+      box-shadow: 0 14px 36px -24px hsl(var(--foreground) / 0.4);
+    }
+
+    .mobile-nav a {
+      display: flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.88rem;
+    }
+    .mobile-nav-label {
+      display: block;
+      margin: 0.45rem 0.75rem 0.1rem;
+      color: hsl(var(--muted-foreground));
+      font-size: 0.68rem;
+      font-weight: 650;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .primary-nav a,
+    .mobile-nav a,
+    .more-toggle,
+    .more-nav a {
+      transition: none;
+    }
+    .primary-nav a:hover,
+    .primary-nav a:focus-visible,
+    .mobile-nav a:hover,
+    .mobile-nav a:focus-visible,
+    .more-nav a:hover,
+    .more-nav a:focus-visible {
+      transform: none;
+    }
+  }
 </style>

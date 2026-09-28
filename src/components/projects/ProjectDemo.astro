@@ -15,8 +15,8 @@ const meta: Record<DemoKind, Record<'zh-CN' | 'en-US', { name: string; note: str
     'en-US': { name: 'Harness · Closed loop', note: 'Illustrative engineering flow. Select a step to inspect.' }
   },
   terminal: {
-    'zh-CN': { name: 'Glassbox · 能力概览', note: '当前能力与规划分开显示。点击可复制。' },
-    'en-US': { name: 'Glassbox · Capabilities', note: 'Available and planned capabilities are separated. Click to copy.' }
+    'zh-CN': { name: 'Glassbox · 审批与回放', note: '本地流程示意，操作不会更改真实任务。' },
+    'en-US': { name: 'Glassbox · Review and replay', note: 'Local flow example. Actions do not change real tasks.' }
   },
   learning: {
     'zh-CN': { name: 'Zhihu Threads · 学习线', note: '选来源，再生成学习线。点击步骤查看说明。' },
@@ -65,19 +65,6 @@ const pipelineData = {
     { label: 'Build', note: 'Build · Code & test in isolated worktree' },
     { label: 'Review', note: 'Review · Quality gates & security audits' },
     { label: 'Merge', note: 'Merge · Automated merge & field note archive' }
-  ]
-}
-
-const terminalData = {
-  'zh-CN': [
-    { line: '当前 · Codex / Claude Code', tip: '已复制当前支持的 Agent 适配器说明' },
-    { line: '当前 · 回放、审批与过程检查', tip: '已复制当前个人 Agent 能力说明' },
-    { line: '规划 · 远程入口、长期任务、学习沉淀', tip: '已复制规划说明，这些功能仍在建设' }
-  ],
-  'en-US': [
-    { line: 'Available: Codex / Claude Code', tip: 'Copied the available provider adapters' },
-    { line: 'Available: replay, approvals, run inspection', tip: 'Copied the available personal-agent capabilities' },
-    { line: 'Planned: remote channels, long tasks, learning', tip: 'Copied planned capabilities; these are still being built' }
   ]
 }
 
@@ -142,7 +129,6 @@ const extraData: Record<Exclude<DemoKind, 'timeline' | 'pipeline' | 'terminal'>,
 
 const currentTimeline = timelineData[locale]
 const currentPipeline = pipelineData[locale]
-const currentTerminal = terminalData[locale]
 const currentExtra =
   kind in extraData ? extraData[kind as keyof typeof extraData][locale] : []
 const copy = meta[kind][locale]
@@ -208,21 +194,45 @@ const copy = meta[kind][locale]
     }
     {
       kind === 'terminal' && (
-        <div class='demo-term'>
-          {currentTerminal.map((item, index) => (
-            <button
-              type='button'
-              class='demo-line'
-              data-line={index}
-              data-text={item.line}
-              data-tip={item.tip}
-              style={`--i:${index}`}
-              title={locale === 'zh-CN' ? '点击复制此项说明' : 'Click to copy capability note'}
-            >
-              <span class='demo-line-inner'>{item.line}</span>
-              <span class='demo-copy-badge' aria-hidden='true'>{locale === 'zh-CN' ? '复制' : 'Copy'}</span>
+        <div class='review-demo' data-review-demo>
+          <div class='review-state'>
+            <span>{locale === 'zh-CN' ? '当前状态' : 'Current state'}</span>
+            <output data-review-status aria-live='polite'>
+              {locale === 'zh-CN' ? 'Task · REVIEW' : 'Task · REVIEW'}
+            </output>
+          </div>
+          <ol class='review-trace' aria-label={locale === 'zh-CN' ? '示例运行记录' : 'Example run trace'}>
+            <li data-review-event>
+              <span>{locale === 'zh-CN' ? 'Worker' : 'Worker'}</span>
+              <strong>done</strong>
+            </li>
+            <li data-review-event>
+              <span>{locale === 'zh-CN' ? 'Task' : 'Task'}</span>
+              <strong>REVIEW</strong>
+            </li>
+            <li data-review-result='accept' hidden>
+              <span>{locale === 'zh-CN' ? 'Review' : 'Review'}</span>
+              <strong>{locale === 'zh-CN' ? 'Accept → DONE' : 'Accept → DONE'}</strong>
+            </li>
+            <li data-review-result='rework' hidden>
+              <span>{locale === 'zh-CN' ? 'Review' : 'Review'}</span>
+              <strong>{locale === 'zh-CN' ? 'Rework → next Attempt' : 'Rework → next Attempt'}</strong>
+            </li>
+          </ol>
+          <div class='review-actions' role='group' aria-label={locale === 'zh-CN' ? '选择示例审查结果' : 'Choose an example review outcome'}>
+            <button type='button' data-review-decision='accept' aria-pressed='false'>
+              {locale === 'zh-CN' ? '接受结果' : 'Accept result'}
             </button>
-          ))}
+            <button type='button' data-review-decision='rework' aria-pressed='false'>
+              {locale === 'zh-CN' ? '要求返工' : 'Request rework'}
+            </button>
+          </div>
+          <p class='review-disclaimer'>
+            {locale === 'zh-CN'
+              ? '示例流程与示例事件，不连接 Glassbox 服务。'
+              : 'Example flow and events. No Glassbox service is connected.'}
+          </p>
+          <span class='sr-only' data-review-announcement aria-live='polite'></span>
         </div>
       )
     }
@@ -232,8 +242,16 @@ const copy = meta[kind][locale]
       <strong>{copy.name}</strong>
       <small data-demo-note aria-live='polite'>{copy.note}</small>
     </span>
-    <button type='button' class='demo-replay tactile-action' data-demo-replay aria-label={locale === 'zh-CN' ? '从头重播演示' : 'Replay demo from beginning'}>
-      {locale === 'zh-CN' ? '重播' : 'Replay'} <span aria-hidden='true'>↻</span>
+    <button
+      type='button'
+      class='demo-replay tactile-action'
+      data-demo-replay={kind === 'terminal' ? undefined : ''}
+      data-review-replay={kind === 'terminal' ? '' : undefined}
+      aria-label={locale === 'zh-CN' ? '重播示例轨迹' : 'Replay example trace'}
+    >
+      {kind === 'terminal'
+        ? locale === 'zh-CN' ? '重播轨迹' : 'Replay trace'
+        : locale === 'zh-CN' ? '重播' : 'Replay'} <span aria-hidden='true'>↻</span>
     </button>
   </div>
 </div>
@@ -259,8 +277,7 @@ const copy = meta[kind][locale]
   .project-demo[data-playing='false'] .demo-sweep,
   .project-demo[data-playing='false'] .demo-node,
   .project-demo[data-playing='false'] .demo-chip,
-  .project-demo[data-playing='false'] .demo-chip::after,
-  .project-demo[data-playing='false'] .demo-line-inner {
+  .project-demo[data-playing='false'] .demo-chip::after {
     animation: none;
   }
 
@@ -377,68 +394,90 @@ const copy = meta[kind][locale]
     transform: translateY(-1px);
   }
 
-  /* terminal：可点击复制行，带微型 Copy 浮标。 */
-  .demo-term {
+  .review-demo {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .review-state,
+  .review-trace li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
+  }
+  .review-state {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+  }
+  .review-state output {
+    color: hsl(var(--foreground));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-weight: 650;
+  }
+  .review-trace {
     display: grid;
     min-width: 0;
-    overflow: hidden;
-    gap: 0.28rem;
+    gap: 0.12rem;
+    margin: 0;
     border: 1px solid hsl(var(--field-ink) / 0.32);
     border-radius: 0.55rem;
-    padding: 0.55rem 0.65rem;
+    padding: 0.35rem 0.5rem;
     background: hsl(var(--field-ink) / 0.045);
     font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
     font-size: 0.62rem;
   }
-  .demo-line {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    width: 100%;
+  .review-trace li {
     min-width: 0;
-    margin: 0;
-    padding: 0.15rem 0.3rem;
-    border: none;
-    border-radius: 0.3rem;
-    background: transparent;
-    color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    text-align: left;
-    cursor: pointer;
-    overflow: hidden;
-    white-space: nowrap;
-    transition: background 140ms ease;
+    min-height: 1.45rem;
+    border-radius: 0.25rem;
+    padding-inline: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    list-style: none;
+    transition: background-color 160ms ease, color 160ms ease;
   }
-  .demo-line:hover,
-  .demo-line:focus-visible {
-    background: hsl(var(--field-ink) / 0.08);
+  .review-trace li[hidden] {
+    display: none;
   }
-  .demo-line-inner {
-    display: inline-block;
+  .review-trace li[data-active='true'] {
+    background: hsl(var(--field-amber) / 0.16);
+    color: hsl(var(--foreground));
+  }
+  .review-trace li strong {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     color: hsl(var(--field-ink) / 0.86);
-    transform: translateX(-101%);
-    animation: demo-type-in 460ms steps(20) forwards;
-    animation-delay: calc(var(--i) * 520ms);
+    font-weight: 620;
   }
-  .demo-copy-badge {
-    flex-shrink: 0;
-    opacity: 0;
-    color: hsl(var(--field-amber-strong));
-    font-size: 0.55rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    transition: opacity 160ms ease;
+  .review-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
   }
-  .demo-line:hover .demo-copy-badge,
-  .demo-line:focus-visible .demo-copy-badge {
-    opacity: 1;
+  .review-actions button {
+    min-height: 2.3rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.3rem 0.62rem;
+    background: hsl(var(--background) / 0.85);
+    color: hsl(var(--foreground));
+    font-size: 0.62rem;
+    font-weight: 640;
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease;
+  }
+  .review-actions button:hover,
+  .review-actions button:focus-visible,
+  .review-actions button[aria-pressed='true'] {
+    border-color: hsl(var(--field-amber-strong));
+    background: hsl(var(--field-amber) / 0.12);
+  }
+  .review-disclaimer {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.58rem;
+    line-height: 1.4;
   }
 
   .demo-bar {
@@ -499,18 +538,21 @@ const copy = meta[kind][locale]
       color: hsl(var(--foreground));
     }
   }
-  @keyframes demo-type-in {
-    to {
-      transform: translateX(0);
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
+    .project-demo,
+    .demo-node,
+    .demo-node i,
+    .demo-chip,
+    .demo-line,
+    .demo-replay,
+    .review-trace li,
+    .review-actions button {
+      transition: none;
+    }
     .demo-sweep,
     .demo-node,
     .demo-chip,
-    .demo-chip::after,
-    .demo-line-inner {
+    .demo-chip::after {
       animation: none;
     }
     .demo-sweep {
@@ -526,7 +568,12 @@ const copy = meta[kind][locale]
       opacity: 1;
       transform: scaleX(1);
     }
-    .demo-line-inner {
+    .demo-node:hover i,
+    .demo-node:focus-visible i,
+    .demo-node[data-active='true'] i,
+    .demo-chip:hover,
+    .demo-chip:focus-visible,
+    .demo-chip[data-active='true'] {
       transform: none;
     }
   }
@@ -539,6 +586,69 @@ const copy = meta[kind][locale]
       if (demo.dataset.demoReady === 'true') continue
       demo.dataset.demoReady = 'true'
       demo.dataset.playing = 'false'
+
+      if (demo.dataset.demo === 'terminal') {
+        const status = demo.querySelector<HTMLOutputElement>('[data-review-status]')
+        const announcement = demo.querySelector<HTMLElement>('[data-review-announcement]')
+        const decisions = demo.querySelectorAll<HTMLButtonElement>('[data-review-decision]')
+        const results = demo.querySelectorAll<HTMLElement>('[data-review-result]')
+        const events = [...demo.querySelectorAll<HTMLElement>('[data-review-event], [data-review-result]')]
+        let replayTimer: number | undefined
+
+        const clearReplay = () => {
+          if (replayTimer !== undefined) window.clearTimeout(replayTimer)
+          replayTimer = undefined
+          events.forEach((event) => event.removeAttribute('data-active'))
+        }
+
+        decisions.forEach((button) => {
+          button.addEventListener('click', () => {
+            clearReplay()
+            const outcome = button.dataset.reviewDecision ?? ''
+            decisions.forEach((decision) => {
+              decision.setAttribute('aria-pressed', String(decision === button))
+            })
+            results.forEach((result) => {
+              result.hidden = result.dataset.reviewResult !== outcome
+            })
+            if (status) {
+              status.textContent = outcome === 'accept'
+                ? 'Task · DONE'
+                : 'Review · REWORK'
+            }
+            if (announcement) {
+              announcement.textContent = outcome === 'accept'
+                ? (demo.dataset.locale === 'en-US' ? 'Example outcome: Accept, then DONE.' : '示例结果：接受后进入 DONE。')
+                : (demo.dataset.locale === 'en-US' ? 'Example outcome: Rework, then the next attempt.' : '示例结果：要求返工后进入下一次 Attempt。')
+            }
+          })
+        })
+
+        demo.querySelector<HTMLButtonElement>('[data-review-replay]')?.addEventListener('click', () => {
+          clearReplay()
+          const visibleEvents = events.filter((event) => !event.hidden)
+          if (reducedMotion.matches) {
+            visibleEvents.at(-1)?.setAttribute('data-active', 'true')
+            if (announcement) announcement.textContent = demo.dataset.locale === 'en-US'
+              ? 'Example trace shown.'
+              : '已显示示例轨迹。'
+            return
+          }
+
+          let index = 0
+          const highlightNext = () => {
+            visibleEvents.forEach((event) => event.removeAttribute('data-active'))
+            visibleEvents[index]?.setAttribute('data-active', 'true')
+            if (announcement) announcement.textContent = demo.dataset.locale === 'en-US'
+              ? `Example trace event ${index + 1} of ${visibleEvents.length}.`
+              : `示例轨迹第 ${index + 1} 项，共 ${visibleEvents.length} 项。`
+            index += 1
+            if (index < visibleEvents.length) replayTimer = window.setTimeout(highlightNext, 420)
+          }
+          if (visibleEvents.length) highlightNext()
+        })
+        continue
+      }
 
       const noteEl = demo.querySelector<HTMLElement>('[data-demo-note]')
       const defaultNote = demo.dataset.defaultNote ?? ''
@@ -586,30 +696,6 @@ const copy = meta[kind][locale]
           try {
             if (document.documentElement.dataset.haptics === 'on') navigator.vibrate?.(8)
           } catch {}
-        })
-      })
-
-      // 3. Terminal 终端点击复制
-      const lines = demo.querySelectorAll<HTMLButtonElement>('[data-line]')
-      lines.forEach((line) => {
-        line.addEventListener('click', async () => {
-          const text = line.dataset.text
-          const tip = line.dataset.tip
-          if (text) {
-            try {
-              await navigator.clipboard.writeText(text)
-              if (tip) setNote(tip, true)
-              const badge = line.querySelector<HTMLElement>('.demo-copy-badge')
-              if (badge) {
-                const old = badge.textContent
-                badge.textContent = demo.dataset.locale === 'en-US' ? 'Copied' : '已复制'
-                window.setTimeout(() => { badge.textContent = old }, 1500)
-              }
-              if (document.documentElement.dataset.haptics === 'on') navigator.vibrate?.(12)
-            } catch {
-              setNote(demo.dataset.locale === 'en-US' ? 'Copy unavailable. Select the log text manually.' : '无法自动复制，请手动选择日志文本。', false)
-            }
-          }
         })
       })
 

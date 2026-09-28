@@ -1,12 +1,12 @@
 ---
-import SiteFooter from '@/components/layout/SiteFooter.astro'
+import { hasAlternate, localizedPath, type SiteLocale } from '@/i18n/site'
+
 import { ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
-import config from '@/site-config'
+import SiteFooter from '@/components/layout/SiteFooter.astro'
 import SiteHeader from '@/components/layout/SiteHeader.astro'
-import RouteVisualBanner from '@/components/lora/RouteVisualBanner.astro'
-import { footerNavigation, hasAlternate, localizedPath, type SiteLocale } from '@/i18n/site'
+import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
@@ -38,11 +38,36 @@ const description =
     ? config.description
     : 'Lora 的个人网站，记录 AI Agent、开发者工具、公开构建、技术写作与正在进行的实验。')
 const localPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
+const pageKind =
+  /^\/(blog(?:\/|$)|en\/writing(?:\/|$)|notes(?:\/|$)|archives(?:\/|$)|tags(?:\/|$)|terms(?:\/|$))/.test(
+    localPath
+  )
+    ? 'reading'
+    : /^\/(?:$|en\/?$|projects(?:\/|$)|en\/work(?:\/|$)|lab(?:\/|$))/.test(localPath)
+      ? 'showcase'
+      : 'regular'
 // 只有真实存在对应路由的页面才声明 hreflang alternate。
 const otherLocale: SiteLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
-const alternatePath = hasAlternate(localPath, otherLocale) ? localizedPath(localPath, otherLocale) : undefined
-const footerItems = footerNavigation(locale)
-const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
+const alternatePath = hasAlternate(localPath, otherLocale)
+  ? localizedPath(localPath, otherLocale)
+  : undefined
+const footerLabel = locale === 'en-US' ? 'Explore' : '站点导航'
+const footerPrimary =
+  locale === 'en-US'
+    ? [
+        { title: 'Work', href: '/en/work' },
+        { title: 'Writing', href: '/en/writing' },
+        { title: 'Now', href: '/en/now' },
+        { title: 'About', href: '/en/about' },
+        { title: 'Contact', href: '/en/contact' }
+      ]
+    : [
+        { title: '作品', href: '/projects' },
+        { title: '写作', href: '/blog' },
+        { title: '正在构建', href: '/now' },
+        { title: '关于', href: '/about' },
+        { title: '联系', href: '/contact' }
+      ]
 ---
 
 <html {lang}>
@@ -72,22 +97,27 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
         />
       )
     }
-    <a class='skip-link' href='#main-content'>{locale === 'en-US' ? 'Skip to content' : '跳到正文'}</a>
-    <div
-      id='main-container'
-      class='w-full max-w-[70rem] min-h-[100dvh] flex flex-col justify-between'
+    <a class='skip-link' href='#main-content'
+      >{locale === 'en-US' ? 'Skip to content' : '跳到正文'}</a
     >
+    <div id='main-container' class='w-full min-h-[100dvh] flex flex-col justify-between site-frame'>
       <SiteHeader locale={locale} />
-      <div id='main-content' class='flex-1 w-full' tabindex='-1'>
-        <RouteVisualBanner path={localPath} lang={locale} />
+      <div
+        id='main-content'
+        class={`page-content page-content--${pageKind} flex-1 w-full`}
+        tabindex='-1'
+      >
         <slot />
       </div>
       <div class='site-footer'>
-        <nav class='secondary-navigation' aria-label={locale === 'en-US' ? 'Secondary navigation' : '补充导航'}>
+        <nav
+          class='secondary-navigation'
+          aria-label={locale === 'en-US' ? 'Secondary navigation' : '补充导航'}
+        >
           <span>{footerLabel}</span>
           <ul>
             {
-              footerItems.map((item) => (
+              footerPrimary.map((item) => (
                 <li>
                   <a href={item.href}>{item.title}</a>
                 </li>
@@ -121,9 +151,38 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
        * https://webkit.org/blog/7929/designing-websites-for-iphone-x/
        */
       #main-container {
+        max-width: 75rem;
+        margin-inline: auto;
         padding-top: env(safe-area-inset-top);
         padding-left: calc(1rem + env(safe-area-inset-left));
         padding-right: calc(1rem + env(safe-area-inset-right));
+      }
+
+      #main-content {
+        margin-inline: auto;
+      }
+
+      #main-content.page-content--reading {
+        max-width: var(--width-reading);
+      }
+
+      #main-content.page-content--regular {
+        max-width: var(--width-regular);
+      }
+
+      #main-content.page-content--showcase {
+        max-width: var(--width-showcase);
+      }
+
+      :global(.wide-visual) {
+        width: min(calc(100% + 4rem), var(--width-visual));
+        max-width: var(--width-visual);
+        margin-inline: auto;
+      }
+      .site-footer {
+        width: 100%;
+        max-width: var(--width-showcase);
+        margin-inline: auto;
       }
       @media (min-width: 640px) {
         #main-container {
@@ -218,6 +277,35 @@ const footerLabel = locale === 'en-US' ? 'Explore' : '继续探索'
 
         .secondary-navigation ul {
           justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 640px) {
+        :global(.wide-visual) {
+          width: 100%;
+        }
+      }
+
+      @media print {
+        :global(.site-header),
+        .site-footer,
+        .skip-link,
+        #highlight-gradient {
+          display: none !important;
+        }
+
+        #main-container,
+        #main-content {
+          width: 100%;
+          max-width: none;
+          min-height: 0;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          color: #111;
+          background: #fff;
         }
       }
     </style>

@@ -57,9 +57,9 @@ const focusCopy = {
     'zh-CN': [
       {
         id: 'building',
-        category: 'Building',
+        category: '构建',
         title: '最近在做',
-        status: 'In progress',
+        status: '进行中',
         frequency: '有明显进展时更新',
         items: [
           'Glassbox：继续做个人 Agent 的身份、授权、会话和可追溯执行基础。',
@@ -70,25 +70,25 @@ const focusCopy = {
       },
       {
         id: 'learning',
-        category: 'Learning',
+        category: '学习',
         title: '最近在学',
-        status: 'Exploring',
+        status: '探索中',
         frequency: '形成可复用结论时更新',
         items: ['长期运行 Agent 的授权、记忆与任务恢复', '怎样让 Agent 的运行过程更容易观察、评测和复盘']
       },
       {
         id: 'reading',
-        category: 'Reading',
+        category: '阅读',
         title: '最近在读',
-        status: 'On my desk',
+        status: '正在阅读',
         frequency: '随阅读进展更新',
         items: ['Designing Data-Intensive Applications']
       },
       {
         id: 'listening',
-        category: 'Listening',
+        category: '聆听',
         title: '最近在听',
-        status: 'On repeat',
+        status: '循环播放',
         frequency: '不定期更新',
         items: ['Tame Impala — Currents']
       }

@@ -1,9 +1,10 @@
 ---
-import { displayLabel } from '@/i18n/ui'
 import type { CollectionEntry } from 'astro:content'
-import FormattedDate from './LocalDate.astro'
-import { projects } from '@/data/projects'
 import { getProjectsForStory } from '@/data/project-stories'
+import { projects } from '@/data/projects'
+import { displayLabel } from '@/i18n/ui'
+
+import FormattedDate from './LocalDate.astro'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -12,7 +13,7 @@ interface Props {
 }
 
 const { post, theme, whyRead } = Astro.props
-const postDate = post.data.updatedDate ?? post.data.publishDate
+const postDate = post.data.publishDate
 const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((repository) => {
   const project = projects.find((item) => item.repository === repository)
   return project ? [project] : []
@@ -24,7 +25,9 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
     <span>{displayLabel(theme, 'zh-CN')}</span>
     <FormattedDate date={postDate} />
   </div>
-  <h3 lang={post.data.language}><a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a></h3>
+  <h3 lang={post.data.language}>
+    <a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a>
+  </h3>
   <p class='description' lang={post.data.language}>{post.data.description}</p>
   <p class='why-read'><b>阅读要点</b>{whyRead}</p>
   {
@@ -41,7 +44,9 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
       </div>
     )
   }
-  <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch>阅读文章 <span aria-hidden='true'>↗</span></a>
+  <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch
+    >阅读文章 <span aria-hidden='true'>↗</span></a
+  >
 </article>
 
 <style>
@@ -135,43 +140,43 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
 
   .related-context {
     display: grid;
-    gap: .4rem;
-    margin-top: .85rem;
+    gap: 0.4rem;
+    margin-top: 0.85rem;
     border-top: 1px dashed hsl(var(--border));
-    padding-top: .75rem;
+    padding-top: 0.75rem;
   }
 
   .related-context > span {
     color: hsl(var(--muted-foreground));
-    font-size: .66rem;
+    font-size: 0.66rem;
     font-weight: 650;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .related-context > div {
     display: flex;
     flex-wrap: wrap;
-    gap: .4rem;
+    gap: 0.4rem;
   }
 
   .related-context a {
     display: inline-flex;
     align-items: center;
     min-height: 2rem;
-    border: 1px solid hsl(var(--field-teal) / .28);
+    border: 1px solid hsl(var(--field-teal) / 0.28);
     border-radius: 999px;
-    padding: .3rem .55rem;
-    background: hsl(var(--field-teal) / .07);
+    padding: 0.3rem 0.55rem;
+    background: hsl(var(--field-teal) / 0.07);
     color: hsl(var(--foreground));
-    font-size: .68rem;
+    font-size: 0.68rem;
     font-weight: 620;
     text-decoration: none;
   }
 
   .related-context a:hover,
   .related-context a:focus-visible {
-    border-color: hsl(var(--field-teal) / .62);
+    border-color: hsl(var(--field-teal) / 0.62);
   }
 
   .read-link {
@@ -186,6 +191,8 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .featured-writing { transition: none; }
+    .featured-writing {
+      transition: none;
+    }
   }
 </style>

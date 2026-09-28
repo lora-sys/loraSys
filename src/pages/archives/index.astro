@@ -1,52 +1,285 @@
 ---
-import BlogPostCard from '@/components/blog/BlogPostCard.astro'
+import { labEntries } from '@/data/lab'
+import { fieldNotes } from '@/data/notes'
+import { projects } from '@/data/projects'
+
 import { getBlogCollection, groupCollectionsByYear, sortMDByDate } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 export const prerender = true
 
-const allPosts = await getBlogCollection()
-const allPostsByDate = sortMDByDate(allPosts)
-const allPostsByYear = groupCollectionsByYear(allPostsByDate)
+const posts = sortMDByDate((await getBlogCollection()).filter(({ data }) => !data.draft))
+const postsByYear = groupCollectionsByYear(posts)
+const datedProjects = [...projects].sort((a, b) => Date.parse(b.pushedAt) - Date.parse(a.pushedAt))
+const datedNotes = [...fieldNotes].sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+const dateLabel = (date: Date | string) =>
+  new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'short', timeZone: 'UTC' }).format(
+    new Date(date)
+  )
 
 const meta = {
-  description: '按年份浏览已发布的文章。',
-  title: '归档'
+  description: '按内容类型浏览已发布的文章、项目、短笔记和实验记录。',
+  title: '内容归档'
 }
 ---
 
 <PageLayout {meta}>
-  <Button title='返回写作' href='/blog' variant='back' />
+  <main class='archive-page'>
+    <header class='archive-heading'>
+      <p class='eyebrow'>站点目录</p>
+      <h1>内容归档</h1>
+      <p>按内容类型浏览文章、项目、短笔记和实验记录。</p>
+    </header>
 
-  <main class='mt-6 lg:mt-10'>
-    <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>归档</h1>
-    </div>
+    <nav class='archive-jump' aria-label='归档内容类型'>
+      <a href='#articles'>文章 <span>{posts.length}</span></a>
+      <a href='#projects'>项目 <span>{projects.length}</span></a>
+      <a href='#notes'>短笔记 <span>{fieldNotes.length}</span></a>
+      <a href='#lab'>实验记录 <span>{labEntries.length}</span></a>
+    </nav>
 
-    {allPosts.length === 0 && <p>暂时没有文章。</p>}
-
-    <section id='content' class='animate' aria-label='文章列表'>
+    <section id='articles' class='archive-section' aria-labelledby='articles-title'>
+      <header><h2 id='articles-title'>文章</h2><span>{posts.length} 篇</span></header>
       {
-        allPostsByYear.map(([year, posts]) => (
-          <div class='relative mt-20'>
-            <h2
-              class='absolute -start-6 -top-16 z-0 text-9xl font-bold text-transparent opacity-12 dark:opacity-25'
-              style='-webkit-text-stroke-width:2px;-webkit-text-stroke-color:hsl(var(--foreground)/var(--un-text-opacity))'
-            >
-              <samp>{year}</samp>
-            </h2>
-            <p class='px-5 text-muted-foreground'>
-              {posts.length} 篇文章
-            </p>
-            <ul class='flex flex-col text-start'>
-              {posts.map((p) => (
-                <BlogPostCard post={p} />
-              ))}
-            </ul>
-          </div>
-        ))
+        posts.length === 0 ? (
+          <p class='empty-state'>暂时没有已发布的文章。</p>
+        ) : (
+          postsByYear.map(([year, yearPosts]) => (
+            <div class='archive-year'>
+              <h3>{year}</h3>
+              <ul class='archive-list'>
+                {yearPosts.map((post) => {
+                  const isEnglish = post.data.language === 'en-US'
+                  const href = isEnglish ? `/en/writing/${post.id}` : `/blog/${post.id}`
+                  return (
+                    <li>
+                      <a href={href} lang={post.data.language}>
+                        {post.data.title}
+                      </a>
+                      <span>{dateLabel(post.data.publishDate)}</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          ))
+        )
+      }
+    </section>
+
+    <section id='projects' class='archive-section' aria-labelledby='projects-title'>
+      <header><h2 id='projects-title'>项目</h2><span>{projects.length} 个</span></header>
+      {
+        projects.length === 0 ? (
+          <p class='empty-state'>暂时没有项目记录。</p>
+        ) : (
+          <ul class='archive-list archive-list--described'>
+            {datedProjects.map((project) => (
+              <li>
+                <div>
+                  <a href={`/projects#${encodeURIComponent(project.repository)}`}>
+                    {project.title}
+                  </a>
+                  <p>{project.description}</p>
+                </div>
+                <span>更新于 {dateLabel(project.pushedAt)}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      <a class='section-link' href='/projects'>浏览完整作品目录 <span aria-hidden='true'>→</span></a
+      >
+    </section>
+
+    <section id='notes' class='archive-section' aria-labelledby='notes-title'>
+      <header><h2 id='notes-title'>短笔记</h2><span>{fieldNotes.length} 条</span></header>
+      {
+        fieldNotes.length === 0 ? (
+          <p class='empty-state'>暂时没有短笔记。</p>
+        ) : (
+          <ul class='archive-list archive-list--described'>
+            {datedNotes.map((note) => (
+              <li>
+                <div>
+                  <a href={`/notes#${encodeURIComponent(note.slug)}`}>{note.title}</a>
+                  <p>{note.summary}</p>
+                </div>
+                <span>{dateLabel(note.date)}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    <section id='lab' class='archive-section' aria-labelledby='lab-title'>
+      <header><h2 id='lab-title'>实验记录</h2><span>{labEntries.length} 项</span></header>
+      {
+        labEntries.length === 0 ? (
+          <p class='empty-state'>暂时没有实验记录。</p>
+        ) : (
+          <ul class='archive-list archive-list--described'>
+            {labEntries.map((entry) => (
+              <li>
+                <div>
+                  <a href={`/lab/${entry.slug}`}>{entry.title}</a>
+                  <p>{entry.summary}</p>
+                </div>
+                <span>{entry.project}</span>
+              </li>
+            ))}
+          </ul>
+        )
       }
     </section>
   </main>
 </PageLayout>
+
+<style>
+  .archive-page {
+    max-width: 58rem;
+    margin-inline: auto;
+  }
+  .archive-heading {
+    margin: 0 0 2rem;
+  }
+  .eyebrow {
+    margin: 0 0 0.4rem;
+    color: hsl(var(--field-amber-strong));
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    line-height: 1.12;
+  }
+  .archive-heading > p:last-child {
+    margin: 0.75rem 0 0;
+    color: hsl(var(--muted-foreground));
+    line-height: 1.7;
+  }
+  .archive-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 3.5rem;
+  }
+  .archive-jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.35rem 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+  .archive-jump span,
+  .archive-section > header > span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .archive-section {
+    margin-block: 3rem;
+    scroll-margin-top: 6rem;
+  }
+  .archive-section > header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 0.8rem;
+  }
+  .archive-section > header h2 {
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 600;
+  }
+  .archive-year {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+  .archive-year h3 {
+    margin: 0.85rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .archive-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .archive-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.7);
+    padding: 0.85rem 0;
+  }
+  .archive-list a {
+    color: hsl(var(--foreground));
+    font-weight: 550;
+    text-decoration: none;
+    text-underline-offset: 0.2em;
+  }
+  .archive-list a:hover,
+  .archive-list a:focus-visible {
+    text-decoration: underline;
+  }
+  .archive-list li > span {
+    flex: none;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+  }
+  .archive-list--described li {
+    align-items: start;
+  }
+  .archive-list--described li > div {
+    min-width: 0;
+  }
+  .archive-list--described p {
+    margin: 0.3rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+  .section-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    min-height: 2.75rem;
+    color: hsl(var(--foreground));
+    font-size: 0.82rem;
+    text-underline-offset: 0.2em;
+  }
+  .empty-state {
+    color: hsl(var(--muted-foreground));
+  }
+  @media (max-width: 560px) {
+    .archive-year {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+    .archive-year h3 {
+      margin: 0.8rem 0 0;
+    }
+    .archive-list li {
+      align-items: start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+</style>

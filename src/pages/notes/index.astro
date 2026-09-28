@@ -1,10 +1,11 @@
 ---
 import { Image } from 'astro:assets'
-import PageLayout from '@/layouts/CommonPage.astro'
-import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
-import LanguageBadge from '@/components/blog/LanguageBadge.astro'
-import notesFieldStrip from '@/assets/lora-visual/v2/lora-v2-notes-strip.webp'
 import { fieldNotes as notes } from '@/data/notes'
+
+import PageLayout from '@/layouts/CommonPage.astro'
+import LanguageBadge from '@/components/blog/LanguageBadge.astro'
+import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+import notesFieldStrip from '@/assets/lora-visual/v2/lora-v2-notes-strip.webp'
 
 const tags = [...new Set(notes.flatMap((note) => note.tags))]
 const formatNoteDate = (date: string) =>
@@ -20,15 +21,14 @@ const formatNoteDate = (date: string) =>
   headings={[]}
 >
   <Fragment slot='head'>
-    <CollectionPageJsonLd
-      name='短笔记'
-      description='Lora 的短篇工程观察、实验记录与技术判断。'
-    />
+    <CollectionPageJsonLd name='短笔记' description='Lora 的短篇工程观察、实验记录与技术判断。' />
   </Fragment>
   <div class='not-prose notes-intro'>
     <p class='eyebrow'>随记</p>
     <div class='intro-line'>
-      <p>未长成文章的观察、实验记录与工程判断。它们比长文更短，但会保留问题的棱角。每条笔记都有稳定链接。</p>
+      <p>
+        未长成文章的观察、实验记录与工程判断。它们比长文更短，但会保留问题的棱角。每条笔记都有稳定链接。
+      </p>
       <span>{String(notes.length).padStart(2, '0')} 条笔记</span>
     </div>
     <Image
@@ -54,6 +54,9 @@ const formatNoteDate = (date: string) =>
     }
   </div>
   <p id='notes-filter-status' class='sr-only' aria-live='polite'></p>
+  <p class='not-prose notes-empty' data-notes-empty hidden>
+    这个主题下暂时没有短笔记。可以切回“全部”。
+  </p>
 
   <ol class='not-prose notes-grid' data-notes-list>
     {
@@ -69,7 +72,9 @@ const formatNoteDate = (date: string) =>
                 <LanguageBadge language='zh-CN' compact />
               </div>
             </header>
-            <h2><a href={`#${note.slug}`}>{note.title}</a></h2>
+            <h2>
+              <a href={`#${note.slug}`}>{note.title}</a>
+            </h2>
             <p>{note.summary}</p>
             <footer>
               <ul aria-label={`${note.title} 的标签`}>
@@ -101,6 +106,7 @@ const formatNoteDate = (date: string) =>
   )
   const noteCards = Array.from(document.querySelectorAll<HTMLElement>('[data-note]'))
   const status = document.getElementById('notes-filter-status')
+  const empty = document.querySelector<HTMLElement>('[data-notes-empty]')
 
   filterButtons.forEach((button) => {
     button.addEventListener('click', () => {
@@ -115,7 +121,9 @@ const formatNoteDate = (date: string) =>
         if (show) visible += 1
       })
 
-      if (status) status.textContent = `已显示 ${visible} 条笔记，主题：${selected === 'all' ? '全部' : selected}`
+      if (status)
+        status.textContent = `已显示 ${visible} 条笔记，主题：${selected === 'all' ? '全部' : selected}`
+      if (empty) empty.hidden = visible > 0
     })
   })
 
@@ -389,6 +397,109 @@ const formatNoteDate = (date: string) =>
     article,
     .note-filters button {
       transition: none;
+    }
+  }
+  .notes-field-strip {
+    width: min(100%, 42rem);
+    max-height: 9rem;
+    object-fit: contain;
+    object-position: left;
+    border: 0;
+    border-radius: 0;
+  }
+  .notes-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: visible;
+    padding: 0;
+    border-top: 1px solid hsl(var(--border));
+    background: transparent;
+  }
+  .notes-grid > li {
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  article {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr) minmax(8rem, 0.35fr);
+    gap: 0.35rem 1.2rem;
+    min-height: 0;
+    padding: 1.2rem 0.2rem;
+  }
+  article > header {
+    grid-column: 1;
+    grid-row: 1/4;
+    display: grid;
+    align-content: start;
+    justify-content: start;
+    gap: 0.2rem;
+  }
+  .note-number {
+    font-size: 0.68rem;
+    letter-spacing: 0;
+  }
+  .meta {
+    display: grid;
+    gap: 0.2rem;
+  }
+  h2 {
+    grid-column: 2;
+    max-width: none;
+    margin: 0;
+    font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  }
+  article > p {
+    grid-column: 2;
+    margin: 0;
+    font-size: 0.78rem;
+  }
+  article footer {
+    grid-column: 3;
+    grid-row: 1/4;
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+    margin: 0;
+    padding: 0;
+  }
+  .note-links {
+    min-width: 0;
+    gap: 0.45rem;
+  }
+  .note-links a {
+    text-align: left;
+  }
+  .notes-empty {
+    margin: 1rem 0;
+    color: hsl(var(--muted-foreground));
+  }
+  .notes-empty[hidden] {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    article {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    article > header,
+    h2,
+    article > p,
+    article footer {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    article > header {
+      display: flex;
+      justify-content: start;
+    }
+    .meta {
+      display: flex;
+    }
+    article footer {
+      margin-top: 0.4rem;
+    }
+    .note-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
     }
   }
 </style>

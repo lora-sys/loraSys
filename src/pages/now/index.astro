@@ -1,13 +1,14 @@
 ---
 import { Image } from 'astro:assets'
-import PageLayout from '@/layouts/CommonPage.astro'
-import nowCurrentDeskHero from '@/assets/lora-visual/v2/lora-v2-now-workbench.webp'
+import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
 import projectSnapshot from '@/data/github-projects.json'
 import syncReport from '@/data/sync-report.json'
-import { currentFocus, getCurrentFocusSections } from '@/data/current-focus'
-import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
-import EvidenceBadge from '@/components/layout/EvidenceBadge.astro'
+
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import PageLayout from '@/layouts/CommonPage.astro'
+import EvidenceBadge from '@/components/layout/EvidenceBadge.astro'
+import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
+import nowCurrentDeskHero from '@/assets/lora-visual/v2/lora-v2-now-workbench.webp'
 
 const lastUpdated = currentFocus.reviewedAt
 const lastUpdatedLabel = new Intl.DateTimeFormat('zh-CN', {
@@ -23,113 +24,558 @@ const projectChanges = Object.values(projectSnapshot.projects)
 const recentPushes = projectChanges.slice(0, 5)
 const allPosts = sortMDByDate(await getBlogCollection())
 const recentWriting = allPosts.slice(0, 4)
-const projectUpdatePayload = projectChanges.map((project) => ({ name: project.name, pushedAt: project.pushedAt }))
+const projectUpdatePayload = projectChanges.map((project) => ({
+  name: project.name,
+  pushedAt: project.pushedAt
+}))
 const writingUpdatePayload = allPosts.map((post) => ({
   title: post.data.title,
   publishDate: post.data.publishDate.toISOString()
 }))
-const syncedLabel = new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(
-  new Date(syncReport.syncedAt)
-)
+const syncedLabel = new Intl.DateTimeFormat('zh-CN', {
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC'
+}).format(new Date(syncReport.syncedAt))
 const sections = getCurrentFocusSections('zh-CN')
 const headings = sections.map((section) => ({ depth: 2, slug: section.id, text: section.title }))
 ---
-<PageLayout
-  title='最近在做'
-  description='Lora 最近在做的项目、写作、学习、阅读与音乐。'
-  {headings}
->
- <section class='not-prose now-hero' aria-labelledby='now-intro'>
-  <Image src={nowCurrentDeskHero} alt='' aria-hidden='true' class='now-hero-image' widths={[768, 1152, 1536]} sizes='(min-width: 1024px) 48rem, 100vw' loading='eager' fetchpriority='high' />
-  <div class='now-hero-copy'>
-   <span class='now-hero-label'>当前记录</span>
-   <p id='now-intro'>一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}>{lastUpdatedLabel}</time>，完成重要变化时更新。</p>
+
+<PageLayout title='最近在做' description='Lora 最近在做的项目、写作、学习、阅读与音乐。' {headings}>
+  <section class='not-prose now-hero' aria-labelledby='now-intro'>
+    <Image
+      src={nowCurrentDeskHero}
+      alt=''
+      aria-hidden='true'
+      class='now-hero-image'
+      widths={[768, 1152, 1536]}
+      sizes='(min-width: 1024px) 48rem, 100vw'
+      loading='eager'
+      fetchpriority='high'
+    />
+    <div class='now-hero-copy'>
+      <span class='now-hero-label'>当前记录</span>
+      <p id='now-intro'>
+        一个关于此刻的持续快照，而不是履历。最后复核于 <time datetime={lastUpdated}
+          >{lastUpdatedLabel}</time
+        >，完成重要变化时更新。
+      </p>
+    </div>
+  </section>
+  <div class='not-prose now-freshness'><FreshnessStatus /></div>
+  <div
+    class='now-recent now-source now-source--human'
+    data-information-origin='human'
+    data-now-visit
+    data-project-updates={JSON.stringify(projectUpdatePayload)}
+    data-writing-updates={JSON.stringify(writingUpdatePayload)}
+  >
+    <strong><EvidenceBadge kind='human-reviewed' /> · 最近在忙</strong>
+    <span>{currentFocus.description}</span>
+    <small data-now-return>第一次来？从“最近在做”开始就好。</small>
   </div>
- </section>
- <div class='not-prose now-freshness'><FreshnessStatus /></div>
- <div
-   class='now-recent now-source now-source--human'
-   data-information-origin='human'
-   data-now-visit
-   data-project-updates={JSON.stringify(projectUpdatePayload)}
-   data-writing-updates={JSON.stringify(writingUpdatePayload)}
- >
-   <strong><EvidenceBadge kind='human-reviewed' /> · 最近在忙</strong>
-   <span>{currentFocus.description}</span>
-   <small data-now-return>第一次来？从“最近在做”开始就好。</small>
- </div>
- <aside class='now-sync now-source now-source--automatic' data-information-origin='automatic' aria-label='自动同步的最近公开项目更新'>
-   <header><strong><EvidenceBadge kind='synced' /> · 最近的公开更新</strong><span>项目数据同步于 {syncedLabel}</span></header>
-   <ul>
-     {recentPushes.map((project) => (
-       <li>
-         <a href={project.url} target='_blank' rel='noopener noreferrer'>{project.fullName}</a>
-         <time datetime={String(project.pushedAt).slice(0, 10)} data-pushed-at={project.pushedAt}>
-           {new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(project.pushedAt))}
-         </time>
-       </li>
-     ))}
-   </ul>
-   <small>这里显示最近的公开仓库更新；上面的近况仍由我自己按阶段复核。</small>
- </aside>
- <aside class='now-writing now-source now-source--automatic' data-information-origin='automatic' aria-label='自动汇总的最近发布文章'>
-   <header><strong><EvidenceBadge kind='synced' /> · 最近写的文章</strong><a href='/blog'>全部写作 <span aria-hidden='true'>→</span></a></header>
-   <ul>
-     {recentWriting.map((post) => (
-       <li>
-         <a href={`/blog/${post.id}`}>{post.data.title}</a>
-         <time datetime={post.data.publishDate.toISOString()} data-published-at={post.data.publishDate.toISOString()}>
-           {new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(post.data.publishDate)}
-         </time>
-       </li>
-     ))}
-   </ul>
- </aside>
- <div class='not-prose now-grid'>{sections.map(section=><section id={section.id}><header><span>{section.category}</span><div><i></i>{section.status}</div></header><h2>{section.title}</h2><ul>{section.items.map(item=><li>{item}</li>)}</ul><footer>更新频率 · {section.frequency}</footer></section>)}</div>
- <p>也可以在 <a href='https://peerlist.io/mierpiter' target='_blank' rel='noopener noreferrer'>PeerList</a>、<a href='https://www.youtube.com/@MierPiter33280' target='_blank' rel='noopener noreferrer'>YouTube</a> 和 <a href='https://space.bilibili.com/431821023' target='_blank' rel='noopener noreferrer'>Bilibili</a> 找到我。</p>
+  <div class='not-prose now-grid'>
+    {
+      sections.map((section, index) => (
+        <section id={section.id}>
+          <>
+            <header>
+              <>
+                <span>
+                  {String(index + 1).padStart(2, '0')} · {section.category}
+                </span>
+                <div>{section.status}</div>
+              </>
+            </header>
+            <h2>{section.title}</h2>
+            <ul>
+              {section.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            <footer>更新频率 · {section.frequency}</footer>
+          </>
+        </section>
+      ))
+    }
+  </div>
+  <h2 class='not-prose updates-title'>最近的公开更新</h2>
+  <p class='not-prose updates-note'>
+    以下仓库和文章由公开数据整理。它们的日期不能代替上面的人工近况。
+  </p>
+  <aside
+    class='now-sync now-source now-source--automatic'
+    data-information-origin='automatic'
+    aria-label='自动同步的最近公开项目更新'
+  >
+    <header>
+      <strong><EvidenceBadge kind='synced' /> · 最近的公开更新</strong><span
+        >项目数据同步于 {syncedLabel}</span>
+    </header>
+    <ul>
+      {
+        recentPushes.map((project) => (
+          <li>
+            <a href={project.url} target='_blank' rel='noopener noreferrer'>
+              {project.fullName}
+            </a>
+            <time
+              datetime={String(project.pushedAt).slice(0, 10)}
+              data-pushed-at={project.pushedAt}
+            >
+              {new Intl.DateTimeFormat('zh-CN', {
+                month: 'short',
+                day: 'numeric',
+                timeZone: 'UTC'
+              }).format(new Date(project.pushedAt))}
+            </time>
+          </li>
+        ))
+      }
+    </ul>
+    <small>这里显示最近的公开仓库更新；上面的近况仍由我自己按阶段复核。</small>
+  </aside>
+  <aside
+    class='now-writing now-source now-source--automatic'
+    data-information-origin='automatic'
+    aria-label='自动汇总的最近发布文章'
+  >
+    <header>
+      <strong><EvidenceBadge kind='synced' /> · 最近写的文章</strong><a href='/blog'
+        >全部写作 <span aria-hidden='true'>→</span></a>
+    </header>
+    <ul>
+      {
+        recentWriting.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}`}>{post.data.title}</a>
+            <time
+              datetime={post.data.publishDate.toISOString()}
+              data-published-at={post.data.publishDate.toISOString()}
+            >
+              {new Intl.DateTimeFormat('zh-CN', {
+                month: 'short',
+                day: 'numeric',
+                timeZone: 'UTC'
+              }).format(post.data.publishDate)}
+            </time>
+          </li>
+        ))
+      }
+    </ul>
+  </aside>
+  <p>
+    也可以在 <a href='https://peerlist.io/mierpiter' target='_blank' rel='noopener noreferrer'
+      >PeerList</a
+    >、<a href='https://www.youtube.com/@MierPiter33280' target='_blank' rel='noopener noreferrer'
+      >YouTube</a
+    > 和 <a href='https://space.bilibili.com/431821023' target='_blank' rel='noopener noreferrer'
+      >Bilibili</a
+    > 找到我。
+  </p>
 </PageLayout>
-<style>.now-hero{position:relative;isolation:isolate;min-height:clamp(14rem,31vw,22rem);margin-bottom:1.25rem;overflow:hidden;border:1px solid hsl(var(--border));border-radius:1.1rem;background:hsl(var(--muted)/.35)}.now-hero-image{position:absolute;inset:0;z-index:-1;width:100%;height:100%;object-fit:cover}.now-hero-copy{display:grid;align-content:end;min-height:inherit;max-width:min(35rem,65%);padding:clamp(1.1rem,4vw,2.25rem);background:linear-gradient(90deg,hsl(var(--background)/.94) 0%,hsl(var(--background)/.78) 58%,transparent 100%)}.now-hero-label{color:hsl(var(--muted-foreground));font-size:.64rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase}.now-hero-copy p{max-width:34rem;margin:.55rem 0 0;font-size:clamp(1rem,2.1vw,1.28rem);line-height:1.45}.now-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin:2rem 0}.now-grid section{border:1px solid hsl(var(--border));border-radius:1rem;padding:1.1rem;background:hsl(var(--card))}.now-grid header{display:flex;justify-content:space-between;color:hsl(var(--muted-foreground));font-size:.7rem;text-transform:uppercase;letter-spacing:.1em}.now-grid header div{display:flex;align-items:center;gap:.35rem;text-transform:none;letter-spacing:0}.now-grid i{width:.4rem;height:.4rem;border-radius:50%;background:hsl(var(--field-teal));box-shadow:0 0 0 3px hsl(var(--field-teal) / .12)}.now-grid h2{margin:.8rem 0 .5rem;font-size:1.15rem}.now-grid ul{margin:0;padding-left:1.2rem;color:hsl(var(--muted-foreground));font-size:.88rem}.now-grid footer{margin-top:1rem;padding-top:.7rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem}.now-freshness{margin:-.25rem 0 1rem}.now-source{position:relative}.now-source::before{position:absolute;top:.9rem;bottom:.9rem;left:0;width:2px;border-radius:999px;background:hsl(var(--field-teal));content:''}.now-source--automatic::before{background:hsl(var(--field-amber))}.now-recent{display:grid;gap:.35rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1rem;background:linear-gradient(120deg,hsl(var(--card)),hsl(var(--muted)/.45));font-size:.84rem}.now-recent strong{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}.now-recent span,.now-recent small{color:hsl(var(--muted-foreground));line-height:1.55}.now-recent small{font-size:.7rem}
-.now-sync{display:grid;gap:.55rem;margin-top:1rem;border:1px dashed hsl(var(--border));border-radius:1rem;padding:.95rem 1rem;background:hsl(var(--card)/.6);font-size:.8rem}
-.now-sync header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.now-sync header strong{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}
-.now-sync header span{color:hsl(var(--muted-foreground));font-size:.68rem}
-.now-sync ul{display:grid;gap:.4rem;margin:0;padding:0;list-style:none}
-.now-sync li{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.now-sync a{color:hsl(var(--foreground));font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:.74rem;text-decoration:none}
-.now-sync a:hover,.now-sync a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
-.now-sync time{color:hsl(var(--muted-foreground));font-size:.7rem;white-space:nowrap}
-.now-sync > small{color:hsl(var(--muted-foreground));font-size:.68rem;line-height:1.5}
-.now-writing{display:grid;gap:.55rem;margin-top:1rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:.95rem 1rem;background:hsl(var(--card)/.72);font-size:.8rem}
-.now-writing header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.now-writing header strong{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase}
-.now-writing header a{color:hsl(var(--foreground));font-size:.7rem;text-decoration:none}
-.now-writing header a:hover,.now-writing header a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
-.now-writing ul{display:grid;gap:.45rem;margin:0;padding:0;list-style:none}
-.now-writing li{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.now-writing li a{min-width:0;color:hsl(var(--foreground));font-size:.76rem;text-decoration:none}
-.now-writing li a:hover,.now-writing li a:focus-visible{text-decoration:underline;text-underline-offset:.2rem}
-.now-writing time{flex:none;color:hsl(var(--muted-foreground));font-size:.68rem}
-@media(max-width:600px){.now-hero{min-height:15.5rem}.now-hero-image{object-position:68% center}.now-hero-copy{max-width:100%;background:linear-gradient(90deg,hsl(var(--background)/.96) 0%,hsl(var(--background)/.78) 68%,hsl(var(--background)/.22) 100%)}.now-grid{grid-template-columns:1fr}}@media(prefers-reduced-motion:reduce){.now-hero-image{transform:none}}</style>
- <script>
-   const visitKey = 'lora:now:last-visit'
-   const root = document.querySelector<HTMLElement>('[data-now-visit]')
-   const marker = root?.querySelector<HTMLElement>('[data-now-return]')
-   if (root && marker) {
-     const previous = localStorage.getItem(visitKey)
-     if (previous) {
-       const previousTime = Date.parse(previous)
-       const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{ name: string; pushedAt: string }>
-       const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{ title: string; publishDate: string }>
-       const changedProjects = projects.filter((item) => Date.parse(item.pushedAt) > previousTime)
-       const newWriting = writing.filter((item) => Date.parse(item.publishDate) > previousTime)
-       if (changedProjects.length || newWriting.length) {
-         const projectText = changedProjects.length ? `${changedProjects.length} 个公开项目有更新` : ''
-         const writingText = newWriting.length ? `${newWriting.length} 篇新文章` : ''
-         marker.textContent = '上次来之后，' + [projectText, writingText].filter(Boolean).join('，') + '。'
-       } else {
-         marker.textContent = '欢迎回来。公开项目和文章里暂时没有比你上次访问更新的记录。'
-       }
-     }
-     localStorage.setItem(visitKey, new Date().toISOString())
-   }
- </script>
+<style>
+  .now-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: clamp(14rem, 31vw, 22rem);
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1.1rem;
+    background: hsl(var(--muted) / 0.35);
+  }
+  .now-hero-image {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .now-hero-copy {
+    display: grid;
+    align-content: end;
+    min-height: inherit;
+    max-width: min(35rem, 65%);
+    padding: clamp(1.1rem, 4vw, 2.25rem);
+    background: linear-gradient(
+      90deg,
+      hsl(var(--background) / 0.94) 0%,
+      hsl(var(--background) / 0.78) 58%,
+      transparent 100%
+    );
+  }
+  .now-hero-label {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.64rem;
+    font-weight: 650;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .now-hero-copy p {
+    max-width: 34rem;
+    margin: 0.55rem 0 0;
+    font-size: clamp(1rem, 2.1vw, 1.28rem);
+    line-height: 1.45;
+  }
+  .now-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+  .now-grid section {
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1.1rem;
+    background: hsl(var(--card));
+  }
+  .now-grid header {
+    display: flex;
+    justify-content: space-between;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .now-grid header div {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .now-grid i {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: hsl(var(--field-teal));
+    box-shadow: 0 0 0 3px hsl(var(--field-teal) / 0.12);
+  }
+  .now-grid h2 {
+    margin: 0.8rem 0 0.5rem;
+    font-size: 1.15rem;
+  }
+  .now-grid ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+  }
+  .now-grid footer {
+    margin-top: 1rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+  }
+  .now-freshness {
+    margin: -0.25rem 0 1rem;
+  }
+  .now-source {
+    position: relative;
+  }
+  .now-source::before {
+    position: absolute;
+    top: 0.9rem;
+    bottom: 0.9rem;
+    left: 0;
+    width: 2px;
+    border-radius: 999px;
+    background: hsl(var(--field-teal));
+    content: '';
+  }
+  .now-source--automatic::before {
+    background: hsl(var(--field-amber));
+  }
+  .now-recent {
+    display: grid;
+    gap: 0.35rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 1rem;
+    background: linear-gradient(120deg, hsl(var(--card)), hsl(var(--muted) / 0.45));
+    font-size: 0.84rem;
+  }
+  .now-recent strong {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .now-recent span,
+  .now-recent small {
+    color: hsl(var(--muted-foreground));
+    line-height: 1.55;
+  }
+  .now-recent small {
+    font-size: 0.7rem;
+  }
+  .now-sync {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 1rem;
+    border: 1px dashed hsl(var(--border));
+    border-radius: 1rem;
+    padding: 0.95rem 1rem;
+    background: hsl(var(--card) / 0.6);
+    font-size: 0.8rem;
+  }
+  .now-sync header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .now-sync header strong {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .now-sync header span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .now-sync ul {
+    display: grid;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .now-sync li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .now-sync a {
+    color: hsl(var(--foreground));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.74rem;
+    text-decoration: none;
+  }
+  .now-sync a:hover,
+  .now-sync a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  .now-sync time {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+  .now-sync > small {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.5;
+  }
+  .now-writing {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 1rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    padding: 0.95rem 1rem;
+    background: hsl(var(--card) / 0.72);
+    font-size: 0.8rem;
+  }
+  .now-writing header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .now-writing header strong {
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .now-writing header a {
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+  .now-writing header a:hover,
+  .now-writing header a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  .now-writing ul {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .now-writing li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .now-writing li a {
+    min-width: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.76rem;
+    text-decoration: none;
+  }
+  .now-writing li a:hover,
+  .now-writing li a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+  }
+  .now-writing time {
+    flex: none;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .now-hero {
+    border: 0;
+    border-block: 1px solid hsl(var(--border));
+    border-radius: 0;
+    background: transparent;
+  }
+  .now-hero-image {
+    object-fit: contain;
+    object-position: right center;
+  }
+  .now-hero-copy {
+    max-width: min(37rem, 72%);
+    background: linear-gradient(
+      90deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.95) 72%,
+      transparent 100%
+    );
+  }
+  .now-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 2.5rem 0 3.5rem;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .now-grid section {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.43fr) minmax(0, 1fr);
+    gap: 0 2rem;
+    border: 0;
+    border-bottom: 1px solid hsl(var(--border));
+    border-radius: 0;
+    padding: 1.3rem 0;
+    background: transparent;
+  }
+  .now-grid header {
+    grid-row: 1/4;
+    display: block;
+  }
+  .now-grid header > div {
+    margin-top: 0.4rem;
+  }
+  .now-grid h2 {
+    margin: 0 0 0.45rem;
+  }
+  .now-grid ul {
+    grid-column: 2;
+  }
+  .now-grid footer {
+    grid-column: 2;
+    border: 0;
+    padding: 0;
+  }
+  .now-recent,
+  .now-sync,
+  .now-writing {
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+    border-radius: 0;
+    background: transparent;
+  }
+  .now-recent {
+    padding-inline: 0;
+  }
+  .now-sync,
+  .now-writing {
+    padding-inline: 0;
+  }
+  .now-source::before {
+    display: none;
+  }
+  .updates-title {
+    margin: 0;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+  }
+  .updates-note {
+    margin: 0.4rem 0 1.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+  }
+  @media (max-width: 600px) {
+    .now-hero {
+      min-height: 15.5rem;
+    }
+    .now-hero-image {
+      object-position: 68% center;
+      opacity: 0.32;
+    }
+    .now-hero-copy {
+      max-width: 100%;
+      background: linear-gradient(
+        90deg,
+        hsl(var(--background) / 0.98) 0%,
+        hsl(var(--background) / 0.88) 70%,
+        transparent 100%
+      );
+    }
+    .now-grid {
+      grid-template-columns: 1fr;
+    }
+    .now-grid section {
+      grid-template-columns: 1fr;
+    }
+    .now-grid header {
+      grid-row: auto;
+    }
+    .now-grid ul,
+    .now-grid footer {
+      grid-column: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .now-hero-image {
+      transform: none;
+    }
+  }
+</style>
+<script>
+  const visitKey = 'lora:now:last-visit'
+  const root = document.querySelector<HTMLElement>('[data-now-visit]')
+  const marker = root?.querySelector<HTMLElement>('[data-now-return]')
+  if (root && marker) {
+    const previous = localStorage.getItem(visitKey)
+    if (previous) {
+      const previousTime = Date.parse(previous)
+      const projects = JSON.parse(root.dataset.projectUpdates || '[]') as Array<{
+        name: string
+        pushedAt: string
+      }>
+      const writing = JSON.parse(root.dataset.writingUpdates || '[]') as Array<{
+        title: string
+        publishDate: string
+      }>
+      const changedProjects = projects.filter((item) => Date.parse(item.pushedAt) > previousTime)
+      const newWriting = writing.filter((item) => Date.parse(item.publishDate) > previousTime)
+      if (changedProjects.length || newWriting.length) {
+        const projectText = changedProjects.length
+          ? `${changedProjects.length} 个公开项目有更新`
+          : ''
+        const writingText = newWriting.length ? `${newWriting.length} 篇新文章` : ''
+        marker.textContent =
+          '上次来之后，' + [projectText, writingText].filter(Boolean).join('，') + '。'
+      } else {
+        marker.textContent = '欢迎回来。公开项目和文章里暂时没有比你上次访问更新的记录。'
+      }
+    }
+    localStorage.setItem(visitKey, new Date().toISOString())
+  }
+</script>

@@ -1,17 +1,300 @@
 ---
-import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { featuredPostIds } from '@/data/featured-posts'
+
+import { getBlogCollection } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
-const posts = sortMDByDate(await getBlogCollection()).filter((post) => post.data.language === 'en-US')
+const posts = (await getBlogCollection())
+  .filter((post) => post.data.language === 'en-US')
+  .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
+const featuredPost =
+  featuredPostIds
+    .map((id) => posts.find((post) => post.id === id))
+    .find((post) => post !== undefined) ?? posts[0]
+const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
 ---
 
-<PageLayout lang='en-US' meta={{ title: 'Writing', description: 'English build notes on agent systems, tools, and building in public.' }} highlightColor='#d99a33'>
+<PageLayout
+  lang='en-US'
+  meta={{
+    title: 'Writing',
+    description: 'English build notes on agent systems, tools, and building in public.'
+  }}
+  highlightColor='#d99a33'
+>
   <main class='writing-page'>
-    <header><p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span>English originals are listed here. Each article keeps one permanent address and its original language.</span></header>
-    <nav aria-label='Writing languages'><a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'>All articles and Chinese originals ↗</a></nav>
-    <section aria-label='English writing'>{posts.map((post) => <article><time>{post.data.publishDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</time><h2><a href={`/blog/${post.id}`}>{post.data.title}</a></h2><p>{post.data.description}</p><div>{post.data.tags.slice(0, 4).map((tag) => <span>#{tag}</span>)}</div><a class='read' href={`/blog/${post.id}`}>Read note ↗</a></article>)}</section>
-    {posts.length === 0 && <p class='empty'>No English notes are published yet. The full writing archive remains available.</p>}
+    <header>
+      <p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span
+        >English originals are listed here. Each article keeps one permanent address and its
+        original language.</span
+      >
+    </header>
+    <nav aria-label='Writing languages'>
+      <a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'
+        >All articles and Chinese originals ↗</a
+      >
+    </nav>
+    {
+      featuredPost && (
+        <section class='featured' aria-labelledby='featured-title'>
+          <div class='featured-label'>
+            <>
+              <span>Featured note</span>
+              <time datetime={featuredPost.data.publishDate.toISOString()}>
+                {featuredPost.data.publishDate.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </time>
+            </>
+          </div>
+          <h2 id='featured-title'>
+            <a href={`/blog/${featuredPost.id}`}>{featuredPost.data.title}</a>
+          </h2>
+          <p>{featuredPost.data.description}</p>
+          <a class='read' href={`/blog/${featuredPost.id}`}>
+            Read this note <span aria-hidden='true'>↗</span>
+          </a>
+        </section>
+      )
+    }
+    {
+      publicationRows.length > 0 && (
+        <section class='publication-list' aria-labelledby='publication-title'>
+          <header>
+            <>
+              <h2 id='publication-title'>Published notes</h2>
+              <span>Newest first · {posts.length} articles</span>
+            </>
+          </header>
+          <ol>
+            {publicationRows.map((post) => (
+              <li>
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {post.data.publishDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </time>
+                <div>
+                  <h3>
+                    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                  </h3>
+                  <p>{post.data.description}</p>
+                </div>
+                <a
+                  class='row-link'
+                  href={`/blog/${post.id}`}
+                  aria-label={`Read ${post.data.title}`}
+                >
+                  <span aria-hidden='true'>↗</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+    {
+      posts.length === 0 && (
+        <p class='empty'>
+          No English notes are published yet. The full writing archive remains available.
+        </p>
+      )
+    }
   </main>
 </PageLayout>
 
-<style>.writing-page{display:grid;gap:1.25rem}header{display:grid;gap:.75rem;padding-block:clamp(1rem,4vw,3rem)}header p{margin:0;color:hsl(var(--field-amber));font-size:.67rem;font-weight:680;letter-spacing:.13em}h1{max-width:17ch;margin:0;font-size:clamp(2.5rem,6vw,5.5rem);font-weight:580;letter-spacing:-.068em;line-height:.93}header span{max-width:60ch;color:hsl(var(--muted-foreground));font-size:.88rem;line-height:1.7}nav{display:flex;gap:.5rem;border-bottom:1px solid hsl(var(--border));padding-bottom:1rem}nav a{border:1px solid hsl(var(--border));border-radius:999px;padding:.45rem .7rem;color:hsl(var(--foreground));font-size:.7rem;text-decoration:none}nav a[aria-current]{border-color:hsl(var(--field-amber));background:hsl(var(--field-amber));color:#fff}section{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}article{display:grid;min-height:17rem;border:1px solid hsl(var(--border));border-radius:1rem;padding:1.25rem;background:linear-gradient(145deg,hsl(var(--card)),hsl(var(--muted)/.4))}time{color:hsl(var(--muted-foreground));font-size:.65rem}h2{max-width:21ch;margin:.8rem 0 0;font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.15}h2 a,.read{color:hsl(var(--foreground));text-decoration:none}p{color:hsl(var(--muted-foreground));font-size:.78rem;line-height:1.65}article div{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:auto}article span{color:hsl(var(--field-amber));font-size:.64rem}.read{margin-top:1rem;font-size:.7rem;font-weight:640}.read:hover,h2 a:hover{text-decoration:underline}.empty{border-left:2px solid hsl(var(--field-amber));padding-left:.9rem}@media(max-width:700px){section{grid-template-columns:1fr}}</style>
+<style>
+  .writing-page {
+    display: grid;
+    gap: 1.6rem;
+  }
+  .writing-page > header {
+    display: grid;
+    gap: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: clamp(1rem, 4vw, 3rem);
+  }
+  .writing-page > header > p {
+    margin: 0;
+    color: hsl(var(--field-amber));
+    font-size: 0.67rem;
+    font-weight: 680;
+    letter-spacing: 0.13em;
+  }
+  h1 {
+    max-width: 17ch;
+    margin: 0;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 580;
+    letter-spacing: -0.068em;
+    line-height: 0.93;
+  }
+  .writing-page > header > span {
+    max-width: 60ch;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 1rem;
+  }
+  nav a {
+    min-height: 2.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.65rem 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+  nav a[aria-current] {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  nav a:focus-visible,
+  .writing-page a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  .featured {
+    display: grid;
+    max-width: 54rem;
+    gap: 0.85rem;
+    border-block: 1px solid hsl(var(--border));
+    padding: clamp(1.2rem, 4vw, 2.2rem) 0;
+  }
+  .featured-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .featured-label span {
+    color: hsl(var(--field-amber-strong));
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .featured h2 {
+    max-width: 22ch;
+    margin: 0;
+    font-size: clamp(1.65rem, 4vw, 2.6rem);
+    font-weight: 570;
+    letter-spacing: -0.045em;
+    line-height: 1.13;
+  }
+  .featured h2 a,
+  .read,
+  .publication-list h3 a,
+  .row-link {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .featured > p {
+    max-width: 62ch;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .read {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 640;
+  }
+  .publication-list > header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: 1rem;
+  }
+  .publication-list > header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 580;
+    letter-spacing: -0.03em;
+  }
+  .publication-list > header span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .publication-list ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .publication-list li {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr) 2rem;
+    align-items: start;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 1.1rem 0.2rem;
+  }
+  .publication-list time {
+    padding-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .publication-list h3 {
+    margin: 0;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    font-weight: 560;
+    line-height: 1.35;
+  }
+  .publication-list li p {
+    max-width: 64ch;
+    margin: 0.4rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+  .row-link {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+  }
+  .publication-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .empty {
+    border-left: 2px solid hsl(var(--field-amber));
+    padding-left: 0.9rem;
+  }
+  @media (max-width: 560px) {
+    .publication-list li {
+      grid-template-columns: minmax(0, 1fr) 2rem;
+      gap: 0.3rem 0.8rem;
+    }
+    .publication-list li time {
+      grid-column: 1;
+    }
+    .publication-list li div {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .publication-list li .row-link {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

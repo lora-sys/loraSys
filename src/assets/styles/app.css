@@ -34,7 +34,8 @@
   --field-shadow: 0 18px 44px -34px hsl(var(--foreground) / 0.46);
 
   /* Type scale: one fluid ladder so pages stop hand-writing clamp() expressions. */
-  --font-display: var(--font-satoshi), ui-sans-serif, system-ui, 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --font-display:
+    var(--font-satoshi), ui-sans-serif, system-ui, 'PingFang SC', 'Noto Sans SC', sans-serif;
   --text-display: clamp(2.9rem, 9vw, 6.75rem);
   --text-title-xl: clamp(2.65rem, 7vw, 6rem);
   --text-title: clamp(1.75rem, 4vw, 3.1rem);
@@ -58,6 +59,12 @@
   --radius-md: 1rem;
   --radius-lg: clamp(1.25rem, 3vw, 2rem);
   --radius-pill: 999px;
+
+  /* Shared page measure. Feature pages can use .wide-visual up to 70rem. */
+  --width-reading: 46.25rem;
+  --width-regular: 55rem;
+  --width-showcase: 65rem;
+  --width-visual: 70rem;
 }
 
 .dark {
@@ -119,14 +126,17 @@ body {
 /* Field Notes assets remain tactile in either scheme rather than becoming bright paper blocks in the dark. */
 .field-asset {
   box-shadow: var(--field-shadow);
-  transition: filter var(--motion-story) ease, opacity var(--motion-story) ease;
+  transition:
+    filter var(--motion-story) ease,
+    opacity var(--motion-story) ease;
 }
 
 html.dark .field-asset {
   filter: brightness(0.76) saturate(0.78) contrast(1.04);
 }
 
-html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
+html[data-theme-transition='true']
+  :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
   transition:
     background-color var(--motion-story) ease,
     color var(--motion-story) ease,
@@ -179,11 +189,15 @@ html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-
   }
 
   @keyframes theme-fade-out {
-    to { opacity: 0; }
+    to {
+      opacity: 0;
+    }
   }
 
   @keyframes theme-reveal {
-    to { clip-path: circle(150vmax at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%)); }
+    to {
+      clip-path: circle(150vmax at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%));
+    }
   }
 }
 
@@ -256,7 +270,8 @@ html.dark .eyebrow {
   a,
   .tactile-action,
   .field-asset,
-  html[data-theme-transition='true'] :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
+  html[data-theme-transition='true']
+    :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
     transition: none;
   }
 

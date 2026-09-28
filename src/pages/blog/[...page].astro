@@ -1,16 +1,18 @@
 ---
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
-
-import { getBlogCollection, getUniqueTagsWithCount, sortMDByDate } from 'astro-pure/server'
-import BlogListing from '@/components/blog/BlogListing.astro'
 import { featuredPostIds } from '@/data/featured-posts'
+
+import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
+import BlogListing from '@/components/blog/BlogListing.astro'
 import config from '@/site-config'
 
 export const prerender = true
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const collections = sortMDByDate(await getBlogCollection())
+  const collections = (await getBlogCollection()).sort(
+    (left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf()
+  )
   const uniqueTags = getUniqueTagsWithCount(collections).map(([tag]) => tag)
   const featuredPosts = featuredPostIds
     .map((id) => collections.find((post) => post.id === id))

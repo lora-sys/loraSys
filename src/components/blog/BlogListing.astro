@@ -1,15 +1,15 @@
 ---
 import type { Page } from 'astro'
-import type { CollectionEntry } from 'astro:content'
-
 import { Image } from 'astro:assets'
-import { Paginator } from 'astro-pure/components/pages'
-import { Button, Icon } from 'astro-pure/user'
-import readingMarker from '@/assets/lora-visual/v2/lora-v2-reading-marker.webp'
-import { fieldNotes } from '@/data/notes'
+import type { CollectionEntry } from 'astro:content'
 import projectSnapshot from '@/data/github-projects.json'
+import { fieldNotes } from '@/data/notes'
+
+import { Paginator } from 'astro-pure/components/pages'
+import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+import readingMarker from '@/assets/lora-visual/v2/lora-v2-reading-marker.webp'
 
 import BlogPostCard from './BlogPostCard.astro'
 import FeaturedWriting from './FeaturedWriting.astro'
@@ -53,18 +53,15 @@ const curation: Record<string, { theme: string; whyRead: string }> = {
     whyRead: '从一次多智能体运行时构建，看产品原型、事件流和链上结算如何真正接起来。'
   }
 }
-const featuredForView = featuredPosts
+const featuredForView = (page.currentPage === 1 ? featuredPosts : [])
   .filter((post) => !activeLanguage || post.data.language === activeLanguage)
+  .slice(0, 1)
   .map((post) => ({
     post,
     ...(curation[post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' })
   }))
 const languageTitle =
-  activeLanguage === 'zh-CN'
-    ? '中文文章'
-    : activeLanguage === 'en-US'
-      ? '英文文章'
-      : '全部文章'
+  activeLanguage === 'zh-CN' ? '中文文章' : activeLanguage === 'en-US' ? '英文文章' : '全部文章'
 const meta = {
   description: activeLanguage
     ? `${languageTitle}，记录智能体、工程与产品构建。`
@@ -94,20 +91,24 @@ const languageFilters = [
 
 <PageLayout {meta} lang='zh-CN'>
   <Fragment slot='head'>
-    <CollectionPageJsonLd
-      name={meta.title}
-      description={meta.description}
-      inLanguage='zh-CN'
-    />
+    <CollectionPageJsonLd name={meta.title} description={meta.description} inLanguage='zh-CN' />
   </Fragment>
-  <Button title='返回首页' href='/' variant='back' />
   <main class='blog-shell mt-6 lg:mt-10'>
     <header id='content-header' class='animate editorial-header'>
-      <Image src={readingMarker} alt='' aria-hidden='true' class='reading-marker' widths={[720, 1152, 1536]} sizes='(min-width: 1024px) 34rem, 72vw' loading='eager' fetchpriority='high' />
+      <Image
+        src={readingMarker}
+        alt=''
+        aria-hidden='true'
+        class='reading-marker'
+        widths={[720, 1152, 1536]}
+        sizes='(min-width: 1024px) 34rem, 72vw'
+        loading='lazy'
+        fetchpriority='low'
+      />
       <div>
         <p class='eyebrow'>写作</p>
         <h1>把正在构建的东西，写成可复查的笔记。</h1>
-        <p class='intro'>这里不是资讯流，而是关于智能体系统、多模态工具与公开构建的长期思考记录。</p>
+        <p class='intro'>记录智能体系统、多模态工具和公开构建中的长期思考与证据。</p>
       </div>
       <span class='edition' aria-label={`当前显示 ${collectionsCount} 篇文章`}>
         {String(collectionsCount).padStart(2, '0')}<small> 篇文章</small>
@@ -117,7 +118,12 @@ const languageFilters = [
     <nav class='language-filter animate' aria-label='按文章语言筛选'>
       {
         languageFilters.map(({ title, href, active, lang }) => (
-          <a class='tactile-action' href={href} lang={lang} aria-current={active ? 'page' : undefined}>
+          <a
+            class='tactile-action'
+            href={href}
+            lang={lang}
+            aria-current={active ? 'page' : undefined}
+          >
             {title}
           </a>
         ))
@@ -137,11 +143,18 @@ const languageFilters = [
       featuredForView.length > 0 && (
         <section class='featured-writing animate' aria-labelledby='featured-writing-title'>
           <header class='featured-heading'>
-            <div><p class='eyebrow'>精选笔记</p><h2 id='featured-writing-title'>先从这几篇读起</h2></div>
-            <p>Agent 预算与评测、架构分层和事件流</p>
+            <div>
+              <>
+                <p class='eyebrow'>编辑精选</p>
+                <h2 id='featured-writing-title'>先读这一篇</h2>
+              </>
+            </div>
+            <p>从一篇有完整背景和证据的构建记录开始。</p>
           </header>
           <div class='featured-grid'>
-            {featuredForView.map(({ post, theme, whyRead }) => <FeaturedWriting {post} {theme} {whyRead} />)}
+            {featuredForView.map(({ post, theme, whyRead }) => (
+              <FeaturedWriting {post} {theme} {whyRead} />
+            ))}
           </div>
         </section>
       )
@@ -151,22 +164,33 @@ const languageFilters = [
       page.data.length === 0 ? (
         <p class='empty-state'>该语言暂时没有文章。</p>
       ) : (
-        <details class='all-notes animate'>
-          <summary>
-            <span>继续浏览全部文章</span>
-            <small>第 {page.currentPage} 页 · {page.data.length} / {collectionsCount}</small>
-          </summary>
+        <section class='all-notes animate' aria-labelledby='all-notes-title'>
+          <header class='all-notes-heading'>
+            <h2 id='all-notes-title'>按发布时间浏览</h2>
+            <small>
+              第 {page.currentPage} 页 · {page.data.length} / {collectionsCount}
+            </small>
+          </header>
           <div class='all-notes-body'>
             <div class='content-grid'>
               <section aria-label={`${languageTitle} 文章列表`} id='content'>
                 <div class='list-heading'>
-                  <span>按时间浏览完整文章流</span>
-                  <a href='/archives' data-astro-prefetch>完整归档 →</a>
+                  <span>从最近发布开始</span>
+                  <a href='/archives' data-astro-prefetch>
+                    完整归档 →
+                  </a>
                 </div>
                 <ul class='post-list'>
-                  {page.data.map((post) => (
-                    <BlogPostCard {post} />
-                  ))}
+                  {page.data
+                    .filter(
+                      (post) =>
+                        !featuredForView.some(
+                          ({ post: featuredPost }) => featuredPost.id === post.id
+                        )
+                    )
+                    .map((post) => (
+                      <BlogPostCard {post} />
+                    ))}
                 </ul>
                 <Paginator {...paginationProps} />
               </section>
@@ -190,7 +214,7 @@ const languageFilters = [
               )}
             </div>
           </div>
-        </details>
+        </section>
       )
     }
 
@@ -282,7 +306,9 @@ const languageFilters = [
     gap: 1rem;
   }
 
-  .featured-heading .eyebrow { margin-bottom: 0.35rem; }
+  .featured-heading .eyebrow {
+    margin-bottom: 0.35rem;
+  }
 
   .featured-heading h2 {
     margin: 0;
@@ -302,47 +328,76 @@ const languageFilters = [
 
   .featured-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 55rem;
     gap: 1rem;
   }
 
   .writing-routes,
   .all-notes {
-    border-block: 1px solid hsl(var(--border));
+    border-top: 1px solid hsl(var(--border));
   }
   .writing-routes {
     margin-top: 0.75rem;
   }
   .writing-routes summary,
-  .all-notes summary {
+  .all-notes-heading {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
-    cursor: pointer;
-    list-style: none;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
-    font-weight: 620;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: 1rem;
   }
-  .writing-routes summary::-webkit-details-marker,
-  .all-notes summary::-webkit-details-marker { display: none; }
-  .writing-routes summary { padding-block: 0.65rem; }
+  .all-notes-heading h2 {
+    margin: 0;
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+    font-weight: 560;
+    letter-spacing: -0.035em;
+  }
+  .writing-routes summary::-webkit-details-marker {
+    display: none;
+  }
+  .writing-routes summary {
+    padding-block: 0.65rem;
+  }
   .writing-routes summary > span:last-child {
     color: hsl(var(--foreground));
     font-size: 1rem;
     transition: transform 160ms ease;
   }
-  .writing-routes[open] summary > span:last-child { transform: rotate(45deg); }
-  .writing-routes nav { display: flex; flex-wrap: wrap; gap: 0.45rem; padding: 0 0 0.75rem; }
-  .writing-routes a { border: 1px solid hsl(var(--border)); border-radius: 999px; padding: 0.4rem 0.62rem; color: hsl(var(--muted-foreground)); font-size: 0.67rem; text-decoration: none; transition: background 160ms ease,color 160ms ease; }
-  .writing-routes a:hover,.writing-routes a:focus-visible{background:hsl(var(--muted));color:hsl(var(--foreground))}
-  .all-notes { margin-top: clamp(3.5rem, 8vw, 6rem); }
-  .all-notes summary { padding-block: 1rem; color: hsl(var(--foreground)); }
-  .all-notes summary > span { font-size: clamp(1.1rem, 2vw, 1.35rem); letter-spacing: -0.025em; }
-  .all-notes summary small { color: hsl(var(--muted-foreground)); font-size: 0.68rem; font-weight: 500; }
-  .all-notes-body { padding-block: 0.65rem 0.2rem; }
-  .language-filter{
+  .writing-routes[open] summary > span:last-child {
+    transform: rotate(45deg);
+  }
+  .writing-routes nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0 0 0.75rem;
+  }
+  .writing-routes a {
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.4rem 0.62rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.67rem;
+    text-decoration: none;
+    transition:
+      background 160ms ease,
+      color 160ms ease;
+  }
+  .writing-routes a:hover,
+  .writing-routes a:focus-visible {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+  }
+  .all-notes {
+    margin-top: clamp(3.5rem, 8vw, 6rem);
+  }
+  .all-notes-body {
+    padding-block: 0.65rem 0.2rem;
+  }
+  .language-filter {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -465,21 +520,35 @@ const languageFilters = [
   }
 
   @media (max-width: 720px) {
-    .reading-marker { right: -0.5rem; width: 58%; opacity: 0.14; }
-    .featured-heading { align-items: start; flex-direction: column; }
-    .featured-heading > p { text-align: left; }
-    .featured-grid { grid-template-columns: 1fr; }
+    .reading-marker {
+      display: none;
+    }
+    .featured-heading {
+      align-items: start;
+      flex-direction: column;
+    }
+    .featured-heading > p {
+      text-align: left;
+    }
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
 
     .editorial-header {
       align-items: start;
+      flex-direction: column;
+      gap: 0.65rem;
     }
 
     .edition {
       font-size: 1.5rem;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .edition small {
-      display: none;
+      margin-left: 0.25rem;
+      letter-spacing: 0.04em;
     }
 
     .content-grid {
@@ -497,9 +566,25 @@ const languageFilters = [
   @media (prefers-reduced-motion: reduce) {
     .language-filter a,
     .writing-routes a,
-    .writing-routes summary > span:last-child { transition: none; }
-    .reading-marker { transform: none; }
+    .writing-routes summary > span:last-child {
+      transition: none;
+    }
+    .reading-marker {
+      transform: none;
+    }
   }
 
-  .writing-stats{display:flex;flex-wrap:wrap;gap:.5rem 1.2rem;margin-top:2rem;padding-top:1rem;border-top:1px solid hsl(var(--border));color:hsl(var(--muted-foreground));font-size:.7rem;font-weight:630;letter-spacing:.08em;text-transform:uppercase}
+  .writing-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.2rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid hsl(var(--border));
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    font-weight: 630;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 </style>
