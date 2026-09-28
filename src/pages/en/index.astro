@@ -8,6 +8,7 @@ import { demoByRepo } from '@/data/project-demos'
 import { Image } from 'astro:assets'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import HomeFieldNote from '@/components/home/HomeFieldNote.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraExpressionPicker from '@/components/lora/LoraExpressionPicker.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
@@ -21,6 +22,12 @@ import readingReaction from '@/assets/lora-visual/v3/lora-icon-reading-v1.webp'
 
 const allPosts = sortMDByDate(await getBlogCollection())
 const englishPosts = allPosts.filter((post) => post.data.language === 'en-US').slice(0, 3)
+const latestEnglishPost = englishPosts[0]
+const latestEnglishPostDate = latestEnglishPost?.data.publishDate.toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  timeZone: 'UTC'
+})
 const allFeatured = projects.filter((project) => project.featured)
 const featured = homepageFeatured(allFeatured)
 const [leadProject, ...supportingProjects] = featured
@@ -58,7 +65,20 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
           >
         </div>
       </div>
-      <HeroScene locale='en-US' />
+      <div class='hero-visual'>
+        {
+          latestEnglishPost && latestEnglishPostDate && (
+            <HomeFieldNote
+              locale='en-US'
+              date={latestEnglishPostDate}
+              dateTime={latestEnglishPost.data.publishDate.toISOString()}
+              title={latestEnglishPost.data.title}
+              href={withBasePath(`/blog/${latestEnglishPost.id}`)}
+            />
+          )
+        }
+        <HeroScene locale='en-US' />
+      </div>
       <a class='scroll-cue' href='#work' aria-label='Scroll down to selected work'
         ><span aria-hidden='true'></span>Explore below</a
       >
@@ -214,6 +234,10 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     width: 112%;
     max-width: none;
     transform: translate(-18%, -8vh);
+  }
+  .hero-visual {
+    position: relative;
+    min-width: 0;
   }
   .eyebrow {
     margin: 0;
@@ -506,7 +530,10 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     }
     .home-hero :global(.hero-scene) {
       width: min(86vw, 23rem);
-      transform: translate(-0.25rem, -1.2rem);
+      transform: translate(-0.25rem, 0);
+    }
+    .hero-visual {
+      width: 100%;
     }
     .home-hero h1 {
       font-size: clamp(2.8rem, 13vw, 4.5rem);
