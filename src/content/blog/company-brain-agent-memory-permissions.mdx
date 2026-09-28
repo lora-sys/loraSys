@@ -1,0 +1,93 @@
+---
+title: 'Company Brain：团队 Agent 的记忆权限该怎么拆'
+description: '拆解 Company Brain 的团队记忆与权限设计，重点看个人授权、共享知识、可追溯来源和团队 Agent 的权限边界。'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Agent', 'Memory', 'Permissions', 'Slack', 'Open Source']
+language: 'zh-CN'
+draft: false
+---
+
+## 事实核验
+<table fit-page-width="true" header-row="true">
+<tr>
+<td>核验项</td>
+<td>结果</td>
+</tr>
+<tr>
+<td>项目</td>
+<td>Company Brain</td>
+</tr>
+<tr>
+<td>作者或组织</td>
+<td>Supermemory，官方 GitHub 组织为 supermemoryai</td>
+</tr>
+<tr>
+<td>仓库</td>
+<td>[https://github.com/supermemoryai/company-brain](https://github.com/supermemoryai/company-brain)</td>
+</tr>
+<tr>
+<td>当前状态</td>
+<td>原托管产品已于 2026 年 9 月 9 日停止服务。当前仓库提供自托管版本，可部署到自己的 Cloudflare 账号。</td>
+</tr>
+<tr>
+<td>核心功能</td>
+<td>Slack 团队 Agent。保存团队对话形成的长期记忆，按提问位置和提问者权限读取，并可调用 GitHub、Linear、Notion、Google Workspace 等工具。</td>
+</tr>
+<tr>
+<td>权限机制</td>
+<td>公开频道写入组织共享记忆。私密频道写入本频道记忆。DM 写入个人记忆。读取范围随房间私密程度扩大，但只能读提问者本来有权看到的内容。</td>
+</tr>
+<tr>
+<td>工具权限</td>
+<td>个人连接优先。组织共享连接只读。写操作必须走个人连接。缺少工具时可以向有连接的同事申请一次临时授权，必须由真人明确批准。</td>
+</tr>
+<tr>
+<td>技术栈</td>
+<td>TypeScript、Cloudflare Workers、Durable Objects、D1。Supermemory 负责记忆层。</td>
+</tr>
+<tr>
+<td>Demo</td>
+<td>未发现无需部署即可使用的公开 live demo。README 有真实产品截图、权限文档和一键部署路径，可用于短视频取景。</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Apache License 2.0</td>
+</tr>
+<tr>
+<td>最近更新</td>
+<td>抓取于 2026 年 9 月 27 日。官方仓库 9 月 26 日仍在合并提交，包括记忆导出和 fresh clone 检查修复。</td>
+</tr>
+</table>
+主要来源：[Company Brain GitHub](https://github.com/supermemoryai/company-brain)　[Permissions](https://github.com/supermemoryai/company-brain/blob/main/docs/guide/permissions.md)　[Supermemory 9 月 10 日公告](https://supermemory.ai/blog/an-update-to-supermemory/)
+## 证据卡
+官方公告确认 Supermemory 在 2026 年 9 月 9 日停止 Company Brain 托管服务，并退还已付费用户款项。官方仓库 README 写明，这个已停止的产品现在完整开源，并改成运行在用户自己的 Cloudflare 账号里。
+权限文档把记忆分成三种作用域。公开频道的信息进入组织共享记忆。私密频道的信息只进入该频道记忆。DM 中形成个人记忆。公开频道查询只能使用公开记忆。私密频道查询可以再读本频道记忆。DM 查询还能读取提问者自己的个人记忆，以及提问者已加入的私密频道记忆。
+工具权限也跟用户身份绑定。读取时优先使用个人连接，没有时才退到组织共享连接。组织共享连接禁止写入。创建 issue、评论 PR 这类写操作必须通过提问者自己的个人连接。如果只有同事连接了某个工具，Company Brain 会在 Slack 发批准卡，授权只服务于当前请求。
+## 30 秒看懂
+Supermemory 先停掉了 Company Brain 的托管产品，现在把整套代码开源了。它还是一个放在 Slack 里的团队 Agent，但最值得看的是权限图。公开频道、私密频道和 DM 不共用一个大记忆池。信息写入最窄的房间，回答时再按提问者本来拥有的权限展开可读范围。工具写操作也不能借组织共享账号直接做，必须走个人连接。它给出了一个很具体的团队 Agent 权限实现，而不是只说“加记忆”。
+## 为什么有意思
+大多数团队知识 Agent 的演示重点是“它记得多少”。Company Brain 把更难的问题写进了产品结构：同一条记忆在什么房间产生，谁能读，在哪个房间可以被重新拿出来，以及谁有权代表团队去改外部系统。
+另一个看点是产品状态。Supermemory 9 月 9 日关闭托管服务，开源仓库现在把原产品改成自托管形态。它不是一份概念 demo，而是一个被真实用户用过、后来停止商业托管的完整产品代码。
+## 3 个值得借鉴的设计
+<table fit-page-width="true" header-row="true">
+<tr>
+<td>设计</td>
+<td>具体做法</td>
+<td>可以怎么抄</td>
+</tr>
+<tr>
+<td>记忆作用域等于权限作用域</td>
+<td>信息写入最窄的房间。读取按当前房间和提问者权限展开。</td>
+<td>不要先建一个全局向量库再补权限过滤。先把 public、project、personal 三层容器建出来。</td>
+</tr>
+<tr>
+<td>读权限和写权限分开</td>
+<td>组织连接可以做共享读取，但写操作必须绑定个人连接。</td>
+<td>Agent 调工具时记录真实操作者。共享 token 不承担个人写操作。</td>
+</tr>
+<tr>
+<td>缺权限时申请一次性授权</td>
+<td>如果只有同事有某个连接，系统发批准卡，请对方明确允许当前请求。</td>
+<td>把临时授权做成请求级能力，不把长期凭证直接交给另一个 Agent。</td>
+</tr>
+</table>

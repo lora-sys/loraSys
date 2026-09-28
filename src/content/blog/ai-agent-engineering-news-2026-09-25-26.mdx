@@ -1,0 +1,75 @@
+---
+title: '2026-09-25 至 09-26｜AI Agent 工程阅读清单'
+description: '7 条 AI Agent 工程更新，覆盖长任务 Token 优化、Codex 网络策略、Copilot Memory、本地 Agent Server 安全和 Self-Practice。'
+publishDate: '2026-09-26T00:00:00Z'
+tags: ['AI Agent', 'Coding Agent', 'Harness', 'Agent Safety', 'Eval']
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+本期检索覆盖上次运行后的 9 月 25 日后续更新和 9 月 26 日早间。新增两条 9 月 25 日的一手工程更新，并补录五条 9 月 23 日至 24 日此前没有进入周报的高价值材料。最值得先读的是 Cursor 的 Harness token 成本拆解、Codex 0.157.0 的后台运行与网络策略变化，以及 OpenCode 的远程代码执行漏洞复盘。
+## 1. Cursor 公布长任务 Agent 的 token 成本优化方法
+**发生了什么**
+Cursor 9 月 23 日发布生产 Harness 优化数据。过去几个月的改动让用户 token 成本降低 7%，同时没有观察到 Agent 质量下降。Cursor 将系统提示词缩短约 66%。此前把 MCP Tool 改为按需加载后，在实际调用 MCP 的 Session 中，总 token 使用量下降 46.9%。现在同样的方法也用于内置 Tool。Cursor 还通过显式 cache breakpoint 将 cold cache miss 降低 20%，并取消了强制鼓励 Agent 使用子 Agent 的提示。
+**工程意义**
+这篇文章给出了一套可以直接测量的 Harness 成本优化顺序。先删掉模型已经不需要的系统指令，再把低频 Tool 从静态上下文移到动态发现，随后稳定缓存前缀，最后再处理文件读取和子 Agent 调度。子 Agent 不是默认越多越好。Cursor 明确提到它会带来重复工作和协调成本，因此只在用户或 Harness 明确要求时让子 Agent 切换到不同模型。
+**先读哪里**
+先读 Trimming the system prompt、Loading tools only when needed、Improving cache reuse 和 Using subagents strategically。重点看 7%、66%、46.9% 和 20% 四组生产数据，以及他们如何用真实流量的 A/B test 检查质量是否退化。
+**一手来源**
+[Cursor：Improved token efficiency for longer agent runs](https://cursor.com/blog/improved-token-efficiency)
+## 2. Codex CLI 0.157.0 默认启动后台 Server，并把网络策略执行到长连接
+**发生了什么**
+OpenAI 9 月 25 日发布 Codex CLI 0.157.0。新版本会在符合条件的交互式 Session 中自动启动 background server。远程 Session 和本地后台 Session 也可以使用 /import。安全相关修复把网络限制覆盖到重定向、持续 HTTP 请求和 WebSocket。当策略变化撤销网络权限时，正在进行的请求也会被取消。Release 还加入了 MCP OAuth 限制、Gateway OAuth 凭据持久化加固和 MCP HTTP Origin 展示。
+**工程意义**
+Coding Agent CLI 正在把持久 Session 和后台控制面变成默认运行方式。网络权限不能只在请求开始前检查一次。重定向、WebSocket、后台任务和策略热更新都必须继续受同一策略约束。后台 Server 默认开启也会改变安装包、权限继承和进程生命周期。0.157.0 发布后已有 Windows 和 Arch Linux 用户报告 daemon 启动回归，因此自定义发行包和企业环境需要单独做启动与权限回归测试。
+**先读哪里**
+先看 New Features 中的 automatic background-server startup，再看 Bug Fixes 中的 network restrictions across redirects and ongoing HTTP and WebSocket traffic。需要做 Codex Runtime 集成时，再看 changelog 中的 MCP OAuth、Gateway OAuth、daemon socket 和 app-server 相关提交。
+**一手来源**
+[OpenAI Codex 0.157.0 Release](https://github.com/openai/codex/releases/tag/rust-v0.157.0)
+## 3. GitHub Agentic Autofix 开始把安全修复经验写进 Copilot Memory
+**发生了什么**
+GitHub 9 月 25 日更新 Agentic Autofix。启用 Copilot Memory 后，Agentic Autofix 会先读取仓库已有 Memory，寻找解决安全告警所需的上下文。成功生成修复后，它会把修复模式保存为新的 Memory。这些 Memory 后续可以被 Agentic Autofix、Copilot Code Review 和 Copilot Cloud Agent 复用。当前两个功能都处于 Public Preview。
+**工程意义**
+这是一个很具体的跨 Agent Memory 闭环。安全修复不再只产生代码 Patch，还会产生仓库级经验，并被其他 Agent 使用。做类似系统时，Memory 应与仓库或资源范围绑定，并经过当前状态校验。还需要单独评测错误 Memory 会不会跨 Agent 扩散，而不能只测试写入和召回是否成功。
+**先读哪里**
+官方更新只有一分钟，直接看 Memory 的读取、写入和跨 Copilot 功能复用三步。随后结合 Copilot Memory 的仓库范围、验证和过期机制看完整生命周期。
+**一手来源**
+[GitHub：Agentic autofix now uses Copilot Memory](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/)
+## 4. OpenCode 的本地 HTTP Server 出现可触发远程代码执行的升级接口漏洞
+**发生了什么**
+Datadog Security Labs 9 月 24 日公开 GHSA-632h-h47v-g4x4。受影响场景是用户通过 npm、pnpm 或 Bun 安装 OpenCode，并运行 opencode serve。旧版 /global/upgrade 接口会把 text/plain 请求体解析为 JSON，同时 target 可以是任意 npm package specifier，并且没有检查可信 Origin。恶意网页因此可以让本地 OpenCode Server 安装攻击者控制的包并执行 lifecycle script。GitHub Advisory 标记为 High，修复版本是 1.18.22。
+**工程意义**
+本地 Agent Server 不能因为监听 127.0.0.1 就被视为可信边界。浏览器可以向本地服务发送跨站请求。任何会执行安装、Shell、文件写入或更新的接口都应强制校验请求类型、Origin、参数 Schema 和身份。升级接口尤其不能把版本字段直接传给包管理器。
+**先读哪里**
+先读 Advisory 的 Summary、Details 和 Resolution。修复方案很清楚：升级接口改用标准 typed HTTP decoder，只接受支持的 JSON content type，target 必须是合法语义版本，拒绝空请求。再读 Datadog 的漏洞发现过程，理解为什么 content-type confusion 会把已有代码注入缺陷变成浏览器可触发的 RCE。
+**一手来源**
+[GitHub Security Advisory GHSA-632h-h47v-g4x4](https://github.com/anomalyco/opencode/security/advisories/GHSA-632h-h47v-g4x4)
+[Datadog Security Labs 复盘](https://securitylabs.datadoghq.com/articles/opencode-upgrade-remote-code-execution/)
+## 5. Privileged Self-Practice 重新设计多轮 Agent 的自蒸馏
+**发生了什么**
+9 月 24 日提交的论文指出，多轮 Agent 使用 privileged teacher 做 token 级自蒸馏时，学生可能学会教师的动作，却没有教师做出这些动作所依赖的信息。论文提出 Privileged Self-Practice。只有当学生自己的 rollout 大多失败时，Analyzer 才生成一组短指令，并把这些指令放入新的 rollout 上下文。训练目标仍使用普通 GRPO，privileged information 不直接进入 loss。作者在 AppWorld 和 SWE-bench Verified 上测试三个学生模型。PSP 是实验中唯一在所有设置下都稳定超过 plain GRPO 的方法。
+**工程意义**
+如果要做 Agent 的 self-improve pipeline，教师信息不一定适合直接蒸馏进每个 token。更稳妥的做法是把它作为失败任务的临时训练环境提示，让学生在真正看到这些信息的状态下重新实践，再用原有强化学习目标训练。这也能减少对已经能成功的任务继续调用昂贵教师模型。
+**先读哪里**
+先读论文对 OPSD 失败机制的解释，再看 PSP 的 gate 和 analyzer。工程实现最值得看 Appendix C。SWE-bench 设置中，每组 8 个 rollout，gate 触发后才调用 Analyzer，随后重新采样并按普通 GRPO 训练。作者报告 AppWorld 任务目标完成度最多提高 65%，SWE-bench Verified resolved rate 最多提高 61%。
+**一手来源**
+[From Self-Distillation to Self-Practice](https://arxiv.org/abs/2609.29051)
+## 6. 83 个真实 Agent Skill 的实验表明，最大瓶颈可能是 Skill 根本没有被触发
+**发生了什么**
+9 月 24 日提交的研究收集了 83 个真实智能合约审计 Skill，并在 EVMBench 上测试 7 组 Agent 和模型配置。Codex 与 GPT-5.5 配置加入 Skill 后，Detect Score 相对提高 22.8%，Detect Award 相对提高 43.2%。但同样暴露 Skill 时，不同模型的触发率差异很大。Codex 与 GPT-5.5 在 40 个审计任务中全部触发 Skill，而多组配置几乎不触发。统一换成较弱的 DeepSeek-V4-Pro 后，三个 Harness 的 Skill 效果都变成负向。
+**工程意义**
+Skill Eval 应把四件事分开测：Skill 是否可见、Agent 是否触发、什么时候触发、触发后任务结果是否改善。只比较有 Skill 和无 Skill 的总分，很容易把路由失败误判成 Skill 内容差。论文还说明模型能力会直接影响 Skill 是否能被利用，因此同一套 Skill 不能只在一个模型上验收。
+**先读哪里**
+先读 RQ2 Skill Effectiveness，再读 RQ3 Behavioral Impact。重点看 Table VII 的触发率，以及同一 DeepSeek-V4-Pro backend 下的消融实验。最后看六阶段审计轨迹中 Skill 的加载时间和 chained skill usage。
+**一手来源**
+[Demystifying Agent Skills for Smart Contract Auditing](https://arxiv.org/abs/2609.29454)
+## 7. RECLAIM 用 100 篇论文测试 Agent 能否真正复现实验结论
+**发生了什么**
+RECLAIM 使用 100 篇 NeurIPS 2025 论文构建 Agent 复现 benchmark。任务分为三档。Run 提供代码、数据和权重。Retrain 缺权重。Reimplement 缺代码。每篇论文都提前固定要复现的结果、成功条件和 GPU 小时预算。评测器根据实际日志和输出评分，而不是相信 Agent 自己的报告。四个 Agent 中，各档最佳复现率分别只有 41%、27% 和 15%。失败运行平均只使用 29% 的预算。400 次运行中有 63 次出现同一类问题：Agent 实现了方法，却没有拿论文里的数值验证自己的结果。
+**工程意义**
+长任务 Agent Eval 应检查最终外部结果，不应把“代码写完”“实验跑了”或 Agent 自报成功当作完成。RECLAIM 还暴露了一个预算问题。失败 Agent 往往不是资源耗尽，而是过早停止。Harness 需要明确的验收条件，并在预算仍充足但证据不足时继续验证或重新执行。
+**先读哪里**
+先读 benchmark 的三档任务定义和 grader。然后看失败分类，尤其是 63 次“实现后没有对照论文数值验证”的错误。做自己的研究 Agent 或 Autoresearch Eval 时，这部分可以直接转成验收规则。
+**一手来源**
+[RECLAIM 论文](https://arxiv.org/abs/2609.28850)

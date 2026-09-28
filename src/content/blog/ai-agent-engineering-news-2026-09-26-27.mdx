@@ -1,0 +1,57 @@
+---
+title: '2026-09-26 至 09-27｜AI Agent 工程阅读清单'
+description: '5 条 Agent 工程更新，重点看 Tool 与 Skill 上下文预算、context doctor、持久调度、Tool Loop 预算和 fail-closed 审批。'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Agent', 'Harness', 'MCP', 'Agent Safety', 'Context']
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+本期去重后保留 5 条。最值得先读的是 Codex 对 Tool 和 Skill 元数据预算的处理、Deep Agents 的 context doctor、Talon 的持久调度语义，以及 Promptfoo 对 Tool Loop 的边界控制。另补录一条上一期窗口末尾漏掉的 Gemini CLI 安全修复。
+## 1. Codex 调整 Tool 和 Skill 的上下文预算分配
+**发生了什么**
+OpenAI Codex 在 9 月 26 日合并了两项与 Harness 上下文管理直接相关的改动。PR 48353 固定 Skill Catalog 的元数据预算分配。Cloud Skill 初始最多占元数据预算的四分之三，剩余预算留给文件系统 Skill。分配结果会跨断连、上下文压缩和 Thread 恢复保持稳定。PR 48574 又修改延迟加载 Tool 的摘要策略。4 KiB 摘要预算会先为所有 namespace 名称保留空间，再把剩余预算分给描述，避免前面几段长描述把后面的 Tool namespace 完全挤掉。
+**工程意义**
+Tool Search 和 Skill Catalog 的问题不只在 Token 数量。Harness 还要保证能力名称始终可发现，并让同一 Thread 的目录结构尽量稳定。名称应该优先于长描述保留。目录预算也不应因为执行器暂时断开就重新洗牌，否则会增加 Prompt 波动、重复注入和缓存失效。
+**先读哪里**
+先读 PR 48574 的 Why、What changed 和 Testing，重点看 4 KiB 预算如何先保护 namespace 名称。再读 PR 48353 的预算分配和 compaction、resume 后的目录恢复逻辑。
+**一手来源**
+[Codex PR 48574](https://github.com/openai/codex/pull/48574)
+[Codex PR 48353](https://github.com/openai/codex/pull/48353)
+## 2. Deep Agents 增加 context doctor，直接拆解 Agent 的上下文成本
+**发生了什么**
+LangChain Deep Agents 在 9 月 26 日合并 Talon 的 context doctor。它会估算基础 Prompt、Memory、Skill、Tool Schema 和对话历史分别占用多少 Token，并把当前启用的 MCP Tool Schema 算进去。诊断是只读操作，输出有长度上限，不会中断正在进行的工作。项目同时注明，估算不包含 Middleware 追加内容和 Provider 额外开销。相关改动通过了 208 个聚焦测试。
+**工程意义**
+长任务 Agent 的上下文问题经常被误判成模型问题。真正需要先知道的是 Token 花在了哪里。把 Prompt、Memory、Skill、MCP Schema 和 Conversation 分开计量，才能判断应该删系统指令、延迟加载 Tool、压缩历史，还是减少 Memory 注入。类似诊断接口适合作为 Harness 的基础可观测能力。
+**先读哪里**
+直接读 PR 6557 的命令输出范围、估算边界和测试说明。实现上重点看 context audit helper 如何复用当前 checkpoint 和 Talon 配置源。
+**一手来源**
+[Deep Agents PR 6557](https://github.com/langchain-ai/deepagents/pull/6557)
+## 3. Talon 给持久 Agent 补上 Cron、到期时间和错过执行的语义
+**发生了什么**
+Deep Agents 的 Talon 在 9 月 26 日合并标准 Cron 表达式和 until 到期时间。Cron 支持时区、范围、步长、月份和星期名称，以及多种常见扩展形式。创建和编辑任务时会返回未来三次执行时间，让 Agent 先核对计划是否符合用户意图。until 早于首次运行会直接拒绝。计划内任务最多允许延迟 5 分钟启动。主机离线导致任务错过并超过 until 后，该次任务不会补发。最终一次执行失败时任务会保留，方便检查错误。
+**工程意义**
+长期 Agent 的 Scheduler 不能只有一个时间字符串。必须定义时区、夏令时、到期、迟到、漏跑、失败保留和清理规则。让创建接口返回未来几次运行时间也很实用，可以在真正写入计划前做一次可验证的意图检查。
+**先读哪里**
+先读 PR 6526 的 Cron expressions、until 和 Cleanup。重点看 5 分钟迟到窗口、漏跑后的处理、未来三次运行预览，以及解析结果的有界缓存。
+**一手来源**
+[Deep Agents PR 6526](https://github.com/langchain-ai/deepagents/pull/6526)
+## 4. Promptfoo 给 Azure Foundry Tool Loop 加上明确的执行预算边界
+**发生了什么**
+Promptfoo 在 9 月 26 日合并 Azure Foundry Provider 的 Tool Loop 修复。Tool Loop 达到预算边界后，如果模型已经返回最终答案，系统会保留这个答案。如果仍有未完成 Tool Call，则停止后续 Tool 工作。Callback 已经耗尽预算时，不会再发下一次模型请求。maxPollTimeMs 会在创建 Azure Client 前检查为有限且非负的数值。相关 Azure 测试共通过 669 项。
+**工程意义**
+Agent Eval 的 Provider Adapter 本身也需要执行边界。超时不能只包住单次 HTTP 请求，还要覆盖模型、Tool Callback、下一轮模型调用组成的循环。配置校验也应该在第一次网络请求前完成，否则错误配置会产生额外费用和难以复现的半完成状态。
+**先读哪里**
+先读 PR 11030 的 Summary 和 Validation，再看 Limits。需要注意 maxPollTimeMs 是轮次之间检查的协作式预算，不会取消已经在运行的 Callback 或请求，也不是固定迭代次数限制。
+**一手来源**
+[Promptfoo PR 11030](https://github.com/promptfoo/promptfoo/pull/11030)
+## 5. Gemini CLI 把非交互式审批改成统一 fail closed，并收紧不可信 Tool 输出
+**发生了什么**
+这项改动在上一期检索窗口末尾合并但没有进入周报，本期补录。Gemini CLI PR 29506 统一了 Policy Engine 对重定向和非交互模式的处理。所有安全判断路径中，nonInteractive 环境遇到 ASK_USER 会转成 DENY。外部 MCP Resource 和 Web Search 输出按不可信上下文格式包装。文件读取增加 device 和 inode 一致性检查，并扩展环境配置和 Workspace 配置目录的路径验证。
+**工程意义**
+没有人可以批准时，ASK_USER 不能被默认放行。外部 MCP 返回值和网页文本也不能直接进入高信任 Prompt 区域。文件读取前后检查 inode 和 device，可以降低读取对象在检查后发生变化带来的风险。这三项分别对应审批、上下文信任和文件系统边界。
+**先读哪里**
+先读 PR 29506 的 Policy & Scheduler Consistency 和 Path & File Utilities。实现层重点看 nonInteractive ASK_USER 到 DENY 的统一路径、MCP 输出的不可信上下文包装，以及 fileUtils 的 device 和 inode 检查。
+**一手来源**
+[Gemini CLI PR 29506](https://github.com/google-gemini/gemini-cli/pull/29506)

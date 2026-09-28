@@ -1,0 +1,80 @@
+---
+title: '2026-09-27 至 09-28｜AI Agent 工程阅读清单'
+description: '7 条 Agent 工程更新，覆盖 Codex 会话预热和 Guardian、远程 Sandbox、MCP OAuth、Secret Store 与 Agent 软件工厂数据。'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI Agent', 'MCP', 'Harness', 'Agent Safety', 'AI Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+上一期在 2026-09-27 早间生成。之后当天到 9 月 28 日早间又出现一批新的上游改动，所以本期覆盖日期与上一期有一天重叠，但内容不重复。去重后保留 7 条。
+优先读三项。第一是 Codex 的 history-aware prewarming，它直接处理长会话恢复后的下一轮延迟。第二是 Deep Agents Talon 的远程 Sandbox，它把 Shell 和文件工具从宿主机移出去，并明确采用失败关闭。第三是 MCP Inspector 的 AI Software Factory 复盘，它给出了 8 周、268 个合并 PR、9 个版本和 99% Agent 产出这一组可核对的工程数据。
+## 1. Codex 给空闲 Thread 增加带历史的预热
+**发生了什么**
+OpenAI Codex 合并 PR 48812。新的 `CodexThread::prewarm_with_history()` 会使用已有对话历史和已经执行的 Tool 元数据发起 `generate: false` 的 WebSocket 准备请求。下一轮用户输入如果是在这段历史后继续，并且请求设置一致，就可以复用已经准备好的响应状态。非前缀输入不会错误复用 `previous_response_id`。
+**工程意义**
+长会话恢复后，Agent 常见的额外延迟来自重新建立连接和重新发送历史。这里把预热条件绑定到真实历史、已执行工具和请求配置，而不是只做空连接预热。自己做持久 Agent Runtime 时，可以把“连接已建立”和“当前会话状态可复用”分成两个缓存条件。
+**先读哪里**
+先读 What changed，再看 Testing。重点看历史前缀判断、`generate: false`、Tool 元数据保留和非前缀 Prompt 的回退逻辑。
+**一手来源**
+[Codex PR 48812](https://github.com/openai/codex/pull/48812)
+## 2. Codex Guardian 把安全审查历史从父会话压缩中分离
+**发生了什么**
+Codex 合并 PR 48779。关闭 `guardian_reuse_parent_compaction` 后，Guardian 会维护有界的独立审查 transcript。父 Thread 发生上下文压缩后，Guardian 仍保留原始证据。同步 Review 和异步评分不再依赖父会话 checkpoint。系统还保存 rollback provenance，并在回滚时按接受顺序移除对应证据。
+**工程意义**
+安全审查如果直接依赖主 Agent 的压缩历史，主会话为了节省 Token 生成的摘要可能删除审查所需证据。这个改动说明 Safety Reviewer 的证据存储应和执行 Agent 的 Context Manager 分开。回滚、恢复和压缩也需要各自定义审查历史的语义。
+**先读哪里**
+先看 Why 和 What changed。重点是 independent review transcript、parent compaction 后的 reviewer continuity、rollback provenance，以及为什么 compaction 输出不进入审查 transcript。
+**一手来源**
+[Codex PR 48779](https://github.com/openai/codex/pull/48779)
+## 3. Deep Agents Talon 支持远程 Sandbox，并采用失败关闭
+**发生了什么**
+Deep Agents 合并 PR 6574。Talon 现在可以通过 `DEEPAGENTS_TALON_SANDBOX` 把 Shell 和文件工具放进远程 Sandbox。当前支持的 provider 包括 LangSmith、Daytona、Modal、Runloop、Vercel 和 AgentCore。Sandbox 是默认执行 Backend，但 assistant 的 `skills/` 和 `memory/` 仍通过虚拟文件系统路由到宿主机。Sandbox 无法访问 `tools.json` 等宿主状态，因此 Agent 不能通过自己的文件工具修改审批状态。
+启动 Sandbox 失败时 Talon 会直接退出，不会回退到宿主机执行。项目同时明确说明，MCP Tool、Web Tool 和频道媒体仍在 Host 上运行，因此这还不是多租户隔离边界。
+**工程意义**
+Agent Sandbox 最危险的实现之一是隔离失败后静默回退本机。这里选择 fail closed，并把 Host 上仍然存在的能力明确列出来。做 Agent Runtime 时，可以沿用这种拆法。Shell 和文件执行进入 Sandbox。凭据、审批状态和控制文件留在 Host。跨边界能力单独列清楚。
+**先读哪里**
+先看 PR 正文中的 backend routing、startup fails closed 和 Host 上仍执行的能力。再看 sandbox 生命周期如何处理启动期间取消，避免已创建资源泄漏。
+**一手来源**
+[Deep Agents PR 6574](https://github.com/langchain-ai/deepagents/pull/6574)
+## 4. MCP Ruby SDK 1.6.1 修复监听流生命周期和解析复杂度
+**发生了什么**
+MCP Ruby SDK 发布 1.6.1。这个版本修复 `subscriptions/listen` 的多个生命周期问题。同一 request id 的监听流现在可以正确服务。keepalive thread 会随对应 slot 释放而结束。Transport 在监听注册期间关闭时，acknowledgement 会先于 closing result。
+OAuth 侧还把 `WWW-Authenticate` challenge 解析和 URL dot segment canonicalization 改成线性时间，减少恶意输入造成高复杂度解析的风险。
+**工程意义**
+长连接 MCP Client 和 Server 需要把 stream、keepalive、request slot 和关闭顺序当成一个生命周期管理问题。解析认证 Header 和 URL 时也不能只验证语义正确，还要限制最坏时间复杂度。
+**先读哪里**
+先读 1.6.1 Release Notes。重点看 `subscriptions/listen` 的 3 个修复，以及两个 linear time 解析修复。
+**一手来源**
+[MCP Ruby SDK v1.6.1](https://github.com/modelcontextprotocol/ruby-sdk/releases/tag/v1.6.1)
+## 5. MCP Ruby SDK 支持 Web 应用跨请求完成 OAuth
+**发生了什么**
+Ruby SDK 合并 PR 573。以前 `OAuth::Flow#run!` 会在一个调用里等待浏览器授权回调，适合 CLI 和桌面程序，但不适合 Web 应用。现在 callback handler 可以省略。第一次 HTTP 请求执行 `run!`，SDK 把 PKCE verifier、state、MCP Server URL、授权端点和创建时间写入共享 storage，并返回 redirect。浏览器回调落到第二个请求后，再调用 `finish!` 完成 issuer 校验和 token exchange。
+Pending authorization 默认 600 秒过期。state 在消费时原子删除。SDK 会重新验证 server URL、endpoint 和 issuer，避免伪造回调提前消耗真正的 verifier。
+**工程意义**
+OAuth 在 Agent Web 应用里经常跨进程、跨请求。把 flow 状态只存在第一次请求的内存栈里会导致水平扩容后失败。这里给出了比较完整的持久化边界，同时处理过期、重放、竞争回调和 issuer 绑定。
+**先读哪里**
+先看 Without callback_handler 的 sequence diagram。再看 `finish!` 的四步验证顺序，尤其是 state 查找、过期、issuer 校验和原子消费。
+**一手来源**
+[MCP Ruby SDK PR 573](https://github.com/modelcontextprotocol/ruby-sdk/pull/573)
+## 6. MCP Inspector 把 OAuth Token 移出共享状态文件
+**发生了什么**
+MCP Inspector 合并 PR 2482。以前多个 Web、CLI、TUI 进程共享 `oauth.json`，长生命周期进程可能拿着旧快照，把另一个进程刚写入的 OAuth 状态覆盖掉。现在每次修改只声明自己触碰的 section，再在文件锁内读取最新状态并做局部合并。
+同时，access token、refresh token、ID token、IdP session token 和动态注册 client secret 被移到 secret store。默认优先 OS keychain。旧版 `oauth.json` 中的明文 token 会在具备持久 secret store 时按需迁移。新增 `MCP_INSPECTOR_PERSIST_TOKENS=all|access|none` 控制哪些新获得的 token 可以持久化。
+**工程意义**
+Agent 工具链经常同时有桌面、CLI、后台进程访问同一套认证状态。这里同时解决了两个常见问题。一个是共享 JSON 的 lost update。另一个是把 token 和非敏感 OAuth 元数据放在同一文件。设计本地 Agent 控制面时，应把状态合并语义和 Secret Storage 分开处理。
+**先读哪里**
+先读 PR 2482 的 Clobber-safe writes 和 Tokens and client secrets move to the secret store。再看 Migration、Degradation 和 `MCP_INSPECTOR_PERSIST_TOKENS`。
+**一手来源**
+[MCP Inspector PR 2482](https://github.com/modelcontextprotocol/inspector/pull/2482)
+## 7. MCP Inspector 公布 8 周 Agent 软件工程生产数据
+**发生了什么**
+MCP Inspector 新增官方文档 Our AI Software Factory。项目说明自 2026-07-28 的 v2.0.0 起采用 maintainer 加 Coding Agent 的贡献流程。外部贡献者提交 Issue，维护者批准和排优先级，Coding Agent 按仓库内的 `AGENTS.md` 和 Skill 执行开发，CI 和本地 quality gate 负责验收。
+文档给出的 8 周数据是 9 个版本、268 个合并 PR，平均约每周 32 个，其中 265 个 PR 被项目认定为 Agent 产出，占 99%。流程还把 Rules 和 Procedures 分开管理，并使用三类自动 Sweep 代替 Dependabot 式的逐个 PR 工作流。安全公告仍保留人工门禁。
+**工程意义**
+这份材料有价值的地方是流程和数据。它说明 Coding Agent 的生产效率依赖仓库内可执行规则、可复用 Skill、Issue 驱动的任务边界和严格质量门，而不是单独依赖模型。它也保留了需要人工审批的安全路径，没有把所有维护操作交给 Agent。
+**先读哪里**
+先读 Results since v2.0.0、Two layers of documentation 和 The quality gate。然后看 issue lifecycle、PR flow、automated sweeps 和 security advisory track。
+**一手来源**
+[MCP Inspector PR 2498](https://github.com/modelcontextprotocol/inspector/pull/2498)

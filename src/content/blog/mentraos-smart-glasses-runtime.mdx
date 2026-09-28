@@ -1,0 +1,27 @@
+---
+title: 'MentraOS：Miniapp 跑在手机上，同一运行时适配多款眼镜'
+description: 'MentraOS 把 Miniapp 放在手机 Runtime，通过共享连接管理多款智能眼镜的输入输出、设备能力和权限。'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI', 'Smart Glasses', 'Runtime', 'Open Source', 'MentraOS']
+language: 'zh-CN'
+draft: false
+---
+
+## 事实核验
+项目名称：MentraOS
+组织：Mentra Community，版权标注 Mentra Labs, Inc.
+仓库：[https://github.com/Mentra-Community/MentraOS](https://github.com/Mentra-Community/MentraOS)
+官网：[https://mentraglass.com/os](https://mentraglass.com/os)
+官方说明：[https://mentrahelp.zendesk.com/hc/en-us/articles/46340522732052-What-is-MentraOS](https://mentrahelp.zendesk.com/hc/en-us/articles/46340522732052-What-is-MentraOS)
+核心功能：MentraOS 负责智能眼镜的配对、连接、数据流、硬件访问和跨设备兼容。Miniapp 运行在手机里的 Mentra Runtime。多个 Miniapp 可以同时运行，共用一条眼镜连接。Miniapp 只能使用已经授予的设备能力和权限。
+当前支持设备，抓取时间 2026-09-28 09:39 CST：Mentra Live、Even Realities G2、Vuzix Z100、Even Realities G1。NIMO 标记为 Coming Soon。
+当前可用状态：官网提供 Mentra App、Miniapp Store 和 SDK 入口。GitHub 组织页显示 MentraOS 于 2026-09-27 更新。
+LICENSE：Apache License 2.0。
+## 30 秒看懂
+做智能眼镜应用最麻烦的一层，往往不是 AI 模型，而是不同眼镜的连接方式和硬件能力。
+MentraOS 把这层收进手机里的 Mentra Runtime。Miniapp 在手机运行，Runtime 接收眼镜的麦克风、摄像头、按键等事件，再把显示和音频结果送回设备。多个 Miniapp 可以共用一条连接。
+结果是，同一个 Miniapp 可以面向多款受支持的智能眼镜，而不是为每一款硬件重写一套应用。
+## 为什么有意思
+它叫 OS，但应用并不是直接跑在眼镜里。官方架构把应用运行时放到手机上。眼镜保留输入输出，手机承担应用执行、权限和连接管理。
+## 设计拆解
+应用运行在手机，眼镜保留输入输出。多个 Miniapp 复用同一个 Runtime。

@@ -1,0 +1,67 @@
+---
+title: 'GitHub Agentic Autofix 开始积累修复记忆'
+description: 'GitHub Agentic Autofix 会读取并写入 Copilot Memory。本文拆解安全修复经验如何跨 Agent 复用，以及验证、范围和过期为什么重要。'
+publishDate: '2026-09-26T00:00:00Z'
+tags: ['AI Agent', 'GitHub Copilot', 'Agent Memory', 'Security', 'Coding Agent']
+language: 'zh-CN'
+draft: false
+---
+
+## 最终选题证据卡
+### 主要一手来源
+- [GitHub Changelog：Agentic autofix now uses Copilot Memory](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/)，2026-09-25。
+- [GitHub Docs：About GitHub Copilot Memory](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/copilot-memory)。
+- [GitHub Docs：About autofix for code scanning](https://docs.github.com/en/enterprise-cloud@latest/code-security/concepts/code-scanning/autofix-for-code-scanning)。
+### 已确认事实
+1. GitHub 在 2026 年 9 月 25 日宣布 Agentic Autofix 接入 Copilot Memory。启用 memory 的用户运行 Agentic Autofix 时，系统会读取已有 memories，寻找与当前告警有关的上下文。
+2. Agentic Autofix 创建修复后，会把 fix pattern 存入 memory，供未来修复复用。
+3. Copilot Memory 当前被 Copilot Cloud Agent、Copilot Code Review、Copilot CLI 和 Agentic Autofix 使用。同一仓库里，一个功能捕获的 repository fact 可以被另一个功能使用。
+4. 仓库级 memory 会保存支持事实的代码引用。Copilot 使用 memory 前会根据当前分支重新验证引用，只有验证通过的事实才会被使用。
+5. 长期未使用的 memory 会在 28 天后自动删除。验证并使用后，保留计时可以重新开始。
+6. Agentic Autofix 仍是 best effort。GitHub 会重新运行 CodeQL 的标准检查验证修复，但自定义检查、扩展检查和第三方工具产生的告警不保证被确认修好。
+7. Copilot Memory 和 Agentic Autofix 都仍处于 public preview。
+### 不能写成事实
+- 不写“GitHub 已经做出会自我进化的安全 Agent”。官方没有给出持续自我改进的性能数据。
+- 不写“memory 能保证下一次修复正确”。Memory 提供上下文，最终修复仍要重新验证。
+- 不写“修复经验会跨所有仓库共享”。Repository-level facts 只在同一个仓库使用。
+- 不写“Memory 永久保存”。未使用条目会自动过期。
+- 不写“这次更新已经提高了多少修复成功率”。GitHub 没有发布对应对照数据。
+### 一句核心判断
+Coding Agent 的有效记忆不该是聊天摘要，而应该是带来源、可重新验证、作用域明确、会过期的工程事实和修复模式。
+
+推荐平台：掘金
+## GitHub 让安全修复开始积累经验，Agent Memory 应该存什么
+GitHub 9 月 25 日给 Agentic Autofix 接上了 Copilot Memory。这个更新本身很小，只有几段 Changelog，但它解决的是 Coding Agent 很具体的重复劳动。
+以前一次代码扫描告警完成修复后，这次修复里学到的仓库规则可能就留在当前会话里。下一次类似告警出现时，Agent 还要重新读代码、重新推断项目约定，再重新尝试修复。
+现在 Agentic Autofix 会先读取已有的 Copilot Memory。如果仓库里已经保存过与当前告警有关的事实或修复模式，它可以把这些内容带进这次修复。修复完成后，Agentic Autofix 还会把新的 fix pattern 写回 memory。
+来源：[GitHub 2026-09-25 Changelog](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/)。
+## Memory 开始连接多个 Agent 工作流
+Copilot Memory 不是只给 Autofix 使用。GitHub 文档列出的使用方包括 Copilot Cloud Agent、Copilot Code Review、Copilot CLI 和 Agentic Autofix。
+这意味着一个仓库里不同 Agent 产生的有效上下文可以流动起来。Cloud Agent 发现数据库连接规则，Code Review 后面可以检查新的改动有没有破坏这个规则。Code Review 发现某两个配置文件必须保持同步，Cloud Agent 后面修改其中一个文件时也可以带上这条事实。
+9 月 25 日的变化是安全修复也加入这个循环。一次修复不再只交付 patch，它还可能交付一条以后可以复用的仓库经验。
+来源：[GitHub Copilot Memory 文档](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/copilot-memory)。
+## 关键不是“记住”，而是使用前重新验证
+Agent memory 最容易出问题的地方是陈旧信息。
+一个月前正确的架构规则，今天可能已经被重构。上一个分支里的修复方式，也可能不适用于当前代码。如果 Agent 直接把旧总结当成事实，memory 会把错误稳定地传给后续任务。
+GitHub 对 repository-level facts 的处理值得借鉴。Memory 会保存支持事实的代码引用。后续 Agent 准备使用这条 memory 时，会先检查这些引用在当前分支里是否仍然成立。只有通过验证的 facts 才会进入当前上下文。
+长期不用的事实和偏好还会自动删除。当前文档给出的期限是 28 天。一次 memory 被成功验证并再次使用后，计时可以重新开始。
+所以这里的 memory 更接近“带证据的缓存事实”，不是一份无限增长的聊天总结。
+## 安全修复还有第二道验证
+Agentic Autofix 生成代码后并不会因为 memory 存在就直接认为修复成功。
+GitHub 的 Code Scanning 文档写得很清楚。Agentic Autofix 会重新运行 CodeQL，检查修复是否解决对应告警。这个验证有明确边界。GitHub 不能确认自定义 query、security-extended query 和第三方工具产生的告警一定被 Agentic Autofix 修好。
+来源：[GitHub Code Scanning Autofix 文档](https://docs.github.com/en/enterprise-cloud@latest/code-security/concepts/code-scanning/autofix-for-code-scanning)。
+这条边界很重要。Memory 提供历史经验，验证器判断当前结果。两者不能合并成一个“Agent 自己觉得修好了”的步骤。
+## 这和普通聊天记忆有什么不同
+普通聊天记忆主要解决重复解释。用户不用每次重新说自己的偏好和背景。
+Coding Agent 里的工程记忆要求更高。它影响代码、测试和修复，因此至少要回答四个问题。
+第一，这条 memory 从哪里来。最好能定位到具体代码、测试结果或已经通过的修复。
+第二，它能在哪个作用域使用。仓库事实不能自动扩散到其他仓库，用户偏好也不能变成团队规则。
+第三，什么时候重新验证。读取 memory 时要检查当前代码是否还支持这条结论。
+第四，什么时候删除。没有过期机制的 memory 会持续积累历史包袱。
+GitHub 当前的设计把这四个问题都放进了 Copilot Memory。
+## Builder 可以直接抄的设计
+如果你在做自己的 Coding Agent，不要先做一个“把所有历史会话向量化”的 memory 系统。
+先只保存能产生后续价值的工程事实。比如构建命令、测试入口、跨文件约束、已经验证的修复模式和项目特有规则。
+每条事实都带来源。来源可以是文件、代码位置、测试、PR 或工具结果。
+读取时重新验证。验证失败就不把它放进 prompt。
+最后给 memory 加作用域和过期策略。仓库事实、用户偏好、组织规则分开存。不要让一条局部经验变成全局规则。
