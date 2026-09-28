@@ -1,0 +1,58 @@
+---
+title: '2026-09-24 至 09-25｜AI Agent 工程阅读清单'
+description: '5 条 AI Agent 工程更新，重点看主动安全介入时机、状态修正、TeamHarness、企业 MCP 权限边界和 Tool 结果处理。'
+publishDate: '2026-09-25T00:00:00Z'
+tags: ['AI Agent', 'Agent Eval', 'Harness', 'MCP', 'AI Engineering']
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+这期保留 5 条。最值得先读的是 PASTABench 和 Agent-Editing World Model。前者把 Agent 安全评测从事后判断推进到“什么时候必须介入”，后者直接处理长任务里错误假设和过期计划污染后续决策的问题。工程侧值得看阿里云 AgentCore 的 TeamHarness，以及 TeamViewer 把真实远程运维能力暴露为 MCP Tool 后怎样保留权限边界。
+## 1. PASTABench：安全监控要评估“什么时候介入”
+**发生了什么**
+PASTABench 提出 Decoupled Proactive Safety Monitoring，把 Agent 安全监控拆成三个问题：是否介入、什么时候介入、风险是什么。Benchmark 包含 1,139 条多轮轨迹，覆盖 5 类风险和 13 个子类。作者还定义了 Optimal Intervention Window，用 Earliest-Signal 和 Trigger 两个时间点评估监控器是否在正确窗口采取行动。16 个模型中，最好模型的最优时机介入率只有 40.74%。
+**工程意义**
+很多 Guard 只判断当前 Tool Call 是否危险，或者在整条轨迹结束后打分。PASTABench 说明真正的运行时安全还需要一个“介入时机”指标。过早会打断正常任务，过晚则已经产生副作用。做 Agent Eval 时，可以把 unsafe action detection 拆成 risk detection、intervention timing 和 intervention decision 三类指标。
+**先读哪里**
+先读 Decoupled Proactive Safety Monitoring 和 Optimal Intervention Window，再看 lexical overfitting 实验。作者发现，一些较小模型的安全得分依赖危险关键词，替换风险词汇后主动监控能力明显下降。
+**一手来源**
+[PASTABench 论文](https://arxiv.org/abs/2609.28197)
+## 2. Agent-Editing World Model：不要让错误推理一直留在 Agent 状态里
+**发生了什么**
+AEWM 不再尝试预测高熵的 Tool Response，而是判断当前 reasoning 和 action 对后续任务状态有什么影响。它先用 Action Judge 把动作分为 Critical、Exploratory 和 Noisy，再用 State Revision 修改会污染后续决策的 reasoning-action continuation。EditAct 会把修正后的状态直接送入后续执行，而不是只附加一条 critique。论文报告 Action Judge 达到 70.5% macro-F1，比最强基线高 10.6 个点。六个 benchmark、三个 Agent backbone 上，EditAct 相比最强基线平均提高 3.2 到 6.7 个点。
+**工程意义**
+长任务 Agent 常见的问题不是缺少上下文，而是错误假设、失败尝试和过期计划一直留在上下文里。普通 compaction 会压缩这些内容，但不一定纠正状态。AEWM 提供了另一条路线：把 Context Manager 变成 state editor，明确识别哪些历史需要保留、探索、修正或删除。
+**先读哪里**
+先看 task-state contamination 的定义，再看 Action Judge、State Revision 和 EditAct。最后看 AEWM-RFT，作者把验证过的修正轨迹用于 rejection sampling fine-tuning，相比 Self-RFT 又提高 2.2 到 2.6 个点。
+**一手来源**
+[Agent-Editing World Model 论文](https://arxiv.org/abs/2609.28416)
+## 3. 阿里云 AgentCore 补齐 TeamHarness 和 AG-UI 运行细节
+**发生了什么**
+阿里云在 9 月 24 日更新 AgentCore 英文产品文档，并补齐 TeamHarness 与 AG-UI 的运行说明。AgentCore 把 Agent、模型、Skill、MCP Tool、Credential、Team 和 Workspace 放进统一控制面。TeamHarness 使用 Leader 和 Worker 角色。Leader 创建异步任务，Worker 在任务房间分工执行，Leader 汇总结果。任务创建后，用户不需要保持原始会话在线。托管 Harness 对外提供 AG-UI 接口，使用 SSE 返回事件，并支持独立 stop endpoint。
+**工程意义**
+这套设计把多 Agent 协作从 Prompt 内部约定提升到 Runtime 层。任务状态、成员角色、凭据、MCP Tool、预算和停止操作都有独立控制面。做自己的多 Agent Runtime 时，Leader/Worker、异步 Task、可断线执行、统一 Credential 和 MCP Registry 比“让几个 Agent 自己聊天”更接近生产系统。
+**先读哪里**
+先读 TeamHarness 的典型流程和任务分工，再看 AG-UI protocol reference 的 start、reconnect、stop 和 Session ID 规则。然后看 AgentCore 产品概览里的 Credential、Tool、Team 和 Observability 设计。
+**一手来源**
+[AgentCore 产品概览](https://www.alibabacloud.com/help/en/agentcore/agentcore-product-overview)
+[TeamHarness 使用说明](https://www.alibabacloud.com/help/en/agentcore/team-collaboration-instructions-collaboration-teamharness)
+[AG-UI protocol reference](https://www.alibabacloud.com/help/en/agentcore/ag-ui-protocol-reference)
+## 4. TeamViewer 发布 MCP 集成，真实 IT 操作开始进入标准 Tool 层
+**发生了什么**
+TeamViewer 在 9 月 24 日发布 MCP 集成。Microsoft Copilot、Claude 和自定义 Agent 可以通过 TeamViewer MCP 查询设备健康和性能、访问会话数据和日志，并触发部分远程操作，例如重启设备或发起远程连接。MCP 层建立在 TeamViewer 现有 REST API 上，并沿用原有安全与合规能力。TeamViewer 没有把所有功能暴露给 MCP，in-session 能力仍由其 Tia Agent 和人工界面处理。
+**工程意义**
+这是一个很具体的生产权限边界案例。MCP Server 不应该等于完整产品 API 的无差别暴露。可以把低风险查询和有限动作放进 Agent Tool 层，把高风险、强交互或需要人工判断的能力留在专用 Runtime 或 UI。对于设备管理、云运维和企业后台，这个分层方式值得参考。
+**先读哪里**
+先看 How TeamViewer MCP works 和 What stays the same。重点看哪些能力通过 MCP 暴露，哪些能力明确没有暴露，以及它如何复用已有 REST API 的权限与合规机制。
+**一手来源**
+[TeamViewer MCP 官方文章](https://www.teamviewer.com/en-us/insights/introducing-teamviewer-model-context-protocol-integration/)
+## 5. Deep Agents 0.7.19 收紧文件和多模态 Tool 结果边界
+**发生了什么**
+LangChain 在 9 月 24 日发布 deepagents 0.7.19。更新包括读取媒体失败后的恢复、通过独立 middleware 过滤模型不支持的多模态内容，以及限制 Tool Result offload 的路径和缩短过长 ID。同一天 deepagents-code 0.1.76 也修复了插件 MCP Server 的登录解析和搜索，并在 MCP Viewer 中标记插件 Server。
+**工程意义**
+这类修复反映了 Coding Agent Harness 的两个实际问题。第一，Tool 返回的内容类型不能假设模型一定支持，需要在 Harness 层做能力过滤和降级。第二，大结果 offload 到文件系统时必须限制路径，否则 Context Offload 会变成新的文件访问边界。MCP Server 的来源也应该进入可观测和授权界面，而不是只显示一个工具名。
+**先读哪里**
+先看 deepagents 0.7.19 的 media rejection recovery、multimodal filtering 和 bounded offload paths。再看 deepagents-code 0.1.76 的 plugin MCP resolution 和 MCP viewer 标记。
+**一手来源**
+[Deep Agents 官方 Releases](https://github.com/langchain-ai/deepagents/releases)
