@@ -10,7 +10,7 @@ export const theme: ThemeUserConfig = {
   description:
     'AI Agent developer and full-stack engineer. A personal site for projects, writing, current work, and the stories, sounds, and ideas I keep close.',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
-  favicon: '/loraSys/favicon/lora-v4-favicon-32x32.png',
+  favicon: '/loraSys/favicon/lora-wave-32.png',
   /** The default social card image for your site which should be a path to an image in the `public/` directory. */
   socialCard: '/loraSys/images/lora-social-card.webp',
   /** Specify the default language for this site. */
