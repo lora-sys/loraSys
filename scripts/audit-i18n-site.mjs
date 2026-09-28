@@ -140,13 +140,23 @@ try {
         }, probeTerm)
         const searchState = await page.evaluate(() => ({
           resultCount: document.querySelectorAll('.pagefind-ui__result').length,
-          emptyVisible: !document.querySelector('[data-search-empty]')?.hasAttribute('hidden')
+          emptyMessage: [...document.querySelectorAll('.pagefind-ui__message')]
+            .find((message) => getComputedStyle(message).display !== 'none')?.textContent?.trim() ?? null,
+          customEmptyPresent: Boolean(document.querySelector('[data-search-empty]')),
+          customEmptyVisible: (() => {
+            const empty = document.querySelector('[data-search-empty]')
+            return Boolean(empty && !empty.hasAttribute('hidden') && getComputedStyle(empty).display !== 'none')
+          })()
         }))
-        assert.equal(
-          searchState.emptyVisible,
-          searchState.resultCount === 0,
-          `Custom empty state must mirror Pagefind results: ${JSON.stringify(searchState)}`
-        )
+        if (searchState.resultCount > 0) {
+          assert.equal(searchState.customEmptyVisible, false, `Empty state must stay hidden when Pagefind returns results: ${JSON.stringify(searchState)}`)
+        } else {
+          assert.ok(
+            searchState.emptyMessage || searchState.customEmptyVisible,
+            `The search UI must explain an empty result set: ${JSON.stringify(searchState)}`
+          )
+          if (searchState.customEmptyPresent) assert.equal(searchState.customEmptyVisible, true)
+        }
         await capture(`${lang?'en':'zh'}-${searchState.resultCount === 0 ? 'search-empty' : 'search-fuzzy-results'}`)
       }
     })

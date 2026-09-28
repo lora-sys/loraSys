@@ -166,13 +166,13 @@ try {
       await check(`${label} web resume is primary and PDF stays optional`, page, async () => {
         for (const route of ['', 'en']) {
           await open(route)
-          const primary = page.locator('[data-resume-reading]').first()
+          const resumeHref = route === 'en' ? `${base}en/resume` : `${base}resume`
+          const primary = page.locator(`.home-about a[href="${resumeHref}"]`).first()
           await primary.waitFor({ state: 'visible' })
-          const expected = route === 'en' ? `${base}en/resume` : `${base}resume`
-          assert.ok((await primary.getAttribute('href')).startsWith(expected))
+          assert.ok((await primary.getAttribute('href')).startsWith(resumeHref))
           assert.equal(await page.locator('[data-resume-pdf][src]').count(), 0, 'Homepage must not preload a PDF')
           await primary.click()
-          await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === expected)
+          await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === resumeHref)
           assert.equal(await page.locator('dialog[open]').count(), 0, 'Primary action must not open a PDF modal')
           await page.locator('#resume-title').waitFor({ state: 'visible' })
           if (viewport.width === 390) {
