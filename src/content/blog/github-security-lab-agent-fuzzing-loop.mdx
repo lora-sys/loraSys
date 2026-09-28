@@ -1,0 +1,48 @@
+---
+title: 'GitHub Security Lab 把 Fuzzing 做成 Agent 反馈环'
+description: '拆解 GitHub Security Lab 的 Fuzzing Taskflow，模型根据 coverage 缺口决定下一轮，确定性工具继续负责执行、测量与持久化。'
+publishDate: '2026-09-25T00:00:00Z'
+tags: ['AI Agent', 'Fuzzing', 'DevSecOps', 'Agent Harness', 'GitHub']
+language: 'zh-CN'
+draft: false
+---
+
+## 事实核验
+项目名：Seclab Taskflows Fuzzing
+仓库：[GitHubSecurityLab/seclab-taskflows-fuzzing](https://github.com/GitHubSecurityLab/seclab-taskflows-fuzzing)
+组织：GitHub Security Lab
+官方介绍：[GitHub Blog，2026-09-24](https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/)
+LICENSE：MIT
+当前状态：公开仓库，未归档。README 标注 active development。
+仓库元数据抓取于 2026-09-25 09:14，中国标准时间。pushed_at 为 2026-09-21 11:41 UTC，updated_at 为 2026-09-24 23:01 UTC。这里不使用 Star 数作为选题依据。
+### 核心机制
+项目面向原生 C 和 C++ 仓库。流程会分析目标代码和构建方式，生成 fuzz harness，运行 AFL++，读取 coverage，再根据未覆盖分支调整下一轮。
+官方设计把职责分开。LLM Agent 负责判断 fuzz 哪个目标、怎么改 harness、下一步追哪个 coverage gap。工具负责执行编译、运行、coverage 读取和结果保存。
+流程状态写进 SQLite。campaign 停止后，已有状态和 corpus 可以继续使用。
+每个 harness 会准备 fuzzing 版本和 coverage 版本。前者负责实际测试，后者用于生成更容易阅读的源代码 coverage。Agent 根据未覆盖路径决定补 seed、改 harness、扩字典或跳过低价值路径。
+### Demo 与当前可用状态
+最直接的体验方式是按官方仓库说明，在一次性开发环境里跑一个目标仓库。campaign 启动后会提供 HTML dashboard。官方文章展示了 coverage trend、crash heatmap 和 iteration timeline。
+这不是托管式在线 Demo。短视频素材可以使用官方仓库、官方文章里的 dashboard，以及自己在一次性环境中跑出的页面。
+### 安全提醒
+官方明确提醒，这个流程会在宿主环境运行编译和测试工具，不经过容器隔离。官方建议使用一次性 Codespace 或临时虚拟机，并限制权限。
+
+## 证据卡
+GitHub 官方文章，2026-09-24：核验项目背景、职责分工、coverage feedback loop、dashboard 和安全提醒。
+项目官方仓库：核验 C 和 C++ pipeline、SQLite 持久化、coverage 设计、MIT License 和 active development。
+DataFlex-RL 官方仓库：仅用于候选核验。README 说明它是 verl 的 zero-fork plugin，License 为 Apache-2.0。
+TIER IV 官方发布，2026-09-24：仅用于候选核验。官方确认发布基于 Autoware 的自主赛车卡丁车参考设计。
+
+## 30 秒看懂
+普通 fuzzing 的麻烦不在开始运行，而在后面要一直看 coverage、补 harness、追没走到的分支、整理结果。
+这个项目把反复判断交给 Agent。AFL++ 继续跑测试，clang 和 lcov 继续测 coverage。Agent 每轮读结果，然后决定下一步改哪里。
+它真正值得看的，是一个能测量的反馈环：执行、测量、判断、再执行。
+
+## 为什么有意思
+很多 Agent 项目让模型包办所有动作。这个项目把模型职责收窄。
+模型不模拟 AFL++，也不自己算 coverage。它只处理需要判断的部分。执行结果再变成下一轮输入。
+这样一来，Agent 的改动有没有效果可以直接看 coverage 变化，不需要靠模型自己描述“任务完成了”。
+
+## 3 个值得借鉴的设计
+第一，决策和执行拆开。模型负责选择下一步，程序负责完成可验证的动作。
+第二，可量化信号直接进入下一轮。每次改动都能用外部指标判断有没有效果。
+第三，状态持久化。历史结果写入结构化存储，不依赖长对话保留上下文。

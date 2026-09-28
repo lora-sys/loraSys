@@ -1,0 +1,76 @@
+---
+title: 'Microsoft 把 AI 内部工具的发布链也接上了'
+description: 'Copilot Code 生成内部工具后，Managed Runtime 接管 Git、受控开发环境、Entra ID、连接器、预览、部署和企业治理。'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Builder', 'AI Coding', 'Microsoft 365', 'Developer Tools', 'Runtime']
+language: 'zh-CN'
+draft: false
+---
+
+## 事实与来源
+## 主要一手来源
+- [Microsoft 官方博客，Introducing the new Copilot with Home, Code and Autopilot](https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/)，2026-09-25。
+- [Microsoft Learn，Copilot Managed Runtime overview and key concepts for admins](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/apps/?view=o365-worldwide)，页面最后更新于 2026-09-25。
+- [Microsoft Learn，Quickstart: Build a Copilot Managed Runtime app with GitHub Copilot](https://learn.microsoft.com/en-us/microsoft-365/managed-apps/developer/quickstart-github-copilot?view=o365-worldwide)，页面最后更新于 2026-09-25。
+## 已确认事实
+- Copilot Code 可以根据自然语言描述生成 app、tracker、dashboard、automation 或 workflow。
+- Copilot Managed Runtime 处于 preview。它给内部应用提供 Microsoft Entra 身份认证和授权。
+- 官方文档写明 Managed Runtime 可接 1500 多个连接器。JavaScript 和 TypeScript 可以直接调用这些连接器。
+- Managed Runtime 提供原生 Git 流程、隔离开发环境、预览、部署、分享、应用清单、使用分析和运行健康状态。
+- 条件访问、DLP、连接器策略、分享限制和数据源限制会随应用进入 Managed Runtime。
+- 官方 quickstart 使用 GitHub Copilot CLI 驱动整条流程。Agent 会检查依赖、生成计划、创建应用、准备 Git 仓库、启动开发环境、运行本地预览、提交 Git、打开 hosted preview、部署和分享。
+- 同一个 Managed Runtime plugin 也支持 Claude Code 和其他支持 Open Plugins 的 Coding Agent。
+- Microsoft 官方博客说明 Managed Runtime 会支持第三方和 pro-code 开发者，并作为 Cowork、Code 和 Copilot Studio 的共同运行基础。
+- 构建和运行可能消耗 Copilot Credits。具体计费取决于创建路径、许可证和运行服务。
+## 不能写成事实
+- 不能写“Copilot Code 已经全面 GA”。Home、Code、Autopilot 和 Managed Runtime 仍有 Frontier、private preview 或 public preview 范围限制。
+- 不能写“有了 Managed Runtime 就完全不用 DevOps”。管理员仍要配置租户开关、策略、成本和分发范围。
+- 不能写“它适合所有公开 SaaS”。官方主要场景是 Microsoft 365 租户内的个人、团队和组织内部应用。
+- 不能写“Claude Code 已经原生集成 Microsoft Copilot”。官方表述是 Managed Runtime plugin 可通过 Open Plugins 给 Claude Code 使用。
+- 不能把 1500 多个连接器写成所有应用默认都能无条件访问。管理员策略和权限仍然生效。
+## 一句核心判断
+AI 生成内部工具以后，真正费时间的部分是把代码接进身份、数据、Git、预览、部署、权限和运维。Microsoft 正在把这些步骤压成一条可重复的企业发布链。
+
+推荐平台：掘金
+## AI 写完内部工具以后，Microsoft 把 Git、预览、部署和权限接成了一条链
+很多 AI Coding 产品已经能生成代码。真正进入公司环境以后，问题会迅速变成另一组事情。应用用什么身份登录。数据从哪里接。谁能访问。代码怎么进 Git。预览环境在哪里。上线以后谁管权限、成本和运行状态。
+Microsoft 9 月 25 日发布新版 Copilot 时，把这组问题放进了 Copilot Code 和 Copilot Managed Runtime。
+来源：[Microsoft 官方发布](https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/)。
+## Code 生成的不是一个代码片段
+Copilot Code 面向 app、tracker、dashboard、automation 和 workflow。用户先用自然语言描述想做的内部工具，系统再选择实现方式并构建。
+Microsoft 同时推出 Copilot Managed Runtime preview。它负责让这些应用在 Microsoft 365 企业环境里运行。官方文档列出的能力包括 Entra ID 身份认证、1500 多个连接器、原生 Git、隔离开发环境、策略执行、应用清单、使用分析和运行健康。
+来源：[Managed Runtime 官方文档](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/apps/?view=o365-worldwide)。
+这让生成代码后的步骤变得具体。代码生成只是第一段。后面还有身份、数据连接、版本控制、预览、部署、分发和治理。
+## 官方 quickstart 已经把整条链跑通
+Microsoft Learn 给了一条完整路径。开发者在终端启动 GitHub Copilot CLI，安装 Managed Runtime plugin，再用自然语言描述应用。
+Agent 会先检查依赖和租户状态，然后给出计划。用户批准后，Agent 创建应用记录和平台管理的 Git 仓库，准备受策略管理的开发环境，生成项目文件，安装依赖并启动本地开发服务器。
+确认本地结果后，Agent 执行 Git 提交和推送，打开 hosted preview。预览通过后，Agent 可以把应用部署到 live 环境，再按用户要求分享给同事。
+来源：[Managed Runtime GitHub Copilot quickstart](https://learn.microsoft.com/en-us/microsoft-365/managed-apps/developer/quickstart-github-copilot?view=o365-worldwide)。
+这里最有用的地方是流程边界很清楚。Agent 负责规划和调用命令。Git 仍然保存真实提交。预览和正式环境仍有区分。身份和 DLP 由企业策略控制。应用上线后进入管理员清单和运行监控。
+## 这套链路没有锁死在一个 Coding Agent
+官方 quickstart 还写了一个容易被忽略的细节。
+Managed Runtime plugin 不只给 GitHub Copilot CLI。Microsoft 明确说它也可以与 Claude Code 和其他支持 Open Plugins 的 Coding Agent 配合。
+这意味着开发团队可以更换前面的 Coding Agent，后面的企业发布路径仍然保持一致。开发者可以让不同 Agent 生成和修改应用，但身份、连接器、Git、预览、部署和治理仍走同一套 Managed Runtime。
+这个设计比再做一个代码生成入口更具体。它处理的是代码生成之后怎么进入公司环境。
+## Builder 可以直接借鉴的产品结构
+如果你做 AI App Builder，可以把产品拆成两段。
+第一段负责把需求变成代码。这里允许模型、Agent、提示词和开发框架快速变化。
+第二段负责把代码变成可用应用。这里固定身份、数据连接、版本控制、预览、发布、权限、成本和运行状态。
+这两段的迭代速度不同。模型端会快速更换。企业身份和治理规则不会每天重写。把它们分开后，前面的 Agent 可以换，后面的交付路径保持稳定。
+## 1500 多个连接器真正解决什么
+内部工具往往不是缺一个页面，而是缺数据连接。
+Microsoft 文档写明 Managed Runtime 可以访问 1500 多个连接器，并允许 JavaScript 和 TypeScript 直接调用。对内部工具来说，这意味着开发者可以把应用接到企业已有的数据和工作流，而不是每次单独写 OAuth、API 客户端和权限逻辑。
+但这不代表连接器可以任意调用。条件访问、DLP、连接器策略、分享限制和数据源限制仍然由管理员控制。Managed Runtime 的目标是把这些约束默认放进应用，而不是让生成代码绕过它们。
+## 目前的边界
+这套产品还在 preview。
+Copilot Code 和 Home 正在通过 Frontier 推出。Autopilot 也仍处于预览阶段。Managed Runtime 的不同创建路径有不同开关和资格要求。
+计费也不能忽略。Microsoft 把构建和运行都接进 Copilot Credits 和相应的 spending policy。某个内部工具能生成出来，不代表它可以无限运行。
+它也不是一个通用公开 SaaS 平台的直接替代。官方文档的主要对象是 Microsoft 365 租户里的个人工具、团队工具和组织内部应用。
+## 我会怎么验证这条路线
+如果要判断这种产品形态值不值得做，我会测四件事。
+第一，需求描述到第一个可运行预览需要多少人工步骤。
+第二，身份、连接器和权限接入需要多少手工配置。
+第三，换一个 Coding Agent 后，发布路径是否还能保持不变。
+第四，应用上线以后，管理员能不能看见所有应用、所有权、成本、健康状态和分发范围。
+如果这四项都稳定，AI App Builder 才真正减少了交付成本。
+Copilot Managed Runtime 这次给出的信号很明确。AI 生成内部工具的竞争正在离开单纯的代码生成页面，进入代码生成后的交付链。
