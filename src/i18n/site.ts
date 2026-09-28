@@ -2,6 +2,13 @@ export type SiteLocale = 'zh-CN' | 'en-US'
 
 export const DEFAULT_LOCALE: SiteLocale = 'zh-CN'
 
+const siteBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+export const withBasePath = (href: string): string => {
+  if (!href.startsWith('/') || href.startsWith('//')) return href
+  if (href === '/') return siteBase || '/'
+  return `${siteBase}${href}`
+}
+
 export const isEnglishPath = (pathname: string) => /^\/en(?:\/|$)/.test(pathname)
 export const getLocale = (pathname: string): SiteLocale => (isEnglishPath(pathname) ? 'en-US' : 'zh-CN')
 
@@ -57,7 +64,7 @@ export const primaryNavigation = (locale: SiteLocale) =>
     : [
         { title: '作品', href: '/projects' },
         { title: '写作', href: '/blog' },
-        { title: '正在构建', href: '/now' },
+        { title: '近况', href: '/now' },
         { title: '友链', href: '/links' },
         { title: '关于', href: '/about' }
       ]

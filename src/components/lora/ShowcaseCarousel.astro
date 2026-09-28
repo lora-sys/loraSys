@@ -1,5 +1,8 @@
 ---
 import type { ShowcaseItem } from '../../data/showcase'
+import { Image } from 'astro:assets'
+import loraHeart from '@/assets/lora-visual/v3/lora-icon-heart-v1.webp'
+import loraThinking from '@/assets/lora-visual/v3/lora-icon-thinking-v1.webp'
 
 interface Props {
   id: string
@@ -25,13 +28,17 @@ const labels = isEnglish
       browse: '使用左右按钮或横向滑动浏览。打开卡片查看详情。'
     }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHeart : undefined
 ---
 
 <section class='showcase' aria-labelledby={`${id}-title`} data-carousel data-showcase-id={id}>
   <header class='showcase-heading'>
-    <div>
-      <p>{eyebrow}</p>
-      <h2 id={`${id}-title`}>{title}</h2>
+    <div class='showcase-title'>
+      <div>
+        <p>{eyebrow}</p>
+        <h2 id={`${id}-title`}>{title}</h2>
+      </div>
+      {mascotMood && <Image src={mascotMood} alt='' aria-hidden='true' class='showcase-mood' width={108} height={108} loading='lazy' />}
     </div>
     <div class='controls' aria-label={isEnglish ? `${title} controls` : `${title} 控制`}>
       <button class='tactile-action' type='button' data-prev aria-label={labels.previous} disabled
@@ -225,6 +232,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '')
     align-items: end;
     justify-content: space-between;
     gap: 1rem;
+  }
+  .showcase-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .showcase-mood {
+    width: 3.4rem;
+    height: 3.4rem;
+    flex: 0 0 auto;
+    object-fit: contain;
+    transition: transform 180ms ease;
+  }
+  .showcase:hover .showcase-mood,
+  .showcase:focus-within .showcase-mood {
+    transform: translateY(-0.2rem) rotate(4deg) scale(1.04);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-mood {
+      transition: none;
+    }
+    .showcase:hover .showcase-mood,
+    .showcase:focus-within .showcase-mood {
+      transform: none;
+    }
   }
   .showcase-heading p {
     margin: 0;

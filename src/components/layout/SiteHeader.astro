@@ -5,10 +5,19 @@ import {
   hasAlternate,
   localeMeta,
   localizedPath,
-  primaryNavigation
+  primaryNavigation,
+  withBasePath
 } from '@/i18n/site'
 
 import { Icon } from 'astro-pure/user'
+import { Image } from 'astro:assets'
+import loraCheer from '@/assets/lora-visual/v3/lora-icon-cheer-v1.webp'
+import loraCoding from '@/assets/lora-visual/v3/lora-icon-coding-v1.webp'
+import loraNeutral from '@/assets/lora-visual/v3/lora-icon-neutral-v1.webp'
+import loraReading from '@/assets/lora-visual/v3/lora-icon-reading-v1.webp'
+import loraSleepy from '@/assets/lora-visual/v3/lora-icon-sleepy-v1.webp'
+import loraThinking from '@/assets/lora-visual/v3/lora-icon-thinking-v1.webp'
+import loraWave from '@/assets/lora-visual/v3/lora-icon-wave-v1.webp'
 
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
 interface Props {
@@ -25,14 +34,50 @@ const moreMenu = [
 const otherLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
 // 无对应路由的页面不提供语言切换，避免把访客丢回对方语言首页。
 const alternate = hasAlternate(pathname, otherLocale)
-  ? localizedPath(pathname, otherLocale)
+  ? withBasePath(localizedPath(pathname, otherLocale))
   : undefined
-const home = locale === 'en-US' ? '/en' : '/'
-const search = locale === 'en-US' ? '/en/search' : '/search'
+const home = withBasePath(locale === 'en-US' ? '/en' : '/')
+const search = withBasePath(locale === 'en-US' ? '/en/search' : '/search')
+const isProjectPage =
+  pathname.startsWith('/projects') || pathname.startsWith('/en/work') || pathname.startsWith('/en/projects')
+const isWritingPage =
+  pathname.startsWith('/blog') ||
+  pathname.startsWith('/en/writing') ||
+  pathname.startsWith('/archives')
+const isNowOrSearchPage =
+  pathname.startsWith('/now') ||
+  pathname.startsWith('/en/now') ||
+  pathname.startsWith('/search') ||
+  pathname.startsWith('/en/search')
+const isContactOrTalksPage =
+  pathname.startsWith('/talks') ||
+  pathname.startsWith('/en/talks') ||
+  pathname.startsWith('/contact') ||
+  pathname.startsWith('/en/contact') ||
+  pathname.startsWith('/guestbook') ||
+  pathname.startsWith('/en/guestbook')
+const isTermsPage = pathname.startsWith('/terms')
+const pageMood = isProjectPage
+  ? loraCoding
+  : isWritingPage
+    ? loraReading
+    : isNowOrSearchPage
+      ? loraThinking
+      : isContactOrTalksPage
+        ? loraCheer
+        : isTermsPage
+          ? loraSleepy
+          : loraNeutral
 ---
 
 <header class='site-header' data-site-header>
-  <a class='brand' href={home} aria-label={locale === 'en-US' ? 'Lora home' : 'Lora 首页'}>Lora</a>
+  <a class='brand' href={home} aria-label={locale === 'en-US' ? 'Lora home' : 'Lora 首页'}>
+    <span class='brand-avatar' aria-hidden='true'>
+      <Image class='brand-avatar__mood' src={pageMood} alt='' width={80} height={80} />
+      <Image class='brand-avatar__wave' src={loraWave} alt='' width={80} height={80} />
+    </span>
+    <span>Lora</span>
+  </a>
 
   <nav
     class='primary-nav'
@@ -41,7 +86,7 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   >
     {
       mainMenu.map((item) => (
-        <a class='tactile-action' href={item.href}>
+        <a class='tactile-action' href={withBasePath(item.href)}>
           {item.title}
         </a>
       ))
@@ -64,8 +109,8 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
         data-more-nav
         hidden
       >
-        {moreMenu.map((item) => <a href={item.href}>{item.title}</a>)}
-        <a href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
+        {moreMenu.map((item) => <a href={withBasePath(item.href)}>{item.title}</a>)}
+        <a href={withBasePath(locale === 'en-US' ? '/en/contact' : '/contact')}>{copy.contactLabel}</a>
       </nav>
     </div>
   </nav>
@@ -115,10 +160,10 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     data-mobile-nav
     hidden
   >
-    {mainMenu.map((item) => <a href={item.href}>{item.title}</a>)}
+    {mainMenu.map((item) => <a href={withBasePath(item.href)}>{item.title}</a>)}
     <span class='mobile-nav-label'>{locale === 'en-US' ? 'More pages' : '更多页面'}</span>
-    {moreMenu.map((item) => <a href={item.href}>{item.title}</a>)}
-    <a href={locale === 'en-US' ? '/en/contact' : '/contact'}>{copy.contactLabel}</a>
+    {moreMenu.map((item) => <a href={withBasePath(item.href)}>{item.title}</a>)}
+    <a href={withBasePath(locale === 'en-US' ? '/en/contact' : '/contact')}>{copy.contactLabel}</a>
     {
       alternate && (
         <a href={alternate} hreflang={otherLocale} lang={otherLocale}>
@@ -334,6 +379,9 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
   }
 
   .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
     margin-right: auto;
     color: hsl(var(--foreground));
     font-family: ui-sans-serif, system-ui, sans-serif;
@@ -341,6 +389,43 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
     font-weight: 650;
     letter-spacing: -0.05em;
     text-decoration: none;
+  }
+
+  .brand-avatar {
+    position: relative;
+    display: block;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex: 0 0 auto;
+  }
+
+  .brand-avatar img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .brand-avatar__mood {
+    opacity: 1;
+  }
+
+  .brand-avatar__wave {
+    opacity: 0;
+    transform: translateY(2px) scale(0.94);
+  }
+
+  .brand:hover .brand-avatar__mood,
+  .brand:focus-visible .brand-avatar__mood {
+    opacity: 0;
+  }
+
+  .brand:hover .brand-avatar__wave,
+  .brand:focus-visible .brand-avatar__wave {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
   .primary-nav {
@@ -541,6 +626,7 @@ const search = locale === 'en-US' ? '/en/search' : '/search'
 
   @media (prefers-reduced-motion: reduce) {
     .site-header,
+    .brand-avatar img,
     .primary-nav a,
     .mobile-nav a,
     .more-toggle,

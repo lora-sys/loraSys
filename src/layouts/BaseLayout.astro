@@ -1,5 +1,5 @@
 ---
-import { hasAlternate, localizedPath, type SiteLocale } from '@/i18n/site'
+import { hasAlternate, localizedPath, type SiteLocale, withBasePath } from '@/i18n/site'
 
 import { ThemeProvider } from 'astro-pure/components/basic'
 import type { SiteMeta } from 'astro-pure/types'
@@ -39,10 +39,12 @@ const description =
     : 'Lora 的个人网站，记录 AI Agent、开发者工具、公开构建、技术写作与正在进行的实验。')
 const localPath = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/'
 const pageKind =
-  /^\/(blog(?:\/|$)|en\/writing(?:\/|$)|notes(?:\/|$)|archives(?:\/|$)|tags(?:\/|$)|terms(?:\/|$))/.test(
-    localPath
-  )
-    ? 'reading'
+  /^\/blog\/[^/]+\/?$/.test(localPath)
+    ? 'article'
+    : /^\/(blog(?:\/|$)|en\/writing(?:\/|$)|notes(?:\/|$)|archives(?:\/|$)|tags(?:\/|$)|terms(?:\/|$))/.test(
+          localPath
+        )
+      ? 'reading'
     : /^\/(?:$|en\/?$|projects(?:\/|$)|en\/work(?:\/|$)|lab(?:\/|$))/.test(localPath)
       ? 'showcase'
       : 'regular'
@@ -64,7 +66,7 @@ const footerPrimary =
     : [
         { title: '作品', href: '/projects' },
         { title: '写作', href: '/blog' },
-        { title: '正在构建', href: '/now' },
+        { title: '近况', href: '/now' },
         { title: '关于', href: '/about' },
         { title: '联系', href: '/contact' }
       ]
@@ -119,7 +121,7 @@ const footerPrimary =
             {
               footerPrimary.map((item) => (
                 <li>
-                  <a href={item.href}>{item.title}</a>
+                  <a href={withBasePath(item.href)}>{item.title}</a>
                 </li>
               ))
             }
@@ -128,7 +130,6 @@ const footerPrimary =
         <SiteFooter locale={locale} />
       </div>
     </div>
-
     {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {
@@ -164,6 +165,10 @@ const footerPrimary =
 
       #main-content.page-content--reading {
         max-width: var(--width-reading);
+      }
+
+      #main-content.page-content--article {
+        max-width: var(--width-article);
       }
 
       #main-content.page-content--regular {

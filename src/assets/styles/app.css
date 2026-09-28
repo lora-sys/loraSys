@@ -62,6 +62,7 @@
 
   /* Shared page measure. Feature pages can use .wide-visual up to 70rem. */
   --width-reading: 46.25rem;
+  --width-article: 65rem;
   --width-regular: 55rem;
   --width-showcase: 65rem;
   --width-visual: 70rem;

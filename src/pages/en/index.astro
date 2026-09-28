@@ -1,17 +1,23 @@
 ---
 import { getCurrentFocusSummary } from '@/data/current-focus'
+import { withBasePath } from '@/i18n/site'
 import { projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 import { demoByRepo } from '@/data/project-demos'
 
+import { Image } from 'astro:assets'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
-import LoraVisual from '@/components/lora/LoraVisual.astro'
+import LoraExpressionPicker from '@/components/lora/LoraExpressionPicker.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import LeadProjectStage from '@/components/projects/LeadProjectStage.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
+import codingReaction from '@/assets/lora-visual/v3/lora-icon-coding-v1.webp'
+import cheerReaction from '@/assets/lora-visual/v3/lora-icon-cheer-v1.webp'
+import heartReaction from '@/assets/lora-visual/v3/lora-icon-heart-v1.webp'
+import readingReaction from '@/assets/lora-visual/v3/lora-icon-reading-v1.webp'
 
 const allPosts = sortMDByDate(await getBlogCollection())
 const englishPosts = allPosts.filter((post) => post.data.language === 'en-US').slice(0, 3)
@@ -19,6 +25,7 @@ const allFeatured = projects.filter((project) => project.featured)
 const featured = homepageFeatured(allFeatured)
 const [leadProject, ...supportingProjects] = featured
 const nowItems = getCurrentFocusSummary('en-US')
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository ?? '']
 ---
 
@@ -38,9 +45,16 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
         <h1 id='home-title'>Build everything.<br />Learn everything.</h1>
         <p class='hero-description'>Build things, write about them, keep a life outside code.</p>
         <div class='hero-actions' aria-label='Start exploring'>
-          <a class='primary-action' href='#work'>See my work <span aria-hidden='true'>↘</span></a>
+          <a class='primary-action' href='#work'>
+            See my work <span class='hero-action-arrow' aria-hidden='true'>↘</span>
+            <Image class='hero-action-reaction hero-action-reaction--base' src={codingReaction} alt='' aria-hidden='true' width={96} height={96} />
+            <Image class='hero-action-reaction hero-action-reaction--hover' src={cheerReaction} alt='' aria-hidden='true' width={96} height={96} />
+          </a>
           <a class='secondary-action' href='#writing'
-            >Recent writing <span aria-hidden='true'>→</span></a
+            >Recent writing <span class='hero-action-arrow' aria-hidden='true'>→</span>
+            <Image class='hero-action-reaction hero-action-reaction--base' src={readingReaction} alt='' aria-hidden='true' width={96} height={96} />
+            <Image class='hero-action-reaction hero-action-reaction--hover' src={heartReaction} alt='' aria-hidden='true' width={96} height={96} />
+          </a
           >
         </div>
       </div>
@@ -57,7 +71,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <p class='eyebrow'>Selected work</p>
             <h2 id='work-title'>A few projects I'd show you first.</h2>
           </div>
-          <a class='text-link' href='/en/work'
+          <a class='text-link' href={`${baseUrl}/en/work`}
             >All selected work <span aria-hidden='true'>↗</span></a
           >
         </header>
@@ -81,7 +95,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <p class='eyebrow'>Writing</p>
             <h2 id='writing-title'>Things I've written recently.</h2>
           </div>
-          <a class='text-link' href='/en/writing'>All writing <span aria-hidden='true'>↗</span></a>
+          <a class='text-link' href={`${baseUrl}/en/writing`}>All writing <span aria-hidden='true'>↗</span></a>
         </header>
         {
           englishPosts.length > 0 ? (
@@ -96,7 +110,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
                     })}
                   </time>
                   <h3>
-                    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                    <a href={withBasePath(`/blog/${post.id}`)}>{post.data.title}</a>
                   </h3>
                   <p>{post.data.description}</p>
                 </li>
@@ -114,7 +128,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <p class='eyebrow'>Now</p>
             <h2 id='now-title'>What I've been up to lately.</h2>
           </div>
-          <a class='text-link' href='/en/now'
+          <a class='text-link' href={`${baseUrl}/en/now`}
             >See the full update <span aria-hidden='true'>↗</span></a
           >
         </header>
@@ -123,7 +137,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             nowItems.map((item, index) => (
               <article class='focus-item'>
                 <span>{String(index + 1).padStart(2, '0')}</span>
-                <h3>{item.href ? <a href={item.href}>{item.title}</a> : item.title}</h3>
+                <h3>{item.href ? <a href={withBasePath(item.href)}>{item.title}</a> : item.title}</h3>
                 <p>{item.description}</p>
               </article>
             ))
@@ -137,7 +151,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
             <p class='eyebrow'>About</p>
             <h2 id='about-title'>Hi, I'm Lora.</h2>
           </div>
-          <a class='text-link' href='/en/about'>More about me <span aria-hidden='true'>↗</span></a>
+          <a class='text-link' href={`${baseUrl}/en/about`}>More about me <span aria-hidden='true'>↗</span></a>
         </header>
         <div class='about-content'>
           <div>
@@ -150,9 +164,9 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
               This site keeps my projects, writing, current interests, and a few things I enjoy
               outside engineering.
             </p>
-            <a class='text-link' href='/en/resume'>View résumé <span aria-hidden='true'>↗</span></a>
+            <a class='text-link' href={`${baseUrl}/en/resume`}>View résumé <span aria-hidden='true'>↗</span></a>
           </div>
-          <LoraVisual asset='avatar' alt='Illustrated portrait of Lora.' />
+          <LoraExpressionPicker locale='en-US' />
         </div>
       </section>
 
@@ -165,10 +179,10 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
           <p class='eyebrow'>Contact</p>
           <h2>Want to say hello or talk about a project?</h2>
           <div class='contact-actions'>
-            <a class='primary-action' href='/en/contact'
+            <a class='primary-action' href={withBasePath('/en/contact')}
               >Write a message <span aria-hidden='true'>→</span></a
             >
-            <a class='text-link' href='/contact'>中文联系页 <span aria-hidden='true'>↗</span></a>
+            <a class='text-link' href={withBasePath('/contact')}>中文联系页 <span aria-hidden='true'>↗</span></a>
           </div>
         </div>
       </div>
@@ -232,8 +246,9 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }
   .primary-action,
   .secondary-action {
+    position: relative;
     display: inline-flex;
-    min-height: 2.8rem;
+    min-height: 3.15rem;
     align-items: center;
     gap: 0.45rem;
     border-radius: 999px;
@@ -241,6 +256,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     font-size: 0.82rem;
     font-weight: 650;
     text-decoration: none;
+    padding-right: 3.9rem;
     transition:
       transform 160ms ease,
       background-color 160ms ease,
@@ -262,6 +278,53 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }
   .secondary-action:hover {
     border-color: hsl(var(--field-amber) / 0.75);
+  }
+  .hero-action-arrow {
+    transition: opacity 160ms ease;
+  }
+  .hero-action-reaction {
+    position: absolute;
+    right: 0.15rem;
+    bottom: 0.05rem;
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
+    opacity: 1;
+    transform: translateY(0.05rem) scale(0.96);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+    pointer-events: none;
+  }
+  .hero-action-reaction--hover {
+    opacity: 0;
+    transform: translateY(0.16rem) scale(0.9);
+  }
+  .primary-action:hover .hero-action-arrow,
+  .primary-action:focus-visible .hero-action-arrow,
+  .primary-action:active .hero-action-arrow,
+  .secondary-action:hover .hero-action-arrow,
+  .secondary-action:focus-visible .hero-action-arrow,
+  .secondary-action:active .hero-action-arrow {
+    opacity: 0;
+  }
+  .primary-action:hover .hero-action-reaction--base,
+  .primary-action:focus-visible .hero-action-reaction--base,
+  .primary-action:active .hero-action-reaction--base,
+  .secondary-action:hover .hero-action-reaction--base,
+  .secondary-action:focus-visible .hero-action-reaction--base,
+  .secondary-action:active .hero-action-reaction--base {
+    opacity: 0;
+    transform: translateY(-0.08rem) scale(0.92);
+  }
+  .primary-action:hover .hero-action-reaction--hover,
+  .primary-action:focus-visible .hero-action-reaction--hover,
+  .primary-action:active .hero-action-reaction--hover,
+  .secondary-action:hover .hero-action-reaction--hover,
+  .secondary-action:focus-visible .hero-action-reaction--hover,
+  .secondary-action:active .hero-action-reaction--hover {
+    opacity: 1;
+    transform: translateY(-0.12rem) rotate(3deg) scale(1.04);
   }
   .scroll-cue {
     position: absolute;
@@ -396,7 +459,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }
   .about-content {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 8rem;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
     align-items: center;
     gap: 2rem;
     border-block: 1px solid hsl(var(--border));
@@ -405,10 +468,6 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   .about-content > div {
     display: grid;
     gap: 0.8rem;
-  }
-  .about-content :global(img) {
-    width: 8rem;
-    border-radius: 0.8rem;
   }
   .contact-outro {
     display: grid;
@@ -472,14 +531,35 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     .about-content {
       grid-template-columns: 1fr;
     }
-    .about-content :global(img) {
-      width: 6.5rem;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     .primary-action,
     .secondary-action {
       transition: none;
+    }
+    .hero-action-reaction--hover {
+      display: none;
+    }
+    .hero-action-reaction--base {
+      transition: none;
+      transform: none;
+    }
+    .primary-action:hover .hero-action-reaction--base,
+    .primary-action:focus-visible .hero-action-reaction--base,
+    .primary-action:active .hero-action-reaction--base,
+    .secondary-action:hover .hero-action-reaction--base,
+    .secondary-action:focus-visible .hero-action-reaction--base,
+    .secondary-action:active .hero-action-reaction--base {
+      opacity: 1;
+      transform: none;
+    }
+    .primary-action:hover .hero-action-arrow,
+    .primary-action:focus-visible .hero-action-arrow,
+    .primary-action:active .hero-action-arrow,
+    .secondary-action:hover .hero-action-arrow,
+    .secondary-action:focus-visible .hero-action-arrow,
+    .secondary-action:active .hero-action-arrow {
+      opacity: 1;
     }
     .primary-action:hover,
     .secondary-action:hover {

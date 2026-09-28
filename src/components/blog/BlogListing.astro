@@ -115,29 +115,30 @@ const languageFilters = [
       </span>
     </header>
 
-    <nav class='language-filter animate' aria-label='按文章语言筛选'>
-      {
-        languageFilters.map(({ title, href, active, lang }) => (
-          <a
-            class='tactile-action'
-            href={href}
-            lang={lang}
-            aria-current={active ? 'page' : undefined}
-          >
-            {title}
-          </a>
-        ))
-      }
-    </nav>
-
-    <details class='writing-routes animate'>
-      <summary><span>更多阅读路径</span><span aria-hidden='true'>+</span></summary>
-      <nav aria-label='更多阅读方式'>
-        <a class='tactile-action' href='/en/writing' hreflang='en-US'>英文原文 ↗</a>
-        <a class='tactile-action' href='/notes'>短笔记 ↗</a>
-        <a class='tactile-action' href='/archives'>完整归档 ↗</a>
+    <div class='writing-toolbar animate'>
+      <nav class='language-filter' aria-label='按文章语言筛选'>
+        {
+          languageFilters.map(({ title, href, active, lang }) => (
+            <a
+              class='tactile-action'
+              href={href}
+              lang={lang}
+              aria-current={active ? 'page' : undefined}
+            >
+              {title}
+            </a>
+          ))
+        }
       </nav>
-    </details>
+      <a class='notes-route tactile-action' href='/notes'>短笔记 ↗</a>
+      <details class='writing-routes'>
+        <summary><span>更多阅读路径</span><span aria-hidden='true'>+</span></summary>
+        <nav aria-label='更多阅读方式'>
+          <a class='tactile-action' href='/en/writing' hreflang='en-US'>英文原文 ↗</a>
+          <a class='tactile-action' href='/archives'>完整归档 ↗</a>
+        </nav>
+      </details>
+    </div>
 
     {
       featuredForView.length > 0 && (
@@ -234,7 +235,7 @@ const languageFilters = [
     align-items: end;
     justify-content: space-between;
     gap: 2rem;
-    padding-block: 1rem 2rem;
+    padding-block: 0.5rem 1.25rem;
     border-bottom: 1px solid hsl(var(--border));
   }
 
@@ -261,15 +262,15 @@ const languageFilters = [
 
   h1 {
     margin: 0;
-    font-size: clamp(2.4rem, 7vw, 5.2rem);
+    font-size: clamp(2rem, 5vw, 3.6rem);
     font-weight: 500;
     letter-spacing: -0.055em;
-    line-height: 0.92;
+    line-height: 0.98;
   }
 
   .intro {
     max-width: 42rem;
-    margin: 1.15rem 0 0;
+    margin: 0.75rem 0 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.9rem;
     line-height: 1.65;
@@ -295,8 +296,8 @@ const languageFilters = [
 
   .featured-writing {
     display: grid;
-    gap: 1.25rem;
-    margin-bottom: clamp(3.5rem, 8vw, 6rem);
+    gap: 1rem;
+    margin-bottom: clamp(2rem, 5vw, 4rem);
   }
 
   .featured-heading {
@@ -333,14 +334,19 @@ const languageFilters = [
     gap: 1rem;
   }
 
-  .writing-routes,
   .all-notes {
     border-top: 1px solid hsl(var(--border));
   }
-  .writing-routes {
-    margin-top: 0.75rem;
+  .writing-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block: 0.75rem 1.5rem;
   }
-  .writing-routes summary,
+  .writing-routes {
+    position: relative;
+  }
   .all-notes-heading {
     display: flex;
     align-items: baseline;
@@ -359,7 +365,17 @@ const languageFilters = [
     display: none;
   }
   .writing-routes summary {
-    padding-block: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    font-size: 0.67rem;
+    list-style: none;
   }
   .writing-routes summary > span:last-child {
     color: hsl(var(--foreground));
@@ -374,6 +390,18 @@ const languageFilters = [
     flex-wrap: wrap;
     gap: 0.45rem;
     padding: 0 0 0.75rem;
+  }
+  .writing-routes[open] nav {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + 0.35rem);
+    right: 0;
+    min-width: max-content;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    background: hsl(var(--background));
+    box-shadow: 0 0.75rem 1.5rem hsl(var(--foreground) / 0.08);
   }
   .writing-routes a {
     border: 1px solid hsl(var(--border));
@@ -391,8 +419,14 @@ const languageFilters = [
     background: hsl(var(--muted));
     color: hsl(var(--foreground));
   }
+  .writing-routes a:focus-visible,
+  .writing-routes summary:focus-visible,
+  .notes-route:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
   .all-notes {
-    margin-top: clamp(3.5rem, 8vw, 6rem);
+    margin-top: clamp(2rem, 5vw, 4rem);
   }
   .all-notes-body {
     padding-block: 0.65rem 0.2rem;
@@ -401,7 +435,7 @@ const languageFilters = [
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-block: 1.25rem 2.8rem;
+    margin: 0;
   }
 
   .language-filter a {
@@ -520,6 +554,14 @@ const languageFilters = [
   }
 
   @media (max-width: 720px) {
+    .writing-routes[open] nav {
+      position: static;
+      width: max-content;
+      max-width: calc(100vw - 2rem);
+      min-width: 0;
+      margin-top: 0.35rem;
+    }
+
     .reading-marker {
       display: none;
     }

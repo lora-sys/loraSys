@@ -1,0 +1,410 @@
+---
+import expressionSprite from '@/assets/lora-visual/v3/lora-expression-sprite-v1.webp'
+
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+}
+
+const { locale = 'zh-CN' } = Astro.props
+const isEnglish = locale === 'en-US'
+
+const names = isEnglish
+  ? [
+      'Calm',
+      'Winking',
+      'Laughing',
+      'Loved',
+      'Surprised',
+      'Curious',
+      'Asleep',
+      'Quiet',
+      'Cheerful',
+      'Listening to music',
+      'Cool',
+      'At the laptop',
+      'Coding',
+      'Focused',
+      'A little nervous',
+      'Crying',
+      'Fond',
+      'In love',
+      'With Mochi',
+      'Thinking',
+      'Inspired',
+      'Dizzy',
+      'Peeking',
+      'Blowing a bubble',
+      'Eating noodles',
+      'Having milk tea',
+      'Hoodie',
+      'Taking a nap',
+      'Cheering',
+      'Winner',
+      'Working late',
+      'Overwhelmed',
+      'Reading about AI',
+      'Taking a break',
+      'Wearing a cap',
+      'Waving goodbye'
+    ]
+  : [
+      '平静',
+      '眨眼',
+      '大笑',
+      '喜欢',
+      '惊讶',
+      '好奇',
+      '睡着了',
+      '安静',
+      '开心',
+      '听音乐',
+      '耍酷',
+      '看电脑',
+      '写代码',
+      '专注',
+      '有点紧张',
+      '哭哭',
+      '亲近',
+      '心动',
+      '和 Mochi 在一起',
+      '思考',
+      '有灵感',
+      '晕乎乎',
+      '探头看看',
+      '吹泡泡',
+      '吃面',
+      '喝奶茶',
+      '穿连帽衫',
+      '午睡',
+      '加油',
+      '赢了',
+      '埋头工作',
+      '忙不过来了',
+      '读 AI',
+      '休息一下',
+      '戴帽子',
+      '挥手告别'
+    ]
+
+const quickPicks = [0, 2, 17, 12, 20, 35]
+const pickerLabel = isEnglish ? 'Lora expression picker' : 'Lora 表情选择'
+const quickLabel = isEnglish ? 'Quick expressions' : '常用表情'
+const allLabel = isEnglish ? 'Browse all expressions' : '浏览全部表情'
+const prompt = isEnglish
+  ? 'Tap Lora to cycle through expressions, or choose one below.'
+  : '点一点 Lora 切换表情，也可以从下面挑选。'
+const selected = isEnglish ? 'Selected' : '当前表情'
+const cycleLabel = isEnglish
+  ? 'Tap Lora to see the next expression'
+  : '点一下 Lora，切换到下一个表情'
+---
+
+<div class='expression-picker' data-expression-picker aria-label={pickerLabel}>
+  <div class='expression-preview'>
+    <button class='expression-stage' type='button' aria-label={cycleLabel} data-expression-stage>
+      <img
+        src={expressionSprite.src}
+        alt=''
+        width='1218'
+        height='1218'
+        loading='lazy'
+        decoding='async'
+        data-expression-sheet
+      />
+    </button>
+    <div class='expression-caption'>
+      <span>{selected}</span>
+      <p data-expression-name>{names[0]}</p>
+    </div>
+  </div>
+
+  <p class='expression-prompt'>{prompt}</p>
+  <div class='expression-quick' role='group' aria-label={quickLabel}>
+    {
+      quickPicks.map((index) => (
+        <button
+          class='expression-option'
+          type='button'
+          data-expression-option
+          data-index={index}
+          data-name={names[index]}
+          aria-label={names[index]}
+          aria-pressed={index === 0 ? 'true' : 'false'}
+          style={`--tile-position:${(index % 6) * 20}% ${Math.floor(index / 6) * 20}%`}
+        >
+          <span class='expression-thumb' aria-hidden='true' />
+          <span class='sr-only'>{names[index]}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <details class='expression-library'>
+    <summary>{allLabel}</summary>
+    <div class='expression-grid' role='group' aria-label={allLabel}>
+      {
+        names.map((name, index) => (
+          <button
+            class='expression-option'
+            type='button'
+            data-expression-option
+            data-index={index}
+            data-name={name}
+            aria-label={name}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            style={`--tile-position:${(index % 6) * 20}% ${Math.floor(index / 6) * 20}%`}
+          >
+            <span class='expression-thumb' aria-hidden='true' />
+            <span class='sr-only'>{name}</span>
+          </button>
+        ))
+      }
+    </div>
+  </details>
+
+  <p class='sr-only' aria-live='polite' data-expression-status data-prefix={selected}>
+    {`${selected}: ${names[0]}`}
+  </p>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-expression-picker]').forEach((picker) => {
+    const stage = picker.querySelector<HTMLButtonElement>('[data-expression-stage]')
+    const sheet = picker.querySelector<HTMLImageElement>('[data-expression-sheet]')
+    const currentName = picker.querySelector<HTMLElement>('[data-expression-name]')
+    const status = picker.querySelector<HTMLElement>('[data-expression-status]')
+    const options = Array.from(
+      picker.querySelectorAll<HTMLButtonElement>('[data-expression-option]')
+    )
+
+    if (!stage || !sheet || !currentName || !status) return
+    let selectedIndex = 0
+
+    const addSpriteToOptions = () => {
+      if (!sheet.currentSrc) return
+      picker.style.setProperty('--expression-sprite', `url("${sheet.currentSrc}")`)
+    }
+
+    if (sheet.complete && sheet.naturalWidth > 0) addSpriteToOptions()
+    sheet.addEventListener('load', addSpriteToOptions, { once: true })
+
+    const selectExpression = (index: number) => {
+      selectedIndex = index
+      const column = index % 6
+      const row = Math.floor(index / 6)
+      const name =
+        options.find((button) => Number(button.dataset.index) === index)?.dataset.name ?? ''
+
+      sheet.style.left = `${column * -100}%`
+      sheet.style.top = `${row * -100}%`
+      currentName.textContent = name
+      status.textContent = `${status.dataset.prefix}: ${name}`
+
+      options.forEach((button) => {
+        button.setAttribute('aria-pressed', String(Number(button.dataset.index) === index))
+      })
+    }
+
+    stage.addEventListener('click', () => selectExpression((selectedIndex + 1) % 36))
+    options.forEach((button) => {
+      button.addEventListener('click', () => selectExpression(Number(button.dataset.index)))
+    })
+  })
+</script>
+
+<style>
+  .expression-picker {
+    display: grid;
+    min-width: 0;
+    justify-items: center;
+    gap: 0.65rem;
+  }
+
+  .expression-preview {
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+  }
+
+  .expression-stage {
+    position: relative;
+    width: 9rem;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.85rem;
+    background: #13161d;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .expression-stage:hover {
+    transform: scale(1.02);
+  }
+
+  .expression-stage:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  .expression-stage img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 600%;
+    max-width: none;
+    height: 600%;
+    object-fit: fill;
+  }
+
+  .expression-caption {
+    display: grid;
+    justify-items: center;
+    gap: 0.08rem;
+  }
+
+  .expression-caption span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.66rem;
+  }
+
+  .expression-caption p {
+    margin: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+
+  .expression-prompt {
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .expression-quick,
+  .expression-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .expression-option {
+    display: grid;
+    width: 2.85rem;
+    min-height: 2.85rem;
+    place-items: center;
+    padding: 0.18rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.65rem;
+    background: hsl(var(--background));
+    cursor: pointer;
+    transition:
+      transform 140ms cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 140ms ease;
+  }
+
+  .expression-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 0.4rem;
+    background-color: #13161d;
+    background-image: var(--expression-sprite, none);
+    background-position: var(--tile-position, 0 0);
+    background-size: 600% 600%;
+  }
+
+  .expression-option:hover {
+    transform: translateY(-1px);
+  }
+
+  .expression-option[aria-pressed='true'] {
+    border-color: hsl(var(--field-amber-strong));
+  }
+
+  .expression-option:focus-visible,
+  .expression-library summary:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  .expression-library {
+    width: 100%;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.55rem;
+  }
+
+  .expression-library summary {
+    width: fit-content;
+    margin-inline: auto;
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .expression-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    justify-items: center;
+    gap: 0.3rem;
+    padding-top: 0.7rem;
+  }
+
+  .expression-grid .expression-option {
+    width: 2.75rem;
+    min-height: 2.75rem;
+  }
+
+  @media (max-width: 760px) {
+    .expression-picker {
+      grid-template-columns: minmax(8.5rem, 0.8fr) minmax(0, 1fr);
+      justify-items: center;
+      column-gap: 0.8rem;
+    }
+
+    .expression-preview {
+      grid-row: span 2;
+    }
+
+    .expression-prompt {
+      align-self: end;
+    }
+
+    .expression-library {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .expression-stage {
+      width: 7.5rem;
+    }
+
+    .expression-quick {
+      gap: 0.25rem;
+    }
+
+    .expression-grid {
+      gap: 0.18rem;
+    }
+
+    .expression-option {
+      width: 2.65rem;
+      min-height: 2.65rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expression-option,
+    .expression-stage {
+      transition: none;
+    }
+
+    .expression-stage:hover {
+      transform: none;
+    }
+  }
+</style>

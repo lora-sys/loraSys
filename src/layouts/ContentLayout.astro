@@ -5,6 +5,7 @@ import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
 import { cn } from 'astro-pure/utils'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { withBasePath } from '@/i18n/site'
 import { uiLocale } from '@/i18n/ui'
 import { integ } from '@/site-config'
 
@@ -35,7 +36,7 @@ const {
 <PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {...props}>
   <slot name='head' slot='head' />
   <CodeActions />
-  <Button title={lang === 'en-US' ? 'Back' : '返回'} href={back} variant='back' />
+  <Button title={lang === 'en-US' ? 'Back' : '返回'} href={withBasePath(back)} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
     {

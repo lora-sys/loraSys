@@ -10,7 +10,7 @@ import 'katex/dist/katex.min.css'
 
 import { getProjectsForStory } from '@/data/project-stories'
 import { projects } from '@/data/projects'
-import type { SiteLocale } from '@/i18n/site'
+import { withBasePath, type SiteLocale } from '@/i18n/site'
 import { text } from '@/i18n/ui'
 import config from 'virtual:config'
 
@@ -279,7 +279,7 @@ const articleFieldNote = {
         loading='lazy'
       />
       <p>
-        {t('阅读完成', 'End of article')} · <a href={`${blogBase}`}
+        {t('阅读完成', 'End of article')} · <a href={withBasePath(blogBase.replace(/\/$/, ''))}
           >{t('回笔记列表', 'Back to writing')}</a
         >
       </p>

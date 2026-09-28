@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-pure/user'
+import { withBasePath } from '@/i18n/site'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 ---
 
@@ -13,7 +14,7 @@ import LoraVisual from '@/components/lora/LoraVisual.astro'
     </p>
   </div>
   <div class='actions'>
-    <a class='primary' href='/contact'>发一封消息 <span aria-hidden='true'>→</span></a>
+    <a class='primary' href={withBasePath('/contact')}>发一封消息 <span aria-hidden='true'>→</span></a>
     <a href='https://github.com/lora-sys' target='_blank' rel='me noopener noreferrer'>
       <Icon name='github-circle' class='size-4' /> GitHub
     </a>

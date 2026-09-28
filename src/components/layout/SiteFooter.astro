@@ -3,7 +3,7 @@ import config from 'virtual:config'
 
 import { Icon } from 'astro-pure/user'
 import { text } from '@/i18n/ui'
-import type { SiteLocale } from '@/i18n/site'
+import { withBasePath, type SiteLocale } from '@/i18n/site'
 interface Props { locale: SiteLocale }
 const { locale } = Astro.props
 const policyTitle = (title: string) => title === 'Site Policy' ? text(locale, '站点政策', 'Chinese site policy') : title
@@ -31,7 +31,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
               {footerLink1.map(({ title, link, style }, index) => (
                 <>
                   
-                  <a href={link} target='_blank' rel='noopener noreferrer' class={style}>{policyTitle(title)}</a>
+                  <a href={withBasePath(link)} target='_blank' rel='noopener noreferrer' class={style}>{policyTitle(title)}</a>
                   {index < footerLink1.length - 1 && <span class='mx-1'>•</span>}
                 </>
               ))}
@@ -51,7 +51,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                     .filter(({ pos }) => pos === 2)
                     .map(({ title, link, style }) => (
                       <span>
-                        <a href={link} class={style}>{policyTitle(title)}</a>
+                        <a href={withBasePath(link)} class={style}>{policyTitle(title)}</a>
                       </span>
                     ))}
                 </span>
@@ -76,7 +76,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         {
           footerConf.social &&
             Object.entries(footerConf.social).map(([platform, { label, url }]) => (
-              <a href={url} aria-label={label === 'Email' ? text(locale, '邮箱', 'Email') : label} rel={url.startsWith('http') ? 'me noopener noreferrer' : undefined}>
+              <a href={withBasePath(url)} aria-label={label === 'Email' ? text(locale, '邮箱', 'Email') : label} rel={url.startsWith('http') ? 'me noopener noreferrer' : undefined}>
                 <Icon name={platform as keyof typeof footerConf.social} />
               </a>
             ))
