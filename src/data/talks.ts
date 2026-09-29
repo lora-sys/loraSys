@@ -6,6 +6,7 @@ export interface Appearance {
   description: string
   project: string
   source?: string
+  sourceLabel?: string
 }
 
 /** Real build appearances only; no video, talk or slides are claimed. */
@@ -51,6 +52,8 @@ export const appearances: Appearance[] = [
     location: '知乎平台 · 线上',
     role: '参赛选手',
     description: '在 48 小时极限开发中探索 AI 与知识社区共创，获知乎官方参赛凭证。',
-    project: '校园新锐季'
+    project: '校园新锐季',
+    source: 'https://www.zhihu.com/hackathon/project/82?activity_code=zhihu_hackathon_2026_p2',
+    sourceLabel: '项目页'
   }
 ]

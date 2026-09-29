@@ -67,8 +67,25 @@ const resume = resumeData.zh
       </ul>
     </section>
 
+    <section aria-labelledby='resume-leadership'>
+      <p class='section-kicker'>02 · 项目与竞赛</p>
+      <h2 id='resume-leadership'>项目与竞赛经历</h2>
+      <div class='resume-list'>
+        {
+          resume.leadership.map((item) => (
+            <article class='resume-record'>
+              <div>
+                <h3>{item.organization}</h3>
+                <p>{item.role}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
     <section aria-labelledby='resume-skills'>
-      <p class='section-kicker'>02 · 技能</p>
+      <p class='section-kicker'>03 · 技能</p>
       <h2 id='resume-skills'>专业能力</h2>
       <div class='resume-grid'>
         {
@@ -83,7 +100,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-strengths'>
-      <p class='section-kicker'>03 · 优势</p>
+      <p class='section-kicker'>04 · 优势</p>
       <h2 id='resume-strengths'>个人优势</h2>
       <ol class='strengths'>
         {resume.strengths.map((strength) => <li>{strength}</li>)}
@@ -91,7 +108,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-experience'>
-      <p class='section-kicker'>04 · 经历</p>
+      <p class='section-kicker'>05 · 经历</p>
       <h2 id='resume-experience'>经历</h2>
       <div class='resume-list'>
         {
@@ -110,7 +127,7 @@ const resume = resumeData.zh
     </section>
 
     <section aria-labelledby='resume-projects'>
-      <p class='section-kicker'>05 · 重点项目</p>
+      <p class='section-kicker'>06 · 重点项目</p>
       <h2 id='resume-projects'>重点项目</h2>
       <div class='resume-list'>
         {

@@ -39,7 +39,7 @@ const headings = [
           <div class='evidence'>
             {appearance.source ? (
               <a href={appearance.source} target='_blank' rel='noopener noreferrer'>
-                源码 <span aria-hidden='true'>↗</span>
+                {appearance.sourceLabel ?? '源码'} <span aria-hidden='true'>↗</span>
               </a>
             ) : (
               <span class='recorded'>暂无公开链接</span>

@@ -78,6 +78,21 @@ const resume = resumeData.en
       </div>
     </section>
 
+    <section aria-labelledby='resume-leadership'>
+      <p class='section-kicker'>Project leadership</p>
+      <h2 id='resume-leadership'>Programs and competition experience.</h2>
+      <div class='resume-grid'>
+        {
+          resume.leadership.map((item) => (
+            <article class='resume-card'>
+              <h3>{item.organization}</h3>
+              <p>{item.role}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
     <section aria-labelledby='resume-strengths'>
       <p class='section-kicker'>Strengths</p>
       <h2 id='resume-strengths'>How I approach building.</h2>

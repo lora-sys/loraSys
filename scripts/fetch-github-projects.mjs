@@ -98,8 +98,8 @@ const buildingRepositories = new Set([
 ])
 
 const summaryOverrides = new Map([
-  // Reviewed against the public Glassbox and Pi Kit repositories on 2026-09-20.
-  ['glassbox-agent-harness', '正在演进为长期运行的个人 Agent 系统。当前支持 Codex、Claude Code、本地会话、运行回放、审批与画布检查；远程渠道、长期任务和学习沉淀仍在继续建设。'],
+  // Reviewed against the public Glassbox README on 2026-09-29.
+  ['glassbox-agent-harness', '以 Pi 为引擎的 QQ 个人 Agent，管理身份、授权、记忆与执行记录。编码任务通过 Herdr 在隔离工作区中执行，结果需人工验收。Workbench 与持久长任务仍在开发。'],
   ['lora-pi-kit', 'Lora 的可复现 Pi 发行版，把个人 Agent、Coding Agent 与委派 Worker 需要的 Skills、MCP、Profiles 和运行配置固定下来。'],
   ['zhihu-threads', '从知乎回答与专栏摘录中选择来源，生成可追问、自测和导出的学习线。'],
   ['lorasys', '基于 Astro 的个人站，收录项目、构建笔记和公开贡献，通过 GitHub Pages 发布。'],

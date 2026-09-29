@@ -15,6 +15,11 @@ export const resumeData = {
       period: '2023.07 — 2027.07',
       honors: ['成都 Monad Blitz 黑客松一等奖（2024）', '蓝桥杯 C++ 算法竞赛省级二等奖（2024）', 'ACM 算法竞赛铜川邀请赛铜牌（2024）']
     },
+    leadership: [
+      { organization: '种子基金项目', role: '项目负责人' },
+      { organization: '国家级大学生创新创业训练计划', role: '项目负责人' },
+      { organization: '挑战杯', role: '参赛选手' }
+    ],
     skills: [
       {
         title: '开发技术',
@@ -79,6 +84,14 @@ export const resumeData = {
       'Turns ideas into runnable work, with code, tests, demos, or project documentation retained for core projects; unfinished work is documented with its reason and next step.',
       'Has experience in module decomposition, interface integration, and code collaboration; defines state, messages, and responsibility boundaries before connecting pages and model calls in multi-agent systems.',
       'Maintains open-source AI applications and learning products; uses competition awards and public work to test engineering implementation.'
+    ],
+    leadership: [
+      { organization: 'Seed Fund Project', role: 'Project Lead' },
+      {
+        organization: 'National College Student Innovation and Entrepreneurship Training Program',
+        role: 'Project Lead'
+      },
+      { organization: 'Challenge Cup', role: 'Competitor' }
     ]
   }
 } as const

@@ -20,8 +20,8 @@ const descriptions: Record<string, Record<SiteLocale, string>> = {
     "en-US": "Compiles images into compact visual evidence packets for coding agents without a connected vision input."
   },
   "glassbox-agent-harness": {
-    "zh-CN": "正在演进为长期运行的个人 Agent 系统。当前支持 Codex、Claude Code、本地会话、运行回放、审批与过程检查；远程入口、长期任务和学习沉淀仍在继续建设。",
-    "en-US": "Evolving into a long-running personal agent system. Available today: Codex, Claude Code, local sessions, replay, approvals and run inspection. Remote channels, long tasks and learning are still being built."
+    "zh-CN": "以 Pi 为引擎的 QQ 个人 Agent，管理身份、授权、记忆与执行记录。编码任务通过 Herdr 在隔离工作区中执行，结果需人工验收。Workbench 与持久长任务仍在开发。",
+    "en-US": "A QQ personal agent powered by Pi, with identity, authorization, memory and execution records. Herdr runs delegated coding tasks in isolated worktrees, with human review before completion. The Workbench and durable long-running tasks remain in development."
   },
   "lora-pi-kit": {
     "zh-CN": "Lora 的可复现 Pi 发行版，把个人 Agent、Coding Agent 与委派 Worker 使用的 Skills、MCP、Profiles 和运行配置固定下来。",

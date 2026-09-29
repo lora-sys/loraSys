@@ -49,12 +49,12 @@ export const profile = {
 
 export const hackathons = [
   {
-    title: '知乎黑客松',
-    date: 'September 13, 2026',
-    location: 'Event passed · record pending',
-    content: 'The event date has passed; participation and final project notes are not yet confirmed in the public record.',
-    href: '',
-    status: 'record-pending'
+    title: 'Zhihu Hackathon · Campus Rising Stars',
+    date: 'September 19, 2026',
+    location: 'Online · Zhihu',
+    content: 'Participated in the campus hackathon. Project details are available on the official submission page.',
+    href: 'https://www.zhihu.com/hackathon/project/82?activity_code=zhihu_hackathon_2026_p2',
+    status: 'completed'
   },
   {
     title: '世界人工智能开源大赛 · Agent Infra',
@@ -117,6 +117,10 @@ export const hackathons = [
 ]
 
 const chineseProfileText: Record<string, string> = {
+  "Zhihu Hackathon · Campus Rising Stars": "知乎黑客松 · 校园新锐季",
+  "September 19, 2026": "2026 年 9 月 19 日",
+  "Online · Zhihu": "知乎平台 · 线上",
+  "Participated in the campus hackathon. Project details are available on the official submission page.": "参加知乎黑客松校园新锐季。项目详情见知乎官方项目页。",
   "September 13, 2026": "2026 年 9 月 13 日",
   "August 22, 2026": "2026 年 8 月 22 日",
   "June 5–7, 2026": "2026 年 6 月 5 至 7 日",

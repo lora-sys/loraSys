@@ -2,164 +2,28 @@
 import { Image } from 'astro:assets'
 
 import heroIllustration from '@/assets/lora-visual/v3/lora-mochi-home.webp'
-import leftGaze from '@/assets/lora-visual/v3/lora-mochi-turn-left.webp'
-import leftMidGaze from '@/assets/lora-visual/v3/lora-mochi-turn-left-mid.webp'
-import rightMidGaze from '@/assets/lora-visual/v3/lora-mochi-turn-right-mid.webp'
-import rightGaze from '@/assets/lora-visual/v3/lora-mochi-turn-right.webp'
 
 interface Props {
   locale?: 'zh-CN' | 'en-US'
 }
 
 const { locale = 'zh-CN' } = Astro.props
-const isEnglish = locale === 'en-US'
-const label = isEnglish
-  ? 'Illustration of Lora and Mochi. Move the pointer or drag to turn their heads. Use the left and right arrow keys when focused.'
-  : 'Lora 和 Mochi 的插画。移动指针或拖动可以让他们转头。聚焦后可使用左右方向键。'
-const instructions = isEnglish
-  ? 'Arrow keys turn their heads. Press Home to reset.'
-  : '使用左右方向键让他们转头，按 Home 键复位。'
-const staticLabel = isEnglish ? 'Illustration of Lora and Mochi.' : 'Lora 和 Mochi 的插画。'
+const label = locale === 'en-US' ? 'Lora and Mochi.' : 'Lora 和 Mochi。'
 ---
 
-<div
-  class='hero-scene'
-  data-hero-scene
-  data-gaze='center'
-  data-left-src={leftGaze.src}
-  data-left-mid-src={leftMidGaze.src}
-  data-right-mid-src={rightMidGaze.src}
-  data-right-src={rightGaze.src}
-  data-static-label={staticLabel}
-  data-focus-hint={isEnglish ? 'Use ← → to turn' : '使用 ← → 转头'}
-  role='group'
-  tabindex='0'
-  aria-label={label}
-  aria-describedby='hero-scene-instructions'
->
+<div class='hero-scene'>
   <div class='hero-figure'>
     <Image
       src={heroIllustration}
-      alt=''
-      aria-hidden='true'
+      alt={label}
       widths={[384, 640, 900, 1200]}
-      sizes='(max-width: 760px) 86vw, 38rem'
+      sizes='(max-width: 760px) 78vw, 38rem'
       loading='eager'
       fetchpriority='high'
       decoding='async'
     />
   </div>
-  <span id='hero-scene-instructions' class='visually-hidden'>{instructions}</span>
 </div>
-
-<script>
-  import { createFrameAnimator } from './frame-animator'
-
-  const scene = document.querySelector<HTMLElement>('[data-hero-scene]')
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)')
-
-  if (scene && reduceMotion.matches) {
-    scene.tabIndex = -1
-    scene.setAttribute('aria-label', scene.dataset.staticLabel ?? '')
-    scene.removeAttribute('aria-describedby')
-  }
-
-  if (scene && !reduceMotion.matches) {
-    type Gaze = 'left' | 'left-mid' | 'center' | 'right-mid' | 'right'
-    const stage = scene.closest<HTMLElement>('.home-hero') ?? scene
-    const figure = scene.querySelector<HTMLElement>('.hero-figure')
-    const source = {
-      left: scene.dataset.leftSrc ?? '',
-      'left-mid': scene.dataset.leftMidSrc ?? '',
-      'right-mid': scene.dataset.rightMidSrc ?? '',
-      right: scene.dataset.rightSrc ?? ''
-    }
-    const frames = new Map<Gaze, HTMLImageElement>()
-    const loading = new Map<Gaze, Promise<void>>()
-    let requested: Gaze = 'center'
-    let inputFrame = 0
-    let pointerX = 0
-
-    const ensureFrame = (gaze: Exclude<Gaze, 'center'>) => {
-      if (frames.has(gaze)) return Promise.resolve()
-      const existing = loading.get(gaze)
-      if (existing) return existing
-      const image = new Image()
-      image.alt = ''
-      image.width = 1200
-      image.height = 900
-      image.decoding = 'async'
-      image.dataset.gazeFrame = gaze
-      image.setAttribute('aria-hidden', 'true')
-      image.src = source[gaze]
-      const promise = image.decode().then(() => {
-        if (!image.naturalWidth) return
-        figure?.append(image)
-        frames.set(gaze, image)
-      }).catch(() => undefined).then(() => {
-        loading.delete(gaze)
-      })
-      loading.set(gaze, promise)
-      return promise
-    }
-
-    const showGaze = (gaze: Gaze) => {
-      requested = gaze
-      if (gaze === 'center') {
-        scene.dataset.gaze = gaze
-        return
-      }
-      void ensureFrame(gaze).then(() => {
-        if (requested === gaze && frames.has(gaze)) scene.dataset.gaze = gaze
-      })
-    }
-
-    const animator = createFrameAnimator({
-      frameCount: 5,
-      initialFrame: 2,
-      smoothTime: 0.58,
-      maxSpeed: 3.2,
-      render: (frame) => showGaze((['left', 'left-mid', 'center', 'right-mid', 'right'] as const)[frame])
-    })
-
-    const reset = () => animator.setTarget(2)
-    stage.addEventListener('pointerenter', () => {
-      void ensureFrame('left')
-      void ensureFrame('left-mid')
-      void ensureFrame('right-mid')
-      void ensureFrame('right')
-    }, { passive: true })
-    stage.addEventListener('pointermove', (event) => {
-      if (event.pointerType === 'touch' && event.buttons === 0) return
-      pointerX = event.clientX
-      if (inputFrame) return
-      inputFrame = requestAnimationFrame(() => {
-        inputFrame = 0
-        const bounds = stage.getBoundingClientRect()
-        const position = (pointerX - bounds.left) / bounds.width
-        animator.setTarget(Math.max(0, Math.min(4, position * 4)))
-      })
-    }, { passive: true })
-    stage.addEventListener('pointerleave', reset)
-    stage.addEventListener('pointercancel', reset)
-    scene.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        event.preventDefault()
-        void ensureFrame(event.key === 'ArrowLeft' ? 'left' : 'right')
-        animator.setTarget(event.key === 'ArrowLeft' ? 0 : 4)
-      } else if (event.key === 'Home') {
-        event.preventDefault()
-        reset()
-      }
-    })
-    scene.addEventListener('focus', () => {
-      void ensureFrame('left')
-      void ensureFrame('left-mid')
-      void ensureFrame('right-mid')
-      void ensureFrame('right')
-    })
-  }
-</script>
 
 <style>
   .hero-scene {
@@ -169,29 +33,6 @@ const staticLabel = isEnglish ? 'Illustration of Lora and Mochi.' : 'Lora 和 Mo
     aspect-ratio: 1.15 / 1;
     place-items: center;
     justify-self: end;
-    outline: none;
-    isolation: isolate;
-    touch-action: pan-y;
-  }
-  .hero-scene:focus-visible {
-    outline: none;
-  }
-  .hero-scene:focus-visible::after {
-    position: absolute;
-    z-index: 2;
-    bottom: 0.25rem;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 2px solid hsl(var(--field-amber-strong));
-    border-radius: 999px;
-    background: hsl(var(--field-paper));
-    color: hsl(var(--field-ink));
-    content: attr(data-focus-hint);
-    font-size: 0.72rem;
-    font-weight: 700;
-    line-height: 1;
-    padding: 0.6rem 0.8rem;
-    white-space: nowrap;
   }
   .hero-figure {
     position: relative;
@@ -205,39 +46,12 @@ const staticLabel = isEnglish ? 'Illustration of Lora and Mochi.' : 'Lora 和 Mo
     width: 100%;
     height: 100%;
     object-fit: contain;
-    opacity: 0;
-  }
-  .hero-figure :global(img:first-child),
-  .hero-scene[data-gaze='center'] .hero-figure :global(img:first-child),
-  .hero-scene[data-gaze='left'] .hero-figure :global(img[data-gaze-frame='left']),
-  .hero-scene[data-gaze='left-mid'] .hero-figure :global(img[data-gaze-frame='left-mid']),
-  .hero-scene[data-gaze='right-mid'] .hero-figure :global(img[data-gaze-frame='right-mid']),
-  .hero-scene[data-gaze='right'] .hero-figure :global(img[data-gaze-frame='right']) {
-    opacity: 1;
-  }
-  .hero-scene[data-gaze='left'] .hero-figure :global(img:first-child),
-  .hero-scene[data-gaze='left-mid'] .hero-figure :global(img:first-child),
-  .hero-scene[data-gaze='right-mid'] .hero-figure :global(img:first-child),
-  .hero-scene[data-gaze='right'] .hero-figure :global(img:first-child) {
-    opacity: 0;
-  }
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    clip-path: inset(50%);
   }
   @media (max-width: 760px) {
     .hero-scene {
       width: min(78vw, 20rem);
       aspect-ratio: 1.2 / 0.82;
       justify-self: center;
-    }
-    .hero-scene:focus-visible::after {
-      bottom: -0.75rem;
     }
   }
 </style>

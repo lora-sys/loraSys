@@ -5,29 +5,17 @@ import { projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 import { demoByRepo } from '@/data/project-demos'
 
-import { Image } from 'astro:assets'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import HomeFieldNote from '@/components/home/HomeFieldNote.astro'
 import HeroScene from '@/components/lora/HeroScene.astro'
 import LoraExpressionPicker from '@/components/lora/LoraExpressionPicker.astro'
 import PersonalShowcase from '@/components/lora/PersonalShowcase.astro'
 import LeadProjectStage from '@/components/projects/LeadProjectStage.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
-import codingReaction from '@/assets/lora-visual/v3/lora-icon-coding-v1.webp'
-import cheerReaction from '@/assets/lora-visual/v3/lora-icon-cheer-v1.webp'
-import heartReaction from '@/assets/lora-visual/v3/lora-icon-heart-v1.webp'
-import readingReaction from '@/assets/lora-visual/v3/lora-icon-reading-v1.webp'
 
 const allPosts = sortMDByDate(await getBlogCollection())
 const englishPosts = allPosts.filter((post) => post.data.language === 'en-US').slice(0, 3)
-const latestEnglishPost = englishPosts[0]
-const latestEnglishPostDate = latestEnglishPost?.data.publishDate.toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-  timeZone: 'UTC'
-})
 const allFeatured = projects.filter((project) => project.featured)
 const featured = homepageFeatured(allFeatured)
 const [leadProject, ...supportingProjects] = featured
@@ -54,29 +42,14 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
         <div class='hero-actions' aria-label='Start exploring'>
           <a class='primary-action' href='#work'>
             See my work <span class='hero-action-arrow' aria-hidden='true'>↘</span>
-            <Image class='hero-action-reaction hero-action-reaction--base' src={codingReaction} alt='' aria-hidden='true' width={96} height={96} />
-            <Image class='hero-action-reaction hero-action-reaction--hover' src={cheerReaction} alt='' aria-hidden='true' width={96} height={96} />
           </a>
           <a class='secondary-action' href='#writing'
             >Recent writing <span class='hero-action-arrow' aria-hidden='true'>→</span>
-            <Image class='hero-action-reaction hero-action-reaction--base' src={readingReaction} alt='' aria-hidden='true' width={96} height={96} />
-            <Image class='hero-action-reaction hero-action-reaction--hover' src={heartReaction} alt='' aria-hidden='true' width={96} height={96} />
           </a
           >
         </div>
       </div>
       <div class='hero-visual'>
-        {
-          latestEnglishPost && latestEnglishPostDate && (
-            <HomeFieldNote
-              locale='en-US'
-              date={latestEnglishPostDate}
-              dateTime={latestEnglishPost.data.publishDate.toISOString()}
-              title={latestEnglishPost.data.title}
-              href={withBasePath(`/blog/${latestEnglishPost.id}`)}
-            />
-          )
-        }
         <HeroScene locale='en-US' />
       </div>
       <a class='scroll-cue' href='#work' aria-label='Scroll down to selected work'
@@ -217,9 +190,9 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   .home-hero {
     position: relative;
     display: grid;
-    width: min(100%, 64rem);
+    width: min(100%, 80rem);
     min-height: calc(100svh - 3.5rem);
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
     align-items: center;
     gap: 0;
     margin-inline: auto;
@@ -233,7 +206,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   .home-hero :global(.hero-scene) {
     width: 112%;
     max-width: none;
-    transform: translate(-18%, -8vh);
+    transform: translate(-4%, -8vh);
   }
   .hero-visual {
     position: relative;
@@ -249,7 +222,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   .home-hero h1 {
     margin: 1.15rem 0 0;
     font-family: var(--font-display);
-    font-size: clamp(3rem, 6.3vw, 5.6rem);
+    font-size: clamp(2.7rem, 4.2vw, 3.5rem);
     font-weight: 650;
     letter-spacing: -0.06em;
     line-height: 0.98;
@@ -280,7 +253,6 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     font-size: 0.82rem;
     font-weight: 650;
     text-decoration: none;
-    padding-right: 3.9rem;
     transition:
       transform 160ms ease,
       background-color 160ms ease,
@@ -302,53 +274,6 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
   }
   .secondary-action:hover {
     border-color: hsl(var(--field-amber) / 0.75);
-  }
-  .hero-action-arrow {
-    transition: opacity 160ms ease;
-  }
-  .hero-action-reaction {
-    position: absolute;
-    right: 0.15rem;
-    bottom: 0.05rem;
-    width: 3rem;
-    height: 3rem;
-    object-fit: contain;
-    opacity: 1;
-    transform: translateY(0.05rem) scale(0.96);
-    transition:
-      opacity 180ms ease,
-      transform 180ms ease;
-    pointer-events: none;
-  }
-  .hero-action-reaction--hover {
-    opacity: 0;
-    transform: translateY(0.16rem) scale(0.9);
-  }
-  .primary-action:hover .hero-action-arrow,
-  .primary-action:focus-visible .hero-action-arrow,
-  .primary-action:active .hero-action-arrow,
-  .secondary-action:hover .hero-action-arrow,
-  .secondary-action:focus-visible .hero-action-arrow,
-  .secondary-action:active .hero-action-arrow {
-    opacity: 0;
-  }
-  .primary-action:hover .hero-action-reaction--base,
-  .primary-action:focus-visible .hero-action-reaction--base,
-  .primary-action:active .hero-action-reaction--base,
-  .secondary-action:hover .hero-action-reaction--base,
-  .secondary-action:focus-visible .hero-action-reaction--base,
-  .secondary-action:active .hero-action-reaction--base {
-    opacity: 0;
-    transform: translateY(-0.08rem) scale(0.92);
-  }
-  .primary-action:hover .hero-action-reaction--hover,
-  .primary-action:focus-visible .hero-action-reaction--hover,
-  .primary-action:active .hero-action-reaction--hover,
-  .secondary-action:hover .hero-action-reaction--hover,
-  .secondary-action:focus-visible .hero-action-reaction--hover,
-  .secondary-action:active .hero-action-reaction--hover {
-    opacity: 1;
-    transform: translateY(-0.12rem) rotate(3deg) scale(1.04);
   }
   .scroll-cue {
     position: absolute;
@@ -536,7 +461,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
       width: 100%;
     }
     .home-hero h1 {
-      font-size: clamp(2.8rem, 13vw, 4.5rem);
+      font-size: clamp(2.35rem, 8vw, 3.3rem);
     }
     .hero-description {
       margin-top: 0.9rem;
