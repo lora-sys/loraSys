@@ -1,0 +1,50 @@
+---
+title: '2026-09-28 至 09-29｜AI Agent 工程阅读清单'
+description: '本期保留 Cloudflare cf、Kitesurf WebMCP、Claude Sonnet 5.5 和 Forge，重点看 Agent 工具接口、浏览器工具调用和生成链。'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'Harness', 'MCP', 'AI Software Engineering', 'DevTools']
+language: 'zh-CN'
+draft: false
+---
+
+本期覆盖 2026 年 9 月 28 日至 9 月 29 日，保留 4 条。它们都在上一期记录后发布，或在上一期生成后才进入公开渠道。
+
+最值得先读的是 Cloudflare 的 cf 和 Kitesurf。前者给出 Agent 原生 CLI 的具体接口设计，后者展示浏览器 Agent 如何从像素操作转向 WebMCP 工具调用。Claude Sonnet 5.5 适合看模型变化怎样影响 Harness 的工具预算。Forge 适合看 API 变更怎样自动同步到 SDK、CLI、文档和 Agent 接口。
+
+## 1. Cloudflare 发布 cf
+
+Cloudflare 在 9 月 28 日发布新的 cf CLI。官方表示，最近一周 Agent 已占 Wrangler 使用量的 48%。Agent 每天使用的不同命令数量接近人类的两倍，使用六个以上命令的概率接近人类的四倍。
+
+cf 把 JSON 作为默认接口，增加自然语言命令搜索，并使用 TypeScript 配置。工程上值得看的是输出格式、能力发现和配置类型怎样按机器使用方式重新设计。
+
+来源：[Cloudflare：Introducing cf](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)
+
+## 2. Kitesurf 加入 WebMCP
+
+Cloudflare 在 9 月 28 日更新 Kitesurf。Kitesurf 现在支持 WebMCP。网站可以直接向 Agent 暴露函数，而不是要求 Agent 模拟点击。
+
+Cloudflare 表示，Kitesurf 当前通过 73 万多个 Web Platform Tests 子测试，比首次发布时增加约 50 万个。
+
+Browser Agent 可以把页面能力分成两层。能通过 WebMCP 暴露的操作直接调用结构化工具。没有工具接口的部分再使用 DOM、截图和点击。
+
+来源：[Cloudflare：Kitesurf update](https://blog.cloudflare.com/kitesurf-update/) 和 [WebMCP Changelog](https://developers.cloudflare.com/changelog/post/2026-09-28-webmcp-api/)
+
+## 3. Claude Sonnet 5.5
+
+Anthropic 在 9 月 28 日发布 Claude Sonnet 5.5。官方报告 Sonnet 5.5 在 Terminal-Bench 4.0 得分 70.6%，Sonnet 5 为 10.3%。CursorBench 4.0 为 55.5%，接近 Opus 5.5 的 57.8%。
+
+Anthropic 表示 Sonnet 5.5 输出速度比 Sonnet 5 快 30% 以上，大多数工作成本最多降低约 30%。多个早期用户还报告相同任务需要更少步骤和工具调用。
+
+模型升级以后，Harness 的 Tool Budget、最大循环次数、并行调用策略和人工介入阈值都应该重新评测，不能直接沿用旧参数。
+
+来源：[Anthropic：Claude Sonnet 5.5](https://www.anthropic.com/claude-sonnet-5-5) 和 [GitHub Copilot Changelog](https://github.blog/changelog/2026-09-28-claude-sonnet-5-5-in-github-copilot/)
+
+## 4. Cloudflare 开源 Forge
+
+Cloudflare 在 9 月 28 日开源 Forge。Forge 可以从 OpenAPI 等接口定义生成 SDK、CLI 和文档。
+
+Cloudflare 当前有 3500 多个 API 操作。Forge 会在 API 仓库的 Pull Request 中做检查，并生成包含本次变更的 CLI、SDK 和文档预览。官方还把 MCP Server、Zod、Valibot 等接口列为可生成目标。
+
+对 Agent 平台来说，最有用的思路是把 Agent Tool、SDK、CLI 和文档放到同一条 Schema 生成链，在 Pull Request 阶段发现接口漂移。
+
+来源：[Cloudflare：Introducing Forge](https://blog.cloudflare.com/forge-open-source-generation-pipeline/)

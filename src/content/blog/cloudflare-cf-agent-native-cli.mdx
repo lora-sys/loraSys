@@ -1,0 +1,48 @@
+---
+title: 'Cloudflare 把 CLI 重新做给 Agent'
+description: 'Cloudflare 发布 cf open beta，用 Wrangler 的实际使用数据解释默认 JSON、命令搜索和类型化配置。'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'Cloudflare', 'CLI', 'Developer Tools']
+language: 'zh-CN'
+draft: false
+---
+
+Cloudflare 在 2026 年 9 月 28 日发布 [cf open beta](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)。值得看的不是又多了一个命令行工具，而是 Cloudflare 公开了 Agent 使用 Wrangler 的数据，并据此调整 CLI 接口。
+
+官方表示，2026 年 3 月 Agent 约占 Wrangler 使用量的四分之一。发布前一周，这一比例达到 48%。Agent 每天使用的不同命令接近人类的两倍，使用六个或更多命令的概率接近人类的四倍。这些数字只代表 Cloudflare 自己观察到的 Wrangler 使用情况。
+
+## 命令发现先于命令调用
+
+Wrangler 大约有 280 条命令路径，Cloudflare API 有 3000 多个操作。cf 使用 Forge 从 OpenAPI schema 生成命令，让 API 文档、SDK 和 CLI 尽量共享同一套结构来源。
+
+工具数量扩大以后，不能把完整命令树一直放进模型上下文。cf 提供 `cf cli search`。Agent 先描述任务，本地索引返回少量相关命令，再进入具体调用。
+
+这个设计可以直接迁移到 Agent Harness。工具目录越大，越应该把能力发现和能力执行分成两个阶段。
+
+## 默认 JSON
+
+传统 CLI 常把表格、颜色和格式化文本作为默认输出。Agent 往往还要补 `--json`，再解析字段。
+
+cf 把 JSON 作为默认接口。结构化输出减少二次解析，也让后续步骤更容易稳定引用字段。人需要阅读时，再把结构化结果格式化。
+
+## 类型化配置
+
+cf 引入 `cloudflare.config.ts`。支持语言服务器的 Coding Agent 可以直接利用字段类型、补全和错误信息。
+
+关键不是把 YAML 换成 TypeScript，而是让配置拥有机器可读的 Schema、类型约束和明确错误反馈。
+
+## Builder 可以检查什么
+
+1. 工具能否先搜索，再加载具体定义。
+2. 输出是否默认结构化。
+3. 配置是否有可读取的 Schema 和类型。
+4. CLI、SDK、文档和 API 是否尽量由同一份接口定义生成。
+
+## 边界
+
+cf 目前仍是 open beta。npm 页面显示版本为 `1.0.0-beta.1`，要求 Node.js 22 或更高版本。Cloudflare 的 48% 不能写成整个开发行业的比例。官方也没有公开统一的跨工具上下文成本实验。
+
+## 主要来源
+
+- [Cloudflare：Introducing cf](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)
+- [npm：cf](https://www.npmjs.com/package/cf)

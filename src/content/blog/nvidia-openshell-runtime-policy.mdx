@@ -1,0 +1,58 @@
+---
+title: 'OpenShell：把 Agent 权限检查放到运行时外层'
+description: 'NVIDIA OpenShell 把 sandbox、网络、凭证和 policy 控制放在 Agent workload 外，由 Supervisor 执行真实权限边界。'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'NVIDIA', 'Security', 'Sandbox', 'Agent Runtime']
+language: 'zh-CN'
+draft: false
+---
+
+NVIDIA 在 2026 年 9 月 28 日发布 OpenShell 0.1.0。这个项目最值得看的地方是权限检查的位置。Agent 继续负责规划和使用工具，但真正的文件、网络、API 和凭证权限由 Agent workload 外的运行时执行。
+
+## 30 秒看懂
+
+OpenShell 把 Agent 放进 sandbox。所有外部请求先经过 Supervisor，再按照 policy 判断是否允许。官方示例可以对同一个 GitHub 服务放行读取请求，同时阻止写入请求。
+
+真实凭证也不需要直接进入 Agent workload。请求通过检查后，外层再为批准的目标注入凭证。
+
+Agent 可以提出扩权请求，但默认需要审批。提出请求和批准请求不是同一个角色。
+
+## 为什么要把控制点放到模型外
+
+提示词可以解释规则，但提示词本身不是强制执行边界。
+
+只要危险动作仍由 Agent 进程自己决定是否执行，规则就依赖模型在每条执行路径上都正确遵守。OpenShell 的思路是把强制控制移到模型碰不到的外层。
+
+这样一来，Agent 即使换了实现路径，最终访问文件、网络或服务时仍要经过同一套控制点。
+
+## 权限细到操作级
+
+OpenShell 的 policy 不只回答“能不能访问 GitHub”。
+
+官方演示展示了更细的控制。读取可以放行，写入可以阻断。对长期运行的 Coding Agent 来说，这比整个平台只有一个开关更实用。
+
+同样的设计也适合数据库、部署和消息工具。读取、写入、删除、发布应该是不同权限。
+
+## 扩权走申请流程
+
+Agent 发现当前权限不足时，可以申请更窄的 policy 变更。关键点是申请不会自动生效。默认情况下需要人或独立审批组件确认。
+
+这把“发现任务需要什么权限”和“允许扩大权限”分开。任务执行时间越长，工具越多，这个边界越重要。
+
+## 三个值得借鉴的设计
+
+1. 把真实权限边界放在 Agent 进程外，由独立 Supervisor 执行。
+2. 权限细化到具体操作，让读取、写入、删除和发布分别受控。
+3. 扩权使用申请和审批两步流程，执行者不能直接给自己放行。
+
+## 事实边界
+
+OpenShell 0.1.0 已公开，官方仓库采用 Apache License 2.0。NVIDIA 技术博客给出 sandbox、policy、凭证和接入示例，也列出 Codex、Claude Code、Pi、Hermes 等接入说明。
+
+本文讨论的是 OpenShell runtime。NVIDIA 同期发布的 Open Agent Safety Platform 还包含其他软件和硬件层，不能把这些能力全部算到 OpenShell 本身。
+
+## 主要来源
+
+- [NVIDIA Technical Blog：OpenShell](https://developer.nvidia.com/blog/add-runtime-controls-to-ai-agents-with-nvidia-openshell/)
+- [NVIDIA Newsroom：Open Agent Safety Platform](https://nvidianews.nvidia.com/news/open-agent-safety-platform)
+- [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell)
