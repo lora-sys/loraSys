@@ -129,7 +129,8 @@ try {
         await page.keyboard.press('/')
         await page.waitForURL(url=>url.pathname.replace(/\/$/,'')===`${base}${lang}search`)
         const input=page.locator('.pagefind-ui__search-input');await input.waitFor({state:'visible'});await input.fill('Zhihu')
-        await page.locator('.pagefind-ui__result-link').first().waitFor({state:'visible'})
+        // Pagefind renders result metadata progressively; the first link may be unrelated.
+        await page.locator('.pagefind-ui__result-link').filter({hasText:'Zhihu'}).first().waitFor({state:'visible'})
         assert.ok((await page.locator('.pagefind-ui__result-link').allTextContents()).some(s=>s.includes('Zhihu')))
         await capture(`${lang?'en':'zh'}-search-results`)
         const probeTerm = 'qvwxjkpzqvwxjkpzqvwxjkpz'
