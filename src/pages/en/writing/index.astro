@@ -1,12 +1,13 @@
 ---
 import { featuredPostIds } from '@/data/featured-posts'
+import { withBasePath } from '@/i18n/site'
 
 import { getBlogCollection } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 const posts = (await getBlogCollection())
-  .filter((post) => post.data.language === 'en-US')
   .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
+const languageOf = (post: (typeof posts)[number]) => post.data.language ?? 'zh-CN'
 const featuredPost =
   featuredPostIds
     .map((id) => posts.find((post) => post.id === id))
@@ -18,28 +19,39 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   lang='en-US'
   meta={{
     title: 'Writing',
-    description: 'English build notes on agent systems, tools, and building in public.'
+    description: 'Published notes on agent systems, tools, and building in public, in Chinese and English.'
   }}
   highlightColor='#d99a33'
 >
   <main class='writing-page'>
     <header>
       <p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span
-        >English originals are listed here. Each article keeps one permanent address and its
+        >Browse the full published library. Every article keeps one permanent address and its
         original language.</span
       >
     </header>
     <nav aria-label='Writing languages'>
-      <a aria-current='page' href='/en/writing'>English originals</a><a href='/blog'
-        >All articles and Chinese originals ↗</a
+      <a aria-current='page' href={withBasePath('/en/writing')}>All articles</a><a href={withBasePath('/blog')}
+        >Full library in Chinese ↗</a
       >
     </nav>
+    <div class='filter'>
+      <label for='language-filter'>Filter articles by language</label>
+      <select id='language-filter' name='language' data-writing-language>
+        <option value='all'>All articles</option>
+        <option value='en-US'>English</option>
+        <option value='zh-CN'>Chinese</option>
+      </select>
+    </div>
     {
       featuredPost && (
-        <section class='featured' aria-labelledby='featured-title'>
+        <section class='featured' aria-labelledby='featured-title' data-article data-language={languageOf(featuredPost)}>
           <div class='featured-label'>
             <>
               <span>Featured note</span>
+              <span class='language-badge'>
+                {languageOf(featuredPost) === 'en-US' ? 'English' : 'Chinese'}
+              </span>
               <time datetime={featuredPost.data.publishDate.toISOString()}>
                 {featuredPost.data.publishDate.toLocaleDateString('en-US', {
                   month: 'long',
@@ -50,27 +62,27 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
             </>
           </div>
           <h2 id='featured-title'>
-            <a href={`/blog/${featuredPost.id}`}>{featuredPost.data.title}</a>
+            <a lang={languageOf(featuredPost)} href={withBasePath(`/blog/${featuredPost.id}`)}>{featuredPost.data.title}</a>
           </h2>
-          <p>{featuredPost.data.description}</p>
-          <a class='read' href={`/blog/${featuredPost.id}`}>
+          <p lang={languageOf(featuredPost)}>{featuredPost.data.description}</p>
+          <a class='read' href={withBasePath(`/blog/${featuredPost.id}`)}>
             Read this note <span aria-hidden='true'>↗</span>
           </a>
         </section>
       )
     }
     {
-      publicationRows.length > 0 && (
+      posts.length > 0 && (
         <section class='publication-list' aria-labelledby='publication-title'>
           <header>
             <>
               <h2 id='publication-title'>Published notes</h2>
-              <span>Newest first · {posts.length} articles</span>
+              <span id='article-count' aria-live='polite'>Newest first · {posts.length} articles</span>
             </>
           </header>
           <ol>
             {publicationRows.map((post) => (
-              <li>
+              <li data-article data-language={languageOf(post)}>
                 <time datetime={post.data.publishDate.toISOString()}>
                   {post.data.publishDate.toLocaleDateString('en-US', {
                     month: 'short',
@@ -80,13 +92,16 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
                 </time>
                 <div>
                   <h3>
-                    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+                    <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>{post.data.title}</a>
                   </h3>
-                  <p>{post.data.description}</p>
+                  <p lang={languageOf(post)}>{post.data.description}</p>
+                  <span class='language-badge'>
+                    {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
+                  </span>
                 </div>
                 <a
                   class='row-link'
-                  href={`/blog/${post.id}`}
+                  href={withBasePath(`/blog/${post.id}`)}
                   aria-label={`Read ${post.data.title}`}
                 >
                   <span aria-hidden='true'>↗</span>
@@ -100,17 +115,42 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     {
       posts.length === 0 && (
         <p class='empty'>
-          No English notes are published yet. The full writing archive remains available.
+          No articles are published yet.
         </p>
       )
     }
+    <p class='empty' id='filter-empty' hidden>No articles match this language.</p>
   </main>
 </PageLayout>
+
+<script>
+  const languageFilter = document.querySelector<HTMLSelectElement>('#language-filter')
+  const articles = [...document.querySelectorAll<HTMLElement>('[data-article]')]
+  const articleCount = document.querySelector<HTMLElement>('#article-count')
+  const filterEmpty = document.querySelector<HTMLElement>('#filter-empty')
+
+  languageFilter?.addEventListener('change', () => {
+    const language = languageFilter.value
+    let visibleCount = 0
+
+    for (const article of articles) {
+      const visible = language === 'all' || article.dataset.language === language
+      article.hidden = !visible
+      if (visible) visibleCount += 1
+    }
+
+    if (articleCount) articleCount.textContent = `Newest first · ${visibleCount} articles`
+    if (filterEmpty) filterEmpty.hidden = visibleCount !== 0
+  })
+</script>
 
 <style>
   .writing-page {
     display: grid;
     gap: 1.6rem;
+  }
+  .writing-page [hidden] {
+    display: none !important;
   }
   .writing-page > header {
     display: grid;
@@ -160,6 +200,23 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     background: hsl(var(--foreground));
     color: hsl(var(--background));
   }
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+  }
+  .filter select {
+    min-height: 2.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font: inherit;
+  }
   nav a:focus-visible,
   .writing-page a:focus-visible {
     outline: 2px solid hsl(var(--ring));
@@ -184,6 +241,18 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     font-weight: 650;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+  }
+  .featured-label .language-badge,
+  .language-badge {
+    width: fit-content;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.2rem 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 550;
+    letter-spacing: normal;
+    text-transform: none;
   }
   .featured h2 {
     max-width: 22ch;
@@ -264,6 +333,10 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     color: hsl(var(--muted-foreground));
     font-size: 0.78rem;
     line-height: 1.6;
+  }
+  .publication-list li .language-badge {
+    display: inline-block;
+    margin-top: 0.55rem;
   }
   .row-link {
     display: grid;

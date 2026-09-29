@@ -122,6 +122,63 @@ try {
         })
       }
 
+      await check(`${label} English writing archive lists and filters the canonical article collection`, page, async () => {
+        await open('en/writing')
+        const sitemapIndex = await context.request.get(new URL('sitemap-index.xml', site).href)
+        assert.equal(sitemapIndex.status(), 200, 'Sitemap index should be available')
+        const sitemapPaths = [...(await sitemapIndex.text()).matchAll(/<loc>([^<]+)<\/loc>/g)]
+          .map((match) => new URL(match[1]).pathname)
+        const canonicalArticles = new Set()
+        for (const sitemapPath of sitemapPaths) {
+          const response = await context.request.get(new URL(sitemapPath, site).href)
+          assert.equal(response.status(), 200, `Article sitemap should load: ${sitemapPath}`)
+          const xml = await response.text()
+          for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+            const pathname = new URL(match[1]).pathname
+            const article = pathname.match(/\/blog\/([^/]+)\/?$/)
+            if (article && article[1] !== 'language' && !/^\d+$/.test(article[1])) canonicalArticles.add(article[1])
+          }
+        }
+        assert.ok(canonicalArticles.size > 0, 'Canonical article sitemap should contain articles')
+
+        const articleLinks = page.locator('[data-article] a[href]')
+        const allLinks = await articleLinks.evaluateAll((items) => items.map((item) => item.href)
+          .filter((href) => /\/blog\/[^/?#]+\/?$/.test(new URL(href).pathname)))
+        const archiveArticles = new Set(allLinks.map((href) => new URL(href).pathname.match(/\/blog\/([^/]+)\/?$/)?.[1]).filter(Boolean))
+        assert.deepEqual([...archiveArticles].sort(), [...canonicalArticles].sort(), 'English archive must link to every canonical article exactly by ID')
+
+        const filter = page.locator('#language-filter')
+        assert.notEqual(await filter.getAttribute('data-writing-language'), null, 'Language filter should expose its stable selector')
+        assert.ok(await page.getByLabel(/language/i).count(), 'Language filter must have an accessible label')
+        const chinese = page.locator('.publication-list [data-article][data-language="zh-CN"]').first()
+        const english = page.locator('[data-article]').filter({ has: page.locator('a[href*="/blog/newtube"]') }).first()
+        await chinese.waitFor({ state: 'visible' })
+        await english.waitFor({ state: 'visible' })
+
+        const options = await filter.locator('option').evaluateAll((items) => items.map((item) => ({ value: item.value, label: item.textContent.trim() })))
+        const englishIndex = options.findIndex((item) => /english/i.test(item.label))
+        assert.ok(englishIndex >= 0, 'Filter should offer an English option')
+        const currentValue = await filter.inputValue()
+        let currentIndex = options.findIndex((item) => item.value === currentValue)
+        assert.ok(currentIndex >= 0, 'Default filter value should match an option')
+        await filter.focus()
+        while (currentIndex !== englishIndex) {
+          const key = currentIndex < englishIndex ? 'ArrowDown' : 'ArrowUp'
+          await filter.press(key)
+          currentIndex += key === 'ArrowDown' ? 1 : -1
+        }
+        assert.equal(await filter.inputValue(), options[englishIndex].value, 'Keyboard should select English')
+        assert.equal(await english.isVisible(), true, 'English filter should keep an English article visible')
+        assert.equal(await chinese.isVisible(), false, 'English filter should hide the latest Chinese article')
+
+        const allIndex = options.findIndex((item) => /all|全部/i.test(item.label))
+        assert.ok(allIndex >= 0, 'Filter should offer a reset to all articles')
+        await filter.selectOption(options[allIndex].value)
+        assert.equal(await chinese.isVisible(), true, 'Reset should restore the latest Chinese article')
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Writing archive must not cause horizontal overflow')
+        await capture('writing-en-archive')
+      })
+
       await check(`${label} search UI returns canonical articles only`, page, async () => {
         await open('search')
         const input = page.locator('.pagefind-ui__search-input')
