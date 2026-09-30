@@ -141,7 +141,7 @@ try {
         assert.ok(await page.locator('h1').count(), 'Search destination should contain a heading')
       })
 
-      await check(`${label}: homepage evidence section links and one scroll progress system`, async () => {
+      await check(`${label}: homepage evidence and keyboard section navigation`, async () => {
         await open()
         const workEvidence = page.locator('#work .section-meta')
         assert.equal(await workEvidence.locator('[data-evidence-kind="verified"]').count(), 1, 'Selected work should retain its evidence label')
@@ -150,7 +150,7 @@ try {
         assert.ok(Number.isFinite(Date.parse(syncedAt)), 'Snapshot date must be valid')
         assert.equal(await page.locator('#writing .section-meta [data-evidence-kind="field-note"]').count(), 1, 'Writing should keep its distinct evidence label')
         assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
-        assert.equal(await page.locator('[data-site-header] [data-scroll-progress]').count(), 1, 'Header scroll progress should remain the single page-progress indicator')
+        assert.equal(await page.locator('[data-site-header]').count(), 1, 'Homepage should retain one consistent navigation header')
         for (const id of ['work', 'writing']) {
           const link = page.locator(`.hero-actions a[href$="#${id}"]`)
           await link.press('Enter')
