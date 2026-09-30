@@ -1,0 +1,94 @@
+---
+title: 'OpenAI 给 Agents API 加了浏览器，密码不走模型上下文'
+description: '拆解 Agents API 的网站访问审批、独立登录通道与截图输出边界：为什么能联网不等于已授权，站点批准也不能代替高影响动作确认。'
+publishDate: 2026-09-30
+tags: ['ai-agent', 'openai', 'computer-use', 'agent-security']
+language: 'zh-CN'
+draft: false
+---
+
+浏览器 Agent 的密码不该进入普通 prompt 或通用工具结果。网站访问权限、认证输入和高影响动作，需要分别处理。OpenAI 在 2026 年 9 月 29 日为 Agents API 增加 computer use，这次更新提供了一个具体的接口设计案例。
+
+本文根据官方发布与实现文档分析，不是产品实测。
+
+## 这次更新增加了什么
+
+[DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/) 确认，Agents API 新增 computer use。开发者可以让 Agent 在 OpenAI 托管的浏览器里访问网站、操作页面和完成任务。Agents API 同时提供多 Agent、tool search、tool calling 和 context compaction。
+
+对浏览器 Agent 产品而言，值得仔细看的不只是页面点击能力，而是网站访问、登录凭证和截图输出如何分开。
+
+## 能联网不等于能访问这个网站
+
+Agents API 的托管环境有自己的 network policy。开发者可以允许浏览器访问网络，但这不会自动批准某个网站。
+
+[Computer use 文档](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use) 要求浏览器第一次进入新的 website origin 时发出审批请求。应用需要把目标 origin 和访问原因展示给用户，再提交批准、拒绝或取消的决定。
+
+这两层限制解决不同问题：network policy 决定环境可以向哪些网络目标发请求；origin approval 决定用户是否允许当前任务进入这个站点。
+
+把两者合成一个开关，容易产生“环境能访问，所以用户也同意”的错误假设。
+
+## 密码通过专用认证事件提交
+
+需要登录的网站会触发 browser authentication request。应用根据请求里的登录方式和字段生成独立登录界面，让用户输入邮箱、密码或验证码。
+
+关键在于提交路径。官方文档说明，登录值只通过专用认证事件提交，不进入 Agent 的模型输入，也不出现在认证响应的 session history 中。开发者不需要把密码拼进 prompt，也不应该把密码包装成普通 function tool result。
+
+这不等于“密码永远不会经过 OpenAI 基础设施”。文档明确的边界是模型输入和认证响应历史，不能把它扩展成未经证明的基础设施承诺。
+
+当前只有主 Agent 能请求浏览器认证，subagent 不能。认证流程支持邮箱、密码和验证码，但不支持 passkey 与二维码登录。
+
+这个限制会影响多 Agent 产品：子任务需要登录私有系统时，不能默认把账号信息转交给 subagent。任务应回到主 Agent 的认证流程，或者改用开发者自己控制的认证与浏览器环境。
+
+## 站点批准不是高影响动作确认
+
+批准一个网站 origin，不会在购买、删除等高影响操作发生前自动要求逐次确认。
+
+如果产品必须保证某类动作每次都经过确认，官方文档建议限制托管浏览器可访问的资源，使它无法完成这些操作，或者使用开发者自己控制的浏览器运行时。
+
+浏览器 Agent 至少需要区分以下三层权限：
+
+| 权限层 | 回答的问题 | 不能替代什么 |
+| --- | --- | --- |
+| 网络策略 | 环境能否连接目标？ | 用户对站点访问的同意 |
+| 站点访问审批 | 用户是否允许进入这个网站？ | 购买、删除等具体动作的确认 |
+| 高影响动作确认 | 这一次具体操作是否获批？ | 整个会话的无限授权 |
+
+把三层权限压成一个“允许 Agent 操作网页”开关，会让审计和撤销都变得困难。
+
+## 截图也要单独管理
+
+Computer use 默认不把浏览器截图放进 API 输出。Agent 仍然可以观察页面，但应用不会自动拿到每一步截图。
+
+开发者主动开启 `include_screenshots` 后，截图可能包含账号页面、私有仓库、订单信息等敏感内容。官方文档要求只向已授权用户展示，并避免写入应用日志。
+
+执行所需的观察能力，与产品侧可见的调试数据，不应该默认绑定。
+
+## 我会怎么实现自己的浏览器 Agent
+
+以下是基于上述接口边界提出的设计方案，不代表已经完成部署或验证。
+
+先给浏览器环境设置明确的网络范围，任务不需要的域名不要开放。第一次进入新网站时，展示 origin、访问原因和批准按钮，并把应用记录的批准决定与具体 session 关联。
+
+登录输入使用独立界面和凭证通道。密码、验证码及其他凭证不进入 prompt、通用 tool output 或普通 trace。
+
+购买、发送、删除、提交申请等高影响动作，需要额外的、可强制执行的确认机制。不能用 origin approval 代替动作确认，也不能仅靠提示词要求模型自觉停下。托管环境无法提供所需约束时，应限制它的能力范围，或改用可控制执行边界的运行时。
+
+截图默认不向应用输出。确实需要调试时再开启，并单独限制读取权限和日志留存。
+
+这些措施解决不同风险，不是重复增加几次确认按钮。
+
+## 证据与适用边界
+
+| 一手来源 | 支持的结论 | 时间口径 |
+| --- | --- | --- |
+| OpenAI DevDay 2026 Recap | Agents API 新增 computer use，及相关运行时能力 | 2026-09-29 发布 |
+| OpenAI Agents API Computer use 文档 | 网站审批、专用认证事件、截图输出与登录限制 | 2026-09-30 查阅 |
+
+Passkey 和二维码登录尚不受此认证流程支持，subagent 不能独立请求认证，origin approval 也不负责逐次确认高影响动作。因此，这次更新不能简化成“Agent 可以安全登录任何网站”。
+
+更准确的结论是：浏览器操作、站点访问批准、凭证提交和高影响动作控制，需要各自明确的接口与执行边界。
+
+## 来源
+
+- [OpenAI：DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/)
+- [OpenAI：Agents API Computer use](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use)

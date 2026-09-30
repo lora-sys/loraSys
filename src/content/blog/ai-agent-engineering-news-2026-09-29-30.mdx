@@ -1,0 +1,92 @@
+---
+title: '2026-09-29 至 2026-09-30｜AI Agent 工程阅读清单'
+description: '7 条 Agent 工程阅读线索：浏览器授权、模型任务成本、独立工作区、MCP 事件、运行时安全与多 Agent 路由。保留论文和产品自报边界。'
+publishDate: 2026-09-30
+tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'mcp']
+language: 'zh-CN'
+draft: false
+---
+
+本期优先读 OpenAI DevDay 的 Agent 开发更新，再看运行时安全与两篇多 Agent 论文。贯穿这些材料的问题是：权限由谁强制执行，任务状态怎样隔离，以及怎样同时衡量成功率与完整任务成本。
+
+**覆盖区间：2026 年 9 月 29 日至 9 月 30 日。** NVIDIA 平台发布于 9 月 28 日；两篇论文分别提交于 9 月 25 日、26 日。这三条作为区间外补录保留，不算本期新发布。上期已经收录的 Cloudflare cf CLI、Kitesurf、Claude Sonnet 5.5 和 Forge 不再重复介绍。
+
+## 1. OpenAI 把 Computer use 接入 Agents API
+
+**发生了什么。** OpenAI 在 9 月 29 日宣布 Agents API 支持 computer use。运行时同时提供 MCP、Tool Search、Programmatic Tool Calling、多 Agent、Context Compaction 和 Sandbox。
+
+**工程意义。** 高影响操作不能只靠 Agent 主动请求确认。官方文档明确指出，origin approval 不能保证购买、删除等动作逐次确认。需要由运行时或应用层设置可强制执行的限制。
+
+**先读哪里。** 先看 Context Compaction、Tool Search 和 Multi-agent，再读 Computer use 文档里的 origin approval 与 network access，区分环境权限、用户授权和具体动作确认。
+
+一手来源：[DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/)、[Agents API](https://openai.com/index/introducing-the-agents-api/)、[Computer use](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use)。
+
+## 2. GPT-6.1 Sol：比较成功率，也比较任务成本
+
+**发生了什么。** OpenAI 在 9 月 29 日发布 GPT-6.1 Sol。官方评估报告称，它在 DeepSWE 1.1 上达到接近 GPT-6 Astra 的表现，成本约为 Astra 的五分之一；在 AutomationBench 的 medium reasoning 设置下，比 Opus 5.5 高 2.2 个百分点，成本约为三分之一；在 OSWorld 2.0 离线集合的 maximum reasoning 设置下，比 GPT-6 Sol 高 7 个百分点。
+
+以上是 OpenAI 报告的评估结果，不是本站复现。不同基准、推理设置和生产工作流的成本不可直接混用。
+
+**工程意义。** 模型选择应该同时看任务成功率和完整任务成本。长任务可以按难度分层，而不是把所有调用固定到最高档模型。迁移前仍要用自己的任务集验证。
+
+**先读哪里。** Coding、AutomationBench、Computer use 和 Terminal-Bench Science 四组结果，尤其注意各组实验设置与每任务成本。
+
+一手来源：[OpenAI：GPT-6.1 Sol](https://openai.com/index/introducing-gpt-6-1-sol/)。
+
+## 3. Codex Cloud：环境配置与任务工作区分开
+
+**发生了什么。** Codex Cloud 支持发布可复用环境，保存仓库、依赖、工具、网络及凭据配置。多个任务可以复用同一环境配置，但每个任务仍有独立 workspace。Codex CLI 也增加了多任务管理入口。
+
+**工程意义。** Coding Agent 平台可以把环境模板与任务状态分开：环境配置管理依赖和权限，独立工作区承载各自的文件改动与执行状态，减少并行任务互相污染的机会。
+
+**先读哪里。** 从 “Reuse your project setup” 开始，再看网络、secret 和任务 workspace 的说明。不要把“复用环境”理解为所有任务共享一份可随意覆盖的工作目录。
+
+一手来源：[Codex Cloud](https://learn.chatgpt.com/docs/cloud)、[Codex CLI](https://learn.chatgpt.com/docs/codex/cli)。
+
+## 4. MCP Events 进入自动化，但规范仍未定稿
+
+**发生了什么。** OpenAI 宣布 Plugin Automation 支持 proposed MCP Events specification。MCP Triggers and Events Working Group 正在定义服务端主动通知客户端的回调机制、订阅生命周期、投递语义和事件顺序。
+
+**工程意义。** 邮件、Issue、订单和任务状态变化，可以通过事件触发减少无效轮询。但当前不能把这些提案当成已经定稿的通用协议。工程实现应保留独立事件总线与适配层，避免过早绑定尚在变化的接口。
+
+**先读哪里。** 工作组章程中的 Mission Statement、In Scope 和投递语义相关范围，再对照具体平台已经实现的部分。
+
+一手来源：[MCP Triggers and Events Charter](https://modelcontextprotocol.io/community/working-groups/triggers-events)、[DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/)。
+
+## 5. 补录：NVIDIA Open Agent Safety Platform
+
+**原始发布日期：2026 年 9 月 28 日。**
+
+**发生了什么。** NVIDIA 发布 Open Agent Safety Platform。OpenShell 将 Agent 放进独立 sandbox，由外部 supervisor 检查文件、网络和凭据访问。平台的 Sentry 参考设计进一步把带外监控放到独立 DPU 上。
+
+**工程意义。** 安全边界不应只存在于 prompt 或 harness 中。外部运行时的目标，是在 Agent 遭遇提示注入或 harness 出错时仍能执行访问策略。这里介绍的是 NVIDIA 公布的设计，不是本站对隔离有效性的实测结论。
+
+**先读哪里。** OpenShell 的 Agent Sandboxes、Policy Prover、Gateway 和 Supervisor，重点看策略在何处执行，以及 Agent 能否修改执行策略的那一层。
+
+一手来源：[NVIDIA 发布公告](https://nvidianews.nvidia.com/news/open-agent-safety-platform)、[NVIDIA OpenShell](https://www.nvidia.com/en-us/ai/openshell/)。
+
+## 6. 补录：Agent 数量增加，投票却很快遇到上限
+
+**论文提交日期：2026 年 9 月 25 日。**
+
+**发生了什么。** 《Multi-agent Scaling Across Disjunctive and Compensatory Tasks》测试了 13 个开放权重模型与最多 30 个 Agent。作者报告，在 disjunctive tasks 中，团队扩大使“至少一个 Agent 答对”的概率提高 5 至 20 个百分点，但直接回答后的 plurality voting 几乎没有利用这些新增正确答案。在 Fermi estimation 中，同一模型不同采样共享的 item-level bias 约占平方误差的 87%。
+
+**工程意义。** 增加 Agent 数量不等于增加最终可用能力。没有可靠验证器或合适的答案聚合机制，更多 Agent 可能只是在重复偏差。这是论文所测模型、任务与聚合方法下的结果，不是所有多 Agent 架构的普遍上限。
+
+**先读哪里。** Steiner 的群体任务分类，再读论文第 3.3 与 3.4 节，区分“有人答对”和“系统选对”这两个指标。
+
+一手来源：[arXiv：2609.31563](https://arxiv.org/abs/2609.31563)。
+
+## 7. 补录：Planner-as-Router 在计划阶段决定模型档位
+
+**论文提交日期：2026 年 9 月 26 日。**
+
+**发生了什么。** Planner-as-Router 在拆分子任务时，同时决定每个节点使用 small、mid 还是 frontier 模型。作者在 54 个企业 Agent 任务上进行了 1,157 次评估；相较全部使用 frontier 模型的方案，报告成本降低 44%，准确率下降 2.9 个百分点。
+
+作者同时指出，54 个任务研穵的准确率置信区间约为正负 6 个百分点，因此没有把结果描述为明确的准确率优势。成本下降也不能改写成“效果不变”。
+
+**工程意义。** 执行前已经知道依赖图时，模型路由可以成为 planner 的职责。评测应同时记录任务成功率与完整 workflow 成本，而不只比较单次调用的 token 价格。
+
+**先读哪里。** Planner 与 router 的合并设计、EntBench 的执行式评分，再看成本—准确率比较与样本规模限制。
+
+一手来源：[arXiv：2609.32917](https://arxiv.org/abs/2609.32917)。
