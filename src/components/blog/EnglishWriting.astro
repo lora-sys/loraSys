@@ -116,7 +116,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
                   : 'Published notes'}
               </h2>
               <span id='article-count' aria-live='polite'>
-                Newest first · {posts.length} articles
+                Newest first · {posts.length} {posts.length === 1 ? 'article' : 'articles'}
               </span>
             </>
           </header>
@@ -187,7 +187,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       article.hidden = !visible
       if (visible) visibleCount += 1
     }
-    if (articleCount) articleCount.textContent = `Newest first · ${visibleCount} articles`
+    if (articleCount) articleCount.textContent = `Newest first · ${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
     if (filterEmpty) filterEmpty.hidden = visibleCount !== 0
   }
   languageFilter?.addEventListener('change', () => {

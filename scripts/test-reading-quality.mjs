@@ -181,7 +181,7 @@ try {
         const projectsLink = page.locator('.type-filter a').filter({ hasText: 'Projects & practice' })
         assert.equal(new URL(await projectsLink.getAttribute('href'), page.url()).searchParams.get('language'), 'en-US', 'Type links retain the selected language')
         await projectsLink.click()
-        await page.waitForURL((url) => url.pathname.endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
+        await page.waitForURL((url) => url.pathname.replace(/\/$/, '').endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
         const waitForEnglish = () => page.waitForFunction(() => {
           const filter = document.querySelector('#language-filter')
           return filter instanceof HTMLSelectElement && !filter.disabled && filter.value === 'en-US'
@@ -230,6 +230,13 @@ try {
         assert.equal(await page.locator('[data-article]:visible').count(), seriesEnglishCount)
         await page.locator('#language-filter').selectOption('all')
         assert.equal(await page.locator('[data-article]:visible').count(), seriesCount)
+        await open('en/writing/topic/multi-agent?language=en-US')
+        await page.waitForFunction(() => {
+          const filter = document.querySelector('#language-filter')
+          return filter instanceof HTMLSelectElement && !filter.disabled && filter.value === 'en-US'
+        })
+        const topicEnglishCount = await page.locator('[data-article]:visible').count()
+        assert.equal((await page.locator('#article-count').textContent()).trim(), `Newest first · ${topicEnglishCount} ${topicEnglishCount === 1 ? 'article' : 'articles'}`, 'Filtered counts use the correct singular or plural')
         await open('blog/type/news/language/en-US')
         assert.equal(await page.locator('.empty-state').isVisible(), englishNewsCount === 0, 'Empty language/type selection stays readable')
         await page.locator('.language-filter a').filter({ hasText: '中文' }).click()
