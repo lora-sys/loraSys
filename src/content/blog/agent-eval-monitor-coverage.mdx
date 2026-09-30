@@ -2,14 +2,15 @@
 title: 'Agentic Search 漏掉第四起事故，Eval 也要被测试'
 description: '从 Anthropic Agentic Search 事故复盘看自动监控和 LLM grader 的漏检问题，说明 Agent Eval 也需要覆盖率、独立性和失效模式测试。'
 publishDate: '2026-09-10T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/agent-eval-monitor-coverage/lora-explainer-v2.webp'
+  alt: '独立复核在首次扫描的档案中找回遗漏记录'
 tags: ['AI', 'Agent', 'Evaluation', 'Observability', 'Anthropic']
+contentType: 'technical'
+topics: ['evaluation', 'security', 'ai-research']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/agent-eval-monitor-coverage/notion-image-1.svg)
-
-![](../../assets/blog/agent-eval-monitor-coverage/notion-image-2.svg)
 
 ## Anthropic 的 Agentic Search 漏掉第四起事故，Eval 也要被测试
 Agent Eval 最常见的结构很简单。准备一组任务，让 Agent 跑完，再让规则、模型或人工判断结果。

@@ -6,23 +6,26 @@ import projectSnapshot from '@/data/github-projects.json'
 import { fieldNotes } from '@/data/notes'
 
 import { Paginator } from 'astro-pure/components/pages'
-import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import CollectionPageJsonLd from '@/components/seo/CollectionPageJsonLd.astro'
+import { writingLabel, type WritingKind } from '@/utils/writing'
 import readingMarker from '@/assets/lora-visual/v2/lora-v2-reading-marker.webp'
 
 import BlogPostCard from './BlogPostCard.astro'
 import FeaturedWriting from './FeaturedWriting.astro'
+import WritingTaxonomy from './WritingTaxonomy.astro'
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>
-  uniqueTags: string[]
   collectionsCount: number
   featuredPosts: CollectionEntry<'blog'>[]
   activeLanguage?: 'zh-CN' | 'en-US'
+  activeKind?: WritingKind
+  activeValue?: string
 }
 
-const { page, uniqueTags, collectionsCount, featuredPosts, activeLanguage } = Astro.props
+const { page, collectionsCount, featuredPosts, activeLanguage, activeKind, activeValue } =
+  Astro.props
 const curation: Record<string, { theme: string; whyRead: string }> = {
   'agent-budget-memory-evaluation': {
     theme: 'Agent Systems',
@@ -66,30 +69,36 @@ const meta = {
   description: activeLanguage
     ? `${languageTitle}，记录智能体、工程与产品构建。`
     : '关于智能体、工程、开源与产品构建的文章。',
-  title: activeLanguage ? languageTitle : '写作'
+  title:
+    activeKind && activeValue
+      ? writingLabel(activeKind, activeValue)
+      : activeLanguage
+        ? languageTitle
+        : '写作'
 }
 const paginationProps = {
   ...(page.url.prev && { prevUrl: { text: '上一页', url: page.url.prev } }),
   ...(page.url.next && { nextUrl: { text: '下一页', url: page.url.next } })
 }
+const browseBase = activeKind && activeValue ? `/blog/${activeKind}/${activeValue}` : '/blog'
 const languageFilters = [
-  { title: '全部', href: '/blog', active: !activeLanguage },
+  { title: '全部', href: browseBase, active: !activeLanguage },
   {
     title: '中文',
-    href: '/blog/language/zh-CN',
+    href: `${browseBase}/language/zh-CN`,
     active: activeLanguage === 'zh-CN',
     lang: 'zh-CN'
   },
   {
     title: '英文',
-    href: '/blog/language/en-US',
+    href: `${browseBase}/language/en-US`,
     active: activeLanguage === 'en-US',
     lang: 'en-US'
   }
 ]
 ---
 
-<PageLayout {meta} lang='zh-CN'>
+<PageLayout {meta} lang='zh-CN' data-pagefind-ignore={activeKind ? 'all' : undefined}>
   <Fragment slot='head'>
     <CollectionPageJsonLd name={meta.title} description={meta.description} inLanguage='zh-CN' />
   </Fragment>
@@ -115,6 +124,7 @@ const languageFilters = [
       </span>
     </header>
 
+    <WritingTaxonomy {activeKind} {activeValue} {activeLanguage} />
     <div class='writing-toolbar animate'>
       <nav class='language-filter' aria-label='按文章语言筛选'>
         {
@@ -163,11 +173,13 @@ const languageFilters = [
 
     {
       page.data.length === 0 ? (
-        <p class='empty-state'>该语言暂时没有文章。</p>
+        <p class='empty-state'>暂时没有符合条件的文章。</p>
       ) : (
         <section class='all-notes animate' aria-labelledby='all-notes-title'>
           <header class='all-notes-heading'>
-            <h2 id='all-notes-title'>按发布时间浏览</h2>
+            <h2 id='all-notes-title'>
+              {activeKind && activeValue ? writingLabel(activeKind, activeValue) : '按发布时间浏览'}
+            </h2>
             <small>
               第 {page.currentPage} 页 · {page.data.length} / {collectionsCount}
             </small>
@@ -195,24 +207,6 @@ const languageFilters = [
                 </ul>
                 <Paginator {...paginationProps} />
               </section>
-
-              {!!uniqueTags.length && (
-                <aside class='tag-index' aria-labelledby='tag-index-title'>
-                  <h2 id='tag-index-title'>
-                    <Icon name='tag-2' /> 归档主题
-                  </h2>
-                  <ul>
-                    {uniqueTags.slice(0, 50).map((tag) => (
-                      <li>
-                        <a href={`/tags/${tag}`}>{tag}</a>
-                      </li>
-                    ))}
-                  </ul>
-                  <a class='all-tags' href='/tags' data-astro-prefetch>
-                    全部主题 →
-                  </a>
-                </aside>
-              )}
             </div>
           </div>
         </section>
@@ -466,7 +460,7 @@ const languageFilters = [
 
   .content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(9rem, 13rem);
+    grid-template-columns: minmax(0, 1fr);
     gap: clamp(2rem, 6vw, 5rem);
   }
 
@@ -494,57 +488,6 @@ const languageFilters = [
   .post-list {
     margin: 0;
     padding: 0;
-  }
-
-  .tag-index {
-    position: sticky;
-    top: 7rem;
-    align-self: start;
-  }
-
-  .tag-index h2 {
-    display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin: 0 0 1rem;
-    font-size: 0.9rem;
-    font-weight: 600;
-  }
-
-  .tag-index h2 :global(svg) {
-    width: 1rem;
-  }
-
-  .tag-index ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem 0.5rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .tag-index li a {
-    display: inline-flex;
-    min-height: 1.75rem;
-    align-items: center;
-    padding-inline: 0.28rem;
-    border-bottom: 1px solid transparent;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.7rem;
-    text-decoration: none;
-  }
-
-  .tag-index li a:hover,
-  .tag-index li a:focus-visible {
-    border-color: currentColor;
-    color: hsl(var(--foreground));
-  }
-
-  .all-tags {
-    display: inline-block;
-    margin-top: 1.2rem;
-    font-size: 0.72rem;
   }
 
   .empty-state {
@@ -595,13 +538,6 @@ const languageFilters = [
 
     .content-grid {
       grid-template-columns: 1fr;
-    }
-
-    .tag-index {
-      position: static;
-      order: -1;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid hsl(var(--border));
     }
   }
 

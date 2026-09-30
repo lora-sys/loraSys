@@ -1,0 +1,47 @@
+---
+import type { GetStaticPaths } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+import { featuredPostIds } from '@/data/featured-posts'
+
+import { getBlogCollection } from 'astro-pure/server'
+import BlogListing from '@/components/blog/BlogListing.astro'
+import { writingGroups, type WritingKind } from '@/utils/writing'
+import config from '@/site-config'
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const all = (await getBlogCollection()).sort(
+    (a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+  )
+  return (Object.keys(writingGroups) as WritingKind[]).flatMap((kind) =>
+    Object.keys(writingGroups[kind]).flatMap((value) =>
+      (['zh-CN', 'en-US'] as const).flatMap((language) => {
+        const posts = all.filter(
+          (post) =>
+            post.data.language === language &&
+            (kind === 'type'
+              ? post.data.contentType === value
+              : kind === 'topic'
+                ? post.data.topics.some((topic) => topic === value)
+                : post.data.series === value)
+        )
+        const featuredPosts = featuredPostIds
+          .map((id) => posts.find((post) => post.id === id))
+          .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
+        return paginate(posts, {
+          pageSize: config.content.blogPageSize,
+          params: { kind, value, language },
+          props: {
+            collectionsCount: posts.length,
+            featuredPosts,
+            activeKind: kind,
+            activeValue: value,
+            activeLanguage: language
+          }
+        })
+      })
+    )
+  )
+}) satisfies GetStaticPaths
+---
+
+<BlogListing {...Astro.props} />

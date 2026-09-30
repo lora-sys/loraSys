@@ -1,5 +1,7 @@
-import { glob } from 'astro/loaders'
 import { defineCollection, z } from 'astro:content'
+import { glob } from 'astro/loaders'
+
+import { contentTypeIds, seriesIds, topicIds } from '@/utils/writing'
 
 function removeDupsAndLowerCase(array: string[]) {
   if (!array.length) return array
@@ -19,6 +21,13 @@ const blog = defineCollection({
       title: z.string().max(60),
       description: z.string().max(160),
       publishDate: z.coerce.date(),
+      contentType: z.enum(contentTypeIds),
+      topics: z
+        .array(z.enum(topicIds))
+        .min(1)
+        .max(5)
+        .refine((topics) => new Set(topics).size === topics.length, 'topics must be unique'),
+      series: z.enum(seriesIds).optional(),
       // Optional
       updatedDate: z.coerce.date().optional(),
       heroImage: z

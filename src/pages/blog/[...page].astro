@@ -3,7 +3,7 @@ import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 import { featuredPostIds } from '@/data/featured-posts'
 
-import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
+import { getBlogCollection } from 'astro-pure/server'
 import BlogListing from '@/components/blog/BlogListing.astro'
 import config from '@/site-config'
 
@@ -13,24 +13,22 @@ export const getStaticPaths = (async ({ paginate }) => {
   const collections = (await getBlogCollection()).sort(
     (left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf()
   )
-  const uniqueTags = getUniqueTagsWithCount(collections).map(([tag]) => tag)
   const featuredPosts = featuredPostIds
     .map((id) => collections.find((post) => post.id === id))
     .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
   return paginate(collections, {
     pageSize: config.content.blogPageSize,
-    props: { uniqueTags, collectionsCount: collections.length, featuredPosts }
+    props: { collectionsCount: collections.length, featuredPosts }
   })
 }) satisfies GetStaticPaths
 
 interface Props {
   page: Page<CollectionEntry<'blog'>>
-  uniqueTags: string[]
   collectionsCount: number
   featuredPosts: CollectionEntry<'blog'>[]
 }
 
-const { page, uniqueTags, collectionsCount, featuredPosts } = Astro.props
+const { page, collectionsCount, featuredPosts } = Astro.props
 ---
 
-<BlogListing {page} {uniqueTags} {collectionsCount} {featuredPosts} />
+<BlogListing {page} {collectionsCount} {featuredPosts} />

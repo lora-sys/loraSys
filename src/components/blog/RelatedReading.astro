@@ -1,9 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content'
 
-import FormattedDate from './LocalDate.astro'
+import { writingLabel } from '@/utils/writing'
 
 import LanguageBadge from './LanguageBadge.astro'
+import FormattedDate from './LocalDate.astro'
 
 interface Props {
   post: CollectionEntry<'blog'>
@@ -12,19 +13,23 @@ interface Props {
 
 const { post, posts } = Astro.props
 const isChinese = post.data.language !== 'en-US'
-const currentTags = new Set(post.data.tags)
+const currentTopics = new Set(post.data.topics)
 const related = posts
   .filter((candidate) => candidate.id !== post.id)
   .map((candidate) => {
-    const sharedTags = candidate.data.tags.filter((tag) => currentTags.has(tag))
+    const sharedTopics = candidate.data.topics.filter((tag) => currentTopics.has(tag))
     const sameLanguage = candidate.data.language === post.data.language
     return {
       candidate,
-      sharedTags,
-      score: sharedTags.length * 3 + (sameLanguage ? 4 : 0)
+      sharedTopics,
+      score:
+        sharedTopics.length * 3 +
+        (sameLanguage ? 1 : 0) +
+        (candidate.data.contentType === post.data.contentType ? 2 : 0) +
+        (post.data.series && candidate.data.series === post.data.series ? 6 : 0)
     }
   })
-  .filter(({ sharedTags }) => sharedTags.length > 0)
+  .filter(({ sharedTopics }) => sharedTopics.length > 0)
   .sort(
     (a, b) =>
       b.score - a.score ||
@@ -41,16 +46,25 @@ const related = posts
         <h2 id='related-reading-title'>{isChinese ? '相关阅读' : 'Related reading'}</h2>
       </header>
       <ul>
-        {related.map(({ candidate, sharedTags }) => (
+        {related.map(({ candidate, sharedTopics }) => (
           <li>
             <a href={`/blog/${candidate.id}`}>
               <div class='meta'>
-                <FormattedDate locale={isChinese ? 'zh-CN' : 'en-US'} date={candidate.data.updatedDate ?? candidate.data.publishDate} />
+                <FormattedDate
+                  locale={isChinese ? 'zh-CN' : 'en-US'}
+                  date={candidate.data.updatedDate ?? candidate.data.publishDate}
+                />
                 <LanguageBadge language={candidate.data.language} compact />
               </div>
               <h3 lang={candidate.data.language}>{candidate.data.title}</h3>
               <p lang={candidate.data.language}>{candidate.data.description}</p>
-              <span class='reason'>{isChinese ? '相关主题：' : 'Shared topics:'} {sharedTags.slice(0, 2).join(' / ')}</span>
+              <span class='reason'>
+                {isChinese ? '相关主题：' : 'Shared topics:'}{' '}
+                {sharedTopics
+                  .slice(0, 2)
+                  .map((topic) => writingLabel('topic', topic, isChinese ? 'zh-CN' : 'en-US'))
+                  .join(' / ')}
+              </span>
             </a>
           </li>
         ))}

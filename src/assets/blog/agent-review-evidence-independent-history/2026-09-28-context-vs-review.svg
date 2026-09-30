@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+<rect width="1200" height="700" fill="#f7f0e6"/>
+<text x="60" y="80" font-size="40" font-family="sans-serif" fill="#2d241f">主上下文可以压缩，审查证据独立保存</text>
+<rect x="70" y="150" width="470" height="430" rx="20" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="105" y="205" font-size="28" font-family="sans-serif" fill="#2d241f">父会话上下文</text>
+<text x="105" y="260" font-size="22" font-family="sans-serif" fill="#2d241f">完整历史</text>
+<text x="105" y="310" font-size="22" font-family="sans-serif" fill="#2d241f">上下文压缩</text>
+<text x="105" y="360" font-size="22" font-family="sans-serif" fill="#2d241f">摘要继续任务</text>
+<rect x="660" y="150" width="470" height="430" rx="20" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="695" y="205" font-size="28" font-family="sans-serif" fill="#2d241f">独立审查 transcript</text>
+<text x="695" y="260" font-size="22" font-family="sans-serif" fill="#2d241f">原始限制</text>
+<text x="695" y="310" font-size="22" font-family="sans-serif" fill="#2d241f">工具调用与结果</text>
+<text x="695" y="360" font-size="22" font-family="sans-serif" fill="#2d241f">回滚来源信息</text>
+<text x="60" y="650" font-size="20" font-family="sans-serif" fill="#5d5148">教学图。机制依据 OpenAI Codex PR 48779。</text>
+</svg>

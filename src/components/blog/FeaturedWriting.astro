@@ -4,6 +4,7 @@ import { getProjectsForStory } from '@/data/project-stories'
 import { projects } from '@/data/projects'
 import { displayLabel } from '@/i18n/ui'
 
+import ArticleClassification from './ArticleClassification.astro'
 import FormattedDate from './LocalDate.astro'
 
 interface Props {
@@ -20,11 +21,17 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
 })
 ---
 
-<article class='featured-writing'>
+<article
+  class='featured-writing'
+  data-article
+  data-content-type={post.data.contentType}
+  data-series={post.data.series}
+>
   <div class='featured-meta'>
     <span>{displayLabel(theme, 'zh-CN')}</span>
     <FormattedDate date={postDate} />
   </div>
+  <ArticleClassification data={post.data} compact />
   <h3 lang={post.data.language}>
     <a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a>
   </h3>

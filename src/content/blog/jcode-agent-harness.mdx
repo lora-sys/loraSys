@@ -3,14 +3,14 @@ title: 'jcode：把 Coding Agent 的瓶颈从模型转到 Harness'
 description: '介绍 jcode 如何把多 Agent 的资源、状态同步和验证放到 Harness 层，说明并行 Coding Agent 的瓶颈不只是模型能力。'
 publishDate: '2026-09-09T00:00:00Z'
 heroImage:
-  src: '../../assets/blog/jcode-agent-harness/notion-image-1.svg'
-  alt: '单个 Agent 等待与多个 Agent 并行处理代码、测试和文档的对照主视觉'
+  src: '../../assets/blog/jcode-agent-harness/lora-explainer-v2.webp'
+  alt: '共享服务端在文件变化后通知受影响的 Agent'
 tags: ['AI', 'Agent', 'Coding Agent', 'Harness', 'Multi-Agent', 'jcode']
+contentType: 'projects'
+topics: ['agent-harness', 'multi-agent', 'devtools']
 language: 'zh-CN'
 draft: false
 ---
-
-![单个 Agent 等待与多个 Agent 并行处理代码、测试和文档的对照主视觉](../../assets/blog/jcode-agent-harness/notion-image-1.svg)
 
 ## 30 秒看懂
 很多 Coding Agent 的多任务玩法，本质是多开几个进程。Agent 一多，RAM、上下文、冲突和状态同步马上变成问题。

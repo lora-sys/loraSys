@@ -10,7 +10,8 @@ export const withBasePath = (href: string): string => {
 }
 
 export const isEnglishPath = (pathname: string) => /^\/en(?:\/|$)/.test(pathname)
-export const getLocale = (pathname: string): SiteLocale => (isEnglishPath(pathname) ? 'en-US' : 'zh-CN')
+export const getLocale = (pathname: string): SiteLocale =>
+  isEnglishPath(pathname) ? 'en-US' : 'zh-CN'
 
 const zhToEn: Record<string, string> = {
   '/': '/en',
@@ -26,7 +27,9 @@ const zhToEn: Record<string, string> = {
   '/projects/zhihu-threads': '/en/projects/zhihu-threads'
 }
 
-const enToZh = Object.fromEntries(Object.entries(zhToEn).map(([zh, en]) => [en.replace(/\/$/, ''), zh]))
+const enToZh = Object.fromEntries(
+  Object.entries(zhToEn).map(([zh, en]) => [en.replace(/\/$/, ''), zh])
+)
 
 const normalizePath = (pathname: string) => {
   const clean = pathname.replace(/\/+$|^$/g, '')
@@ -36,20 +39,33 @@ const normalizePath = (pathname: string) => {
 export const localizedPath = (pathname: string, target: SiteLocale): string => {
   const normalized = normalizePath(pathname)
   if (target === 'en-US') {
+    if (/^\/blog\/(type|topic|series)\/[^/]+/.test(normalized))
+      return normalized
+        .replace(/^\/blog/, '/en/writing')
+        .replace(/\/language\/[^/]+(?:\/\d+)?$/, '')
+        .replace(/\/\d+$/, '')
     if (normalized in zhToEn) return zhToEn[normalized]
     if (normalized.startsWith('/blog/language/')) return '/en/writing'
     return normalized.startsWith('/blog/') ? normalized : '/en'
   }
+  if (/^\/en\/writing\/(type|topic|series)\/[^/]+$/.test(normalized))
+    return normalized.replace(/^\/en\/writing/, '/blog')
   if (normalized in enToZh) return enToZh[normalized]
-  if (normalized.startsWith('/en/writing/')) return `/blog/${normalized.slice('/en/writing/'.length)}`
+  if (normalized.startsWith('/en/writing/'))
+    return `/blog/${normalized.slice('/en/writing/'.length)}`
   return '/'
 }
 
 // Article aliases are not translations. Only paired directory pages expose a language switch.
 export const hasAlternate = (pathname: string, target: SiteLocale): boolean => {
   const normalized = normalizePath(pathname)
-  if (target === 'en-US') return normalized in zhToEn || normalized.startsWith('/blog/language/')
-  return normalized in enToZh
+  if (target === 'en-US')
+    return (
+      normalized in zhToEn ||
+      normalized.startsWith('/blog/language/') ||
+      /^\/blog\/(type|topic|series)\/[^/]+/.test(normalized)
+    )
+  return normalized in enToZh || /^\/en\/writing\/(type|topic|series)\/[^/]+$/.test(normalized)
 }
 
 export const primaryNavigation = (locale: SiteLocale) =>
@@ -90,5 +106,17 @@ export const footerNavigation = (locale: SiteLocale) =>
 
 export const localeMeta = (locale: SiteLocale) =>
   locale === 'en-US'
-    ? { htmlLang: 'en-US', ogLocale: 'en_US', switchLabel: '中文', contactLabel: 'Contact', searchLabel: 'Search' }
-    : { htmlLang: 'zh-CN', ogLocale: 'zh_CN', switchLabel: 'EN', contactLabel: '联系', searchLabel: '搜索' }
+    ? {
+        htmlLang: 'en-US',
+        ogLocale: 'en_US',
+        switchLabel: '中文',
+        contactLabel: 'Contact',
+        searchLabel: 'Search'
+      }
+    : {
+        htmlLang: 'zh-CN',
+        ogLocale: 'zh_CN',
+        switchLabel: 'EN',
+        contactLabel: '联系',
+        searchLabel: '搜索'
+      }

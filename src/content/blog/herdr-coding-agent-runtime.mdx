@@ -2,12 +2,15 @@
 title: 'Herdr 不替换 Agent，它把终端做成运行时'
 description: '拆解 Herdr 如何接管现有 Coding Agent 所在终端，提供持久会话、阻塞状态、跨机器控制和 Agent 协作，而不重写底层 Agent。'
 publishDate: '2026-09-12T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/herdr-coding-agent-runtime/lora-explainer-v2.webp'
+  alt: '客户端断开后，独立服务端的终端继续运行并标出等待输入的任务'
 tags: ['AI', 'Agent', 'Coding Agent', 'Runtime', 'Terminal', 'Herdr']
+contentType: 'technical'
+topics: ['agents', 'devtools', 'runtime-infrastructure']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/herdr-coding-agent-runtime/notion-image-1.svg)
 
 ## Herdr 不替换 Agent，它把终端做成运行时
 Claude Code、Codex、Cursor、OpenCode 越来越像一组并行的开发进程，而不是一个聊天窗口。

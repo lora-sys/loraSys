@@ -2,6 +2,23 @@
 
 `src/content/blog` accepts Markdown and MDX. New Notion-synchronized articles should use `.mdx`. Existing `.md` articles can stay unchanged until they need a content update.
 
+## Writing classification
+
+Every published Markdown or MDX article must declare `contentType` and `topics` in frontmatter. `series` is optional. The canonical IDs, Chinese/English labels, and supported source-type mappings live in `src/data/writing-taxonomy.json`. Astro and `bun run content:validate` reject missing or unknown types, unknown/duplicate topics, empty topics, and unknown series. Choose one to five specific topics.
+
+```yaml
+contentType: technical
+topics: [agents, evaluation]
+```
+
+The four content types are `technical` (技术文章), `projects` (项目与实践), `guides` (学习指南), and `news` (新闻与阅读清单). A type describes what the reader will get; a topic describes the subject; a series groups installments. Language remains a separate field. Preserve existing `tags` and their historical URLs, but use normalized topics for new navigation and related-reading selection.
+
+The engineering-news source types 周报, 增量补充, and 历史回填 map to `news` with `series: agent-engineering-reading`. This series includes only engineering reading lists. Other news does not inherit that series, and another recurring publication needs a separately reviewed series ID. The editorial source task 有趣项目介绍 maps to `projects`; 科技内容主包 maps to `technical`. 产品机会雷达 is not an automatic publication source. Source metadata has priority over title/tag guesses. If the source type is absent, unknown, or conflicts with a reviewed article, block that candidate for review rather than defaulting to technical.
+
+For existing articles, preserve the reviewed classification unless the source changes its purpose. A superseded source record must not overwrite a current dedicated article's classification. The one-time reviewed mapping is `content-sync/writing-classification.json`. It records only public-safe categorical metadata, never private page IDs or URLs. The stable source identity, existing slug, publication date, article body, and site-side reading enhancements remain unchanged during classification updates.
+
+Run `bun scripts/migrate-writing-classification.mjs` to verify the reviewed migration. `--apply` adds classification only to wholly unclassified entries and refuses to overwrite conflicting metadata. It does not fetch Notion or publish anything. Run `bun scripts/test-writing-classification.mjs`, `bun run content:validate`, `bun run check`, and the normal production build after changes. Existing CI runs the same validation through `check` and `build`; no new workflow is needed.
+
 ## Security boundary
 
 Synchronized MDX is declarative content, not executable application code.
@@ -140,6 +157,7 @@ Do not use either component for arbitrary remote embeds. Interactive HTML must b
 - Headings, paragraphs, lists, quotes, links, GFM tables, code blocks, equations, images, and `details` should stay native Markdown or HTML where possible.
 - Remove Notion-only placeholders such as `<table_of_contents/>`; the site already generates its own table of contents.
 - Before declaring a Notion page fully synchronized, build a media inventory for image, file, video, audio, embed, and HTML-attachment blocks.
+- Preserve reviewed site-side hero overrides in `content-sync/blog-visuals.json`. They are original editorial explanatory illustrations, not original source attachments or measured evidence. Do not restore retired duplicate lead-body covers during a prose sync. Keep research figures, numeric diagrams, official demos, and source media independent. Content validation rejects changes that silently discard a reviewed hero override. Continue accounting for the original source block in the media inventory, mapped to its approved editorial replacement; do not claim the replacement is the original attachment. A genuinely updated source visual may supersede the override after content and image QA, with the article and visual manifest updated together. A missing source cover is never a reason to discard the reviewed site cover.
 - Copy source images into `src/assets/blog/<slug>/` and reference the local asset exactly as the current sync flow does.
 - Copy videos into `public/media/blog/<slug>/` and render them with `MediaVideo`. Copy self-contained interactive HTML into `public/artifacts/blog/<slug>/` and render it with `InteractiveHtml`.
 - If a historical Notion attachment is exposed only as an internal `file://` reference and its bytes cannot be retrieved, record that limitation. A source-backed site reconstruction may restore the reader experience, but it must be labeled as a reconstruction and never represented as the original file.

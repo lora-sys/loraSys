@@ -1,0 +1,121 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+import { withBasePath } from '@/i18n/site'
+
+import { writingGroups, writingLabel, writingPath, type WritingKind } from '@/utils/writing'
+
+interface Props {
+  locale?: SiteLocale
+  activeKind?: WritingKind
+  activeValue?: string
+  activeLanguage?: string
+}
+const { locale = 'zh-CN', activeKind, activeValue, activeLanguage } = Astro.props
+const en = locale === 'en-US'
+const suffix = !en && activeLanguage ? `/language/${activeLanguage}` : ''
+const home = en ? '/en/writing' : `/blog${suffix}`
+const secondaryActive = activeKind === 'topic' || activeKind === 'series'
+---
+
+<div class='writing-taxonomy'>
+  <nav class='type-filter' aria-label={en ? 'Article types' : '按内容类型浏览'}>
+    <a href={withBasePath(home)} aria-current={!activeKind ? 'page' : undefined}
+      >{en ? 'All articles' : '全部文章'}</a
+    >
+    {
+      Object.keys(writingGroups.type).map((id) => (
+        <a
+          href={withBasePath(writingPath('type', id, locale) + suffix)}
+          aria-current={activeKind === 'type' && activeValue === id ? 'page' : undefined}
+        >
+          {writingLabel('type', id, locale)}
+        </a>
+      ))
+    }
+  </nav>
+  <details open={secondaryActive}>
+    <summary
+      >{
+        secondaryActive
+          ? writingLabel(activeKind!, activeValue!, locale)
+          : en
+            ? 'Topics & series'
+            : '主题与系列'
+      }</summary
+    >
+    <div class='secondary-groups'>
+      {
+        (['topic', 'series'] as const).map((kind) => (
+          <nav aria-label={kind === 'topic' ? (en ? 'Topics' : '主题') : en ? 'Series' : '系列'}>
+            <span>{kind === 'topic' ? (en ? 'Topics' : '主题') : en ? 'Series' : '系列'}</span>
+            {Object.keys(writingGroups[kind]).map((id) => (
+              <a
+                href={withBasePath(writingPath(kind, id, locale) + suffix)}
+                aria-current={activeKind === kind && activeValue === id ? 'page' : undefined}
+              >
+                {writingLabel(kind, id, locale)}
+              </a>
+            ))}
+          </nav>
+        ))
+      }
+    </div>
+  </details>
+</div>
+<style>
+  .writing-taxonomy {
+    margin-block: 1rem;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  a,
+  summary {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.5rem 0.85rem;
+    font-size: 0.76rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  a {
+    color: hsl(var(--muted-foreground));
+  }
+  a:hover,
+  a[aria-current] {
+    background: hsl(var(--foreground));
+    border-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  details {
+    margin-top: 0.65rem;
+  }
+  summary {
+    list-style: revert;
+    border-color: transparent;
+    border-radius: 0.35rem;
+    padding-inline: 0;
+    color: hsl(var(--muted-foreground));
+  }
+  .secondary-groups {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 0.5rem;
+  }
+  nav > span {
+    width: 100%;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+  }
+</style>

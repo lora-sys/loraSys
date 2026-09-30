@@ -2,12 +2,15 @@
 title: 'AWS 把 Agent 决策拆开了：模型提案，代码验证'
 description: '拆解 AWS 如何用确定性工作流分开 Agent 提案、规则验证、人工审批和真实执行，让模型负责候选方案，代码负责边界与幂等。'
 publishDate: '2026-09-14T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/aws-agent-proposal-validation/lora-explainer-v2.webp'
+  alt: 'Agent 提案先经过确定性校验，再按风险进入执行或人工审批'
 tags: ['AI', 'Agent', 'AWS', 'Harness', 'Multi-Agent', 'Evaluation']
+contentType: 'technical'
+topics: ['agent-harness', 'multi-agent', 'evaluation']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/aws-agent-proposal-validation/notion-image-1.svg)
 
 ## AWS 把 Agent 决策拆开了，模型负责提案，代码负责验证
 很多多 Agent 架构图有一个共同问题。图里有很多 Agent，但每个 Agent 都在做判断。

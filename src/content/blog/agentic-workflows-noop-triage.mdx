@@ -2,12 +2,15 @@
 title: '一个靠谱的 Agent，今天可能不改代码'
 description: '从 GitHub Agentic Workflows 的 jsweep 看 Agent 如何先判断有没有值得修改的目标，把 noop 作为正式结果，而不是为了自动化强行制造改动。'
 publishDate: '2026-09-13T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/agentic-workflows-noop-triage/lora-explainer-v2.webp'
+  alt: '先审查候选文件，有必要才修改，不需要修改时保留 noop 结果'
 tags: ['AI', 'Agent', 'GitHub', 'Harness', 'Automation', 'Noop']
+contentType: 'technical'
+topics: ['agent-harness', 'devtools']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/agentic-workflows-noop-triage/notion-image-1.svg)
 
 ## 一个靠谱的 Agent，今天可能不改代码
 GitHub Agentic Workflows 9 月 11 日公开了一个很小的自动化 Agent，名字叫 jsweep。
