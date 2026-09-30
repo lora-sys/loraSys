@@ -178,14 +178,26 @@ try {
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Writing archive must not cause horizontal overflow')
         await capture('writing-en-archive')
         await filter.selectOption('en-US')
-        await page.locator('.type-filter a').filter({ hasText: 'Projects & practice' }).click()
-        await page.locator('#language-filter').waitFor({ state: 'visible' })
+        const projectsLink = page.locator('.type-filter a').filter({ hasText: 'Projects & practice' })
+        assert.equal(new URL(await projectsLink.getAttribute('href'), page.url()).searchParams.get('language'), 'en-US', 'Type links retain the selected language')
+        await projectsLink.click()
+        await page.waitForURL((url) => url.pathname.endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
+        const waitForEnglish = () => page.waitForFunction(() => {
+          const filter = document.querySelector('#language-filter')
+          return filter instanceof HTMLSelectElement && !filter.disabled && filter.value === 'en-US'
+            && [...document.querySelectorAll('[data-article][data-language="zh-CN"]')].every((article) => article instanceof HTMLElement && article.hidden)
+        })
+        // A visible server-rendered select can precede the deferred language script.
+        // Await the selected state, not an arbitrary delay or a weaker assertion.
+        await waitForEnglish()
         assert.equal(await page.locator('#language-filter').inputValue(), 'en-US', 'Changing type keeps the selected language')
         assert.equal(await page.locator('[data-article][data-language="zh-CN"]:visible').count(), 0)
         await page.goBack()
-        assert.equal(await page.locator('#language-filter').inputValue(), 'en-US')
+        assert.equal(new URL(page.url()).searchParams.get('language'), 'en-US')
+        await waitForEnglish()
         await page.goForward()
-        assert.equal(await page.locator('#language-filter').inputValue(), 'en-US')
+        assert.equal(new URL(page.url()).searchParams.get('language'), 'en-US')
+        await waitForEnglish()
 
       })
 

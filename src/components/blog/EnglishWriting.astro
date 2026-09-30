@@ -52,7 +52,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     <WritingTaxonomy locale='en-US' {activeKind} {activeValue} />
     <div class='filter'>
       <label for='language-filter'>Filter articles by language</label>
-      <select id='language-filter' name='language' data-writing-language>
+      <select id='language-filter' name='language' data-writing-language disabled>
         <option value='all'>All articles</option>
         <option value='en-US'>English</option>
         <option value='zh-CN'>Chinese</option>
@@ -199,6 +199,8 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   })
   window.addEventListener('popstate', applyLanguage)
   applyLanguage()
+  // Do not accept a change before the URL state and change listener are ready.
+  if (languageFilter) languageFilter.disabled = false
 </script>
 
 <style>
