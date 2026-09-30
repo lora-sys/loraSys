@@ -181,7 +181,7 @@ try {
         const projectsLink = page.locator('.type-filter a').filter({ hasText: 'Projects & practice' })
         assert.equal(new URL(await projectsLink.getAttribute('href'), page.url()).searchParams.get('language'), 'en-US', 'Type links retain the selected language')
         await projectsLink.click()
-        await page.waitForURL((url) => url.pathname.endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
+        await page.waitForURL((url) => url.pathname.replace(/\/$/, '').endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
         const waitForEnglish = () => page.waitForFunction(() => {
           const filter = document.querySelector('#language-filter')
           return filter instanceof HTMLSelectElement && !filter.disabled && filter.value === 'en-US'
