@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="900" viewBox="0 0 1536 900">
+<style>text{font-family:"Noto Sans SC","Microsoft YaHei",Arial,sans-serif;fill:#302820}.h1{font-size:43px;font-weight:700}.h2{font-size:27px;font-weight:700}.b{font-size:21px}.s{font-size:17px}.tag{font-size:18px;font-weight:700}</style>
+<rect width="1536" height="900" fill="#f6efe3"/>
+<text x="70" y="78" class="h1">一条指令应该放在哪里</text>
+<text x="70" y="120" class="b">先看它什么时候需要进入上下文，再决定放进 CLAUDE.md、Rule、Skill 还是 Agent。</text>
+<rect x="55" y="175" width="330" height="560" rx="25" fill="#fffaf1" stroke="#6f5d50" stroke-width="3"/>
+<rect x="415" y="175" width="330" height="560" rx="25" fill="#fffaf1" stroke="#9c7d5e" stroke-width="3"/>
+<rect x="775" y="175" width="330" height="560" rx="25" fill="#fffaf1" stroke="#c08a4d" stroke-width="3"/>
+<rect x="1135" y="175" width="345" height="560" rx="25" fill="#fffaf1" stroke="#7b684f" stroke-width="3"/>
+<text x="90" y="230" class="h2">CLAUDE.md</text><text x="450" y="230" class="h2">Rule</text><text x="810" y="230" class="h2">Skill</text><text x="1170" y="230" class="h2">Agent</text>
+<rect x="90" y="265" width="260" height="58" rx="14" fill="#e7d7c5"/><text x="120" y="302" class="tag">每次会话都需要</text>
+<rect x="450" y="265" width="260" height="58" rx="14" fill="#eadfce"/><text x="480" y="302" class="tag">全局或按路径加载</text>
+<rect x="810" y="265" width="260" height="58" rx="14" fill="#f2dfbf"/><text x="840" y="302" class="tag">按需加载</text>
+<rect x="1170" y="265" width="275" height="58" rx="14" fill="#e6d9c9"/><text x="1200" y="302" class="tag">独立上下文执行</text>
+<text x="90" y="375" class="b">适合</text><text x="90" y="415" class="s">构建命令</text><text x="90" y="450" class="s">核心代码约定</text><text x="90" y="485" class="s">永远不能违反的规则</text>
+<text x="450" y="375" class="b">适合</text><text x="450" y="415" class="s">语言或目录规则</text><text x="450" y="450" class="s">只对部分路径生效</text><text x="450" y="485" class="s">减少无关上下文</text>
+<text x="810" y="375" class="b">适合</text><text x="810" y="415" class="s">部署流程</text><text x="810" y="450" class="s">API 参考资料</text><text x="810" y="485" class="s">偶尔使用的工作流</text>
+<text x="1170" y="375" class="b">适合</text><text x="1170" y="415" class="s">代码审查</text><text x="1170" y="450" class="s">独立研究任务</text><text x="1170" y="485" class="s">需要隔离上下文的工作</text>
+<line x1="90" y1="535" x2="350" y2="535" stroke="#c5b09a" stroke-width="2"/><line x1="450" y1="535" x2="710" y2="535" stroke="#c5b09a" stroke-width="2"/><line x1="810" y1="535" x2="1070" y2="535" stroke="#c5b09a" stroke-width="2"/><line x1="1170" y1="535" x2="1440" y2="535" stroke="#c5b09a" stroke-width="2"/>
+<text x="90" y="580" class="b">不适合</text><text x="90" y="620" class="s">长篇参考资料</text><text x="90" y="655" class="s">只在少数任务使用的步骤</text>
+<text x="450" y="580" class="b">不适合</text><text x="450" y="620" class="s">所有项目都不需要的细节</text><text x="450" y="655" class="s">与路径无关的工作流</text>
+<text x="810" y="580" class="b">不适合</text><text x="810" y="620" class="s">必须始终生效的安全规则</text><text x="810" y="655" class="s">不能依赖模型是否想起调用</text>
+<text x="1170" y="580" class="b">不适合</text><text x="1170" y="620" class="s">主 Agent 必须持续掌握的状态</text><text x="1170" y="655" class="s">紧密串行的简单任务</text>
+<rect x="55" y="785" width="1425" height="74" rx="18" fill="#44382f"/>
+<text x="180" y="832" font-family="Noto Sans SC,Arial" font-size="25" fill="#fffaf1">Claude Code 官方建议：CLAUDE.md 保持精简，只把每次会话都需要的内容放进去。</text>
+</svg>

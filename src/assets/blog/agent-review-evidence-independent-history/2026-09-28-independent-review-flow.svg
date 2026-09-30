@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+<rect width="1200" height="700" fill="#f7f0e6"/>
+<text x="55" y="75" font-size="38" font-family="sans-serif" font-weight="700" fill="#2d241f">独立审查 transcript 怎样穿过 compaction、resume 与 rollback</text>
+<g font-family="sans-serif" fill="#2d241f">
+<rect x="45" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="70" y="205" font-size="26" font-weight="700">1 原始证据</text>
+<text x="70" y="260" font-size="20">用户限制</text><text x="70" y="300" font-size="20">工具调用</text><text x="70" y="340" font-size="20">工具结果</text><text x="70" y="380" font-size="20">助手动作</text>
+<rect x="330" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="355" y="205" font-size="26" font-weight="700">2 compaction</text>
+<rect x="360" y="250" width="175" height="90" rx="12" fill="#f3d9a6"/><text x="380" y="290" font-size="20">父会话变摘要</text>
+<rect x="360" y="380" width="175" height="90" rx="12" fill="#e0ead8"/><text x="380" y="420" font-size="20">审查记录不变</text>
+<rect x="615" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="640" y="205" font-size="26" font-weight="700">3 resume</text>
+<text x="640" y="270" font-size="20">读取 review</text><text x="640" y="305" font-size="20">checkpoint</text><text x="640" y="360" font-size="20">继续增量记录</text>
+<rect x="900" y="150" width="255" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="925" y="205" font-size="26" font-weight="700">4 rollback</text>
+<rect x="930" y="260" width="190" height="55" rx="10" fill="#e0ead8"/><text x="950" y="295" font-size="19">证据 A 保留</text>
+<rect x="930" y="335" width="190" height="55" rx="10" fill="#e0ead8"/><text x="950" y="370" font-size="19">证据 B 保留</text>
+<rect x="930" y="410" width="190" height="55" rx="10" fill="#f4d9cf"/><text x="950" y="445" font-size="19">证据 C 移除</text>
+<text x="60" y="625" font-size="22" font-weight="700">父会话负责继续生成。审查 transcript 负责证据连续性。</text>
+<text x="60" y="665" font-size="18" fill="#5d5148">教学图。机制依据 OpenAI Codex PR 48779。</text>
+</g></svg>

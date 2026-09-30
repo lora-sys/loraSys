@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+<rect width="1536" height="1024" fill="#F5EEDF"/>
+<text x="768" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#2B211B">网络策略加载失败时，为什么要 fail closed</text>
+<text x="768" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">无法确认允许范围时，不应该继续沿用旧策略或默认放行</text>
+<rect x="90" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#B67A2A" stroke-width="4"/>
+<text x="305" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#7A4E17">1. 加载策略</text>
+<rect x="150" y="320" width="310" height="210" rx="20" fill="#EFE3D3"/>
+<text x="305" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#2B211B">application.network</text>
+<text x="305" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#2B211B">api.example.com</text>
+<text x="305" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#2B211B">github.com</text>
+<text x="305" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#5A4638">启动或显式 reload 时读取</text>
+<rect x="555" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#8C6A51" stroke-width="4"/>
+<text x="770" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#5A4638">2. 两种结果</text>
+<rect x="620" y="325" width="300" height="150" rx="20" fill="#E4EAD9"/>
+<text x="770" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#4F6A3A">加载成功</text>
+<text x="770" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B">按允许列表处理流量</text>
+<rect x="620" y="535" width="300" height="185" rx="20" fill="#F7D9D1"/>
+<text x="770" y="590" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#A9503E">加载失败</text>
+<text x="770" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B">阻止新的网络流量</text>
+<text x="770" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B">不把未知状态当成允许</text>
+<rect x="1020" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#A9503E" stroke-width="4"/>
+<text x="1235" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#8C3F31">3. 策略更新</text>
+<text x="1235" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">新规则撤销某个域名</text>
+<path d="M1120 440 H1350" stroke="#6B5140" stroke-width="10" marker-end="url(#a)"/>
+<text x="1235" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">正在运行的请求</text>
+<rect x="1110" y="520" width="250" height="115" rx="18" fill="#F7D9D1"/>
+<text x="1235" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#A9503E">立即取消</text>
+<text x="1235" y="610" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#2B211B">不再允许的连接</text>
+<text x="1235" y="730" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#5A4638">错误策略也不能扩大权限</text>
+<rect x="370" y="910" width="796" height="74" rx="24" fill="#4A3427"/>
+<text x="768" y="958" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#FFF8EE">默认拒绝，比默认放行更容易验证</text>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6B5140"/></marker></defs>
+</svg>

@@ -852,6 +852,190 @@
       "slug": "openai-agents-api-browser-authentication",
       "status": "duplicate",
       "note": "Short evidence-card-only source for the same OpenAI browser-authentication topic. The complete source page is the primary mapping; do not create a second article."
+    },
+    {
+      "source_page_id_sha256": "649fa24065c6d5cf4dbe6b147d1c6ffe06e5f99c416c52cecb17ab34a131e737",
+      "slug": "agent-instant-steering-preemption-recoverable-tools",
+      "content_fingerprint": "git-blob:07f903478aefd188141670c519446b091208323c",
+      "source_last_edited_at": "2026-09-29T17:10:16.448Z",
+      "status": "synced",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-29-steering-overview.svg",
+          "source_block_id": "asset:37d32109-e4d1-4d9f-838b-77f15991a286",
+          "position": 1,
+          "site_path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-steering-overview.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-29-steering-state-v2.svg",
+          "source_block_id": "asset:98c639e1-93cb-49a9-815b-389852d8f7da",
+          "position": 2,
+          "site_path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-steering-state-v2.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-29-subscribe-before-check.svg",
+          "source_block_id": "asset:c4d8049e-5b61-4670-8810-f4edefda0dd3",
+          "position": 3,
+          "site_path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-subscribe-before-check.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-29-steer-cancel-collect.svg",
+          "source_block_id": "asset:ca6c6ddc-32e4-4125-9d6d-426b051b4f05",
+          "position": 4,
+          "site_path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-steer-cancel-collect.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-29-lora-pi-kit-steering.svg",
+          "source_block_id": "asset:251b9acf-5a95-4351-8bd8-0420e37c0672",
+          "position": 5,
+          "site_path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-lora-pi-kit-steering.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        }
+      ],
+      "note": "Complete recursive-discovery article. All five source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
+    },
+    {
+      "source_page_id_sha256": "e123cb47329db67a8b8fca7ad2296a8f2c55f06733be3470d0922bf7073df720",
+      "slug": "agent-review-evidence-independent-history",
+      "content_fingerprint": "git-blob:3a2a25b820dd90e57deaccfeff11ea5298e1d483",
+      "source_last_edited_at": "2026-09-28T15:56:23.826Z",
+      "status": "synced",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-28-context-vs-review.svg",
+          "source_block_id": "asset:f33d1234-7c64-4095-9187-a46715be212e",
+          "position": 1,
+          "site_path": "src/assets/blog/agent-review-evidence-independent-history/2026-09-28-context-vs-review.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-28-independent-review-flow.svg",
+          "source_block_id": "asset:66ffdb4c-ed25-41c9-8c03-ab7c6f3b0f79",
+          "position": 2,
+          "site_path": "src/assets/blog/agent-review-evidence-independent-history/2026-09-28-independent-review-flow.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-28-rollback-order.svg",
+          "source_block_id": "asset:849ec589-5d78-4ca5-9b16-0d35181bee2c",
+          "position": 3,
+          "site_path": "src/assets/blog/agent-review-evidence-independent-history/2026-09-28-rollback-order.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        }
+      ],
+      "note": "Complete recursive-discovery article. All three source SVG attachments were recovered and localized in order. Native cover is null; source visuals are teaching and evidence diagrams, so no heroImage was assigned."
+    },
+    {
+      "source_page_id_sha256": "9a1710d7723a7ffc611a12f37fe767a7f89adc314c85b01cc5e500db0175d64d",
+      "slug": "coding-agent-prompt-audit-migration-eval",
+      "content_fingerprint": "git-blob:ce822ba82f620d73a5e3c5e8875bcf252dae1c6c",
+      "source_last_edited_at": "2026-09-27T16:01:01.159Z",
+      "status": "synced",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-27-prompt-audit-1.svg",
+          "source_block_id": "asset:cbf1427a-a420-4712-a01d-71964fcd3889",
+          "position": 1,
+          "site_path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-1.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-27-prompt-audit-2.svg",
+          "source_block_id": "asset:f3f357bf-b1ac-4113-a1c1-d6194e694652",
+          "position": 2,
+          "site_path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-2.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-27-prompt-audit-3.svg",
+          "source_block_id": "asset:1c8ca158-fe99-45be-a8d6-ea4e98fc69f4",
+          "position": 3,
+          "site_path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-3.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-27-prompt-audit-4.svg",
+          "source_block_id": "asset:8785e4bf-f9b7-4742-b793-526ccc1c2604",
+          "position": 4,
+          "site_path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-4.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        }
+      ],
+      "note": "Complete recursive-discovery article. All four source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
+    },
+    {
+      "source_page_id_sha256": "73757d394cc35e671c2fbb29c4ada6ef9cc84d33127cea496f60ba6fd2ca18b6",
+      "slug": "agent-network-policy-revocation",
+      "content_fingerprint": "git-blob:42e05bf9323256f83c7433b18aa5fa6f8ee266a5",
+      "source_last_edited_at": "2026-09-26T15:55:31.937Z",
+      "status": "synced",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-26-network-policy-redirect.svg",
+          "source_block_id": "asset:3950e450-8c19-42f6-a247-e758295f79b1",
+          "position": 1,
+          "site_path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-redirect.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-26-network-policy-revocation.svg",
+          "source_block_id": "asset:f755ebf8-689d-490c-8f48-07b1d80ed72f",
+          "position": 2,
+          "site_path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-revocation.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-26-network-policy-fail-closed.svg",
+          "source_block_id": "asset:ee70ca11-28a7-4848-a0c5-24ef1f6e8957",
+          "position": 3,
+          "site_path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-fail-closed.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-26-lora-pi-kit-network-boundary.svg",
+          "source_block_id": "asset:54a45b9a-80f4-48a1-ba0c-e278ab6a6546",
+          "position": 4,
+          "site_path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-lora-pi-kit-network-boundary.svg",
+          "status": "synced",
+          "note": "Original SVG bytes recovered from the source attachment and stored locally."
+        }
+      ],
+      "note": "Complete recursive-discovery article. All four source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
     }
   ]
 }

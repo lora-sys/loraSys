@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="900" viewBox="0 0 1536 900">
+<style>text{font-family:"Noto Sans SC","Microsoft YaHei",Arial,sans-serif;fill:#302820}.h1{font-size:43px;font-weight:700}.h2{font-size:26px;font-weight:700}.b{font-size:20px}.s{font-size:17px}.n{font-size:30px;font-weight:700;fill:#fff}</style>
+<rect width="1536" height="900" fill="#f5ede1"/>
+<text x="70" y="78" class="h1">Prompt audit 只能找到可疑规则，不能替代 Eval</text>
+<text x="70" y="120" class="b">正确流程是先做静态审计，再用固定任务比较修改前后的真实行为。</text>
+<g>
+<rect x="70" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#8d7460" stroke-width="3"/>
+<circle cx="125" cy="270" r="28" fill="#7a6555"/><text x="116" y="280" class="n">1</text>
+<text x="95" y="335" class="h2">盘点指令</text>
+<text x="95" y="385" class="s">CLAUDE.md</text><text x="95" y="420" class="s">Skills</text><text x="95" y="455" class="s">Agents</text><text x="95" y="490" class="s">Commands</text>
+<text x="95" y="545" class="s">记录来源与适用模型</text>
+<rect x="360" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#9f805f" stroke-width="3"/>
+<circle cx="415" cy="270" r="28" fill="#8c6c50"/><text x="406" y="280" class="n">2</text>
+<text x="385" y="335" class="h2">分类</text>
+<text x="385" y="385" class="s">产品硬约束</text><text x="385" y="420" class="s">安全边界</text><text x="385" y="455" class="s">项目事实</text><text x="385" y="490" class="s">旧模型补丁</text>
+<text x="385" y="545" class="s">只改有证据的问题</text>
+<rect x="650" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#c18b4f" stroke-width="3"/>
+<circle cx="705" cy="270" r="28" fill="#b0783d"/><text x="696" y="280" class="n">3</text>
+<text x="675" y="335" class="h2">生成 Diff</text>
+<text x="675" y="385" class="s">删除重复强化</text><text x="675" y="420" class="s">缩小触发范围</text><text x="675" y="455" class="s">保留测试要求</text><text x="675" y="490" class="s">保留权限边界</text>
+<text x="675" y="545" class="s">不要一次重写全部</text>
+<rect x="940" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#a77b53" stroke-width="3"/>
+<circle cx="995" cy="270" r="28" fill="#8e6748"/><text x="986" y="280" class="n">4</text>
+<text x="965" y="335" class="h2">A/B Eval</text>
+<text x="965" y="385" class="s">同一批任务</text><text x="965" y="420" class="s">同一模型配置</text><text x="965" y="455" class="s">记录测试通过</text><text x="965" y="490" class="s">记录工具与 token</text>
+<text x="965" y="545" class="s">看行为，不看感觉</text>
+<rect x="1230" y="210" width="235" height="380" rx="26" fill="#fff9ef" stroke="#7e6c58" stroke-width="3"/>
+<circle cx="1285" cy="270" r="28" fill="#665547"/><text x="1276" y="280" class="n">5</text>
+<text x="1255" y="335" class="h2">接受或回滚</text>
+<text x="1255" y="385" class="s">质量不能下降</text><text x="1255" y="420" class="s">测试必须执行</text><text x="1255" y="455" class="s">成本变化可解释</text><text x="1255" y="490" class="s">保存版本与结果</text>
+<text x="1255" y="545" class="s">形成迁移记录</text>
+</g>
+<g stroke="#c18b4f" stroke-width="8" fill="none"><path d="M320 400 L360 400"/><path d="M610 400 L650 400"/><path d="M900 400 L940 400"/><path d="M1190 400 L1230 400"/></g>
+<rect x="145" y="665" width="1245" height="112" rx="22" fill="#eadbc8"/>
+<text x="190" y="710" class="h2">两类证据要分开</text>
+<text x="190" y="752" class="b">静态审计回答“这条规则可能过时吗”。Eval 回答“改完以后任务结果真的更好吗”。</text>
+<rect x="55" y="810" width="1425" height="58" rx="16" fill="#44382f"/>
+<text x="285" y="848" font-family="Noto Sans SC,Arial" font-size="23" fill="#fff9ef">没有对照实验，prompt audit 只是修改建议，不是效果证明。</text>
+</svg>

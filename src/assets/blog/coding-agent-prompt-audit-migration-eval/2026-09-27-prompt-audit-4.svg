@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="900" viewBox="0 0 1536 900">
+<style>text{font-family:"Noto Sans SC","Microsoft YaHei",Arial,sans-serif;fill:#302820}.h1{font-size:43px;font-weight:700}.h2{font-size:26px;font-weight:700}.b{font-size:20px}.s{font-size:17px}.mono{font-family:ui-monospace,monospace;font-size:17px}</style>
+<rect width="1536" height="900" fill="#f6eee2"/>
+<text x="70" y="78" class="h1">Lora PI Kit 可以把 Prompt compatibility 放进现有 doctor</text>
+<text x="70" y="120" class="b">这张图区分当前仓库已有内容与本文建议，避免把方案写成已经实现。</text>
+<rect x="55" y="170" width="650" height="590" rx="28" fill="#fff9ef" stroke="#7e6958" stroke-width="3"/>
+<rect x="830" y="170" width="650" height="590" rx="28" fill="#fff9ef" stroke="#c48a48" stroke-width="3"/>
+<text x="90" y="225" class="h2">当前仓库已经有</text>
+<text x="865" y="225" class="h2">建议增加</text>
+<rect x="90" y="270" width="550" height="110" rx="18" fill="#e7d8c7"/>
+<text x="120" y="310" class="mono">prompts/base.md</text><text x="120" y="344" class="s">长期安全、执行与研究原则</text>
+<rect x="90" y="400" width="550" height="110" rx="18" fill="#eadfce"/>
+<text x="120" y="440" class="mono">prompts/coding.md / prompts/worker.md</text><text x="120" y="474" class="s">编码验收要求与 Worker 合同</text>
+<rect x="90" y="530" width="550" height="110" rx="18" fill="#f1dfc3"/>
+<text x="120" y="570" class="mono">skills/*/SKILL.md</text><text x="120" y="604" class="s">按任务使用的参考资料与工作流</text>
+<rect x="90" y="660" width="550" height="70" rx="18" fill="#ded1c2"/>
+<text x="120" y="704" class="mono">scripts/doctor.ts</text>
+<path d="M705 465 L830 465" stroke="#bb8246" stroke-width="10"/><path d="M808 442 L840 465 L808 488" fill="none" stroke="#bb8246" stroke-width="10"/>
+<rect x="865" y="270" width="550" height="125" rx="18" fill="#f0dcb8"/>
+<text x="895" y="310" class="h2">Prompt Compatibility 检查</text><text x="895" y="350" class="s">扫描 promptTemplate 与启用的 Skills</text><text x="895" y="380" class="s">只报告可疑模式，不自动改文件</text>
+<rect x="865" y="420" width="550" height="125" rx="18" fill="#ead8c2"/>
+<text x="895" y="460" class="h2">兼容记录</text><text x="895" y="500" class="s">文件路径、模型族、最后测试日期、Eval 集</text><text x="895" y="530" class="s">建议独立保存，不塞进提示正文</text>
+<rect x="865" y="570" width="550" height="125" rx="18" fill="#e4d5c7"/>
+<text x="895" y="610" class="h2">迁移 Eval</text><text x="895" y="650" class="s">相同任务比较修改前后结果</text><text x="895" y="680" class="s">测试通过、工具调用、token、耗时</text>
+<text x="220" y="805" class="b">保留现有分层。新增检查层。不要把某个模型的临时补丁写成所有 Profile 的永久规则。</text>
+<rect x="55" y="835" width="1425" height="42" rx="14" fill="#44382f"/>
+<text x="355" y="864" font-family="Noto Sans SC,Arial" font-size="20" fill="#fff9ef">本文建议，没有修改仓库。当前 doctor 仍主要检查运行环境、锁文件、Skill 完整性、Profile 与 MCP registry。</text>
+</svg>
