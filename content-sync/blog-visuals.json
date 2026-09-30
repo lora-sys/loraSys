@@ -1,0 +1,644 @@
+{
+  "version": 1,
+  "reviewed_at": "2026-09-30",
+  "scope": "Article editorial visuals and source-preserving diagram contrast repairs",
+  "sync_policy": "Preserve these site-side hero overrides when updating article prose. Keep research figures, numerical charts, official demos and source media independent from editorial illustrations. Retired files are retained for provenance.",
+  "entries": [
+    {
+      "slug": "agent-demo-harness-control-layer",
+      "replacement": "src/assets/blog/agent-demo-harness-control-layer/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "任务通过权限与预算检查后，进入工具执行和证据验收",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/agent-demo-harness-control-layer/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 244830,
+        "sha256": "a0d02f7ba79fdd28ce2c1b9c8a5814239481c777f7dfdbbbe67d941044666289"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "agent-eval-monitor-coverage",
+      "replacement": "src/assets/blog/agent-eval-monitor-coverage/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "独立复核在首次扫描的档案中找回遗漏记录",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/agent-eval-monitor-coverage/notion-image-1.svg",
+          "retained": true
+        },
+        {
+          "path": "src/assets/blog/agent-eval-monitor-coverage/notion-image-2.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 256470,
+        "sha256": "1a865fcf1368950a919e9501f62027d6b31d0f8d885453f6debaf66b10b51144"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "agentic-workflows-noop-triage",
+      "replacement": "src/assets/blog/agentic-workflows-noop-triage/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "先审查候选文件，有必要才修改，不需要修改时保留 noop 结果",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/agentic-workflows-noop-triage/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 177394,
+        "sha256": "89177af1dc5a0902d08a55e7abe6392596f213d2f1372570b84dfd496b458c75"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "aws-agent-proposal-validation",
+      "replacement": "src/assets/blog/aws-agent-proposal-validation/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Agent 提案先经过确定性校验，再按风险进入执行或人工审批",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/aws-agent-proposal-validation/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 257436,
+        "sha256": "8266d3941c8f96844336d00e619146eedc7460330e85de27d7e4ae9835484649"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "coding-agent-supply-chain-security",
+      "replacement": "src/assets/blog/coding-agent-supply-chain-security/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Agent 执行前先检查 Skill、MCP 和依赖组件的来源与权限",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/coding-agent-supply-chain-security/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 218900,
+        "sha256": "3e50017782f262724a80d52f4daa5f28e56ea92f1d082a98e0d0ed4c69a29dd4"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "foreman-coding-agent-supervisor",
+      "replacement": "src/assets/blog/foreman-coding-agent-supervisor/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Worker 执行任务，Foreman 读取运行证据，再由 Policy 决定下一步",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/foreman-coding-agent-supervisor/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 230194,
+        "sha256": "51b244bce193bb763485a9aa161b80580c2dfee40ff60bbc7fdb48299bcbee1b"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "github-agentic-workflows",
+      "replacement": "src/assets/blog/github-agentic-workflows/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Markdown 工作流进入只读沙箱，写回操作经过受控输出",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/github-agentic-workflows/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 248600,
+        "sha256": "9ec7b88e6c3ece65014378d24dcdc1f064dac074183e4b10f07d69d3974eb93e"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "google-agent-plugins-skills-mcp",
+      "replacement": "src/assets/blog/google-agent-plugins-skills-mcp/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Skill 指令、MCP 连接与配置装入同一个 Plugin 安装包",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/google-agent-plugins-skills-mcp/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 241916,
+        "sha256": "7dcdc8017e24685895511d55e03a8abd42f14026c1faebab8eedc3991f8166fb"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "herdr-coding-agent-runtime",
+      "replacement": "src/assets/blog/herdr-coding-agent-runtime/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "客户端断开后，独立服务端的终端继续运行并标出等待输入的任务",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/herdr-coding-agent-runtime/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 157500,
+        "sha256": "9e2a1a221a4705f121ebe118ef47c0b3e2a39d2cbe1967df430fc2f3cd80e1e5"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "hyperframes-html-video-engineering",
+      "replacement": "src/assets/blog/hyperframes-html-video-engineering/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "HTML 工程经过检查与预览后，生成 MP4 成片",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/hyperframes-html-video-engineering/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 232390,
+        "sha256": "1944525f3e6134e312f55aaa6f04f5b813cbecfcbd8372c9f0d6e734a872ba19"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "jcode-agent-harness",
+      "replacement": "src/assets/blog/jcode-agent-harness/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "共享服务端在文件变化后通知受影响的 Agent",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/jcode-agent-harness/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 179990,
+        "sha256": "7965c918118eb6139136069c7dc02c63f709d4a5b131be27c309e472ffdb601d"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "minecraft-agent-layered-planning-action",
+      "replacement": "src/assets/blog/minecraft-agent-layered-planning-action/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "Astra 规划目标，JEV 根据结构化状态选动作，Mineflayer 执行",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/minecraft-agent-layered-planning-action/cover.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 279772,
+        "sha256": "c58e58ef86e8e74b3fa0540c48b2d898eadad2b62f584252fd6ff1b8a0101e8a"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "munim-accessibility-computer-use",
+      "replacement": "src/assets/blog/munim-accessibility-computer-use/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "从控件树找到元素 ID，操作后再验证界面结果",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/munim-accessibility-computer-use/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 199910,
+        "sha256": "145b2a397d2183942b4dc4bab2dadf1e3e4dbd73176678a9a140390d237ec24e"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "opencloak-local-pii-redaction",
+      "replacement": "src/assets/blog/opencloak-local-pii-redaction/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "真实信息在本地替换为占位符，响应返回后再本地还原",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/opencloak-local-pii-redaction/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 196998,
+        "sha256": "17fc4c493d8ecb2ab3ef69d48965332998917d9b5c606436a61534dab52c18c7"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "opencompany-versioned-agent-config",
+      "replacement": "src/assets/blog/opencompany-versioned-agent-config/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "版本化配置定义 Agent 团队、工具权限和人工签核点",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/opencompany-versioned-agent-config/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 258232,
+        "sha256": "1fdab90c035552bb426f65fbd765cba623aef5b52a7c006ef42eb45d5985dbea"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "rtk-agent-shell-output-filter",
+      "replacement": "src/assets/blog/rtk-agent-shell-output-filter/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "RTK 过滤重复 Shell 输出，将保留的错误信息送入模型上下文",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/rtk-agent-shell-output-filter/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 220422,
+        "sha256": "ab27643e8e7810892fa9445d2c119fa4dfbacefa93e62c4a8b3d4d5e07316434"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "skills-manager-multi-agent-skill-sync",
+      "replacement": "src/assets/blog/skills-manager-multi-agent-skill-sync/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "一份 Skill 从本地中央库同步给多个 Coding Agent",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "public/images/blog/skills-manager-multi-agent-skill-sync/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 242060,
+        "sha256": "bde8f39a10f03ea2520f34e676a2ed4d1c8c72784b21fd6ac3912d6f1ce96f81"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "splash-model-specific-local-llm",
+      "replacement": "src/assets/blog/splash-model-specific-local-llm/lora-explainer-v2.webp",
+      "placement": "heroImage",
+      "alt": "专用模型包按机器内存预算组装本地推理环境，再提供兼容 API",
+      "replacement_kind": "original editorial explanatory illustration",
+      "retired_article_images": [
+        {
+          "path": "src/assets/blog/splash-model-specific-local-llm/notion-image-1.svg",
+          "retained": true
+        }
+      ],
+      "provenance": "New illustration of the article mechanism. Not a source screenshot, research figure, measured result or original Notion attachment.",
+      "qa": {
+        "status": "passed",
+        "label_accuracy": "exact labels inspected in bitmap",
+        "mechanism": "checked against article text",
+        "dimensions": [
+          1536,
+          1024
+        ],
+        "format": "webp",
+        "bytes": 218994,
+        "sha256": "25c0e77191fc40fd461ee4c69b511435f309c778bc8b1da8c258810a2fbe083d"
+      },
+      "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    }
+  ],
+  "diagram_repairs": [
+    {
+      "path": "src/assets/blog/financial-markets-zero-to-one-roadmap/01-market-map.svg",
+      "change": "Move existing text fill attributes to inline style so global text CSS no longer overrides contrast",
+      "content_changed": false,
+      "geometry_changed": false,
+      "qa": "Rendered and checked; all original labels, numbers and formulas preserved"
+    },
+    {
+      "path": "src/assets/blog/financial-markets-zero-to-one-roadmap/03-risk-position-size.svg",
+      "change": "Move existing text fill attributes to inline style so global text CSS no longer overrides contrast",
+      "content_changed": false,
+      "geometry_changed": false,
+      "qa": "Rendered and checked; all original labels, numbers and formulas preserved"
+    },
+    {
+      "path": "src/assets/blog/link-cli-agent-payment/01-main-visual.svg",
+      "change": "Move existing text fill attributes to inline style so global text CSS no longer overrides contrast",
+      "content_changed": false,
+      "geometry_changed": false,
+      "qa": "Rendered and checked; all original labels, numbers and formulas preserved"
+    },
+    {
+      "path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-1.svg",
+      "change": "Restore readable footer contrast without changing teaching text; remove decorative imitation character faces and give the existing title room",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "dcf21c9eb46f522465e1ac4d2de4efcdadfae8de",
+      "repaired_blob_sha": "d5008cdb30a81a0130ef67a47fac26d850fa4ac8",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [
+        "lora",
+        "Mochi"
+      ],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-2.svg",
+      "change": "Restore readable footer contrast without changing teaching text",
+      "content_changed": false,
+      "geometry_changed": false,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "bd793c2915f3cc177ec187ba8edc0aac1778a1c4",
+      "repaired_blob_sha": "0328ea6bf0408f74440800a498cad5dc776b8bf4",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-3.svg",
+      "change": "Restore readable footer contrast without changing teaching text",
+      "content_changed": false,
+      "geometry_changed": false,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "01f26d45442b20ac736cdee02c1714037aaad8fc",
+      "repaired_blob_sha": "807f4a497b55577c4ec0de06f486f3b12369b3db",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/coding-agent-prompt-audit-migration-eval/2026-09-27-prompt-audit-4.svg",
+      "change": "Restore readable footer contrast without changing teaching text",
+      "content_changed": false,
+      "geometry_changed": false,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "107bffb45f1487bb68d6744813aaf097a7c2c8ee",
+      "repaired_blob_sha": "692119ae6bb79eb8dd222d2cbba3a1d6df2f988c",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-lora-pi-kit-steering.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "197e6b77f0a5f1088a9e3beaa09d3bee7b9fc513",
+      "repaired_blob_sha": "1d15f32aeed01ec7d03062f650628dbc04f62b9f",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-steer-cancel-collect.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "e6b02c58b40c2be27ad75529a212227c620f3e1f",
+      "repaired_blob_sha": "0d59e724b495b5ff880979b29523175ed9125664",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/2026-09-29-steering-state-v2.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "dadd019802fe495e8c60699fc4bc755a8af8c02c",
+      "repaired_blob_sha": "56807e86d60aa6d1e17b14df35262839a5549d7c",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-redirect.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "a76b98d9701c69df290cd9ea33aca2477dcaac8a",
+      "repaired_blob_sha": "a6b181dbd51f46b15f21b890ccb1ba4b899e6d5c",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-revocation.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "f97bf62a98b89ede08d0acabb47cab9fa147728d",
+      "repaired_blob_sha": "92ec3668968da0d95f51d87bbf2364bc1c055296",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    },
+    {
+      "path": "src/assets/blog/agent-network-policy-revocation/2026-09-26-network-policy-fail-closed.svg",
+      "change": "Wrap or reposition overflowing labels within their existing panels; preserve relationships and teaching text",
+      "content_changed": false,
+      "geometry_changed": true,
+      "original_commit": "62b63dbe5f9d2d675109bb85c8355555657d9dff",
+      "original_blob_sha": "8bfed484276831e300d79a8a5251c43c4e61a84f",
+      "repaired_blob_sha": "5d0b190881e02c047e2585c8ee9eb1eed13fb52d",
+      "original_preservation": "Original SVG bytes remain in the recorded Git commit; current file has site-side readability corrections",
+      "removed_decorative_labels": [],
+      "qa": "Rendered and visually checked; no canvas overflow; all substantive text, numbers, instructions and relationship directions preserved"
+    }
+  ]
+}

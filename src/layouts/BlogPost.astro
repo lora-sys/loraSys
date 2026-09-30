@@ -23,6 +23,7 @@ import ArticleHero from '@/components/blog/ArticleHero.astro'
 import LanguageBadge from '@/components/blog/LanguageBadge.astro'
 import RelatedReading from '@/components/blog/RelatedReading.astro'
 import { Comment, PageInfo } from '@/components/waline'
+import { writingLabel } from '@/utils/writing'
 import agentRunbookMargin from '@/assets/lora-visual/v2/lora-v2-agent-runbook.webp'
 import mediaWorkbenchMargin from '@/assets/lora-visual/v2/lora-v2-media-workbench.webp'
 import sandboxSpecimenSlip from '@/assets/lora-visual/v2/lora-v2-sandbox.webp'
@@ -82,7 +83,8 @@ const articleJsonLd = {
   datePublished: publishDate.toISOString(),
   dateModified: articleDate,
   image: socialImageUrl,
-  keywords: data.tags,
+  keywords: data.topics.map((topic) => writingLabel('topic', topic, locale)),
+  articleSection: writingLabel('type', data.contentType, locale),
   mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl.href },
   author: { '@type': 'Person', name: config.author, url: siteUrl.href },
   publisher: { '@type': 'Person', name: config.author, url: siteUrl.href },

@@ -1,0 +1,120 @@
+{
+  "contentTypes": {
+    "technical": {
+      "zh-CN": "技术文章",
+      "en-US": "Technical articles"
+    },
+    "projects": {
+      "zh-CN": "项目与实践",
+      "en-US": "Projects & practice"
+    },
+    "guides": {
+      "zh-CN": "学习指南",
+      "en-US": "Learning guides"
+    },
+    "news": {
+      "zh-CN": "新闻与阅读清单",
+      "en-US": "News & reading lists"
+    }
+  },
+  "topics": {
+    "agents": {
+      "zh-CN": "智能体",
+      "en-US": "Agents"
+    },
+    "agent-harness": {
+      "zh-CN": "Agent 工程",
+      "en-US": "Agent engineering"
+    },
+    "multi-agent": {
+      "zh-CN": "多智能体",
+      "en-US": "Multi-agent systems"
+    },
+    "evaluation": {
+      "zh-CN": "评测",
+      "en-US": "Evaluation"
+    },
+    "memory-context": {
+      "zh-CN": "记忆与上下文",
+      "en-US": "Memory & context"
+    },
+    "mcp-skills": {
+      "zh-CN": "MCP 与 Skills",
+      "en-US": "MCP & skills"
+    },
+    "security": {
+      "zh-CN": "安全与隐私",
+      "en-US": "Security & privacy"
+    },
+    "devtools": {
+      "zh-CN": "开发者工具",
+      "en-US": "Developer tools"
+    },
+    "web-development": {
+      "zh-CN": "Web 开发",
+      "en-US": "Web development"
+    },
+    "multimodal": {
+      "zh-CN": "多模态",
+      "en-US": "Multimodal systems"
+    },
+    "runtime-infrastructure": {
+      "zh-CN": "运行时与基础设施",
+      "en-US": "Runtime & infrastructure"
+    },
+    "ai-research": {
+      "zh-CN": "AI 研究",
+      "en-US": "AI research"
+    },
+    "product-design": {
+      "zh-CN": "产品设计",
+      "en-US": "Product design"
+    },
+    "finance": {
+      "zh-CN": "金融基础",
+      "en-US": "Finance"
+    }
+  },
+  "series": {
+    "agent-engineering-reading": {
+      "zh-CN": "AI Agent 工程阅读清单",
+      "en-US": "AI agent engineering reading lists"
+    }
+  },
+  "sourceMappings": {
+    "engineering-news": {
+      "周报": {
+        "contentType": "news",
+        "series": "agent-engineering-reading"
+      },
+      "增量补充": {
+        "contentType": "news",
+        "series": "agent-engineering-reading"
+      },
+      "历史回填": {
+        "contentType": "news",
+        "series": "agent-engineering-reading"
+      }
+    },
+    "editorial": {
+      "有趣项目介绍": {
+        "contentType": "projects"
+      },
+      "科技内容主包": {
+        "contentType": "technical"
+      }
+    }
+  },
+  "sourceTopicAliases": {
+    "AI Agent": "agents",
+    "Harness": "agent-harness",
+    "MCP": "mcp-skills",
+    "安全": "security",
+    "Agent Eval": "evaluation",
+    "AI 软件工程": "agent-harness",
+    "AI软件工程": "agent-harness",
+    "多 Agent": "multi-agent",
+    "多Agent": "multi-agent",
+    "Memory": "memory-context"
+  }
+}

@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import type { SiteLocale } from '@/i18n/site'
+import { withBasePath } from '@/i18n/site'
+
+import { writingLabel, writingPath } from '@/utils/writing'
+
+interface Props {
+  data: CollectionEntry<'blog'>['data']
+  locale?: SiteLocale
+  compact?: boolean
+  includeType?: boolean
+  searchFilters?: boolean
+}
+const {
+  data,
+  locale = 'zh-CN',
+  compact = false,
+  includeType = true,
+  searchFilters = false
+} = Astro.props
+---
+
+<div
+  class='article-classification'
+  role='group'
+  aria-label={locale === 'en-US' ? 'Article classification' : '文章分类'}
+>
+  {
+    includeType && (
+      <a class='content-type' href={withBasePath(writingPath('type', data.contentType, locale))}>
+        {writingLabel('type', data.contentType, locale)}
+      </a>
+    )
+  }
+  {
+    data.series && (
+      <a class='series' href={withBasePath(writingPath('series', data.series, locale))}>
+        {writingLabel('series', data.series, locale)}
+      </a>
+    )
+  }
+  {
+    !compact &&
+      data.topics.map((topic) => (
+        <a
+          href={withBasePath(writingPath('topic', topic, locale))}
+          data-pagefind-filter={
+            searchFilters ? (locale === 'en-US' ? 'Topics' : '主题') : undefined
+          }
+        >
+          {writingLabel('topic', topic, locale)}
+        </a>
+      ))
+  }
+</div>
+<style>
+  .article-classification {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.75rem;
+    margin-block: 0.65rem;
+    font-size: 0.7rem;
+  }
+  a {
+    color: hsl(var(--muted-foreground));
+    text-decoration: none;
+    line-height: 1.7;
+  }
+  .content-type {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+  .series {
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+</style>

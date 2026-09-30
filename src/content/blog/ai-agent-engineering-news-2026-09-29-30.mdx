@@ -3,6 +3,9 @@ title: '2026-09-29 至 2026-09-30｜AI Agent 工程阅读清单'
 description: '7 条 Agent 工程阅读线索：浏览器授权、模型任务成本、独立工作区、MCP 事件、运行时安全与多 Agent 路由。保留论文和产品自报边界。'
 publishDate: 2026-09-30
 tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'mcp']
+contentType: 'news'
+topics: ["agent-harness", "evaluation", "mcp-skills", "security", "multi-agent"]
+series: 'agent-engineering-reading'
 language: 'zh-CN'
 draft: false
 ---
@@ -83,7 +86,7 @@ draft: false
 
 **发生了什么。** Planner-as-Router 在拆分子任务时，同时决定每个节点使用 small、mid 还是 frontier 模型。作者在 54 个企业 Agent 任务上进行了 1,157 次评估；相较全部使用 frontier 模型的方案，报告成本降低 44%，准确率下降 2.9 个百分点。
 
-作者同时指出，54 个任务研穵的准确率置信区间约为正负 6 个百分点，因此没有把结果描述为明确的准确率优势。成本下降也不能改写成“效果不变”。
+作者同时指出，54 个任务研究的准确率置信区间约为正负 6 个百分点，因此没有把结果描述为明确的准确率优势。成本下降也不能改写成“效果不变”。
 
 **工程意义。** 执行前已经知道依赖图时，模型路由可以成为 planner 的职责。评测应同时记录任务成功率与完整 workflow 成本，而不只比较单次调用的 token 价格。
 

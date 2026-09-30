@@ -2,12 +2,15 @@
 title: 'RTK：Coding Agent 不该把整段 Shell 输出塞进上下文'
 description: '介绍 RTK 如何在命令输出进入模型上下文前过滤测试、Git、搜索和构建噪声，把 Context Engineering 做到工具输出边界。'
 publishDate: '2026-09-12T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/rtk-agent-shell-output-filter/lora-explainer-v2.webp'
+  alt: 'RTK 过滤重复 Shell 输出，将保留的错误信息送入模型上下文'
 tags: ['AI', 'Agent', 'Coding Agent', 'Context Engineering', 'Shell', 'RTK']
+contentType: 'projects'
+topics: ['memory-context', 'devtools', 'agent-harness']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/rtk-agent-shell-output-filter/notion-image-1.svg)
 
 ## 30 秒看懂
 Coding Agent 执行 `git status`、`pytest`、`cargo test` 或搜索命令时，经常会收到很长的输出。很多内容是成功日志、重复行或格式噪声。

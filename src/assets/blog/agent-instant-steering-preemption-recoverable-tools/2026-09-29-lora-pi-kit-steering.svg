@@ -13,18 +13,18 @@
 <text x="90" y="210" class="t b">已确认的现有能力</text>
 <text x="90" y="265" class="t m">Pi Session：维护会话和模型上下文</text>
 <text x="90" y="320" class="t m">trace-hooks.ts：记录 agent、turn、tool 事件</text>
-<text x="90" y="375" class="t m">Docker sandbox executor：execute、cancel、close</text>
-<text x="90" y="430" class="t m">runtime.ts：目前只注册 lora-status</text>
+<text x="90" y="375" class="t m"><tspan x="90">Docker sandbox executor：</tspan><tspan x="90" dy="29">execute、cancel、close</tspan></text>
+<text x="90" y="452" class="t m">runtime.ts：目前只注册 lora-status</text>
 <rect x="90" y="500" width="375" height="58" rx="14" fill="#EFE3D2"/>
 <text x="115" y="537" class="t sm">这些模块没有现成的即时转向控制器</text>
 <path d="M540 365 H635" class="line"/><polygon points="635,365 615,353 615,377" fill="#6C5745"/>
-<rect x="665" y="160" width="485" height="440" rx="24" class="good"/>
+<rect x="665" y="160" width="485" height="460" rx="24" class="good"/>
 <text x="705" y="210" class="t b">建议新增 Steering Controller</text>
-<text x="705" y="265" class="t m">输入：新用户消息、当前 turn、活动 task handle</text>
-<text x="705" y="320" class="t m">动作：preempt 当前采样，决定 continue 或 cancel</text>
-<text x="705" y="375" class="t m">记录：steer_received、preempted、task_state</text>
-<text x="705" y="430" class="t m">输出：新的 turn 输入与可恢复后台任务状态</text>
-<rect x="705" y="500" width="400" height="58" rx="14" fill="#DCE7CE"/>
-<text x="740" y="537" class="t sm">建议方案。当前 lora-pi-kit 尚未实现。</text>
-<text x="330" y="650" class="t s">验收重点：新输入不丢，工具结果不重复，取消语义明确，Trace 能还原转向过程。</text>
+<text x="705" y="255" class="t m"><tspan x="705">输入：新用户消息、当前 turn、</tspan><tspan x="705" dy="28">活动 task handle</tspan></text>
+<text x="705" y="325" class="t m"><tspan x="705">动作：preempt 当前采样，</tspan><tspan x="705" dy="28">决定 continue 或 cancel</tspan></text>
+<text x="705" y="395" class="t m"><tspan x="705">记录：steer_received、preempted、</tspan><tspan x="705" dy="28">task_state</tspan></text>
+<text x="705" y="465" class="t m"><tspan x="705">输出：新的 turn 输入与</tspan><tspan x="705" dy="28">可恢复后台任务状态</tspan></text>
+<rect x="705" y="530" width="400" height="58" rx="14" fill="#DCE7CE"/>
+<text x="740" y="567" class="t sm">建议方案。当前 lora-pi-kit 尚未实现。</text>
+<text x="600" y="665" text-anchor="middle" class="t s">验收重点：新输入不丢，工具结果不重复，取消语义明确，Trace 能还原转向过程。</text>
 </svg>

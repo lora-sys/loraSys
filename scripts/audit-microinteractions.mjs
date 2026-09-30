@@ -161,17 +161,21 @@ try {
       }
     })
     await check(`${label}: localized search filter labels retain selection`,async()=>{
-      for(const [route,label] of [['search/','标签'],['en/search/','Tags']]) {
+      for(const [route,labels] of [['search/',['主题','内容类型']],['en/search/',['Topics','Content type']]]) {
         await open(route)
         const input=page.locator('.pagefind-ui__search-input');await input.waitFor();await input.fill('Agent')
         await page.locator('.pagefind-ui__result-link').first().waitFor()
-        const filter=page.locator('.pagefind-ui__filter-block').first();await filter.waitFor()
+        await page.locator('.pagefind-ui__filter-block').first().waitFor()
         const names=await page.locator('.pagefind-ui__filter-name').allTextContents()
-        assert.deepEqual(names.map(s=>s.trim()),[label])
-        if(!await filter.evaluate(el=>el.open)) await filter.locator('summary').click()
-        const option=filter.locator('input[type="checkbox"]').first()
-        await option.check();assert.equal(await option.isChecked(),true)
-        await option.uncheck();assert.equal(await option.isChecked(),false)
+        assert.deepEqual(names.map(s=>s.trim()).sort(),[...labels].sort())
+        for(const name of labels) {
+          const filter=page.locator('.pagefind-ui__filter-block').filter({has:page.locator('.pagefind-ui__filter-name',{hasText:name})})
+          assert.equal(await filter.count(),1,`One localized filter for ${name}`)
+          if(!await filter.evaluate(el=>el.open)) await filter.locator('summary').click()
+          const option=filter.locator('input[type="checkbox"]').first()
+          await option.check();assert.equal(await option.isChecked(),true)
+          await option.uncheck();assert.equal(await option.isChecked(),false)
+        }
         await page.locator('.pagefind-ui__result-link').first().waitFor()
         await capture(route.startsWith('en/')?'en-filter-label':'zh-filter-label')
       }

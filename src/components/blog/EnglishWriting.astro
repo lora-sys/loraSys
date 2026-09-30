@@ -1,0 +1,432 @@
+---
+import { featuredPostIds } from '@/data/featured-posts'
+import { withBasePath } from '@/i18n/site'
+
+import { getBlogCollection } from 'astro-pure/server'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import ArticleClassification from '@/components/blog/ArticleClassification.astro'
+import WritingTaxonomy from '@/components/blog/WritingTaxonomy.astro'
+import { writingLabel, type WritingKind } from '@/utils/writing'
+
+interface Props {
+  activeKind?: WritingKind
+  activeValue?: string
+}
+const { activeKind, activeValue } = Astro.props
+const posts = (await getBlogCollection())
+  .filter(
+    (post) =>
+      !activeKind ||
+      (activeKind === 'type'
+        ? post.data.contentType === activeValue
+        : activeKind === 'topic'
+          ? post.data.topics.some((topic) => topic === activeValue)
+          : post.data.series === activeValue)
+  )
+  .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
+const languageOf = (post: (typeof posts)[number]) => post.data.language ?? 'zh-CN'
+const featuredPost =
+  featuredPostIds
+    .map((id) => posts.find((post) => post.id === id))
+    .find((post) => post !== undefined) ?? posts[0]
+const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
+---
+
+<PageLayout
+  lang='en-US'
+  data-pagefind-ignore={activeKind ? 'all' : undefined}
+  meta={{
+    title: activeKind && activeValue ? writingLabel(activeKind, activeValue, 'en-US') : 'Writing',
+    description:
+      'Published notes on agent systems, tools, and building in public, in Chinese and English.'
+  }}
+  highlightColor='#d99a33'
+>
+  <main class='writing-page'>
+    <header>
+      <p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span
+        >Browse the full published library. Every article keeps one permanent address and its
+        original language.</span
+      >
+    </header>
+    <WritingTaxonomy locale='en-US' {activeKind} {activeValue} />
+    <div class='filter'>
+      <label for='language-filter'>Filter articles by language</label>
+      <select id='language-filter' name='language' data-writing-language disabled>
+        <option value='all'>All articles</option>
+        <option value='en-US'>English</option>
+        <option value='zh-CN'>Chinese</option>
+      </select>
+    </div>
+    <noscript>
+      <p>
+        <a
+          href={withBasePath(
+            `${activeKind && activeValue ? `/blog/${activeKind}/${activeValue}` : '/blog'}/language/en-US`
+          )}>Browse English articles without JavaScript</a
+        >
+      </p>
+    </noscript>
+    {
+      featuredPost && (
+        <section
+          class='featured'
+          aria-labelledby='featured-title'
+          data-article
+          data-content-type={featuredPost.data.contentType}
+          data-series={featuredPost.data.series}
+          data-language={languageOf(featuredPost)}
+        >
+          <div class='featured-label'>
+            <>
+              <span>Featured note</span>
+              <span class='language-badge'>
+                {languageOf(featuredPost) === 'en-US' ? 'English' : 'Chinese'}
+              </span>
+              <time datetime={featuredPost.data.publishDate.toISOString()}>
+                {featuredPost.data.publishDate.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                })}
+              </time>
+            </>
+          </div>
+          <ArticleClassification data={featuredPost.data} locale='en-US' compact />
+          <h2 id='featured-title'>
+            <a lang={languageOf(featuredPost)} href={withBasePath(`/blog/${featuredPost.id}`)}>
+              {featuredPost.data.title}
+            </a>
+          </h2>
+          <p lang={languageOf(featuredPost)}>{featuredPost.data.description}</p>
+          <a class='read' href={withBasePath(`/blog/${featuredPost.id}`)}>
+            Read this note <span aria-hidden='true'>↗</span>
+          </a>
+        </section>
+      )
+    }
+    {
+      posts.length > 0 && (
+        <section class='publication-list' aria-labelledby='publication-title'>
+          <header>
+            <>
+              <h2 id='publication-title'>
+                {activeKind && activeValue
+                  ? writingLabel(activeKind, activeValue, 'en-US')
+                  : 'Published notes'}
+              </h2>
+              <span id='article-count' aria-live='polite'>
+                Newest first · {posts.length} articles
+              </span>
+            </>
+          </header>
+          <ol>
+            {publicationRows.map((post) => (
+              <li
+                data-article
+                data-content-type={post.data.contentType}
+                data-series={post.data.series}
+                data-language={languageOf(post)}
+              >
+                <time datetime={post.data.publishDate.toISOString()}>
+                  {post.data.publishDate.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </time>
+                <div>
+                  <h3>
+                    <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>
+                      {post.data.title}
+                    </a>
+                  </h3>
+                  <p lang={languageOf(post)}>{post.data.description}</p>
+                  <ArticleClassification data={post.data} locale='en-US' />
+                  <span class='language-badge'>
+                    {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
+                  </span>
+                </div>
+                <a
+                  class='row-link'
+                  href={withBasePath(`/blog/${post.id}`)}
+                  aria-label={`Read ${post.data.title}`}
+                >
+                  <span aria-hidden='true'>↗</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+    {posts.length === 0 && <p class='empty'>No articles are published yet.</p>}
+    <p class='empty' id='filter-empty' hidden>No articles match this language.</p>
+  </main>
+</PageLayout>
+
+<script>
+  const languageFilter = document.querySelector<HTMLSelectElement>('#language-filter')
+  const articles = [...document.querySelectorAll<HTMLElement>('[data-article]')]
+  const articleCount = document.querySelector<HTMLElement>('#article-count')
+  const filterEmpty = document.querySelector<HTMLElement>('#filter-empty')
+
+  const applyLanguage = () => {
+    const requested = new URL(location.href).searchParams.get('language') ?? 'all'
+    const language = ['en-US', 'zh-CN'].includes(requested) ? requested : 'all'
+    if (languageFilter) languageFilter.value = language
+    for (const link of document.querySelectorAll<HTMLAnchorElement>('.writing-taxonomy a')) {
+      const destination = new URL(link.href)
+      if (language === 'all') destination.searchParams.delete('language')
+      else destination.searchParams.set('language', language)
+      link.href = destination.href
+    }
+    let visibleCount = 0
+    for (const article of articles) {
+      const visible = language === 'all' || article.dataset.language === language
+      article.hidden = !visible
+      if (visible) visibleCount += 1
+    }
+    if (articleCount) articleCount.textContent = `Newest first · ${visibleCount} articles`
+    if (filterEmpty) filterEmpty.hidden = visibleCount !== 0
+  }
+  languageFilter?.addEventListener('change', () => {
+    const url = new URL(location.href)
+    if (languageFilter.value === 'all') url.searchParams.delete('language')
+    else url.searchParams.set('language', languageFilter.value)
+    history.pushState(null, '', url)
+    applyLanguage()
+  })
+  window.addEventListener('popstate', applyLanguage)
+  applyLanguage()
+  // Do not accept a change before the URL state and change listener are ready.
+  if (languageFilter) languageFilter.disabled = false
+</script>
+
+<style>
+  .writing-page {
+    display: grid;
+    gap: 1.6rem;
+  }
+  .writing-page [hidden] {
+    display: none !important;
+  }
+  .writing-page > header {
+    display: grid;
+    gap: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: clamp(1rem, 4vw, 3rem);
+  }
+  .writing-page > header > p {
+    margin: 0;
+    color: hsl(var(--field-amber));
+    font-size: 0.67rem;
+    font-weight: 680;
+    letter-spacing: 0.13em;
+  }
+  h1 {
+    max-width: 17ch;
+    margin: 0;
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 580;
+    letter-spacing: -0.068em;
+    line-height: 0.93;
+  }
+  .writing-page > header > span {
+    max-width: 60ch;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 1rem;
+  }
+  nav a {
+    min-height: 2.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.65rem 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+  nav a[aria-current] {
+    border-color: hsl(var(--foreground));
+    background: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+  .filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+  }
+  .filter select {
+    min-height: 2.5rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.7rem;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font: inherit;
+  }
+  nav a:focus-visible,
+  .writing-page a:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  .featured {
+    display: grid;
+    max-width: 54rem;
+    gap: 0.85rem;
+    border-block: 1px solid hsl(var(--border));
+    padding: clamp(1.2rem, 4vw, 2.2rem) 0;
+  }
+  .featured-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .featured-label span {
+    color: hsl(var(--field-amber-strong));
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .featured-label .language-badge,
+  .language-badge {
+    width: fit-content;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.2rem 0.45rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.62rem;
+    font-weight: 550;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  .featured h2 {
+    max-width: 22ch;
+    margin: 0;
+    font-size: clamp(1.65rem, 4vw, 2.6rem);
+    font-weight: 570;
+    letter-spacing: -0.045em;
+    line-height: 1.13;
+  }
+  .featured h2 a,
+  .read,
+  .publication-list h3 a,
+  .row-link {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .featured > p {
+    max-width: 62ch;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .read {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 640;
+  }
+  .publication-list > header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-block: 1rem;
+  }
+  .publication-list > header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 580;
+    letter-spacing: -0.03em;
+  }
+  .publication-list > header span {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+  }
+  .publication-list ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .publication-list li {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr) 2rem;
+    align-items: start;
+    gap: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 1.1rem 0.2rem;
+  }
+  .publication-list time {
+    padding-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .publication-list h3 {
+    margin: 0;
+    font-size: clamp(1rem, 1.6vw, 1.25rem);
+    font-weight: 560;
+    line-height: 1.35;
+  }
+  .publication-list li p {
+    max-width: 64ch;
+    margin: 0.4rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.78rem;
+    line-height: 1.6;
+  }
+  .publication-list li .language-badge {
+    display: inline-block;
+    margin-top: 0.55rem;
+  }
+  .row-link {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border-radius: 50%;
+  }
+  .publication-list a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .empty {
+    border-left: 2px solid hsl(var(--field-amber));
+    padding-left: 0.9rem;
+  }
+  @media (max-width: 560px) {
+    .publication-list li {
+      grid-template-columns: minmax(0, 1fr) 2rem;
+      gap: 0.3rem 0.8rem;
+    }
+    .publication-list li time {
+      grid-column: 1;
+    }
+    .publication-list li div {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .publication-list li .row-link {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

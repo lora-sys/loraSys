@@ -24,5 +24,5 @@
 <text x="895" y="610" class="h2">迁移 Eval</text><text x="895" y="650" class="s">相同任务比较修改前后结果</text><text x="895" y="680" class="s">测试通过、工具调用、token、耗时</text>
 <text x="220" y="805" class="b">保留现有分层。新增检查层。不要把某个模型的临时补丁写成所有 Profile 的永久规则。</text>
 <rect x="55" y="835" width="1425" height="42" rx="14" fill="#44382f"/>
-<text x="355" y="864" font-family="Noto Sans SC,Arial" font-size="20" fill="#fff9ef">本文建议，没有修改仓库。当前 doctor 仍主要检查运行环境、锁文件、Skill 完整性、Profile 与 MCP registry。</text>
+<text x="355" y="864" font-family="Noto Sans SC,Arial" font-size="20" style="fill:#fff9ef">本文建议，没有修改仓库。当前 doctor 仍主要检查运行环境、锁文件、Skill 完整性、Profile 与 MCP registry。</text>
 </svg>

@@ -1,0 +1,1181 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "slug": "agent-budget-memory-evaluation",
+      "contentType": "guides",
+      "topics": [
+        "evaluation",
+        "memory-context",
+        "ai-research"
+      ],
+      "basis": "reviewed-content",
+      "note": "按概念、论文结果与对照实验讲解预算、记忆和评测；旧选题来源已被替代"
+    },
+    {
+      "slug": "agent-credential-boundary-vault-broker",
+      "contentType": "guides",
+      "topics": [
+        "security",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "从凭据概念与边界讲到迁移方法和可操作实验"
+    },
+    {
+      "slug": "agent-demo-harness-control-layer",
+      "contentType": "technical",
+      "topics": [
+        "agent-harness",
+        "mcp-skills",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "比较多个框架的控制层与工程职责"
+    },
+    {
+      "slug": "agent-durable-execution-step-idempotency",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "逐步解释持久步骤、幂等性和故障恢复实验"
+    },
+    {
+      "slug": "agent-eval-monitor-coverage",
+      "contentType": "technical",
+      "topics": [
+        "evaluation",
+        "security",
+        "ai-research"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "agent-instant-steering-preemption-recoverable-tools",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "runtime-infrastructure",
+        "memory-context"
+      ],
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "agent-network-policy-revocation",
+      "contentType": "guides",
+      "topics": [
+        "security",
+        "runtime-infrastructure",
+        "agent-harness"
+      ],
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "agent-observability-trace-span-opentelemetry",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "devtools",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "解释遥测概念、字段与文件导出练习"
+    },
+    {
+      "slug": "agent-review-evidence-independent-history",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "memory-context",
+        "evaluation",
+        "security"
+      ],
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "agent-tool-search-mcp-ard",
+      "contentType": "guides",
+      "topics": [
+        "mcp-skills",
+        "memory-context",
+        "agent-harness"
+      ],
+      "basis": "reviewed-content",
+      "note": "解释工具发现机制，并提供对照实验与自测"
+    },
+    {
+      "slug": "agentic-workflows-noop-triage",
+      "contentType": "technical",
+      "topics": [
+        "agent-harness",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-04-10",
+      "contentType": "news",
+      "topics": [
+        "evaluation",
+        "agent-harness",
+        "mcp-skills",
+        "multi-agent",
+        "security"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "历史回填",
+        "主题": [
+          "AI Agent",
+          "Agent Eval",
+          "Harness",
+          "MCP",
+          "多 Agent",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-11-16",
+      "contentType": "news",
+      "topics": [
+        "evaluation",
+        "multi-agent",
+        "security",
+        "agent-harness",
+        "mcp-skills"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "历史回填",
+        "主题": [
+          "AI Agent",
+          "Agent Eval",
+          "多 Agent",
+          "Harness",
+          "MCP",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-11-17",
+      "contentType": "news",
+      "topics": [
+        "mcp-skills",
+        "evaluation",
+        "security",
+        "multi-agent",
+        "agent-harness"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "历史回填",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Agent Eval",
+          "Harness",
+          "多 Agent",
+          "安全",
+          "Memory"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-11-18",
+      "contentType": "news",
+      "topics": [
+        "evaluation",
+        "multi-agent",
+        "mcp-skills",
+        "security",
+        "agent-harness"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "历史回填",
+        "主题": [
+          "AI Agent",
+          "Agent Eval",
+          "Harness",
+          "多 Agent",
+          "安全",
+          "Memory",
+          "MCP",
+          "AI 软件工程"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-18-19",
+      "contentType": "news",
+      "topics": [
+        "agent-harness",
+        "memory-context",
+        "mcp-skills",
+        "evaluation",
+        "devtools"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "历史回填",
+        "主题": [
+          "AI Agent",
+          "Harness",
+          "MCP",
+          "Memory",
+          "Agent Eval",
+          "AI 软件工程"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-18-20",
+      "contentType": "news",
+      "topics": [
+        "memory-context",
+        "security",
+        "agent-harness",
+        "devtools",
+        "mcp-skills"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Harness",
+          "AI 软件工程",
+          "安全",
+          "Memory"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-21",
+      "contentType": "news",
+      "topics": [
+        "multi-agent",
+        "mcp-skills",
+        "security",
+        "agent-harness",
+        "devtools"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Harness",
+          "多 Agent",
+          "AI 软件工程",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-22",
+      "contentType": "news",
+      "topics": [
+        "agent-harness",
+        "evaluation",
+        "devtools",
+        "memory-context",
+        "agents"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "Harness",
+          "Agent Eval",
+          "AI 软件工程",
+          "Memory"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-23",
+      "contentType": "news",
+      "topics": [
+        "multi-agent",
+        "evaluation",
+        "agent-harness",
+        "security",
+        "devtools"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "多 Agent",
+          "Agent Eval",
+          "Harness",
+          "AI 软件工程",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-24-25",
+      "contentType": "news",
+      "topics": [
+        "evaluation",
+        "security",
+        "multi-agent",
+        "agent-harness",
+        "mcp-skills"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "多 Agent",
+          "Agent Eval",
+          "Harness",
+          "AI 软件工程",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-25-26",
+      "contentType": "news",
+      "topics": [
+        "memory-context",
+        "security",
+        "agent-harness",
+        "evaluation",
+        "mcp-skills"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "多 Agent",
+          "Agent Eval",
+          "Harness",
+          "AI 软件工程",
+          "安全",
+          "Memory"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-26-27",
+      "contentType": "news",
+      "topics": [
+        "agent-harness",
+        "mcp-skills",
+        "security",
+        "evaluation",
+        "devtools"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Agent Eval",
+          "Harness",
+          "AI 软件工程",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-27-28",
+      "contentType": "news",
+      "topics": [
+        "memory-context",
+        "security",
+        "mcp-skills",
+        "agent-harness",
+        "devtools"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Agent Eval",
+          "Harness",
+          "AI 软件工程",
+          "安全",
+          "Memory"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-28-29",
+      "contentType": "news",
+      "topics": [
+        "agents",
+        "mcp-skills",
+        "agent-harness",
+        "devtools",
+        "security"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报",
+        "主题": [
+          "AI Agent",
+          "MCP",
+          "Harness",
+          "AI 软件工程",
+          "安全"
+        ]
+      }
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-09-29-30",
+      "contentType": "news",
+      "topics": [
+        "agent-harness",
+        "evaluation",
+        "mcp-skills",
+        "security",
+        "multi-agent"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "ai-engineering-harness",
+      "contentType": "projects",
+      "topics": [
+        "agent-harness",
+        "multi-agent",
+        "devtools",
+        "evaluation"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有工程项目的实现、使用路径与验证记录"
+    },
+    {
+      "slug": "anthropic-agent-market-preference-negotiation",
+      "contentType": "technical",
+      "topics": [
+        "multi-agent",
+        "evaluation",
+        "ai-research"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "anthropic-art-scientific-agent-wetlab",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "multi-agent",
+        "ai-research"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "anthropic-embedded-evaluator-access",
+      "contentType": "technical",
+      "topics": [
+        "evaluation",
+        "security",
+        "ai-research"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "aws-agent-proposal-validation",
+      "contentType": "technical",
+      "topics": [
+        "agent-harness",
+        "multi-agent",
+        "evaluation"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "claude-chat-cowork-unified-mode",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "product-design"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "cloudflare-agent-traffic-economics",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "web-development",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "cloudflare-cf-agent-native-cli",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "devtools",
+        "mcp-skills"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "cloudflare-python-workers-agent-backend",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "web-development",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "coding-agent-long-task-eval-completion-rate",
+      "contentType": "technical",
+      "topics": [
+        "evaluation",
+        "devtools",
+        "ai-research"
+      ],
+      "basis": "reviewed-content",
+      "note": "分析 Android Bench 指标、结果口径与工程含义"
+    },
+    {
+      "slug": "coding-agent-prompt-audit-migration-eval",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "evaluation",
+        "devtools"
+      ],
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "coding-agent-supply-chain-security",
+      "contentType": "technical",
+      "topics": [
+        "security",
+        "mcp-skills",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "company-brain-agent-memory-permissions",
+      "contentType": "projects",
+      "topics": [
+        "memory-context",
+        "security",
+        "agents"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "eve-agent",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "针对外部框架的技术调研，重点是编程模型、生命周期与采用成本"
+    },
+    {
+      "slug": "fde-enterprise-ai-engineering-role",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "devtools"
+      ],
+      "basis": "reviewed-content",
+      "note": "基于招聘数据与项目证据的工程岗位调研"
+    },
+    {
+      "slug": "financial-markets-zero-to-one-roadmap",
+      "contentType": "guides",
+      "topics": [
+        "finance"
+      ],
+      "basis": "reviewed-content",
+      "note": "明确面向零基础，包含学习顺序、练习和分阶段路线"
+    },
+    {
+      "slug": "foreman-coding-agent-supervisor",
+      "contentType": "projects",
+      "topics": [
+        "agent-harness",
+        "evaluation",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "free-vision-skill",
+      "contentType": "projects",
+      "topics": [
+        "multimodal",
+        "mcp-skills",
+        "memory-context"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有视觉工具的协议、实现、测试与版本记录"
+    },
+    {
+      "slug": "gemini-live-background-reasoning",
+      "contentType": "technical",
+      "topics": [
+        "multimodal",
+        "agents",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "git-sha-pinning-final-head-verification",
+      "contentType": "guides",
+      "topics": [
+        "security",
+        "devtools",
+        "mcp-skills"
+      ],
+      "basis": "reviewed-content",
+      "note": "讲解 Git 校验机制并提供本地无害复现与验证实验"
+    },
+    {
+      "slug": "github-agentic-autofix-copilot-memory",
+      "contentType": "technical",
+      "topics": [
+        "memory-context",
+        "security",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "github-agentic-workflows",
+      "contentType": "projects",
+      "topics": [
+        "agents",
+        "devtools",
+        "security"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "github-security-lab-agent-fuzzing-loop",
+      "contentType": "projects",
+      "topics": [
+        "security",
+        "agent-harness",
+        "evaluation"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "google-agent-plugins-skills-mcp",
+      "contentType": "technical",
+      "topics": [
+        "mcp-skills",
+        "devtools",
+        "security"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "gpt6-prompt-cache-agent-state-layer",
+      "contentType": "technical",
+      "topics": [
+        "memory-context",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "herdr-coding-agent-runtime",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "devtools",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "hermes-minimax-media",
+      "contentType": "projects",
+      "topics": [
+        "multimodal",
+        "mcp-skills",
+        "devtools"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有插件的后端接入、端到端验证与发布记录"
+    },
+    {
+      "slug": "hermes-stepfun-imagegen",
+      "contentType": "projects",
+      "topics": [
+        "multimodal",
+        "mcp-skills",
+        "devtools"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有插件的完整接入、版本修复与包发布记录"
+    },
+    {
+      "slug": "hyperframes-html-video-engineering",
+      "contentType": "projects",
+      "topics": [
+        "multimodal",
+        "web-development",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "jcode-agent-harness",
+      "contentType": "projects",
+      "topics": [
+        "agent-harness",
+        "multi-agent",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "jev-code-reviewer-pr-priority",
+      "contentType": "projects",
+      "topics": [
+        "devtools",
+        "product-design"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "jev-typed-agent-decisions",
+      "contentType": "technical",
+      "topics": [
+        "agent-harness",
+        "agents"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "json-render-constrained-generative-ui",
+      "contentType": "projects",
+      "topics": [
+        "web-development",
+        "product-design",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "kitaru-agent-regression-testing",
+      "contentType": "guides",
+      "topics": [
+        "evaluation",
+        "agent-harness",
+        "devtools"
+      ],
+      "basis": "reviewed-content",
+      "note": "当前专篇讲解回归测试数据关系与迁移实验；旧项目介绍来源已被替代"
+    },
+    {
+      "slug": "link-cli-agent-payment",
+      "contentType": "projects",
+      "topics": [
+        "agents",
+        "security",
+        "finance"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "lobsterai-mobile-desktop-agent",
+      "contentType": "projects",
+      "topics": [
+        "agents",
+        "runtime-infrastructure",
+        "product-design"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "long-running-agent-session-context-state",
+      "contentType": "guides",
+      "topics": [
+        "memory-context",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "拆解会话、上下文与持久状态，并安排可验证实验"
+    },
+    {
+      "slug": "loop-engineering-harness",
+      "contentType": "guides",
+      "topics": [
+        "agent-harness",
+        "memory-context",
+        "evaluation"
+      ],
+      "basis": "reviewed-content",
+      "note": "从定义与原理讲到最小实现和工程检查"
+    },
+    {
+      "slug": "mentraos-smart-glasses-runtime",
+      "contentType": "projects",
+      "topics": [
+        "multimodal",
+        "runtime-infrastructure",
+        "product-design"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "microsoft-copilot-managed-runtime-app-delivery",
+      "contentType": "technical",
+      "topics": [
+        "devtools",
+        "web-development",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "minecraft-agent-layered-planning-action",
+      "contentType": "projects",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "evaluation"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "multi-agent-dependency-aware-delegation",
+      "contentType": "guides",
+      "topics": [
+        "multi-agent",
+        "agent-harness",
+        "evaluation",
+        "ai-research"
+      ],
+      "basis": "reviewed-content",
+      "note": "讲解任务依赖与委派决策，并提供对照实验"
+    },
+    {
+      "slug": "munim-accessibility-computer-use",
+      "contentType": "projects",
+      "topics": [
+        "agents",
+        "mcp-skills",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "newtube",
+      "contentType": "projects",
+      "topics": [
+        "web-development"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有完整应用的仓库结构、数据流与实现取舍"
+    },
+    {
+      "slug": "nvidia-openshell-runtime-policy",
+      "contentType": "projects",
+      "topics": [
+        "security",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "openai-agents-api-browser-authentication",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "security",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content"
+    },
+    {
+      "slug": "openai-research-agent-workdays",
+      "contentType": "technical",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "evaluation"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "opencloak-local-pii-redaction",
+      "contentType": "projects",
+      "topics": [
+        "security",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "opencompany-versioned-agent-config",
+      "contentType": "projects",
+      "topics": [
+        "multi-agent",
+        "agent-harness",
+        "security"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "qwen-image-2-1-rgba-license",
+      "contentType": "technical",
+      "topics": [
+        "multimodal",
+        "ai-research"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "rtk-agent-shell-output-filter",
+      "contentType": "projects",
+      "topics": [
+        "memory-context",
+        "devtools",
+        "agent-harness"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "sandbox",
+      "contentType": "guides",
+      "topics": [
+        "security",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "从隔离概念与实现方式讲到搭建步骤和边界验证"
+    },
+    {
+      "slug": "skill-up-stateful-multiturn-eval",
+      "contentType": "technical",
+      "topics": [
+        "evaluation",
+        "mcp-skills",
+        "memory-context"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "skills-manager-multi-agent-skill-sync",
+      "contentType": "projects",
+      "topics": [
+        "mcp-skills",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "splash-model-specific-local-llm",
+      "contentType": "projects",
+      "topics": [
+        "runtime-infrastructure",
+        "devtools"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
+    },
+    {
+      "slug": "tau-agent-architecture",
+      "contentType": "guides",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "devtools"
+      ],
+      "basis": "reviewed-content",
+      "note": "以分层架构为教学案例，含伪代码与项目检查练习"
+    },
+    {
+      "slug": "tau-agent-loop-events",
+      "contentType": "guides",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "web-development"
+      ],
+      "basis": "reviewed-content",
+      "note": "逐步讲解事件流，并提供可运行的事件顺序演示"
+    },
+    {
+      "slug": "wishlive",
+      "contentType": "projects",
+      "topics": [
+        "multi-agent",
+        "agent-harness",
+        "runtime-infrastructure"
+      ],
+      "basis": "reviewed-content",
+      "note": "自有黑客松原型的架构、运行机制与实现范围"
+    }
+  ]
+}

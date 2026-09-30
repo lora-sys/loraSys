@@ -24,7 +24,7 @@ const server = createServer(async (req, res) => {
 })
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve))
 const base = `http://127.0.0.1:${server.address().port}/loraSys/`
-const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome' })
+const browser = await chromium.launch({ headless: true, channel: process.env.PLAYWRIGHT_CHANNEL || 'chromium' })
 
 try {
   for (const viewport of [
@@ -47,25 +47,37 @@ try {
       if (image instanceof HTMLImageElement && !image.complete) await new Promise(resolve => image.addEventListener('load', resolve, { once: true }))
     })
 
+    assert.ok(await page.locator('.contact-visual').evaluate(image => image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0), `${viewport.name}: artwork loads`)
+    const emailAction = page.locator('.contact-intro .mail-cta')
+    await emailAction.focus()
+    assert.equal(await emailAction.evaluate(element => element === document.activeElement), true, `${viewport.name}: email action accepts keyboard focus`)
+
     const metrics = await page.evaluate(() => {
       const intro = document.querySelector('.contact-intro').getBoundingClientRect()
-      const title = document.querySelector('.contact-intro h2').getBoundingClientRect()
+      const copy = document.querySelector('.contact-intro p').getBoundingClientRect()
+      const action = document.querySelector('.contact-intro .mail-cta').getBoundingClientRect()
       const visual = document.querySelector('.contact-visual').getBoundingClientRect()
       const style = getComputedStyle(document.querySelector('.contact-visual'))
       return {
         overflow: document.documentElement.scrollWidth - innerWidth,
         intro: { left: intro.left, right: intro.right, top: intro.top, bottom: intro.bottom },
-        title: { left: title.left, right: title.right, top: title.top, bottom: title.bottom },
+        copy: { left: copy.left, right: copy.right, top: copy.top, bottom: copy.bottom },
+        action: { left: action.left, right: action.right, top: action.top, bottom: action.bottom },
         visual: { left: visual.left, right: visual.right, top: visual.top, bottom: visual.bottom },
-        mask: style.maskImage || style.webkitMaskImage || ''
+        objectFit: style.objectFit
       }
     })
     assert.ok(metrics.overflow <= 1, `${viewport.name}: page must not overflow horizontally`)
+    for (const name of ['copy', 'action']) {
+      const bounds = metrics[name]
+      assert.ok(bounds.left >= metrics.intro.left - 1 && bounds.right <= metrics.intro.right + 1, `${viewport.name}: ${name} stays inside the intro`)
+      assert.ok(bounds.top >= metrics.intro.top - 1 && bounds.bottom <= metrics.intro.bottom + 1, `${viewport.name}: ${name} remains readable inside the intro`)
+    }
+    assert.equal(metrics.objectFit, 'contain', `${viewport.name}: the current artwork must remain uncropped`)
     if (viewport.width > 620) {
-      assert.ok(metrics.title.right < metrics.intro.right - metrics.intro.right * 0.02, `${viewport.name}: title must remain inside card`)
-      assert.ok(metrics.mask.includes('linear-gradient'), `${viewport.name}: artwork must retain the protective fade`)
+      assert.ok(Math.max(metrics.copy.right, metrics.action.right) <= metrics.visual.left + 1, `${viewport.name}: artwork does not overlap the copy or email action`)
     } else {
-      assert.ok(metrics.visual.top >= metrics.title.bottom, `${viewport.name}: mobile artwork must sit below the title`)
+      assert.ok(metrics.visual.top >= metrics.action.bottom, `${viewport.name}: mobile artwork must sit below the email action`)
     }
     await page.screenshot({ path: path.join(output, `${viewport.name}.png`), animations: 'disabled' })
     await context.close()

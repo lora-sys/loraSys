@@ -2,12 +2,15 @@
 title: 'Foreman：给 Coding Agent 加一个独立监工'
 description: '拆解 Foreman 如何把 Coding Agent 的执行循环与独立监督分开，用运行证据、Jev 判断和确定性 policy 决定继续、验证、停止或交给人工。'
 publishDate: '2026-09-17T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/foreman-coding-agent-supervisor/lora-explainer-v2.webp'
+  alt: 'Worker 执行任务，Foreman 读取运行证据，再由 Policy 决定下一步'
 tags: ['AI', 'Agent', 'Coding Agent', 'Harness', 'Eval', 'Foreman']
+contentType: 'projects'
+topics: ['agent-harness', 'evaluation', 'devtools']
 language: 'zh-CN'
 draft: false
 ---
-
-![](../../assets/blog/foreman-coding-agent-supervisor/notion-image-1.svg)
 
 ## 核心观点
 Coding Agent 自己写代码，又自己判断“是不是已经做完”，会把执行和验收放进同一个决策循环。

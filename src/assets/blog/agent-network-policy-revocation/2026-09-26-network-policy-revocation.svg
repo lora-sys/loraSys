@@ -13,13 +13,13 @@
 <text x="320" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#7A4E17">连接开始时</text>
 <text x="320" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">目标 api.example.com</text>
 <text x="320" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">当前策略允许访问</text>
-<rect x="190" y="610" width="260" height="90" rx="18" fill="#E4EAD9"/>
+<rect x="155" y="610" width="330" height="90" rx="18" fill="#E4EAD9"/>
 <text x="320" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#4F6A3A">持有 network permit</text>
 <rect x="555" y="380" width="420" height="420" rx="28" fill="#FFF9F0" stroke="#8C6A51" stroke-width="4"/>
 <text x="765" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#5A4638">连接正在运行</text>
 <text x="765" y="500" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">HTTP 流持续读取</text>
 <text x="765" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">WebSocket 持续读写</text>
-<rect x="630" y="610" width="270" height="90" rx="18" fill="#EFE3D3"/>
+<rect x="590" y="610" width="350" height="90" rx="18" fill="#EFE3D3"/>
 <text x="765" y="665" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#5A4638">permit 跟随整个生命周期</text>
 <rect x="1000" y="380" width="420" height="420" rx="28" fill="#FFF9F0" stroke="#A9503E" stroke-width="4"/>
 <text x="1210" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#8C3F31">策略撤销访问</text>

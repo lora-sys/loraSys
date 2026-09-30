@@ -3,6 +3,7 @@ import { render, type CollectionEntry } from 'astro:content'
 
 import { Icon } from 'astro-pure/user'
 
+import ArticleClassification from './ArticleClassification.astro'
 import LanguageBadge from './LanguageBadge.astro'
 import FormattedDate from './LocalDate.astro'
 
@@ -16,7 +17,7 @@ const { remarkPluginFrontmatter } = await render(post)
 const postDate = data.publishDate
 ---
 
-<li class='post-card'>
+<li class='post-card' data-article data-content-type={data.contentType} data-series={data.series}>
   <article>
     <div class='post-meta'>
       <FormattedDate date={postDate} />
@@ -40,17 +41,7 @@ const postDate = data.publishDate
 
     <p lang={data.language}>{data.description}</p>
 
-    {
-      !!data.tags.length && (
-        <ul class='tag-list' aria-label={`${data.title} 的标签`}>
-          {data.tags.map((tag) => (
-            <li>
-              <a href={`/tags/${tag}`}>#{tag}</a>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+    <ArticleClassification {data} />
   </article>
 </li>
 

@@ -22,7 +22,7 @@
 <text x="1235" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#8C3F31">3. 策略更新</text>
 <text x="1235" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">新规则撤销某个域名</text>
 <path d="M1120 440 H1350" stroke="#6B5140" stroke-width="10" marker-end="url(#a)"/>
-<text x="1235" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">正在运行的请求</text>
+<text x="1235" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">正在运行的请求</text>
 <rect x="1110" y="520" width="250" height="115" rx="18" fill="#F7D9D1"/>
 <text x="1235" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#A9503E">立即取消</text>
 <text x="1235" y="610" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#2B211B">不再允许的连接</text>

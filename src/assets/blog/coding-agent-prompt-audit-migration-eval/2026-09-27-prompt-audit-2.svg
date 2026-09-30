@@ -22,5 +22,5 @@
 <text x="810" y="580" class="b">不适合</text><text x="810" y="620" class="s">必须始终生效的安全规则</text><text x="810" y="655" class="s">不能依赖模型是否想起调用</text>
 <text x="1170" y="580" class="b">不适合</text><text x="1170" y="620" class="s">主 Agent 必须持续掌握的状态</text><text x="1170" y="655" class="s">紧密串行的简单任务</text>
 <rect x="55" y="785" width="1425" height="74" rx="18" fill="#44382f"/>
-<text x="180" y="832" font-family="Noto Sans SC,Arial" font-size="25" fill="#fffaf1">Claude Code 官方建议：CLAUDE.md 保持精简，只把每次会话都需要的内容放进去。</text>
+<text x="180" y="832" font-family="Noto Sans SC,Arial" font-size="25" style="fill:#fffaf1">Claude Code 官方建议：CLAUDE.md 保持精简，只把每次会话都需要的内容放进去。</text>
 </svg>

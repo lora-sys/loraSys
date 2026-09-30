@@ -1,8 +1,12 @@
 ---
 import { Image } from 'astro:assets'
 import type { InferEntrySchema } from 'astro:content'
-import config from '@/site-config'
 import { text } from '@/i18n/ui'
+
+import { writingLabel } from '@/utils/writing'
+import config from '@/site-config'
+
+import ArticleClassification from './ArticleClassification.astro'
 import FormattedDate from './LocalDate.astro'
 
 interface Props {
@@ -11,34 +15,40 @@ interface Props {
 }
 
 const {
-  data: { title, description, draft, heroImage, publishDate, updatedDate, tags, language },
+  data: { title, description, draft, heroImage, publishDate, updatedDate, contentType, language },
   remarkPluginFrontmatter
 } = Astro.props
 const locale = language === 'en-US' ? 'en-US' : 'zh-CN'
 const t = (zh: string, en: string) => text(locale, zh, en)
-const dateTimeOptions: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short', year: 'numeric' }
+const dateTimeOptions: Intl.DateTimeFormatOptions = {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric'
+}
 const minutesRead = String(remarkPluginFrontmatter.minutesRead ?? '')
 const readingMinutes = minutesRead.match(/\d+/)?.[0] ?? '1'
-const category = tags?.[0] ?? t('文章', 'Article')
+const category = writingLabel('type', contentType, locale)
 ---
 
-{heroImage && (
-  <div class='article-hero-image'>
-    <Image
-      alt={heroImage.alt || title}
-      class='cover-image'
-      fetchpriority='high'
-      loading='eager'
-      decoding='async'
-      {...heroImage}
-    />
-  </div>
-)}
+{
+  heroImage && (
+    <div class='article-hero-image'>
+      <Image
+        alt={heroImage.alt || title}
+        class='cover-image'
+        fetchpriority='high'
+        loading='eager'
+        decoding='async'
+        {...heroImage}
+      />
+    </div>
+  )
+}
 
 {draft ? <span class='article-draft'>{t('草稿', 'Draft')}</span> : null}
 
 <header class='article-info'>
-  <p class='article-kicker'>{category}</p>
+  <p class='article-kicker' data-pagefind-filter={t('内容类型', 'Content type')}>{category}</p>
   <h1>{title}</h1>
   <p class='article-deck'>{description}</p>
 
@@ -49,27 +59,37 @@ const category = tags?.[0] ?? t('文章', 'Article')
     </div>
     <div>
       <dt>{t('发布', 'Published')}</dt>
-      <dd><FormattedDate {locale} class='article-meta-date' date={publishDate} dateTimeOptions={dateTimeOptions} /></dd>
+      <dd>
+        <FormattedDate
+          {locale}
+          class='article-meta-date'
+          date={publishDate}
+          dateTimeOptions={dateTimeOptions}
+        />
+      </dd>
     </div>
     <div>
       <dt>{t('阅读时长', 'Reading time')}</dt>
       <dd>{t(`约 ${readingMinutes} 分钟`, `${readingMinutes} min`)}</dd>
     </div>
-    {updatedDate && (
-      <div>
-        <dt>{t('更新', 'Updated')}</dt>
-        <dd><FormattedDate {locale} class='article-meta-date' date={updatedDate} dateTimeOptions={dateTimeOptions} /></dd>
-      </div>
-    )}
+    {
+      updatedDate && (
+        <div>
+          <dt>{t('更新', 'Updated')}</dt>
+          <dd>
+            <FormattedDate
+              {locale}
+              class='article-meta-date'
+              date={updatedDate}
+              dateTimeOptions={dateTimeOptions}
+            />
+          </dd>
+        </div>
+      )
+    }
   </dl>
 
-  {!!tags?.length && (
-    <nav class='article-tags' aria-label={t('文章标签', 'Article tags')}>
-      {tags.map((tag: string) => (
-        <a data-pagefind-filter={t('标签', 'Tags')} href={`/tags/${tag}`}>#{tag}</a>
-      ))}
-    </nav>
-  )}
+  <ArticleClassification data={Astro.props.data} {locale} includeType={false} searchFilters />
 
   <div class='article-support'>
     <slot name='description' />
@@ -148,27 +168,6 @@ const category = tags?.[0] ?? t('文章', 'Article')
     font-size: 0.77rem;
     font-weight: 530;
     line-height: 1.45;
-  }
-
-  .article-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.45rem 0.9rem;
-    margin-top: 0.85rem;
-    font-size: 0.67rem;
-    line-height: 1.45;
-  }
-
-  .article-tags a {
-    color: hsl(var(--muted-foreground));
-    text-decoration: none;
-  }
-
-  .article-tags a:hover,
-  .article-tags a:focus-visible {
-    color: hsl(var(--foreground));
-    text-decoration: underline;
-    text-underline-offset: 0.22rem;
   }
 
   .article-support {

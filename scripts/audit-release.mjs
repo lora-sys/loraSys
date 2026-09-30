@@ -139,3 +139,5 @@ if (failures.length) {
 }
 
 console.log(`Release audit passed: ${files.length} generated files and ${required.length} required outputs`)
+
+await import("./audit-writing-taxonomy.mjs")

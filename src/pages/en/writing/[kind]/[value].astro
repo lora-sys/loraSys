@@ -1,0 +1,14 @@
+---
+import EnglishWriting from '@/components/blog/EnglishWriting.astro'
+import { writingGroups, type WritingKind } from '@/utils/writing'
+
+export const getStaticPaths = () =>
+  (Object.keys(writingGroups) as WritingKind[]).flatMap((kind) =>
+    Object.keys(writingGroups[kind]).map((value) => ({
+      params: { kind, value },
+      props: { activeKind: kind, activeValue: value }
+    }))
+  )
+---
+
+<EnglishWriting {...Astro.props} />

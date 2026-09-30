@@ -141,13 +141,28 @@ try {
         assert.ok(await page.locator('h1').count(), 'Search destination should contain a heading')
       })
 
-      await check(`${label}: homepage freshness and one scroll progress system`, async () => {
+      await check(`${label}: homepage evidence and keyboard section navigation`, async () => {
         await open()
-        assert.equal(await page.locator('[data-freshness-status]').count(), 1, 'Homepage should expose one freshness summary')
+        const workEvidence = page.locator('#work .section-meta')
+        assert.equal(await workEvidence.locator('[data-evidence-kind="verified"]').count(), 1, 'Selected work should retain its evidence label')
+        const syncedAt = await workEvidence.locator('time').getAttribute('datetime')
+        assert.match(syncedAt ?? '', /^\d{4}-\d{2}-\d{2}$/, 'Selected work should expose its snapshot date')
+        assert.ok(Number.isFinite(Date.parse(syncedAt)), 'Snapshot date must be valid')
+        assert.equal(await page.locator('#writing .section-meta [data-evidence-kind="field-note"]').count(), 1, 'Writing should keep its distinct evidence label')
         assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
-        assert.equal(await page.locator('[data-site-header] [data-scroll-progress]').count(), 1, 'Header scroll progress should remain the single page-progress indicator')
-        const sectionNavPosition = await page.locator('.section-nav').evaluate((element) => getComputedStyle(element).position)
-        assert.equal(sectionNavPosition, viewport.width >= 768 ? 'sticky' : 'relative', 'Homepage section index should stay available on desktop without trapping mobile')
+        assert.equal(await page.locator('[data-site-header]').count(), 1, 'Homepage should retain one consistent navigation header')
+        for (const id of ['work', 'writing']) {
+          const link = page.locator(`.hero-actions a[href$="#${id}"]`)
+          await link.press('Enter')
+          await page.waitForURL((url) => url.hash === `#${id}`)
+          await page.waitForFunction((sectionId) => {
+            const heading = document.querySelector(`#${sectionId} h2`)
+            const header = document.querySelector('[data-site-header]')
+            if (!heading || !header) return false
+            const bounds = heading.getBoundingClientRect()
+            return bounds.top >= header.getBoundingClientRect().bottom && bounds.top < innerHeight
+          }, id)
+        }
       })
 
       await check(`${label}: Now separates reviewed focus from automatic snapshots`, async () => {
@@ -162,75 +177,119 @@ try {
         assert.ok(await page.locator('.related-context').count() > 0, 'Featured writing should surface related projects when curated links exist')
       })
 
-      await check(`${label}: lead project unfolds from the curated map`, async () => {
+      await check(`${label}: lead project demo and keyboard project navigation`, async () => {
         await open()
-        const stage = page.locator('[data-lead-project-stage]')
+        const stage = page.locator('#work .lead-project-stage')
+        assert.equal(await stage.locator('[data-project-card]').count(), 1, 'Lead project should contain one project card')
         await stage.scrollIntoViewIfNeeded()
-        await page.waitForFunction(() => document.querySelector('[data-lead-project-stage]')?.getAttribute('data-active') === 'true')
-        const progress = Number(await stage.getAttribute('data-stage-progress'))
-        assert.ok(progress >= 0 && progress <= 1, 'Lead stage progress must stay bounded')
-        assert.ok(await stage.locator('[data-project-card]').count(), 'Lead project stage should contain the existing project card')
+        const accept = stage.locator('[data-review-decision="accept"]')
+        const rework = stage.locator('[data-review-decision="rework"]')
+        await accept.press('Enter')
+        assert.equal(await stage.locator('[data-review-status]').textContent(), 'Task · DONE')
+        assert.equal(await accept.getAttribute('aria-pressed'), 'true')
+        await rework.press('Enter')
+        assert.equal(await stage.locator('[data-review-status]').textContent(), 'Review · REWORK')
+        assert.equal(await rework.getAttribute('aria-pressed'), 'true')
+        assert.equal(await accept.getAttribute('aria-pressed'), 'false')
+        assert.equal(await stage.locator('[data-review-result="accept"]').isVisible(), false)
+        assert.equal(await stage.locator('[data-review-result="rework"]').isVisible(), true)
+        const projectLink = stage.locator('[data-interaction="project_website"]')
+        const repository = await projectLink.getAttribute('data-destination')
+        assert.ok(repository, 'Lead project link should identify its repository')
+        assert.equal(await projectLink.getAttribute('href'), `${base}projects#${repository}`)
+        const source = stage.locator('[data-interaction="project_source"]')
+        assert.equal(new URL(await source.getAttribute('href')).hostname, 'github.com')
+        assert.equal(await source.getAttribute('target'), '_blank')
+        assert.match(await source.getAttribute('rel'), /(?:^|\s)noopener(?:\s|$)/)
+        await projectLink.press('Enter')
+        await page.waitForURL((url) => url.hash === `#${repository}` && url.pathname.replace(/\/$/, '') === `${base}projects`)
+        const target = page.locator(`[id="${repository}"]`)
+        assert.equal(await target.count(), 1, 'Lead project destination must be unique')
+        await target.waitFor({ state: 'visible' })
+        await page.waitForFunction((id) => {
+          const target = document.getElementById(id)
+          if (!target) return false
+          const bounds = target.getBoundingClientRect()
+          return bounds.top >= 0 && bounds.top < innerHeight && bounds.bottom > 0
+        }, repository)
       })
 
-      await check(`${label}: Anime Archive opens and returns from broadcast mode`, async () => {
+      await check(`${label}: Anime Archive opens and returns from its keyboard-accessible viewer`, async () => {
         await open()
-        const trigger = page.locator('[data-showcase-id="anime"] .lens').first()
+        const shelf = page.locator('[data-showcase-id="anime"]')
+        const trigger = shelf.locator('[data-viewer-trigger]').first()
         await trigger.scrollIntoViewIfNeeded()
-        await trigger.click()
-        const viewer = page.locator('[data-anime-broadcast]')
+        assert.equal(await trigger.getAttribute('aria-haspopup'), 'dialog')
+        await trigger.press('Enter')
+        const viewer = page.locator('[data-archive-viewer]')
         await viewer.waitFor({ state: 'visible' })
         assert.equal(await viewer.evaluate((element) => element.open), true)
-        assert.ok(await viewer.locator('[data-broadcast-image]').getAttribute('alt'), 'Broadcast poster needs alt text')
-        assert.ok(await viewer.locator('[data-broadcast-media-status]').count(), 'Broadcast needs a media status region')
-        assert.equal(await viewer.locator('[data-broadcast-backdrop]').count(), 1, 'Broadcast needs a letterbox backdrop so posters are not cropped')
-        const initial = await viewer.locator('[data-broadcast-count]').textContent()
+        assert.ok(await viewer.locator('[data-viewer-close]').evaluate((element) => element === document.activeElement), 'Opening the viewer should focus its close button')
+        assert.ok(await viewer.locator('[data-viewer-image]').getAttribute('alt'), 'Archive poster needs alt text')
+        assert.equal(await viewer.locator('[data-viewer-image]').evaluate((element) => getComputedStyle(element).objectFit), 'contain', 'Archive posters should remain uncropped')
+        assert.equal(await viewer.locator('[data-viewer-status]').getAttribute('role'), 'status')
+        assert.equal(await viewer.locator('[data-viewer-backdrop]').count(), 1, 'Archive viewer needs a backdrop around the uncropped poster')
+        assert.equal(await viewer.locator('[data-viewer-detail]').getAttribute('href'), await trigger.getAttribute('href'), 'Viewer details should retain the originating card destination')
+        assert.equal(await viewer.locator('[data-viewer-prev]').isDisabled(), true)
+        const initial = await viewer.locator('[data-viewer-count]').textContent()
+        const secondTitle = (await shelf.locator('[data-viewer-trigger] h3').nth(1).textContent()).trim()
         await page.keyboard.press('ArrowRight')
-        const changed = await viewer.locator('[data-broadcast-count]').textContent()
-        assert.notEqual(changed, initial, 'Broadcast arrow navigation should change channel')
+        assert.notEqual(await viewer.locator('[data-viewer-count]').textContent(), initial, 'Arrow navigation should change the archive item')
+        assert.equal(await viewer.locator('[data-viewer-title]').textContent(), secondTitle)
+        assert.equal(await viewer.locator('[data-viewer-prev]').isDisabled(), false)
+        await page.keyboard.press('ArrowLeft')
+        assert.equal(await viewer.locator('[data-viewer-count]').textContent(), initial, 'Left arrow should return to the first item')
         await page.keyboard.press('Escape')
         await viewer.waitFor({ state: 'hidden' })
-        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus to the originating card')
+        await page.waitForFunction((element) => element === document.activeElement, await trigger.elementHandle())
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing the viewer should restore focus to the originating card')
+        if (reducedMotion === 'reduce') {
+          assert.equal(await shelf.locator('[data-track]').evaluate((element) => getComputedStyle(element).scrollBehavior), 'auto', 'Reduced motion should disable smooth archive scrolling')
+        }
       })
 
-      await check(`${label}: official trailer stays optional and never outlives its channel`, async () => {
+      await check(`${label}: official trailer stays optional and never outlives its archive item`, async () => {
         await open()
-        const trigger = page.locator('[data-showcase-id="anime"] .lens').first()
+        const cards = page.locator('[data-showcase-id="anime"] [data-archive-card]')
+        const videoIds = await cards.evaluateAll((elements) => elements.map((element) => element.dataset.videoId ?? ''))
+        const videoIndex = videoIds.findIndex((id, index) => id && index + 1 < videoIds.length && !videoIds[index + 1])
+        assert.ok(videoIndex >= 0, 'Archive should provide a verified trailer followed by a poster-only item to exercise media changes')
+        const trigger = cards.nth(videoIndex).locator('[data-viewer-trigger]')
         await trigger.scrollIntoViewIfNeeded()
         await trigger.click()
-        const viewer = page.locator('[data-anime-broadcast]')
+        const viewer = page.locator('[data-archive-viewer]')
         await viewer.waitFor({ state: 'visible' })
-        // The poster is the default; no iframe may exist before the reader asks for the trailer.
-        assert.equal(await viewer.locator('iframe').count(), 0, 'Broadcast must not load a player before activation')
-        const playButton = viewer.locator('[data-broadcast-video]')
-        // A channel without a verified official video must not offer the control at all.
-        await viewer.locator('[data-broadcast-next]').click()
-        await page.waitForFunction(() => {
-          const button = document.querySelector('[data-anime-broadcast] [data-broadcast-video]')
-          return button instanceof HTMLElement && getComputedStyle(button).display === 'none'
-        })
-        assert.equal(await playButton.isVisible(), false, 'Channels without a verified video must hide the trailer control')
-        await viewer.locator('[data-broadcast-prev]').click()
-        if (await playButton.isVisible()) {
-          await playButton.click()
-          await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
-          assert.equal(await viewer.locator('iframe').count(), 1, 'Only one player may be active')
-          // Switching channels must unload the previous player immediately.
-          await viewer.locator('[data-broadcast-next]').click()
-          await page.waitForFunction(() => !document.querySelector('[data-anime-broadcast] .broadcast-video-frame'))
-          assert.equal(await viewer.locator('iframe').count(), 0, 'Channel change must unload the previous player')
-          // Playing it again and closing must leave nothing behind.
-          await viewer.locator('[data-broadcast-prev]').click()
-          const replay = viewer.locator('[data-broadcast-video]')
-          if (await replay.isVisible()) {
-            await replay.click()
-            await viewer.locator('.broadcast-video-frame').waitFor({ state: 'attached' })
-          }
-        }
-        await viewer.locator('[data-broadcast-close]').click()
+        const player = viewer.locator('[data-viewer-player]')
+        const playButton = viewer.locator('[data-viewer-play]')
+        // The viewer retains an empty iframe and only assigns its source on request.
+        assert.equal(await player.getAttribute('src'), null, 'Archive viewer must not load media before activation')
+        assert.equal(await player.isVisible(), false)
+        assert.equal(await playButton.isVisible(), true, 'A verified trailer must offer an explicit play control')
+        await viewer.locator('[data-viewer-next]').click()
+        assert.equal(await playButton.isVisible(), false, 'Items without a verified video must hide the trailer control')
+        assert.equal(await viewer.locator('[data-viewer-media]').isVisible(), false)
+        assert.equal(await player.getAttribute('src'), null)
+        await viewer.locator('[data-viewer-prev]').click()
+        await playButton.click()
+        await player.waitFor({ state: 'visible' })
+        assert.equal(await player.getAttribute('src'), `https://www.youtube.com/embed/${videoIds[videoIndex]}?autoplay=1&mute=1&rel=0`)
+        assert.equal(await viewer.locator('iframe[src]').count(), 1, 'Only one player may be active')
+        assert.equal(await playButton.isVisible(), false)
+        await viewer.locator('[data-viewer-next]').click()
+        assert.equal(await player.getAttribute('src'), null, 'Changing archive items must unload the previous player')
+        assert.equal(await player.isVisible(), false)
+        await viewer.locator('[data-viewer-prev]').click()
+        await playButton.click()
+        await player.waitFor({ state: 'visible' })
+        assert.ok(await player.getAttribute('src'), 'Replaying the trailer should load it again')
+        await viewer.locator('[data-viewer-close]').click()
         await viewer.waitFor({ state: 'hidden' })
-        await page.waitForFunction(() => document.querySelectorAll('[data-anime-broadcast] iframe, [data-anime-broadcast] audio, [data-anime-broadcast] video').length === 0)
-        assert.equal(await viewer.locator('iframe, audio, video').count(), 0, 'Closing broadcast must leave no player behind')
-        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing broadcast should restore focus after video playback')
+        await page.waitForFunction(() => {
+          const player = document.querySelector('[data-archive-viewer] [data-viewer-player]')
+          return player instanceof HTMLIFrameElement && !player.hasAttribute('src') && player.hidden
+        })
+        assert.equal(await viewer.locator('iframe[src], audio, video').count(), 0, 'Closing the viewer must leave no loaded player behind')
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing the viewer should restore focus after video playback')
       })
 
       await check(`${label}: source labels filtering empty state and browser history`, async () => {

@@ -35,5 +35,5 @@
 <text x="190" y="710" class="h2">两类证据要分开</text>
 <text x="190" y="752" class="b">静态审计回答“这条规则可能过时吗”。Eval 回答“改完以后任务结果真的更好吗”。</text>
 <rect x="55" y="810" width="1425" height="58" rx="16" fill="#44382f"/>
-<text x="285" y="848" font-family="Noto Sans SC,Arial" font-size="23" fill="#fff9ef">没有对照实验，prompt audit 只是修改建议，不是效果证明。</text>
+<text x="285" y="848" font-family="Noto Sans SC,Arial" font-size="23" style="fill:#fff9ef">没有对照实验，prompt audit 只是修改建议，不是效果证明。</text>
 </svg>
