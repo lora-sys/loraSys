@@ -1036,6 +1036,15 @@
         }
       ],
       "note": "Complete recursive-discovery article. All four source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
+    },
+    {
+      "source_page_id_sha256": "5eb91552a4c1b03cc5f52d5db280f4cadc7ec13b20cbd124e36b99b5a803024e",
+      "slug": "ai-agent-engineering-news-2026-09-30-10-01",
+      "content_fingerprint": "git-blob:ddab54c1e359c93da1028c143c50365a9b28465e",
+      "source_last_edited_at": "2026-10-01T00:01:39.319Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. Coverage ends 2026-10-01 and publishDate uses the coverage end date."
     }
   ]
 }
