@@ -18,7 +18,7 @@ const en = locale === 'en-US'
         src={paperStage}
         alt=''
         widths={[480, 800, 1200]}
-        sizes='(max-width: 760px) 90vw, 48rem'
+        sizes='(max-width: 900px) 90vw, 48rem'
         loading='eager'
         decoding='async'
       />
@@ -30,7 +30,7 @@ const en = locale === 'en-US'
           ? 'Lora and Mochi sit together on a paper notebook.'
           : 'Lora 和 Mochi 坐在纸本笔记上。'}
         widths={[384, 640, 900]}
-        sizes='(max-width: 760px) 64vw, 28rem'
+        sizes='(max-width: 900px) 64vw, 28rem'
         loading='eager'
         fetchpriority='high'
         decoding='async'
@@ -51,7 +51,7 @@ const en = locale === 'en-US'
       const button = this.querySelector<HTMLButtonElement>('[data-scene-motion]')
       if (!camera || !button) return
       const media = matchMedia('(prefers-reduced-motion: reduce)')
-      const pointer = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 761px)')
+      const pointer = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)')
       const en = this.dataset.locale === 'en-US'
       let paused = false
       try {
@@ -155,7 +155,7 @@ const en = locale === 'en-US'
   }
   .scene-paper {
     position: absolute;
-    inset: 0 -9% -5% -4%;
+    inset: 0 -4% -5% -4%;
     transform: translateZ(-34px);
   }
   .scene-paper :global(img) {
@@ -205,12 +205,12 @@ const en = locale === 'en-US'
   :global(.dark) .hero-figure :global(img) {
     filter: drop-shadow(0 12px 8px hsl(0 0% 0% / 0.4));
   }
-  @media (min-width: 761px) and (max-width: 1200px) {
+  @media (min-width: 901px) and (max-width: 1200px) {
     .scene-paper {
       inset: 0 0 -5%;
     }
   }
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     .hero-scene {
       width: min(100%, 28rem);
       max-width: 100%;

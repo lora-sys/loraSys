@@ -236,3 +236,35 @@
     box-shadow: none;
   }
 }
+
+/* Let the selected editorial scene fill the first spread, not a small centered card. */
+#main-container.site-frame:has(.home-page) {
+  max-width: 85rem;
+}
+#main-content.page-content--showcase:has(.home-page) {
+  max-width: none;
+}
+body:has(.home-page) #highlight-gradient {
+  opacity: 0.07;
+}
+.site-frame .home-page .home-hero {
+  min-height: clamp(36rem, 54vw, 48rem);
+  padding-inline: 0;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+}
+.site-frame .home-page .home-flow {
+  width: 100%;
+  padding-inline: 0;
+}
+@media (max-width: 900px) {
+  .site-frame .home-page .home-hero {
+    min-height: 0;
+    grid-template-columns: 1fr;
+    padding: 2.5rem 0.25rem 3rem;
+    gap: 1.5rem;
+  }
+  .site-frame .home-page .hero-visual {
+    display: grid;
+    place-items: center;
+  }
+}

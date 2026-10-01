@@ -205,9 +205,9 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     transform: translateY(-1rem);
   }
   .home-hero :global(.hero-scene) {
-    width: 112%;
+    width: 100%;
     max-width: none;
-    transform: translate(-4%, 0);
+    transform: none;
   }
   .hero-visual {
     position: relative;
@@ -444,10 +444,10 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     gap: 1rem;
     margin-top: 0.6rem;
   }
-  @media (min-width: 761px) and (max-width: 1200px) {
+  @media (min-width: 901px) and (max-width: 1200px) {
     .home-hero :global(.hero-scene) { width:100%; transform:none; }
   }
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
     .home-hero {
       min-height: calc(100svh - 3.5rem);
       grid-template-columns: 1fr;

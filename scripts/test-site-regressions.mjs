@@ -151,7 +151,7 @@ try {
         assert.equal(await scene.locator('canvas').count(), 0, 'Paper scene remains dependency-free CSS perspective')
         assert.equal(await page.locator('.home-hero h1').count(), 1, 'Main title remains HTML')
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Paper scene cannot create horizontal overflow')
-        if (reducedMotion === 'reduce' || viewport.width <= 760) {
+        if (reducedMotion === 'reduce' || viewport.width <= 900) {
           assert.equal(await toggle.isVisible(), false)
           assert.equal(await scene.getAttribute('data-motion'), 'static')
           assert.equal(await camera.evaluate(element => getComputedStyle(element).transform), 'none')
