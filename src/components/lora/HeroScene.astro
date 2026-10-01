@@ -17,9 +17,10 @@ const en = locale === 'en-US'
       <Image
         src={paperStage}
         alt=''
-        widths={[480, 800, 1200]}
+        widths={[480, 640, 800, 1200]}
         sizes='(max-width: 900px) 90vw, 48rem'
         loading='eager'
+        fetchpriority='high'
         decoding='async'
       />
     </div>
@@ -29,7 +30,7 @@ const en = locale === 'en-US'
         alt={en
           ? 'Lora and Mochi sit together on a paper notebook.'
           : 'Lora 和 Mochi 坐在纸本笔记上。'}
-        widths={[480, 800, 1200]}
+        widths={[480, 640, 800, 1200]}
         sizes='(max-width: 900px) 74vw, 42rem'
         quality={90}
         loading='eager'

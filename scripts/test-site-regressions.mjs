@@ -29,6 +29,15 @@ async function htmlFiles(directory) {
 }
 
 const report = { base, checks: [], screenshots: [] }
+const fontPreloads = [...home.matchAll(/<link\b[^>]*>/g)]
+  .map(([tag]) => attributes(tag))
+  .filter((tag) => tag.rel === 'preload' && tag.as === 'font')
+assert.equal(fontPreloads.length, 2, 'Preload both normal Satoshi weights before first paint')
+report.checks.push({ name: 'Satoshi font preloads', passed: true, count: fontPreloads.length })
+const projectHtml = await readFile(path.join(dist, 'projects/index.html'), 'utf8')
+const archivedProjects = projectHtml.slice(projectHtml.indexOf('data-work-archive'))
+assert.ok(!/<img\b[^>]*loading="eager"/.test(archivedProjects), 'Collapsed project archive must not eagerly load a duplicate hero')
+report.checks.push({ name: 'collapsed archive image loading', passed: true })
 const errors = []
 const files = await htmlFiles(dist)
 let alternateCount = 0
