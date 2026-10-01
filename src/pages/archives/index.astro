@@ -38,6 +38,13 @@ const meta = {
       <a href='#lab'>实验记录 <span>{labEntries.length}</span></a>
     </nav>
 
+    <div class='archive-search'>
+      <label for='archive-query'>在归档中查找</label><input
+        id='archive-query'
+        type='search'
+        placeholder='文章标题、项目或笔记'
+      /><p data-archive-search-status role='status' aria-live='polite'></p>
+    </div>
     <section id='articles' class='archive-section' aria-labelledby='articles-title'>
       <header><h2 id='articles-title'>文章</h2><span>{posts.length} 篇</span></header>
       {
@@ -136,7 +143,49 @@ const meta = {
   </main>
 </PageLayout>
 
+<script>
+  const input = document.querySelector<HTMLInputElement>('#archive-query')
+  const items = [...document.querySelectorAll<HTMLElement>('.archive-list > li')]
+  const status = document.querySelector<HTMLElement>('[data-archive-search-status]')
+  input?.addEventListener('input', () => {
+    const query = input.value.trim().toLocaleLowerCase()
+    let visible = 0
+    items.forEach((item) => {
+      item.hidden = !item.textContent?.toLocaleLowerCase().includes(query)
+      if (!item.hidden) visible += 1
+    })
+    if (status) status.textContent = query ? `显示 ${visible} / ${items.length} 条记录` : ''
+  })
+</script>
 <style>
+  .archive-search {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem 0 2.5rem;
+  }
+  .archive-search input {
+    font: inherit;
+    min-height: 3rem;
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--field-paper));
+    color: inherit;
+    border-radius: 0.5rem;
+  }
+  .archive-search label {
+    font-weight: 650;
+    font-size: 0.85rem;
+  }
+  .archive-search p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .archive-list > li[hidden] {
+    display: none;
+  }
+
   .archive-page {
     max-width: 58rem;
     margin-inline: auto;

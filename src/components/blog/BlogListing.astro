@@ -80,6 +80,7 @@ const paginationProps = {
   ...(page.url.prev && { prevUrl: { text: '上一页', url: page.url.prev } }),
   ...(page.url.next && { nextUrl: { text: '下一页', url: page.url.next } })
 }
+const compactHeader = Boolean(activeKind || activeLanguage || page.currentPage > 1)
 const browseBase = activeKind && activeValue ? `/blog/${activeKind}/${activeValue}` : '/blog'
 const languageFilters = [
   { title: '全部', href: browseBase, active: !activeLanguage },
@@ -102,22 +103,30 @@ const languageFilters = [
   <Fragment slot='head'>
     <CollectionPageJsonLd name={meta.title} description={meta.description} inLanguage='zh-CN' />
   </Fragment>
-  <main class='blog-shell mt-6 lg:mt-10'>
+  <main class:list={['blog-shell mt-6 lg:mt-10', { 'blog-shell--filtered': compactHeader }]}>
     <header id='content-header' class='animate editorial-header'>
-      <Image
-        src={readingMarker}
-        alt=''
-        aria-hidden='true'
-        class='reading-marker'
-        widths={[720, 1152, 1536]}
-        sizes='(min-width: 1024px) 34rem, 72vw'
-        loading='lazy'
-        fetchpriority='low'
-      />
+      {
+        !compactHeader && (
+          <Image
+            src={readingMarker}
+            alt=''
+            aria-hidden='true'
+            class='reading-marker'
+            widths={[720, 1152, 1536]}
+            sizes='(min-width: 1024px) 34rem, 72vw'
+            loading='lazy'
+            fetchpriority='low'
+          />
+        )
+      }
       <div>
         <p class='eyebrow'>写作</p>
-        <h1>把正在构建的东西，写成可复查的笔记。</h1>
-        <p class='intro'>记录智能体系统、多模态工具和公开构建中的长期思考与证据。</p>
+        <h1>{compactHeader ? meta.title : '把正在构建的东西，写成可复查的笔记。'}</h1>
+        {
+          !compactHeader && (
+            <p class='intro'>记录智能体系统、多模态工具和公开构建中的长期思考与证据。</p>
+          )
+        }
       </div>
       <span class='edition' aria-label={`当前显示 ${collectionsCount} 篇文章`}>
         {String(collectionsCount).padStart(2, '0')}<small> 篇文章</small>
@@ -173,7 +182,11 @@ const languageFilters = [
 
     {
       page.data.length === 0 ? (
-        <p class='empty-state'>暂时没有符合条件的文章。</p>
+        <div class='empty-state'>
+          <p>暂时没有符合条件的文章。</p>
+          {activeLanguage && <a href={browseBase}>查看全部语言</a>}
+          <a href='/blog'>清除全部筛选</a>
+        </div>
       ) : (
         <section class='all-notes animate' aria-labelledby='all-notes-title'>
           <header class='all-notes-heading'>
@@ -231,6 +244,38 @@ const languageFilters = [
     gap: 2rem;
     padding-block: 0.5rem 1.25rem;
     border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .blog-shell--filtered .editorial-header {
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    padding-block: 0.25rem 0.85rem;
+  }
+  .blog-shell--filtered h1 {
+    font-size: clamp(1.5rem, 4vw, 2.35rem);
+    line-height: 1.2;
+    letter-spacing: -0.035em;
+  }
+  .blog-shell--filtered .edition {
+    flex: none;
+    font-size: 1.35rem;
+    white-space: nowrap;
+  }
+  .blog-shell--filtered .all-notes {
+    margin-top: 0.75rem;
+  }
+  .blog-shell--filtered .writing-toolbar {
+    margin-bottom: 0.75rem;
+  }
+  .empty-state a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin-right: 1.25rem;
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .reading-marker {

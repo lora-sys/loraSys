@@ -43,17 +43,20 @@ const formatNoteDate = (date: string) =>
     />
   </div>
 
-  <div class='not-prose note-filters' aria-label='按主题筛选笔记'>
-    <button type='button' data-note-filter='all' aria-pressed='true'>全部</button>
-    {
-      tags.map((tag) => (
-        <button type='button' data-note-filter={tag} aria-pressed='false'>
-          {tag}
-        </button>
-      ))
-    }
-  </div>
-  <p id='notes-filter-status' class='sr-only' aria-live='polite'></p>
+  <details class='not-prose note-filter-details'>
+    <summary>按主题筛选 · {tags.length} 个主题</summary>
+    <div class='not-prose note-filters' aria-label='按主题筛选笔记'>
+      <button type='button' data-note-filter='all' aria-pressed='true'>全部</button>
+      {
+        tags.map((tag) => (
+          <button type='button' data-note-filter={tag} aria-pressed='false'>
+            {tag}
+          </button>
+        ))
+      }
+    </div>
+  </details>
+  <p id='notes-filter-status' class='not-prose notes-selection' aria-live='polite'></p>
   <p class='not-prose notes-empty' data-notes-empty hidden>
     这个主题下暂时没有短笔记。可以切回“全部”。
   </p>
@@ -134,6 +137,20 @@ const formatNoteDate = (date: string) =>
 </script>
 
 <style>
+  .note-filter-details {
+    margin: 1rem 0;
+    border-block: 1px solid hsl(var(--border));
+    padding: 0.75rem 0;
+  }
+  .note-filter-details summary {
+    cursor: pointer;
+    font-size: 0.85rem;
+    min-height: 2rem;
+  }
+  .notes-selection {
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+  }
   .notes-intro {
     margin-top: 0.5rem;
     padding-bottom: 2rem;

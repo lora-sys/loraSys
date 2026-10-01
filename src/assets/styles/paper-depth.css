@@ -1,0 +1,215 @@
+/* Shared, quiet paper materials. Reading text is never a transformed surface. */
+:root {
+  --paper-edge: hsl(35 28% 80%);
+  --paper-lift:
+    0 1px 0 hsl(40 50% 100%) inset, 0 3px 0 -1px hsl(var(--field-paper)),
+    0 4px 0 -1px var(--paper-edge), 0 8px 0 -3px hsl(var(--field-paper)),
+    0 9px 0 -3px var(--paper-edge), 0 20px 32px -28px hsl(28 26% 22% / 0.42);
+}
+.dark {
+  --paper-edge: hsl(31 13% 27%);
+  --paper-lift:
+    0 1px 0 hsl(36 15% 26%) inset, 0 3px 0 -1px hsl(var(--field-paper)),
+    0 4px 0 -1px var(--paper-edge), 0 8px 0 -3px hsl(var(--field-paper)),
+    0 9px 0 -3px var(--paper-edge), 0 20px 32px -24px hsl(0 0% 0% / 0.8);
+}
+#main-content {
+  padding-top: clamp(1rem, 3vw, 2rem);
+}
+#main-content:has(.home-page) {
+  padding-top: 0;
+}
+.site-frame .home-hero {
+  min-height: min(48rem, calc(100svh - 5rem));
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  overflow: visible;
+}
+.site-frame .hero-visual {
+  position: relative;
+  min-width: 0;
+  isolation: isolate;
+}
+.site-frame .home-flow {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 2.5rem;
+}
+.site-frame .home-hero .hero-copy {
+  z-index: 2;
+}
+.site-frame .home-hero .secondary-action {
+  border-color: transparent;
+  background: transparent;
+}
+.site-frame
+  :is(
+    .project-card--lead,
+    .project-card--featured,
+    .notes-grid > li > article,
+    .now-grid > section,
+    .lab-card,
+    .resume-card,
+    .record-links > a,
+    .guestbook-hero,
+    .contact-intro,
+    .now-hero,
+    .site-card
+  ) {
+  box-shadow: var(--paper-lift);
+  background-color: hsl(var(--field-paper));
+  border-radius: 0.65rem;
+}
+/* Only artwork tilts. Copy and hit targets keep their flat reading plane. */
+.site-frame :is(.project-card--lead, .project-card--featured) {
+  perspective: 1000px;
+  overflow: visible;
+}
+.site-frame :is(.project-card--lead, .project-card--featured) .project-media {
+  transform-origin: center bottom;
+  transition: transform 190ms ease;
+  box-shadow: 0 1px 0 hsl(var(--border));
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .site-frame :is(.project-card--lead, .project-card--featured):hover .project-media {
+    transform: rotateX(2deg) rotateY(-1deg) translateZ(8px);
+  }
+  .site-frame .notes-grid > li:hover > article {
+    transform: translateY(-3px);
+  }
+}
+.site-frame .notes-grid > li > article {
+  transition: transform 180ms ease;
+}
+.site-frame :is(.project-card--lead, .project-card--featured):focus-within {
+  outline: 1px solid hsl(var(--field-amber-strong));
+  outline-offset: 4px;
+}
+.site-frame .project-demo {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  box-shadow: var(--paper-lift);
+  margin-bottom: 0.5rem;
+}
+.site-frame .demo-stage {
+  perspective: 900px;
+  background: hsl(var(--field-warm) / 0.35);
+}
+.site-frame :is(.demo-node, .demo-chip) {
+  box-shadow:
+    0 3px 0 hsl(var(--field-warm)),
+    0 4px 0 hsl(var(--border));
+  transform-origin: center bottom;
+  transition:
+    transform 190ms ease,
+    opacity 190ms ease;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .site-frame :is(.demo-node, .demo-chip)[aria-pressed='true'] {
+    transform: translateZ(12px) translateY(-3px);
+    box-shadow:
+      0 7px 0 -3px hsl(var(--field-paper)),
+      0 8px 0 -3px hsl(var(--border));
+  }
+}
+.site-frame .review-trace {
+  border-inline-start: 3px solid hsl(var(--field-amber-strong));
+  padding-inline-start: 1rem;
+}
+.site-frame .review-trace li {
+  background: hsl(var(--field-paper));
+  box-shadow: 0 2px 0 hsl(var(--border));
+  border-radius: 0.25rem;
+}
+.site-frame :is(.page-content--article, .page-content--reading) {
+  perspective: none;
+}
+.site-frame :is(.page-content--article, .page-content--reading) .prose {
+  background: transparent;
+}
+.site-frame .prose blockquote {
+  border-radius: 0.25rem;
+  line-height: 1.8;
+}
+.site-frame :is(.resume-page, .policy-page) {
+  scroll-behavior: auto;
+}
+.site-frame .tag-grid a {
+  overflow-wrap: anywhere;
+}
+.site-frame .sky[data-empty='true'] {
+  min-height: 16rem;
+}
+.site-frame .sky[data-empty='true'] .empty-sky {
+  max-width: 34rem;
+  padding: 1.5rem;
+}
+.site-frame :is(button, a, input, select, summary):focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .site-frame .home-hero {
+    min-height: 0;
+    gap: 1.5rem;
+    padding: 2.5rem 0.25rem 3rem;
+  }
+  .site-frame .home-hero .hero-copy {
+    transform: none;
+  }
+  .site-frame .home-hero .hero-visual {
+    display: grid;
+    place-items: center;
+  }
+  .site-frame .home-flow {
+    padding-inline: 0.25rem;
+  }
+  .site-frame :is(.project-card--lead, .project-card--featured) .project-media {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-frame :is(.project-media, .notes-grid > li > article, .demo-node, .demo-chip) {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+@media print {
+  .site-frame
+    :is(
+      .project-card,
+      .notes-grid > li > article,
+      .now-grid > section,
+      .resume-card,
+      .record-links > a
+    ) {
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+.site-frame .lab-ledger .entries > article {
+  background: hsl(var(--field-paper));
+  box-shadow: var(--paper-lift);
+  border: 1px solid hsl(var(--border));
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-block: 1rem;
+}
+.site-frame .archive-jump {
+  background: hsl(var(--field-paper));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  box-shadow: var(--paper-lift);
+}
+.site-frame .notes-grid {
+  gap: 1.25rem;
+  border-top: 0;
+}
+.site-frame .notes-grid > li {
+  border-bottom: 0;
+}
+.site-frame .notes-grid > li > article {
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--border));
+}

@@ -51,13 +51,21 @@ const contentTypes = [
             aria-label={t('按内容类型筛选', 'Filter by content type')}
           >
             {contentTypes.map((kind) => (
-              <button type='button' data-search-type={kind.id} aria-pressed={kind.id === 'all'}>
+              <button
+                type='button'
+                data-search-type={kind.id}
+                aria-pressed={kind.id === 'all'}
+                disabled
+              >
                 {locale === 'en-US' ? kind.en : kind.zh}
               </button>
             ))}
           </div>
+          <button class='reset-search-filters' type='button' data-search-reset hidden disabled>
+            {t('清除筛选', 'Clear filters')}
+          </button>
           <LocalSearch {locale} />
-          <p class='filter-count' data-filter-count role='status' aria-live='polite' hidden>
+          <p class='filter-count' data-filter-count hidden>
             {t('正在更新结果数。', 'Updating the result count.')}
           </p>
         </div>
@@ -81,109 +89,6 @@ const contentTypes = [
     </nav>
   </main>
 </PageLayout>
-
-<script>
-  type SearchKind = 'project' | 'article' | 'note' | 'lab' | 'page' | 'talk' | 'archive'
-  const shell = document.querySelector<HTMLElement>('[data-search-shell]')
-
-  if (shell) {
-    const baseUrl = shell.dataset.baseUrl?.replace(/\/$/, '') ?? ''
-    const isEnglish = shell.dataset.locale === 'en-US'
-    const labels: Record<SearchKind, string> = isEnglish
-      ? {
-          project: 'Project',
-          article: 'Article',
-          note: 'Short note',
-          lab: 'Experiment',
-          page: 'Site page',
-          talk: 'Talk',
-          archive: 'Archive'
-        }
-      : {
-          project: '项目',
-          article: '文章',
-          note: '短笔记',
-          lab: '实验',
-          page: '站点页面',
-          talk: '活动',
-          archive: '归档'
-        }
-    const filters = [...shell.querySelectorAll<HTMLButtonElement>('[data-search-type]')]
-    const filterCount = shell.querySelector<HTMLElement>('[data-filter-count]')
-    let activeType = 'all'
-
-    const getKind = (result: HTMLElement): SearchKind => {
-      const link = result.querySelector<HTMLAnchorElement>('.pagefind-ui__result-link')
-      if (!link) return 'page'
-      const pathname = new URL(link.href, window.location.origin).pathname
-      const hasBase = baseUrl && (pathname === baseUrl || pathname.startsWith(`${baseUrl}/`))
-      const path = hasBase ? pathname.slice(baseUrl.length) || '/' : pathname
-      if (/^\/(?:projects|en\/work|en\/projects)(?:\/|$)/.test(path)) return 'project'
-      if (/^\/(?:blog|en\/writing)(?:\/|$)/.test(path)) return 'article'
-      if (/^\/notes(?:\/|$)/.test(path)) return 'note'
-      if (/^\/lab(?:\/|$)/.test(path)) return 'lab'
-      if (/^\/talks(?:\/|$)/.test(path)) return 'talk'
-      if (/^\/(?:archives|tags)(?:\/|$)/.test(path)) return 'archive'
-      return 'page'
-    }
-
-    const refreshResults = () => {
-      const results = [...shell.querySelectorAll<HTMLElement>('.pagefind-ui__result')]
-      let visibleCount = 0
-      results.forEach((result) => {
-        const kind = getKind(result)
-        result.dataset.searchKind = kind
-        let badge = result.querySelector<HTMLElement>('[data-search-kind-badge]')
-        if (!badge) {
-          badge = document.createElement('span')
-          badge.dataset.searchKindBadge = ''
-          badge.className = 'search-kind-badge'
-          result.prepend(badge)
-        }
-        if (badge.textContent !== labels[kind]) badge.textContent = labels[kind]
-        const visible = activeType === 'all' || activeType === kind
-        result.hidden = !visible
-        if (visible) visibleCount += 1
-      })
-      const query =
-        shell.querySelector<HTMLInputElement>('.pagefind-ui__search-input')?.value.trim() ?? ''
-      const isFiltered = activeType !== 'all'
-      const showCount = Boolean(query && results.length > 0)
-      if (filterCount) {
-        filterCount.hidden = !showCount
-        const selectedLabel =
-          filters.find((filter) => filter.dataset.searchType === activeType)?.textContent?.trim() ??
-          ''
-        const message = isEnglish
-          ? isFiltered
-            ? `${results.length} total results. ${visibleCount} match this filter.`
-            : `${results.length} results. Showing all ${visibleCount}.`
-          : isFiltered
-            ? `共 ${results.length} 条结果，当前“${selectedLabel}”筛选显示 ${visibleCount} 条。`
-            : `共 ${results.length} 条结果，当前显示全部 ${visibleCount} 条。`
-        if (filterCount.textContent !== message) filterCount.textContent = message
-      }
-    }
-
-    filters.forEach((button) =>
-      button.addEventListener('click', () => {
-        activeType = button.dataset.searchType ?? 'all'
-        filters.forEach((filter) => filter.setAttribute('aria-pressed', String(filter === button)))
-        refreshResults()
-      })
-    )
-
-    shell.addEventListener('input', () => {
-      if (filterCount) filterCount.hidden = true
-    })
-    new MutationObserver(refreshResults).observe(shell, {
-      childList: true,
-      subtree: true,
-      characterData: true
-    })
-    refreshResults()
-  }
-</script>
 
 <style>
   .search-page {
@@ -230,10 +135,27 @@ const contentTypes = [
     color: hsl(var(--foreground));
     font-size: 0.76rem;
   }
+  .search-filters button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
   .search-filters button[aria-pressed='true'] {
     border-color: hsl(var(--foreground));
     background: hsl(var(--foreground));
     color: hsl(var(--background));
+  }
+  .search-filters button:focus-visible,
+  .reset-search-filters:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  .reset-search-filters {
+    min-height: 2.75rem;
+    padding: 0.4rem 0.2rem;
+    color: hsl(var(--foreground));
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
   .filter-count {
     margin: 1rem 0;
@@ -259,9 +181,6 @@ const contentTypes = [
   .search-shell :global(.pagefind-ui__result) {
     border-radius: 0.6rem;
     transition: transform 160ms ease;
-  }
-  .search-shell :global(.pagefind-ui__result[hidden]) {
-    display: none;
   }
   .search-shell :global(.search-kind-badge) {
     display: inline-block;
