@@ -268,3 +268,10 @@ body:has(.home-page) #highlight-gradient {
     place-items: center;
   }
 }
+
+@media (min-width: 901px) {
+  html[lang='zh-CN'] .site-frame .home-page .home-hero h1 {
+    font-size: clamp(4.3rem, 7.6vw, 7.1rem);
+    line-height: 1.04;
+  }
+}
