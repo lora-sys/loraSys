@@ -1045,6 +1045,106 @@
       "status": "synced",
       "media": [],
       "note": "Complete source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. Coverage ends 2026-10-01 and publishDate uses the coverage end date."
+    },
+    {
+      "source_page_id_sha256": "9598207c70b2f5959a40884b639903908256a65fb057ed2174a46595f6cb4c5c",
+      "slug": "emdash-decentralized-plugin-registry",
+      "content_fingerprint": "git-blob:24cf3190b7e7a00bce18824c67a40530e3c03ffa",
+      "source_last_edited_at": "2026-09-30T01:53:53.514Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete public project article. Source body contains no attached media blocks. Native page cover is null and visual production was not persisted, so heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "1f855f6ac9588aa5e0d97d42cca6146bcdcdca01425b718f37856dd3cb582065",
+      "slug": "agent-origin-approval-action-side-effects",
+      "source_last_edited_at": "2026-09-30T15:49:10.194Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-09-30-origin-action.svg",
+          "source_block_id": "asset:763559be-b2e2-4dd0-b41c-6323d172bd7c",
+          "position": 1,
+          "status": "blocked",
+          "note": "Source attachment is exposed only through a short-lived signed asset URL in this run; original bytes were not recoverable through the available connector path."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-30-browser-approval-flow.svg",
+          "source_block_id": "asset:b7a4203c-c227-460a-9885-7e1f3d21f237",
+          "position": 2,
+          "status": "blocked",
+          "note": "Source attachment is exposed only through a short-lived signed asset URL in this run; original bytes were not recoverable through the available connector path."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-09-30-lora-pi-kit-browser-gate.svg",
+          "source_block_id": "asset:78c16154-190a-4196-b6a5-1d43087bc906",
+          "position": 3,
+          "status": "blocked",
+          "note": "Source attachment is exposed only through a short-lived signed asset URL in this run; original bytes were not recoverable through the available connector path."
+        }
+      ],
+      "note": "Recursive-discovery article is complete, but all three source diagrams remain unresolved. Media completeness is a hard gate, so no public MDX was created."
+    },
+    {
+      "source_page_id_sha256": "5cbe04be787ad3463b801f33be4797c65d2a4c3394ad70d43f9a8906e877ce7b",
+      "slug": "deepgemm-ascend-stable-api-backend",
+      "source_last_edited_at": "2026-10-01T02:23:25.016Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "deepgemm-backend-cover-v2.png",
+          "source_block_id": "asset:e19c45fb-a008-4dab-bcde-1188a3115c2f",
+          "position": 1,
+          "status": "blocked",
+          "note": "Current source exposes a short-lived signed binary URL. This execution environment could not retrieve and localize the original bytes."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-10-01-deepgemm-ascend-cover.svg",
+          "source_block_id": "asset:c467b5aa-53a1-44dd-a3fe-2b363607a71c",
+          "position": 2,
+          "status": "blocked",
+          "note": "Current source exposes a short-lived signed asset URL. Original bytes were not recoverable through the available connector path."
+        }
+      ],
+      "note": "Public article body and fact gate are complete, but the two attached source visuals were not fully recoverable. The page remains retryable and was not published without its source media."
+    },
+    {
+      "source_page_id_sha256": "887b5a4e9347e03e5a829854021f1bd21e5ff47ec0f9970a753ef227b26c3602",
+      "slug": "cloudflare-agent-sandbox-snapshot-lifecycle",
+      "source_last_edited_at": "2026-10-01T02:23:12.167Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-10-01-cloudflare-snapshot-cover-v2.png",
+          "source_block_id": "asset:3ac27b48-6db5-4282-9431-836c51fa9bc8",
+          "position": 1,
+          "status": "blocked",
+          "note": "Current source exposes a short-lived signed binary URL. This execution environment could not retrieve and localize the original bytes."
+        },
+        {
+          "kind": "image",
+          "source_name": "cloudflare-snapshot-limits-v2.png",
+          "source_block_id": "asset:ee56b3a8-7818-4988-9948-1b685b60f366",
+          "position": 2,
+          "status": "blocked",
+          "note": "Current source exposes a short-lived signed binary URL. This execution environment could not retrieve and localize the original bytes."
+        },
+        {
+          "kind": "image",
+          "source_name": "cloudflare-snapshot-eval-v2.png",
+          "source_block_id": "asset:60ceee51-f9a4-41f5-8315-1ee9d3191dba",
+          "position": 3,
+          "status": "blocked",
+          "note": "Current source exposes a short-lived signed binary URL. This execution environment could not retrieve and localize the original bytes."
+        }
+      ],
+      "note": "Public article body and fact gate are complete, but all three attached source visuals were not recoverable as local bytes in this run. Media completeness is a hard gate, so no public MDX was created."
     }
   ]
 }
