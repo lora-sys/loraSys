@@ -31,6 +31,10 @@ const resume = resumeData.en
       <h1 id='resume-title'>{resume.name}</h1>
       <p class='resume-title'>{resume.title}</p>
       <p class='resume-summary'>{resume.summary}</p>
+      <p class='resume-language-note'>
+        This is an English summary. <a href='/resume'>Read the complete Chinese résumé</a> for the original
+        experience and education record.
+      </p>
       <ul class='resume-meta' aria-label='Contact details'>
         <li>{resume.contact.location}</li>
         <li><a href={`mailto:${resume.contact.email}`}>{resume.contact.email}</a></li>

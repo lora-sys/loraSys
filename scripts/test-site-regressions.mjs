@@ -29,6 +29,15 @@ async function htmlFiles(directory) {
 }
 
 const report = { base, checks: [], screenshots: [] }
+const fontPreloads = [...home.matchAll(/<link\b[^>]*>/g)]
+  .map(([tag]) => attributes(tag))
+  .filter((tag) => tag.rel === 'preload' && tag.as === 'font')
+assert.equal(fontPreloads.length, 2, 'Preload both normal Satoshi weights before first paint')
+report.checks.push({ name: 'Satoshi font preloads', passed: true, count: fontPreloads.length })
+const projectHtml = await readFile(path.join(dist, 'projects/index.html'), 'utf8')
+const archivedProjects = projectHtml.slice(projectHtml.indexOf('data-work-archive'))
+assert.ok(!/<img\b[^>]*loading="eager"/.test(archivedProjects), 'Collapsed project archive must not eagerly load a duplicate hero')
+report.checks.push({ name: 'collapsed archive image loading', passed: true })
 const errors = []
 const files = await htmlFiles(dist)
 let alternateCount = 0
@@ -139,6 +148,41 @@ try {
         await search.click()
         await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === `${base}search`)
         assert.ok(await page.locator('h1').count(), 'Search destination should contain a heading')
+      })
+
+      await check(`${label}: paper scene is bounded, pausable and motion safe`, async () => {
+        await open()
+        const scene = page.locator('[data-paper-scene]')
+        const camera = page.locator('[data-scene-camera]')
+        const toggle = page.locator('[data-scene-motion]')
+        await scene.waitFor({state: 'visible'})
+        await page.waitForFunction(() => [...document.querySelectorAll('[data-paper-scene] img')].every(image => image.complete && image.naturalWidth > 0))
+        assert.equal(await scene.locator('canvas').count(), 0, 'Paper scene remains dependency-free CSS perspective')
+        assert.equal(await page.locator('.home-hero h1').count(), 1, 'Main title remains HTML')
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Paper scene cannot create horizontal overflow')
+        if (reducedMotion === 'reduce' || viewport.width <= 900) {
+          assert.equal(await toggle.isVisible(), false)
+          assert.equal(await scene.getAttribute('data-motion'), 'static')
+          assert.equal(await camera.evaluate(element => getComputedStyle(element).transform), 'none')
+        } else {
+          await toggle.waitFor({state: 'visible'})
+          const box = await scene.boundingBox()
+          await page.mouse.move(box.x + box.width * .8, box.y + box.height * .4)
+          await page.waitForFunction(() => document.querySelector('[data-scene-camera]').style.getPropertyValue('--scene-x') !== '')
+          const angle = await camera.evaluate(element => parseFloat(element.style.getPropertyValue('--scene-x')))
+          assert.ok(Math.abs(angle) <= 4, 'Pointer angle must stay bounded')
+          await toggle.press('Enter')
+          assert.equal(await toggle.getAttribute('aria-pressed'), 'true')
+          assert.equal(await scene.getAttribute('data-motion'), 'static')
+          assert.equal(await camera.evaluate(element => element.style.getPropertyValue('--scene-x')), '')
+          await page.reload()
+          assert.equal(await toggle.getAttribute('aria-pressed'), 'true', 'Pause survives navigation')
+          await toggle.press('Enter')
+          await page.locator('#writing').scrollIntoViewIfNeeded()
+          await page.waitForFunction(() => document.querySelector('[data-paper-scene]').dataset.motion === 'static')
+        }
+        await open()
+        await capture('paper-depth')
       })
 
       await check(`${label}: homepage evidence and keyboard section navigation`, async () => {

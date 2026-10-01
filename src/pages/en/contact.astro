@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import { socialLinks } from '@/data/social'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import CopyAction from '@/components/layout/CopyAction.astro'
 import correspondence from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
 
 const channels = socialLinks.filter((link) =>
@@ -50,10 +51,27 @@ const channels = socialLinks.filter((link) =>
           </a>
         ))
       }
-    </section><a class='back' href='/contact'>Contact page in Chinese ↗</a>
+    </section>
+    <div class='email-copy'>
+      <span>lorasys@outlook.com</span><CopyAction
+        value='lorasys@outlook.com'
+        label='Copy email'
+        locale='en-US'
+      />
+    </div>
+    <a class='back' href='/contact'>Contact page in Chinese ↗</a>
   </main>
 </PageLayout>
 <style>
+  .email-copy {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--field-paper));
+  }
   .contact-page {
     display: grid;
     gap: clamp(2rem, 5vw, 4rem);

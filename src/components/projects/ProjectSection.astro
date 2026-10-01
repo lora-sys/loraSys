@@ -83,7 +83,6 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
       <ProjectCard
         project={leadProject}
         variant='lead'
-        priority
         lens
         filterable
         anchor={!externalCanonicalRepositories.has(leadProject.repository)}

@@ -25,6 +25,9 @@ const headings = [
   <p class='eyebrow'>{entry.eyebrow} · {entry.project}</p>
   <p class='lead'>{entry.summary}</p>
 
+  <p class='not-prose'>
+    <a href={entry.source} target='_blank' rel='noopener noreferrer'>查看项目源码 →</a>
+  </p>
   <h2 id='question'>问题</h2>
   <blockquote>{entry.question}</blockquote>
 
@@ -123,5 +126,16 @@ const headings = [
     .actions a:hover {
       transform: none;
     }
+  }
+
+  blockquote {
+    display: block;
+    width: 100%;
+    max-width: none;
+    border-radius: 0.25rem;
+    border-inline-start: 3px solid hsl(var(--field-amber-strong));
+    padding: 1rem 1.25rem;
+    white-space: normal;
+    line-height: 1.8;
   }
 </style>

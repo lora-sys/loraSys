@@ -6,6 +6,8 @@ import path from 'node:path'
 import os from 'node:os'
 import { pathToFileURL } from 'node:url'
 
+import { assertSearchPagination } from './lib/search-regressions.mjs'
+
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright')
 const dist = path.resolve(process.argv[2] ?? 'dist')
 const output = path.resolve(process.env.SITE_TEST_OUTPUT ?? path.join(os.tmpdir(), 'lorasys-reading-quality'))
@@ -180,6 +182,7 @@ try {
         await filter.selectOption('en-US')
         const projectsLink = page.locator('.type-filter a').filter({ hasText: 'Projects & practice' })
         assert.equal(new URL(await projectsLink.getAttribute('href'), page.url()).searchParams.get('language'), 'en-US', 'Type links retain the selected language')
+        await page.locator('.writing-taxonomy summary').press('Enter')
         await projectsLink.click()
         await page.waitForURL((url) => url.pathname.replace(/\/$/, '').endsWith('/en/writing/type/projects') && url.searchParams.get('language') === 'en-US')
         const waitForEnglish = () => page.waitForFunction(() => {
@@ -254,12 +257,29 @@ try {
         assert.equal(seriesIds.size, seriesCount, 'Series pagination must retain every installment across old page boundaries')
         await open('blog/topic/security')
         const summary = page.locator('.writing-taxonomy summary')
+        assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null, 'Selected topics remain collapsed so articles stay near the top')
+        assert.match(await page.locator('[data-writing-selection]').textContent(), /安全/)
+        assert.equal(await page.locator('[data-writing-reset]').isVisible(), true)
         await summary.press('Enter')
-        assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null, 'Keyboard collapses the topic list')
+        assert.notEqual(await page.locator('.writing-taxonomy details').getAttribute('open'), null, 'Keyboard opens the taxonomy')
         await summary.press('Enter')
-        assert.notEqual(await page.locator('.writing-taxonomy details').getAttribute('open'), null)
+        assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null, 'Keyboard collapses the taxonomy')
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
         await capture('writing-taxonomy')
+      })
+
+      await check(`${label} filtered writing keeps the first article in view`, page, async () => {
+        for (const route of ['blog/topic/security', 'en/writing/topic/security']) {
+          await open(route)
+          assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null)
+          assert.equal(await page.locator('[data-writing-selection]').isVisible(), true)
+          assert.equal(await page.locator('[data-writing-reset]').isVisible(), true)
+          const firstTitle = page.locator(route.startsWith('en/') ? '.featured h2' : '.post-link').first()
+          const box = await firstTitle.boundingBox()
+          assert.ok(box && box.y >= 0 && box.y < viewport.height, `${route}: first article must start in the first viewport: ${JSON.stringify(box)}`)
+          assert.equal(await page.evaluate(() => scrollY), 0)
+          await capture(route.startsWith('en/') ? 'writing-en-compact-category' : 'writing-zh-compact-category')
+        }
       })
 
       await check(`${label} reviewed article covers load without duplicate body covers`, page, async () => {
@@ -278,6 +298,13 @@ try {
           assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), entry.slug)
           if (['agent-demo-harness-control-layer', 'herdr-coding-agent-runtime', 'opencloak-local-pii-redaction'].includes(entry.slug)) await capture(`cover-${entry.slug}`)
         }
+      })
+
+      await check(`${label} bilingual search filters the complete index before pagination`, page, async () => {
+        for (const route of ['search', 'en/search']) {
+          report.searches.push(await assertSearchPagination(page, base, open, route))
+        }
+        await capture('search-filtered-pagination')
       })
 
       await check(`${label} search UI returns canonical articles only`, page, async () => {
@@ -527,7 +554,8 @@ try {
   const noJsPage = await noJs.newPage()
   await check('writing taxonomy has a narrow-screen no-JavaScript fallback', noJsPage, async () => {
     await noJsPage.goto(new URL('blog', site).href)
-    await noJsPage.getByRole('link', { name: '新闻与阅读清单', exact: true }).first().click()
+    await noJsPage.locator('.writing-taxonomy summary').press('Enter')
+    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' }).click()
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     await noJsPage.locator('.writing-taxonomy summary').press('Enter')
     await noJsPage.locator('.writing-taxonomy a').filter({ hasText: 'AI Agent 工程阅读清单' }).click()

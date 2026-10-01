@@ -2,56 +2,247 @@
 import { Image } from 'astro:assets'
 
 import heroIllustration from '@/assets/lora-visual/v3/lora-mochi-home.webp'
+import paperStage from '@/assets/paper-depth/notebook-stage.webp'
 
 interface Props {
   locale?: 'zh-CN' | 'en-US'
 }
-
 const { locale = 'zh-CN' } = Astro.props
-const label = locale === 'en-US' ? 'Lora and Mochi.' : 'Lora 和 Mochi。'
+const en = locale === 'en-US'
 ---
 
-<div class='hero-scene'>
-  <div class='hero-figure'>
-    <Image
-      src={heroIllustration}
-      alt={label}
-      widths={[384, 640, 900, 1200]}
-      sizes='(max-width: 760px) 78vw, 38rem'
-      loading='eager'
-      fetchpriority='high'
-      decoding='async'
-    />
+<paper-scene class='hero-scene' data-paper-scene data-locale={locale}>
+  <div class='scene-camera' data-scene-camera>
+    <div class='scene-paper' aria-hidden='true'>
+      <Image
+        src={paperStage}
+        alt=''
+        widths={[480, 640, 800, 1200]}
+        sizes='(max-width: 900px) 90vw, 48rem'
+        loading='eager'
+        fetchpriority='high'
+        decoding='sync'
+      />
+    </div>
+    <div class='hero-figure'>
+      <Image
+        src={heroIllustration}
+        alt={en
+          ? 'Lora and Mochi sit together on a paper notebook.'
+          : 'Lora 和 Mochi 坐在纸本笔记上。'}
+        widths={[480, 640, 800, 1200]}
+        sizes='(max-width: 900px) 74vw, 42rem'
+        quality={90}
+        loading='eager'
+        fetchpriority='high'
+        decoding='sync'
+      />
+    </div>
   </div>
-</div>
+  <button type='button' class='scene-motion' data-scene-motion aria-pressed='false' hidden>
+    {en ? 'Pause depth effect' : '暂停纵深动效'}
+  </button>
+</paper-scene>
+
+<script>
+  class PaperScene extends HTMLElement {
+    private cleanup?: () => void
+    connectedCallback() {
+      if (this.cleanup) return
+      const camera = this.querySelector<HTMLElement>('[data-scene-camera]')
+      const button = this.querySelector<HTMLButtonElement>('[data-scene-motion]')
+      if (!camera || !button) return
+      const media = matchMedia('(prefers-reduced-motion: reduce)')
+      const pointer = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)')
+      const en = this.dataset.locale === 'en-US'
+      let paused = false
+      try {
+        paused = localStorage.getItem('lora-paper-motion') === 'paused'
+      } catch {
+        /* Storage can be unavailable in private browsing. */
+      }
+      let visible = true
+      let frame = 0
+      let x = 0
+      let y = 0
+      const reset = () => {
+        cancelAnimationFrame(frame)
+        frame = 0
+        camera.style.removeProperty('--scene-x')
+        camera.style.removeProperty('--scene-y')
+      }
+      const enabled = () =>
+        !paused && !media.matches && pointer.matches && visible && !document.hidden
+      const update = () => {
+        button.hidden = media.matches || !pointer.matches
+        button.setAttribute('aria-pressed', String(paused))
+        button.textContent = en
+          ? paused
+            ? 'Enable depth effect'
+            : 'Pause depth effect'
+          : paused
+            ? '开启纵深动效'
+            : '暂停纵深动效'
+        this.dataset.motion = enabled() ? 'active' : 'static'
+        if (!enabled()) reset()
+      }
+      const move = (event: PointerEvent) => {
+        if (!enabled() || event.pointerType !== 'mouse') return
+        const rect = this.getBoundingClientRect()
+        x = Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2))
+        y = Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2))
+        if (!frame)
+          frame = requestAnimationFrame(() => {
+            camera.style.setProperty('--scene-x', `${(x * 4).toFixed(2)}deg`)
+            camera.style.setProperty('--scene-y', `${(-y * 3).toFixed(2)}deg`)
+            frame = 0
+          })
+      }
+      const toggle = () => {
+        paused = !paused
+        try {
+          localStorage.setItem('lora-paper-motion', paused ? 'paused' : 'active')
+        } catch {
+          /* The local toggle still works without persistence. */
+        }
+        update()
+      }
+      const observer = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting
+        update()
+      })
+      observer.observe(this)
+      this.addEventListener('pointermove', move)
+      this.addEventListener('pointerleave', reset)
+      button.addEventListener('click', toggle)
+      media.addEventListener('change', update)
+      pointer.addEventListener('change', update)
+      document.addEventListener('visibilitychange', update)
+      update()
+      this.cleanup = () => {
+        reset()
+        observer.disconnect()
+        this.removeEventListener('pointermove', move)
+        this.removeEventListener('pointerleave', reset)
+        button.removeEventListener('click', toggle)
+        media.removeEventListener('change', update)
+        pointer.removeEventListener('change', update)
+        document.removeEventListener('visibilitychange', update)
+      }
+    }
+    disconnectedCallback() {
+      this.cleanup?.()
+      this.cleanup = undefined
+    }
+  }
+  if (!customElements.get('paper-scene')) customElements.define('paper-scene', PaperScene)
+</script>
 
 <style>
   .hero-scene {
     position: relative;
-    display: grid;
-    width: min(100%, 38rem);
-    aspect-ratio: 1.15 / 1;
-    place-items: center;
+    display: block;
+    width: 112%;
+    max-width: 48rem;
+    aspect-ratio: 1.18;
     justify-self: end;
+    perspective: 1000px;
   }
-  .hero-figure {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  .hero-figure :global(img) {
+  .scene-camera {
     position: absolute;
     inset: 0;
-    display: block;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--scene-y, 0deg)) rotateY(var(--scene-x, 0deg));
+    transition: transform 180ms ease-out;
+  }
+  .scene-paper {
+    position: absolute;
+    inset: 0 -4% -5% -4%;
+    transform: translateZ(-34px);
+  }
+  .scene-paper :global(img) {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: drop-shadow(0 24px 20px hsl(28 28% 18% / 0.12));
   }
-  @media (max-width: 760px) {
+  .hero-figure {
+    position: absolute;
+    width: 76%;
+    height: 79%;
+    left: 3%;
+    bottom: 17%;
+    transform: translateZ(42px);
+  }
+  .hero-figure :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 5px hsl(28 28% 18% / 0.15));
+  }
+  .scene-motion {
+    position: absolute;
+    right: 0;
+    bottom: -1.25rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 999px;
+    padding: 0.5rem 0.75rem;
+    min-height: 2.5rem;
+    font: inherit;
+    font-size: 0.68rem;
+    background: hsl(var(--field-paper));
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+  }
+  .scene-motion[hidden] {
+    display: none;
+  }
+  .scene-motion:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  :global(.dark) .scene-paper :global(img) {
+    filter: drop-shadow(0 26px 24px hsl(0 0% 0% / 0.55));
+  }
+  :global(.dark) .hero-figure :global(img) {
+    filter: drop-shadow(0 12px 8px hsl(0 0% 0% / 0.4));
+  }
+  @media (min-width: 901px) and (max-width: 1200px) {
+    .scene-paper {
+      inset: 0 0 -5%;
+    }
+  }
+  @media (max-width: 900px) {
     .hero-scene {
-      width: min(78vw, 20rem);
-      aspect-ratio: 1.2 / 0.82;
+      width: min(100%, 28rem);
+      max-width: 100%;
       justify-self: center;
+      aspect-ratio: 1.42;
+    }
+    .scene-paper {
+      inset: 0 -4% -8%;
+    }
+    .hero-figure {
+      height: 84%;
+      width: 74%;
+      bottom: 15%;
+    }
+    .scene-camera {
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scene-camera {
+      transform: none;
+      transition: none;
+    }
+  }
+  @media print {
+    .scene-motion {
+      display: none;
+    }
+    .scene-camera {
+      transform: none;
     }
   }
 </style>

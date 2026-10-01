@@ -104,7 +104,8 @@ const profileJsonLd = {
 <link rel='apple-touch-icon' sizes='180x180' href={`${baseUrl}favicon/lora-wave-180.png`} />
 <link rel='manifest' href={`${baseUrl}favicon/site.webmanifest`} />
 
-<Font cssVariable='--font-satoshi' preload={[{ subset: 'latin', style: 'normal' }]} />
+<!-- Fontshare omits subset metadata; filtering by it silently removes every preload. -->
+<Font cssVariable='--font-satoshi' preload={[{ style: 'normal' }]} />
 <style>
   body { font-family: var(--font-satoshi); }
 </style>

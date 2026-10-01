@@ -29,6 +29,8 @@ const featuredPost =
   featuredPostIds
     .map((id) => posts.find((post) => post.id === id))
     .find((post) => post !== undefined) ?? posts[0]
+const browsePath =
+  activeKind && activeValue ? `/en/writing/${activeKind}/${activeValue}` : '/en/writing'
 const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
 ---
 
@@ -42,12 +44,28 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   }}
   highlightColor='#d99a33'
 >
-  <main class='writing-page'>
+  <main class:list={['writing-page', { 'writing-page--filtered': Boolean(activeKind) }]}>
     <header>
-      <p>Writing</p><h1>Notes on systems I am building, checking, and learning from.</h1><span
-        >Browse the full published library. Every article keeps one permanent address and its
-        original language.</span
-      >
+      <p>Writing</p>
+      <h1>
+        {
+          activeKind && activeValue
+            ? writingLabel(activeKind, activeValue, 'en-US')
+            : 'Notes on systems I am building, checking, and learning from.'
+        }
+      </h1>
+      {
+        activeKind ? (
+          <span data-writing-header-count>
+            {posts.length} {posts.length === 1 ? 'article' : 'articles'}
+          </span>
+        ) : (
+          <span>
+            Browse the full published library. Every article keeps one permanent address and its
+            original language.
+          </span>
+        )
+      }
     </header>
     <WritingTaxonomy locale='en-US' {activeKind} {activeValue} />
     <div class='filter'>
@@ -161,7 +179,11 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       )
     }
     {posts.length === 0 && <p class='empty'>No articles are published yet.</p>}
-    <p class='empty' id='filter-empty' hidden>No articles match this language.</p>
+    <p class='empty' id='filter-empty' hidden>
+      No articles match this language.
+      <a href={withBasePath(browsePath)}>Show all languages</a>
+      <a href={withBasePath('/en/writing')}>Clear all filters</a>
+    </p>
   </main>
 </PageLayout>
 
@@ -169,6 +191,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   const languageFilter = document.querySelector<HTMLSelectElement>('#language-filter')
   const articles = [...document.querySelectorAll<HTMLElement>('[data-article]')]
   const articleCount = document.querySelector<HTMLElement>('#article-count')
+  const headerCount = document.querySelector<HTMLElement>('[data-writing-header-count]')
   const filterEmpty = document.querySelector<HTMLElement>('#filter-empty')
 
   const applyLanguage = () => {
@@ -187,7 +210,10 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       article.hidden = !visible
       if (visible) visibleCount += 1
     }
-    if (articleCount) articleCount.textContent = `Newest first · ${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
+    if (articleCount)
+      articleCount.textContent = `Newest first · ${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
+    if (headerCount)
+      headerCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
     if (filterEmpty) filterEmpty.hidden = visibleCount !== 0
   }
   languageFilter?.addEventListener('change', () => {
@@ -207,6 +233,28 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   .writing-page {
     display: grid;
     gap: 1.6rem;
+  }
+  .writing-page--filtered {
+    gap: 0.85rem;
+  }
+  .writing-page.writing-page--filtered > header {
+    gap: 0.4rem;
+    padding-block: 0.25rem 0.85rem;
+  }
+  .writing-page--filtered h1 {
+    max-width: none;
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+  .empty a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin-inline: 0.4rem;
+    color: hsl(var(--foreground));
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
   .writing-page [hidden] {
     display: none !important;

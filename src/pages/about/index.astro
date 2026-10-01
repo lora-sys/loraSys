@@ -81,7 +81,13 @@ const personalNow = getCurrentFocusSections('zh-CN').filter((section) =>
     <summary>页面目录</summary>
     <nav aria-label='关于页面目录'>
       <ul>
-        {headings.map((heading) => <li><a href={`#${heading.slug}`}>{heading.text}</a></li>)}
+        {
+          headings.map((heading) => (
+            <li>
+              <a href={`#${heading.slug}`}>{heading.text}</a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
   </details>
@@ -442,6 +448,22 @@ const personalNow = getCurrentFocusSections('zh-CN').filter((section) =>
   @media (prefers-reduced-motion: reduce) {
     .project-index a {
       transition: none;
+    }
+  }
+
+  .about-lead {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+  .journey-fragment {
+    max-height: 20rem;
+  }
+  @media (max-width: 620px) {
+    .about-lead {
+      grid-template-columns: 1fr;
+    }
+    .journey-fragment {
+      justify-self: center;
+      max-height: 15rem;
     }
   }
 </style>

@@ -11,6 +11,7 @@ const labels = {
 const label = labels[locale]
 ---
 
+<span class='haptics-slot'>
 <button
   class='haptics-toggle tactile-action'
   type='button'
@@ -23,8 +24,18 @@ const label = labels[locale]
   <i aria-hidden='true'></i>
   <span data-haptics-label>{label.off}</span>
 </button>
+</span>
 
 <style>
+  .haptics-slot {
+    display: flex;
+  }
+  @media (pointer: coarse) and (prefers-reduced-motion: no-preference) {
+    /* Reserve the opt-in control's row before capability detection runs. */
+    .haptics-slot {
+      min-height: 2rem;
+    }
+  }
   .haptics-toggle {
     display: inline-flex;
     align-items: center;

@@ -52,7 +52,7 @@ const fallbackMark = project.title
         {sizes}
         quality={quality}
         loading={priority ? 'eager' : 'lazy'}
-        decoding='async'
+        decoding={priority ? 'sync' : 'async'}
         fetchpriority={priority ? 'high' : 'auto'}
         data-project-poster
       />

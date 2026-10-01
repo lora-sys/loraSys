@@ -165,8 +165,8 @@ try {
         await open(route)
         const input=page.locator('.pagefind-ui__search-input');await input.waitFor();await input.fill('Agent')
         await page.locator('.pagefind-ui__result-link').first().waitFor()
-        await page.locator('.pagefind-ui__filter-block').first().waitFor()
-        const names=await page.locator('.pagefind-ui__filter-name').allTextContents()
+        await page.locator('.pagefind-ui__filter-block:visible').first().waitFor()
+        const names=await page.locator('.pagefind-ui__filter-block:visible .pagefind-ui__filter-name').allTextContents()
         assert.deepEqual(names.map(s=>s.trim()).sort(),[...labels].sort())
         for(const name of labels) {
           const filter=page.locator('.pagefind-ui__filter-block').filter({has:page.locator('.pagefind-ui__filter-name',{hasText:name})})
