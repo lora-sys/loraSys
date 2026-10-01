@@ -1,0 +1,123 @@
+---
+title: '2026-09-30 至 2026-10-01｜AI Agent 工程阅读清单'
+description: '5 条 Agent 工程更新：模型路由、Sandbox 快照、Cloud CLI MCP、Data Agent Kit 与生产故障自动交给 Coding Agent。'
+publishDate: 2026-10-01
+tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'mcp']
+contentType: 'news'
+topics: ['agent-harness', 'evaluation', 'mcp-skills', 'runtime-infrastructure', 'security']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+
+本期覆盖 2026 年 9 月 30 日至 10 月 1 日。上一期生成后，9 月 30 日出现一批新的 Agent 工程发布。本期保留 5 条，没有为了凑数量加入较弱材料。
+
+最值得先读的是 Cloudflare Auto Router 和 Cloudflare Containers。前者给出了长会话模型路由如何把缓存重写成本算进决策。后者给出了 Agent Sandbox 的启动、暂停、恢复和 Eval 基线环境应该怎样设计。Google Cloud 的两项发布分别处理 MCP 工具面过大，以及 Skills 与工具如何分工。Cloudflare Issues 则展示了生产故障怎样把可验证上下文交给 Coding Agent。
+
+## 1. Cloudflare Auto Router 把长会话缓存成本放进模型路由
+
+### 发生了什么
+
+Cloudflare 在 9 月 30 日发布 AI Gateway Auto Router 公测版。调用方把模型设为 `cloudflare/auto` 后，Gateway 会按任务选择模型。
+
+Cloudflare 在内部知识工作基准上运行 291 次试验。Auto Router 成功 252 次，成功率 86.6%，总成本 2.10 美元。Claude Opus 5.5 成功 281 次，总成本 5.91 美元。GPT-6 Sol 成功 245 次，总成本 2.64 美元。这些数字来自 Cloudflare 自己的基准，不代表其他任务会得到相同结果。
+
+更值得注意的是路由规则。长 Agent 会话切换模型会让原模型缓存失效，新模型必须重新写入已有上下文。Auto Router 因此把缓存读取、缓存写入和上下文长度纳入切换成本。同一轮内倾向保持模型不变，跨轮切换时会随着上下文变长提高切换惩罚。
+
+### 工程意义
+
+Agent 模型路由不能只比较单次输入输出 Token 单价。长任务还要计算缓存复用、上下文重写和模型切换后的重复推理成本。
+
+如果一个 Harness 已经支持多模型，路由器至少应记录当前模型、缓存是否仍可复用、上下文长度、预计剩余步骤和切换后的重写成本。
+
+### 先读哪里
+
+先读官方文章的结果部分，再读模型选择的评分逻辑。重点看缓存切换成本和跨轮 switching penalty。
+
+来源：[Cloudflare：AI Gateway Auto Router](https://blog.cloudflare.com/auto-router/)
+
+## 2. Cloudflare 重做 Containers，面向 Agent Sandbox 的按需生命周期
+
+### 发生了什么
+
+Cloudflare 在 9 月 30 日发布新的 Containers 调度和 Sandbox 能力。应用可以在运行时为每个 Agent 任务选择镜像和实例规格。官方称启动速度提高超过 6 倍。ComputeSDK 的独立测试中，中位启动时间从 4 秒以上降到 648 毫秒。
+
+文件系统快照进入公测。Agent 可以保存当前 Workspace，在后续 Session 恢复。相同快照也可以作为多个隔离 Sandbox 的共同起点。
+
+### 工程意义
+
+这套设计适合 Coding Agent 和 Agent Eval。任务环境不必长期运行，但 Workspace 状态需要独立持久化。
+
+做 Eval 时，可以让候选模型、Prompt、Skill 和 Harness 从同一个不可变快照启动。这样仓库、依赖、工具和输入文件保持一致，减少环境漂移对评测结果的影响。
+
+长任务也可以把 Agent 控制层和执行 Sandbox 分开。控制层保存 Session 和凭据状态，Sandbox 可以启动、休眠、失败和替换。
+
+### 先读哪里
+
+先读官方文章中关于 Agent runtime 的部分，再读 filesystem snapshots。重点看同一快照如何启动多个独立 Eval 环境，以及 Durable Object 如何管理 Sandbox 生命周期。
+
+来源：[Cloudflare：Containers rebuilt to scale agent sandboxes](https://blog.cloudflare.com/faster-agent-sandboxes/)
+
+## 3. Google Cloud CLI remote MCP server 用两个 Tool 暴露数百个云操作
+
+### 发生了什么
+
+Google Cloud 在 9 月 30 日发布 Cloud CLI remote MCP server 公测版。它把数百个 `gcloud` 和 `bq` 命令放进一个托管 MCP Server，但对 Agent 只暴露两个主要 Tool：`run_gcloud_command` 和 `run_bq_command`。
+
+命令在 Google Cloud 的网络受限 Sandbox 中执行。运行环境没有 ambient credentials。认证通过 Agent Identity、OAuth 2.0 和 IAM 完成。每条命令使用调用者身份权限执行，并继续受 IAM 和组织策略约束。Google 还提供 Model Armor 检查和 Audit Logs。
+
+### 工程意义
+
+MCP Server 不一定要把每个后端 API 都映射成一个 Tool。工具数量过多会增加 Tool Schema 上下文和能力发现成本。
+
+把成熟 CLI 作为较粗粒度执行面，可以复用 CLI 已有的参数验证、组合命令和文档知识。但这种设计必须把身份、权限、Sandbox、审计和命令策略放在 Agent 外部强制执行。
+
+### 先读哪里
+
+先读官方文章关于把 CLI 放到 remote MCP 后面的设计，再看安全和治理部分。重点看为什么完整 Cloud CLI 只暴露两个 Tool。
+
+来源：[Google Cloud：Cloud CLI remote MCP server](https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-cli-remote-mcp-server-in-preview)
+
+## 4. Google Data Agent Kit 正式 GA，把 MCP Tools 和 Skills 分成两层
+
+### 发生了什么
+
+Google Cloud 在 9 月 30 日宣布 Data Agent Kit 正式 GA。它支持 15 个以上 Google Data Cloud 服务，并提供 MCP Tools 和 Google 工程师编写的开源 Skills。GA 新增 BigQuery Graph、Bigtable 和 Managed Service for Apache Spark。
+
+MCP Tools 负责读取 Schema、运行查询、读取 Job Log 和管理资源。Skills 负责教 Agent 使用具体产品时遵守工程规则。例如 BigQuery Skill 会检查分区并先执行 dry run，Graph Skill 会先生成计划供用户批准，再创建资源。
+
+所有步骤继续使用当前用户或被模拟 Service Account 的 IAM 权限。
+
+### 工程意义
+
+工具接口和过程知识适合分开维护。MCP Tool 定义系统能做什么。Skill 定义怎样做更安全、更便宜、更符合团队规范。
+
+这种分层也方便升级。后端 Tool 可以保持稳定，团队只修改 Skill 就能调整查询策略、审批步骤和成本规则。
+
+### 先读哪里
+
+先读官方文章中 MCP tools 与 Google-authored skills 的分工。再看 BigQuery Graph 的审批流程，以及企业部分的 IAM、Model Armor、VPC Service Controls 和成本控制。
+
+来源：[Google Cloud：Data Agent Kit GA](https://cloud.google.com/blog/topics/developers-practitioners/data-agent-kit-is-now-ga-bring-google-data-cloud-to-any-coding-agent)
+
+## 5. Cloudflare Issues 把生产故障上下文直接交给 Coding Agent
+
+### 发生了什么
+
+Cloudflare 在 9 月 30 日发布 Workers Issues 公测版。系统会把重复异常、5xx 和错误日志聚合成 Issue，并附带异常、Source Map 后的 Stack Trace、前后日志、Trace、Worker Version 和应用上下文。
+
+当 Issue 达到出现次数阈值，或静默一段时间后再次出现，Automation 可以把完整上下文发送到 Claude Code、Cursor、Devin 或通用 Webhook。Agent 可以继续查询相关 Log 和 Trace，并生成代码修改和 Pull Request。部署仍由人工审核。
+
+### 工程意义
+
+生产 Coding Agent 的触发输入不应该只有一段错误文本。Runtime 应先把相同故障聚类，再把版本、Trace、日志和业务标识一起打包成可复现上下文。
+
+这也给出了事件驱动修复的边界。Agent 可以自动完成诊断和提交修改，但生产部署仍保留独立审核步骤。
+
+### 先读哪里
+
+先读官方文章关于错误上下文和发送给 Agent 的部分。重点看触发条件、传给 Agent 的上下文字段，以及 Pull Request 之后的人工作业边界。
+
+来源：[Cloudflare：Detect and send production issues straight to your agent](https://blog.cloudflare.com/real-time-issue-detection/)
