@@ -213,3 +213,26 @@
   padding: 1.25rem;
   border: 1px solid hsl(var(--border));
 }
+
+/* Certificate and collection surfaces retain flat, readable source images. */
+.site-frame .credential-card {
+  box-shadow: var(--paper-lift);
+  background: hsl(var(--field-paper));
+  border-radius: 0.65rem;
+}
+.site-frame .showcase .archive-card {
+  box-shadow:
+    3px 3px 0 hsl(var(--field-paper)),
+    4px 4px 0 hsl(var(--border));
+  border-radius: 0.4rem;
+}
+.site-frame .notfound-copy {
+  border-inline-start: 2px solid hsl(var(--field-amber-strong));
+  padding-inline-start: 1.25rem;
+}
+@media print {
+  .site-frame .credential-card,
+  .site-frame .showcase .archive-card {
+    box-shadow: none;
+  }
+}

@@ -340,7 +340,7 @@ const { locale } = Astro.props
     --pagefind-ui-tag: hsl(var(--muted-foreground));
     --pagefind-ui-border-width: 2px;
     --pagefind-ui-border-radius: calc(var(--radius) + 2px);
-    --pagefind-ui-font: inherit;
+    --pagefind-ui-font: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
   }
   /* The main type buttons control this index filter. Keep native topic filters available. */
   #site-search :global(.pagefind-ui__filter-block:has(input[name='search-kind'])) {
