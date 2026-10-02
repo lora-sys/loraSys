@@ -355,7 +355,7 @@ try {
         await open('en/writing?language=en-US')
         await page.locator('#language-filter:not([disabled])').waitFor()
         for (const slug of slugs) {
-          assert.equal(await page.locator(`[data-article]:visible a[href="${base}blog/${slug}-en"]`).count(), 1, `${slug}: discoverable English edition`)
+          assert.equal(await page.locator('[data-article]:visible').filter({ has: page.locator(`a[href="${base}blog/${slug}-en"]`) }).count(), 1, `${slug}: discoverable English edition`)
         }
         for (const slug of slugs) {
           await open(`blog/${slug}-en`)

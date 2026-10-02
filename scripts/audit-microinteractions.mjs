@@ -277,6 +277,7 @@ try {
         document.getElementById('content').scrollIntoView({block:'end',behavior:'instant'})
       })
       await page.waitForFunction(()=>document.querySelector('[data-reading-progress]').getAttribute('aria-valuenow')==='100')
+      assert.equal(await progress.locator('span').evaluate(el=>getComputedStyle(el).transitionProperty),'none','A global reduced-motion duration must not create progress transitions')
       assert.equal(await progress.locator('span').evaluate(el=>el.getAnimations().length),0,'Progress tracks real scroll directly, including reduced motion')
       await capture('reading-progress')
       await backToTop.click()

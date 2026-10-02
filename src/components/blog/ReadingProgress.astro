@@ -55,6 +55,8 @@ const { locale } = Astro.props
 
 <style>
   .reading-progress { position:fixed; inset:0 0 auto; z-index:80; height:3px; background:hsl(var(--border) / .35); pointer-events:none; }
+  /* Scroll position is data, not a transition; override the global reduced-motion duration. */
+  .reading-progress, .reading-progress span { transition:none !important; animation:none !important; }
   .reading-progress[hidden] { display:none; }
   .reading-progress span { display:block; width:100%; height:100%; background:hsl(var(--field-amber-strong)); transform:scaleX(0); transform-origin:left; }
   @media print { .reading-progress { display:none; } }

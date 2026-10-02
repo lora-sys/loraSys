@@ -35,7 +35,9 @@ const fontPreloads = [...home.matchAll(/<link\b[^>]*>/g)]
 assert.equal(fontPreloads.length, 2, 'Preload both normal Satoshi weights before first paint')
 report.checks.push({ name: 'Satoshi font preloads', passed: true, count: fontPreloads.length })
 const projectHtml = await readFile(path.join(dist, 'projects/index.html'), 'utf8')
-const archivedProjects = projectHtml.slice(projectHtml.indexOf('data-work-archive'))
+const archiveStart = projectHtml.search(/<details\b[^>]*\bdata-work-archive(?:[\s=>])/i)
+assert.ok(archiveStart >= 0, 'Projects page must contain the archive disclosure')
+const archivedProjects = projectHtml.slice(archiveStart)
 assert.ok(!/<img\b[^>]*loading="eager"/.test(archivedProjects), 'Collapsed project archive must not eagerly load a duplicate hero')
 report.checks.push({ name: 'collapsed archive image loading', passed: true })
 const errors = []
