@@ -1,0 +1,103 @@
+---
+title: 'Deploying agent backends with Python Workers GA'
+description: 'Python Workers GA supports web frameworks and agent libraries. WebAssembly package compatibility remains the main migration boundary.'
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['AI Builder', 'AI Agent', 'Cloudflare Workers', 'Python', 'Developer Tools']
+contentType: 'technical'
+topics: ['agents', 'web-development', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'cloudflare-python-workers-agent-backend'
+draft: false
+---
+
+Cloudflare has made Python Workers generally available. Workers could already run Python two years ago. What has changed now is the support level and the engineering path.
+
+Cloudflare defines Python as an officially supported language on its Developer Platform. FastAPI, Django, and Flask can run directly on Workers. Python code can also use Workers AI, R2, D1, Hyperdrive, Durable Objects, Queues, and Workflows directly.
+
+For agent backends, this is worth another look at deployment architecture.
+
+## The 30-second version
+
+Cloudflare now explicitly supports Python web frameworks and a set of libraries commonly used by agents. `openai`, `langchain`, and `mcp` are all listed as libraries that can run in Python Workers.
+
+A lightweight agent API can therefore stay in Python while connecting directly to Cloudflare's queues, object storage, databases, and workflows.
+
+The boundary is clear too. Python Workers runs in a Pyodide and WebAssembly environment. Packages with native C, C++, or Rust extensions need a working WebAssembly build. GA does not mean every `pip` package can run directly.
+
+## Python syntax was never the problem
+
+Python is well suited to agents. Model SDKs, data processing, evaluation, MCP, RAG, and many machine-learning tools prioritize Python support.
+
+The problem was the deployment boundary. Cloudflare Workers' core runtime is a V8 isolate. Early Python Workers used Pyodide, which compiles CPython to WebAssembly. Python could run, but calling Workers platform capabilities often required conversion between Python and JavaScript objects.
+
+In the GA release, Cloudflare moves this type conversion into the runtime and Python SDK. The official example is concrete. Previously, sending a Python dictionary to a Queue required converting it to a JavaScript object first. Now the Python dictionary can go straight to the Queue binding.
+
+This removes a category of glue code that adds no business value.
+
+## FastAPI can run directly on Workers
+
+Cloudflare now provides `workers.asgi` and `workers.wsgi`. FastAPI connects through ASGI, while Django and other synchronous frameworks can connect through WSGI.
+
+A traditional deployment uses Uvicorn or Gunicorn to handle connections and concurrency. Workers takes a different approach. Cloudflare's platform receives requests and handles scaling. An ASGI or WSGI connector converts Workers requests into structures the Python web framework understands, then returns responses to the runtime.
+
+At least at the framework level, an existing FastAPI agent API therefore does not need to be rewritten in TypeScript before it can deploy to Workers.
+
+Source: [Cloudflare Python Workers GA announcement](https://blog.cloudflare.com/python-workers-ga/).
+
+## Common agent libraries can now run directly too
+
+Cloudflare explicitly mentions `openai`, `langchain`, and `mcp`.
+
+One previous obstacle was the network stack. Many Python AI libraries depend on `requests` or `httpx`. These libraries typically rely on underlying sockets, but a WebAssembly environment does not have the POSIX sockets of a normal Linux system.
+
+Cloudflare added a networking path for Python Workers so these HTTP clients can make requests through Workers capabilities. Its documentation therefore explicitly states that `openai`, `langchain`, and `mcp` can now run in Python Workers.
+
+A lightweight agent service can keep using the Python ecosystem while placing its surrounding infrastructure on the Workers platform.
+
+For example, an asynchronous agent task could accept a request through FastAPI, put the task in a Queue, manage multi-step execution with Workflows, use Workers AI or an external model for inference, and write the result to R2. Cloudflare's official examples already include pure-Python asynchronous AI orchestration and an MCP server.
+
+## It is still different from an ordinary Python server
+
+Python Workers uses Pyodide. The Python interpreter runs inside a WebAssembly sandbox. Pure-Python packages generally present fewer problems, and packages already included in Pyodide can be used directly.
+
+Native extensions are what need checking.
+
+Many Python packages contain C, C++, or Rust code. On ordinary Linux, `pip` can download a wheel for the platform. In a WebAssembly environment, that native code must be recompiled to WebAssembly.
+
+Cloudflare is advancing PyEmscripten and adding related support to `cibuildwheel`, but it also explicitly says the package ecosystem is still adapting.
+
+Python Workers GA therefore does not mean everything installed with `pip install` will run.
+
+Source: [Cloudflare Python packages documentation](https://developers.cloudflare.com/workers/languages/python/packages/).
+
+## How I would choose a deployment environment
+
+Start with dependencies, rather than the framework name.
+
+If a project mainly uses FastAPI, HTTP model calls, MCP, webhooks, queues, R2, D1, Durable Objects, and Workflows, test Python Workers directly. It can preserve the Python agent code while reducing the work of connecting surrounding infrastructure.
+
+If a project depends on many system libraries, CUDA, a local GPU, complex audio or video processing, native extensions that are difficult to cross-compile, or ordinary Linux process capabilities, a container or virtual machine remains a better fit.
+
+Some projects are better split. Put the public API, authentication, webhooks, and asynchronous scheduling on Workers, and keep heavy computation in a GPU service. Python Workers can connect the two through a Queue, HTTP, or Service Binding.
+
+## Four checks before deployment
+
+1. Are the core dependencies pure Python, or do Pyodide or PyEmscripten builds already exist?
+2. Do network and database access use paths Cloudflare currently supports?
+3. Should persistent state live in D1, R2, Durable Objects, or an external database?
+4. Should heavy computation stay in a separate GPU service?
+
+Python Workers GA offers a specific benefit. It removes a layer of glue code when a Python agent backend joins the Cloudflare platform. The WebAssembly runtime boundary remains.
+
+## What the evidence supports
+
+The material supports these facts. Python Workers is generally available. FastAPI, Django, and Flask can run. Python Workers can use multiple Cloudflare bindings directly. Cloudflare explicitly documents ways to run `openai`, `langchain`, and `mcp`.
+
+It does not support several stronger claims. We cannot say every Python package runs directly, describe Python Workers as an ordinary Linux Python server, or claim that migrating a FastAPI project requires no code changes. The official material also lacks sufficiently standardized data to establish that Python Workers is faster or cheaper than containers.
+
+## Primary sources
+
+- [Cloudflare Blog: Python Workers are now generally available](https://blog.cloudflare.com/python-workers-ga/)
+- [Cloudflare Docs: Python Workers](https://developers.cloudflare.com/workers/languages/python/)
+- [Cloudflare Docs: Python packages](https://developers.cloudflare.com/workers/languages/python/packages/)
+- [Cloudflare Docs: How Python Workers Work](https://developers.cloudflare.com/workers/languages/python/how-python-workers-work/)

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+<rect width="1536" height="1024" fill="#F5EEDF"/>
+<text x="768" y="82" text-anchor="middle" font-family="Arial, sans-serif" font-size="48" font-weight="700" fill="#2B211B">Why fail closed when network policy fails to load?</text>
+<text x="768" y="130" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">If permitted scope is unknown, do not reuse old policy or allow access by default</text>
+<rect x="90" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#B67A2A" stroke-width="4"/>
+<text x="305" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#7A4E17">1. Load policy</text>
+<rect x="150" y="320" width="310" height="210" rx="20" fill="#EFE3D3"/>
+<text x="305" y="375" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#2B211B">application.network</text>
+<text x="305" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#2B211B">api.example.com</text>
+<text x="305" y="475" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#2B211B">github.com</text>
+<text x="305" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#5A4638" style=";font-size:24.4px">Read at startup or explicit reload</text>
+<rect x="555" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#8C6A51" stroke-width="4"/>
+<text x="770" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#5A4638">2. Two outcomes</text>
+<rect x="620" y="325" width="300" height="150" rx="20" fill="#E4EAD9"/>
+<text x="770" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#4F6A3A">Load succeeds</text>
+<text x="770" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B" style=";font-size:19.8px">Apply the allowlist to traffic</text>
+<rect x="620" y="535" width="300" height="185" rx="20" fill="#F7D9D1"/>
+<text x="770" y="590" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#A9503E">Load fails</text>
+<text x="770" y="640" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B" style=";font-size:21.4px">Block new network traffic</text>
+<text x="770" y="685" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#2B211B" style=";font-size:17px"><tspan x="770.0" y="677.0">Unknown does not mean</tspan><tspan x="770.0" y="697.0">allowed</tspan></text>
+<rect x="1020" y="190" width="430" height="690" rx="28" fill="#FFF9F0" stroke="#A9503E" stroke-width="4"/>
+<text x="1235" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#8C3F31">3. Policy update</text>
+<text x="1235" y="350" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" fill="#2B211B">New rules revoke a domain</text>
+<path d="M1120 440 H1350" stroke="#6B5140" stroke-width="10" marker-end="url(#a)"/>
+<text x="1235" y="385" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#5A4638">Requests in progress</text>
+<rect x="1110" y="520" width="250" height="115" rx="18" fill="#F7D9D1"/>
+<text x="1235" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#A9503E" style=";font-size:20.1px">Cancel immediately</text>
+<text x="1235" y="610" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#2B211B" style=";font-size:17px"><tspan x="1235.0" y="602.0">Connections no longer</tspan><tspan x="1235.0" y="622.0">allowed</tspan></text>
+<text x="1235" y="730" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" fill="#5A4638" style=";font-size:21.6px">Policy errors must not expand access</text>
+<rect x="370" y="910" width="796" height="74" rx="24" fill="#4A3427"/>
+<text x="768" y="958" text-anchor="middle" font-family="Arial, sans-serif" font-size="31" font-weight="700" fill="#FFF8EE" style=";font-size:27.3px">Default deny is easier to verify than default allow</text>
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#6B5140"/></marker></defs>
+</svg>

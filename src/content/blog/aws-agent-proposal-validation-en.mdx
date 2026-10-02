@@ -1,0 +1,61 @@
+---
+title: 'AWS agents propose; deterministic code validates'
+description: 'How AWS separates agent proposals, rule checks, human approval, and execution, with code enforcing boundaries and idempotency.'
+publishDate: '2026-09-14T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/aws-agent-proposal-validation/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: code validates agent proposals before execution or human approval according to risk'
+tags: ['AI', 'Agent', 'AWS', 'Harness', 'Multi-Agent', 'Evaluation']
+contentType: 'technical'
+topics: ['agent-harness', 'multi-agent', 'evaluation']
+language: 'en-US'
+translationOf: 'aws-agent-proposal-validation'
+draft: false
+---
+
+The original cover retains Chinese labels. They read "Model proposal," "Code validation," "Human approval," and "Deterministic execution." It shows proposed flight changes passing through code checks, with a human approval path before execution when needed.
+
+## AWS separates agent decisions: models propose, code validates
+Many multi-agent architecture diagrams share a problem. They show many agents, but every agent makes judgments.
+One agent generates a plan, another evaluates it, and a third decides whether to execute it. If that last step changes production data, makes a payment, deploys software, or deletes resources, the design has a direct risk. All the important judgments still come from probabilistic models.
+AWS's flight-rebooking reference architecture, published on September 14, offers another approach.
+It assigns proposals to agents and hands validation, routing, and real execution to Step Functions and ordinary code.
+### Agents only produce candidate options
+After a flight cancellation triggers Step Functions, the system first uses deterministic tasks to read passenger information, bookings, membership tiers, and preferences.
+Distributed Map then processes affected passengers in parallel. AWS documentation states that this mode supports up to 10,000 concurrent child executions by default.
+The first AgentCore agent has a narrow task. It proposes the top three rebooking options based on passenger preferences and constraints.
+At this point, the agent has no booking permissions.
+### Code must validate candidate options
+The flights an agent proposes do not go straight to execution.
+The next step is Lambda. It reads flight information again, then checks seat inventory, fare rules, and route validity one by one.
+If the agent invents a flight, this step blocks it. If a flight exists but has no seats, it is blocked too. A fare class or route that violates the rules cannot proceed either.
+This validator does not use natural-language judgment. It is ordinary Python code, so it can be unit-tested and reproduced, and the system can identify exactly which rule rejected an option.
+### Models can write messages; compensation eligibility stays in code
+AWS's second agent generates passenger-facing notification text.
+It does not calculate compensation eligibility or move money.
+Another Lambda calculates eligibility from a rule table. AWS's example cites EU261 and US Department of Transportation refund rules to explain why this step should be auditable, but the business still has to configure and validate the specific rules.
+This is a practical boundary. Let the model handle language and personalization. Use code for strict calculations and compliance decisions.
+### High-risk cases go to human approval
+After deterministic validation, a Step Functions Choice state selects the next path.
+Passengers who meet automatic-confirmation conditions can proceed to execution. Other cases go to human review. The example uses a task token to wait for the result, with a 4-hour timeout.
+The wait happens in a separate callback task, so the agent itself does not have to remain running.
+This matters for long tasks. Approval is workflow state and should not depend on keeping a model session alive.
+### Real execution must also handle retries
+Deterministic Tasks continue to handle the final booking, compensation, and notification steps.
+AWS explicitly adds idempotency. Each execution task generates an idempotency key from the passenger ID and decision ID. If the workflow retries or is redriven, the same request does not book or pay again.
+Many agent demos omit this part. A model calling a tool correctly once does not mean a production system can safely execute it repeatedly.
+### What this means for evals
+When an agent can only chat, evals often focus on answer quality.
+Once an agent can modify real systems, evals need another layer.
+The first still evaluates the model. Did it find reasonable candidates, and did its notification text meet the requirements?
+The second evaluates the execution chain. Did candidates pass deterministic rules? Were invalid options blocked? Did high-risk cases reach a human? Did retries produce duplicate side effects?
+These two types of metrics should stay separate.
+A decline in model quality may produce worse candidates. A failed validation layer may send invalid candidates straight into real systems. The latter carries more risk and is better suited to continuous checks through hard rules and automated tests.
+### A structure builders can reuse
+I would divide production-agent actions into four categories.
+The first is generation. Models can summarize, plan, propose candidates, and generate text.
+The second is validation. Deterministic code handles inventory, permissions, amounts, state-machine conditions, and compliance rules.
+The third is routing. Low-risk cases continue automatically; high-risk cases go to humans or a stricter approval chain.
+The fourth is execution. Every operation with side effects needs idempotency, permission limits, and audit records.
+This separation does not require AWS. Temporal, queue systems, or a state machine of your own can implement the same principle.
+The key is to avoid assigning one model the job of proposing a plan, proving itself right, and then executing it.

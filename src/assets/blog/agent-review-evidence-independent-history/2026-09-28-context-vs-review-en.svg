@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+<rect width="1200" height="700" fill="#f7f0e6"/>
+<text x="60" y="80" font-size="36" font-family="sans-serif" fill="#2d241f">Compact main context; keep review evidence separate</text>
+<rect x="70" y="150" width="470" height="430" rx="20" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="105" y="205" font-size="26" font-family="sans-serif" fill="#2d241f">Parent-session context</text>
+<text x="105" y="260" font-size="22" font-family="sans-serif" fill="#2d241f">Complete history</text>
+<text x="105" y="310" font-size="22" font-family="sans-serif" fill="#2d241f">Context compaction</text>
+<text x="105" y="360" font-size="22" font-family="sans-serif" fill="#2d241f">Continue from a summary</text>
+<rect x="660" y="150" width="470" height="430" rx="20" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="695" y="205" font-size="26" font-family="sans-serif" fill="#2d241f">Independent review transcript</text>
+<text x="695" y="260" font-size="22" font-family="sans-serif" fill="#2d241f">Original constraints</text>
+<text x="695" y="310" font-size="22" font-family="sans-serif" fill="#2d241f">Tool calls and results</text>
+<text x="695" y="360" font-size="22" font-family="sans-serif" fill="#2d241f">Rollback provenance</text>
+<text x="60" y="650" font-size="20" font-family="sans-serif" fill="#5d5148">Teaching diagram based on OpenAI Codex PR 48779.</text>
+</svg>

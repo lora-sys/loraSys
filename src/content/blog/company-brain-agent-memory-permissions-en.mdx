@@ -1,0 +1,96 @@
+---
+title: 'Company Brain separates team memory permissions'
+description: 'Company Brain scopes team-agent memory by room and user permissions, with personal authorization, traceable sources, and separate tool-write access.'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Agent', 'Memory', 'Permissions', 'Slack', 'Open Source']
+contentType: 'projects'
+topics: ['memory-context', 'security', 'agents']
+language: 'en-US'
+translationOf: 'company-brain-agent-memory-permissions'
+draft: false
+---
+
+## Fact check
+<table fit-page-width="true" header-row="true">
+<tr>
+<td>Check</td>
+<td>Result</td>
+</tr>
+<tr>
+<td>Project</td>
+<td>Company Brain</td>
+</tr>
+<tr>
+<td>Author or organization</td>
+<td>Supermemory. Its official GitHub organization is supermemoryai.</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>[https://github.com/supermemoryai/company-brain](https://github.com/supermemoryai/company-brain)</td>
+</tr>
+<tr>
+<td>Current status</td>
+<td>The original hosted product shut down on September 9, 2026. The current repository provides a self-hosted version that deploys to your own Cloudflare account.</td>
+</tr>
+<tr>
+<td>Core capabilities</td>
+<td>A Slack team agent. It saves long-term memory from team conversations, reads it according to the question's location and the asker's permissions, and can call tools including GitHub, Linear, Notion, and Google Workspace.</td>
+</tr>
+<tr>
+<td>Permission model</td>
+<td>Public channels write to shared organization memory. Private channels write to that channel's memory. DMs write to personal memory. The readable scope expands with room privacy, but only includes content the asker was already allowed to see.</td>
+</tr>
+<tr>
+<td>Tool permissions</td>
+<td>Personal connections take priority. Shared organization connections are read-only. Writes must use a personal connection. If a tool is missing, the agent can request one-time temporary authorization from a colleague who has a connection, with explicit approval from that person.</td>
+</tr>
+<tr>
+<td>Stack</td>
+<td>TypeScript, Cloudflare Workers, Durable Objects, and D1. Supermemory provides the memory layer.</td>
+</tr>
+<tr>
+<td>Demo</td>
+<td>No public live demo usable without deployment was found. The README includes real product screenshots, permission documentation, and a one-click deployment path that can be used for short-video footage.</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Apache License 2.0</td>
+</tr>
+<tr>
+<td>Recent updates</td>
+<td>Retrieved on September 27, 2026. The official repository was still merging commits on September 26, including memory export and fixes to fresh-clone checks.</td>
+</tr>
+</table>
+Main sources: [Company Brain GitHub](https://github.com/supermemoryai/company-brain), [Permissions](https://github.com/supermemoryai/company-brain/blob/main/docs/guide/permissions.md), [Supermemory September 10 announcement](https://supermemory.ai/blog/an-update-to-supermemory/)
+## Evidence card
+The official announcement confirms that Supermemory shut down the hosted Company Brain service on September 9, 2026 and refunded paying users. The official repository README says the discontinued product is now fully open source and runs in users' own Cloudflare accounts.
+The permission documentation divides memory into three scopes. Information from public channels enters shared organization memory. Private-channel information enters only that channel's memory. DMs create personal memory. Queries in public channels can use only public memory. Queries in private channels can also read that channel's memory. DM queries can additionally read the asker's own personal memory and memory from private channels the asker has joined.
+Tool permissions are also tied to user identity. Reads use a personal connection first, falling back to a shared organization connection only when none is available. Shared organization connections cannot write. Writes such as creating issues or commenting on PRs must use the asker's own personal connection. If only a colleague has connected a tool, Company Brain sends an approval card in Slack, and the authorization applies only to the current request.
+## The 30-second version
+Supermemory first shut down Company Brain's hosted product and has now open-sourced the complete codebase. It remains a team agent inside Slack, but its permission map is the part most worth examining. Public channels, private channels, and DMs do not share one large memory pool. Information is written to the narrowest room, and the readable scope expands at answer time according to permissions the asker already has. Tool writes also cannot use a shared organization account directly; they must go through personal connections. This gives a concrete implementation of team-agent permissions, beyond simply "adding memory."
+## Why it is interesting
+Most team-knowledge agent demos emphasize how much the agent remembers. Company Brain builds harder questions into the product's structure: which room produced a memory, who may read it, in which room it may be retrieved again, and who is allowed to change external systems on the team's behalf.
+The product's status is another point of interest. Supermemory closed the hosted service on September 9, and the open-source repository now turns the original product into a self-hosted one. It is complete product code that real users used before commercial hosting ended, rather than a concept demo.
+## Three designs worth borrowing
+<table fit-page-width="true" header-row="true">
+<tr>
+<td>Design</td>
+<td>Implementation</td>
+<td>How to reuse it</td>
+</tr>
+<tr>
+<td>Memory scope equals permission scope</td>
+<td>Write information to the narrowest room. Expand reads according to the current room and asker's permissions.</td>
+<td>Create public, project, and personal containers first, rather than building a global vector database and adding permission filters later.</td>
+</tr>
+<tr>
+<td>Separate read and write permissions</td>
+<td>Organization connections support shared reads, while writes must bind to personal connections.</td>
+<td>Record the real operator when an agent calls a tool. Shared tokens should not perform personal writes.</td>
+</tr>
+<tr>
+<td>Request one-time authorization when permission is missing</td>
+<td>If only a colleague has a connection, send an approval card asking that person to explicitly allow the current request.</td>
+<td>Make temporary authorization a request-scoped capability instead of handing long-lived credentials directly to another agent.</td>
+</tr>
+</table>

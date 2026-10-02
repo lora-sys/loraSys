@@ -1,0 +1,51 @@
+---
+title: 'Cloudflare redesigns its CLI for agents'
+description: 'Cloudflare launches cf in open beta, using Wrangler usage data to explain default JSON, command search, and typed configuration.'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'Cloudflare', 'CLI', 'Developer Tools']
+contentType: 'technical'
+topics: ['agents', 'devtools', 'mcp-skills']
+language: 'en-US'
+translationOf: 'cloudflare-cf-agent-native-cli'
+draft: false
+---
+
+Cloudflare released the [cf open beta](https://blog.cloudflare.com/cloudflare-cf-cli-launch/) on September 28, 2026. The interesting part is the data Cloudflare shared about agents using Wrangler and how it used those observations to change the CLI interface.
+
+According to Cloudflare, agents accounted for about a quarter of Wrangler usage in March 2026. In the week before the release, that share reached 48%. Agents used nearly twice as many distinct commands per day as humans and were nearly four times as likely to use six or more commands. These figures describe only the Wrangler usage Cloudflare observed.
+
+## Discover commands before calling them
+
+Wrangler has roughly 280 command paths, and the Cloudflare API has more than 3,000 operations. cf uses Forge to generate commands from OpenAPI schemas, so API documentation, SDKs, and the CLI can share the same structural source as much as possible.
+
+As the number of tools grows, keeping the entire command tree in the model context becomes impractical. cf provides `cf cli search`. The agent first describes the task, a local index returns a small set of relevant commands, and only then does it make a specific call.
+
+This design transfers directly to an agent harness. The larger the tool catalog, the more important it is to separate capability discovery from execution.
+
+## JSON by default
+
+Traditional CLIs often default to tables, colors, and formatted text. Agents frequently have to add `--json` and then parse the fields.
+
+cf makes JSON the default interface. Structured output reduces extra parsing and makes it easier for later steps to reference fields reliably. When a human needs to read it, the structured result can be formatted for display.
+
+## Typed configuration
+
+cf introduces `cloudflare.config.ts`. Coding agents with language-server support can use field types, completions, and error messages directly.
+
+The important part is giving configuration a machine-readable schema, type constraints, and clear error feedback, rather than merely replacing YAML with TypeScript.
+
+## What builders can check
+
+1. Can tools be searched before their specific definitions are loaded?
+2. Is output structured by default?
+3. Does configuration have readable schemas and types?
+4. Are the CLI, SDK, documentation, and API generated from the same interface definition where possible?
+
+## Limits
+
+cf is still in open beta. The npm page lists version `1.0.0-beta.1` and requires Node.js 22 or later. Cloudflare's 48% figure must not be presented as the share for the entire development industry. The company also has not published a standardized cross-tool experiment on context costs.
+
+## Main sources
+
+- [Cloudflare: Introducing cf](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)
+- [npm: cf](https://www.npmjs.com/package/cf)

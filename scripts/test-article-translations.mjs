@@ -4,6 +4,7 @@ import path from 'node:path'
 
 import { validateArticleTranslations } from './lib/article-translations.mjs'
 import { readFrontmatter } from './lib/writing-classification.mjs'
+import { recentEnglishArticles } from '../src/utils/article-translations.ts'
 
 const root = path.resolve(import.meta.dirname, '..')
 const directory = path.join(root, 'src/content/blog')
@@ -12,6 +13,12 @@ const posts = readdirSync(directory).filter((file) => /\.mdx?$/.test(file)).map(
   const { data, body } = readFrontmatter(source)
   return { id: file.replace(/\.mdx?$/, ''), data, body, source }
 })
+const fixture = (id, language, translationOf) => ({ id, data: { language, translationOf } })
+const englishFixtures = [fixture('a', 'en-US'), fixture('b', 'en-US', 'b-source'), fixture('c', 'en-US'), fixture('d', 'en-US')]
+assert.deepEqual(recentEnglishArticles([]), [], 'Empty English homepage stays empty')
+assert.deepEqual(recentEnglishArticles([fixture('zh', 'zh-CN')]), [], 'Chinese originals are not an English fallback')
+assert.deepEqual(recentEnglishArticles([fixture('zh', 'zh-CN'), ...englishFixtures.slice(0, 2)]).map((post) => post.id), ['a', 'b'], 'Fewer than three English articles retain their canonical IDs')
+assert.deepEqual(recentEnglishArticles(englishFixtures).map((post) => post.id), ['a', 'b', 'c'], 'English homepage keeps only the first three in date order')
 const byId = new Map(posts.map((post) => [post.id, post]))
 const translations = posts.filter((post) => post.data.translationOf)
 const published = posts.filter((post) => !post.data.draft)
@@ -39,6 +46,21 @@ for (const translated of translations) {
   assert.deepEqual(components(translated.body), components(original.body), `${translated.id}: MDX components retained`)
   assert.deepEqual(media(translated.body), media(original.body), `${translated.id}: all media retained`)
   assert.equal(translated.data.heroImage?.src?.replace(/-en\.svg$/, '.svg'), original.data.heroImage?.src, `${translated.id}: source cover retained`)
+  for (const match of translated.body.matchAll(/<InteractiveHtml\b[\s\S]*?\bsrc="([^"]+)"/g)) {
+    const src = match[1]
+    assert.ok(src.startsWith('/artifacts/blog/') && src.endsWith('-en.html'), `${translated.id}: English interactive artifact`)
+    const html = readFileSync(path.join(root, 'public', src.slice(1)), 'utf8')
+    const sourceHtml = readFileSync(path.join(root, 'public', src.slice(1).replace(/-en\.html$/, '.html')), 'utf8')
+    assert.match(html, /<html\b[^>]*lang="en-US"/, `${translated.id}: interactive document language`)
+    assert.doesNotMatch(html, /[\u3400-\u9fff]/, `${translated.id}: interactive visible and data-string text translated`)
+    assert.match(html.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? '', /[A-Za-z]/, `${translated.id}: English interactive title`)
+    for (const button of html.matchAll(/<button\b[^>]*>([\s\S]*?)<\/button>/g))
+      assert.match(button[1].replace(/<[^>]*>/g, ''), /[A-Za-z]/, `${translated.id}: English button label`)
+    const policy = (document) => document.match(/<meta[^>]*http-equiv="Content-Security-Policy"[^>]*>/)?.[0]
+    assert.ok(policy(sourceHtml), `${translated.id}: source CSP exists`)
+    assert.equal(policy(html), policy(sourceHtml), `${translated.id}: original artifact CSP retained`)
+    assert.deepEqual([...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((item) => item[1]), [...sourceHtml.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((item) => item[1]), `${translated.id}: artifact CSS retained`)
+  }
   assert.ok(translated.data.title.length <= 60 && translated.data.description.length <= 160)
   report.push({ original: original.id, translation: translated.id, headings: headings(translated.body), codeBlocks: fences(translated.body) / 2, media: media(translated.body).length })
 }

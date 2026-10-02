@@ -1,0 +1,62 @@
+---
+title: 'Foreman: an independent supervisor for coding agents'
+description: 'How Foreman separates a coding agent from supervision, using runtime evidence, Jev judgments, and deterministic policy to continue, verify, stop, or escalate.'
+publishDate: '2026-09-17T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/foreman-coding-agent-supervisor/lora-explainer-v2.webp'
+  alt: 'Original cover with a Chinese runtime-evidence label: a worker acts, Foreman reviews evidence, and policy decides what happens next'
+tags: ['AI', 'Agent', 'Coding Agent', 'Harness', 'Eval', 'Foreman']
+contentType: 'projects'
+topics: ['agent-harness', 'evaluation', 'devtools']
+language: 'en-US'
+translationOf: 'foreman-coding-agent-supervisor'
+draft: false
+---
+
+The original cover contains a Chinese label meaning "runtime evidence." It shows the worker producing evidence, Foreman reviewing it, and policy choosing the next action.
+
+## Core idea
+A coding agent that writes code and decides for itself whether the task is complete puts execution and acceptance in the same decision loop.
+Foreman separates supervision. The worker does not need to pause while the supervisor thinks. Runtime events continuously enter a separate loop. The supervision layer sees only limited evidence, and a deterministic policy decides whether to continue, verify, stop, or request human help.
+The most useful idea here is an independent control plane for an existing agent, rather than another agent that can write code.
+## Understand it in 30 seconds
+Give Foreman a ticket, specification, bug, or free-text task. The Codex worker writes code, edits files, and runs tests as usual.
+Meanwhile, Foreman reads diffs, tests, worker output, and events. Jev judges whether the task is complete, whether testing is sufficient, and whether the worker is stuck or off track. Python policy then decides what happens next.
+If verification is needed, it starts an independent verifier. If the worker gets stuck, it can stop or retry. When credentials, clarification, or human judgment are needed, it pauses and asks a person to handle them.
+## Why it is interesting
+Most coding agent harnesses put execution and the decision to stop in the same agent loop. An agent may stop before tests cover enough, or keep consuming context after it has finished.
+Foreman does not rewrite Codex's reason, tool, and observe workflow or choose its files and tools. It reads limited evidence from outside and handles narrower questions, such as whether progress has stalled, whether independent verification is needed, and whether the requirements are met.
+This separation lets developers test supervision policies and tune thresholds independently. The README also states the limits: Jev's judgment accuracy has not been established. A wrong judgment may stop a healthy worker or let incorrect work pass.
+## 3 designs worth borrowing
+### 1. Separate the worker and supervision loops
+The coding agent continues its task. Foreman reads events in an independent asynchronous loop, without making the worker wait for an extra model after every step.
+### 2. The model judges; policy acts
+Jev produces judgments. Python policy decides whether to stop the worker, start a verifier, retry, or end the task. The probabilistic model does not directly control executable actions.
+### 3. Give supervision context explicit limits
+Foreman does not send the entire repository to the supervision model. It provides only the task, recent output, a bounded diff, changed files, tests, and events. The README sets explicit size limits for these observations.
+## How this connects to my work
+If you build agent harnesses or agent evaluations, you can apply Foreman's approach to your own runtime.
+In a multi-agent system, for example, avoid making the execution agent decide whether its own work is done. Maintain separate supervisor state that accepts only task status, tool results, failure counts, cost, tests, and key events. The supervision model judges the situation; deterministic policy performs the actual stop, retry, verify, and escalate actions.
+This can also work with Kitaru-style replay evaluation. Foreman supervises live runs, while replay evaluation checks whether the supervision policy often stops workers incorrectly, misses necessary stops, or ends tasks too early.
+
+## Sources and fact checks
+Checked on 2026-09-17 at 17:11 UTC-8.
+- Project name: Foreman.
+- Maintainer: the GitHub organization `thruwire`.
+- Official repository: [thruwire/foreman](https://github.com/thruwire/foreman). The repository is public and not archived.
+- Core capability: a coding agent worker performs the actual software engineering task. Foreman reads runtime evidence in a separate asynchronous loop and assesses the current state of the work.
+- Worker: V1 uses a locally installed Codex CLI and runs tasks through `codex exec`. The README also says the worker implementation can be replaced; the runtime depends only on a small worker protocol.
+- Supervision inputs: the original task, worker summary, recent output, exit status, elapsed time, `git status`, bounded diff, changed files, validation results, and recent events.
+- Judgment dimensions: whether implementation is complete, testing is sufficient, requirements are met, verification is needed, and the task can end; and whether the current worker is progressing, stuck, off track, or needs a human.
+- Decision mechanism: Jev produces judgments. Deterministic Python policy decides the permitted actions, including continuing, starting a worker, starting an independent verifier, stopping, retrying, finishing, and handing off to a human.
+- Demo: the repository provides `foreman demo --repo .`. The README explicitly says this demo needs no API key, network, Codex installation, or external repository.
+- Persistence: each run is saved in `.foreman/runs/<run-id>/state.json` and `events.jsonl`.
+- LICENSE: MIT.
+- Latest update: the commit at 2026-09-17 12:32:50 UTC was `docs: clarify Foreman introduction`. A `foreman first release` commit also appeared that day.
+- Current status: the author explicitly describes it as an architectural experiment and does not claim it already outperforms a conventional coding agent harness. V1 runs only one coding worker at a time. Local execution is not a security sandbox.
+- Standalone website: none was confirmed from the official repository in this check, so none is listed.
+## Evidence cards
+1. The [official Foreman README](https://github.com/thruwire/foreman) describes the worker and Foreman dual loops, Jev judgments, deterministic policy, real Codex worker, offline demo, persistence, and limitations.
+2. The [MIT LICENSE](https://github.com/thruwire/foreman/blob/main/LICENSE) confirms the license.
+3. The [first release commit](https://github.com/thruwire/foreman/commit/75619ce25e1634c52a2adc9dff8753823de02fdd) was made on 2026-09-17.
+4. The [latest documentation commit](https://github.com/thruwire/foreman/commit/2c439828b9fe45ee5d40f6f57be81f7ff1f8a140) was made at 2026-09-17 12:32:50 UTC.

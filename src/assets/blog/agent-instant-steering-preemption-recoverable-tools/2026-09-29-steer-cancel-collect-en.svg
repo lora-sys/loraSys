@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#F6EEDF"/>
+  <style>
+    .t{font-family:Arial,'Noto Sans CJK SC',sans-serif;fill:#2E251F}
+    .h{font-size:40px;font-weight:700}.s{font-size:22px}.b{font-size:25px;font-weight:700}.m{font-size:20px}.sm{font-size:17px}
+    .card{fill:#FFF9EF;stroke:#B98A58;stroke-width:2}.bad{fill:#FDE9E3;stroke:#A9503E;stroke-width:2}.good{fill:#EEF2E7;stroke:#657052;stroke-width:2}
+    .line{stroke:#6C5745;stroke-width:4;fill:none}.dash{stroke:#9A7B5D;stroke-width:3;stroke-dasharray:10 10;fill:none}
+  </style>
+  <text x="55" y="70" class="t h" style=";font-size:31.6px">Steering, canceling, and collecting results are separate actions</text>
+  <text x="55" y="108" class="t s">After a change of mind, side effects determine how to handle background work.</text>
+  
+<rect x="55" y="170" width="330" height="390" rx="24" class="card"/>
+<text x="95" y="220" class="t b">Steer</text>
+<text x="95" y="265" class="t m" style=";font-size:17px"><tspan x="95.0" y="257.0">The current turn handles new</tspan><tspan x="95.0" y="277.0">input first</tspan></text>
+<text x="95" y="315" class="t m" style=";font-size:17px"><tspan x="95.0" y="307.0">For changes to plans and</tspan><tspan x="95.0" y="327.0">priorities</tspan></text>
+<text x="95" y="365" class="t m" style=";font-size:17px"><tspan x="95.0" y="357.0">Does not automatically stop</tspan><tspan x="95.0" y="377.0">background work</tspan></text>
+<rect x="95" y="430" width="250" height="72" rx="16" fill="#F4D6A8"/>
+<text x="125" y="475" class="t b" style=";font-size:18.2px">Control-flow change</text>
+<rect x="435" y="170" width="330" height="390" rx="24" class="bad"/>
+<text x="475" y="220" class="t b">Cancel</text>
+<text x="475" y="265" class="t m">Explicitly stop the old task</text>
+<text x="475" y="310" class="t m"><tspan x="475" style=";font-size:19.2px">For tasks with side effects or</tspan><tspan x="475" dy="28" style=";font-size:19.1px">operations no longer needed</tspan></text>
+<text x="475" y="385" class="t m" style=";font-size:17px"><tspan x="475.0" y="377.0">Check partial results when</tspan><tspan x="475.0" y="397.0">needed</tspan></text>
+<rect x="475" y="430" width="250" height="72" rx="16" fill="#F7C6B8"/>
+<text x="505" y="475" class="t b" style=";font-size:17px"><tspan x="505.0" y="467.0">Resources and side</tspan><tspan x="505.0" y="487.0">effects</tspan></text>
+<rect x="815" y="170" width="330" height="390" rx="24" class="good"/>
+<text x="855" y="220" class="t b">Collect later</text>
+<text x="855" y="265" class="t m" style=";font-size:17.4px">Continue safe background work</text>
+<text x="855" y="310" class="t m"><tspan x="855">Later, use a task handle </tspan><tspan x="855" dy="28">or cell ID to retrieve results</tspan></text>
+<text x="855" y="385" class="t m" style=";font-size:18.7px">For tests, reads, and retrieval</text>
+<rect x="855" y="430" width="250" height="72" rx="16" fill="#DCE7CE"/>
+<text x="885" y="475" class="t b" style=";font-size:17.6px">Retain useful results</text>
+<text x="300" y="635" class="t s" style=";font-size:18.4px">PR #48135 lets code mode return the running cell ID early without stopping the underlying cell.</text>
+</svg>

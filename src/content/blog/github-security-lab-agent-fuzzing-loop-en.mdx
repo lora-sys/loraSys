@@ -1,0 +1,51 @@
+---
+title: 'GitHub Security Lab makes fuzzing an agent feedback loop'
+description: 'GitHub Security Lab Fuzzing Taskflow uses coverage gaps to guide model decisions while deterministic tools execute, measure, and persist results.'
+publishDate: '2026-09-25T00:00:00Z'
+tags: ['AI Agent', 'Fuzzing', 'DevSecOps', 'Agent Harness', 'GitHub']
+contentType: 'projects'
+topics: ['security', 'agent-harness', 'evaluation']
+language: 'en-US'
+translationOf: 'github-security-lab-agent-fuzzing-loop'
+draft: false
+---
+
+## Fact checks
+Project name: Seclab Taskflows Fuzzing
+Repository: [GitHubSecurityLab/seclab-taskflows-fuzzing](https://github.com/GitHubSecurityLab/seclab-taskflows-fuzzing)
+Organization: GitHub Security Lab
+Official introduction: [GitHub Blog, 2026-09-24](https://github.blog/security/application-security/ai-powered-fuzzing-with-the-github-security-lab-taskflow-agent/)
+LICENSE: MIT
+Current status: public repository, not archived. The README marks it as active development.
+Repository metadata was retrieved at 09:14 China Standard Time on 2026-09-25. The `pushed_at` value was 2026-09-21 11:41 UTC, and `updated_at` was 2026-09-24 23:01 UTC. Star counts are not used to select the topic here.
+### Core mechanism
+The project targets native C and C++ repositories. It analyzes the target code and build process, generates fuzz harnesses, runs AFL++, reads coverage, and adjusts the next iteration based on uncovered branches.
+The official design separates responsibilities. The LLM agent decides what target to fuzz, how to modify the harness, and which coverage gap to pursue next. Tools compile and run code, read coverage, and save results.
+Workflow state is stored in SQLite. Existing state and the corpus remain usable after a campaign stops.
+Each harness has a fuzzing build and a coverage build. The former performs the tests; the latter generates more readable source-code coverage. Based on uncovered paths, the agent decides whether to add seeds, modify the harness, expand the dictionary, or skip low-value paths.
+### Demo and current availability
+The most direct way to try it is to follow the official repository instructions and run a target repository in a disposable development environment. Once a campaign starts, it provides an HTML dashboard. The official article shows coverage trends, a crash heatmap, and an iteration timeline.
+This is not a hosted online demo. A short video could use the official repository, the dashboard in the official article, and pages from a run in your own disposable environment.
+### Safety note
+The official documentation explicitly warns that this workflow runs compilation and testing tools on the host, without container isolation. It recommends a disposable Codespace or temporary virtual machine with restricted permissions.
+
+## Evidence cards
+GitHub's official article, 2026-09-24: confirms the project background, division of responsibilities, coverage feedback loop, dashboard, and safety warning.
+The official project repository: confirms the C and C++ pipeline, SQLite persistence, coverage design, MIT License, and active development status.
+The official DataFlex-RL repository: used only to verify a candidate topic. Its README describes it as a zero-fork plugin for verl, licensed under Apache-2.0.
+TIER IV's official release, 2026-09-24: used only to verify a candidate topic. The company confirms an autonomous racing kart reference design based on Autoware.
+
+## Understand it in 30 seconds
+The difficult part of ordinary fuzzing is not starting the run. It is continually reviewing coverage, extending harnesses, pursuing unvisited branches, and organizing results afterward.
+This project gives the repeated judgment calls to an agent. AFL++ still runs the tests, while clang and lcov still measure coverage. The agent reads each round of results and decides what to change next.
+What makes it worth examining is a measurable feedback loop: execute, measure, judge, and execute again.
+
+## Why it is interesting
+Many agent projects make the model handle every action. This project narrows the model's role.
+The model does not simulate AFL++ or calculate coverage itself. It handles only the parts that require judgment. Execution results then become inputs to the next iteration.
+The effect of an agent's changes can therefore be assessed directly through coverage changes, without relying on the model's own statement that the task is complete.
+
+## 3 designs worth borrowing
+First, separate decisions from execution. The model chooses the next step, and programs perform verifiable actions.
+Second, feed measurable signals directly into the next iteration. External metrics can show whether each change had an effect.
+Third, persist state. Store historical results in structured storage instead of relying on a long conversation to retain context.

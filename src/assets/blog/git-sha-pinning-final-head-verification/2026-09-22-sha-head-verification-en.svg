@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<rect width="1400" height="820" fill="#F6EEDF"/>
+<rect x="42" y="42" width="1316" height="100" rx="24" fill="#2E251F"/>
+<text x="78" y="102" font-family="Arial, Liberation Sans, sans-serif" font-size="42" font-weight="700" fill="#FFF9EF">A pinned SHA is expected; verify the HEAD after checkout</text>
+<text x="78" y="132" font-family="Arial, Liberation Sans, sans-serif" font-size="20" fill="#E9D8BE">Revision text may undergo Git name resolution. The security boundary must check the final commit.</text>
+<g font-family="Arial, Liberation Sans, sans-serif">
+<rect x="55" y="185" width="390" height="480" rx="28" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<circle cx="100" cy="235" r="28" fill="#D7B98D"/><text x="91" y="246" font-size="28" font-weight="700" fill="#2E251F">1</text>
+<text x="145" y="246" font-size="30" font-weight="700" fill="#2E251F">Expected SHA</text>
+<text x="88" y="310" font-size="23" fill="#51443A">Marketplace or policy records</text><text x="88" y="345" font-size="23" fill="#51443A">a reviewed commit ID</text>
+<rect x="88" y="390" width="322" height="100" rx="16" fill="#EFE1CA"/>
+<text x="108" y="430" font-size="20" fill="#2E251F">PINNED_SHA</text><text x="108" y="466" font-family="monospace" font-size="18" fill="#76512F">abc123...789</text>
+<text x="88" y="545" font-size="21" fill="#76512F">This is what you expect</text><text x="88" y="580" font-size="21" fill="#76512F">Not yet what you obtained</text>
+
+<rect x="505" y="185" width="390" height="480" rx="28" fill="#FFF9EF" stroke="#C89A62" stroke-width="3"/>
+<circle cx="550" cy="235" r="28" fill="#D7B98D"/><text x="541" y="246" font-size="28" font-weight="700" fill="#2E251F">2</text>
+<text x="595" y="246" font-size="28.5" font-weight="700" fill="#2E251F" style="font-size:28.5px">Git resolves revision</text>
+<text x="538" y="310" font-size="22" fill="#51443A">Git receives revision text</text><text x="538" y="345" font-size="22" fill="#51443A">and resolves an object or ref</text>
+<rect x="538" y="390" width="324" height="140" rx="16" fill="#2E251F"/>
+<text x="562" y="432" font-family="monospace" font-size="19" fill="#FFF9EF">git checkout abc123...</text>
+<text x="562" y="474" font-size="18" fill="#E9D8BE">A same-named ref may exist</text><text x="562" y="505" font-size="18" fill="#E9D8BE">and trigger an ambiguous warning</text>
+<text x="538" y="585" font-size="21" fill="#76512F">Exit code 0</text><text x="538" y="620" font-size="21" fill="#76512F">does not prove the correct commit</text>
+
+<rect x="955" y="185" width="390" height="480" rx="28" fill="#FFF9EF" stroke="#758061" stroke-width="3"/>
+<circle cx="1000" cy="235" r="28" fill="#AEB79C"/><text x="991" y="246" font-size="28" font-weight="700" fill="#2E251F">3</text>
+<text x="1045" y="246" font-size="30" font-weight="700" fill="#2E251F">Check actual HEAD</text>
+<rect x="990" y="310" width="320" height="82" rx="16" fill="#E7EBDD"/><text x="1012" y="347" font-family="monospace" font-size="17.0" fill="#2E251F" style="font-size:17.0px">git rev-parse --verify HEAD</text><text x="1012" y="378" font-family="monospace" font-size="18" fill="#536044">abc123...789</text>
+<text x="990" y="447" font-size="24" font-weight="700" fill="#536044">actual HEAD = expected SHA</text><text x="990" y="485" font-size="21" fill="#51443A">Only then allow plugin loading</text>
+<rect x="990" y="535" width="320" height="80" rx="16" fill="#F6D9D2"/><text x="1012" y="570" font-size="21" font-weight="700" fill="#963F32">Stop on mismatch</text><text x="1012" y="602" font-size="18" fill="#963F32">Log expected and actual</text>
+
+<line x1="445" y1="425" x2="505" y2="425" stroke="#6F5A48" stroke-width="8"/><polygon points="505,425 482,410 482,440" fill="#6F5A48"/>
+<line x1="895" y1="425" x2="955" y2="425" stroke="#6F5A48" stroke-width="8"/><polygon points="955,425 932,410 932,440" fill="#6F5A48"/>
+
+<rect x="55" y="704" width="1290" height="72" rx="22" fill="#E8D4B4"/>
+<circle cx="92" cy="740" r="20" fill="#2E251F"/><text x="84" y="748" font-size="22" fill="#FFF9EF">L</text>
+<text x="128" y="748" font-size="21.0" font-weight="700" fill="#2E251F" style="font-size:21.0px">lora: the security condition is that final HEAD exactly matches the pinned SHA, not merely that checkout succeeds.</text>
+</g></svg>

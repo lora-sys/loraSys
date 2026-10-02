@@ -1,0 +1,26 @@
+---
+title: 'Jev gives agents typed decisions instead of generated text'
+description: 'TypeSafe Jev uses Choice, Score, and Noul for constrained agent decisions while code retains control of valid actions and side effects.'
+publishDate: '2026-09-20T00:00:00Z'
+tags: ['AI', 'Agent', 'Jev', 'Routing', 'Decision']
+contentType: 'technical'
+topics: ['agent-harness', 'agents']
+language: 'en-US'
+translationOf: 'jev-typed-agent-decisions'
+draft: false
+---
+
+Many agent systems make small, frequent decisions: which tool to call next, whether to continue, whether to retry, and whether the current result needs human takeover.
+A common implementation sends the state to a generative model and asks it to return JSON. The application parses the JSON, checks the schema, reads the fields, and enters a code branch. This works, but the model is still generating free-form text, with its output forced into a structured format.
+TypeSafe released Jev on September 15 with a different interface. The company calls Jev a System One model. It takes a state and a set of typed questions, then returns Choice, Score, or Noul directly. Multiple questions share the same state and are evaluated independently in a single call. The official documentation does not require the model to generate explanatory text first and then parse it. Sources: [TypeSafe announcement](https://typesafe.ai/blog/introducing-system-one-models-and-jev) and [TypeSafe Docs](https://docs.typesafe.ai/introduction).
+The most useful part of this interface for agent builders is how it reallocates responsibilities between models and code, beyond simply adding another model.
+Suppose an agent needs to decide what to do after a round of tool calls. The application already knows there are only four valid actions: continue the current plan, retry the tool, ask the user for more information, or stop. The answer space is fixed. A generative model can answer, but the application ultimately has to map that answer back to those four actions.
+Jev's approach is to ask a Choice question directly. Risk, quality, or priority can use Score. A true-or-false judgment such as whether human takeover is needed can use Noul. After the model returns a probability, code still determines thresholds and final side effects.
+On September 16, Vercel AI Gateway added Jev. Vercel's agent examples specifically include choosing the next tool or sub-agent and deciding whether to continue, retry, ask the user, or stop. Source: [Vercel Changelog](https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway). This shows that the interface has started entering general-purpose developer model gateways beyond TypeSafe's own product pages.
+It cannot replace generative models.
+When users ask for an email, a code explanation, or a complex task plan, the answer space cannot be enumerated in advance. Those tasks need a generative model. Jev suits a different class of problem: the software already knows the valid actions and needs a model to judge ambiguous input.
+This is also why I would not simply repeat TypeSafe's performance figures. TypeSafe reports speed differences of up to 193.6 times and cost differences of up to 444.6 times in its own workflow evals. The company also says those results are toward the high end of real-workload gains and that its own capabilities team designed the evaluation workflows. Source: [TypeSafe technical explanation](https://typesafe.ai/blog/introducing-system-one-models-and-jev). These figures show what the company is optimizing, but do not prove your agent will see the same proportional gains.
+A more useful test starts with one node that has a fixed answer space. Choose the routing judgment called most often each day, and keep the existing generative model as a baseline. Compare accuracy, error types, latency, and confidence calibration on real historical data. Then set an explicit threshold for escalation to a person. Replace the production path only once these measurements are stable.
+For me, the engineering question matters more than the "System One" name: does each step in the agent loop need to generate content, or does it only need to make a constrained judgment?
+Those two tasks do not have to use the same kind of model.
+---

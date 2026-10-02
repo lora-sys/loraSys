@@ -1,0 +1,79 @@
+---
+title: 'AI Agent engineering reading list, Sep 25–26, 2026'
+description: 'Seven updates on token efficiency, Codex networking, Copilot Memory, local agent server security, self-practice, skills, and reproducibility.'
+publishDate: '2026-09-26T00:00:00Z'
+tags: ['AI Agent', 'Coding Agent', 'Harness', 'Agent Safety', 'Eval']
+contentType: 'news'
+topics: ['memory-context', 'security', 'agent-harness', 'evaluation', 'mcp-skills']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-25-26'
+draft: false
+---
+
+## This edition's takeaways
+This search covers updates published after the previous run on September 25 and during the morning of September 26. It adds two primary-source engineering updates from September 25 and five valuable items from September 23–24 that had not appeared in the reading list. Start with Cursor's breakdown of harness token costs, Codex 0.157.0's background execution and network policy changes, and the OpenCode remote code execution vulnerability analysis.
+## 1. Cursor explains how it reduced token costs for long-running agents
+**What happened**
+On September 23, Cursor published production data on harness optimization. Changes over the preceding months reduced users' token costs by 7%, with no observed decline in agent quality. Cursor shortened its system prompt by about 66%. An earlier change to load MCP tools on demand reduced total token use by 46.9% in sessions that actually called MCP. Cursor now applies the same approach to built-in tools. It also reduced cold cache misses by 20% through explicit cache breakpoints and removed instructions that strongly encouraged agents to use subagents.
+**Engineering significance**
+The article gives a directly measurable sequence for optimizing harness costs. First remove system instructions the model no longer needs. Then move infrequently used tools from static context to dynamic discovery. Stabilize the cached prefix before tackling file reads and subagent scheduling. More subagents are not always better. Cursor explicitly notes that they can duplicate work and add coordination costs, so it only lets subagents switch to a different model when the user or harness specifically requests it.
+**Where to start**
+Read Trimming the system prompt, Loading tools only when needed, Improving cache reuse, and Using subagents strategically. Focus on the four production figures, 7%, 66%, 46.9%, and 20%, and how Cursor uses A/B tests on real traffic to check for quality regressions.
+**Primary source**
+[Cursor: Improved token efficiency for longer agent runs](https://cursor.com/blog/improved-token-efficiency)
+## 2. Codex CLI 0.157.0 starts a background server by default and enforces network policy on persistent connections
+**What happened**
+OpenAI released Codex CLI 0.157.0 on September 25. The new version automatically starts a background server in eligible interactive sessions. Remote sessions and local background sessions can also use /import. Security fixes extend network restrictions to redirects, ongoing HTTP requests, and WebSockets. When a policy change revokes network access, requests already in progress are canceled too. The release also adds MCP OAuth restrictions, stronger Gateway OAuth credential persistence, and display of MCP HTTP origins.
+**Engineering significance**
+Coding agent CLIs are making persistent sessions and background control planes the default execution model. Checking network permissions once before a request starts is insufficient. Redirects, WebSockets, background tasks, and live policy updates all need to remain subject to the same policy. Enabling the background server by default also changes packaging, permission inheritance, and process lifecycles. Windows and Arch Linux users have already reported daemon startup regressions after 0.157.0, so custom packages and enterprise environments need separate startup and permission regression tests.
+**Where to start**
+Read automatic background-server startup under New Features, then network restrictions across redirects and ongoing HTTP and WebSocket traffic under Bug Fixes. For Codex runtime integration, also review the MCP OAuth, Gateway OAuth, daemon socket, and app-server commits in the changelog.
+**Primary source**
+[OpenAI Codex 0.157.0 release](https://github.com/openai/codex/releases/tag/rust-v0.157.0)
+## 3. GitHub Agentic Autofix starts saving security repair experience in Copilot Memory
+**What happened**
+GitHub updated Agentic Autofix on September 25. When Copilot Memory is enabled, Agentic Autofix first reads the repository's existing memories for context needed to resolve a security alert. After successfully generating a fix, it saves the repair pattern as a new memory. Agentic Autofix, Copilot Code Review, and Copilot Cloud Agent can reuse these memories later. Both features are currently in public preview.
+**Engineering significance**
+This is a concrete cross-agent memory feedback loop. A security repair produces both a code patch and repository-level experience that other agents can use. In similar systems, memory should be scoped to a repository or resource and validated against the current state. Teams also need to evaluate whether incorrect memories can spread across agents, rather than only testing successful writes and retrieval.
+**Where to start**
+The official update takes only a minute to read. Focus on the three steps: reading memory, writing it, and reusing it across Copilot features. Then review Copilot Memory's repository scope, validation, and expiration mechanisms to understand the full lifecycle.
+**Primary source**
+[GitHub: Agentic autofix now uses Copilot Memory](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/)
+## 4. An upgrade endpoint in OpenCode's local HTTP server exposes remote code execution
+**What happened**
+Datadog Security Labs disclosed GHSA-632h-h47v-g4x4 on September 24. It affects users who installed OpenCode through npm, pnpm, or Bun and run opencode serve. The old /global/upgrade endpoint parsed text/plain request bodies as JSON, allowed target to be any npm package specifier, and did not check for a trusted Origin. A malicious webpage could therefore make the local OpenCode server install an attacker-controlled package and execute its lifecycle script. The GitHub advisory rates it High. Version 1.18.22 fixes it.
+**Engineering significance**
+A local agent server does not become a trusted boundary simply because it listens on 127.0.0.1. Browsers can send cross-site requests to local services. Any endpoint that installs software, executes a shell, writes files, or performs updates should enforce request type, Origin, parameter schema, and identity checks. An upgrade endpoint in particular must not pass a version field directly to a package manager.
+**Where to start**
+Read Summary, Details, and Resolution in the advisory. The fix is clear: use a standard typed HTTP decoder for the upgrade endpoint, accept only supported JSON content types, require target to be a valid semantic version, and reject empty requests. Then read Datadog's discovery account to see why content-type confusion turned an existing code injection flaw into browser-triggerable RCE.
+**Primary sources**
+[GitHub Security Advisory GHSA-632h-h47v-g4x4](https://github.com/anomalyco/opencode/security/advisories/GHSA-632h-h47v-g4x4)
+[Datadog Security Labs analysis](https://securitylabs.datadoghq.com/articles/opencode-upgrade-remote-code-execution/)
+## 5. Privileged Self-Practice redesigns self-distillation for multi-turn agents
+**What happened**
+A paper submitted on September 24 argues that token-level self-distillation from a privileged teacher can teach a multi-turn agent the teacher's actions without giving it the information behind those actions. The paper proposes Privileged Self-Practice. An analyzer generates a short set of instructions only when most of the student's own rollouts fail, then places those instructions in the context of fresh rollouts. Training still uses ordinary GRPO; privileged information does not enter the loss directly. The authors tested three student models on AppWorld and SWE-bench Verified. PSP was the only method in the experiments that consistently outperformed plain GRPO across all settings.
+**Engineering significance**
+In an agent self-improvement pipeline, teacher information may not be suitable for direct distillation into every token. A more reliable approach is to use it as temporary training-environment guidance for failed tasks. The student practices again while actually having that information, then trains with the original reinforcement learning objective. This can also reduce calls to expensive teacher models on tasks the student already completes successfully.
+**Where to start**
+Read the explanation of OPSD's failure mechanism, then PSP's gate and analyzer. Appendix C is most useful for implementation. In the SWE-bench setup, each group contains 8 rollouts. The analyzer is called only when the gate triggers, after which the system samples again and trains with ordinary GRPO. The authors report improvements of up to 65% in AppWorld task goal completion and up to 61% in SWE-bench Verified resolved rate.
+**Primary source**
+[From Self-Distillation to Self-Practice](https://arxiv.org/abs/2609.29051)
+## 6. Experiments with 83 real agent skills suggest the biggest bottleneck may be invocation
+**What happened**
+A study submitted on September 24 collected 83 real smart contract auditing skills and tested 7 agent and model configurations on EVMBench. Adding skills to Codex with GPT-5.5 increased Detect Score by 22.8% and Detect Award by 43.2%, both relative improvements. Yet invocation rates varied widely across models given the same skills. Codex with GPT-5.5 invoked skills in all 40 audit tasks, while several configurations almost never invoked them. When all three harnesses used the weaker DeepSeek-V4-Pro backend, skills had a negative effect in each one.
+**Engineering significance**
+Skill evaluation should measure four things separately: whether the skill is visible, whether the agent invokes it, when it is invoked, and whether invoking it improves the task result. Comparing only overall scores with and without skills can easily mistake routing failure for poor skill content. The paper also shows that model capability directly affects whether skills can be used, so the same skill collection should not be accepted based on tests with a single model.
+**Where to start**
+Read RQ2 Skill Effectiveness, then RQ3 Behavioral Impact. Focus on the invocation rates in Table VII and the ablation experiments using the same DeepSeek-V4-Pro backend. Finally, examine skill loading times and chained skill usage across the six-stage audit trajectories.
+**Primary source**
+[Demystifying Agent Skills for Smart Contract Auditing](https://arxiv.org/abs/2609.29454)
+## 7. RECLAIM tests whether agents can reproduce experimental findings from 100 papers
+**What happened**
+RECLAIM builds an agent reproducibility benchmark from 100 NeurIPS 2025 papers. Tasks have three levels. Run provides code, data, and weights. Retrain omits the weights. Reimplement omits the code. Each paper has a predetermined result to reproduce, success criteria, and a GPU-hour budget. The grader scores actual logs and outputs rather than trusting the agent's own report. Across four agents, the best reproduction rates at each level were only 41%, 27%, and 15%. Failed runs used an average of just 29% of their budgets. Of 400 runs, 63 had the same problem: the agent implemented the method but did not validate its results against the paper's numbers.
+**Engineering significance**
+Long-running agent evaluations should check final external results. Finishing the code, running an experiment, or declaring success does not establish completion. RECLAIM also exposes a budget problem. Failed agents often stop too early rather than exhausting resources. A harness needs explicit acceptance criteria and should continue verification or rerun the task when evidence is insufficient and ample budget remains.
+**Where to start**
+Read the benchmark's three task definitions and grader. Then examine the failure categories, especially the 63 cases where agents implemented a method without validating against the paper's numbers. These can become direct acceptance rules for a research agent or autoresearch evaluation.
+**Primary source**
+[RECLAIM paper](https://arxiv.org/abs/2609.28850)

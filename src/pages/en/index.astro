@@ -4,6 +4,7 @@ import { withBasePath } from '@/i18n/site'
 import { projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 import { demoByRepo } from '@/data/project-demos'
+import { recentEnglishArticles } from '@/utils/article-translations'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
@@ -15,7 +16,7 @@ import ProjectCard from '@/components/projects/ProjectCard.astro'
 import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 
 const allPosts = sortMDByDate(await getBlogCollection())
-const recentPosts = allPosts.slice(0, 3)
+const recentPosts = recentEnglishArticles(allPosts)
 const allFeatured = projects.filter((project) => project.featured)
 const featured = homepageFeatured(allFeatured)
 const [leadProject, ...supportingProjects] = featured
@@ -106,12 +107,12 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
                     <a href={withBasePath(`/blog/${post.id}`)}>{post.data.title}</a>
                   </h3>
                   <p lang={post.data.language ?? 'zh-CN'}>{post.data.description}</p>
-                  <span class='article-language'>{post.data.language === 'en-US' ? 'English' : 'Chinese'} original</span>
+                  <span class='article-language'>{post.data.translationOf ? 'English translation' : 'English original'}</span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p class='empty-note'>No public writing yet.</p>
+            <p class='empty-note'>No English articles are published yet.</p>
           )
         }
       </section>

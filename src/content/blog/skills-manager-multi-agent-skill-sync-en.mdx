@@ -1,0 +1,69 @@
+---
+title: 'Skills Manager: sync one skill to multiple coding agents'
+description: 'Skills Manager distributes a local skill library to Claude Code, Codex, Cursor, and Gemini CLI while managing version and configuration consistency.'
+publishDate: '2026-09-16T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/skills-manager-multi-agent-skill-sync/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: select skills from one central local library and sync them to multiple agent workspaces'
+tags: ['AI', 'Agent', 'Skills', 'Coding Agent', 'DevTools']
+contentType: 'projects'
+topics: ['mcp-skills', 'devtools']
+language: 'en-US'
+translationOf: 'skills-manager-multi-agent-skill-sync'
+draft: false
+---
+
+The original cover retains its Chinese labels. They mean "central skill library," "select and sync," and "agent workspaces." A single source library supplies selected skills to multiple agent workspaces.
+
+## The 30-second version
+If you use Claude Code, Codex, and Cursor together, a skill can easily turn into three separate files. Every rule change then requires you to remember three updates.
+Skills Manager collects these skills in one local central library. You choose which skills to give each agent, then sync them at global or project scope. It also supports presets, Git backups, and a CLI.
+It addresses the long-term management of skills after they have been written.
+## Why it is interesting
+Agent skills are becoming real configuration assets. They have sources, versions, project scopes, sync states, and backup needs.
+Skills Manager keeps the existing skill format and adds a management layer. The approach resembles a package manager, applied to agent behavior instructions, tool rules, and workflows.
+The CRLF/LF fix in v1.39.0 makes the problem clear. When multiple computers and different agents are involved, keeping files consistent often becomes harder than writing the prompt.
+## 3 designs worth borrowing
+### Separate the central library from target directories
+A skill enters the central library first, then syncs to each agent. Changes to the source no longer require manual maintenance of multiple copies.
+### Give workspaces explicit scopes
+The tool distinguishes global, project, and linked workspaces. General skills can be enabled globally, while project-specific skills stay in the project. That boundary is easier to maintain than putting every rule in one directory.
+### Let users choose a sync strategy
+Users can choose copies or symbolic links. Copies are more independent; links make live consistency easier. v1.39.0 also addresses false updates caused by different Windows and macOS line endings.
+## How this connects to my work
+If a team already maintains readable, editable skill sources in Notion and also needs to distribute the same skills to multiple coding agents, Skills Manager is better suited to local synchronization than replacing the content source. Responsibilities can be split as follows:
+- Notion stores readable, editable skill sources and reference material.
+- Skills needed by local coding agents are exported as standard directories.
+- Skills Manager syncs those directories to Claude Code, Codex, Cursor, and other tools.
+Notion continues to manage the source content, while Skills Manager handles local distribution and version consistency.
+
+## Sources and fact check
+Project: Skills Manager  
+Repository owner: xingkongliang  
+Website: [https://skillsmanager.dev](https://skillsmanager.dev)  
+Repository: [https://github.com/xingkongliang/skills-manager](https://github.com/xingkongliang/skills-manager)  
+License: MIT  
+Current status: installable and usable. It provides a desktop app and CLI, with macOS, Windows, and Linux support.  
+Latest stable release: v1.39.0, published on GitHub at 2026-09-15 01:19 UTC.  
+Latest code push: the GitHub API reports `pushed_at` as 2026-09-15 00:59 UTC.  
+Built-in agent count: as of 2026-09-16, the official README lists 54, including Claude Code, Codex, Cursor, Copilot, and Gemini CLI.
+Core capabilities:
+- Store skills in one local central library.
+- Sync skills to different coding agents.
+- Support global, project, and linked workspaces.
+- Support presets that enable a group of skills together.
+- Support sync through either copies or symbolic links.
+- Support Git backups.
+- Share core logic between the desktop app and CLI.
+Visible changes in v1.39.0:
+- Adds GitLab Duo as a built-in agent.
+- Lets preset tags wrap when there are too many.
+- Stops reporting skill updates when the only Windows/macOS difference is CRLF versus LF line endings.
+- Fixes confirmation-dialog buttons scrolling off screen and imported skills continuing to show a missing original path.
+## Evidence cards
+1. [Skills Manager website](https://skillsmanager.dev)  
+Describes the product, central skill library, workspaces, presets, Git backups, and CLI.
+1. [Official GitHub repository](https://github.com/xingkongliang/skills-manager)  
+Verifies supported agents, installation, the MIT License, and current code status.
+1. [v1.39.0 release](https://github.com/xingkongliang/skills-manager/releases/tag/v1.39.0)  
+Verifies the 2026-09-15 release, GitLab Duo support, new cross-platform line-ending handling, and UI fixes.

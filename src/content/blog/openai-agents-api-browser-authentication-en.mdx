@@ -1,0 +1,97 @@
+---
+title: 'Agents API browser auth keeps passwords out of model input'
+description: 'How Agents API separates site approval, login credentials, and screenshots, and why network access and site approval cannot replace action-level confirmation.'
+publishDate: 2026-09-30
+tags: ['ai-agent', 'openai', 'computer-use', 'agent-security']
+contentType: 'technical'
+topics: ["agents", "security", "runtime-infrastructure"]
+language: 'en-US'
+translationOf: 'openai-agents-api-browser-authentication'
+draft: false
+---
+
+A browser agent's passwords should not enter ordinary prompts or generic tool results. Website access, authentication input, and high-impact actions need separate handling. OpenAI added computer use to the Agents API on September 29, 2026, providing a concrete example of how to design these interfaces.
+
+This article analyzes the official announcement and implementation documentation. It is not a hands-on product test.
+
+## What the update added
+
+[DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/) confirms that computer use was added to the Agents API. Developers can let agents visit websites, interact with pages, and complete tasks in an OpenAI-hosted browser. The Agents API also provides multi-agent capabilities, tool search, tool calling, and context compaction.
+
+For browser-agent products, the details worth examining include how website access, login credentials, and screenshot output are separated, beyond the ability to click a page.
+
+## Network access does not authorize access to a website
+
+The Agents API's hosted environment has its own network policy. Developers can allow browser network access, but that does not automatically approve a particular website.
+
+The [computer use documentation](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use) requires the browser to issue an approval request the first time it enters a new website origin. The application must show the user the target origin and the reason for access, then submit an approval, rejection, or cancellation decision.
+
+These two restrictions solve different problems. Network policy determines which network destinations the environment can send requests to. Origin approval determines whether the user allows the current task to enter that site.
+
+Combining them into one switch invites the false assumption that "the environment can access it, so the user must have agreed too."
+
+## Passwords are submitted through dedicated authentication events
+
+A website that requires login triggers a browser authentication request. The application uses the requested login method and fields to generate a separate login interface where the user can enter an email address, password, or verification code.
+
+The submission path matters. The official documentation says login values are submitted only through dedicated authentication events. They do not enter the agent's model input or appear in the authentication response's session history. Developers do not need to insert passwords into prompts, and should not package passwords as ordinary function tool results.
+
+This does not mean "passwords never pass through OpenAI infrastructure." The documentation defines a boundary around model input and authentication-response history. That should not be extended into an unproven infrastructure guarantee.
+
+Currently, only the main agent can request browser authentication; subagents cannot. The authentication flow supports email addresses, passwords, and verification codes, but not passkeys or QR-code login.
+
+This limitation affects multi-agent products. When a subtask needs to log in to a private system, account details should not automatically be passed to a subagent. The task should return to the main agent's authentication flow, or use authentication and browser environments controlled by the developer.
+
+## Site approval is not confirmation for high-impact actions
+
+Approving a website origin does not automatically require confirmation each time a high-impact action, such as a purchase or deletion, is about to occur.
+
+If a product must guarantee confirmation for every action of a certain type, the official documentation recommends restricting the hosted browser's accessible resources so it cannot perform those actions, or using a browser runtime controlled by the developer.
+
+Browser agents need to distinguish at least these three permission layers:
+
+| Permission layer | Question it answers | What it cannot replace |
+| --- | --- | --- |
+| Network policy | Can the environment connect to the destination? | The user's consent to access a site |
+| Site-access approval | Does the user allow entry to this website? | Confirmation of specific actions such as purchases or deletions |
+| High-impact action confirmation | Is this particular action approved? | Unlimited authorization for the entire session |
+
+Collapsing these three layers into one "allow the agent to operate websites" switch makes both auditing and revocation harder.
+
+## Screenshots need separate controls too
+
+By default, computer use does not include browser screenshots in API output. The agent can still observe pages, but the application does not automatically receive a screenshot of every step.
+
+If a developer explicitly enables `include_screenshots`, screenshots may contain sensitive content such as account pages, private repositories, or order information. The official documentation requires them to be shown only to authorized users and kept out of application logs.
+
+The observation capability needed for execution should not be tied by default to debugging data visible to the product.
+
+## How I would implement my own browser agent
+
+The following is a proposed design based on the interface boundaries above. It does not describe a completed deployment or validation.
+
+First, set an explicit network scope for the browser environment. Do not open domains the task does not need. On the first visit to a new website, show the origin, reason for access, and an approval button. Associate the application's record of the approval decision with the specific session.
+
+Use a separate interface and credential channel for login input. Keep passwords, verification codes, and other credentials out of prompts, generic tool output, and ordinary traces.
+
+High-impact actions such as purchases, sending, deletion, and submitting applications need an additional, enforceable confirmation mechanism. Origin approval cannot replace action confirmation, and a prompt asking the model to stop voluntarily is not enough. If the hosted environment cannot provide the required constraints, restrict its capabilities or use a runtime whose execution boundaries you can control.
+
+Do not output screenshots to the application by default. Enable them only when debugging requires them, with separate limits on read access and log retention.
+
+These measures address different risks. They do more than add repeated confirmation buttons.
+
+## Evidence and scope
+
+| Primary source | Conclusion it supports | Date basis |
+| --- | --- | --- |
+| OpenAI DevDay 2026 Recap | The addition of computer use to the Agents API and related runtime capabilities | Published 2026-09-29 |
+| OpenAI Agents API computer use documentation | Website approvals, dedicated authentication events, screenshot output, and login limitations | Consulted 2026-09-30 |
+
+Passkeys and QR-code login are not yet supported by this authentication flow. Subagents cannot independently request authentication, and origin approval does not confirm each high-impact action. The update therefore cannot be reduced to "agents can safely log in to any website."
+
+The more accurate conclusion is that browser operation, site-access approval, credential submission, and high-impact action controls each need explicit interfaces and enforcement boundaries.
+
+## Sources
+
+- [OpenAI: DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/)
+- [OpenAI: Agents API computer use](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use)

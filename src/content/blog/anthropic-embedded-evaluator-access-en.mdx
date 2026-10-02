@@ -1,0 +1,26 @@
+---
+title: 'Anthropic opens internal processes to embedded evaluators'
+description: 'Anthropic and Accenture extend evaluation beyond model outputs to training, deployment, monitoring, and incident processes, with independence unresolved.'
+publishDate: '2026-09-19T00:00:00Z'
+tags: ['AI', 'Evaluation', 'Anthropic', 'Agent Eval', 'Safety']
+contentType: 'technical'
+topics: ['evaluation', 'security', 'ai-research']
+language: 'en-US'
+translationOf: 'anthropic-embedded-evaluator-access'
+draft: false
+---
+
+On September 18, Anthropic and Accenture both announced the creation of an embedded evaluator team. Faculty will participate in model evaluation, red teaming, alignment assessment, and safeguards testing. Each company expects to invest at least $1 billion over the next five years. The [Anthropic announcement](https://www.anthropic.com/news/accenture-embedded-evaluation) and [Accenture announcement](https://newsroom.accenture.com/news/2026/accenture-and-anthropic-partner-to-build-team-of-embedded-evaluators-at-anthropic) describe these facts consistently.
+The part most worth examining is what evaluators can see, rather than the investment amount.
+Anthropic is specific. Embedded evaluators will work inside the AI company with near-employee-level access. They can observe how models take shape during training, follow how they are built and deployed, and speak directly with employees.
+Traditional external evaluations are easily limited by the model interface. Evaluators can submit test questions, observe behavior, conduct red-team attacks, and compare models. But if a risk comes from training-data handling, deployment policy, permission settings, internal monitoring, or incident-reporting procedures, model outputs alone make it hard to locate the problem.
+Embedded evaluation tries to fill this information gap.
+It divides the object of evaluation into two layers. The first remains model behavior. The second is the process behind the model. Evaluators need to examine whether the company actually follows its written safety commitments, whether monitoring has blind spots, and whether incidents can be detected and reported.
+This connects directly to agent evaluation.
+When evaluating agents, we also often look only at whether the final task was completed. That metric is too coarse. An agent may produce a correct answer while accessing data it should not have accessed. A tool call may succeed while retries repeat a real-world operation. A monitor may miss a trajectory that should have triggered an alert.
+A more complete agent evaluation should preserve and inspect execution traces, tool calls, permission changes, failure recovery, monitoring results, and human-intervention records. Evaluators need evaluation too. Several recent real incidents have shown that final results alone miss many process problems.
+Embedded evaluation is still an early approach, however.
+Anthropic explicitly acknowledges that there is no common standard for what information evaluators should access or how they should publish results. Funding also remains unresolved. Anthropic currently pays Accenture directly for its work. In the long term, Anthropic hopes funding will come from pooled or government sources.
+Another question cannot be skipped. Working inside a company gives evaluators more information, but does not automatically make them more independent. Who decides their access scope, which results can be published, and who has the final say when conflicts of interest arise? These all need further rules.
+I would therefore not describe this partnership as an answer to AI safety. More accurately, frontier AI evaluation is trying to address a long-standing information problem. Evaluators who can only stand outside an API have difficulty determining why a model behaves a certain way or verifying whether a company actually follows its own internal safety procedures.
+Builders can apply a smaller version of this idea to their own agent systems. Retain more than final answers and success rates. At minimum, save task traces, tool calls, permissions, retries, errors, human takeovers, and monitoring results. Let evaluations return to that evidence instead of scoring only the final reply.

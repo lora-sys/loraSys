@@ -1,0 +1,58 @@
+---
+title: 'A reliable agent might leave the code alone today'
+description: 'GitHub Agentic Workflows jsweep checks whether a change is worthwhile and treats noop as valid, instead of forcing automation to produce a diff.'
+publishDate: '2026-09-13T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/agentic-workflows-noop-triage/lora-explainer-v2.webp'
+  alt: 'Original Chinese illustration: inspect candidate files first, change them only when needed, and retain a noop result otherwise'
+tags: ['AI', 'Agent', 'GitHub', 'Harness', 'Automation', 'Noop']
+contentType: 'technical'
+topics: ['agent-harness', 'devtools']
+language: 'en-US'
+translationOf: 'agentic-workflows-noop-triage'
+draft: false
+---
+
+The original Chinese-language cover labels read "Minimal precheck," "Leave unchanged," and "No changes needed."
+
+## A reliable agent might leave the code alone today
+On September 11, GitHub Agentic Workflows published a small automation agent called jsweep.
+Its task is narrow. Every day, it picks one `.cjs` file from `actions/setup/js/`, prioritizing files that still contain `@ts-nocheck`, and performs a small cleanup.
+The interesting part is its ability to decide that no change is needed today, rather than how it replaces `var` with `const`.
+#### Before changing anything, decide whether it is worth doing
+jsweep does not immediately read the whole candidate file.
+It first starts a `file-triage` subagent that reads only the first 80 lines. That subagent answers specific questions: what context the file runs in, whether it has `@ts-nocheck`, whether a corresponding test file exists, and whether the cleanup is worth continuing.
+If the result is `noop`, the main agent stops.
+This step makes a decision before taking action. The agent does not need to fill its context first and then find a justification for doing something.
+#### The September 11 run produced no PR
+The run GitHub published that day finished in under 8 minutes, used 336K tokens, and took only 2 turns.
+The final result was zero errors, zero warnings, and zero PRs.
+This was expected. The official page explicitly explains that producing no PR was a designed outcome because triage decided the candidate did not justify a diff.
+Its `safe-outputs` configuration supports that decision. `create-pull-request` uses `if-no-changes: ignore`, gives PRs a 2-day expiration, and requires them to be drafts.
+The system does not make creating a PR a condition of success.
+#### Why many agents produce pointless actions
+If a task has just one goal, such as "optimize the code every day," a model can easily treat making a change as evidence of completion.
+That looks proactive in a demo. In long-running automation, it creates two problems.
+First, low-value diffs enter the code review queue. People spend time confirming that the changes were unnecessary.
+Second, the agent spends more context, tool calls, and model turns on a task that should have ended earlier.
+jsweep does not solve every cost problem. It still used 336K tokens that day, so this case cannot be described as a low-cost agent. But it clearly separates the decision about whether to continue into its own step.
+#### Noop belongs in the task protocol
+I would make `noop` part of an agent's output protocol rather than an exceptional branch.
+A code maintenance agent might have three possible results.
+The first is a clear problem that leads to a draft PR.
+The second is a problem without enough tests, or with too much risk, that leads to a report awaiting human action.
+The third is nothing worth changing, which returns noop.
+All three complete the task. They differ in the action they take.
+This also makes evaluation easier. You can evaluate whether the agent stops when it should, rather than merely count how many changes it successfully submits.
+#### How builders can implement this
+If you are building a long-running coding agent, start with four changes.
+First, narrow each task. Do not make tidying the entire repository a single run's goal. Limit the scope to one file, one issue, or a clearly defined module.
+Next, add a precheck. Read only the minimum information needed for the decision. Its goal is to decide whether the main task is worthwhile, not to solve the problem.
+Then define noop. Give it explicit return conditions and a log format. Do not treat no changes as a failed run.
+Finally, constrain the outputs. Automated code changes should default to drafts. High-risk operations need human approval. If nothing changes, do not create an empty PR or a report just for form's sake.
+#### This is closer to a production concern than a smarter prompt
+One difficulty with production agents is that they run repeatedly.
+One unnecessary change may seem harmless. Across daily runs, dozens of repositories, and hundreds of tasks, low-value actions become a direct cost in human review time.
+That is why I care more about an agent's stopping conditions, scope, and safe outputs than whether every run can generate something that looks complete.
+jsweep is a small example, but it states these controls clearly. Knowing when to leave code unchanged is part of task design for long-running automation.
+---

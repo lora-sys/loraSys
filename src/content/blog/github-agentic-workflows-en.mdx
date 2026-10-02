@@ -1,0 +1,59 @@
+---
+title: 'GitHub Agentic Workflows: agents inside GitHub Actions'
+description: 'How GitHub Agentic Workflows puts judgment-based automation inside GitHub Actions while retaining permissions, controlled outputs, approval, and security.'
+publishDate: '2026-09-08T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/github-agentic-workflows/lora-explainer-v2.webp'
+  alt: 'Original cover with Chinese labels for read-only sandbox and controlled outputs, showing the Markdown workflow and write-back path'
+tags: ['AI', 'Agent', 'GitHub', 'GitHub Actions', 'Automation']
+contentType: 'projects'
+topics: ['agents', 'devtools', 'security']
+language: 'en-US'
+translationOf: 'github-agentic-workflows'
+draft: false
+---
+
+The original cover uses Chinese labels for "read-only sandbox" and "controlled outputs." A Markdown workflow enters the sandbox, and repository writes leave through the controlled output path.
+
+## Understand it in 30 seconds
+Ordinary GitHub Actions suits deterministic steps: build, test, lint, and deploy.
+`gh-aw` addresses another kind of task: reading issues, inspecting code, interpreting context, and deciding what to do next.
+You write a Markdown workflow. Its frontmatter defines triggers, permissions, tools, and the model; its body describes the task. `gh aw compile` turns it into a standard Actions workflow. The agent is read-only by default and runs in a sandbox. Writing back to the repository goes through controlled outputs.
+The important part is that the agent's freedom stays within the existing CI permission model.
+## Why it is interesting
+Most agent automation demos start with what the agent can do. `gh-aw` first addresses what gives it permission to do it.
+That is closer to production requirements. CI already has triggers, permissions, secrets, logs, auditing, and failure records. Rather than rebuild an agent platform, `gh-aw` connects reasoning steps to that infrastructure.
+## 3 designs worth borrowing
+### 1. Separate intent files from execution files
+People maintain `.md`; machines execute the compiled `.lock.yml`. Natural language is easy to edit, while the executable result remains an inspectable Actions file.
+### 2. Withhold write access by default
+The agent first reads, analyzes, and produces results. Actual changes to issues, PRs, or repository content go through explicit safe outputs. Permissions are execution-layer constraints, rather than reminders in a prompt.
+### 3. Keep deterministic CI
+Tests, builds, and deployments continue to use ordinary Actions. Only the parts that require judgment go to the agent. This is easier to debug and cheaper than turning every step into an agent task.
+## How this connects to my work
+The most useful idea to borrow is **separating the agent harness from the business workflow**.
+When building agent runtimes, tool calls, permissions, and automation, you can apply these principles directly:
+- Keep deterministic tasks in ordinary programs.
+- Enter the agent loop only when interpretation or judgment is needed.
+- Put agent permissions at the runtime or tool boundary, rather than only in the system prompt.
+- Prefer compiling natural-language configuration into auditable execution artifacts.
+This structure also suits multi-agent systems: define goals at the top, generate constrained execution plans below, and let the tool layer carry them out.
+
+## Sources and fact checks
+- Project: GitHub Agentic Workflows; CLI name: `gh-aw`.
+- Maintainer: GitHub Next / GitHub.
+- Core function: define agent workflows with Markdown and YAML frontmatter, then use `gh aw compile` to generate standard GitHub Actions `.lock.yml` files.
+- Suitable tasks: issue triage, PR review, CI failure investigation, documentation maintenance, dependency analysis, repository reports, and other tasks that require judgment or explanation.
+- AI engines: GitHub Copilot, Claude Code, OpenAI Codex, Google Gemini, and Pi.
+- Security defaults: the agent job is read-only by default and runs in a sandbox; write operations generally go through constrained safe outputs.
+- LICENSE: MIT.
+- Current status: official documentation, installation instructions, quickstart, and repository are accessible. The official weekly update dated 2026-09-07 records v0.88.4.
+## Evidence cards
+1. **Official About page** defines Markdown source, `gh aw compile`, the sandbox, read-only access, and safe outputs.  
+[https://github.github.com/gh-aw/about/](https://github.github.com/gh-aw/about/)
+1. **Official repository** states `gh-aw = Actions + Agent + Safety` and lists supported AI engines and the MIT License.  
+[https://github.com/github/gh-aw](https://github.com/github/gh-aw)
+1. **GitHub Docs Quickstart** provides installation and execution steps.  
+[https://docs.github.com/en/copilot/how-tos/github-agentic-workflows/quickstart](https://docs.github.com/en/copilot/how-tos/github-agentic-workflows/quickstart)
+1. **Official weekly update for 2026-09-07** focuses on firewall/network hardening and CI reliability in v0.88.4.  
+[https://github.github.com/gh-aw/blog/2026-09-07-weekly-update/](https://github.github.com/gh-aw/blog/2026-09-07-weekly-update/)

@@ -1,0 +1,96 @@
+---
+title: 'AI Agent engineering reading list, Sep 29–30, 2026'
+description: 'Seven readings on browser authorization, task cost, isolated workspaces, MCP events, runtime safety, and multi-agent routing, with source limits intact.'
+publishDate: 2026-09-30
+tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'mcp']
+contentType: 'news'
+topics: ["agent-harness", "evaluation", "mcp-skills", "security", "multi-agent"]
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-29-30'
+draft: false
+---
+
+Start with OpenAI DevDay's agent development updates, then read about runtime safety and the two multi-agent papers. Across these materials, the questions are who enforces permissions, how task state is isolated, and how to measure success rates alongside the full cost of a task.
+
+**Coverage: September 29–30, 2026.** NVIDIA's platform was released on September 28; the two papers were submitted on September 25 and 26. These three are supplementary items from outside the coverage window, not new releases within it. Cloudflare cf CLI, Kitesurf, Claude Sonnet 5.5, and Forge were covered in the previous edition and are not repeated here.
+
+## 1. OpenAI brings computer use to the Agents API
+
+**What happened.** On September 29, OpenAI announced computer use support in the Agents API. The runtime also provides MCP, Tool Search, Programmatic Tool Calling, multi-agent support, Context Compaction, and sandboxes.
+
+**Engineering significance.** High-impact actions cannot rely solely on the agent volunteering to ask for confirmation. The official documentation explicitly states that origin approval does not guarantee per-action confirmation for purchases, deletions, and similar operations. The runtime or application layer must impose enforceable limits.
+
+**Where to start.** Read Context Compaction, Tool Search, and Multi-agent first. Then read origin approval and network access in the Computer use documentation to distinguish environment permissions, user authorization, and confirmation of a specific action.
+
+Primary sources: [DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/), [Agents API](https://openai.com/index/introducing-the-agents-api/), [Computer use](https://developers.openai.com/api/docs/guides/agents-api/tools/computer-use).
+
+## 2. GPT-6.1 Sol: compare both success rates and task costs
+
+**What happened.** OpenAI released GPT-6.1 Sol on September 29. Its official evaluation report says it performs close to GPT-6 Astra on DeepSWE 1.1 at about one-fifth of Astra's cost. On AutomationBench with medium reasoning, it exceeds Opus 5.5 by 2.2 percentage points at about one-third of the cost. On the offline OSWorld 2.0 set with maximum reasoning, it exceeds GPT-6 Sol by 7 percentage points.
+
+These are evaluation results reported by OpenAI, not reproduced by this site. Costs from different benchmarks, reasoning settings, and production workflows cannot be treated as directly interchangeable.
+
+**Engineering significance.** Model selection should consider both task success rate and full task cost. Long-running tasks can be tiered by difficulty instead of fixing every call to the highest-tier model. Validate any migration on your own task set first.
+
+**Where to start.** Read the Coding, AutomationBench, Computer use, and Terminal-Bench Science results. Pay particular attention to each experiment's settings and per-task cost.
+
+Primary source: [OpenAI: GPT-6.1 Sol](https://openai.com/index/introducing-gpt-6-1-sol/).
+
+## 3. Codex Cloud separates environment configuration from task workspaces
+
+**What happened.** Codex Cloud supports publishing reusable environments that save repository, dependency, tool, network, and credential configuration. Multiple tasks can reuse the same environment configuration while each retains an independent workspace. Codex CLI also adds an entry point for managing multiple tasks.
+
+**Engineering significance.** Coding-agent platforms can separate environment templates from task state. Environment configuration manages dependencies and permissions; independent workspaces hold each task's file changes and execution state. This reduces opportunities for concurrent tasks to interfere with one another.
+
+**Where to start.** Start with "Reuse your project setup," then read the descriptions of networking, secrets, and task workspaces. Reusing an environment does not mean every task shares one working directory that any task can overwrite.
+
+Primary sources: [Codex Cloud](https://learn.chatgpt.com/docs/cloud), [Codex CLI](https://learn.chatgpt.com/docs/codex/cli).
+
+## 4. MCP Events enters automation, but the specification is still a proposal
+
+**What happened.** OpenAI announced that Plugin Automation supports the proposed MCP Events specification. The MCP Triggers and Events Working Group is defining callbacks for servers to proactively notify clients, subscription lifecycles, delivery semantics, and event ordering.
+
+**Engineering significance.** Changes to email, issues, orders, and task state can trigger events and reduce unnecessary polling. But these proposals cannot yet be treated as a finalized general-purpose protocol. Implementations should retain an independent event bus and adapter layer to avoid binding too early to interfaces that are still changing.
+
+**Where to start.** Read Mission Statement, In Scope, and the delivery-semantics scope in the working group charter, then compare those with what a particular platform has actually implemented.
+
+Primary sources: [MCP Triggers and Events Charter](https://modelcontextprotocol.io/community/working-groups/triggers-events), [DevDay 2026 Recap](https://openai.com/index/devday-2026-recap/).
+
+## 5. Supplement: NVIDIA Open Agent Safety Platform
+
+**Original publication date: September 28, 2026.**
+
+**What happened.** NVIDIA released the Open Agent Safety Platform. OpenShell places agents in independent sandboxes, with an external supervisor checking file, network, and credential access. The platform's Sentry reference design goes further by putting out-of-band monitoring on a separate DPU.
+
+**Engineering significance.** Safety boundaries should not exist only in prompts or harnesses. An external runtime aims to keep enforcing access policies when an agent encounters prompt injection or its harness malfunctions. This item describes NVIDIA's published design, not this site's measured assessment of its isolation effectiveness.
+
+**Where to start.** Read OpenShell's Agent Sandboxes, Policy Prover, Gateway, and Supervisor. Focus on where policies are enforced and whether the agent can modify the layer enforcing them.
+
+Primary sources: [NVIDIA announcement](https://nvidianews.nvidia.com/news/open-agent-safety-platform), [NVIDIA OpenShell](https://www.nvidia.com/en-us/ai/openshell/).
+
+## 6. Supplement: more agents quickly run into voting limits
+
+**Paper submission date: September 25, 2026.**
+
+**What happened.** Multi-agent Scaling Across Disjunctive and Compensatory Tasks tested 13 open-weight models with teams of up to 30 agents. The authors report that larger teams increased the probability of at least one correct answer by 5 to 20 percentage points on disjunctive tasks, but plurality voting after direct answers captured almost none of those additional correct answers. In Fermi estimation, item-level bias shared across different samples from the same model accounted for about 87% of squared error.
+
+**Engineering significance.** Adding agents does not necessarily increase the system's usable capability. Without a reliable verifier or suitable answer-aggregation method, more agents may simply repeat the same biases. These results apply to the paper's tested models, tasks, and aggregation methods; they are not a universal limit on every multi-agent architecture.
+
+**Where to start.** Read Steiner's classification of group tasks, then sections 3.3 and 3.4 of the paper. Distinguish the probability that someone answers correctly from the probability that the system selects the correct answer.
+
+Primary source: [arXiv: 2609.31563](https://arxiv.org/abs/2609.31563).
+
+## 7. Supplement: Planner-as-Router selects model tiers during planning
+
+**Paper submission date: September 26, 2026.**
+
+**What happened.** When Planner-as-Router splits a task into subtasks, it also decides whether each node uses a small, mid, or frontier model. The authors ran 1,157 evaluations across 54 enterprise agent tasks. Compared with using frontier models everywhere, they report a 44% cost reduction and a 2.9-percentage-point drop in accuracy.
+
+The authors also note that the accuracy confidence interval in the 54-task study is about plus or minus 6 percentage points, so they do not describe the result as a clear accuracy advantage. The cost reduction must not be rewritten as "unchanged performance."
+
+**Engineering significance.** When the dependency graph is known before execution, model routing can become part of the planner's responsibility. Evaluation should record both task success rates and full workflow costs rather than comparing only per-call token prices.
+
+**Where to start.** Read the combined planner and router design and EntBench's execution-based scoring. Then examine the cost–accuracy comparison and sample-size limitations.
+
+Primary source: [arXiv: 2609.32917](https://arxiv.org/abs/2609.32917).

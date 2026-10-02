@@ -1,0 +1,60 @@
+---
+title: 'Munim Computer Use lets agents act on desktop controls'
+description: 'Munim Computer Use reads the accessibility tree and operates desktop controls by element ID, reducing reliance on fragile screenshot-coordinate automation.'
+publishDate: '2026-09-10T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/munim-accessibility-computer-use/lora-explainer-v2.webp'
+  alt: 'Chinese-labeled illustration: find an element ID in the control tree, act, then verify the interface result'
+tags: ['AI', 'Agent', 'Computer Use', 'Accessibility', 'MCP', 'Munim']
+contentType: 'projects'
+topics: ['agents', 'mcp-skills', 'devtools']
+language: 'en-US'
+translationOf: 'munim-accessibility-computer-use'
+draft: false
+---
+
+The original cover retains its Chinese labels. The tree is labeled "Control tree," the highlighted target is "Element ID," and the result card says "Verification." It illustrates finding a control by ID and checking the result after acting.
+
+## Central conclusion
+The key question in computer use is whether an agent can reliably find controls and send actions to the correct window, rather than simply whether a model can read a screenshot.
+This project puts the accessibility tree before screenshots. The agent first gets a structured target such as `Button id=42`, then clicks it. Screenshots are reserved for verification and visual content.
+This design reduces the dependence of coordinate-only operations on resolution, scaling, and window position.
+## Understand it in 30 seconds
+Many desktop agents start with a screenshot and ask the model to guess button coordinates.
+Computer Use first calls `get_app_state` to read the system accessibility tree. Buttons, input fields, and menus have stable element IDs. Once the agent finds its target, it acts by ID.
+When it needs to inspect a canvas, small text, or a result, it uses screenshot and zoom for verification.
+It also sends input to the target window, so the user can keep using the mouse while the agent works.
+## Why it is interesting
+It separates computer use into two different problems, finding controls and executing actions.
+The accessibility tree finds controls. Screenshots add visual information and verify results. This is easier to debug than inspecting the entire screen again at every step.
+Background input has practical value too. If a desktop agent keeps taking the mouse and focus, long tasks are hard to run alongside a person's normal work. This project addresses that conflict directly in the execution layer.
+## 3 designs worth borrowing
+### 1. Find the element ID before acting
+`get_app_state` returns structured controls. The agent can query by label, then call click, set_value, or select_text on a specific ID. When something fails, it is easier to distinguish a perception error from an action error.
+### 2. Use screenshots for verification
+Screenshots are not the only perception input. The officially recommended loop is to read state, act, then read state again or take a screenshot to check the result. Agent evaluations can record perception, action, and verification as separate events.
+### 3. Keep one tool contract across platforms
+macOS, Windows, and Linux have different underlying implementations, but the MCP tool names and parameters remain the same. Once a model learns a tool call, it does not need a different interface for each of the three systems.
+## How it connects to my work
+This project fits directly into the agent harness and evaluation work you are following.
+For desktop-agent evaluations, you can split a task into recordable events. `get_app_state` finds the target control, an action tool executes, and state or a screenshot verifies the result. This distinguishes an agent that perceived the wrong thing, clicked the wrong thing, or failed to check the result.
+If you want Codex or Claude Code to operate local applications, this project also saves you from writing separate control interfaces for macOS, Windows, and Linux.
+
+## Sources and fact check
+- The project is named Computer Use. Its repository is `munimtechnologies/computer-use`.
+- Munim Technologies maintains it. It is the computer-use engine for MT Code and is also open source on its own.
+- The project connects to Claude Code, Codex, Cursor, MT Code, and other MCP clients through MCP stdio.
+- `get_app_state` first returns an application's accessibility tree and stable element IDs. The agent can click, enter text, and select by element ID. Screenshots are mainly for verification and content the accessibility tree cannot describe.
+- Clicks, typing, and scrolling are sent to the target window. The official description says the user's mouse is not moved and window focus is not taken away.
+- The project provides 26 tools. macOS, Windows, and Linux use the same tool names and parameter structures.
+- The macOS implementation uses Swift, the Accessibility API, and ScreenCaptureKit. Windows and Linux use Rust. Windows uses UI Automation, while Linux uses AT-SPI and X11.
+- Element operations are available on Linux. Coordinate clicks in native Wayland apps are limited; X11 or XWayland clients are needed to provide absolute geometry.
+- The Chrome extension can create a separate tab group in the user's already signed-in Chrome browser. The agent does not need to take over the user's own tabs.
+- The LICENSE is Apache License 2.0.
+- The latest public release is `v0.1.0`, published on 2026-09-05. Official prebuilt packages are available for macOS universal and Windows x64. On Linux, the README currently directs users to build from source.
+- Repository status was retrieved at 2026-09-10 09:21 +08:00. The latest batch of synchronization commits in the public repository is dated 2026-09-05.
+## Evidence cards
+1. The [official Munim Technologies page](https://www.munimtech.com/computer-use) describes the accessibility tree, background input, cross-platform tools, and installation.
+2. The [official GitHub repository](https://github.com/munimtechnologies/computer-use) provides the README, source layout, MCP configuration, 26 tools, and platform limitations.
+3. The [Apache 2.0 LICENSE](https://github.com/munimtechnologies/computer-use/blob/main/LICENSE) directly verifies the license.
+4. The [v0.1.0 release](https://github.com/munimtechnologies/computer-use/releases/tag/v0.1.0) records the first public version, macOS and Windows builds, and checksum files.

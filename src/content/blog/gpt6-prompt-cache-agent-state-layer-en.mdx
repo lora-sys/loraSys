@@ -1,0 +1,94 @@
+---
+title: 'GPT-6 prompt caching becomes an agent state layer'
+description: 'GPT-6 adds cache breakpoints, diagnostics, prewarming, and mutable configuration. Long-running agents need stable shared prefixes and cache-hit monitoring.'
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'GPT-6', 'Prompt Caching', 'Context Engineering', 'Agent Infra']
+contentType: 'technical'
+topics: ['memory-context', 'agent-harness', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'gpt6-prompt-cache-agent-state-layer'
+draft: false
+---
+
+Long-running agents repeatedly send the same material. System rules, tool definitions, repository instructions, conversation history, and reference materials all appear in later requests.
+
+If those prefixes stay identical, the model can reuse intermediate states it has already computed. The problem is that an agent's request structure keeps changing. Tools switch, reasoning effort changes, tasks branch, and new rules are appended. Once the shared prefix changes, computation that could have been reused may become invalid.
+
+OpenAI released a GPT-6 prompt caching update on September 22, 2026. For agent developers, the changes center on four capabilities: explicit cache breakpoints, visibility into hit rates and miss reasons, changes to some runtime configuration without rewriting the shared prefix, and prewarming stable context.
+
+## Distinguish caching from memory first
+
+Prompt cache is not an agent's long-term memory.
+
+It addresses repeated computation. When the same stable prefix appears again, the model can reuse completed intermediate computations. Business state, user preferences, task history, and facts that need long-term retention still require session state, databases, retrieval, or other memory mechanisms.
+
+Agent design should therefore separate two questions. What needs long-term storage and what will recur in later requests are different decisions.
+
+## Explicit cache breakpoints change how context is organized
+
+GPT-6 supports explicit cache breakpoints. Developers can decide where the stable prefix ends.
+
+That makes prompt order important. Developer instructions that rarely change, shared reference material, and tool definitions should go as early as possible. User input, temporary state, and frequently changing task information belong later.
+
+If dynamic content is inserted into the middle of a stable prefix, the unchanged material after it can no longer be reused as the same prefix.
+
+Context for a long-running agent therefore needs more than semantic correctness. Its organization must also account for what is repeatedly computed and what changes on every turn.
+
+## Do not rebuild definitions on every turn just to change tools
+
+An agent may need different tools on each turn.
+
+The most direct implementation regenerates the tools array, retaining only the tools needed for that turn. But changing tool definitions, schemas, or their order also changes the shared prefix.
+
+OpenAI recommends keeping tool definitions, schemas, and order as stable as possible, then using `allowed_tools` or `tool_choice` to control which tools may be called. That changes the current execution scope while retaining stable tool context earlier in the request.
+
+The goal is not to make an agent always load every tool. It is to avoid rewriting the entire stable tool-definition prefix just to change what it is allowed to call.
+
+## Reasoning effort can also change without rewriting the prefix
+
+Complex tasks and ordinary follow-ups do not necessarily need the same reasoning effort.
+
+GPT-6 can adjust reasoning effort through `configuration_update` without rewriting the earlier shared context. For a continuously running agent, a runtime-parameter change therefore does not necessarily have to disrupt a stable cache prefix.
+
+The same approach applies to tool scope. Putting frequently changing control information into a dedicated configuration mechanism makes it easier to preserve cache structure than rebuilding all system context on each turn.
+
+## Inspect cache misses before guessing at cost problems
+
+OpenAI added a Prompt Caching Dashboard and cache miss diagnostics.
+
+The dashboard shows cache-hit behavior. Diagnostics compare the current request with recent responses to help identify whether model, tool, setting, or input changes caused the cache to miss, and identify the affected token range.
+
+This helps when investigating agent costs. If requests suddenly become more expensive or time to first token rises, do not immediately assume model pricing or context length changed. Checking whether the application's own request structure disrupted the shared prefix is a more direct way to find the cause.
+
+Keeping the same session does not guarantee a cache hit. OpenAI's documentation explicitly reminds developers to monitor `cached_tokens`, cache writes, and hit rates.
+
+## Prewarming suits large, stable prefixes
+
+`prewarm` can prepare stable context before a real user request arrives.
+
+If the application knows at startup which instructions, tool definitions, and reference materials will remain stable, it can put them into cache first. When a real task begins, it appends the dynamic input.
+
+This suits agents with large shared prefixes and substantial repetition in later requests. Prewarming may add little value for short contexts or requests whose tasks vary widely.
+
+## What these capabilities do not establish
+
+The maximum discount on cached input tokens cannot be described as an equivalent reduction in the cost of an entire agent task. A task also includes uncached input, output, tool calls, and other operating costs.
+
+A persistent session does not guarantee cache hits. The shared prefix still has to meet the reuse conditions.
+
+Tool-control capabilities do not mean arbitrary tool changes preserve caching. Changing definitions, schemas, or order may still change the prefix.
+
+Prompt cache also cannot replace long-term memory. It retains computation for repeated prefixes, rather than the business state an application must maintain over time.
+
+## How to inspect your own agent
+
+Start by recording the shared-prefix fingerprint, `cached_tokens`, tool-definition version, and reasoning configuration for each request.
+
+When hit rates fall, compare four kinds of change: model, tool definitions, configuration, and input prefix. Optimization has a clear target only once you know which layer disrupted the cache.
+
+For a long-running agent, these fields should be in its runtime records alongside latency, error rates, and tool failures.
+
+## Primary sources
+
+- [OpenAI: Better prompt caching for GPT-6](https://openai.com/index/better-prompt-caching-for-gpt-6/)
+- [OpenAI API Prompt Caching Guide](https://developers.openai.com/api/docs/guides/prompt-caching)

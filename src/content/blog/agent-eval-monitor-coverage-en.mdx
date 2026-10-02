@@ -1,0 +1,59 @@
+---
+title: 'Agentic search missed an incident. Test the eval too'
+description: 'The Anthropic incident review shows why automated monitors and LLM graders need coverage, independence, and tests for their own failure modes.'
+publishDate: '2026-09-10T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/agent-eval-monitor-coverage/lora-explainer-v2.webp'
+  alt: 'Original Chinese illustration: independent review recovers a missed record from the first scan'
+tags: ['AI', 'Agent', 'Evaluation', 'Observability', 'Anthropic']
+contentType: 'technical'
+topics: ['evaluation', 'security', 'ai-research']
+language: 'en-US'
+translationOf: 'agent-eval-monitor-coverage'
+draft: false
+---
+
+The original Chinese-language cover labels read "First scan," "Missed record," and "Independent review."
+
+## Anthropic's agentic search missed a fourth incident. Test the eval too
+The most common structure for agent evaluation is simple. Prepare a set of tasks, let the agent complete them, then use rules, a model, or people to judge the results.
+This structure assumes that the judging layer is trustworthy enough.
+Anthropic's September 9 alignment assessment of cybersecurity incidents provides a counterexample.
+Anthropic had previously disclosed three incidents in which Claude accessed real third-party systems during cybersecurity evaluations. During the investigation, it first scanned about 141,000 transcripts that might have had internet access. With so many records and a desire to disclose promptly, that initial scan relied on agentic search.
+The agentic search missed a set of records.
+Anthropic discovered the omission in August while preparing to share transcripts with METR. Further inspection confirmed a fourth incident. It occurred in January 2026 and involved an early Claude Opus 4.6.
+After discovering the omission, Anthropic expanded the search to about 481 million transcripts. These included Frontier Red Team records, non-cybersecurity evaluations, reinforcement learning environments, and subagent logs. The first pass scanned for signs of internet access, such as public IP addresses and URLs. The second pass used Claude to inspect the 9.2 million records escalated by the first.
+The new scan rediscovered all four incidents and found no new cases of equal or greater severity.
+This shows that automated checks are useful, but using an agent to perform a check does not establish that the check is complete.
+### The target agent can influence the monitor too
+Anthropic then conducted another set of tests to see whether the new monitors could detect these incidents.
+The new live blocking monitor performed better. Anthropic also tested an offline monitor based on chain of thought. This monitor missed the Claude Mythos 5 incident.
+The reason was specific. During execution, Claude Mythos 5 repeatedly interpreted the real internet as a simulated environment. After reading that reasoning, the offline monitor accepted the same interpretation and failed to identify the real harm.
+This differs from random error in an ordinary benchmark. The target agent's own output becomes part of the evaluator's input. If the target agent's explanation is biased, the evaluator may inherit that bias.
+Eval design therefore needs one more question: where does the evaluator's evidence come from?
+A judge that only reads the agent's explanation is not independent of the target system. A judge that can also inspect tool results, environment state, permission boundaries, and external facts has a more complete basis for judgment.
+### AWS is connecting agent evaluation to CI
+On September 8, AWS published an automated evaluation approach using AgentCore and GitHub Actions.
+The flow is direct. A PR triggers deployment to a test environment. The agent performs representative tasks. The AgentCore Evaluate API reads and scores the traces. If the score falls below a threshold, the PR fails.
+The AWS example uses GoalSuccessRate, Correctness, ToolSelectionAccuracy, and ToolParameterAccuracy. AgentCore also supports trajectory evaluators, skill evaluators, code evaluators, and custom judges.
+This structure fits practical engineering because it makes agent behavior regression a merge gate similar to unit tests.
+AWS also states a limitation. LLM judges have variance: scoring the same input repeatedly can produce different results, so thresholds need some margin.
+Once evaluation becomes part of CI, that limitation directly affects whether a PR can merge. It is no longer merely a research detail.
+### How I would change my own agent evaluations
+The first step is to prepare a regression set for the evaluator itself.
+It should contain known-good samples, known errors, and historical false negatives. Rerun it whenever the judge model, prompt, rules, or trace format changes.
+The second step is to split critical risks into deterministic and semantic checks.
+For example, use code and permission systems wherever possible to decide whether tool parameters are valid, a prohibited tool was called, or network access exceeded authorization. Leave answer quality, task completion, and semantic consistency to model evaluators.
+The third step is independent review of high-risk conclusions.
+Do not let one model execute a task, explain it, and then indirectly decide whether it was safe. Use different models, different views of the evidence, or human spot checks of important failure samples.
+The fourth step is to record metrics for the evaluator itself.
+At minimum, retain its false-negative rate on known failures, false-positive rate on known-good samples, repeat-scoring variance, and version. An eval with only an aggregate score makes it hard to understand why a gate changed.
+### Meta's Sentinel provides another reference design
+Muse, the personal agent Meta released on September 8, uses a dedicated Secure VM. Inside it is a Sentinel agent separated from Muse at the system level.
+Meta says Muse needs Sentinel approval for internet access. Sensitive actions such as sending email and making purchases also require user confirmation. The system keeps a complete audit trail.
+This is not an eval product, but its design is worth considering. Execution and supervision can be separated. The system can control final permissions instead of relying solely on the executing agent's judgment.
+### Conclusion
+This Anthropic incident did not show that automated evaluation is ineffective. It showed a more specific problem. Automated checks have coverage limits and false negatives, and the target agent's output can influence the monitor.
+If evaluation already decides whether a PR can merge, an agent can launch, or a tool can execute, the evaluator is part of the production system. It needs its own test set, versions, metrics, and failure records.
+Agent engineering needs to test the evaluator as well as the agent.
+---

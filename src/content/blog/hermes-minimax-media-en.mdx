@@ -1,0 +1,258 @@
+---
+title: 'MiniMax image and video generation for Hermes Agent'
+description: 'A Hermes MiniMax plugin with image-01, Hailuo async video tasks, CN/global endpoint fallback, end-to-end tests, and a PyPI release.'
+publishDate: '2026-07-10T00:00:00Z'
+tags: ['Hermes Agent', 'MiniMax', 'Image Generation', 'Video Generation', 'Plugin', 'AI']
+contentType: 'projects'
+topics: ['multimodal', 'mcp-skills', 'devtools']
+language: 'en-US'
+translationOf: 'hermes-minimax-media'
+draft: false
+---
+
+This article records how I connected MiniMax image and video generation to Hermes, providing both backends in one pip package. The implementation covers text-to-image, image-to-image, text-to-video, image-to-video, and subject-reference video.
+
+The response times, file sizes, and resolutions in this article come from the end-to-end tests recorded at the time. API behavior and model limits change. When integrating them, use the current official documentation and actual API responses.
+
+## Why MiniMax
+
+Hermes Agent's built-in `image_generate` tool originally supported only a few overseas backends: FAL, xAI, OpenAI, Krea, and Replicate. This MiniMax integration mainly adds two capabilities:
+
+- **`image-01`**: a single API supports both text-to-image and image-to-image with one `subject_reference` image, so both can use the same Hermes image-backend interface
+- **Hailuo video models**: asynchronous tasks cover text-to-video, image-to-video, first-and-last frames, and subject-reference workflows. The actual successful run in this article is a 6-second, 768P Hailuo-2.3 text-to-video task
+
+MiniMax also has two endpoints:
+
+| Region | Domain | User center |
+| --- | --- | --- |
+| **China, CN** | `api.minimaxi.com` | [api.minimaxi.com](https://api.minimaxi.com) |
+| **International, global** | `api.minimax.io` | [minimax.io](https://www.minimax.io) |
+
+The plugin selects automatically: CN first for a Chinese account, with global as the fallback.
+
+## What implementing a plugin involves
+
+Hermes's `ImageGenProvider` and `VideoGenProvider` already handle environment-variable loading, URL caching, and error formatting. This plugin mainly adds the request and response logic for two providers:
+
+```text
+~/.hermes/plugins/image_gen/minimax/
+├── __init__.py        # Business logic
+└── plugin.yaml        # Plugin metadata
+
+~/.hermes/plugins/video_gen/minimax/
+├── __init__.py
+└── plugin.yaml
+```
+
+`plugin.yaml` is minimal:
+
+```yaml
+name: minimax
+version: 1.0.0
+description: 'MiniMax image generation backend. ...'
+author: NousResearch
+kind: backend
+```
+
+## Key points in the image-01 backend
+
+Most of the work is assembling HTTP requests. A few details in the documentation are not obvious:
+
+1. **Use `aspect_ratio` rather than size**, unlike OpenAI and StepFun:
+
+   ```json
+   {
+   	"model": "image-01",
+   	"prompt": "a tiny red apple on a white plate, studio lighting",
+   	"aspect_ratio": "1:1", // Not "1024x1024"
+   	"response_format": "url", // Can also be "base64"
+   	"n": 1,
+   	"prompt_optimizer": true
+   }
+   ```
+
+2. **Wrap the image URL in `subject_reference` for image-to-image**:
+
+   ```json
+   "subject_reference": [
+     { "type": "character", "image_file": "https://..." }
+   ]
+   ```
+
+3. **The response is nested**:
+
+   ```json
+   {
+   	"data": { "image_urls": ["https://..."] },
+   	"metadata": { "success_count": "1" },
+   	"base_resp": { "status_code": 0, "status_msg": "success" }
+   }
+   ```
+
+Assemble the request, call `_call_api`, get the URL, and use Hermes's built-in `save_url_image` to save it to `~/.hermes/cache/images/`. That completes the generate flow.
+
+## Key points in the Hailuo video backend
+
+The biggest difference between video and image generation is that video is **asynchronous**:
+
+```text
+1. POST  /v1/video_generation          → task_id
+2. GET   /v1/query/video_generation    (poll every 10s) → file_id
+3. GET   /v1/files/retrieve?file_id=…  → download_url
+4. GET   <download_url>                → byte stream → local cache
+```
+
+The timeout policy allows up to 5 minutes per task and polls every 10 seconds. In testing, Hailuo-2.3 at 6s 768P returned in 30-90 seconds; 10s 1080P occasionally took 3-4 minutes. Pay attention to model selection:
+
+| Model | 6/10s | 768P/1080P | T2V | I2V | Subject reference |
+| --- | --- | --- | --- | --- | --- |
+| `MiniMax-Hailuo-2.3` | ✅ | ✅ | ✅ | ✅ | ❌ |
+| `MiniMax-Hailuo-02` | ✅ | ✅ | ✅ | ✅ | ❌ |
+| `S2V-01` | 6s only | 1080P only | ❌ | ❌ | ✅ |
+
+One API compatibility issue: the official documentation example uses `720P`, but the **actual API rejects it**. Submitting `720P` immediately returns `does not support resolution 720P, supported resolutions: 768P, 1080P`. My plugin automatically coerces `720P` to `768P`, so callers do not need to handle it.
+
+## End-to-end test results
+
+### image-01 text-to-image, 1:1 square
+
+> `a tiny red apple on a white plate, studio lighting, photorealistic`
+
+![Apple on plate](/images/blog/hermes-minimax-media/apple.webp)
+
+A single image returned in about 5 seconds, at ~150KB.
+
+### image-01 text-to-image, 16:9 landscape
+
+> `a cute cat astronaut floating in a colorful nebula, digital art, vibrant`
+
+![Cat astronaut](/images/blog/hermes-minimax-media/cat-astronaut.webp)
+
+> `futuristic tokyo cityscape at night, neon lights, rain reflections, cyberpunk`
+
+![Cyberpunk city with original generated Chinese-looking neon signs](/images/blog/hermes-minimax-media/city.webp)
+
+The original generated city image is retained. Its neon signs contain Chinese-looking characters, including distorted text; they are part of the generated scene, not English explanatory labels.
+
+### Hailuo-2.3 text-to-video, 6s @ 768P
+
+> `a calico cat napping in a sunbeam, soft cinematic lighting, gentle breathing motion`
+
+> The video demo GIF was removed from the upstream repository. The original MP4 link below remains as a verifiable demo.
+
+[Original MP4, 608KB](https://github.com/lora-sys/hermes-minimax-media/blob/main/docs/assets/screenshot-cat-napping.mp4)
+
+It returned in 86 seconds, producing a 1366×768 h264 mp4 with small changes in every frame that suggest breathing.
+
+## Local integration steps
+
+### 1. Install the package
+
+```bash
+pip install hermes-minimax-media
+```
+
+### 2. Configure the keys
+
+Edit `~/.hermes/.env`:
+
+```bash
+# CN endpoint, the one currently in use
+MINIMAX_CN_API_KEY=eyJ...
+
+# International endpoint, as a fallback
+MINIMAX_API_KEY=eyJ...
+```
+
+### 3. Enable the plugins
+
+Edit `~/.hermes/config.yaml`:
+
+```yaml
+plugins:
+  enabled:
+    - image_gen/minimax
+    - video_gen/minimax
+    # ... Other plugins
+
+image_gen:
+  provider: minimax
+  minimax:
+    model: image-01
+
+video_gen:
+  provider: minimax
+  minimax:
+    model: MiniMax-Hailuo-2.3 # Or Hailuo-02 / S2V-01
+```
+
+### 4. Restart Hermes
+
+```bash
+hermes gateway restart
+```
+
+Then say directly to Hermes:
+
+- "Draw a cat wearing sunglasses" → uses image-01
+- "Make a 6-second time-lapse of a city at dusk" → uses Hailuo-2.3
+- "Animate this photo of ocean waves," with an `image_url` → uses Hailuo-2.3 I2V
+- "Make this character wave," with a photo of the subject → uses S2V-01
+
+## What is in the repository
+
+The whole project is open source at [github.com/lora-sys/hermes-minimax-media](https://github.com/lora-sys/hermes-minimax-media):
+
+- `src/hermes_minimax_media/plugins/image_gen/minimax/`: image-01 backend
+- `src/hermes_minimax_media/plugins/video_gen/minimax/`: Hailuo video backend
+- `tests/`: 20 pytest cases that do not require an API key
+- `.github/workflows/ci.yml`: py3.11/3.12 tests, ruff lint, and automatic PyPI publishing on tags
+- `docs/assets/`: 3 sample images and 1 demo.gif for the README
+
+## End-to-end verification record
+
+Actual results I ran, without mocks:
+
+<StatStrip
+  stats="5s::image-01 T2I response|86s::Hailuo-2.3 T2V completion|20::pytest cases passed"
+  source="End-to-end verification recorded in this article. Times describe this local test only, not a service SLA."
+/>
+
+| Check | Result |
+| --- | --- |
+| `image-01` T2I calling `api.minimaxi.com` | ✅ Returned a 155KB jpg in 5 seconds |
+| `Hailuo-2.3` T2V async submission | ✅ task_id returned immediately |
+| Poll task status every 10s | ✅ Changed to Success at 86 seconds |
+| Parse `file_id` + `download_url` | ✅ Retrieved a 608KB mp4 |
+| Automatically choose CN across two endpoints | ✅ Uses `api.minimaxi.com` when `MINIMAX_CN_API_KEY` is set in env |
+| Package import with `pip install -e .` | ✅ Both providers import successfully |
+| `pytest tests/` | ✅ 20 passed |
+| `ruff check src/ tests/` | ✅ All checks passed |
+| `twine upload dist/*` | ✅ https://pypi.org/project/hermes-minimax-media/ |
+
+## How this relates to the earlier StepFun article
+
+I previously wrote [Adding StepFun image generation to Hermes](/blog/hermes-stepfun-imagegen-en). The workflow is the same: local plugin, PyPI, CI, and blog. The plugins complement each other:
+
+<ComparePanel
+  title="What the two Hermes media backends focus on"
+  leftTitle="StepFun"
+  left="step-image-edit-2 took about 1–2 seconds in the recorded tests, useful for rapid iteration|Image editing is a main capability of the StepFun plugin|Choose the billing endpoint for your account type"
+  rightTitle="MiniMax"
+  right="image-01 covers text-to-image and single-reference image-to-image|The same plugin family adds Hailuo video generation|This article verifies automatic CN endpoint selection"
+  source="Based on the implementation and verification records in the two Hermes plugin articles"
+/>
+
+Both plugins can be **enabled at the same time**. Change `image_gen.provider` in `config.yaml` to switch without uninstalling either one.
+
+<Callout tone="warning" title="Check the StepFun billing path separately">
+StepFun's `/v1/` and `/step_plan/v1/` may both authenticate with the same key, but charge the account balance and subscription Credits respectively. When switching providers, check both the endpoint and billing source. The full investigation is in the [StepFun article](/blog/hermes-stepfun-imagegen-en) and its README.
+</Callout>
+
+## Next steps
+
+- Run a real `image-01` i2i example using subject_reference
+- Run a real `S2V-01` subject-reference video example
+- Add the `Hailuo-02` start-end frame mode by passing two URLs, first_frame_image + last_frame_image
+
+The package has been published as [`hermes-minimax-media`](https://github.com/lora-sys/hermes-minimax-media). The repository keeps the installation instructions, current support scope, and planned adaptations.
