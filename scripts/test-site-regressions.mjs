@@ -133,6 +133,36 @@ try {
       }
     } finally { await context.close() }
   })
+  await check('Touch artwork keeps native scrolling and tap-to-open in both languages', async () => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+    try {
+      await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort())
+      const page = await context.newPage()
+      for (const route of ['', 'en/']) {
+        await page.goto(`${origin}${base}${route}`, { waitUntil: 'load' })
+        await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })
+        for (const id of ['anime', 'favorites']) {
+          const shelf = page.locator(`[data-showcase-id="${id}"]`)
+          const trigger = shelf.locator('[data-archive-card] [data-viewer-trigger]').first()
+          const art = trigger.locator('[data-magnifier]')
+          await art.scrollIntoViewIfNeeded()
+          assert.equal(await art.evaluate(element => getComputedStyle(element).touchAction), 'auto')
+          await art.tap()
+          const viewer = page.locator('[data-archive-viewer]')
+          await viewer.waitFor({ state: 'visible' })
+          assert.equal(await art.locator('[data-artwork-lens]').isVisible(), false)
+          assert.equal(await viewer.locator('iframe[src]').count(), 0)
+          await viewer.locator('[data-viewer-close]').tap()
+          await viewer.waitFor({ state: 'hidden' })
+          assert.ok(await trigger.evaluate(element => element === document.activeElement))
+          const track = shelf.locator('[data-track]')
+          await track.evaluate(element => { element.scrollLeft += 100 })
+          await page.waitForFunction(element => element.scrollLeft > 0, await track.elementHandle())
+          assert.equal(await art.locator('[data-artwork-lens]').isVisible(), false)
+        }
+      }
+    } finally { await context.close() }
+  })
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const label = `${viewport.width}-${reducedMotion}`
@@ -322,6 +352,81 @@ try {
         assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing the viewer should restore focus to the originating card')
         if (reducedMotion === 'reduce') {
           assert.equal(await shelf.locator('[data-track]').evaluate((element) => getComputedStyle(element).scrollBehavior), 'auto', 'Reduced motion should disable smooth archive scrolling')
+        }
+      })
+
+      await check(`${label}: original circular artwork lens preserves archive actions`, async () => {
+        for (const route of ['', 'en/']) {
+          await open(route)
+          for (const [id, size, zoom, count] of [['anime', 75, 1.5, 11], ['favorites', 60, 1.4, 5]]) {
+            const shelf = page.locator(`[data-showcase-id="${id}"]`)
+            assert.equal(await shelf.locator('[data-archive-card] [data-magnifier]').count(), count)
+            const trigger = shelf.locator('[data-archive-card] [data-viewer-trigger]').first()
+            const art = trigger.locator('[data-magnifier]')
+            const lens = art.locator('[data-artwork-lens]')
+            await art.scrollIntoViewIfNeeded()
+            await art.locator('img').evaluate(image => image.decode())
+            await art.hover({ position: { x: 45, y: 65 } })
+            await lens.waitFor({ state: 'visible' })
+            const state = await lens.evaluate(element => {
+              const style = getComputedStyle(element)
+              const copy = getComputedStyle(element.firstElementChild)
+              return { radius: element.style.getPropertyValue('--lens-radius'), x: element.style.getPropertyValue('--lens-x'), y: element.style.getPropertyValue('--lens-y'), clip: style.clipPath, events: style.pointerEvents, transform: copy.transform, background: copy.backgroundImage, animation: copy.animationName, duration: copy.transitionDuration }
+            })
+            assert.equal(state.radius, `${size}px`)
+            const bounds = await art.boundingBox()
+            assert.ok(Math.abs(parseFloat(state.x) - (reducedMotion === 'reduce' ? bounds.width / 2 : 45)) < 1)
+            assert.ok(Math.abs(parseFloat(state.y) - (reducedMotion === 'reduce' ? bounds.height / 2 : 65)) < 1)
+            assert.match(state.clip, /circle\(/)
+            assert.equal(state.events, 'none')
+            assert.ok(state.transform.startsWith(`matrix(${zoom},`))
+            assert.notEqual(state.background, 'none')
+            assert.equal(state.animation, 'none')
+            assert.equal(state.duration, '0s')
+            assert.equal(await lens.getAttribute('aria-hidden'), 'true')
+            if (viewport.width === 1440 && reducedMotion === 'no-preference' && route === '')
+              await capture(`${id}-original-circular-lens`)
+            await page.keyboard.press('Escape')
+            assert.equal(await lens.isVisible(), false, 'Escape dismisses a hovered lens even without focus')
+            await art.hover({ position: { x: 50, y: 70 } })
+            assert.equal(await lens.isVisible(), false, 'Pointer movement must not reopen an Escape-dismissed lens')
+            await trigger.locator('h3').hover()
+            await art.hover({ position: { x: 45, y: 65 } })
+            await lens.waitFor({ state: 'visible' })
+            await page.emulateMedia({ reducedMotion: reducedMotion === 'reduce' ? 'no-preference' : 'reduce' })
+            await lens.waitFor({ state: 'hidden' })
+            await page.emulateMedia({ reducedMotion })
+            await page.waitForFunction(mode => matchMedia('(prefers-reduced-motion: reduce)').matches === (mode === 'reduce'), reducedMotion)
+            await art.hover({ position: { x: 55, y: 75 } })
+            await lens.waitFor({ state: 'visible' })
+            await art.dispatchEvent('pointerdown', { pointerType: 'mouse', buttons: 1 })
+            assert.equal(await lens.isVisible(), false, 'Pressing or dragging must hide the decorative lens')
+            await art.dispatchEvent('pointermove', { pointerType: 'touch', buttons: 0, clientX: 45, clientY: 65 })
+            assert.equal(await lens.isVisible(), false, 'Touch keeps native swipe and the full-image archive path')
+            await art.hover({ position: { x: 60, y: 80 } })
+            await lens.waitFor({ state: 'visible' })
+            await art.click({ position: { x: 55, y: 75 } })
+            const viewer = page.locator('[data-archive-viewer]')
+            await viewer.waitFor({ state: 'visible' })
+            assert.equal(await lens.isVisible(), false)
+            assert.equal(await viewer.locator('iframe[src]').count(), 0)
+            await page.keyboard.press('Escape')
+            await viewer.waitFor({ state: 'hidden' })
+            await page.waitForFunction(element => element === document.activeElement, await trigger.elementHandle())
+            await page.keyboard.press('Tab')
+            await trigger.focus()
+            await lens.waitFor({ state: 'visible' })
+            await trigger.press('Escape')
+            assert.equal(await lens.isVisible(), false)
+            await trigger.press('Enter')
+            await viewer.waitFor({ state: 'visible' })
+            await page.keyboard.press('Escape')
+            await viewer.waitFor({ state: 'hidden' })
+            await art.hover({ position: { x: 60, y: 80 } })
+            await lens.waitFor({ state: 'visible' })
+            await shelf.locator('[data-track]').evaluate(element => { element.scrollLeft += 100 })
+            await lens.waitFor({ state: 'hidden' })
+          }
         }
       })
 

@@ -143,7 +143,7 @@ const mediaLabel = (item: ShowcaseItem) =>
             <span aria-hidden='true'>↗</span>
           </span>
         </div>
-        <div class='exhibition-art'>
+        <div class='exhibition-art' data-magnifier>
           <img
             src={imageUrl(first)}
             alt=''
@@ -153,6 +153,7 @@ const mediaLabel = (item: ShowcaseItem) =>
             decoding='async'
             style={`object-position:${first.objectPosition ?? '50% 50%'}`}
           />
+          <span class='artwork-lens' data-artwork-lens aria-hidden='true' hidden><span /></span>
           <span class='exhibition-caption' aria-hidden='true'>
             {eyebrow}
           </span>
@@ -205,7 +206,7 @@ const mediaLabel = (item: ShowcaseItem) =>
             data-item-index={i}
             aria-haspopup='dialog'
           >
-            <div class='archive-art'>
+            <div class='archive-art' data-magnifier>
               <img
                 src={imageUrl(item)}
                 alt=''
@@ -224,6 +225,7 @@ const mediaLabel = (item: ShowcaseItem) =>
                     : undefined
                 }
               />
+              <span class='artwork-lens' data-artwork-lens aria-hidden='true' hidden><span /></span>
               <span class='archive-number' aria-hidden='true'>
                 {String(i + 1).padStart(2, '0')}
               </span>
@@ -276,6 +278,95 @@ const mediaLabel = (item: ShowcaseItem) =>
     const cards = [...root.querySelectorAll<HTMLElement>('[data-archive-card]')]
     if (!track || !bar || !index || !prev || !next || !cards.length) return
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
+    const hideLenses: (() => void)[] = []
+    const dismissLenses: (() => void)[] = []
+    root.querySelectorAll<HTMLElement>('[data-magnifier]').forEach((art) => {
+      const image = art.querySelector<HTMLImageElement>('img')
+      const lens = art.querySelector<HTMLElement>('[data-artwork-lens]')
+      const copy = lens?.querySelector<HTMLElement>('span')
+      const trigger = art.closest<HTMLAnchorElement>('[data-viewer-trigger]')
+      if (!image || !lens || !copy || !trigger) return
+      // Match the original Svelte Lens: anime 1.5× / 150px, favorites 1.4× / 120px.
+      lens.style.setProperty('--lens-zoom', root.dataset.showcaseId === 'anime' ? '1.5' : '1.4')
+      lens.style.setProperty('--lens-radius', root.dataset.showcaseId === 'anime' ? '75px' : '60px')
+      let bounds: DOMRect | undefined
+      let frame: number | undefined
+      let dismissed = false
+      const hide = () => {
+        lens.hidden = true
+        bounds = undefined
+        if (frame !== undefined) cancelAnimationFrame(frame)
+        frame = undefined
+      }
+      hideLenses.push(hide)
+      dismissLenses.push(() => {
+        if (!lens.hidden) dismissed = true
+        hide()
+      })
+      const prepare = () => {
+        if (dismissed || !image.complete || !image.naturalWidth) return false
+        if (!bounds) {
+          bounds = art.getBoundingClientRect()
+          const imageStyle = getComputedStyle(image)
+          copy.style.backgroundImage = `url(${JSON.stringify(image.currentSrc || image.src)})`
+          copy.style.backgroundSize = imageStyle.objectFit
+          copy.style.backgroundPosition = imageStyle.objectPosition
+        }
+        return true
+      }
+      const position = (x: number, y: number) => {
+        if (!bounds) return
+        lens.style.setProperty('--lens-x', `${Math.max(0, Math.min(bounds.width, x))}px`)
+        lens.style.setProperty('--lens-y', `${Math.max(0, Math.min(bounds.height, y))}px`)
+        lens.hidden = false
+      }
+      const follow = (event: PointerEvent) => {
+        if (!finePointer.matches || event.pointerType === 'touch' || event.buttons) {
+          hide()
+          return
+        }
+        if (!prepare() || !bounds) return
+        if (reducedMotion.matches) {
+          position(bounds.width / 2, bounds.height / 2)
+          return
+        }
+        const x = event.clientX - bounds.left
+        const y = event.clientY - bounds.top
+        if (frame !== undefined) cancelAnimationFrame(frame)
+        frame = requestAnimationFrame(() => {
+          frame = undefined
+          position(x, y)
+        })
+      }
+      art.addEventListener('pointerenter', follow)
+      art.addEventListener('pointermove', follow)
+      art.addEventListener('pointerleave', () => {
+        hide()
+        dismissed = false
+      })
+      art.addEventListener('pointerdown', hide)
+      art.addEventListener('pointercancel', hide)
+      trigger.addEventListener('focus', () => {
+        dismissed = false
+        if (trigger.matches(':focus-visible') && prepare() && bounds)
+          position(bounds.width / 2, bounds.height / 2)
+      })
+      trigger.addEventListener('blur', hide)
+      trigger.addEventListener('click', hide)
+      image.addEventListener('error', hide)
+      image.addEventListener('load', hide)
+    })
+    const hideAllLenses = () => hideLenses.forEach((hide) => hide())
+    window.addEventListener('scroll', hideAllLenses, { passive: true, capture: true })
+    window.addEventListener('resize', hideAllLenses)
+    window.addEventListener('blur', hideAllLenses)
+    window.addEventListener('pagehide', hideAllLenses)
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') dismissLenses.forEach((dismiss) => dismiss())
+    })
+    finePointer.addEventListener('change', hideAllLenses)
+    reducedMotion.addEventListener('change', hideAllLenses)
     let announceTimer: number | undefined
     const update = () => {
       const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth)
@@ -615,8 +706,19 @@ const mediaLabel = (item: ShowcaseItem) =>
     object-position: var(--showcase-object-position, 50% 50%);
     transition: transform 180ms ease;
   }
-  .archive-card-link:hover .archive-art img {
-    transform: scale(1.025);
+  .artwork-lens {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    clip-path: circle(var(--lens-radius) at var(--lens-x) var(--lens-y));
+  }
+  .artwork-lens > span {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    transform: scale(var(--lens-zoom));
+    transform-origin: var(--lens-x) var(--lens-y);
   }
   .archive-number {
     position: absolute;
