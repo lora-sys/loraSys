@@ -280,6 +280,7 @@ const mediaLabel = (item: ShowcaseItem) =>
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
     const finePointer = matchMedia('(hover: hover) and (pointer: fine)')
     const hideLenses: (() => void)[] = []
+    const refreshLenses: (() => void)[] = []
     const dismissLenses: (() => void)[] = []
     root.querySelectorAll<HTMLElement>('[data-magnifier]').forEach((art) => {
       const image = art.querySelector<HTMLImageElement>('img')
@@ -293,13 +294,18 @@ const mediaLabel = (item: ShowcaseItem) =>
       let bounds: DOMRect | undefined
       let frame: number | undefined
       let dismissed = false
+      let mode: 'keyboard' | 'pointer' | undefined
       const hide = () => {
         lens.hidden = true
         bounds = undefined
         if (frame !== undefined) cancelAnimationFrame(frame)
         frame = undefined
       }
-      hideLenses.push(hide)
+      const deactivate = () => {
+        mode = undefined
+        hide()
+      }
+      hideLenses.push(deactivate)
       dismissLenses.push(() => {
         if (!lens.hidden || document.activeElement === trigger) dismissed = true
         hide()
@@ -321,12 +327,25 @@ const mediaLabel = (item: ShowcaseItem) =>
         lens.style.setProperty('--lens-y', `${Math.max(0, Math.min(bounds.height, y))}px`)
         lens.hidden = false
       }
+      const refreshKeyboard = () => {
+        hide()
+        if (
+          mode === 'keyboard' &&
+          document.activeElement === trigger &&
+          trigger.matches(':focus-visible') &&
+          prepare() &&
+          bounds
+        )
+          position(bounds.width / 2, bounds.height / 2)
+      }
+      refreshLenses.push(refreshKeyboard)
       const follow = (event: PointerEvent) => {
         if (!finePointer.matches || event.pointerType === 'touch' || event.buttons) {
-          hide()
+          deactivate()
           return
         }
         if (!prepare() || !bounds) return
+        mode = 'pointer'
         if (reducedMotion.matches) {
           position(bounds.width / 2, bounds.height / 2)
           return
@@ -339,36 +358,32 @@ const mediaLabel = (item: ShowcaseItem) =>
           position(x, y)
         })
       }
-      art.addEventListener('pointerenter', follow)
+      art.addEventListener('pointerenter', (event) => {
+        if (mode !== 'keyboard') follow(event)
+      })
       art.addEventListener('pointermove', follow)
       art.addEventListener('pointerleave', () => {
-        hide()
-        dismissed = false
+        if (mode !== 'keyboard') {
+          deactivate()
+          dismissed = false
+        }
       })
-      art.addEventListener('pointerdown', hide)
-      art.addEventListener('pointercancel', hide)
+      art.addEventListener('pointerdown', deactivate)
+      art.addEventListener('pointercancel', deactivate)
       trigger.addEventListener('focus', () => {
         dismissed = false
-        if (trigger.matches(':focus-visible') && prepare() && bounds)
-          position(bounds.width / 2, bounds.height / 2)
+        mode = 'keyboard'
+        refreshKeyboard()
       })
-      trigger.addEventListener('blur', hide)
-      trigger.addEventListener('click', hide)
+      trigger.addEventListener('blur', deactivate)
+      trigger.addEventListener('click', deactivate)
       image.addEventListener('error', hide)
-      image.addEventListener('load', () => {
-        hide()
-        if (
-          document.activeElement === trigger &&
-          trigger.matches(':focus-visible') &&
-          prepare() &&
-          bounds
-        )
-          position(bounds.width / 2, bounds.height / 2)
-      })
+      image.addEventListener('load', refreshKeyboard)
     })
     const hideAllLenses = () => hideLenses.forEach((hide) => hide())
-    window.addEventListener('scroll', hideAllLenses, { passive: true, capture: true })
-    window.addEventListener('resize', hideAllLenses)
+    const refreshAllLenses = () => refreshLenses.forEach((refresh) => refresh())
+    window.addEventListener('scroll', refreshAllLenses, { passive: true, capture: true })
+    window.addEventListener('resize', refreshAllLenses)
     window.addEventListener('blur', hideAllLenses)
     window.addEventListener('pagehide', hideAllLenses)
     window.addEventListener('keydown', (event) => {
