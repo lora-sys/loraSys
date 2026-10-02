@@ -41,6 +41,12 @@ const socialImageURL = new URL(ogImage ? ogImage : config.socialCard, Astro.url)
 const alternateURL = alternateWithBase ? new URL(alternateWithBase, Astro.site) : undefined
 const socialProfiles = socialLinks.filter((link) => link.href.startsWith('http')).map((link) => link.href)
 const twitterCreator = socialLinks.find((link) => link.name === 'X')?.handle
+// Only these approved article routes embed local, sandboxed HTML diagrams.
+const localInteractiveArticlePaths = new Set([
+  `${basePath}/blog/fde-enterprise-ai-engineering-role`,
+  `${basePath}/blog/fde-enterprise-ai-engineering-role-en`
+])
+const allowLocalArticleFrames = localInteractiveArticlePaths.has(Astro.url.pathname.replace(/\/$/, ''))
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -50,7 +56,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "connect-src 'self' data: https://giscus.app",
-  "frame-src https://giscus.app https://www.youtube.com https://open.spotify.com",
+  `frame-src ${allowLocalArticleFrames ? "'self' " : ''}https://giscus.app https://www.youtube.com https://open.spotify.com`,
   "media-src 'self' https:",
   "worker-src 'self' blob:",
   "manifest-src 'self'",

@@ -166,3 +166,5 @@ There are 57 English SVG diagrams, including 45 new copies, and three English in
 - `src/assets/blog/skills-manager-multi-agent-skill-sync/lora-explainer-v2.webp`
 - `src/assets/blog/splash-model-specific-local-llm/lora-explainer-v2.webp`
 - `src/assets/blog/tau-agent-loop-events/agent_event_loop.png`
+
+Interactive HTML is excluded from the search index so auxiliary panels cannot appear as unclassified article results. Same-origin framing is enabled only on the Chinese and English FDE article routes; the frames retain `sandbox="allow-scripts"` without same-origin access, and each artifact retains its own restrictive CSP. Other routes keep the existing frame policy.

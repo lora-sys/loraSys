@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import path from 'node:path'
+import { gunzipSync } from 'node:zlib'
 
 import { validateArticleTranslations } from './lib/article-translations.mjs'
 import { readFrontmatter } from './lib/writing-classification.mjs'
@@ -51,6 +52,7 @@ for (const translated of translations) {
     assert.ok(src.startsWith('/artifacts/blog/') && src.endsWith('-en.html'), `${translated.id}: English interactive artifact`)
     const html = readFileSync(path.join(root, 'public', src.slice(1)), 'utf8')
     const sourceHtml = readFileSync(path.join(root, 'public', src.slice(1).replace(/-en\.html$/, '.html')), 'utf8')
+    assert.match(html, /data-pagefind-ignore="all"/, `${translated.id}: interactive artifact excluded from search`)
     assert.match(html, /<html\b[^>]*lang="en-US"/, `${translated.id}: interactive document language`)
     assert.doesNotMatch(html, /[\u3400-\u9fff]/, `${translated.id}: interactive visible and data-string text translated`)
     assert.match(html.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? '', /[A-Za-z]/, `${translated.id}: English interactive title`)
@@ -93,6 +95,21 @@ if (!process.argv.includes('--source-only')) {
     }
     const alias = readFileSync(path.join(dist, `en/writing/${translated.id}/index.html`), 'utf8')
     assert.ok(alias.includes('noindex, follow') && alias.includes(`href="${href(translated.id)}"`), `${translated.id}: legacy alias remains canonicalized`)
+  }
+  const frameSources = 'https://giscus.app https://www.youtube.com https://open.spotify.com'
+  for (const post of published) {
+    const html = readFileSync(path.join(dist, `blog/${post.id}/index.html`), 'utf8')
+    const policy = html.match(/<meta[^>]*http-equiv="Content-Security-Policy"[^>]*>/)?.[0]?.match(/content="([^"]+)"/)?.[1] ?? ''
+    const actual = policy.split(';').map((part) => part.trim()).find((part) => part.startsWith('frame-src '))
+    const localFrames = ['fde-enterprise-ai-engineering-role', 'fde-enterprise-ai-engineering-role-en'].includes(post.id)
+    assert.equal(actual, `frame-src ${localFrames ? "'self' " : ''}${frameSources}`, `${post.id}: same-origin frames remain limited to the approved articles`)
+  }
+  const fragments = path.join(dist, 'pagefind/fragment')
+  for (const name of readdirSync(fragments).filter((name) => name.startsWith('en-us_'))) {
+    const raw = gunzipSync(readFileSync(path.join(fragments, name))).toString('utf8')
+    const fragment = JSON.parse(raw.slice(raw.indexOf('{')))
+    assert.ok(fragment.filters?.['search-kind']?.length, `${fragment.url}: indexed English content has search type metadata`)
+    assert.ok(!fragment.url.startsWith('/artifacts/'), `${fragment.url}: auxiliary HTML does not become a search result`)
   }
   const listing = readFileSync(path.join(dist, 'en/writing/index.html'), 'utf8')
   assert.equal([...listing.matchAll(/data-article(?:\s|>)/g)].length, published.length)
