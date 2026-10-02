@@ -29,6 +29,7 @@ const copy = isEnglish
       poster: 'Artwork source',
       media: 'Video & audio',
       source: 'Source',
+      detailsSource: 'Details: ',
       checked: 'Link checked',
       stop: 'Stop & unload player',
       playTrailer: 'Load YouTube player',
@@ -64,6 +65,7 @@ const copy = isEnglish
       poster: '图片来源',
       media: '视频与音乐',
       source: '来源',
+      detailsSource: '资料来源：',
       checked: '链接核验',
       stop: '停止并关闭播放器',
       playTrailer: '加载 YouTube 播放器',
@@ -301,7 +303,10 @@ const copy = isEnglish
       title.textContent = itemTitle
       description.textContent =
         card.querySelector('.archive-card-copy p')?.textContent?.trim() ?? ''
-      source.textContent = card.dataset.sourceLabel ?? ''
+      const detailsUrl = httpsUrl(trigger.href)
+      const detailsHostname = detailsUrl ? new URL(detailsUrl).hostname : ''
+      source.hidden = !detailsHostname
+      source.textContent = detailsHostname ? `${labels.detailsSource}${detailsHostname}` : ''
       medium.textContent = card.dataset.medium ?? ''
       count.textContent = `${activeShelf?.querySelector('h2')?.childNodes[0]?.textContent?.trim() ?? ''} / ${String(activeIndex + 1).padStart(2, '0')}`
       indexLabel.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(activeItems.length).padStart(2, '0')}`
