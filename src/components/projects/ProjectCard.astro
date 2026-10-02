@@ -30,6 +30,8 @@ const {
   compactLocale = uiLocale(Astro.url.pathname),
   anchor = false
 } = Astro.props
+// Mobile image slot excludes the 2rem page inset, .84rem media padding, and 4px of borders.
+const mobilePosterSize = 'calc(100vw - 2.84rem - 4px)'
 const project = localizeProject(rawProject, compactLocale)
 const t = (zh: string, en: string) => text(compactLocale, zh, en)
 const caseHref = project.repository.toLowerCase() === 'zhihu-threads' ? `${import.meta.env.BASE_URL.replace(/\/$/, '')}${compactLocale === 'en-US' ? '/en/projects/zhihu-threads' : '/projects/zhihu-threads'}` : undefined
@@ -109,8 +111,8 @@ const filterAttributes = filterable
     locale={compactLocale}
     quality={compact ? 84 : undefined}
     sizes={variant === 'lead'
-      ? '(min-width: 1024px) 58vw, 100vw'
-      : '(min-width: 1024px) 35vw, (min-width: 640px) 46vw, 100vw'}
+      ? `(max-width: 639px) ${mobilePosterSize}, (min-width: 1024px) 58vw, 100vw`
+      : `(min-width: 1024px) 35vw, (min-width: 640px) 46vw, ${mobilePosterSize}`}
   />
   {
     compact ? (

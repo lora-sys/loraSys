@@ -368,7 +368,11 @@ try {
           for (let index = 0; index < await images.count(); index++) {
             const image = images.nth(index)
             await image.scrollIntoViewIfNeeded()
-            await image.evaluate(element => element.decode())
+            // Lazy image selection can invalidate decode() while scrolling; wait for the actual load state.
+            await page.waitForFunction(imageIndex => {
+              const element = document.querySelectorAll('#content img')[imageIndex]
+              return element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0
+            }, index).catch(error => { throw new Error(`${slug}: image ${index} did not load: ${error.message}`) })
             assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0), `${slug}: article image loads`)
           }
           await page.locator('.article-translation-link a').press('Enter')

@@ -433,6 +433,40 @@ try {
       await context.close()
     }
   }
+  await check('mobile DPR 1.75: responsive hero sources retain pixel coverage', async () => {
+    const context = await browser.newContext({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75, isMobile: true, reducedMotion: 'reduce' })
+    await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort())
+    const page = await context.newPage()
+    try {
+      for (const [route, selectors] of [
+        ['', [['.scene-paper img', 720], ['.hero-figure img', 480]]],
+        ['projects', [['.project-card--lead [data-project-poster]', 640]]],
+        ['en/work', [['.project-card--lead [data-project-poster]', 640]]]
+      ]) {
+        await page.goto(`${origin}${base}${route}`, { waitUntil: 'load' })
+        await page.evaluate(() => document.fonts.ready)
+        for (const [selector, maximumWidth] of selectors) {
+          const image = page.locator(selector).first()
+          await image.scrollIntoViewIfNeeded()
+          await page.waitForFunction(selector => {
+            const image = document.querySelector(selector)
+            return image instanceof HTMLImageElement && image.complete && image.naturalWidth > 0
+          }, selector)
+          const measurement = await image.evaluate(image => {
+            const selected = image.srcset.split(',').map(candidate => candidate.trim().split(/\s+/)).find(([url]) => new URL(url, location.href).href === image.currentSrc)
+            return { currentSrc: image.currentSrc, selectedWidth: selected ? Number.parseInt(selected[1], 10) : 0, renderedWidth: image.getBoundingClientRect().width, dpr: devicePixelRatio, sizes: image.sizes }
+          })
+          assert.ok(measurement.selectedWidth >= Math.ceil(measurement.renderedWidth * measurement.dpr), `${route} ${selector}: source must cover rendered pixels at the emulated DPR: ${JSON.stringify(measurement)}`)
+          assert.ok(measurement.selectedWidth <= maximumWidth, `${route} ${selector}: select the closer responsive candidate: ${JSON.stringify(measurement)}`)
+          report.checks.push({ name: `${route || 'home'} ${selector}: responsive source`, passed: true, measurement })
+        }
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${route}: image sizing must not cause overflow`)
+        const filename = `412-dpr175-${route.replaceAll('/', '-') || 'home'}-responsive-source.png`
+        await page.screenshot({ path: path.join(evidence, filename), animations: 'disabled' })
+        report.screenshots.push(filename)
+      }
+    } finally { await context.close() }
+  })
 } finally {
   await browser.close()
   await new Promise((resolve) => server.close(resolve))
