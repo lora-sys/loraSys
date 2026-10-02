@@ -25,6 +25,8 @@ const posts = (await getBlogCollection())
   )
   .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
 const languageOf = (post: (typeof posts)[number]) => post.data.language ?? 'zh-CN'
+const englishCount = posts.filter((post) => languageOf(post) === 'en-US').length
+const chineseCount = posts.filter((post) => languageOf(post) === 'zh-CN').length
 const featuredPost =
   featuredPostIds
     .map((id) => posts.find((post) => post.id === id))
@@ -61,8 +63,8 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
           </span>
         ) : (
           <span>
-            Browse the full published library. Every article keeps one permanent address and its
-            original language.
+            Browse {englishCount} English articles and {chineseCount} Chinese articles. English
+            translations link back to their original versions.
           </span>
         )
       }
@@ -71,9 +73,9 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     <div class='filter'>
       <label for='language-filter'>Filter articles by language</label>
       <select id='language-filter' name='language' data-writing-language disabled>
-        <option value='all'>All articles</option>
-        <option value='en-US'>English</option>
-        <option value='zh-CN'>Chinese</option>
+        <option value='all'>All articles ({posts.length})</option>
+        <option value='en-US'>English ({englishCount})</option>
+        <option value='zh-CN'>Chinese ({chineseCount})</option>
       </select>
     </div>
     <noscript>

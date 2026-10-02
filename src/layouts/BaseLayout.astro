@@ -14,6 +14,7 @@ import { searchKindForPath, SEARCH_KIND_FILTER } from '@/utils/search'
 import '@/assets/styles/global.css'
 import '@/assets/styles/app.css'
 import '@/assets/styles/paper-depth.css'
+import '@/assets/styles/microinteractions.css'
 
 interface Props {
   meta: SiteMeta
@@ -22,6 +23,7 @@ interface Props {
   highlightColor?: string
   noindex?: boolean
   lang?: string
+  alternatePath?: string
 }
 
 const {
@@ -31,6 +33,7 @@ const {
   highlightColor,
   noindex = false,
   lang = config.locale.lang,
+  alternatePath: articleAlternatePath,
   ...props
 } = Astro.props
 const locale: SiteLocale = lang === 'en-US' ? 'en-US' : 'zh-CN'
@@ -52,9 +55,9 @@ const pageKind =
       : 'regular'
 // 只有真实存在对应路由的页面才声明 hreflang alternate。
 const otherLocale: SiteLocale = locale === 'zh-CN' ? 'en-US' : 'zh-CN'
-const alternatePath = hasAlternate(localPath, otherLocale)
+const alternatePath = articleAlternatePath ?? (hasAlternate(localPath, otherLocale)
   ? localizedPath(localPath, otherLocale)
-  : undefined
+  : undefined)
 const footerLabel = locale === 'en-US' ? 'Explore' : '站点导航'
 const footerPrimary =
   locale === 'en-US'
@@ -109,7 +112,7 @@ const footerPrimary =
       >{locale === 'en-US' ? 'Skip to content' : '跳到正文'}</a
     >
     <div id='main-container' class='w-full min-h-[100dvh] flex flex-col justify-between site-frame'>
-      <SiteHeader locale={locale} />
+      <SiteHeader locale={locale} {alternatePath} />
       <div
         id='main-content'
         class={`page-content page-content--${pageKind} flex-1 w-full`}

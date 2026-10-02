@@ -1,5 +1,6 @@
 ---
 import CodeActions from '@/components/blog/CodeActions.astro'
+import ReadingProgress from '@/components/blog/ReadingProgress.astro'
 import { BackToTop } from 'astro-pure/components/pages'
 import type { SiteMeta } from 'astro-pure/types'
 import { Button, Icon } from 'astro-pure/user'
@@ -16,7 +17,9 @@ interface Props {
   highlightColor?: string
   back?: string
   lang?: string
+  alternatePath?: string
   showSidebar?: boolean
+  showReadingProgress?: boolean
   showMobileSidebarButton?: boolean
 }
 
@@ -27,15 +30,18 @@ const {
   highlightColor,
   back = '/',
   lang = uiLocale(Astro.url.pathname),
+  alternatePath,
   showSidebar = Astro.slots.has('sidebar'),
   showMobileSidebarButton = showSidebar,
+  showReadingProgress = false,
   ...props
 } = Astro.props
 ---
 
-<PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {...props}>
+<PageLayout {meta} {articlePublishedAt} {articleModifiedAt} {highlightColor} {lang} {alternatePath} {...props}>
   <slot name='head' slot='head' />
   <CodeActions />
+  {showReadingProgress && <ReadingProgress locale={lang === 'en-US' ? 'en-US' : 'zh-CN'} />}
   <Button title={lang === 'en-US' ? 'Back' : '返回'} href={withBasePath(back)} variant='back' />
   <main class='mt-6 items-start gap-x-10 md:flex'>
     {/* Sidebar */}
@@ -89,7 +95,7 @@ const {
     </div>
   </div>
 
-  <BackToTop label={lang === 'en-US' ? 'Back to top' : '返回顶部'} header='content-header' content='content'>
+  <BackToTop label={lang === 'en-US' ? 'Back to top' : '返回顶部'} header='content-header' content='content' needPercent={!showReadingProgress}>
     {
       showSidebar && showMobileSidebarButton && (
         <button

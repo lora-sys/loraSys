@@ -5,10 +5,17 @@ interface Props { value?: string; label?: string; locale?: SiteLocale; url?: boo
 const { value = '', locale = uiLocale(Astro.url.pathname), label = text(locale, '复制链接', 'Copy link'), url = false } = Astro.props
 ---
 <span class='copy-action' data-copy-action data-copy-value={value} data-copy-url={String(url)} data-copy-locale={locale}>
-  <button type='button' data-copy-button>{label}</button>
+  <button type='button' data-copy-button>
+    <span>{label}</span>
+    <span class='copy-mark' aria-hidden='true'>
+      <svg class='copy-ready' viewBox='0 0 20 20'><rect x='6.5' y='6.5' width='10' height='10' rx='2' /><path d='M13 4V3.5h-9v9H4.5' /></svg>
+      <svg class='copy-done' viewBox='0 0 20 20'><path d='m4 10 4 4 8-8' /></svg>
+    </span>
+  </button>
   <span class='copy-feedback' data-copy-feedback role='status' aria-live='polite'></span>
 </span>
 <script>
+  import { enterFeedback, stopFeedback } from '@/utils/motion'
   document.querySelectorAll<HTMLElement>('[data-copy-action]').forEach((root) => {
     const button = root.querySelector<HTMLButtonElement>('[data-copy-button]')
     const status = root.querySelector<HTMLElement>('[data-copy-feedback]')
@@ -18,24 +25,30 @@ const { value = '', locale = uiLocale(Astro.url.pathname), label = text(locale, 
       const value = root.dataset.copyValue || window.location.href
       const result = root.dataset.copyUrl === 'true' ? new URL(value, window.location.href).href : value
       button.disabled = true
+      button.setAttribute('aria-busy', 'true')
+      root.dataset.copyState = 'pending'
+      stopFeedback(status)
       status.textContent = en ? 'Copying…' : '正在复制…'
       try {
         await navigator.clipboard.writeText(result)
         status.textContent = en ? 'Copied' : '已复制'
         root.dataset.copyState = 'success'
+        enterFeedback(status)
       } catch {
         status.textContent = `${en ? 'Copy unavailable. Select this text:' : '无法自动复制，请选择下方文本：'} ${result}`
         root.dataset.copyState = 'error'
       } finally {
         button.disabled = false
+        button.removeAttribute('aria-busy')
       }
     })
   })
 </script>
 <style>
   .copy-action{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;min-width:0}
-  button{min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.55rem;padding:.5rem .7rem;color:hsl(var(--foreground));background:hsl(var(--background));font:inherit;font-size:.78rem;cursor:pointer;transition:transform 140ms ease}
+  button{display:inline-flex;align-items:center;gap:.5rem;min-height:2.75rem;border:1px solid hsl(var(--border));border-radius:.55rem;padding:.5rem .7rem;color:hsl(var(--foreground));background:hsl(var(--background));font:inherit;font-size:.78rem;cursor:pointer;transition:transform 140ms ease}
   button:active{transform:scale(.98)}button:focus-visible{outline:2px solid hsl(var(--ring));outline-offset:3px}button:disabled{cursor:wait}
   .copy-feedback{font-size:.78rem;line-height:1.6;overflow-wrap:anywhere;user-select:text}.copy-action[data-copy-state='error'] .copy-feedback{flex-basis:100%}
-  @media(prefers-reduced-motion:reduce){button{transition:none}button:active{transform:none}}
+  .copy-mark{position:relative;display:block;width:1rem;height:1rem;flex:none}.copy-mark svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:opacity 140ms ease,transform 140ms ease}.copy-done{opacity:0;transform:scale(.7)}.copy-action[data-copy-state='success'] .copy-ready{opacity:0;transform:scale(.7)}.copy-action[data-copy-state='success'] .copy-done{opacity:1;transform:scale(1)}
+  @media(prefers-reduced-motion:reduce){button,.copy-mark svg{transition:none}button:active{transform:none}}
 </style>

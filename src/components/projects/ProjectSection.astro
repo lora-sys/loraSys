@@ -167,6 +167,8 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
 </div>
 
 <script>
+  import { enterFeedback, stopFeedback } from '@/utils/motion'
+
   document.querySelectorAll<HTMLElement>('[data-project-browser]').forEach((browser) => {
     const search = browser.querySelector<HTMLInputElement>('[data-project-search]')
     const items = [...browser.querySelectorAll<HTMLElement>('[data-project-item]')]
@@ -210,7 +212,7 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
       if (mode === 'push') history.pushState({}, '', next)
       else history.replaceState({}, '', next)
     }
-    const applyFilters = () => {
+    const applyFilters = (feedback = false) => {
       const query = search?.value.trim().toLocaleLowerCase() ?? ''
       let visible = 0
       items.forEach((item) => {
@@ -219,8 +221,11 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
         const matchesStatus = projectStatus === 'all' || item.dataset.status === projectStatus
         const matchesSource = projectSource === 'all' || item.dataset.source === projectSource
         const show = matchesQuery && matchesCategory && matchesStatus && matchesSource
+        const wasHidden = item.hidden
+        if (!show) stopFeedback(item)
         item.hidden = !show
         item.style.display = show ? '' : 'none'
+        if (feedback && show && wasHidden) enterFeedback(item, false)
         if (show) visible += 1
       })
       sections.forEach((section) => {
@@ -234,7 +239,10 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
         const sourceName = projectSource === 'all' ? '' : projectSource === 'External' ? '外部贡献' : projectSource
         const categoryName = category === 'all' ? '' : categoryButtons.find((button) => button.dataset.categoryFilter === category)?.textContent?.trim() ?? ''
         const filters = [query && `“${search?.value.trim()}”`, categoryName, sourceName, statusName].filter(Boolean).join(' · ')
-        status.textContent = filters ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}` : `共收录 ${items.length} 个项目`
+        const message = filters ? `共 ${items.length} 个项目，当前显示 ${visible} 个 · ${filters}` : `共收录 ${items.length} 个项目`
+        const changed = status.textContent !== message
+        status.textContent = message
+        if (feedback && changed) enterFeedback(status)
       }
       if (emptyState) emptyState.hidden = visible !== 0
     }
@@ -276,23 +284,23 @@ const statusLabel = (status: Project['status']) => ({ building: '构建中', act
     categoryButtons.forEach((button) => button.addEventListener('click', () => {
       category = button.dataset.categoryFilter ?? 'all'
       setPressed(categoryButtons, category, 'category')
-      writeUrl('push'); applyFilters()
+      writeUrl('push'); applyFilters(true)
     }))
     statusButtons.forEach((button) => button.addEventListener('click', () => {
       projectStatus = button.dataset.statusFilter ?? 'all'
       setPressed(statusButtons, projectStatus, 'status')
-      writeUrl('push'); applyFilters()
+      writeUrl('push'); applyFilters(true)
     }))
     sourceButtons.forEach((button) => button.addEventListener('click', () => {
       projectSource = button.dataset.sourceFilter ?? 'all'
       setPressed(sourceButtons, projectSource, 'source')
-      writeUrl('push'); applyFilters()
+      writeUrl('push'); applyFilters(true)
     }))
-    search?.addEventListener('input', () => { writeUrl('replace'); applyFilters() })
+    search?.addEventListener('input', () => { writeUrl('replace'); applyFilters(true) })
     reset?.addEventListener('click', () => {
-      clearFilters(); writeUrl('push'); applyFilters(); search?.focus()
+      clearFilters(); writeUrl('push'); applyFilters(true); search?.focus()
     })
-    addEventListener('popstate', () => { readUrl(); applyFilters(); revealHashTarget() })
+    addEventListener('popstate', () => { readUrl(); applyFilters(true); revealHashTarget() })
     addEventListener('hashchange', revealHashTarget)
     readUrl()
     applyFilters()
