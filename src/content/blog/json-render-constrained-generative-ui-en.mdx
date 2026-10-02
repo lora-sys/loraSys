@@ -1,0 +1,84 @@
+---
+title: 'json-render constrains UI with a component catalog'
+description: 'Vercel Labs json-render defines components, actions, and data bindings before generating schema-constrained JSON that can be checked and replayed.'
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['Generative UI', 'AI App', 'Vercel', 'Frontend Infra', 'Developer Tools']
+contentType: 'projects'
+topics: ['web-development', 'product-design', 'devtools']
+language: 'en-US'
+translationOf: 'json-render-constrained-generative-ui'
+draft: false
+---
+
+Ordinary AI frontend generation often asks a model to write JSX directly. The model can change the structure, but may also invent a component or property that does not exist.
+
+[Vercel Labs' json-render](https://github.com/vercel-labs/json-render) changes where control sits. Developers first list the permitted components, actions, and data bindings, then define schemas for those components. The model produces JSON within those constraints. The developer's own components render the actual interface.
+
+## The 30-second version
+
+The developer first defines a catalog. It specifies which components, actions, and data bindings the model may use. The model generates JSON from natural language. The JSON must conform to a schema before real components render it.
+
+The core idea is that AI can compose an interface only from the UI parts the developer supplies.
+
+This is close to tool calling. The model can choose, while the developer controls the execution boundary.
+
+## Fact-checking
+
+The project repository is [vercel-labs/json-render](https://github.com/vercel-labs/json-render), and its official site is [json-render.dev](https://json-render.dev/). GitHub marks Vercel Labs as Verified and confirms that the organization controls vercel.com.
+
+The official README describes a clear core flow. Developers define a catalog of permitted components, actions, and data bindings. The model generates JSON. A schema constrains that JSON, and real components render it. The project also officially supports rendering while generation is still in progress.
+
+The repository currently provides rendering packages for React, shadcn, React Native, Remotion, React PDF, React Email, Vue, Svelte, Solid, Ink, Next.js, and React Three Fiber, along with an MCP Apps integration package.
+
+The official homepage is itself an interactive example. It displays the catalog, JSON, live render, and static code, and can export standalone React code.
+
+The repository uses Apache-2.0. It is public and currently installable through npm.
+
+A changing star count can reflect attention at a moment in time, but cannot be treated as a user count. This article therefore does not present stars as adoption figures.
+
+## Why constrain the component catalog first
+
+Generative UI has a direct conflict. Users want an interface that changes with the task, but a product cannot let a model freely invent components, properties, and interactions.
+
+json-render reduces what the model can express instead of leaving the problem to prompt instructions.
+
+The catalog is a capability allowlist. The schema constrains structure. The renderer is the actual execution boundary.
+
+The model can decide how to combine Card, Metric, and Button, but product code still controls their implementations. A model generation does not automatically invalidate the design system, permissions, or interaction rules.
+
+## What a structured spec provides
+
+A prompt passes through a JSON spec before becoming JSX.
+
+That structure can be validated. A field or component outside the schema can be rejected before rendering. The spec can also be saved for logging, diffs, replay, and evals.
+
+For agent products, this is useful. An inspectable intermediate result sits between what the model generates and what the frontend actually executes. When something goes wrong, you can compare two specs directly instead of looking only at the final DOM or screenshots.
+
+## One spec can connect to multiple renderers
+
+json-render separates the spec from the renderer. Official adapters already cover web, mobile, PDF, email, video, terminals, and 3D.
+
+A product can separate the model's choices about content and structure from how each platform renders them. The model need not generate a fresh set of arbitrary code for every platform handling the same kind of business state.
+
+This design suits dynamic workspaces in agent products. Start by defining trusted components such as candidate cards, quote cards, risk notices, confirmation buttons, and timelines. The agent generates only a structured spec. The frontend renders it and limits executable actions to the catalog.
+
+## What these constraints cannot guarantee
+
+Schemas and catalogs constrain the output space, but cannot guarantee that AI always generates the correct interface. Business logic, data, and component implementations can still contain errors.
+
+The official materials do not provide a standardized benchmark. They therefore cannot support claims that this is faster, cheaper, or higher quality than generating React code directly.
+
+What can be confirmed is that json-render turns some UI boundaries that previously depended on a model following instructions into structural boundaries that code can verify.
+
+## Designs to borrow directly
+
+First, allow freedom in composition rather than component implementation. The model can combine existing components, but cannot arbitrarily invent capabilities the product has not implemented.
+
+Second, use a structured intermediate layer. A JSON spec can be validated, logged, diffed, replayed, and evaluated.
+
+Third, separate the spec from the renderer. The model decides content and structure, while each platform's component layer performs the rendering.
+
+## Primary sources
+
+- [Vercel Labs json-render GitHub repository](https://github.com/vercel-labs/json-render)
+- [json-render official site](https://json-render.dev/)

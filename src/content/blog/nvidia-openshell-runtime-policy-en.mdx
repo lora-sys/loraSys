@@ -1,0 +1,61 @@
+---
+title: 'OpenShell enforces agent permissions outside the workload'
+description: 'NVIDIA OpenShell places sandbox, network, credential, and policy controls outside the agent workload, with a Supervisor enforcing permission boundaries.'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'NVIDIA', 'Security', 'Sandbox', 'Agent Runtime']
+contentType: 'projects'
+topics: ['security', 'agent-harness', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'nvidia-openshell-runtime-policy'
+draft: false
+---
+
+NVIDIA released OpenShell 0.1.0 on September 28, 2026. The part most worth examining is where permission checks happen. The agent continues to plan and use tools, but a runtime outside the agent workload enforces the actual file, network, API, and credential permissions.
+
+## Understand it in 30 seconds
+
+OpenShell puts the agent in a sandbox. All external requests first pass through the Supervisor, which checks whether policy allows them. The official example allows read requests to GitHub while blocking write requests to the same service.
+
+Real credentials do not need to enter the agent workload directly either. After a request passes its checks, the outer layer injects credentials for the approved destination.
+
+The agent can request expanded permissions, but approval is required by default. Requesting and approving permissions are separate roles.
+
+## Why put control outside the model
+
+A prompt can explain rules, but it is not an enforcement boundary.
+
+As long as the agent process itself decides whether to carry out a dangerous action, the rules depend on the model following them correctly on every execution path. OpenShell moves enforcement to an outer layer the model cannot touch.
+
+Even if the agent changes its implementation path, its eventual access to files, networks, or services still passes through the same control points.
+
+## Permissions at the operation level
+
+OpenShell policy answers more than "Can this agent access GitHub?"
+
+The official demo shows finer control. Reads can be allowed while writes are blocked. For a long-running coding agent, this is more practical than one switch for an entire platform.
+
+The same design applies to database, deployment, and messaging tools. Reading, writing, deleting, and publishing should have separate permissions.
+
+## Expanded permissions require a request
+
+When an agent finds that its permissions are insufficient, it can request a narrowly scoped policy change. The request does not take effect automatically. By default, a person or independent approval component must confirm it.
+
+This separates "identifying the permissions a task needs" from "allowing permissions to expand." The longer a task runs and the more tools it uses, the more this boundary matters.
+
+## Three designs worth borrowing
+
+1. Put the real permission boundary outside the agent process and have an independent Supervisor enforce it.
+2. Define permissions for specific operations, with separate controls for reading, writing, deleting, and publishing.
+3. Use a two-step request-and-approval process for expanded permissions. The executor cannot directly authorize itself.
+
+## Factual limits
+
+OpenShell 0.1.0 is public, and the official repository uses Apache License 2.0. NVIDIA's technical blog provides examples for sandboxes, policies, credentials, and integration, along with integration instructions for Codex, Claude Code, Pi, Hermes, and others.
+
+This article discusses the OpenShell runtime. The Open Agent Safety Platform that NVIDIA announced at the same time includes other software and hardware layers. Those capabilities should not all be attributed to OpenShell itself.
+
+## Main sources
+
+- [NVIDIA Technical Blog: OpenShell](https://developer.nvidia.com/blog/add-runtime-controls-to-ai-agents-with-nvidia-openshell/)
+- [NVIDIA Newsroom: Open Agent Safety Platform](https://nvidianews.nvidia.com/news/open-agent-safety-platform)
+- [NVIDIA OpenShell](https://github.com/NVIDIA/OpenShell)

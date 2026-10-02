@@ -1,0 +1,30 @@
+---
+title: 'MentraOS runs Miniapps on phones for multiple glasses'
+description: 'MentraOS runs Miniapps in a phone runtime, sharing a connection to manage input, output, hardware capabilities, and permissions across smart glasses.'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI', 'Smart Glasses', 'Runtime', 'Open Source', 'MentraOS']
+contentType: 'projects'
+topics: ['multimodal', 'runtime-infrastructure', 'product-design']
+language: 'en-US'
+translationOf: 'mentraos-smart-glasses-runtime'
+draft: false
+---
+
+## Fact check
+Project name: MentraOS
+Organization: Mentra Community, with copyright attributed to Mentra Labs, Inc.
+Repository: [https://github.com/Mentra-Community/MentraOS](https://github.com/Mentra-Community/MentraOS)
+Website: [https://mentraglass.com/os](https://mentraglass.com/os)
+Official explanation: [https://mentrahelp.zendesk.com/hc/en-us/articles/46340522732052-What-is-MentraOS](https://mentrahelp.zendesk.com/hc/en-us/articles/46340522732052-What-is-MentraOS)
+Core capabilities: MentraOS manages smart-glasses pairing, connections, data streams, hardware access, and cross-device compatibility. Miniapps run in the Mentra Runtime on a phone. Multiple Miniapps can run simultaneously and share one connection to the glasses. Miniapps can use only the device capabilities and permissions they have been granted.
+Currently supported devices, retrieved at 2026-09-28 09:39 CST: Mentra Live, Even Realities G2, Vuzix Z100, and Even Realities G1. NIMO is marked Coming Soon.
+Current availability: The website provides entry points for the Mentra App, Miniapp Store, and SDK. The GitHub organization page shows that MentraOS was updated on 2026-09-27.
+LICENSE: Apache License 2.0.
+## Understand it in 30 seconds
+The most troublesome layer of building smart-glasses apps is often the different connection methods and hardware capabilities, rather than the AI model.
+MentraOS puts that layer into the Mentra Runtime on the phone. Miniapps run on the phone. The runtime receives events from the glasses' microphone, camera, buttons, and other inputs, then sends display and audio output back to the device. Multiple Miniapps can share one connection.
+As a result, the same Miniapp can target several supported smart glasses without rewriting the application for each piece of hardware.
+## Why it is interesting
+It is called an OS, but its apps do not run directly on the glasses. The official architecture puts the application runtime on the phone. The glasses handle input and output, while the phone handles app execution, permissions, and connection management.
+## Design breakdown
+Apps run on the phone, and the glasses handle input and output. Multiple Miniapps reuse the same runtime.

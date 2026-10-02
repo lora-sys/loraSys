@@ -1,0 +1,47 @@
+---
+title: 'Google packages Skills and MCP in one plugin'
+description: 'How the Google Cloud Developer Plugin packages Skills, MCP configuration, and rules, and what this means for distribution, versions, and permissions.'
+publishDate: '2026-09-11T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/google-agent-plugins-skills-mcp/lora-explainer-v2.webp'
+  alt: 'Skill instructions, MCP connections, and configuration are packed into one plugin installation bundle'
+tags: ['AI', 'Agent', 'MCP', 'Skills', 'Plugins', 'Google Cloud']
+contentType: 'technical'
+topics: ['mcp-skills', 'devtools', 'security']
+language: 'en-US'
+translationOf: 'google-agent-plugins-skills-mcp'
+draft: false
+---
+
+## Google packages Skills and MCP in one plugin as coding agent extensions start to standardize
+On September 10, Google Cloud released the Google Cloud Developer Plugin for AI Coding Agents.
+The official announcement starts with a practical problem. Agent Skills are easy to install and can reduce context usage in some situations. But managing them individually becomes cumbersome as their number grows. Some capabilities also depend on other Skills, MCP servers, and configuration files.
+Google's approach is to package these related capabilities in one plugin.
+### What the plugin packages
+Google's `google-cloud-developer` plugin follows the Agent Plugins specification.
+The specification defines a common manifest and directory structure for agent extensions. Its current core components are Skills and MCP servers. Google's plugin also includes rules and configuration needed by clients.
+`google-cloud-developer` handles several basic jobs: Google Cloud authentication and authorization, project management, constraints on gcloud CLI operations, and the Developer Knowledge MCP server. The latter supplies agents with current information from Google's official developer documentation.
+Google has provided installation instructions for three kinds of clients: Antigravity CLI, Claude Code, and Codex CLI.
+Builders can therefore release related capabilities as one unit, instead of asking users to copy Skills, configure MCP, add rule files, and manually handle differences between clients.
+### Why this layer deserves attention now
+Recent discussion of agent extensions has focused mainly on Skills and MCP.
+Skills suit working methods and domain instructions. MCP connects tools, data, and external services. Real projects usually need both.
+The problems start to appear during installation.
+Suppose you build a Google Cloud deployment capability. The agent needs to know the deployment workflow, read official documentation, call cloud tools, and use the correct identity. Making users configure these separately creates multiple points of failure.
+A plugin puts these dependencies into an installable unit. It does not reduce the underlying capabilities, but it reduces scattered configuration.
+### A September 11 fix illustrates the problem
+The `google/skills` repository was still receiving updates on September 11.
+The `google-cloud-developer 1.1.2` release that day fixed an MCP authentication problem. Its `mcp_config.json` had been missing `authProviderType: google_credentials`. The repository's commit description says the missing field caused clients to send unauthenticated requests and receive 401 Unauthorized.
+This was a problem with extension-package configuration, rather than with model capability or prompting.
+Once a plugin becomes the distribution unit, its manifest, authentication declarations, versions, and compatibility all need testing. Builders cannot check only whether the Skill text is correct.
+### What builders can do now
+If you are building agent Skills or MCP tools, start designing the capability as a single installation unit.
+First, define the component boundaries. Specify what belongs in the Skill, what must be called through MCP, and what rules the client should enforce.
+Second, pin versions and dependencies. When the plugin changes, record changes to Skills, MCP servers, and configuration. Do not make production automatically follow the latest version.
+Third, test different clients. A shared format does not mean every client implements every capability identically. At minimum, run through installation, authentication, tool discovery, and the core task.
+Fourth, include permissions in release checks. A plugin can introduce both Skills and MCP, which can expand an agent's available tools. Before installation, establish which services it connects to, which identity it uses, and which permissions it needs.
+### Current limits
+Agent Plugins is still at an early stage.
+Google's announcement establishes that the specification is used in its official Google Cloud Plugin, and that Claude Code, Codex, and Antigravity have installation paths. The available evidence does not establish that all agent clients will adopt it, or that behavior is identical across clients.
+The more accurate conclusion is that a shared packaging layer is emerging for agent extensions. Google has already used it in an official product. Builders can start including distribution, versioning, authentication, and compatibility in their engineering work on Skills and MCP.
+---

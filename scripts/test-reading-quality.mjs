@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { createServer } from 'node:http'
-import { readFile, stat, mkdir, writeFile } from 'node:fs/promises'
+import { readFile, readdir, stat, mkdir, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
 import os from 'node:os'
@@ -14,6 +14,26 @@ const output = path.resolve(process.env.SITE_TEST_OUTPUT ?? path.join(os.tmpdir(
 await mkdir(output, { recursive: true })
 const report = { startedAt: new Date().toISOString(), mode: process.env.SITE_TEST_URL ? 'published-site' : 'production-build', checks: [], measurements: [], screenshots: [], searches: [], htmlHashes: {} }
 const failures = []
+const contentDirectory = path.resolve(import.meta.dirname, '../src/content/blog')
+const translatedEditions = []
+for (const file of await readdir(contentDirectory)) {
+  if (!/\.mdx?$/.test(file)) continue
+  const source = await readFile(path.join(contentDirectory, file), 'utf8')
+  const header = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? ''
+  const original = header.match(/^translationOf:\s*['"]?([^'"\s]+)['"]?\s*$/m)?.[1]
+  if (!original || /^draft:\s*true\s*$/m.test(header)) continue
+  assert.match(header, /^language:\s*['"]?en-US['"]?\s*$/m, `${file}: English translation metadata`)
+  translatedEditions.push({ id: file.replace(/\.mdx?$/, ''), original, svg: /-en\.svg/.test(source), html: /<InteractiveHtml\b/.test(source), video: /<MediaVideo\b/.test(source) })
+}
+translatedEditions.sort((left, right) => left.id.localeCompare(right.id))
+assert.ok(translatedEditions.length, 'Read real translationOf metadata from the tested checkout')
+const baselineOriginals = new Set(['loop-engineering-harness', 'tau-agent-loop-events', 'long-running-agent-session-context-state', 'agent-credential-boundary-vault-broker', 'multi-agent-dependency-aware-delegation', 'free-vision-skill'])
+const representativeIds = new Set(translatedEditions.filter((edition) => baselineOriginals.has(edition.original)).map((edition) => edition.id))
+for (const kind of ['svg', 'html', 'video']) {
+  const representative = translatedEditions.find((edition) => edition[kind] && !baselineOriginals.has(edition.original))
+  if (representative) representativeIds.add(representative.id)
+}
+report.translationCoverage = { source: 'Published translationOf fields in the tested checkout', fullDesktopIds: translatedEditions.map((edition) => edition.id), matrixRepresentativeIds: [...representativeIds], completed: [] }
 let server
 let site
 
@@ -123,6 +143,35 @@ try {
           await page.evaluate(() => { document.documentElement.classList.remove('dark'); localStorage.setItem('theme', 'light') })
         })
       }
+
+      await check(`${label} Chinese homepage keeps recent Chinese originals`, page, async () => {
+        await open('')
+        const links = page.locator('#writing .writing-item > a')
+        assert.ok(await links.count() > 0 && await links.count() <= 3)
+        for (const link of await links.all()) {
+          const href = await link.getAttribute('href')
+          const response = await context.request.get(new URL(href, site).href)
+          assert.equal(response.status(), 200)
+          assert.match(await response.text(), /<html lang="zh-CN"/)
+        }
+      })
+
+      await check(`${label} English homepage links to English editions with accurate labels`, page, async () => {
+        await open('en/')
+        const entries = page.locator('#writing .writing-item')
+        assert.ok(await entries.count() <= 3)
+        assert.ok(await entries.count() > 0)
+        assert.equal(await page.locator('#writing h3:not([lang="en-US"])').count(), 0)
+        for (const entry of await entries.all()) {
+          const href = await entry.locator('h3 a').getAttribute('href')
+          const response = await context.request.get(new URL(href, site).href)
+          assert.equal(response.status(), 200)
+          const html = await response.text()
+          assert.match(html, /<html lang="en-US"/)
+          const translated = html.includes('Translated from the original article; source publication date retained')
+          assert.equal((await entry.locator('.article-language').textContent()).trim(), translated ? 'English translation' : 'English original')
+        }
+      })
 
       await check(`${label} English writing archive lists and filters the canonical article collection`, page, async () => {
         await open('en/writing')
@@ -354,37 +403,63 @@ try {
         await capture('legacy-link')
       })
 
-      await check(`${label} all six translations retain keyboard switches and readable media`, page, async () => {
-        const slugs = ['loop-engineering-harness', 'tau-agent-loop-events', 'long-running-agent-session-context-state', 'agent-credential-boundary-vault-broker', 'multi-agent-dependency-aware-delegation', 'free-vision-skill']
+      await check(`${label} translations retain keyboard switches and readable media`, page, async () => {
+        const editions = viewport.width === 1440 && reducedMotion === 'no-preference'
+          ? translatedEditions
+          : translatedEditions.filter((edition) => representativeIds.has(edition.id))
         await open('en/writing?language=en-US')
         await page.locator('#language-filter:not([disabled])').waitFor()
-        for (const slug of slugs) {
-          assert.equal(await page.locator('[data-article]:visible').filter({ has: page.locator(`a[href="${base}blog/${slug}-en"]`) }).count(), 1, `${slug}: discoverable English edition`)
+        for (const edition of editions) {
+          assert.equal(await page.locator('[data-article]:visible').filter({ has: page.locator(`a[href="${base}blog/${edition.id}"]`) }).count(), 1, `${edition.original}: discoverable English edition`)
         }
-        for (const slug of slugs) {
-          await open(`blog/${slug}-en`)
+        for (const edition of editions) {
+          await open(`blog/${edition.id}`)
           assert.equal(await page.locator('html').getAttribute('lang'), 'en-US')
-          assert.equal(await page.locator('.site-header .locale-toggle').getAttribute('href'), `${base}blog/${slug}`)
+          assert.equal(await page.locator('.site-header .locale-toggle').getAttribute('href'), `${base}blog/${edition.original}`)
           assert.equal(await page.locator('[data-reading-progress]').count(), 1)
           assert.equal(await page.locator('[data-reading-progress]').getAttribute('aria-label'), 'Reading progress')
-          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${slug}: no horizontal overflow`)
-          const images = page.locator('#content img')
-          for (let index = 0; index < await images.count(); index++) {
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${edition.original}: no horizontal overflow`)
+          const images = page.locator('.article-hero-image img, #content img')
+          const imageCount = await images.count()
+          for (let index = 0; index < imageCount; index++) {
             const image = images.nth(index)
             await image.scrollIntoViewIfNeeded()
             // Lazy image selection can invalidate decode() while scrolling; wait for the actual load state.
             await page.waitForFunction(imageIndex => {
-              const element = document.querySelectorAll('#content img')[imageIndex]
+              const element = document.querySelectorAll('.article-hero-image img, #content img')[imageIndex]
               return element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0
-            }, index).catch(error => { throw new Error(`${slug}: image ${index} did not load: ${error.message}`) })
-            assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0), `${slug}: article image loads`)
+            }, index).catch(error => { throw new Error(`${edition.original}: image ${index} did not load: ${error.message}`) })
+            assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0), `${edition.original}: article image loads`)
+          }
+          const frames = page.locator('#content [data-interactive-html] iframe')
+          const frameCount = await frames.count()
+          for (const frameElement of await frames.all()) {
+            await frameElement.scrollIntoViewIfNeeded()
+            assert.equal(await frameElement.getAttribute('sandbox'), 'allow-scripts')
+            const frame = await frameElement.contentFrame()
+            await frame.locator('body').waitFor()
+            assert.equal(await frame.locator('html').getAttribute('lang'), 'en-US', `${edition.id}: interactive labels are English`)
+            for (const control of await frame.locator('[role="tab"], .filter').all()) {
+              await control.click()
+              const active = await control.getAttribute('aria-selected') ?? await control.getAttribute('aria-pressed')
+              assert.equal(active, 'true', `${edition.id}: interactive control responds`)
+            }
+          }
+          const videos = page.locator('#content [data-media-video] video')
+          const videoCount = await videos.count()
+          for (const video of await videos.all()) {
+            await video.scrollIntoViewIfNeeded()
+            await video.evaluate((element) => element.load())
+            await page.waitForFunction((element) => element instanceof HTMLVideoElement && element.readyState >= 1 && !element.error, await video.elementHandle())
           }
           await page.locator('.article-translation-link a').press('Enter')
-          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${slug}`)
+          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${edition.original}`)
           assert.equal(await page.locator('html').getAttribute('lang'), 'zh-CN')
           await page.locator('.article-translation-link a').press('Enter')
-          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${slug}-en`)
+          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${edition.id}`)
           assert.equal(await page.locator('html').getAttribute('lang'), 'en-US')
+          report.translationCoverage.completed.push({ id: edition.id, original: edition.original, label, images: imageCount, interactiveFrames: frameCount, videos: videoCount })
+          await save()
         }
         await capture('translation-round-trip')
       })

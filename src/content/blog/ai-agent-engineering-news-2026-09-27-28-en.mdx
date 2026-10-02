@@ -1,0 +1,84 @@
+---
+title: 'AI Agent engineering reading list, Sep 27–28, 2026'
+description: 'Seven updates on Codex prewarming and Guardian, remote sandboxes, MCP OAuth, secret stores, and agent software factory production data.'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI Agent', 'MCP', 'Harness', 'Agent Safety', 'AI Engineering']
+contentType: 'news'
+topics: ['memory-context', 'security', 'mcp-skills', 'agent-harness', 'devtools']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-27-28'
+draft: false
+---
+
+## This edition's takeaways
+The previous edition was generated on the morning of September 27, 2026. More upstream changes appeared later that day and by the morning of September 28, so this edition's dates overlap the previous one by a day without repeating its content. It retains 7 items after deduplication.
+Start with three items. Codex's history-aware prewarming directly addresses next-turn latency after resuming a long conversation. Deep Agents Talon's remote sandbox moves shell and file tools off the host and explicitly fails closed. MCP Inspector's AI Software Factory retrospective provides verifiable engineering figures: 8 weeks, 268 merged PRs, 9 releases, and 99% agent-produced work.
+## 1. Codex adds history-aware prewarming for idle threads
+**What happened**
+OpenAI Codex merged PR 48812. The new `CodexThread::prewarm_with_history()` sends a `generate: false` WebSocket preparation request using existing conversation history and metadata for tools already executed. If the next user input continues that history and uses the same request settings, it can reuse the prepared response state. Non-prefix inputs do not incorrectly reuse `previous_response_id`.
+**Engineering significance**
+After a long conversation resumes, extra agent latency often comes from reconnecting and resending history. This change ties prewarming to actual history, executed tools, and request configuration rather than simply warming an empty connection. In a persistent agent runtime, "connection established" and "current session state reusable" can be separate cache conditions.
+**Where to start**
+Read What changed, then Testing. Focus on history-prefix checks, `generate: false`, retention of tool metadata, and fallback logic for non-prefix prompts.
+**Primary source**
+[Codex PR 48812](https://github.com/openai/codex/pull/48812)
+## 2. Codex Guardian separates safety-review history from parent-session compaction
+**What happened**
+Codex merged PR 48779. With `guardian_reuse_parent_compaction` disabled, Guardian maintains its own bounded review transcript. It retains original evidence after the parent thread compacts its context. Synchronous review and asynchronous scoring no longer depend on the parent session's checkpoint. The system also stores rollback provenance and removes the corresponding evidence in acceptance order during rollback.
+**Engineering significance**
+If safety review depends directly on the main agent's compacted history, a summary created to save tokens may remove evidence the reviewer needs. This change shows why a safety reviewer's evidence storage should be separate from the executing agent's context manager. Rollback, restoration, and compaction also need explicitly defined review-history semantics.
+**Where to start**
+Read Why and What changed. Focus on the independent review transcript, reviewer continuity after parent compaction, rollback provenance, and why compaction output does not enter the review transcript.
+**Primary source**
+[Codex PR 48779](https://github.com/openai/codex/pull/48779)
+## 3. Deep Agents Talon supports remote sandboxes and fails closed
+**What happened**
+Deep Agents merged PR 6574. Talon can now use `DEEPAGENTS_TALON_SANDBOX` to run shell and file tools in a remote sandbox. Supported providers currently include LangSmith, Daytona, Modal, Runloop, Vercel, and AgentCore. The sandbox is the default execution backend, while the assistant's `skills/` and `memory/` still route to the host through a virtual filesystem. The sandbox cannot access host state such as `tools.json`, so the agent cannot change approval state through its own file tools.
+If sandbox startup fails, Talon exits rather than falling back to host execution. The project also explicitly states that MCP tools, web tools, and channel media still run on the host, so this is not yet a multitenant isolation boundary.
+**Engineering significance**
+One of the most dangerous sandbox designs silently falls back to the local machine when isolation fails. This design fails closed and explicitly lists the capabilities that remain on the host. Agent runtimes can use the same separation: shell and file execution go into the sandbox, while credentials, approval state, and control files stay on the host. List cross-boundary capabilities separately.
+**Where to start**
+Read backend routing, startup fails closed, and the host-executed capabilities in the PR description. Then examine how the sandbox lifecycle handles cancellation during startup to avoid leaking resources already created.
+**Primary source**
+[Deep Agents PR 6574](https://github.com/langchain-ai/deepagents/pull/6574)
+## 4. MCP Ruby SDK 1.6.1 fixes listening-stream lifecycles and parsing complexity
+**What happened**
+MCP Ruby SDK released 1.6.1. This version fixes several lifecycle problems in `subscriptions/listen`. Listening streams with the same request id can now be served correctly. The keepalive thread ends when its corresponding slot is released. If the transport closes during listener registration, the acknowledgement precedes the closing result.
+On the OAuth side, parsing of `WWW-Authenticate` challenges and canonicalization of URL dot segments now run in linear time, reducing the risk of high-complexity parsing caused by malicious input.
+**Engineering significance**
+Persistent MCP clients and servers need to manage streams, keepalives, request slots, and shutdown order as one lifecycle problem. Authentication header and URL parsing also need worst-case time-complexity limits, not just semantic correctness.
+**Where to start**
+Read the 1.6.1 release notes. Focus on the 3 `subscriptions/listen` fixes and the two linear-time parsing fixes.
+**Primary source**
+[MCP Ruby SDK v1.6.1](https://github.com/modelcontextprotocol/ruby-sdk/releases/tag/v1.6.1)
+## 5. MCP Ruby SDK lets web applications complete OAuth across requests
+**What happened**
+Ruby SDK merged PR 573. Previously, `OAuth::Flow#run!` waited for the browser authorization callback within a single call, which suited CLI and desktop programs but not web applications. The callback handler can now be omitted. The first HTTP request calls `run!`; the SDK writes the PKCE verifier, state, MCP server URL, authorization endpoint, and creation time to shared storage, then returns a redirect. When the browser callback reaches a second request, `finish!` validates the issuer and exchanges the token.
+Pending authorizations expire after 600 seconds by default. State is atomically deleted when consumed. The SDK revalidates the server URL, endpoint, and issuer so a forged callback cannot consume the real verifier prematurely.
+**Engineering significance**
+OAuth in agent web applications often spans processes and requests. Keeping flow state only on the first request's in-memory stack fails under horizontal scaling. This design provides a fairly complete persistence boundary while handling expiry, replay, competing callbacks, and issuer binding.
+**Where to start**
+Read the Without callback_handler sequence diagram. Then examine `finish!`'s four-step validation sequence, especially state lookup, expiry, issuer validation, and atomic consumption.
+**Primary source**
+[MCP Ruby SDK PR 573](https://github.com/modelcontextprotocol/ruby-sdk/pull/573)
+## 6. MCP Inspector moves OAuth tokens out of shared state files
+**What happened**
+MCP Inspector merged PR 2482. Previously, multiple web, CLI, and TUI processes shared `oauth.json`. A long-lived process holding an old snapshot could overwrite OAuth state another process had just saved. Now each modification declares only the section it touches, then reads the latest state under a file lock and merges that section.
+Access tokens, refresh tokens, ID tokens, IdP session tokens, and dynamically registered client secrets also move to a secret store. The OS keychain is preferred by default. Plaintext tokens in the old `oauth.json` migrate on demand when a persistent secret store is available. The new `MCP_INSPECTOR_PERSIST_TOKENS=all|access|none` setting controls which newly acquired tokens may be persisted.
+**Engineering significance**
+Agent toolchains often have desktop, CLI, and background processes accessing the same authentication state. This change addresses two common problems: lost updates in shared JSON and storing tokens alongside non-sensitive OAuth metadata in one file. A local agent control plane should handle state-merge semantics and secret storage separately.
+**Where to start**
+Read Clobber-safe writes and Tokens and client secrets move to the secret store in PR 2482. Then read Migration, Degradation, and `MCP_INSPECTOR_PERSIST_TOKENS`.
+**Primary source**
+[MCP Inspector PR 2482](https://github.com/modelcontextprotocol/inspector/pull/2482)
+## 7. MCP Inspector publishes 8 weeks of agent software engineering production data
+**What happened**
+MCP Inspector added official documentation titled Our AI Software Factory. The project says it has used a maintainer-plus-coding-agent contribution process since v2.0.0 on July 28, 2026. External contributors submit issues, maintainers approve and prioritize them, and coding agents develop according to the repository's `AGENTS.md` and skills. CI and local quality gates check acceptance.
+The document reports 9 releases and 268 merged PRs over 8 weeks, about 32 per week on average. The project classifies 265 of those PRs, or 99%, as agent-produced. The process also manages Rules and Procedures separately and uses three kinds of automated sweep instead of a Dependabot-style one-PR-at-a-time workflow. Security advisories retain a human gate.
+**Engineering significance**
+The value here is the process and the data. It shows that coding-agent productivity depends on executable repository rules, reusable skills, issue-defined task boundaries, and strict quality gates rather than the model alone. It also preserves a security path that requires human approval instead of handing every maintenance operation to an agent.
+**Where to start**
+Read Results since v2.0.0, Two layers of documentation, and The quality gate. Then review the issue lifecycle, PR flow, automated sweeps, and security advisory track.
+**Primary source**
+[MCP Inspector PR 2498](https://github.com/modelcontextprotocol/inspector/pull/2498)

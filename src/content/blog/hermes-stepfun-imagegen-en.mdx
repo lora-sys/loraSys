@@ -1,0 +1,397 @@
+---
+title: 'StepFun image generation for Hermes Agent'
+description: 'The Hermes StepFun image plugin: directory layout, model routing, API calls, billing endpoints, version fixes, and publishing.'
+publishDate: '2026-07-10T00:00:00Z'
+tags: ['Hermes Agent', 'StepFun', 'Image Generation', 'Plugin', 'AI']
+contentType: 'projects'
+topics: ['multimodal', 'mcp-skills', 'devtools']
+language: 'en-US'
+translationOf: 'hermes-stepfun-imagegen'
+draft: false
+---
+
+This article records a complete integration of an image-generation backend into Hermes. The goal is to let the agent call StepFun through a cloud API without running ComfyUI or a local image-generation model.
+
+It covers plugin directories, capability declarations, request routing, billing endpoint differences, version fixes, and release steps.
+
+## Why StepFun
+
+A common local image-generation setup is Stable Diffusion + ComfyUI, but this usually means:
+
+- An NVIDIA GPU or Apple Silicon is required
+- Large models and dependencies must be downloaded
+- A certain amount of VRAM and system configuration is required
+- Maintenance is costly, and switching machines means configuring it again
+
+StepFun offers a different set of advantages:
+
+- **Cloud API**: models run on the server; the local machine only needs to send HTTP requests
+- **Low latency**: `step-image-edit-2` can return results in 1-2 seconds
+- **Capabilities**: supports text-to-image, image editing, and image-to-image
+- **No local GPU required**: an API Key is enough
+- **Plugin integration**: connects directly to Hermes's `image_gen` system
+
+## Check your environment first
+
+| Item | Requirement |
+| --- | --- |
+| Hermes Agent | Installed and running |
+| Python | 3.11+ |
+| StepFun account | Registered, with access to https://platform.stepfun.com |
+| API Key | Created, usually in `step-...` format |
+
+> If you do not have a StepFun account yet, register on the platform and create an API Key first.
+
+## Step 1: check the Hermes plugin directory structure
+
+The local Hermes plugin directory is usually:
+
+```bash
+~/.hermes/plugins/
+```
+
+Image-generation plugins usually go in:
+
+```bash
+~/.hermes/plugins/image_gen/
+```
+
+The official repository already has reference implementations, including:
+
+- `openai`
+- `fal`
+- `krea`
+- `xai`
+
+We will create a directory specifically for the StepFun backend:
+
+```bash
+~/.hermes/plugins/image_gen/stepfun/
+```
+
+## Step 2: write the `plugin.yaml` manifest
+
+First create the directory:
+
+```bash
+mkdir -p ~/.hermes/plugins/image_gen/stepfun
+```
+
+Then create `plugin.yaml`:
+
+```yaml
+name: stepfun
+version: '1.0.0'
+description: StepFun image generation backend for Hermes Agent
+requires_env:
+  - STEPFUN_API_KEY
+```
+
+`requires_env` matters here. It tells Hermes to read `STEPFUN_API_KEY` before starting the plugin, instead of discovering the missing configuration at runtime.
+
+## Step 3: implement the plugin logic
+
+Create `__init__.py`. The key is to implement `ImageGenProvider` and expose three things to Hermes:
+
+- The list of supported models
+- The image-generation capability declaration
+- The actual generation logic
+
+### Models and capability declarations
+
+```python
+MODELS = [
+    {"id": "step-image-edit-2", "name": "Step Image Edit 2", "speed": "fast"},
+    {"id": "step-2x-large", "name": "Step 2X Large", "speed": "high-quality"},
+    {"id": "step-1x-medium", "name": "Step 1X Medium", "speed": "balanced"},
+]
+
+CAPABILITIES = {
+    "modalities": ["text", "image"],
+    "max_prompt_length": 1024,
+    "supports_edits": True,
+    "supports_image_to_image": True,
+}
+```
+
+### The core generation flow
+
+```python
+def generate(self, prompt, model=None, aspect_ratio="square", steps=4, seed=None):
+    model_id = model or self.default_model()
+
+    if model_id == "step-image-edit-2":
+        return self._call_text_to_image(prompt, aspect_ratio, steps, seed)
+
+    if model_id in ("step-2x-large", "step-1x-medium"):
+        return self._call_image_to_image(prompt, aspect_ratio, steps, seed)
+
+    raise ValueError(f"Unsupported model: {model_id}")
+```
+
+The plugin therefore routes requests internally according to the model, rather than requiring the calling layer to decide manually.
+
+## Two endpoints, two billing paths
+
+After I officially released v0.1.0 and used the plugin for a while, I noticed odd billing. A few tenths of a yuan were deducted from my account balance each day, while Credit usage on the Step Plan subscription page barely moved. Investigation revealed:
+
+**StepFun provides two independent endpoint sets for the same API key, with different billing channels**:
+
+<OptionTabs
+  title="Choose an endpoint for your account type first"
+  items="Step Plan subscription::Use /step_plan/v1::The same API key can authenticate;;Uses the Step Plan Credit allowance;;Plugin v0.1.1+ fixes the default path for subscribers|Open Platform prepaid account::Use /v1::The same API key can authenticate;;Charges the account balance per image;;For ordinary prepaid Open Platform accounts"
+  source="Based on the actual billing investigation and v0.1.1 fix recorded in this article"
+/>
+
+<Callout tone="warning" title="The same authentication can use different billing">
+The same key authenticates successfully on both endpoint sets, so a successful request does not prove that it used the right billing channel. Check both the actual request URL and changes to the corresponding account balance or Credits.
+</Callout>
+
+**Both paths authenticate with the same key**, but billing uses completely different channels. My plugin initially set the default `STEPFUN_BASE_URL` to `/v1/...`, so Step Plan subscribers, including me, were also charged per image.
+
+The fix in v0.1.1 was a 1-line change:
+
+```python
+STEPFUN_BASE_URL = os.environ.get(
+    "STEPFUN_BASE_URL",
+    "https://api.stepfun.com/step_plan/v1"  # Change /v1 to /step_plan/v1 here
+)
+```
+
+> If you are **not** a Step Plan subscriber and use an ordinary prepaid Open Platform account, keep the default `/v1`.
+> If you **are a Step Plan subscriber**, upgrading to 0.1.1+ routes all calls through the Credit plan instead of charging cash.
+
+Upgrade with:
+
+```bash
+pip install --upgrade hermes-stepfun-imagegen
+```
+
+For the full diagnosis from symptoms to investigation to fix, including a 7-step troubleshooting prompt you can paste into your own agent, see the README's [Troubleshooting → My usage is billing my cash balance, not my Step Plan credit](https://github.com/lora-sys/hermes-stepfun-imagegen#troubleshooting).
+
+## Step 4: call the StepFun API
+
+StepFun's image-generation API usually follows an OpenAI-like `/v1/images/generations` pattern and may also provide dedicated edits and image2image endpoints. Pay attention to three things:
+
+- The **headers** include `Authorization: Bearer ***`
+- The **parameters** include `model` and `prompt`, and sometimes `size` and `n`
+- The **response** usually returns an image URL or base64, which must be saved locally for Hermes to read later
+
+A simplified call looks like this:
+
+```python
+import os
+import requests
+
+API_KEY = os.environ["STEPFUN_API_KEY"]
+BASE_URL = os.environ.get("STEPFUN_BASE_URL", "https://api.stepfun.com/v1")
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+payload = {
+    "model": "step-image-edit-2",
+    "prompt": prompt,
+    "size": aspect_ratio_to_size(aspect_ratio),
+    "n": 1,
+}
+
+resp = requests.post(
+    f"{BASE_URL}/images/generations",
+    headers=headers,
+    json=payload,
+    timeout=60,
+)
+resp.raise_for_status()
+data = resp.json()
+```
+
+Once the response arrives, save the image locally using its URL or base64 data.
+
+> Note: StepFun's `size` parameter may use a different format from the usual convention. Check the actual API documentation for whether it uses `1024x1024`, `1024*1024`, or height x width ordering.
+
+## Step 5: configure Hermes to enable the plugin
+
+After writing the plugin code, update the Hermes configuration:
+
+```yaml
+plugins:
+  enabled:
+    - image_gen/stepfun
+
+image_gen:
+  provider: stepfun
+  model: step-image-edit-2
+```
+
+Then restart Hermes:
+
+```bash
+hermes gateway restart
+```
+
+After the restart, calls from the main model to `image_generate` automatically use StepFun.
+
+## Step 6: verify three modes locally
+
+### 1. Text-to-image
+
+Example prompt:
+
+```text
+A cute cat astronaut floating in space, digital art
+```
+
+Expected behavior: the plugin calls the text-to-image endpoint and returns an image path.
+
+### 2. Image editing
+
+Upload an existing image and provide an editing instruction:
+
+```text
+Change this image to an ink-wash painting style
+```
+
+Expected behavior: the plugin calls the edits endpoint and returns the edited image.
+
+### 3. Image-to-image
+
+Generate a new image from a reference:
+
+```text
+Turn this photo into a Van Gogh-style image
+```
+
+Expected behavior: the plugin calls the image2image endpoint and returns a stylized image.
+
+> Once these local checks pass, the core capabilities are working.
+
+## Step 7: put the plugin in its own repository
+
+This makes the plugin an independent project that can be shared, installed, and versioned, rather than existing only in `~/.hermes/plugins/`.
+
+A standard directory layout is:
+
+```bash
+hermes-stepfun-imagegen/
+├── pyproject.toml
+├── README.md
+├── LICENSE
+└── src/
+    └── hermes_stepfun_imagegen/
+        ├── __init__.py
+        └── plugin.yaml
+```
+
+The key part of `pyproject.toml` is the entry point:
+
+```toml
+[project.entry-points."hermes_agent.plugins"]
+stepfun-imggen = "hermes_stepfun_imagegen"
+```
+
+Others can then simply run:
+
+```bash
+pip install hermes-stepfun-imagegen
+```
+
+## Step 8: publish to PyPI
+
+Enter the repository directory, build, and upload:
+
+```bash
+cd hermes-stepfun-imagegen
+python -m build
+twine upload dist/*
+```
+
+After a successful upload, your plugin can be installed with:
+
+```bash
+pip install hermes-stepfun-imagegen
+```
+
+## Step 9: GitHub Actions CI
+
+To give the repository a professional setup and automate more of the release process, add a GitHub Actions workflow:
+
+```yaml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install pytest pytest-cov
+      - run: pip install -e .
+      - run: python -m pytest tests/ -v --tb=short
+      - run: pip install ruff
+      - run: ruff check src/ tests/
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'release'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - run: twine upload dist/*
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+```
+
+Then configure `PYPI_API_TOKEN` under Settings → Secrets in the GitHub repository to enable the described "tag and automatically publish" flow.
+
+## Step 10: make the release discoverable
+
+Once the plugin is independently published, users should at least be able to find installation instructions, its capabilities, and where to report issues.
+
+GitHub Topics can use keywords directly related to the implementation:
+
+```text
+hermes-agent
+stepfun
+image-generation
+ai-plugin
+```
+
+The `#plugins-skills-and-skins` channel in the Nous Research Discord can help the community discover it. Release notes only need to list supported models, installation steps, required environment variables, and the repository link. There is no need to copy the whole tutorial again.
+
+## What the complete process includes
+
+```text
+Hermes Agent + StepFun API Key
+    -> Local plugin development
+    -> Configuration and integration
+    -> Functional verification
+    -> Independent repository
+    -> PyPI release
+    -> CI automation
+    -> Release discovery
+```
+
+For local integration alone, focus on the plugin structure, model routing, endpoints, and verification described earlier. Add package releases, CI, version notes, and issue tracking when you need long-term maintenance and public distribution.

@@ -1,0 +1,81 @@
+---
+title: 'A Minecraft agent separates planning from fast decisions'
+description: 'This Minecraft agent uses Astra for slow planning, JEV for frequent action selection, and Mineflayer for execution, with logs and scripts to verify runs.'
+publishDate: '2026-09-21T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/minecraft-agent-layered-planning-action/lora-explainer-v2.webp'
+  alt: 'Chinese-labeled illustration: Astra plans, JEV selects actions from structured state, and Mineflayer executes'
+tags: ['AI Agent', 'Agent Harness', 'Minecraft', 'JEV', 'Developer Tools']
+contentType: 'projects'
+topics: ['agents', 'agent-harness', 'evaluation']
+language: 'en-US'
+translationOf: 'minecraft-agent-layered-planning-action'
+draft: false
+---
+
+The original cover retains its Chinese labels. They read "Astra planning," "JEV action selection," "Mineflayer execution," and "Structured state." The arrows show planning feeding action selection, actions passing to execution, and structured state returning to JEV.
+
+## Understand it in 30 seconds
+
+This project does not ask one large model to make every decision in Minecraft.
+
+Astra handles less frequent, high-level planning, choosing the current objective and the next section of the route. JEV makes frequent decisions. It uses the current position, inventory, surroundings, and objective to select the next step from a limited action set. Mineflayer then executes movement, mining, collection, crafting, and combat in the game.
+
+The useful lesson is how one agent loop can be divided into components by decision timescale, rather than just the result of defeating the Ender Dragon.
+
+## Fact check
+
+The project repository is [rmalde/minecraft-agent](https://github.com/rmalde/minecraft-agent). GitHub shows it was created on September 20, 2026, and is currently public and not archived. The repository has no release.
+
+The GitHub account is `rmalde`. In its September 21, 2026 report, ASCII identifies the author as Ronak Malde and links to his [original X post](https://x.com/rronak_/status/2101544156757950697) from September 20, 2026. That post includes a video of the run and says the code is public.
+
+The core mechanism comes from the repository README. GPT-6 Astra or GPT-5.6 Sol sets the current objective, item targets, and waypoints. JEV selects the next action from structured game state. Mineflayer executes it. The project does not have a model inspect screenshots and press keys one by one.
+
+The latest verified run listed in the README is `nether-final-08`. The project records a run in Minecraft Java 1.16.5 that starts with an empty inventory, passes through the Nether, defeats the Ender Dragon using bed explosions, and enters the exit. Its recorded time is 8 minutes 43.300 seconds. The run called JEV 131 times and Astra 35 times. The repository also reports that 17 run checks, 8 route, camera, and visual checks, and 29 local tests passed.
+
+These results are run records reported by the project repository, not an independent benchmark.
+
+## Run constraints
+
+The result must be understood in the context of its run conditions.
+
+- The difficulty is Peaceful.
+- The seed, route, and known coordinates were selected in advance.
+- The final route is specified in configuration files.
+- The agent uses structured state and Mineflayer, rather than end-to-end visual control.
+- The README describes the complete survival run separately from the combat lab tests.
+
+The source code is currently public. The README says native rendering and launch scripts were developed mainly on macOS. Reproduction also requires a compatible Minecraft Java environment, Mineflayer dependencies, and model access. Minecraft binaries, world saves, credentials, and the final recording are not committed to the repository.
+
+The license also needs a separate check. GitHub currently does not recognize a license for the repository. The author's original post uses the words `open sourced`, but the license file and the scope of authorization should still be checked before using or redistributing the code.
+
+## Why this layering is useful
+
+Many agent systems give planning, local decisions, and tool execution to the same model. That is simple to implement, but high-level objectives and immediate actions then share the same reasoning latency. The large model also repeatedly processes problems that could have been constrained.
+
+This project separates the three kinds of work. High-level objectives update slowly, immediate actions need lower latency, and ordinary software handles actual path movement and protocol operations. The README also says that while Astra updates a plan, JEV can keep choosing actions toward the current objective. The game does not need to pause while the planning model thinks.
+
+This also makes failures easier to locate. If the route is wrong, inspect the planner. If the immediate action is wrong, inspect JEV. If execution fails, inspect Mineflayer and the harness.
+
+## Three designs worth borrowing
+
+### Split components by decision frequency
+
+High-level objectives do not need to update every tick, while immediate actions need low latency. Dividing tasks by timescale before choosing models makes latency and failure scope easier to control than choosing one model for every responsibility.
+
+### Limit the action set
+
+JEV does not generate arbitrary control code. It chooses from a limited set of actions such as travel, mine, collect, craft, eat, sleep, and combat. A clearly defined action space makes model output easier to check and the executor more stable.
+
+### Build verification into the harness
+
+The project uses `events.jsonl` to save requests, model responses, actions, and game results, and `status.json` to save progress. `victory.json` records the Ender Dragon's death and the exit event. The repository also provides `verify-run.mjs` and retains a native-client recording workflow.
+
+The final result can therefore be checked against action logs and game events, rather than relying on a statement that "the agent succeeded."
+
+## Evidence cards
+
+1. The [project README](https://github.com/rmalde/minecraft-agent/blob/main/README.md) supports checks of model responsibilities, action methods, run conditions, verification results, reproduction steps, and limitations.
+2. The [GitHub repository](https://github.com/rmalde/minecraft-agent) supports checks of the creation date, public status, current source code, and license recognition status.
+3. [Ronak Malde's original X post](https://x.com/rronak_/status/2101544156757950697), published on September 20, 2026, is the source of the public demo.
+4. [ASCII's September 21, 2026 report](https://ascii.jp/elem/000/004/436/4436545/) cross-checks the author's identity, the original-post link, and run conditions. The repository README remains the authority for the core mechanism.

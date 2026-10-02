@@ -1,0 +1,73 @@
+---
+title: 'LobsterAI: send tasks by phone, run them on your desktop'
+description: 'LobsterAI connects phone messages to a local desktop agent. The phone handles tasks and approvals while the computer works with files, terminals, and browsers.'
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'Desktop Agent', 'LobsterAI', 'Open Source', 'Automation']
+contentType: 'projects'
+topics: ['agents', 'runtime-infrastructure', 'product-design']
+language: 'en-US'
+translationOf: 'lobsterai-mobile-desktop-agent'
+draft: false
+---
+
+The part of LobsterAI most worth examining is its separation of where a task is sent from where it actually runs.
+
+A phone can use messaging channels to send instructions, view progress, and handle approvals. Execution that touches files, terminals, browsers, and projects stays on the computer. For a desktop agent, this division is more direct than putting a complete workbench on a phone.
+
+NetEase Youdao maintains the project. Its official repository is [netease-youdao/LobsterAI](https://github.com/netease-youdao/LobsterAI). This review uses the official README, GitHub Releases, and project website as its sources.
+
+## Understand it in 30 seconds
+
+LobsterAI is a desktop agent. The official README describes Cowork as the product and session layer, with OpenClaw as the underlying runtime and gateway.
+
+The desktop application stores local state, including sessions, permissions, UI state, artifacts, agents, memory, and messaging-channel bindings. OpenClaw handles agent execution.
+
+On the computer, it can work with local files, terminals, browser workflows, documents, spreadsheets, slides, scheduled tasks, and project workspaces. After leaving the computer, users can continue sending tasks through messaging channels on their phones. Sensitive files, terminal commands, and network operations require approval first.
+
+The phone is therefore just the task entry point. The actual execution environment remains on the local computer.
+
+## Fact check
+
+The official README explicitly lists local files, terminal commands, browser workflows, documents, spreadsheets, slides, messaging channels, scheduled tasks, and project workspaces. Sessions and application data are stored in local SQLite.
+
+For remote control, the README currently lists WeChat, WeCom, DingTalk, Feishu, QQ, Telegram, Discord, NetEase Yunxin, NetEase Honeycomb, POPO, and email. Different accounts or channels can be bound to different agents.
+
+The official website also presents phone-based control of a computer as a main capability and provides a product demo.
+
+The GitHub Releases page lists `2026.9.22` as the latest release, published on September 22, 2026. This update restores native scheduled tasks and Feishu delivery. The repository uses the MIT License.
+
+These facts describe LobsterAI's current product scope. They do not establish that it is more reliable than other agents on arbitrary desktop tasks, nor does "local data" mean that all model requests run locally.
+
+## Why this structure is useful
+
+Many remote-agent products first solve the problem of "chatting on a phone too." LobsterAI addresses something more specific. The phone handles task input, status updates, and human approvals, while the computer accesses the real working environment.
+
+This has two direct results.
+
+First, the mobile client does not need to reproduce a complete filesystem, terminal, and browser workbench. Tasks can enter through a lightweight interface while their execution context stays on the original computer.
+
+Second, permission checks can happen before an action. Sensitive file operations, terminal commands, and network access wait for approval in the execution path instead of merely being recorded afterward.
+
+## Separate the product layer from the runtime
+
+Another design worth borrowing is LobsterAI's separation of product state from agent execution.
+
+Cowork maintains sessions, permissions, UI state, artifacts, memory, and messaging-channel bindings. OpenClaw handles the underlying execution. This layering lets the desktop product maintain user state while handling agent-runtime upgrades and changes separately.
+
+For a long-running desktop agent, this makes faults easier to locate than having one process manage the interface, sessions, permissions, messaging integration, and tool execution at once.
+
+## A small workflow to test first
+
+Testing this structure does not require building an entire remote-work system first.
+
+Start by sending a narrowly scoped task from a phone, such as "Export the three drafts generated today into a local review package." The desktop agent reads only the specified directory and produces an HTML summary page and an attachment inventory. It stops for approval before uploading, deleting, or making additional network requests.
+
+Check just three outcomes. Was the input directory correct? Were the output files complete? Were sensitive actions actually blocked before execution?
+
+This small experiment directly tests whether remote input, local execution, and permission checks are connected in practice.
+
+## Primary sources
+
+- [Official LobsterAI GitHub repository](https://github.com/netease-youdao/LobsterAI)
+- [LobsterAI GitHub Releases](https://github.com/netease-youdao/LobsterAI/releases)
+- [Official LobsterAI website](https://lobsterai.youdao.com/)

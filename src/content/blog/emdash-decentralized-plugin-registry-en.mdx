@@ -1,0 +1,90 @@
+---
+title: 'EmDash 1.0 separates plugin catalogs from publishing'
+description: 'EmDash 1.0 separates author identity, signed releases, plugin discovery, and runtime permissions. Installers verify records independently.'
+publishDate: '2026-09-30T00:00:00Z'
+tags: ['EmDash', 'Astro', 'Cloudflare', 'Plugin Registry', 'AT Protocol', 'Agent Skills']
+contentType: 'projects'
+topics: ['devtools', 'mcp-skills', 'security', 'web-development']
+language: 'en-US'
+translationOf: 'emdash-decentralized-plugin-registry'
+draft: false
+---
+
+## Conclusion
+
+EmDash 1.0 separates plugin-author identity, release records, and the plugin catalog. Authors retain signed release records, catalogs index and display them, and installers independently verify the records and package contents.
+
+This structure addresses two common problems. First, the catalog no longer controls both author identity and authoritative release history. Second, after a plugin is discovered, separate sandbox and capability rules still determine its runtime permissions.
+
+## The 30-second version
+
+Traditional plugin marketplaces often combine developer accounts, authoritative release records, and user discovery on one platform. If the platform closes or removes an account, authors struggle to carry the same identity and release history elsewhere.
+
+EmDash 1.0 separates these responsibilities. Plugin authors store signed package and release records in their own AT Protocol accounts. EmDash's plugin catalog indexes them. Other services can index the same records too.
+
+At installation time, the client does not simply trust the catalog's result. EmDash also verifies signed records, checksums, package names, versions, permission declarations, and build provenance when required. The catalog can change without changing the author's identity or release history.
+
+## Fact check
+
+EmDash is an open-source CMS maintained by `emdash-cms`, built on Astro and TypeScript. Cloudflare released EmDash 1.0 on September 28, 2026, describing it as stable, free, and open source. The project uses the MIT License.
+
+The official repository provides `npm create emdash@latest` to create a local project. There is also an official Playground and EmDash Build Demo.
+
+1. The plugin catalog is based on AT Protocol. Authors publish through their own accounts, signing package and release records and storing them in those accounts.
+2. Different services can index the same release records and build their own catalogs.
+3. Installers verify signed commits and check checksums, package names, versions, requested permissions, and required build provenance.
+4. Plugins run in isolation. By default, they cannot read site content, media, users, secrets, the environment, the filesystem, or the network.
+5. Plugins declare the capabilities they need. A site administrator approves them, and the runtime then grants the corresponding capabilities.
+6. Cloudflare deployments use Dynamic Workers. Node.js deployments use separate workerd processes.
+7. The current plugin catalog supports free plugins. Paid plugins remain on the roadmap.
+
+These details come from Cloudflare's EmDash 1.0 announcement, the official EmDash repository, the plugin catalog, and official demos.
+
+## Why these separate layers matter
+
+A plugin ecosystem has two different questions to answer. Where do users find plugins, and who owns author identity and release history?
+
+If a catalog also owns accounts, release records, and distribution, it becomes the sole center of trust. EmDash returns release records to author accounts and lets catalogs index them. Catalogs can still review, rank, and hide entries, but they cannot rewrite an author's signed release records.
+
+Independent verification by installers matters too. A plugin returned by the catalog does not have to be trusted immediately. The client continues to check records, package contents, and permission declarations, separating discovery results from installable results.
+
+## Four layers of responsibility
+
+| Layer | Responsible for | Outside its responsibility |
+| --- | --- | --- |
+| Author identity | Holding the account and signing identity | Catalog ranking |
+| Release records | Keeping signed package and version records | Runtime authorization |
+| Plugin catalog | Indexing, search, display, and review policy | Owning the author's authoritative release history |
+| Installation and runtime | Verifying packages, declaring permissions, and restricting execution capabilities | Choosing content discovery on behalf of the catalog |
+
+One product can provide all four layers, but their responsibilities should not collapse into one permission.
+
+## Three reusable designs
+
+### 1. Separate identity, release records, and catalogs
+
+Author identity and release history can move. Catalogs handle discovery and their own review policies. Changing catalogs therefore does not automatically cut off an author's existing release records.
+
+### 2. Verify again at installation
+
+After a catalog returns a result, the client still verifies signed records, checksums, versions, permission declarations, and build provenance. The catalog is not the only root of trust.
+
+### 3. Separate discovery from execution permissions
+
+Listing a plugin in a catalog only means users can find it. When the plugin actually runs, it still needs the relevant capabilities under sandbox and capability rules. A listing does not grant full site access.
+
+## Limits
+
+EmDash 1.0 is public and can create local projects, but its plugin ecosystem is still developing. Paid plugins are not complete in the current 1.0 design.
+
+A "decentralized catalog" also does not mean an absence of platform governance. Catalogs can still determine indexing, ranking, hiding, and review rules. The change is that no single catalog exclusively owns authors' signed release records.
+
+Installer verification also cannot replace runtime permission control. Signatures and checksums mainly establish whether downloaded content matches the author's published records. The runtime still determines which data, files, and networks a plugin can access.
+
+## Main sources
+
+- [Cloudflare: EmDash 1.0: the stable CMS with a secure plugin registry](https://blog.cloudflare.com/emdash-cms-plugin-registry/)
+- [Official EmDash repository](https://github.com/emdash-cms/emdash)
+- [EmDash plugin catalog](https://plugins.emdashcms.com/)
+- [EmDash Playground](https://try.emdashcms.com/)
+- [EmDash Build](https://build.emdashcms.com/)

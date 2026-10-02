@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820">
+<rect width="1400" height="820" fill="#F6EEDF"/>
+<rect x="42" y="42" width="1316" height="100" rx="24" fill="#2E251F"/>
+<text x="78" y="102" font-family="Arial, Liberation Sans, sans-serif" font-size="42" font-weight="700" fill="#FFF9EF">Where a secure plugin installer must verify</text>
+<text x="78" y="134" font-family="Arial, Liberation Sans, sans-serif" font-size="20" fill="#E9D8BE">Command success only means Git finished the operation. Verify actual HEAD before loading code.</text>
+<g font-family="Arial, Liberation Sans, sans-serif">
+<rect x="55" y="190" width="610" height="500" rx="28" fill="#FFF9EF" stroke="#A9503E" stroke-width="3"/>
+<text x="88" y="242" font-size="22.5" font-weight="700" fill="#963F32" style="font-size:22.5px">Weak flow</text><text x="210" y="242" font-size="24" fill="#51443A">Load on successful checkout</text>
+<g font-size="21" fill="#2E251F"><text x="94" y="310">1 Read pinned SHA</text><text x="94" y="380">2 Clone repository</text><text x="94" y="450">3 git checkout pinned SHA</text><text x="94" y="520">4 Observe exit code 0</text><text x="94" y="590">5 Load the plugin directly</text></g>
+<line x1="415" y1="292" x2="415" y2="600" stroke="#A9503E" stroke-width="4" stroke-dasharray="10 10"/>
+<rect x="445" y="304" width="176" height="92" rx="14" fill="#F6D9D2"/><text x="468" y="340" font-size="18.5" fill="#963F32" style="font-size:18.5px">No verification of</text><text x="468" y="372" font-size="18" fill="#963F32">actual HEAD</text>
+<rect x="445" y="500" width="176" height="90" rx="14" fill="#F6D9D2"/><text x="468" y="538" font-size="16.5" fill="#963F32" style="font-size:16.5px">The wrong commit</text><text x="468" y="570" font-size="18" fill="#963F32">may still execute</text>
+
+<rect x="735" y="190" width="610" height="500" rx="28" fill="#FFF9EF" stroke="#647154" stroke-width="3"/>
+<text x="768" y="242" font-size="20.5" font-weight="700" fill="#536044" style="font-size:20.5px">Strong flow</text><text x="890" y="242" font-size="24" fill="#51443A">Load only after a verified match</text>
+<g font-size="21" fill="#2E251F"><text x="774" y="310">1 Read pinned SHA</text><text x="774" y="370">2 Clone and checkout</text><text x="774" y="430">3 Read git rev-parse HEAD</text><text x="774" y="490" font-size="20.5" style="font-size:20.5px">4 Compare actual and expected</text><text x="774" y="550">5 Load only on a match</text><text x="774" y="610">6 Stop and log any mismatch</text></g>
+<rect x="1090" y="318" width="210" height="120" rx="14" fill="#E7EBDD"/><text x="1112" y="353" font-size="18" fill="#2E251F">expected</text><text x="1112" y="385" font-family="monospace" font-size="17" fill="#536044">abc123...</text><text x="1112" y="419" font-size="18" fill="#2E251F">actual HEAD</text>
+<rect x="1090" y="480" width="210" height="110" rx="14" fill="#E7EBDD"/><text x="1112" y="520" font-size="20" font-weight="700" fill="#536044">Equal</text><text x="1112" y="554" font-size="18" fill="#51443A">Loading allowed</text>
+
+<rect x="55" y="724" width="1290" height="62" rx="20" fill="#E8D4B4"/>
+<text x="85" y="764" font-size="23.0" font-weight="700" fill="#2E251F" style="font-size:23.0px">Acceptance: after name resolution, mirror sync, or auto-update, the actual execution ID must equal the policy ID.</text>
+</g></svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+  <rect width="1500" height="900" fill="#F7F0E4"/>
+  <style>
+    text{font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#2D241E}
+    .title{font-size:42px;font-weight:700}.sub{font-size:23px;fill:#65564B}
+    .h{font-size:28px;font-weight:700}.t{font-size:22px}.s{font-size:18px;fill:#6B5C50}
+    .card{fill:#FFF9EF;stroke:#C8B39E;stroke-width:2}.amber{fill:#F2D7A5;stroke:#B97B2B;stroke-width:2}
+    .bad{fill:#F7DED6;stroke:#B85B47;stroke-width:2}.good{fill:#E6E9D8;stroke:#6F7C57;stroke-width:2}
+    .line{stroke:#6B5C50;stroke-width:4;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#6B5C50"/></marker></defs>
+  <text x="70" y="80" class="title">What if the user changes direction during an agent run?</text>
+<text x="70" y="125" class="sub">Steering is not forced cancellation. Send new input to the next model call promptly and retain completed work.</text>
+<rect x="70" y="175" rx="28" ry="28" width="630" height="610" class="card"/>
+<rect x="800" y="175" rx="28" ry="28" width="630" height="610" class="card"/>
+<text x="105" y="230" class="h" style=";font-size:26.6px">Old flow: new input waits in the queue</text>
+<text x="835" y="230" class="h" style=";font-size:25.5px">Instant steering: adjust the current turn</text>
+<rect x="115" y="280" rx="18" width="250" height="90" class="amber"/><text x="145" y="325" class="t">Original task</text><text x="145" y="355" class="s">Fix the login test</text>
+<path d="M365 325 H500" class="line"/>
+<rect x="505" y="280" rx="18" width="145" height="90" class="card"/><text x="535" y="333" class="t">Running</text>
+<rect x="220" y="445" rx="18" width="330" height="105" class="bad"/><text x="250" y="490" class="t">New requirement</text><text x="250" y="525" class="s" style=";font-size:17px"><tspan x="250.0" y="517.0">Change cache logic; leave the</tspan><tspan x="250.0" y="537.0">auth API</tspan></text>
+<path d="M385 550 V650" class="line"/>
+<rect x="220" y="660" rx="18" width="330" height="75" class="bad"/><text x="255" y="707" class="t" style=";font-size:19.4px">Wait for the old task to finish</text>
+
+<rect x="845" y="280" rx="18" width="250" height="90" class="amber"/><text x="875" y="325" class="t" style=";font-size:19.6px">Original task running</text>
+<rect x="980" y="420" rx="18" width="360" height="105" class="good"/><text x="1010" y="465" class="t">New requirement arrives</text><text x="1010" y="500" class="s">Queue input for the same turn</text>
+<path d="M1090 370 V410" class="line"/>
+<rect x="845" y="585" rx="18" width="250" height="100" class="good"/><text x="875" y="625" class="t" style=";font-size:17.1px">Current model response</text><text x="875" y="660" class="s" style=";font-size:17px"><tspan x="875.0" y="652.0">End early; discard</tspan><tspan x="875.0" y="672.0">partial output</tspan></text>
+<rect x="1135" y="585" rx="18" width="250" height="100" class="good"/><text x="1165" y="625" class="t">Long-running task</text><text x="1165" y="660" class="s" style=";font-size:17px"><tspan x="1165.0" y="652.0">Yield; retain a</tspan><tspan x="1165.0" y="672.0">continuation handle</tspan></text>
+<path d="M1160 525 V570" class="line"/>
+<text x="70" y="845" class="h">New input changes direction without erasing completed results.</text></svg>

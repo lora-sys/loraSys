@@ -1,0 +1,53 @@
+---
+title: 'skill-up: evaluate real stateful multi-turn sessions'
+description: 'Alibaba skill-up resumes real sessions turn by turn, letting skill evaluations test context continuity, intermediate state, and per-turn assertions.'
+publishDate: '2026-09-18T00:00:00Z'
+tags: ['AI', 'Agent', 'Evaluation', 'Skills', 'Session']
+contentType: 'technical'
+topics: ['evaluation', 'mcp-skills', 'memory-context']
+language: 'en-US'
+translationOf: 'skill-up-stateful-multiturn-eval'
+draft: false
+---
+
+Multi-turn evaluations have an easily overlooked problem. Listing three turns in a configuration does not mean the system actually tested three consecutive session turns.
+Alibaba's `skill-up` merged PR #250 on September 17, adding a stateful multi-turn mode to custom engines. The change is small, but it fixes the evaluation execution path itself.
+## Batched turns and real multiple turns differ
+Previously, custom-engine multi-turn cases used batch processing by default. Suppose a test has three steps: read a repository, modify code based on the first step's results, and then write a report based on the first two. Batch mode sends all those messages to the agent together.
+That can check the final output, but it does not exercise the real service's session-resumption process. It may bypass problems such as whether the second turn receives the first turn's server-side state, whether a remote agent resumes correctly, or whether intermediate files from the previous turn get overwritten.
+The new `skill-up` mode separates execution into real turns. The first custom-engine call has no `session_id`. After the agent returns a `SessionResult`, the next turn receives the `session_id` returned by the previous turn. If more turns remain but no ID was returned, the evaluation fails immediately.
+The official Custom Engine documentation specifies this contract in [Custom Engine Design](https://alibaba.github.io/skill-up/design/custom-engine). Evaluation configuration and per-turn assertion rules are documented in [Writing Evals](https://alibaba.github.io/skill-up/guide/writing-evals).
+## Why session resumption deserves a separate test
+Real agent products rarely execute only one prompt. Users ask follow-up questions, tools return results, code changes between turns, and the next turn must read the state left by the previous one.
+An evaluation that checks only the final answer misses at least three classes of failure.
+The first is broken context continuity. The second turn appears to continue, but actually starts a new session.
+The second is corrupted intermediate state. Two turns generate artifacts with the same name, and the later turn overwrites earlier evidence.
+The third is failed per-turn constraints. The final answer looks correct, but the first turn already called a forbidden tool, or the second turn skipped a prerequisite.
+PR #250 adds execution-level support for all three. Stateful results incrementally accumulate transcripts, token usage, and artifacts across turns. Path artifacts with the same name are snapshotted first. The evaluator can also continue applying post-conditions and per-turn assertions.
+## Agents resume in different ways
+The current official `skill-up` support matrix does not describe one shared implementation.
+Claude Code has its own session resume. Codex uses thread resume. Qoder CLI also has a session-resumption parameter. A custom engine must explicitly enable `conversation_mode: stateful`. Qwen Code currently lacks native session resume, so the official documentation says it falls back to batch mode.
+That is another reason evaluations cannot compare only the final text. Different harnesses have different session lifecycles and different failure points.
+## A version fact that is easy to get wrong
+The latest public release is v0.11.0, published on September 14. The stateful custom-engine PR was not merged until September 17.
+It is therefore incorrect to say "v0.11.0 already includes stateful multi-turn execution." What can be confirmed is that the main-branch code and official documentation include this capability. Teams pinned to a release must wait for a later release or explicitly use the corresponding main-branch commit.
+This timing boundary comes from the [v0.11.0 release](https://github.com/alibaba/skill-up/releases/tag/v0.11.0) and [PR #250](https://github.com/alibaba/skill-up/pull/250).
+## How I would add multi-turn evaluations to a skill
+Start with a task that must depend on the previous turn's state. Do not write three independent questions.
+In the first turn, have the agent create verifiable state, such as reading a repository and generating a file. In the second, ask it to modify content based on the first turn's result. In the third, ask it to verify or export the result.
+Then write assertions for each turn separately. Do not check only one final pass or fail.
+If you are connecting a custom agent service, enable stateful mode:
+```yaml
+engine:
+  type: custom
+  custom:
+    conversation_mode: stateful
+    response_format: session_result
+```
+The server must return `session_id`, and later turns must use that ID to resume the same session.
+Finally, establish a baseline. The official Agent Skills evaluation guide recommends running the same case both with and without the skill, recording assertions, tokens, and time. That reveals what the skill adds, rather than showing only one successful demo.
+The official evaluation method is described in [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills).
+## Limits
+Stateful mode makes evaluation execution more representative. It does not improve judge accuracy or automatically fix unstable cases. Multi-turn tasks still need checks for verifiable assertions, isolated environments, retry-induced state contamination, and fair baselines.
+Today's new information is specific. Agent skill evaluations are beginning to handle "multiple messages" separately from "multiple session turns." Builders working on skills, harnesses, and evaluations should put that distinction directly into their test cases.
+---

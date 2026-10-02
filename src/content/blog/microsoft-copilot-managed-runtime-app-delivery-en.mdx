@@ -1,0 +1,79 @@
+---
+title: 'Microsoft connects AI-built tools to app delivery'
+description: 'After Copilot Code builds an internal tool, Managed Runtime handles Git, dev environments, Entra ID, connectors, previews, deployment, and governance.'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Builder', 'AI Coding', 'Microsoft 365', 'Developer Tools', 'Runtime']
+contentType: 'technical'
+topics: ['devtools', 'web-development', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'microsoft-copilot-managed-runtime-app-delivery'
+draft: false
+---
+
+## Facts and sources
+## Main primary sources
+- [Microsoft's official blog, Introducing the new Copilot with Home, Code and Autopilot](https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/), 2026-09-25.
+- [Microsoft Learn, Copilot Managed Runtime overview and key concepts for admins](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/apps/?view=o365-worldwide), last updated on 2026-09-25.
+- [Microsoft Learn, Quickstart: Build a Copilot Managed Runtime app with GitHub Copilot](https://learn.microsoft.com/en-us/microsoft-365/managed-apps/developer/quickstart-github-copilot?view=o365-worldwide), last updated on 2026-09-25.
+## Confirmed facts
+- Copilot Code can generate an app, tracker, dashboard, automation, or workflow from a natural-language description.
+- Copilot Managed Runtime is in preview. It provides Microsoft Entra authentication and authorization for internal apps.
+- The official documentation says Managed Runtime can connect to more than 1500 connectors. JavaScript and TypeScript can call these connectors directly.
+- Managed Runtime provides native Git workflows, isolated development environments, previews, deployment, sharing, an app inventory, usage analytics, and runtime health information.
+- Conditional access, DLP, connector policies, sharing restrictions, and data-source restrictions apply to apps in Managed Runtime.
+- The official quickstart uses GitHub Copilot CLI to drive the entire process. The agent checks dependencies, generates a plan, creates an app, prepares a Git repository, starts a development environment, runs a local preview, commits to Git, opens a hosted preview, deploys, and shares.
+- The same Managed Runtime plugin also supports Claude Code and other coding agents that support Open Plugins.
+- Microsoft's official blog says Managed Runtime will support third-party and pro-code developers and provide a common runtime for Cowork, Code, and Copilot Studio.
+- Building and running apps may consume Copilot Credits. Billing depends on the creation path, license, and runtime services.
+## What cannot be stated as fact
+- Do not say "Copilot Code is fully GA." Home, Code, Autopilot, and Managed Runtime still have Frontier, private-preview, or public-preview availability limits.
+- Do not say "Managed Runtime eliminates the need for DevOps." Administrators still need to configure tenant switches, policies, costs, and distribution scope.
+- Do not say "It suits every public SaaS product." Microsoft's main scenarios are personal, team, and organization-wide internal apps within Microsoft 365 tenants.
+- Do not say "Claude Code is already natively integrated with Microsoft Copilot." The official wording is that Claude Code can use the Managed Runtime plugin through Open Plugins.
+- Do not describe the more than 1500 connectors as unconditionally available to every app by default. Administrator policies and permissions still apply.
+## The central conclusion in one sentence
+After AI generates an internal tool, the time-consuming part is connecting its code to identity, data, Git, previews, deployment, permissions, and operations. Microsoft is turning these steps into a repeatable enterprise release process.
+
+Recommended platform: Juejin
+## After AI builds an internal tool, Microsoft connects Git, previews, deployment, and permissions
+Many AI coding products can already generate code. Once that code enters a company environment, the questions quickly change. What identity does the app use to sign in? Where does its data come from? Who can access it? How does the code get into Git? Where is the preview environment? Who manages permissions, costs, and runtime status after launch?
+When Microsoft announced the new Copilot on September 25, it put these questions into Copilot Code and Copilot Managed Runtime.
+Source: [Microsoft's official announcement](https://blogs.microsoft.com/blog/2026/09/25/introducing-the-new-copilot-with-home-code-and-autopilot/).
+## Code generates more than a snippet
+Copilot Code targets apps, trackers, dashboards, automations, and workflows. Users first describe the internal tool they want in natural language. The system then chooses an implementation and builds it.
+Microsoft also introduced the Copilot Managed Runtime preview. It runs these apps in Microsoft 365 enterprise environments. The official documentation lists Entra ID authentication, more than 1500 connectors, native Git, isolated development environments, policy enforcement, an app inventory, usage analytics, and runtime health information.
+Source: [Official Managed Runtime documentation](https://learn.microsoft.com/en-us/microsoft-365/admin/manage/apps/?view=o365-worldwide).
+This makes the steps after code generation concrete. Generating code is only the first stage. Identity, data connections, version control, previews, deployment, distribution, and governance follow.
+## The official quickstart covers the whole process
+Microsoft Learn provides a complete path. Developers start GitHub Copilot CLI in a terminal, install the Managed Runtime plugin, and describe the app in natural language.
+The agent first checks dependencies and tenant status, then proposes a plan. After the user approves, the agent creates an app record and a platform-managed Git repository, prepares a policy-managed development environment, generates project files, installs dependencies, and starts a local development server.
+After the local result is confirmed, the agent commits and pushes to Git and opens a hosted preview. Once that preview passes review, the agent can deploy the app to the live environment and share it with colleagues as the user requests.
+Source: [Managed Runtime GitHub Copilot quickstart](https://learn.microsoft.com/en-us/microsoft-365/managed-apps/developer/quickstart-github-copilot?view=o365-worldwide).
+The useful part here is that the workflow's boundaries are clear. The agent plans and calls commands. Git still stores real commits. Preview and production environments remain separate. Enterprise policies control identity and DLP. After launch, the app enters the administrator's inventory and runtime monitoring.
+## The process is not tied to one coding agent
+The official quickstart includes another detail that is easy to miss.
+The Managed Runtime plugin is not limited to GitHub Copilot CLI. Microsoft explicitly says it also works with Claude Code and other coding agents that support Open Plugins.
+This means a development team can change the coding agent at the front of the process while keeping the enterprise release path consistent. Developers can use different agents to generate and modify apps, while identity, connectors, Git, previews, deployment, and governance still go through the same Managed Runtime.
+This design tackles a more specific problem than adding another code-generation interface. It addresses how generated code enters a company environment.
+## A product structure builders can borrow
+If you are building an AI app builder, you can split the product into two parts.
+The first turns requirements into code. Models, agents, prompts, and development frameworks can change quickly here.
+The second turns code into a usable app. It keeps identity, data connections, version control, previews, releases, permissions, costs, and runtime status consistent.
+These parts evolve at different speeds. Models will change quickly. Enterprise identity and governance rules will not be rewritten every day. Separating them lets the agent change while the delivery path stays stable.
+## What more than 1500 connectors actually solve
+Internal tools often need a data connection more than another page.
+Microsoft's documentation says Managed Runtime can access more than 1500 connectors and lets JavaScript and TypeScript call them directly. For internal tools, this means developers can connect apps to existing enterprise data and workflows without writing OAuth, API clients, and permission logic separately each time.
+But that does not mean connectors can be called without restrictions. Administrators still control conditional access, DLP, connector policies, sharing restrictions, and data-source restrictions. Managed Runtime aims to make these constraints part of apps by default, rather than letting generated code bypass them.
+## Current limits
+These products are still in preview.
+Copilot Code and Home are rolling out through Frontier. Autopilot is also still in preview. Different Managed Runtime creation paths have different switches and eligibility requirements.
+Billing matters too. Microsoft ties both building and running apps to Copilot Credits and the relevant spending policy. Being able to generate an internal tool does not mean it can run without limits.
+It is also not a direct replacement for a general-purpose public SaaS platform. The official documentation mainly addresses personal tools, team tools, and organization-wide internal apps in Microsoft 365 tenants.
+## How I would test this approach
+To judge whether this product approach is worth building, I would test four things.
+First, how many manual steps are needed between describing a requirement and seeing the first runnable preview?
+Second, how much manual configuration is needed to connect identity, connectors, and permissions?
+Third, can the release path remain unchanged after switching to another coding agent?
+Fourth, after launch, can administrators see every app, its ownership, costs, health, and distribution scope?
+An AI app builder truly reduces delivery costs only when all four work reliably.
+Copilot Managed Runtime sends a clear signal. Competition in AI-generated internal tools is moving beyond the code-generation page to the delivery process that follows it.

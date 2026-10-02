@@ -1,0 +1,875 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "sourceCommit": "c0518b79f997793b2182d1890fc8d8fb29614083",
+    "sourceTree": "2a733eada9af7f4326b9131f3ea6fb29ad0e67d2",
+    "chineseArticles": 83,
+    "newTranslations": 77,
+    "preexistingTranslations": 6,
+    "englishOriginals": [
+      "eve-agent",
+      "newtube",
+      "wishlive"
+    ],
+    "futureSourceChanges": "Outside this bounded source snapshot; review separately"
+  },
+  "coverage": {
+    "pairedChineseArticles": 83,
+    "publishedChinese": 83,
+    "publishedEnglish": 86,
+    "publishedEditions": 169,
+    "englishSVGDiagrams": 57,
+    "newEnglishSVGDiagrams": 45,
+    "englishInteractiveHtmlArtifacts": 3,
+    "unchangedBaselineArticles": 92,
+    "retainedChinesePixelMedia": 19,
+    "textCoverage": "Complete English prose, captions, tables, component labels, and explanatory text",
+    "pixelCoverage": "Not 100% English pixels; the listed original media retain Chinese or generated Chinese-looking text with English explanations"
+  },
+  "articles": [
+    {
+      "original": "agent-budget-memory-evaluation",
+      "english": "agent-budget-memory-evaluation-en",
+      "sourceSHA256": "1a83a9a57d5ef492ecc5a2ff38b66b6725f41332b9cb559ec6ce760aaf9f4c68",
+      "englishSHA256": "f417b30d8dbae05455bc780e5100cd78c24a76f45d766713d454dea80d341676",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/agent-budget-memory-evaluation",
+      "englishPath": "/blog/agent-budget-memory-evaluation-en"
+    },
+    {
+      "original": "agent-credential-boundary-vault-broker",
+      "english": "agent-credential-boundary-vault-broker-en",
+      "sourceSHA256": "3033d808571cc13137c3250f6b61267f20e5dd54a55bf8a3a6840f39de5376c5",
+      "englishSHA256": "021f769bd8a752551f20837175a78fe274df490f189057b9900f70bc00909aed",
+      "sourcePublishDate": "2026-09-18T00:00:00Z",
+      "originalPath": "/blog/agent-credential-boundary-vault-broker",
+      "englishPath": "/blog/agent-credential-boundary-vault-broker-en"
+    },
+    {
+      "original": "agent-demo-harness-control-layer",
+      "english": "agent-demo-harness-control-layer-en",
+      "sourceSHA256": "01d1af8cab8cced3dc5837ac8ff378ee711074e9b4183e818e030ceaa973048b",
+      "englishSHA256": "e305ff72a69f58bc1c028b36b478987724019814b44bb675198589fd01c3bc5a",
+      "sourcePublishDate": "2026-09-08T00:00:00Z",
+      "originalPath": "/blog/agent-demo-harness-control-layer",
+      "englishPath": "/blog/agent-demo-harness-control-layer-en"
+    },
+    {
+      "original": "agent-durable-execution-step-idempotency",
+      "english": "agent-durable-execution-step-idempotency-en",
+      "sourceSHA256": "2fbdd07161101e562fab127ca6d3050ba9fbe2abb2f802145f053b031ffdeb08",
+      "englishSHA256": "0c40d0fbda64076a2f66c6ac7096894d71157a843bd5decdfe869e1b419efe8c",
+      "sourcePublishDate": "2026-09-19T00:00:00Z",
+      "originalPath": "/blog/agent-durable-execution-step-idempotency",
+      "englishPath": "/blog/agent-durable-execution-step-idempotency-en"
+    },
+    {
+      "original": "agent-eval-monitor-coverage",
+      "english": "agent-eval-monitor-coverage-en",
+      "sourceSHA256": "e245045e8d9f372350200c44afa7438e761d8e16164b23484e28affa7d718a34",
+      "englishSHA256": "450e0d369732759317a87798fec271e675d6c326a75068da18f0c6f3934e36ac",
+      "sourcePublishDate": "2026-09-10T00:00:00Z",
+      "originalPath": "/blog/agent-eval-monitor-coverage",
+      "englishPath": "/blog/agent-eval-monitor-coverage-en"
+    },
+    {
+      "original": "agent-instant-steering-preemption-recoverable-tools",
+      "english": "agent-instant-steering-preemption-recoverable-tools-en",
+      "sourceSHA256": "9fefebe2bafe287bfbc9952dc30a44e8f7a63a95bcf9c5ae00564c61803bba4a",
+      "englishSHA256": "6896fc2b7f38451ecaece01ab30dd4975cc0bb6f0e4bd3f9efe5fa5897fb2bb8",
+      "sourcePublishDate": "2026-09-29T00:00:00Z",
+      "originalPath": "/blog/agent-instant-steering-preemption-recoverable-tools",
+      "englishPath": "/blog/agent-instant-steering-preemption-recoverable-tools-en"
+    },
+    {
+      "original": "agent-network-policy-revocation",
+      "english": "agent-network-policy-revocation-en",
+      "sourceSHA256": "eb79af879a5017d6f8238db81bd9f8423f63096b851edd96a6525eaf8c5eb35a",
+      "englishSHA256": "bd35b7283dda25f9b576dcf12d9d52f80579d296e58a8b58b904f5278f63f4c7",
+      "sourcePublishDate": "2026-09-26T00:00:00Z",
+      "originalPath": "/blog/agent-network-policy-revocation",
+      "englishPath": "/blog/agent-network-policy-revocation-en"
+    },
+    {
+      "original": "agent-observability-trace-span-opentelemetry",
+      "english": "agent-observability-trace-span-opentelemetry-en",
+      "sourceSHA256": "bf069a1473ad22b38da2859a9e38a47a010596e6edbd1fb55ea2baa59ae86807",
+      "englishSHA256": "4d033a26a6d8f865d2e2e39f7f962479ca1a1fc87ca6520bc4879200704ff277",
+      "sourcePublishDate": "2026-09-23T00:00:00Z",
+      "originalPath": "/blog/agent-observability-trace-span-opentelemetry",
+      "englishPath": "/blog/agent-observability-trace-span-opentelemetry-en"
+    },
+    {
+      "original": "agent-review-evidence-independent-history",
+      "english": "agent-review-evidence-independent-history-en",
+      "sourceSHA256": "601817a81a4e049a066c9bf06330aaae68a67f1478bb73024ca17c621426d8df",
+      "englishSHA256": "0a5fc3fed500373e1abcd40054a3ece34be93e6d43e22334d02b97ed6eeb70a3",
+      "sourcePublishDate": "2026-09-28T00:00:00Z",
+      "originalPath": "/blog/agent-review-evidence-independent-history",
+      "englishPath": "/blog/agent-review-evidence-independent-history-en"
+    },
+    {
+      "original": "agent-tool-search-mcp-ard",
+      "english": "agent-tool-search-mcp-ard-en",
+      "sourceSHA256": "5731618c209f50266bdfe7baf1e53bd6f510ce6cde6a5dcd6db9a1f26f2c7fac",
+      "englishSHA256": "03d9ae989a7d71ae3724635b3790c16b06e4bd7d233cb21bed56c8176222369f",
+      "sourcePublishDate": "2026-09-17T00:00:00Z",
+      "originalPath": "/blog/agent-tool-search-mcp-ard",
+      "englishPath": "/blog/agent-tool-search-mcp-ard-en"
+    },
+    {
+      "original": "agentic-workflows-noop-triage",
+      "english": "agentic-workflows-noop-triage-en",
+      "sourceSHA256": "6a2abad2b1ce24a14c1279aae108955ae3e827fe20904f5bc5f486025ba111cb",
+      "englishSHA256": "2d8a579a2a310e1fffe2df5e65f9cc2fc092f45e6687d967aad76e9785963264",
+      "sourcePublishDate": "2026-09-13T00:00:00Z",
+      "originalPath": "/blog/agentic-workflows-noop-triage",
+      "englishPath": "/blog/agentic-workflows-noop-triage-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-04-10",
+      "english": "ai-agent-engineering-news-2026-09-04-10-en",
+      "sourceSHA256": "56e9ac0471b5f37f0366030f5941f99b184677efee2db89004fed0cd01a15906",
+      "englishSHA256": "bc4573abbff2f8a23cc575fa0d4726a168d32ddbc5aed46953ddb3f91d23e7e8",
+      "sourcePublishDate": "2026-09-10T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-04-10",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-04-10-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-11-16",
+      "english": "ai-agent-engineering-news-2026-09-11-16-en",
+      "sourceSHA256": "e2909229a0214aad4b9fbe0af4833a0a1458c0d78423c42c6480da16674c895a",
+      "englishSHA256": "0e47a54b20bf5978f475a7bef03501b1506ff3840bba0ac0ef8c87b2d511cf5f",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-16",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-16-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-11-17",
+      "english": "ai-agent-engineering-news-2026-09-11-17-en",
+      "sourceSHA256": "0ad7033f11ebb67dfd971d266e8ff55a66fd6e788b75dd8e738c6bc5b76d5579",
+      "englishSHA256": "ae49e4039e06dd79711a8032dbe75fe661cf0ce4e6ca1474fe56b5ffe9c2f42f",
+      "sourcePublishDate": "2026-09-17T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-17",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-17-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-11-18",
+      "english": "ai-agent-engineering-news-2026-09-11-18-en",
+      "sourceSHA256": "534f55244d30df43bd568c5c4d2320d165c04a392f61164f1997d88b774228f1",
+      "englishSHA256": "a7ad5e54ab4f910cedb9d2dc1dbcc8892e3f860b93a1ebf623d2b9080502efc1",
+      "sourcePublishDate": "2026-09-18T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-18",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-18-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-18-19",
+      "english": "ai-agent-engineering-news-2026-09-18-19-en",
+      "sourceSHA256": "d1c36e5ee8064280f4a499c0dc71aebd6aebd7857c56f2a5e8b33cd91618e73d",
+      "englishSHA256": "def6c7f57df32e644f07d20d811132de8038acadd632ccf8a49236a126022e07",
+      "sourcePublishDate": "2026-09-19T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-18-19",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-18-19-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-18-20",
+      "english": "ai-agent-engineering-news-2026-09-18-20-en",
+      "sourceSHA256": "fe0e7656b6cdd7e4178292385e78b89fddc9cc5624cfdce9f052112dd27f7dc3",
+      "englishSHA256": "833de6d67e90607b661cdeb50a0d9b41b22fb568cc42d1c05d06eecf704fa1f1",
+      "sourcePublishDate": "2026-09-20T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-18-20",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-18-20-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-21",
+      "english": "ai-agent-engineering-news-2026-09-21-en",
+      "sourceSHA256": "6df6f22b181b6255cebea38fda146d684bfb81e6562129a9ddc879580e918c6e",
+      "englishSHA256": "2c1c5b30446f21e75115d816bde17d24e8db947e73206a6fba667cf84bce3e07",
+      "sourcePublishDate": "2026-09-21T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-21",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-21-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-22",
+      "english": "ai-agent-engineering-news-2026-09-22-en",
+      "sourceSHA256": "2ef75e2e6d5a992e6add735494f0523291da013e449be3c390cc2218ccc2e748",
+      "englishSHA256": "a2a03556e49b544c8e2dc2067128af38df8b03ee5be9d3d7a2e141e784bbd549",
+      "sourcePublishDate": "2026-09-22T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-22",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-22-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-23",
+      "english": "ai-agent-engineering-news-2026-09-23-en",
+      "sourceSHA256": "a80ec0645245ad6ef71b565ba6d63492d2d84dfcd353b59645707a9a82cbc801",
+      "englishSHA256": "b9d32f704a49cb8358f5d80962bc2be8eb467629a0a7cb7b5863b0366ec17ca0",
+      "sourcePublishDate": "2026-09-23T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-23",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-23-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-24-25",
+      "english": "ai-agent-engineering-news-2026-09-24-25-en",
+      "sourceSHA256": "471a7e3b10b62eb2c5ba563a06435667989cfbba8ff0caacb3284a3a44a4b11e",
+      "englishSHA256": "c3381230059a3a8ec8bc2d01866a472a3114b5460a0f0d93d19b31150c60818e",
+      "sourcePublishDate": "2026-09-25T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-24-25",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-24-25-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-25-26",
+      "english": "ai-agent-engineering-news-2026-09-25-26-en",
+      "sourceSHA256": "e52872c97697588df1db19bd8419840d45d30c0af77fb8decbc02deedec489bd",
+      "englishSHA256": "ca5d60133701dfe17edafd4f5655df5f96d709eb9970a06c84071c81637c0340",
+      "sourcePublishDate": "2026-09-26T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-25-26",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-25-26-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-26-27",
+      "english": "ai-agent-engineering-news-2026-09-26-27-en",
+      "sourceSHA256": "8c31cbc5bc692f0126b90a78975a875882f7ce862bd8e6555b5609c5ca7fa4d4",
+      "englishSHA256": "074fb12f6af66de2870738523d6fbdecd3ac0dcc0453eac54829b80c11033108",
+      "sourcePublishDate": "2026-09-27T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-26-27",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-26-27-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-27-28",
+      "english": "ai-agent-engineering-news-2026-09-27-28-en",
+      "sourceSHA256": "53f77e5d47d7dd722d664079295cd87935488fed8e6887bbd2ece46b94cb6967",
+      "englishSHA256": "529445c79ec1f44fe180ce57759a01fd093515bec0c64f348e53511db2e1a22f",
+      "sourcePublishDate": "2026-09-28T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-27-28",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-27-28-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-28-29",
+      "english": "ai-agent-engineering-news-2026-09-28-29-en",
+      "sourceSHA256": "39e0c6db590e8cb2d10bc115b7f7635c6804f3f2f5dee9f714fd0719f5211628",
+      "englishSHA256": "fe4a721a7c17e6905df0f0396e2e48020a5ac3fe36973ecfdfbf3bf0f4b6163e",
+      "sourcePublishDate": "2026-09-29T00:00:00Z",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-28-29",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-28-29-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-29-30",
+      "english": "ai-agent-engineering-news-2026-09-29-30-en",
+      "sourceSHA256": "020cec0bd8567a93b6b0af880852c86f5b5be03720dade00f25125784c57cf01",
+      "englishSHA256": "1b2e1f04aea5d1fa75614cb471070f0f8d72b399e9bcd407cdb74f7358e0b819",
+      "sourcePublishDate": "2026-09-30",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-29-30",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-29-30-en"
+    },
+    {
+      "original": "ai-agent-engineering-news-2026-09-30-10-01",
+      "english": "ai-agent-engineering-news-2026-09-30-10-01-en",
+      "sourceSHA256": "f6c03bae1e64b7f2f735faf355bfbf015bd344576ee899c898b48578ea684c62",
+      "englishSHA256": "b5165f570222eb3ba41035839adaf4c8cd34a1623ddda6b21d7b25b165589178",
+      "sourcePublishDate": "2026-10-01",
+      "originalPath": "/blog/ai-agent-engineering-news-2026-09-30-10-01",
+      "englishPath": "/blog/ai-agent-engineering-news-2026-09-30-10-01-en"
+    },
+    {
+      "original": "ai-engineering-harness",
+      "english": "ai-engineering-harness-en",
+      "sourceSHA256": "c2b3be9a7eca8535a6a8593762db30dbc2d7907268803913bb2bab2a57e98ff1",
+      "englishSHA256": "2e773e9556ad48623f2a71ae0d60850142151d27663a817b527ccf8bd406ee77",
+      "sourcePublishDate": "2026-08-02T00:00:00Z",
+      "originalPath": "/blog/ai-engineering-harness",
+      "englishPath": "/blog/ai-engineering-harness-en"
+    },
+    {
+      "original": "anthropic-agent-market-preference-negotiation",
+      "english": "anthropic-agent-market-preference-negotiation-en",
+      "sourceSHA256": "79077286a33c9c665643a85cbf76a4dc95a29cd31d7bb9f28467ef555e6f984d",
+      "englishSHA256": "a77b54d5cd60677d564ee5f1b921c23e86c1db91a6a73b2316855a5f26d1b68b",
+      "sourcePublishDate": "2026-09-25T00:00:00Z",
+      "originalPath": "/blog/anthropic-agent-market-preference-negotiation",
+      "englishPath": "/blog/anthropic-agent-market-preference-negotiation-en"
+    },
+    {
+      "original": "anthropic-art-scientific-agent-wetlab",
+      "english": "anthropic-art-scientific-agent-wetlab-en",
+      "sourceSHA256": "1e12addc3b0589e942c48a0b4e931d5ef997f3334c71e1739199f09a8a9b1569",
+      "englishSHA256": "575e32582f84e6404e45c63dd4310074742a8dc52a1ad92c338c1b34e551c57c",
+      "sourcePublishDate": "2026-09-24T00:00:00Z",
+      "originalPath": "/blog/anthropic-art-scientific-agent-wetlab",
+      "englishPath": "/blog/anthropic-art-scientific-agent-wetlab-en"
+    },
+    {
+      "original": "anthropic-embedded-evaluator-access",
+      "english": "anthropic-embedded-evaluator-access-en",
+      "sourceSHA256": "a76e74bd0a3cadeea71847bc97280e9c92bfa428b91467ec0a6e2259af367d21",
+      "englishSHA256": "a7f595c71e0578b7b0ee2d9f2acda76a13a440280a9cff48158b675561c8f0d6",
+      "sourcePublishDate": "2026-09-19T00:00:00Z",
+      "originalPath": "/blog/anthropic-embedded-evaluator-access",
+      "englishPath": "/blog/anthropic-embedded-evaluator-access-en"
+    },
+    {
+      "original": "aws-agent-proposal-validation",
+      "english": "aws-agent-proposal-validation-en",
+      "sourceSHA256": "2870c350e2a6543ddcc913ece25a24f4433e534f3ae3a63e87c15aa4225c7304",
+      "englishSHA256": "7944ec19e486a880f9a378d05cc75df3906a4555a259c652d68bbdb3421f1fa3",
+      "sourcePublishDate": "2026-09-14T00:00:00Z",
+      "originalPath": "/blog/aws-agent-proposal-validation",
+      "englishPath": "/blog/aws-agent-proposal-validation-en"
+    },
+    {
+      "original": "claude-chat-cowork-unified-mode",
+      "english": "claude-chat-cowork-unified-mode-en",
+      "sourceSHA256": "6b5f48ae74eafdf219078054db6e17323ff91b826c8adaeb71a70721933e0553",
+      "englishSHA256": "adf9d5e3f095237a7adcc4cefbd7cb7ac9f8e98859b8b9b324353dee383f5896",
+      "sourcePublishDate": "2026-09-17T00:00:00Z",
+      "originalPath": "/blog/claude-chat-cowork-unified-mode",
+      "englishPath": "/blog/claude-chat-cowork-unified-mode-en"
+    },
+    {
+      "original": "cloudflare-agent-traffic-economics",
+      "english": "cloudflare-agent-traffic-economics-en",
+      "sourceSHA256": "bd90bbe22c28fa7837127e7a15defebfb5a51dc5cbb4f4baf71edf1526ccf5de",
+      "englishSHA256": "6805484660f0672be693fa50e5ae35b4e35433a6af8ba950768492697e2593d7",
+      "sourcePublishDate": "2026-09-28T00:00:00Z",
+      "originalPath": "/blog/cloudflare-agent-traffic-economics",
+      "englishPath": "/blog/cloudflare-agent-traffic-economics-en"
+    },
+    {
+      "original": "cloudflare-cf-agent-native-cli",
+      "english": "cloudflare-cf-agent-native-cli-en",
+      "sourceSHA256": "20335bc1afb64f532247e99da9d69367668a4f9f7770cfae93579168dd0985a7",
+      "englishSHA256": "3f8c09f3e4a33c4d442b7c6963dc5e2505eac13a4533010414a7c1e5a6ad2319",
+      "sourcePublishDate": "2026-09-29T00:00:00Z",
+      "originalPath": "/blog/cloudflare-cf-agent-native-cli",
+      "englishPath": "/blog/cloudflare-cf-agent-native-cli-en"
+    },
+    {
+      "original": "cloudflare-python-workers-agent-backend",
+      "english": "cloudflare-python-workers-agent-backend-en",
+      "sourceSHA256": "15d82dafdd2cff9e81e1ae55e9b2c11828707110405ec90e8d3722f4597e9593",
+      "englishSHA256": "2f37eca33bdead2da2b8c1e5240bf2f2ed510da5e6813d3227b83c099a7f9153",
+      "sourcePublishDate": "2026-09-22T00:00:00Z",
+      "originalPath": "/blog/cloudflare-python-workers-agent-backend",
+      "englishPath": "/blog/cloudflare-python-workers-agent-backend-en"
+    },
+    {
+      "original": "coding-agent-long-task-eval-completion-rate",
+      "english": "coding-agent-long-task-eval-completion-rate-en",
+      "sourceSHA256": "48bd05e85094d3992e125ee367b6492e95ddc5aba904cf256dca0915db432635",
+      "englishSHA256": "4978f73b1763d2d0bb190f3f29d1f5ec8fb068cf1f7a716c3657e437298198ff",
+      "sourcePublishDate": "2026-09-20T00:00:00Z",
+      "originalPath": "/blog/coding-agent-long-task-eval-completion-rate",
+      "englishPath": "/blog/coding-agent-long-task-eval-completion-rate-en"
+    },
+    {
+      "original": "coding-agent-prompt-audit-migration-eval",
+      "english": "coding-agent-prompt-audit-migration-eval-en",
+      "sourceSHA256": "24dc191308f9b1055f705b2f21b80bc6d095961bd0bce5c11ca61f19e7a9c99f",
+      "englishSHA256": "d5abb7ea40a335ba20ffcf8e174f24ff22f82232f4fd41cfcff95683364402d7",
+      "sourcePublishDate": "2026-09-27T00:00:00Z",
+      "originalPath": "/blog/coding-agent-prompt-audit-migration-eval",
+      "englishPath": "/blog/coding-agent-prompt-audit-migration-eval-en"
+    },
+    {
+      "original": "coding-agent-supply-chain-security",
+      "english": "coding-agent-supply-chain-security-en",
+      "sourceSHA256": "ece1b82643588291e4394c04d802fb35d5566be4f672876c1ee230928893a386",
+      "englishSHA256": "77543e04bb7af1d946e0e83ae4e8e5ce39a88368d394525d46a37c5431850d6c",
+      "sourcePublishDate": "2026-09-08T00:00:00Z",
+      "originalPath": "/blog/coding-agent-supply-chain-security",
+      "englishPath": "/blog/coding-agent-supply-chain-security-en"
+    },
+    {
+      "original": "company-brain-agent-memory-permissions",
+      "english": "company-brain-agent-memory-permissions-en",
+      "sourceSHA256": "bd41523749373c0e7efb45257bb4a0d2751fae7552e0d18df6731c99c9e0c530",
+      "englishSHA256": "6140389f3b0c03057e1db5fb858e55eb3df1f6acd96afbe7cd7df76b0ca3ae98",
+      "sourcePublishDate": "2026-09-27T00:00:00Z",
+      "originalPath": "/blog/company-brain-agent-memory-permissions",
+      "englishPath": "/blog/company-brain-agent-memory-permissions-en"
+    },
+    {
+      "original": "emdash-decentralized-plugin-registry",
+      "english": "emdash-decentralized-plugin-registry-en",
+      "sourceSHA256": "3c8973dabcbe765e38c23ea84c52faa2c4600b976658a223bec4b371aa075feb",
+      "englishSHA256": "5d9b567f5c3431c0f3f19868bccaaa35e4622cfd9cf19e52764352839d0ea680",
+      "sourcePublishDate": "2026-09-30T00:00:00Z",
+      "originalPath": "/blog/emdash-decentralized-plugin-registry",
+      "englishPath": "/blog/emdash-decentralized-plugin-registry-en"
+    },
+    {
+      "original": "fde-enterprise-ai-engineering-role",
+      "english": "fde-enterprise-ai-engineering-role-en",
+      "sourceSHA256": "52e1ab1ea0b574b1a6553515272dad624556e8b8d65c803593d37e650ab759a5",
+      "englishSHA256": "b8963c2a9449c36d0c2dc1f1dfa102510b0f7317b0036ba78e63ac977e882288",
+      "sourcePublishDate": "2026-09-20T00:00:00Z",
+      "originalPath": "/blog/fde-enterprise-ai-engineering-role",
+      "englishPath": "/blog/fde-enterprise-ai-engineering-role-en"
+    },
+    {
+      "original": "financial-markets-zero-to-one-roadmap",
+      "english": "financial-markets-zero-to-one-roadmap-en",
+      "sourceSHA256": "5692f5e2689a340b52b81fd955db73f3c3e5e2bdf0196be58b29df0f6f1fe6e1",
+      "englishSHA256": "ad02e3158216861aa6ae87c7eccdcb94d5d6c82f0bc9bc3fae23fa79bebf8a45",
+      "sourcePublishDate": "2026-09-24T00:00:00Z",
+      "originalPath": "/blog/financial-markets-zero-to-one-roadmap",
+      "englishPath": "/blog/financial-markets-zero-to-one-roadmap-en"
+    },
+    {
+      "original": "foreman-coding-agent-supervisor",
+      "english": "foreman-coding-agent-supervisor-en",
+      "sourceSHA256": "2fccafdc3d10a947dc88fb6f7bb481124a74029eaf85622da9337bb1141ba7f2",
+      "englishSHA256": "c4cd9b66cc671184d38fedd301adcf139a6e75cef1792ec45aceb3a46ba86272",
+      "sourcePublishDate": "2026-09-17T00:00:00Z",
+      "originalPath": "/blog/foreman-coding-agent-supervisor",
+      "englishPath": "/blog/foreman-coding-agent-supervisor-en"
+    },
+    {
+      "original": "free-vision-skill",
+      "english": "free-vision-skill-en",
+      "sourceSHA256": "082cb2a75c2adc999a778e50e92c6196b4c2febc1313167f28ff24eb1572748b",
+      "englishSHA256": "48f16d4dfc86c90ac5a176b352a1bbd10ca098a5bd882806939fd1294832e1d2",
+      "sourcePublishDate": "2026-08-01T00:00:00Z",
+      "originalPath": "/blog/free-vision-skill",
+      "englishPath": "/blog/free-vision-skill-en"
+    },
+    {
+      "original": "gemini-live-background-reasoning",
+      "english": "gemini-live-background-reasoning-en",
+      "sourceSHA256": "0555e34c5f133a7e2993274203fd62d1e165b613b6debd24bf785f6ab83aa741",
+      "englishSHA256": "e965d6424f0c47fd3ef06dc5177710d6155f21ba20f23aa50ffb95b14d3f296b",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/gemini-live-background-reasoning",
+      "englishPath": "/blog/gemini-live-background-reasoning-en"
+    },
+    {
+      "original": "git-sha-pinning-final-head-verification",
+      "english": "git-sha-pinning-final-head-verification-en",
+      "sourceSHA256": "3aaad5308aa3b43db470be3942e5722c2336416979e49d56c2e1dea9dcfb41ab",
+      "englishSHA256": "7a6c7ba8e79101969b9f581e9801e04ac21ec69f99b59af54745051b88ff051b",
+      "sourcePublishDate": "2026-09-22T00:00:00Z",
+      "originalPath": "/blog/git-sha-pinning-final-head-verification",
+      "englishPath": "/blog/git-sha-pinning-final-head-verification-en"
+    },
+    {
+      "original": "github-agentic-autofix-copilot-memory",
+      "english": "github-agentic-autofix-copilot-memory-en",
+      "sourceSHA256": "a3be79148b80a4e4fae19f8ce2acebe0d54c1288afd8de69b91afaffca646840",
+      "englishSHA256": "82a206bc56e565f0ccc578df12a390f0b94bcf56ab2ae21573ee03cbefbb0b16",
+      "sourcePublishDate": "2026-09-26T00:00:00Z",
+      "originalPath": "/blog/github-agentic-autofix-copilot-memory",
+      "englishPath": "/blog/github-agentic-autofix-copilot-memory-en"
+    },
+    {
+      "original": "github-agentic-workflows",
+      "english": "github-agentic-workflows-en",
+      "sourceSHA256": "5fde50cd634b59242e49df86649e8a4ac142d5348623f4996c7f3d995dd07a6c",
+      "englishSHA256": "1f4bc9510d7322b79fc80bead8ab6bd03878e471cea93d0ef375413bb28a852f",
+      "sourcePublishDate": "2026-09-08T00:00:00Z",
+      "originalPath": "/blog/github-agentic-workflows",
+      "englishPath": "/blog/github-agentic-workflows-en"
+    },
+    {
+      "original": "github-security-lab-agent-fuzzing-loop",
+      "english": "github-security-lab-agent-fuzzing-loop-en",
+      "sourceSHA256": "def1b9db88632ffdf7b0051b2d31a9a0cf0d95f6e866026d3e7c942e78ef08f0",
+      "englishSHA256": "f6c63d735c315dc13710cf11ac1da2926e33834b4b1f7529396846b802d8b72e",
+      "sourcePublishDate": "2026-09-25T00:00:00Z",
+      "originalPath": "/blog/github-security-lab-agent-fuzzing-loop",
+      "englishPath": "/blog/github-security-lab-agent-fuzzing-loop-en"
+    },
+    {
+      "original": "google-agent-plugins-skills-mcp",
+      "english": "google-agent-plugins-skills-mcp-en",
+      "sourceSHA256": "7be2d9c266ff028304c733180b22cd8a05b71cffb4cdae5a2c3c4e3bcfc753d9",
+      "englishSHA256": "54fd443196893d86714a4b66cb7c49e9251657a07cea3879a1dca57a9d4e5d1e",
+      "sourcePublishDate": "2026-09-11T00:00:00Z",
+      "originalPath": "/blog/google-agent-plugins-skills-mcp",
+      "englishPath": "/blog/google-agent-plugins-skills-mcp-en"
+    },
+    {
+      "original": "gpt6-prompt-cache-agent-state-layer",
+      "english": "gpt6-prompt-cache-agent-state-layer-en",
+      "sourceSHA256": "d5ec1b07337824b3bba84d103f296245420837f8edb81f442efda6ca4a574132",
+      "englishSHA256": "8b84802b35460f9a4a34890bddb7d163444880c64042a6172eb2aa849b328cd2",
+      "sourcePublishDate": "2026-09-23T00:00:00Z",
+      "originalPath": "/blog/gpt6-prompt-cache-agent-state-layer",
+      "englishPath": "/blog/gpt6-prompt-cache-agent-state-layer-en"
+    },
+    {
+      "original": "herdr-coding-agent-runtime",
+      "english": "herdr-coding-agent-runtime-en",
+      "sourceSHA256": "8d13bd77e012cd23a9411a87543b1cefcf52a6f42c17bbd5b56b0dc38bdd216d",
+      "englishSHA256": "2e8b103ef270e3bd7afcd1f4b3427cfd6e09cc8d90962472187f14e00be40776",
+      "sourcePublishDate": "2026-09-12T00:00:00Z",
+      "originalPath": "/blog/herdr-coding-agent-runtime",
+      "englishPath": "/blog/herdr-coding-agent-runtime-en"
+    },
+    {
+      "original": "hermes-minimax-media",
+      "english": "hermes-minimax-media-en",
+      "sourceSHA256": "527df08b4f556b84c7bdee0361a0f80fb9b1c4082b34592a01585f0d21fefcf3",
+      "englishSHA256": "b3595cb92acf20bef8d43492036a72fc50e52e55f2c4e4461d29b99867f95d62",
+      "sourcePublishDate": "2026-07-10T00:00:00Z",
+      "originalPath": "/blog/hermes-minimax-media",
+      "englishPath": "/blog/hermes-minimax-media-en"
+    },
+    {
+      "original": "hermes-stepfun-imagegen",
+      "english": "hermes-stepfun-imagegen-en",
+      "sourceSHA256": "3b2fcabc99b2060e912cc7b0966b2d76e1745548ae4d60bbf3856ed2ab1fce9c",
+      "englishSHA256": "d0d884da5040ab30a753b9ab5c8e226043e103bd242ca59c2e51b0df29dd12de",
+      "sourcePublishDate": "2026-07-10T00:00:00Z",
+      "originalPath": "/blog/hermes-stepfun-imagegen",
+      "englishPath": "/blog/hermes-stepfun-imagegen-en"
+    },
+    {
+      "original": "hyperframes-html-video-engineering",
+      "english": "hyperframes-html-video-engineering-en",
+      "sourceSHA256": "cb3ddb47e84618f4c201cd329fbba106e9da5453052e5dd39e05ebddd41300b5",
+      "englishSHA256": "65fa224d093a860d6bc7d79e6cb2478e3de34d2a95f04462c706758d8fb3eec9",
+      "sourcePublishDate": "2026-09-13T00:00:00Z",
+      "originalPath": "/blog/hyperframes-html-video-engineering",
+      "englishPath": "/blog/hyperframes-html-video-engineering-en"
+    },
+    {
+      "original": "jcode-agent-harness",
+      "english": "jcode-agent-harness-en",
+      "sourceSHA256": "f2265624261fef4c70db0a304211fa6e1f390a0b3fa2a5ac10146439de558e8c",
+      "englishSHA256": "5b6a424f4a4239fd8aeb25114184484ffe167a4c13fde45f7ba988c3b34e92fa",
+      "sourcePublishDate": "2026-09-09T00:00:00Z",
+      "originalPath": "/blog/jcode-agent-harness",
+      "englishPath": "/blog/jcode-agent-harness-en"
+    },
+    {
+      "original": "jev-code-reviewer-pr-priority",
+      "english": "jev-code-reviewer-pr-priority-en",
+      "sourceSHA256": "1141a510096b8521ab858aff66629e48a20044ea3e6e544837b40f163845ef5f",
+      "englishSHA256": "35ad7a985d233259418cf027868e72cff0f1be6824684ee3ab31e91999f69880",
+      "sourcePublishDate": "2026-09-26T00:00:00Z",
+      "originalPath": "/blog/jev-code-reviewer-pr-priority",
+      "englishPath": "/blog/jev-code-reviewer-pr-priority-en"
+    },
+    {
+      "original": "jev-typed-agent-decisions",
+      "english": "jev-typed-agent-decisions-en",
+      "sourceSHA256": "28defb170144729c3b399b215cecb0e9e68019f92814e98c58de3af8a1a84f49",
+      "englishSHA256": "45506c021f53bc8c8cfe6ebc30ba3fd5346de7ae88a657db01576e435b78cd22",
+      "sourcePublishDate": "2026-09-20T00:00:00Z",
+      "originalPath": "/blog/jev-typed-agent-decisions",
+      "englishPath": "/blog/jev-typed-agent-decisions-en"
+    },
+    {
+      "original": "json-render-constrained-generative-ui",
+      "english": "json-render-constrained-generative-ui-en",
+      "sourceSHA256": "e6bd77fb59ce1ece473b1bf2f986927e26934c17025a172bf0a10c065a3c0eb0",
+      "englishSHA256": "cd0b111be3e4e337acc6f29145fe579e6cd2e9d7fd5de09f5fc93dc104f08af6",
+      "sourcePublishDate": "2026-09-22T00:00:00Z",
+      "originalPath": "/blog/json-render-constrained-generative-ui",
+      "englishPath": "/blog/json-render-constrained-generative-ui-en"
+    },
+    {
+      "original": "kitaru-agent-regression-testing",
+      "english": "kitaru-agent-regression-testing-en",
+      "sourceSHA256": "66f55dd41f6f660d9a20b8087334381d51cc9d2c08ef44d383114c71eb6105cf",
+      "englishSHA256": "580e5c91f11c80e022958fb3bd4cdfe5881ce2a7f6f9af6833cc30c0e58cb699",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/kitaru-agent-regression-testing",
+      "englishPath": "/blog/kitaru-agent-regression-testing-en"
+    },
+    {
+      "original": "link-cli-agent-payment",
+      "english": "link-cli-agent-payment-en",
+      "sourceSHA256": "ea0d5aa1aeb1591bdde92f1a1d7b4307531cc62010762bd49df6675a252d84cf",
+      "englishSHA256": "514a1f1aeed58ffd78178b53a00af62e07b296ecdb9d1c9b2cf8dcb9241126f0",
+      "sourcePublishDate": "2026-09-24T00:00:00Z",
+      "originalPath": "/blog/link-cli-agent-payment",
+      "englishPath": "/blog/link-cli-agent-payment-en"
+    },
+    {
+      "original": "lobsterai-mobile-desktop-agent",
+      "english": "lobsterai-mobile-desktop-agent-en",
+      "sourceSHA256": "b6a92053309ec9070f2bd7b080edbcd8bdbffbcaddc5aad9532dc331dd2d3ebf",
+      "englishSHA256": "b83e47e0a3d402b533c542029988de4af5fd736bd67a350b658ea9bdae706399",
+      "sourcePublishDate": "2026-09-23T00:00:00Z",
+      "originalPath": "/blog/lobsterai-mobile-desktop-agent",
+      "englishPath": "/blog/lobsterai-mobile-desktop-agent-en"
+    },
+    {
+      "original": "long-running-agent-session-context-state",
+      "english": "long-running-agent-session-context-state-en",
+      "sourceSHA256": "6c7cb510888ce5db3f56465bc8572b7fb3321dbe30c102c46bca3cc94638e688",
+      "englishSHA256": "c7911f18716d5e61a085b27543eafb2693ecb0f9e0d1764e36fabd93b1c419e0",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/long-running-agent-session-context-state",
+      "englishPath": "/blog/long-running-agent-session-context-state-en"
+    },
+    {
+      "original": "loop-engineering-harness",
+      "english": "loop-engineering-harness-en",
+      "sourceSHA256": "c5dfb4ac51257de652e15e994126b16fd3b80f1ca5dbfaa25e1585ac09e71fa5",
+      "englishSHA256": "b9a11f2bce9363b7889c9192ac917ff88509462c2d41455dfe9257f339e5e422",
+      "sourcePublishDate": "2026-06-16T00:00:00Z",
+      "originalPath": "/blog/loop-engineering-harness",
+      "englishPath": "/blog/loop-engineering-harness-en"
+    },
+    {
+      "original": "mentraos-smart-glasses-runtime",
+      "english": "mentraos-smart-glasses-runtime-en",
+      "sourceSHA256": "b1c2103740e3d2955dc0f5c82d846510547ca42b485254472a5ead42acbf6d0b",
+      "englishSHA256": "0df8251d2970d79e8ebcf6db61120cb8fb37f20bac45a42b125aca3b66a08536",
+      "sourcePublishDate": "2026-09-28T00:00:00Z",
+      "originalPath": "/blog/mentraos-smart-glasses-runtime",
+      "englishPath": "/blog/mentraos-smart-glasses-runtime-en"
+    },
+    {
+      "original": "microsoft-copilot-managed-runtime-app-delivery",
+      "english": "microsoft-copilot-managed-runtime-app-delivery-en",
+      "sourceSHA256": "e4f07dbf33e6ece781386e14e989facc521f96617ce5da05f720655c1af7508e",
+      "englishSHA256": "682bdbddd7599da3365e36c82e8d3a174f2793f83c359983c7b916511c72b091",
+      "sourcePublishDate": "2026-09-27T00:00:00Z",
+      "originalPath": "/blog/microsoft-copilot-managed-runtime-app-delivery",
+      "englishPath": "/blog/microsoft-copilot-managed-runtime-app-delivery-en"
+    },
+    {
+      "original": "minecraft-agent-layered-planning-action",
+      "english": "minecraft-agent-layered-planning-action-en",
+      "sourceSHA256": "32ad08e4edb885e43624a984124514a218756baf4d765326bda0535b9f8f921d",
+      "englishSHA256": "9a4dadcb8059b3835a38361be8ce8ed5b5f746eca2d642608357af4046a96a6a",
+      "sourcePublishDate": "2026-09-21T00:00:00Z",
+      "originalPath": "/blog/minecraft-agent-layered-planning-action",
+      "englishPath": "/blog/minecraft-agent-layered-planning-action-en"
+    },
+    {
+      "original": "multi-agent-dependency-aware-delegation",
+      "english": "multi-agent-dependency-aware-delegation-en",
+      "sourceSHA256": "d2e919be31d23b4830ec579bff26a1fbbae10fd2bfb9d52aa94d065c5dd045b7",
+      "englishSHA256": "53db8c88207c0d6eab1191747f3991654ebe578500b037cd0ce4e3205d03c9b5",
+      "sourcePublishDate": "2026-09-21T00:00:00Z",
+      "originalPath": "/blog/multi-agent-dependency-aware-delegation",
+      "englishPath": "/blog/multi-agent-dependency-aware-delegation-en"
+    },
+    {
+      "original": "munim-accessibility-computer-use",
+      "english": "munim-accessibility-computer-use-en",
+      "sourceSHA256": "41e723541061539d6c72fe094eab2fd24fe8b3d1723ea28e61b93d0ef8f3dfd9",
+      "englishSHA256": "5a1c585b8102c9d0419ffab8e94f25a205c9bc4f9c4f8302505bee394b7d6863",
+      "sourcePublishDate": "2026-09-10T00:00:00Z",
+      "originalPath": "/blog/munim-accessibility-computer-use",
+      "englishPath": "/blog/munim-accessibility-computer-use-en"
+    },
+    {
+      "original": "nvidia-openshell-runtime-policy",
+      "english": "nvidia-openshell-runtime-policy-en",
+      "sourceSHA256": "be862c0d7a04aa74f8db3bb8774d43696a55e25fec87ddb429a256d0f1f59f9f",
+      "englishSHA256": "1ca4a615bd98c68d61afd764c62f0f64f52714c062b202a82dd6034f759e2436",
+      "sourcePublishDate": "2026-09-29T00:00:00Z",
+      "originalPath": "/blog/nvidia-openshell-runtime-policy",
+      "englishPath": "/blog/nvidia-openshell-runtime-policy-en"
+    },
+    {
+      "original": "openai-agents-api-browser-authentication",
+      "english": "openai-agents-api-browser-authentication-en",
+      "sourceSHA256": "3b8a3d1b20ee13733008e623885f6df4b39846604269d4ed0ecb249179050f6f",
+      "englishSHA256": "42b3b21190f84658cd7be632ea5b31b1c570ec68054fac6e189df9b1e48acb35",
+      "sourcePublishDate": "2026-09-30",
+      "originalPath": "/blog/openai-agents-api-browser-authentication",
+      "englishPath": "/blog/openai-agents-api-browser-authentication-en"
+    },
+    {
+      "original": "openai-research-agent-workdays",
+      "english": "openai-research-agent-workdays-en",
+      "sourceSHA256": "16ad20f254df357291c555b3e5b5dddc79f883ecf9a69e89eee42c320c687547",
+      "englishSHA256": "0ddfbca1b787b9a3b86e2b901c4318d2263390a257a3af75de97c13e34179089",
+      "sourcePublishDate": "2026-09-09T00:00:00Z",
+      "originalPath": "/blog/openai-research-agent-workdays",
+      "englishPath": "/blog/openai-research-agent-workdays-en"
+    },
+    {
+      "original": "opencloak-local-pii-redaction",
+      "english": "opencloak-local-pii-redaction-en",
+      "sourceSHA256": "45d340395e6a6d099123501ec6dd439d75514079ddd295207131156b69ddea50",
+      "englishSHA256": "420384c22f6fdfef349560ce55298d601c1dbd4ea16ce03946eaa63ca14a12da",
+      "sourcePublishDate": "2026-09-20T00:00:00Z",
+      "originalPath": "/blog/opencloak-local-pii-redaction",
+      "englishPath": "/blog/opencloak-local-pii-redaction-en"
+    },
+    {
+      "original": "opencompany-versioned-agent-config",
+      "english": "opencompany-versioned-agent-config-en",
+      "sourceSHA256": "e7bf3fc27e4771c307464e232f282acf21c33110c79d8e725fedbe1ab42f233a",
+      "englishSHA256": "88d91296bb7a41bf92de620a094ab289b5349f0ad4c45b1e6ed360563db6461a",
+      "sourcePublishDate": "2026-09-11T00:00:00Z",
+      "originalPath": "/blog/opencompany-versioned-agent-config",
+      "englishPath": "/blog/opencompany-versioned-agent-config-en"
+    },
+    {
+      "original": "qwen-image-2-1-rgba-license",
+      "english": "qwen-image-2-1-rgba-license-en",
+      "sourceSHA256": "738b3d7d73c6da92975c01e5a9e7aecd10f5e5198496870e9b4eed4eb81c184e",
+      "englishSHA256": "9b6bf5a0597c7d663580e00a1f8264e3619ecd93950efeb747d1d5fb5364e178",
+      "sourcePublishDate": "2026-09-21T00:00:00Z",
+      "originalPath": "/blog/qwen-image-2-1-rgba-license",
+      "englishPath": "/blog/qwen-image-2-1-rgba-license-en"
+    },
+    {
+      "original": "rtk-agent-shell-output-filter",
+      "english": "rtk-agent-shell-output-filter-en",
+      "sourceSHA256": "8b07b1e01a109ebcfff6f118e1628d7a29724f31f3157804e205306372e8f3e4",
+      "englishSHA256": "0ffc29d9d038f83320e7b176ad8237a278a5ffc56ce0b53567553166f3357c3f",
+      "sourcePublishDate": "2026-09-12T00:00:00Z",
+      "originalPath": "/blog/rtk-agent-shell-output-filter",
+      "englishPath": "/blog/rtk-agent-shell-output-filter-en"
+    },
+    {
+      "original": "sandbox",
+      "english": "sandbox-en",
+      "sourceSHA256": "37046e679602bd172658dd1d2ad6780ebfeb18c710d855c14857033b8b4d0e1e",
+      "englishSHA256": "3d53817fe613466a2687c668b4a950d1a6af5494ebcce17f40d0c4dc03897efd",
+      "sourcePublishDate": "2026-06-16T00:00:00Z",
+      "originalPath": "/blog/sandbox",
+      "englishPath": "/blog/sandbox-en"
+    },
+    {
+      "original": "skill-up-stateful-multiturn-eval",
+      "english": "skill-up-stateful-multiturn-eval-en",
+      "sourceSHA256": "52542f580c5fbbb5ff19455cf461d916d2b3d31ad850161cc0acf67fe0f45a41",
+      "englishSHA256": "f9b8f2a7007db8fbab0d9526edd2ffdb15a8c94f35859858ff8226cc5e59fadf",
+      "sourcePublishDate": "2026-09-18T00:00:00Z",
+      "originalPath": "/blog/skill-up-stateful-multiturn-eval",
+      "englishPath": "/blog/skill-up-stateful-multiturn-eval-en"
+    },
+    {
+      "original": "skills-manager-multi-agent-skill-sync",
+      "english": "skills-manager-multi-agent-skill-sync-en",
+      "sourceSHA256": "54feac3c442ab577560af1a06596b984f38c8a035b71ad599a60d94f0536e885",
+      "englishSHA256": "3de887bf20a1d425582859c148ab3fc3f7ca27e91afb5f628060d29edf3c7713",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/skills-manager-multi-agent-skill-sync",
+      "englishPath": "/blog/skills-manager-multi-agent-skill-sync-en"
+    },
+    {
+      "original": "splash-model-specific-local-llm",
+      "english": "splash-model-specific-local-llm-en",
+      "sourceSHA256": "1168fa422d33b3488f5ec555f376d8ca30c8fbcc34395dea89d090ace13a39a2",
+      "englishSHA256": "5b16ac7414704dad378c770fb1b4b354e142e2f64d774f38815e75b8749d60c1",
+      "sourcePublishDate": "2026-09-18T00:00:00Z",
+      "originalPath": "/blog/splash-model-specific-local-llm",
+      "englishPath": "/blog/splash-model-specific-local-llm-en"
+    },
+    {
+      "original": "tau-agent-architecture",
+      "english": "tau-agent-architecture-en",
+      "sourceSHA256": "f70afc472b87266ab1e1ff3b84c4a61348c3b92de54e2dddc05f385b50b10071",
+      "englishSHA256": "e38248d3d3b267499e82d6effac7f39232b37807ad502da65e1c4ee4d9c0b058",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/tau-agent-architecture",
+      "englishPath": "/blog/tau-agent-architecture-en"
+    },
+    {
+      "original": "tau-agent-loop-events",
+      "english": "tau-agent-loop-events-en",
+      "sourceSHA256": "1e78cc8dcb25e74b72b242c8b32f34d1b8810ad0d0d81141f71cf5278dcc8e41",
+      "englishSHA256": "d7f359e5b58afcca1cf015425530421910a22744e5542db96d37323ea158ff2d",
+      "sourcePublishDate": "2026-09-16T00:00:00Z",
+      "originalPath": "/blog/tau-agent-loop-events",
+      "englishPath": "/blog/tau-agent-loop-events-en"
+    }
+  ],
+  "retainedChinesePixelMedia": [
+    {
+      "path": "src/assets/blog/agent-demo-harness-control-layer/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original Chinese labels retained with English alt text and a visible label explanation"
+    },
+    {
+      "path": "src/assets/blog/agent-eval-monitor-coverage/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original Chinese labels retained with English alt text and a visible label explanation"
+    },
+    {
+      "path": "src/assets/blog/agentic-workflows-noop-triage/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original Chinese labels retained with English alt text and a visible label explanation"
+    },
+    {
+      "path": "src/assets/blog/aws-agent-proposal-validation/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original Chinese labels retained with English alt text and visible label explanation"
+    },
+    {
+      "path": "src/assets/blog/coding-agent-supply-chain-security/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original Chinese labels retained with English alt text and visible label explanation"
+    },
+    {
+      "path": "src/assets/blog/foreman-coding-agent-supervisor/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original bitmap inspected and retained; translated alt and opening explanation identify the Chinese label and explain the Worker → evidence → Foreman → Policy flow."
+    },
+    {
+      "path": "src/assets/blog/github-agentic-workflows/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Original bitmap inspected and retained; translated alt and opening explanation identify both Chinese labels and explain the workflow."
+    },
+    {
+      "path": "src/assets/blog/herdr-coding-agent-runtime/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "English alt text and opening paragraph explicitly identify original Chinese labels"
+    },
+    {
+      "path": "src/assets/blog/hyperframes-html-video-engineering/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "English alt text and opening paragraph explicitly identify original Chinese labels"
+    },
+    {
+      "path": "src/assets/blog/jcode-agent-harness/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "English alt text and opening paragraph explicitly identify original Chinese labels"
+    },
+    {
+      "path": "public/images/blog/hermes-minimax-media/city.webp",
+      "type": "sample",
+      "handling": "Alt text and adjacent English paragraph identify original generated sign text; no claim the bitmap is English"
+    },
+    {
+      "path": "src/assets/blog/minecraft-agent-layered-planning-action/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Astra planning; JEV action selection; Mineflayer execution; Structured state. English prose before the first heading explains the arrows and state feedback."
+    },
+    {
+      "path": "src/assets/blog/munim-accessibility-computer-use/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Control tree; Element ID; Verification. English prose before the first heading explains targeting and verification."
+    },
+    {
+      "path": "src/assets/blog/opencloak-local-pii-redaction/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Accurate English cover alt and visible English paragraph translate all cover labels"
+    },
+    {
+      "path": "src/assets/blog/opencompany-versioned-agent-config/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Accurate English cover alt and visible English paragraph translate all cover labels"
+    },
+    {
+      "path": "src/assets/blog/rtk-agent-shell-output-filter/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Accurate English cover alt and visible English paragraph translate all cover labels"
+    },
+    {
+      "path": "src/assets/blog/skills-manager-multi-agent-skill-sync/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Accurate English cover alt and visible English paragraph translate all cover labels"
+    },
+    {
+      "path": "src/assets/blog/splash-model-specific-local-llm/lora-explainer-v2.webp",
+      "type": "cover",
+      "handling": "Accurate English cover alt and visible English paragraph translate all cover labels"
+    },
+    {
+      "path": "src/assets/blog/tau-agent-loop-events/agent_event_loop.png",
+      "type": "body figure",
+      "handling": "Existing complete English caption explains the retained Chinese diagram sequence"
+    }
+  ]
+}

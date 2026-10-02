@@ -1,0 +1,109 @@
+---
+title: 'Claude takes a candidate to the lab, not a new CRISPR'
+description: 'About 950 Claude agents helped identify ART. Human wet-lab experiments confirmed short RNA expression, but its main biological function remains unknown.'
+publishDate: '2026-09-24T00:00:00Z'
+tags: ['Claude', 'Anthropic', 'AI for Science', 'AI Agent', 'Bioinformatics']
+contentType: 'technical'
+topics: ['agents', 'multi-agent', 'ai-research']
+language: 'en-US'
+translationOf: 'anthropic-art-scientific-agent-wetlab'
+draft: false
+---
+
+On September 23, 2026, Anthropic published a set of early results from its life sciences research group and wet lab.
+
+The claim most likely to spread is "Claude discovered a new CRISPR." That exceeds the current evidence.
+
+A more accurate account is that Claude agents proposed a candidate in large-scale genomic data that had not previously been described as a complete system. Human scientists then conducted wet-lab experiments and confirmed that its repeat arrays produce short RNAs. The system is called ART, or array-associated reverse transcriptases. ART's main biological function is still unknown.
+
+## What the AI did
+
+Anthropic gave Claude a broad research task: search DNA sequence databases for reverse transcriptase systems worth further study.
+
+According to Anthropic's public account, the search lasted about 21 hours, ran about 950 agents, and consumed about 210 million tokens.
+
+The agents collected more than 200,000 reverse transcriptases, selected about 3,500 novel candidate systems, and narrowed those to 20 priority candidates with accompanying reports.
+
+ART emerged from this screening process. While examining the DNA around an unusual reverse transcriptase, one agent noticed regularly repeating sequences nearby. It continued checking the number and spacing of repeats, compared known systems, searched the literature, and ultimately submitted the candidate to human researchers.
+
+The point worth examining is how the agent narrowed an anomaly in a large dataset into a candidate ready for experimentation, rather than simply answering a biology question.
+
+## What the human experiments confirmed
+
+The ART system Anthropic describes contains a reverse transcriptase, a neighboring partner gene, and a regularly arranged DNA repeat array. It is found primarily in bacteriophages.
+
+The underlying reverse transcriptase had already been studied, so the entire molecular system cannot be described as something Claude discovered for the first time.
+
+Anthropic's new claim is that Claude connected the reverse transcriptase, repeat array, and partner protein as a previously uncharacterized system.
+
+Human scientists conducted the subsequent wet-lab experiments. Initial results showed that ART repeat arrays are expressed as different short RNAs.
+
+That gives the candidate experimental support, but it does not answer the most important question: what ART actually does.
+
+## Why this cannot be called "AI discovers a new CRISPR"
+
+CRISPR's importance comes from a defined biological mechanism and the programmable engineering capabilities developed afterward. Regular repeating sequences alone do not establish the same mechanism.
+
+Several clues have been observed for ART.
+
+- It contains regularly arranged DNA repeat arrays
+- The repeat arrays produce short RNAs
+- Neighboring regions contain a reverse transcriptase and a partner gene
+
+But Anthropic explicitly states that ART's main function remains under investigation.
+
+The supported claim is therefore that the research proposes a novel reverse transcriptase system candidate with CRISPR-like repeat arrays. It cannot yet be called a new gene-editing mechanism or something already usable for gene editing.
+
+## The more important change for scientific agents
+
+Many earlier AI for Science demonstrations focused on reading papers, organizing information, proposing research questions, and suggesting experiments.
+
+This public material moves the acceptance criterion one step further.
+
+A research question first becomes a sequence search. Agents expand the candidate set and then narrow it. Humans need to review only a small number of priority reports. Finally, the lab tests whether the candidates actually produce observable phenomena.
+
+This means a scientific agent's output can become a candidate worth the cost of a real experiment, rather than just a plausible-sounding answer.
+
+But one successful hit is not enough.
+
+Before this can become a regular research workflow, several questions remain. Can the same candidates be found consistently? Can the screening criteria be explained? Can the experimental results be reproduced? Can failed experiments inform the next search round?
+
+## The limits of this result
+
+Anthropic's technical report is currently a preprint and has not undergone peer review.
+
+ART's main function is unknown.
+
+Human scientists performed all wet-lab operations. It would be inaccurate to say that AI independently completed the entire scientific discovery process.
+
+Anthropic also says its lab conducts only BSL 1 and BSL 2 research and does not work with pathogens that can infect humans.
+
+The comparison that experts might need weeks to months is Anthropic's own estimate and should not be treated as an independently measured result.
+
+## A more practical way to evaluate it
+
+Evaluating scientific agents requires more than counting how many candidates they generate.
+
+More useful metrics are:
+
+- How many candidates warrant human review
+- How many warrant experiments after human review
+- How many experimental results support the original hypothesis
+- Whether the same data and process reproduce similar candidates
+- Whether failed results feed into the next screening round
+
+These distinguish an expanded search space from a real reduction in scientists' screening costs.
+
+## Conclusion
+
+This result does not establish that Claude discovered a new CRISPR or that ART has gene-editing capabilities.
+
+It provides a more specific piece of evidence. Scientific agents can already move a candidate from a large-scale data search to real experimental validation.
+
+The next priorities are reproducibility, experimental feedback, and explaining the mechanism, rather than simply adding more agents.
+
+## Sources
+
+- [Anthropic: Claude discovers a novel enzyme system with CRISPR-like repeats](https://www.anthropic.com/news/claude-discovers-novel-enzyme-system)
+- [Anthropic technical report PDF](https://www-cdn.anthropic.com/22573675ada52a8ca8a97a1a4b4326b2f208a071.pdf)
+- [Anthropic Research](https://www.anthropic.com/research)

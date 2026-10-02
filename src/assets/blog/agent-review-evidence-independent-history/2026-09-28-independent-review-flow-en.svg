@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700">
+<rect width="1200" height="700" fill="#f7f0e6"/>
+<text x="55" y="75" font-size="32" font-family="sans-serif" font-weight="700" fill="#2d241f">Review history through compaction, resume, and rollback</text>
+<g font-family="sans-serif" fill="#2d241f">
+<rect x="45" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="70" y="205" font-size="22" font-weight="700" style=";font-size:18.0px">1 Original evidence</text>
+<text x="70" y="260" font-size="17">User constraints</text><text x="70" y="300" font-size="17">Tool calls</text><text x="70" y="340" font-size="17">Tool results</text><text x="70" y="380" font-size="17">Assistant actions</text>
+<rect x="330" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="355" y="205" font-size="22" font-weight="700">2 compaction</text>
+<rect x="360" y="250" width="175" height="90" rx="12" fill="#f3d9a6"/><text x="380" y="290" font-size="17" style=";font-size:17px"><tspan x="380.0" y="282.0">Parent</tspan><tspan x="380.0" y="302.0">summarized</tspan></text>
+<rect x="360" y="380" width="175" height="90" rx="12" fill="#e0ead8"/><text x="380" y="420" font-size="17" style=";font-size:17px"><tspan x="380.0" y="412.0">Review</tspan><tspan x="380.0" y="432.0">unchanged</tspan></text>
+<rect x="615" y="150" width="235" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="640" y="205" font-size="22" font-weight="700">3 resume</text>
+<text x="640" y="270" font-size="17">Read review</text><text x="640" y="305" font-size="17">checkpoint</text><text x="640" y="360" font-size="17">Continue increments</text>
+<rect x="900" y="150" width="255" height="400" rx="18" fill="#fffaf0" stroke="#b88a55" stroke-width="2"/>
+<text x="925" y="205" font-size="22" font-weight="700">4 rollback</text>
+<rect x="930" y="260" width="190" height="55" rx="10" fill="#e0ead8"/><text x="950" y="295" font-size="17">Keep evidence A</text>
+<rect x="930" y="335" width="190" height="55" rx="10" fill="#e0ead8"/><text x="950" y="370" font-size="17">Keep evidence B</text>
+<rect x="930" y="410" width="190" height="55" rx="10" fill="#f4d9cf"/><text x="950" y="445" font-size="17" style=";font-size:17px"><tspan x="950.0" y="437.0">Remove evidence</tspan><tspan x="950.0" y="457.0">C</tspan></text>
+<text x="60" y="625" font-size="22" font-weight="700">The parent continues generation. The review transcript preserves evidence continuity.</text>
+<text x="60" y="665" font-size="18" fill="#5d5148">Teaching diagram based on OpenAI Codex PR 48779.</text>
+</g></svg>

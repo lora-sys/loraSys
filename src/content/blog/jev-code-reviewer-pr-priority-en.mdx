@@ -1,0 +1,37 @@
+---
+title: 'Jev-Code-Reviewer prioritizes large PRs as P0/P1/P2'
+description: 'Jev-Code-Reviewer prioritizes PR changes, expands P0 by default, and retains the original diff and fallback paths so reviewers see key changes first.'
+publishDate: '2026-09-26T00:00:00Z'
+tags: ['Coding Agent', 'Code Review', 'GitHub', 'Developer Tools', 'Open Source']
+contentType: 'projects'
+topics: ['devtools', 'product-design']
+language: 'en-US'
+translationOf: 'jev-code-reviewer-pr-priority'
+draft: false
+---
+
+## Fact-checking
+Project name: Jev-Code-Reviewer.
+Author and organization: egma-ai.
+Official repository: egma-ai/jev-code-reviewer.
+Core functionality: a local CLI analyzes units of change in a PR. TypeSafe Jev generates structured priority signals, and a policy maps the results to P0, P1, and P2. OpenAI generates explanations such as old logic, new logic, and what changed.
+Demo: the repository provides a screen recording, a public Demo PR, and a replay that does not call a provider.
+License: MIT.
+Latest code commit: 2026-09-25 04:47:19 UTC.
+Current status: public repository, not archived.
+GitHub dynamic data retrieved at 2026-09-26 09:18 +08:00. At that time the repository had 72 stars and 2 open issues. Dynamic figures only record freshness and are not used in publication copy.
+## Evidence cards
+The official repository README explains P0, P1, and P2, the default of expanding only P0, switching back to the original code, and current usage limitations.
+The architecture document, docs/[ARCHITECTURE.md](https://github.com/egma-ai/jev-code-reviewer/blob/main/docs/ARCHITECTURE.md), states that the Git diff is the source of truth. TypeSafe Jev assigns priority, OpenAI generates explanations, and a local cache supplies them to the Chrome extension.
+Demo provenance is in demo/[README.md](https://github.com/egma-ai/jev-code-reviewer/blob/main/demo/README.md). Jev classifications in the public replay come from real TypeSafe Jev API calls. The bundled recording uses prepared explanation text because the OpenAI project had insufficient quota when it was recorded. Live analysis can call real providers.
+The public Demo PR is PR 1 in the repository.
+## The 30-second version
+When a coding agent changes many files at once, expanding an entire PR line by line consumes human attention. Jev-Code-Reviewer first analyzes each unit of change, then maps it through a policy to P0, P1, or P2. P0 means human review is required, P1 means human review is recommended, and P2 means a mechanical change or one with stronger supporting evidence.
+The Chrome extension retains GitHub's original file containers and replaces only the diff tables. P0 is expanded by default; P1 and P2 are collapsed. You can return to the unmodified GitHub diff at any time. Priority tells you where to look first, not whether the code is necessarily right or wrong.
+## Why it is interesting
+This project focuses on human review time. It does not create another review dashboard. The extension embeds directly in GitHub's Files changed page and preserves filenames, collapse behavior, and the original diff. If a report is missing, stale, or unverifiable, the extension keeps displaying the source code.
+That is easier to check than compressing an entire PR into a summary. Reviewers can start with P0 and return to the original code immediately when needed.
+## 3 designs worth borrowing
+First, separate attention priority from correctness judgments. P0, P1, and P2 determine only where people look first, so a model classification does not become a safety conclusion.
+Second, return to the source of truth on failure. If a report is missing or stale, or the local service is unavailable, the interface keeps displaying GitHub's original diff.
+Third, add assistance to the existing workflow. The extension retains GitHub's file structure and replaces only the diff content, so users do not need another console.

@@ -1,0 +1,61 @@
+---
+title: 'AI Agent engineering reading list, Sep 26–27, 2026'
+description: 'Five updates on tool and skill context budgets, context doctor, persistent scheduling, tool-loop limits, and fail-closed approvals.'
+publishDate: '2026-09-27T00:00:00Z'
+tags: ['AI Agent', 'Harness', 'MCP', 'Agent Safety', 'Context']
+contentType: 'news'
+topics: ['agent-harness', 'mcp-skills', 'security', 'evaluation', 'devtools']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-26-27'
+draft: false
+---
+
+## This edition's takeaways
+This edition retains 5 items after deduplication. Start with Codex's handling of tool and skill metadata budgets, Deep Agents' context doctor, Talon's persistent scheduling semantics, and Promptfoo's tool-loop limits. It also includes a Gemini CLI security fix missed at the end of the previous edition's search window.
+## 1. Codex changes how it allocates context budgets to tools and skills
+**What happened**
+OpenAI Codex merged two changes directly related to harness context management on September 26. PR 48353 fixes the allocation of the skill catalog's metadata budget. Cloud skills initially receive at most three-quarters of the metadata budget, leaving the remainder for filesystem skills. That allocation stays stable across disconnections, context compaction, and thread restoration. PR 48574 changes how deferred tools are summarized. The 4 KiB summary budget first reserves room for every namespace name, then allocates the remaining space to descriptions. This prevents a few long early descriptions from crowding out later tool namespaces entirely.
+**Engineering significance**
+Tool search and skill catalogs involve more than token counts. The harness must also keep capability names discoverable and preserve a thread's catalog structure as consistently as possible. Names should take priority over long descriptions. A temporary executor disconnection should not reshuffle the catalog budget, which would increase prompt variation, duplicate injection, and cache invalidation.
+**Where to start**
+Read Why, What changed, and Testing in PR 48574, focusing on how the 4 KiB budget protects namespace names first. Then read PR 48353's budget allocation and catalog restoration logic after compaction and resume.
+**Primary sources**
+[Codex PR 48574](https://github.com/openai/codex/pull/48574)
+[Codex PR 48353](https://github.com/openai/codex/pull/48353)
+## 2. Deep Agents adds context doctor to break down agent context costs
+**What happened**
+LangChain Deep Agents merged Talon's context doctor on September 26. It estimates the tokens used by the base prompt, memory, skills, tool schemas, and conversation history, including currently enabled MCP tool schemas. The diagnostic is read-only, its output is bounded, and it does not interrupt work in progress. The project notes that the estimates exclude content added by middleware and provider overhead. The related changes passed 208 focused tests.
+**Engineering significance**
+Context problems in long-running agents are often mistaken for model problems. The first question is where the tokens go. Separate accounting for prompts, memory, skills, MCP schemas, and conversation history helps decide whether to remove system instructions, defer tool loading, compact history, or reduce memory injection. A diagnostic interface like this is a useful basic observability feature for a harness.
+**Where to start**
+Read PR 6557's command output scope, estimation limits, and test notes. In the implementation, focus on how the context audit helper reuses the current checkpoint and Talon's configuration source.
+**Primary source**
+[Deep Agents PR 6557](https://github.com/langchain-ai/deepagents/pull/6557)
+## 3. Talon adds cron, expiry, and missed-run semantics to persistent agents
+**What happened**
+Deep Agents' Talon merged standard cron expressions and an until expiry time on September 26. Cron supports time zones, ranges, steps, month and weekday names, and several common extensions. Creating or editing a task returns its next three execution times so the agent can check the schedule against the user's intent. An until value earlier than the first run is rejected. Scheduled tasks may start at most 5 minutes late. If a host outage causes a missed run and the until time has passed, that run is not replayed. A task whose final execution fails is retained for error inspection.
+**Engineering significance**
+A scheduler for persistent agents needs more than a time string. It must define time zones, daylight saving time, expiry, lateness, missed runs, failure retention, and cleanup rules. Returning the next few run times from the creation interface is also useful. It provides a verifiable check of intent before the schedule is actually written.
+**Where to start**
+Read Cron expressions, until, and Cleanup in PR 6526. Focus on the 5-minute lateness window, missed-run handling, the preview of the next three runs, and the bounded cache for parsed results.
+**Primary source**
+[Deep Agents PR 6526](https://github.com/langchain-ai/deepagents/pull/6526)
+## 4. Promptfoo adds explicit execution budget limits to Azure Foundry tool loops
+**What happened**
+Promptfoo merged a fix for the Azure Foundry provider's tool loop on September 26. When the tool loop reaches its budget limit, it preserves a final answer if the model has already returned one. If unfinished tool calls remain, it stops further tool work. When callbacks have already exhausted the budget, it does not issue another model request. It validates maxPollTimeMs as a finite, non-negative number before creating the Azure client. The related Azure tests passed all 669 cases.
+**Engineering significance**
+Provider adapters used in agent evaluation also need execution limits. A timeout must cover the loop of model calls, tool callbacks, and subsequent model calls, rather than only individual HTTP requests. Configuration should be validated before the first network request, or invalid settings can cause extra charges and partially completed states that are hard to reproduce.
+**Where to start**
+Read Summary and Validation in PR 11030, then Limits. Note that maxPollTimeMs is a cooperative budget checked between turns. It neither cancels callbacks or requests already running nor imposes a fixed iteration count.
+**Primary source**
+[Promptfoo PR 11030](https://github.com/promptfoo/promptfoo/pull/11030)
+## 5. Gemini CLI makes non-interactive approvals consistently fail closed and tightens untrusted tool output handling
+**What happened**
+This change merged at the end of the previous search window but was missed in that reading list, so it is included here. Gemini CLI PR 29506 makes the policy engine's handling of redirects and non-interactive mode consistent. Across all security decision paths, ASK_USER becomes DENY in a nonInteractive environment. External MCP resources and web search output are wrapped as untrusted context. File reads gain device and inode consistency checks, and path validation expands to environment configuration and workspace configuration directories.
+**Engineering significance**
+When no one can approve an action, ASK_USER must not default to permission. External MCP results and webpage text must not enter high-trust prompt regions directly. Checking inode and device before and after a file read can reduce the risk that the object changes after inspection. These changes address approval, context trust, and filesystem boundaries respectively.
+**Where to start**
+Read Policy & Scheduler Consistency and Path & File Utilities in PR 29506. In the implementation, focus on the unified path from nonInteractive ASK_USER to DENY, the untrusted-context wrapper for MCP output, and fileUtils' device and inode checks.
+**Primary source**
+[Gemini CLI PR 29506](https://github.com/google-gemini/gemini-cli/pull/29506)

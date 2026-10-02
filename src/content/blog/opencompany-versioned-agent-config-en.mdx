@@ -1,0 +1,59 @@
+---
+title: 'OpenCompany: version-controlled agent configuration'
+description: 'OpenCompany uses company.toml, agent teams, and human sign-off to put organizational structure and agent configuration into version-controlled files.'
+publishDate: '2026-09-11T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/opencompany-versioned-agent-config/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: versioned configuration defines agent teams, narrowed tool permissions, and human sign-off'
+tags: ['AI', 'Agent', 'OpenCompany', 'Configuration', 'Developer Tools']
+contentType: 'projects'
+topics: ['multi-agent', 'agent-harness', 'security']
+language: 'en-US'
+translationOf: 'opencompany-versioned-agent-config'
+draft: false
+---
+
+The original cover retains its Chinese labels. They mean "version history," "narrow permissions," and "human sign-off." The company.toml file records the configuration, each layer reduces available permissions, and a person approves designated actions.
+
+## Fact check
+- Project name: OpenCompany.
+- Organization: Tiny Humans, with the GitHub organization `tinyhumansai`.
+- Official positioning: an agent-team runtime layer for one-person businesses.
+- Core structure: each company lives under `companies/`. Its `company.toml` defines company information, agent organization, tool permissions, groups, connections, workflows, and policies.
+- Human control: company configuration can specify `human_role`. The official Marketing Agency example sets it to `Campaign review and sign-off`.
+- Tool permissions: the Marketing Agency example narrows tool permissions across company, desk, and agent levels. Configuration comments explicitly state that these permission sets are intersected across the hierarchy.
+- Demo: the official README provides `launch-demo.sh`. Once it starts, the local Operator Console lets users watch agents work and handle items awaiting human approval.
+- Models and execution: real agent work requires a TinyHumans API key to use Medulla. Without a key, users can still start and inspect the interface, but agents do not perform real work.
+- Current version: v0.1.4. The GitHub release was published at 2026-09-11 21:55 UTC. Retrieval time was 2026-09-11 17:48, UTC-08:00.
+- Current status: source code and a local demo are available. The official README explicitly labels the project WIP and `Not production-ready`. The official website still has a waitlist.
+- LICENSE: GPL-3.0.
+- Changing information: the official README currently lists 22 company templates. This count was retrieved at 2026-09-11 17:48, UTC-08:00, and may change later.
+## Evidence
+![Official OpenCompany project demo showing an animated network of organizational groups and agent nodes](https://raw.githubusercontent.com/tinyhumansai/opencompany/main/docs/gitbooks/.gitbook/assets/opencompany-hero.gif)
+1. [OpenCompany website](https://tinyhumans.ai/opencompany) shows the product positioning and current waitlist status.
+2. [Official GitHub repository](https://github.com/tinyhumansai/opencompany) provides local-running instructions, the demo, template directories, WIP status, and architecture documentation.
+3. [Marketing Agency company.toml](https://github.com/tinyhumansai/opencompany/blob/main/companies/marketing_agency/company.toml) shows `human_role`, tool permissions, groups, connections, workflows, and policies.
+4. [v0.1.4 release](https://github.com/tinyhumansai/opencompany/releases/tag/v0.1.4) was published on 2026-09-11.
+5. The [LICENSE](https://github.com/tinyhumansai/opencompany/blob/main/LICENSE) is GPL-3.0.
+## The 30-second version
+OpenCompany treats a company as a runnable configuration package.
+Each company is a directory. Its `company.toml` specifies the company name, human responsibilities, agent team, tool permissions, groups, connections, workflows, and policies. The host reads this configuration and instantiates the agents. People approve or decide matters at the points designated in the configuration.
+It released v0.1.4 today. The source code and local demo can run, but the project is still officially marked WIP, with an explicit warning against relying on it as a production system.
+## Main assessment
+The part most worth borrowing is the conversion of organizational design into configuration files, rather than the "one-person company" slogan.
+If roles, permissions, and human approvals exist only in prompts, the system is difficult to audit or compare between revisions. Once those rules are in `company.toml`, they can be committed to Git, reviewed as diffs, and checked before deployment.
+## Why it is interesting
+Many multi-agent demos start by drawing an organization chart and letting different agents message each other. OpenCompany goes a step further by mapping that chart to executable configuration.
+The Marketing Agency manifest directly records the human sign-off responsibility, each agent's desk, permitted tools, intended Slack or Gmail connections, enabled workflows, and approval policies. It puts "who can do what" into a concrete repository file.
+The project remains WIP, so it should not be used as proof that the one-person company is already a mature model. It is more useful as an example of agent-product architecture.
+## 3 designs worth borrowing
+## 1. The company is configuration
+`company.toml` is the stable entry point. Organizational structure lives in a version-controlled file as well as the UI. Changes to roles, permissions, and workflows all produce diffs.
+## 2. Narrow permissions at each level
+The Marketing Agency example separates company-wide, desk-level, and agent-level tool sets. Lower levels can only narrow access further, not expand it on their own. This approach suits any multi-agent system with high-risk tool calls.
+## 3. Put human sign-off into the structure
+`human_role` and approval policies appear directly in the configuration. When people intervene does not depend on an agent's improvised judgment. For publishing, payments, contracts, and high-cost actions, this design is more controllable than a line saying "ask the user when necessary."
+## How this connects to my work
+Your current content workflow could be rewritten using the same structure.
+Research, fact-checking, writing, visuals, and review can be separate agents. Database fields, source requirements, and scoring rules can go into a manifest. Final publication stays with a person. The daily process then no longer needs an ever-longer prompt to remain consistent.
+If you later build a multi-agent product, you can also put AgentCard definitions, tool permissions, and human intervention points into the same project-level configuration for the runtime to read.

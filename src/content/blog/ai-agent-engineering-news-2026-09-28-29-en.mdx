@@ -1,0 +1,54 @@
+---
+title: 'AI Agent engineering reading list, Sep 28–29, 2026'
+description: 'Cloudflare cf, Kitesurf WebMCP, Claude Sonnet 5.5, and Forge: agent tool interfaces, browser tool calls, and schema-driven generation.'
+publishDate: '2026-09-29T00:00:00Z'
+tags: ['AI Agent', 'Harness', 'MCP', 'AI Software Engineering', 'DevTools']
+contentType: 'news'
+topics: ['agents', 'mcp-skills', 'agent-harness', 'devtools', 'security']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-28-29'
+draft: false
+---
+
+This edition covers September 28–29, 2026 and retains 4 items. All were published after the previous edition's record, or became publicly available only after it was generated.
+
+Start with Cloudflare's cf and Kitesurf. The former provides concrete interface design for an agent-native CLI; the latter shows browser agents moving from pixel-based actions to WebMCP tool calls. Claude Sonnet 5.5 is useful for examining how model changes affect a harness's tool budget. Forge shows how API changes can automatically propagate to SDKs, CLIs, documentation, and agent interfaces.
+
+## 1. Cloudflare releases cf
+
+Cloudflare released its new cf CLI on September 28. The company says agents accounted for 48% of Wrangler usage during the preceding week. Agents used nearly twice as many distinct commands per day as humans and were nearly four times as likely to use more than six commands.
+
+cf uses JSON as its default interface, adds natural-language command search, and uses TypeScript configuration. The engineering details worth studying are how output formats, capability discovery, and configuration types are redesigned for machine use.
+
+Source: [Cloudflare: Introducing cf](https://blog.cloudflare.com/cloudflare-cf-cli-launch/)
+
+## 2. Kitesurf adds WebMCP
+
+Cloudflare updated Kitesurf on September 28. Kitesurf now supports WebMCP. Websites can expose functions directly to agents instead of requiring them to simulate clicks.
+
+Cloudflare says Kitesurf now passes more than 730,000 Web Platform Tests subtests, about 500,000 more than at its initial release.
+
+Browser agents can split page capabilities into two layers. Operations exposed through WebMCP use direct structured tool calls. Parts without a tool interface still use the DOM, screenshots, and clicks.
+
+Sources: [Cloudflare: Kitesurf update](https://blog.cloudflare.com/kitesurf-update/) and [WebMCP changelog](https://developers.cloudflare.com/changelog/post/2026-09-28-webmcp-api/)
+
+## 3. Claude Sonnet 5.5
+
+Anthropic released Claude Sonnet 5.5 on September 28. The company reports a Terminal-Bench 4.0 score of 70.6%, compared with 10.3% for Sonnet 5. Its CursorBench 4.0 score is 55.5%, close to Opus 5.5's 57.8%.
+
+Anthropic says Sonnet 5.5's output is more than 30% faster than Sonnet 5's and that most work costs up to about 30% less. Several early users also report fewer steps and tool calls for the same tasks.
+
+After a model upgrade, teams should reevaluate the harness's tool budget, maximum loop count, parallel-call strategy, and human-intervention thresholds rather than simply carrying over old parameters.
+
+Sources: [Anthropic: Claude Sonnet 5.5](https://www.anthropic.com/claude-sonnet-5-5) and [GitHub Copilot changelog](https://github.blog/changelog/2026-09-28-claude-sonnet-5-5-in-github-copilot/)
+
+## 4. Cloudflare open-sources Forge
+
+Cloudflare open-sourced Forge on September 28. Forge generates SDKs, CLIs, and documentation from interface definitions such as OpenAPI.
+
+Cloudflare currently has more than 3,500 API operations. Forge runs checks on pull requests in the API repository and generates CLI, SDK, and documentation previews containing the proposed changes. The company also lists MCP servers, Zod, and Valibot interfaces as generation targets.
+
+For agent platforms, the most useful idea is to put agent tools, SDKs, CLIs, and documentation in the same schema-driven generation pipeline so interface drift is caught at the pull request stage.
+
+Source: [Cloudflare: Introducing Forge](https://blog.cloudflare.com/forge-open-source-generation-pipeline/)

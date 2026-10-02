@@ -27,7 +27,7 @@ const latestPostDate = allPosts[0]?.data?.publishDate
 const allSelectedProjects = projects.filter((project) => project.featured)
 const featuredProjects = homepageFeatured(allSelectedProjects)
 const [leadProject, ...supportingProjects] = featuredProjects
-const recentPosts = allPosts.slice(0, 3)
+const recentPosts = allPosts.filter((post) => post.data.language !== 'en-US').slice(0, 3)
 const focusSummary = getCurrentFocusSummary('zh-CN')
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
 const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repository ?? '']

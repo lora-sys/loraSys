@@ -1,0 +1,46 @@
+---
+title: 'Claude merges Chat and Cowork to reduce mode choices'
+description: 'Claude combines Chat and Cowork in one conversation, routes capabilities automatically, and keeps task state and permissions visible.'
+publishDate: '2026-09-17T00:00:00Z'
+tags: ['AI', 'Agent', 'Claude', 'UX', 'Anthropic']
+contentType: 'technical'
+topics: ['agents', 'product-design']
+language: 'en-US'
+translationOf: 'claude-chat-cowork-unified-mode'
+draft: false
+---
+
+On September 16, Anthropic made a seemingly small product change: Claude Chat and Cowork merged.
+The official announcement puts it plainly. Users no longer need to decide whether a task belongs in Chat or Cowork. Claude chooses the capabilities the task needs. [Anthropic announcement](https://claude.com/blog/cowork-is-now-claude)
+The Claude Help Center is more specific. An ordinary conversation can now search the web, read files, run code, and create documents, spreadsheets, and presentations. Users describe the outcome without first dividing their work into "Q&A," "research," "file processing," or "code execution." [Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+What interests me most is the product decision Anthropic removed, rather than which capabilities it added.
+## Choosing a mode makes the user route work for the system
+When an AI product only offers chat and search, separate modes are easy to understand. As capabilities expand, so does the number of modes. Research, files, code, browsers, design, presentations, and scheduled tasks can all become separate entry points.
+Most users do not care which internal capabilities the system calls. They care about the result. For example, "Group these five interviews into themes and turn them into a document I can use in a meeting." That request may require file reading, content analysis, and a finished deliverable.
+Claude's new experience moves the routing decision back to the system. Users describe their goal, and the system decides whether to use web, file, code, and artifact-generation capabilities. The official help page also states that a conversation can run multiple tasks at once.
+The value is more concrete than a "simpler interface." It directly removes one failure point: the user choosing the wrong mode.
+## Long tasks in one conversation make state management more important
+Merging modes does not turn every task into ordinary chat.
+Claude's complex tasks can still continue in the cloud. They can keep running after the user closes the webpage or laptop. When a task uses local files, the browser, or computer apps, Claude Desktop must remain open. [Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+A unified conversation therefore contains two timescales. Quick questions may finish in seconds, while research, spreadsheets, and presentations can take longer.
+If an interface removes mode selection without showing clear task states, users face a new problem. They cannot tell whether the agent is still working or when they need to return to approve something.
+Capability routing can be hidden. Task state must remain visible.
+## Permissions cannot disappear with modes
+Anthropic did not remove permission boundaries when it merged Chat and Cowork.
+The announcement says Claude asks before taking actions by default. The help page divides permissions into Manual and Auto. Manual is the default, and Claude asks before acting. Auto lets Claude continue and take actions after safety checks. Users can stop or redirect it at any time. [Anthropic announcement](https://claude.com/blog/cowork-is-now-claude)
+This gives agent products a clear division of responsibility.
+The system can choose capabilities. Users still control permission for real actions.
+If a product couples "automatic tool selection" with "automatic high-risk execution," reducing modes merely hides the risk further.
+## Claude Code has not been merged
+This update also has clear limits.
+The Claude Help Center states that the model picker and Code tab remain. Add from GitHub is temporarily unsupported, conversation branching is not yet available, and Incognito still opens the old experience. [Claude Help Center](https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude)
+It would therefore be inaccurate to describe the change as "Anthropic putting all its products in a single chat box." More precisely, Anthropic merged the entry points for ordinary Claude conversations and Cowork, while retaining Code and some explicit boundaries.
+## Four things builders can check
+If you are building an agent product, check whether the current interface exposes too much internal implementation to users.
+First, can users describe the outcome without knowing which tool to use?
+Second, can they see and redirect the system when it selects the wrong capability?
+Third, do long tasks have a distinct, clear running state, rather than only a spinning chat bubble?
+Fourth, are capability routing and permission control separate mechanisms? The system can choose tools automatically, while real actions should still require confirmation according to risk.
+Not every agent product should remove modes. Healthcare, finance, enterprise approvals, and expensive tasks may need more explicit entry points and expectations. Whether a mode should exist depends on whether it helps users express intent or makes them understand the system's internal architecture.
+Anthropic's update sends a specific signal. More capabilities do not necessarily require more buttons. The system can take responsibility for choosing capabilities, while state and permissions remain visible to users.
+---

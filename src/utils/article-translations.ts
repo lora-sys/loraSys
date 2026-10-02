@@ -16,3 +16,7 @@ export function alternateArticle(post: Article, posts: Article[]): Article | und
       articleLanguage(candidate) !== articleLanguage(post)
   )
 }
+
+export function recentEnglishArticles<T extends { data: { language?: string } }>(posts: T[], limit = 3): T[] {
+  return posts.filter((post) => post.data.language === 'en-US').slice(0, limit)
+}

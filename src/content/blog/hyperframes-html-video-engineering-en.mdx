@@ -1,0 +1,37 @@
+---
+title: 'HyperFrames makes video a buildable HTML project'
+description: 'How HyperFrames gives agent-generated video an inspectable workflow of HTML, animation, assets, lint, preview, and rendering.'
+publishDate: '2026-09-13T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/hyperframes-html-video-engineering/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: an HTML project passes through checking and preview before becoming a finished MP4'
+tags: ['AI', 'Agent', 'Video', 'HTML', 'DevTools', 'HyperFrames']
+contentType: 'projects'
+topics: ['multimodal', 'web-development', 'devtools']
+language: 'en-US'
+translationOf: 'hyperframes-html-video-engineering'
+draft: false
+---
+
+The original cover retains Chinese labels meaning "HTML project," "Check and preview," and "Finished MP4." It illustrates the path from editable source to a rendered video.
+
+## The 30-second version
+HyperFrames treats video as a code project that can be built.
+An agent first generates HTML, CSS, asset references, and animation from a brief. It then uses the CLI to lint and preview. After checking the timeline and visuals, it renders an MP4.
+It also packages common tasks as skills, such as turning a GitHub PR into an update video or a product website into a launch short.
+Video generation therefore retains more than the final file. The intermediate structure can be versioned, inspected, and edited.
+## Why it is interesting
+Many AI video tools return a finished video directly. When the result is wrong, making a change usually means describing the request again.
+HyperFrames keeps an editable intermediate layer. The video structure is HTML. Animations have explicit timing. Assets have file references. The CLI can check, preview, and render the project.
+This structure is easier to automate in agent workflows. An agent can edit a segment, check it again, and handle only the project content that needs to change. People can also read the code and preview the result directly.
+## 3 designs worth borrowing
+### 1. Make video an inspectable build artifact
+The final output is MP4, but the source remains HTML, CSS, assets, and animation configuration. When generation fails, you can locate the specific structure responsible instead of guessing from a prompt.
+### 2. Use skills to define production workflows
+`/hyperframes` handles routing. Specific tasks then enter workflows for product videos, PR videos, subtitles, or motion graphics. Every workflow reuses the same lint, preview, and render tools.
+### 3. Connect design rules to the video project
+The README provides `frame.md` to turn an existing design specification into rules video frames can use. The agent does not need to guess font, proportion, and composition constraints each time.
+## How it connects to my work
+This approach could be used directly in your content workspace.
+You already have daily topic selection, long-form articles, X posts, Xiaohongshu posts, short-video scripts, and visual briefs. The next step could be to hand short-video scripts directly to the HyperFrames skill. The agent reads the project's official website and repository assets, generates an HTML video project, and uses the same visual rules to control fonts, colors, and layout.
+If you want to automate more of the "research one project every day" process, the two workflows most worth testing are `PR-to-video` and `product-launch-video`. They can turn existing evidence and scripts into editable video projects.

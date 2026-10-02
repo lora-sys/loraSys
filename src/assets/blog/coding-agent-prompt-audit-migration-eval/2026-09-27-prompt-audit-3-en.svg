@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="900" viewBox="0 0 1536 900">
+<style>text{font-family:"Noto Sans SC","Microsoft YaHei",Arial,sans-serif;fill:#302820}.h1{font-size:43px;font-weight:700}.h2{font-size:26px;font-weight:700}.b{font-size:20px}.s{font-size:17px}.n{font-size:30px;font-weight:700;fill:#fff}</style>
+<rect width="1536" height="900" fill="#f5ede1" />
+<text x="70" y="78" class="h1" font-size="42.5" style="font-size:42.5px" font-family="Arial, sans-serif">Prompt audit finds suspicious rules. Evals must test them.</text>
+<text x="70" y="120" class="b" font-size="20.0" style="font-size:20.0px" font-family="Arial, sans-serif">Start with a static audit, then compare actual behavior before and after the change on fixed tasks.</text>
+<g>
+<rect x="70" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#8d7460" stroke-width="3" />
+<circle cx="125" cy="270" r="28" fill="#7a6555" /><text x="116" y="280" class="n" font-size="30.0" style="font-size:30.0px" font-family="Arial, sans-serif">1</text>
+<text x="95" y="335" class="h2" font-size="22.5" style="font-size:22.5px" font-family="Arial, sans-serif">List instructions</text>
+<text x="95" y="385" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">CLAUDE.md</text><text x="95" y="420" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Skills</text><text x="95" y="455" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Agents</text><text x="95" y="490" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Commands</text>
+<text x="95" y="545" class="s" font-size="12.0" style="font-size:12.0px" font-family="Arial, sans-serif">Record sources and target models</text>
+<rect x="360" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#9f805f" stroke-width="3" />
+<circle cx="415" cy="270" r="28" fill="#8c6c50" /><text x="406" y="280" class="n" font-size="30.0" style="font-size:30.0px" font-family="Arial, sans-serif">2</text>
+<text x="385" y="335" class="h2" font-size="26.0" style="font-size:26.0px" font-family="Arial, sans-serif">Classify</text>
+<text x="385" y="385" class="s" font-size="16.5" style="font-size:16.5px" font-family="Arial, sans-serif">Hard product constraints</text><text x="385" y="420" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Safety boundaries</text><text x="385" y="455" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Project facts</text><text x="385" y="490" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Old model workarounds</text>
+<text x="385" y="545" class="s" font-size="13.0" style="font-size:13.0px" font-family="Arial, sans-serif">Change only evidenced issues</text>
+<rect x="650" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#c18b4f" stroke-width="3" />
+<circle cx="705" cy="270" r="28" fill="#b0783d" /><text x="696" y="280" class="n" font-size="30.0" style="font-size:30.0px" font-family="Arial, sans-serif">3</text>
+<text x="675" y="335" class="h2" font-size="26.0" style="font-size:26.0px" font-family="Arial, sans-serif">Create a diff</text>
+<text x="675" y="385" class="s" font-size="12.5" style="font-size:12.5px" font-family="Arial, sans-serif">Remove repeated reinforcement</text><text x="675" y="420" class="s" font-size="14.5" style="font-size:14.5px" font-family="Arial, sans-serif">Narrow triggering conditions</text><text x="675" y="455" class="s" font-size="15.0" style="font-size:15.0px" font-family="Arial, sans-serif">Keep testing requirements</text><text x="675" y="490" class="s" font-size="14.5" style="font-size:14.5px" font-family="Arial, sans-serif">Keep permission boundaries</text>
+<text x="675" y="545" class="s" font-size="12.5" style="font-size:12.5px" font-family="Arial, sans-serif">Do not rewrite everything at once</text>
+<rect x="940" y="210" width="250" height="380" rx="26" fill="#fff9ef" stroke="#a77b53" stroke-width="3" />
+<circle cx="995" cy="270" r="28" fill="#8e6748" /><text x="986" y="280" class="n" font-size="30.0" style="font-size:30.0px" font-family="Arial, sans-serif">4</text>
+<text x="965" y="335" class="h2" font-size="26.0" style="font-size:26.0px" font-family="Arial, sans-serif">A/B Eval</text>
+<text x="965" y="385" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">The same task set</text><text x="965" y="420" class="s" font-size="13.0" style="font-size:13.0px" font-family="Arial, sans-serif">The same model configuration</text><text x="965" y="455" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Record test passes</text><text x="965" y="490" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Record tools and tokens</text>
+<text x="965" y="545" class="s" font-size="12.5" style="font-size:12.5px" font-family="Arial, sans-serif">Judge behavior, not impressions</text>
+<rect x="1230" y="210" width="235" height="380" rx="26" fill="#fff9ef" stroke="#7e6c58" stroke-width="3" />
+<circle cx="1285" cy="270" r="28" fill="#665547" /><text x="1276" y="280" class="n" font-size="30.0" style="font-size:30.0px" font-family="Arial, sans-serif">5</text>
+<text x="1255" y="335" class="h2" font-size="20.5" style="font-size:20.5px" font-family="Arial, sans-serif">Accept or revert</text>
+<text x="1255" y="385" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Quality must not fall</text><text x="1255" y="420" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Tests must run</text><text x="1255" y="455" class="s" font-size="17.0" style="font-size:17.0px" font-family="Arial, sans-serif">Explain cost changes</text><text x="1255" y="490" class="s" font-size="14.5" style="font-size:14.5px" font-family="Arial, sans-serif">Save versions and results</text>
+<text x="1255" y="545" class="s" font-size="15.0" style="font-size:15.0px" font-family="Arial, sans-serif">Keep a migration record</text>
+</g>
+<g stroke="#c18b4f" stroke-width="8" fill="none"><path d="M320 400 L360 400" /><path d="M610 400 L650 400" /><path d="M900 400 L940 400" /><path d="M1190 400 L1230 400" /></g>
+<rect x="145" y="665" width="1245" height="112" rx="22" fill="#eadbc8" />
+<text x="190" y="710" class="h2" font-size="26.0" style="font-size:26.0px" font-family="Arial, sans-serif">Keep two kinds of evidence separate</text>
+<text x="190" y="752" class="b" font-size="20.0" style="font-size:20.0px" font-family="Arial, sans-serif">Static audit asks if a rule may be outdated. Evals ask if the change actually improves task results.</text>
+<rect x="55" y="810" width="1425" height="58" rx="16" fill="#44382f" />
+<text x="105" y="848" font-family="Arial, sans-serif" font-size="23.0" style="fill:#fff9ef;font-size:23.0px">Without a controlled comparison, prompt audit suggests edits but does not prove they work.</text>
+</svg>

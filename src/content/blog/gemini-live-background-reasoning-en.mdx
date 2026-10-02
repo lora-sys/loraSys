@@ -1,0 +1,48 @@
+---
+title: 'Gemini Live: turnComplete no longer means the task is done'
+description: 'Gemini Live Extended Thinking separates conversation turns from background task lifecycles. Clients need interaction_status to track actual completion.'
+publishDate: '2026-09-16T00:00:00Z'
+tags: ['AI', 'Agent', 'Gemini', 'Realtime', 'State Machine']
+contentType: 'technical'
+topics: ['multimodal', 'agents', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'gemini-live-background-reasoning'
+draft: false
+---
+
+On September 15, Google released Gemini 3.8 Live and Gemini 3.8 Live Extended Thinking.
+The model card includes the usual upgrades: native multimodal input, real-time audio, and complex reasoning. The more important change for developers is in the Live API documentation.
+Google explicitly warns that in Extended Thinking mode, `turnComplete: true` no longer means the whole task has finished.
+That changes how many real-time agents need to be implemented.
+## Real-time conversation state used to be simple
+Most real-time voice applications can be understood as a straight line: the user speaks, the model processes the input, the model answers, and the turn ends.
+Frontends therefore often treat "the model has finished this reply" and "the task is complete" as the same event. Once a turn-complete signal arrives, they can stop the loading indicator, restore input, release resources, or end the current listener.
+Extended Thinking separates these two states.
+Google's [Live API Thinking documentation](https://ai.google.dev/gemini-api/docs/live-api/thinking) explains that the model can maintain voice interaction while continuing to reason in the background and execute asynchronous tool calls. It may even say something like "I'm checking" before continuing the task in the background.
+So when the user hears a voice turn end, that only establishes that the audible reply has ended. Background work may still be running.
+## `turnComplete` now covers only one layer of state
+The [model documentation](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-live-extended-thinking) for Gemini 3.8 Live Extended Thinking specifically states that `turnComplete: true` no longer means the model is idle.
+The client must keep listening for subsequent server messages.
+The key state Google added is `interaction_status`:
+- `IN_PROGRESS`: background reasoning or tool processing is still underway.
+- `IDLE`: the entire interaction is complete.
+This design gives a real-time agent two lifecycles. The first is the conversation turn, the spoken exchange the user hears. The second is the interaction, a complete task including background reasoning, tool calls, and subsequent results.
+These lifecycles could previously coincide. That can no longer be assumed.
+## The frontend is the likeliest place for trouble
+Suppose a user says, "Find flights to Shanghai tonight and compare their prices."
+The model first responds, "Okay, I'm checking."
+That voice turn may end quickly, while background work calls a flight tool, waits for results, filters them, and returns with a final answer.
+If the frontend marks the task done on `turnComplete: true`, several problems follow. The loading indicator disappears too early. The page may let the user submit the same task again. The client may stop listening and miss later tool results. The cancel button disappears too early. Reconnection logic cannot tell whether to restore conversation state or task state.
+These are state-machine problems, rather than problems with the quality of the model's answer.
+## What builders should change
+First, do not use `turnComplete` to close the entire task. It covers only the conversation turn. Actual task completion depends on `interaction_status == IDLE`.
+Second, display the foreground reply and background task separately. The user may have finished hearing the current sentence while the UI still shows "Searching flights" or "Waiting for tool results."
+Third, give asynchronous tool calls independent task IDs. One interaction may contain multiple tool calls. Each needs its own state, timeout, and associated result, or recovery after reconnection becomes difficult.
+Fourth, cancellation must cancel background tasks, rather than merely stop audio. If only frontend playback stops, tool calls may continue running.
+Fifth, distinguish turns from interactions in logs. When debugging a voice agent, you need to know which spoken turn has ended, which background task has not, and which tool is still waiting.
+## The limits of this change
+This does not mean every voice agent must adopt Google's protocol, nor does it justify claiming that voice agents have entered a fully asynchronous era.
+What Google has publicly documented is a specific implementation of the Gemini Live API. Other vendors may use different event names, lifecycles, or tool protocols.
+The transferable engineering conclusion is simple: **once a model moves reasoning and tool calls into the background of a real-time conversation, "finished speaking" and "finished working" can no longer be the same state.**
+Primary sources: [Gemini 3.8 Audio Model Card](https://deepmind.google/models/model-cards/gemini-3-8-audio/); [Gemini 3.8 Live Extended Thinking](https://ai.google.dev/gemini-api/docs/models/gemini-3.8-live-extended-thinking); [Thinking in the Live API](https://ai.google.dev/gemini-api/docs/live-api/thinking).
+---

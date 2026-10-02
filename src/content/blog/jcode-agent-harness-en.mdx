@@ -1,0 +1,60 @@
+---
+title: 'jcode moves coding-agent bottlenecks into the harness'
+description: 'How jcode handles multi-agent resources, state synchronization, and verification in its harness, beyond the capabilities of the model alone.'
+publishDate: '2026-09-09T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/jcode-agent-harness/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: a shared server notifies affected agents when a file changes'
+tags: ['AI', 'Agent', 'Coding Agent', 'Harness', 'Multi-Agent', 'jcode']
+contentType: 'projects'
+topics: ['agent-harness', 'multi-agent', 'devtools']
+language: 'en-US'
+translationOf: 'jcode-agent-harness'
+draft: false
+---
+
+The original cover retains Chinese labels meaning "File changed," "Notify affected agents," and "Shared server." It shows the server notifying agents after a file changes.
+
+## The 30-second version
+Many coding-agent multitasking setups amount to running several processes. As the number of agents grows, RAM, context, conflicts, and state synchronization quickly become problems.
+`jcode` starts with the harness. It implements a terminal agent in Rust and connects multiple sessions to the same server. If Agent A changes a file that Agent B has already read, the server notifies B. Agents can also send private messages and broadcasts, and the main agent can launch workers itself.
+It also puts unfinished todos, changes in confidence, context caching, and continued execution into the harness instead of relying on the model to remember everything.
+The useful question with projects like this is how agents keep working, beyond the chat interface.
+## Why it is interesting
+Differences between coding agents are increasingly hard to explain through model names alone. With the same model, different tools, context, caching, verification, and continuation strategies can produce substantially different results.
+`jcode` makes this concrete. It even states publicly that `the harness matters as much as the model`.
+I am more interested in how it handles multi-agent state. Parallel work is more than starting four models at once. The hard part is deciding who knows a file has changed, who handles conflicts, and who determines whether the task is actually complete when four agents edit the same repository.
+## 3 designs worth borrowing
+### 1. Share server state across agents
+The agents are more than independent terminals. The server knows which agents are working in the same repository and can notify them when code changes affect their context.
+That is closer to a collaborative runtime than worktree-based parallel execution alone.
+### 2. Put the verification loop in the harness
+jcode todos record task assignment and confidence at completion. The project also has an automatic continuation mechanism. If a turn ends while todos remain unfinished, the harness can prompt the model to keep working.
+This is useful for agent evals. Measure task states, verification actions, failure points, and the number of continuations, as well as the final answer.
+### 3. Treat resource efficiency as multi-agent infrastructure
+The most direct costs of multiple agents are processes, memory, caches, and provider requests. jcode measures the PSS of additional sessions and uses a server/client architecture to reduce duplicated overhead.
+If you want to run 10 or 20 agents, these metrics are more useful than the number of nodes drawn in the UI.
+## How it connects to my work
+This project is close to your current interests in agent harnesses, evals, and multi-agent runtimes.
+Four pieces are worth studying directly:
+- `server/client`: what state agents share and what state must remain isolated.
+- `swarm`: how agents find teammates, exchange messages, and know whether another agent has finished.
+- `todo + confidence`: how to turn execution into measurable events rather than looking only at final answers.
+- `auto-poke`: how long-running tasks decide to continue instead of stopping as soon as the model says "done."
+If you are building your own agent eval framework, I would borrow the event model and verification points before the UI.
+
+## Sources and fact-checking
+- Project: jcode.
+- Author and repository: 1jehuang / jcode.
+- Positioning: an open-source terminal coding agent and agent harness written in Rust.
+- LICENSE: MIT.
+- Current availability: installation options for macOS, Linux, and Windows. Supports TUI, non-interactive execution, server/client, multiple sessions, and SSH workflows.
+- Multi-agent support: multiple agents can work in the same repository. The server notifies affected agents when file changes alter content they have already read. It also provides agent-to-agent messaging and autonomous swarm spawning.
+- Harness: includes memory, todo confidence, automatic continuation of unfinished tasks, MCP, browser tools, provider login, and session recovery.
+- Recent updates: the official changelog shows unreleased commits as of 2026-09-08. v0.84.0 was released on 2026-09-07. Recent work includes SSH sessions and remote login.
+- Performance figures are reported only as the project's own measurements. Retrieved at 2026-09-09 16:47 +08:00. The project reports approximately 10.4 MB of additional PSS per new jcode session. The same page lists approximately 212.7 MB for Claude Code. These are not independent third-party benchmarks.
+## Evidence cards
+1. [jcode website](https://jcode.sh/): project positioning, Mission, performance methodology, Bench, harness design, and changelog.
+2. [GitHub repository](https://github.com/1jehuang/jcode): README, MIT LICENSE, installation, Swarm, Memory, MCP, Browser, Provider, and source code.
+3. [jcode Bench](https://jcode.sh/bench): the project's published benchmark methods and results.
+4. [jcode Changelog](https://jcode.sh/): unreleased updates from 2026-09-08 and records for v0.84.0 and v0.83.0.

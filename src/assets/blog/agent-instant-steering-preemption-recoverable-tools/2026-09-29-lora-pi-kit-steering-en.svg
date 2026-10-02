@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#F6EEDF"/>
+  <style>
+    .t{font-family:Arial,'Noto Sans CJK SC',sans-serif;fill:#2E251F}
+    .h{font-size:40px;font-weight:700}.s{font-size:22px}.b{font-size:25px;font-weight:700}.m{font-size:20px}.sm{font-size:17px}
+    .card{fill:#FFF9EF;stroke:#B98A58;stroke-width:2}.bad{fill:#FDE9E3;stroke:#A9503E;stroke-width:2}.good{fill:#EEF2E7;stroke:#657052;stroke-width:2}
+    .line{stroke:#6C5745;stroke-width:4;fill:none}.dash{stroke:#9A7B5D;stroke-width:3;stroke-dasharray:10 10;fill:none}
+  </style>
+  <text x="55" y="70" class="t h">Where should Lora PI Kit handle control signals?</text>
+  <text x="55" y="108" class="t s" style=";font-size:19.7px">The kit already has sessions, traces, and executors. Steering belongs in a host control layer, not an individual tool.</text>
+  
+<rect x="50" y="160" width="460" height="440" rx="24" class="card"/>
+<text x="90" y="210" class="t b">Verified existing capabilities</text>
+<text x="90" y="265" class="t m">Pi Session: session and model context</text>
+<text x="90" y="320" class="t m" style=";font-size:18.6px">trace-hooks.ts: agent, turn, and tool events</text>
+<text x="90" y="375" class="t m"><tspan x="90">Docker sandbox executor:</tspan><tspan x="90" dy="29">execute、cancel、close</tspan></text>
+<text x="90" y="452" class="t m" style=";font-size:17.6px">runtime.ts: currently only registers lora-status</text>
+<rect x="90" y="500" width="375" height="58" rx="14" fill="#EFE3D2"/>
+<text x="115" y="537" class="t sm" style=";font-size:17px"><tspan x="115.0" y="529.0">These modules have no</tspan><tspan x="115.0" y="549.0">instant-steering controller</tspan></text>
+<path d="M540 365 H635" class="line"/><polygon points="635,365 615,353 615,377" fill="#6C5745"/>
+<rect x="665" y="160" width="485" height="460" rx="24" class="good"/>
+<text x="705" y="210" class="t b">Proposed steering controller</text>
+<text x="705" y="255" class="t m"><tspan x="705">Input: new user message, current turn,</tspan><tspan x="705" dy="28">active task handle</tspan></text>
+<text x="705" y="325" class="t m"><tspan x="705">Action: preempt current sampling,</tspan><tspan x="705" dy="28">choose continue or cancel</tspan></text>
+<text x="705" y="395" class="t m"><tspan x="705">Record: steer_received, preempted,</tspan><tspan x="705" dy="28">task_state</tspan></text>
+<text x="705" y="465" class="t m"><tspan x="705">Output: new turn input and</tspan><tspan x="705" dy="28">recoverable background-task state</tspan></text>
+<rect x="705" y="530" width="400" height="58" rx="14" fill="#DCE7CE"/>
+<text x="740" y="567" class="t sm" style=";font-size:17px"><tspan x="740.0" y="559.0">Proposal. Not implemented in the</tspan><tspan x="740.0" y="579.0">current lora-pi-kit.</tspan></text>
+<text x="600" y="665" text-anchor="middle" class="t s" style=";font-size:21.7px">Acceptance: no lost input, no duplicate tool results, clear cancellation, and traces that reconstruct steering.</text>
+</svg>

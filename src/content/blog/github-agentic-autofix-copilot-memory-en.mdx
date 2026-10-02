@@ -1,0 +1,70 @@
+---
+title: 'GitHub Agentic Autofix starts retaining repair experience'
+description: 'GitHub Agentic Autofix reads and writes Copilot Memory. How security repair knowledge crosses agent workflows, and why verification, scope, and expiry matter.'
+publishDate: '2026-09-26T00:00:00Z'
+tags: ['AI Agent', 'GitHub Copilot', 'Agent Memory', 'Security', 'Coding Agent']
+contentType: 'technical'
+topics: ['memory-context', 'security', 'devtools']
+language: 'en-US'
+translationOf: 'github-agentic-autofix-copilot-memory'
+draft: false
+---
+
+## Evidence card for the selected topic
+### Main primary sources
+- [GitHub Changelog: Agentic autofix now uses Copilot Memory](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/), 2026-09-25.
+- [GitHub Docs: About GitHub Copilot Memory](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/copilot-memory).
+- [GitHub Docs: About autofix for code scanning](https://docs.github.com/en/enterprise-cloud@latest/code-security/concepts/code-scanning/autofix-for-code-scanning).
+### Confirmed facts
+1. On September 25, 2026, GitHub announced that Agentic Autofix had integrated Copilot Memory. When users with memory enabled run Agentic Autofix, it reads existing memories for context relevant to the current alert.
+2. After creating a fix, Agentic Autofix saves the fix pattern in memory for future repairs.
+3. Copilot Memory is currently used by Copilot Cloud Agent, Copilot Code Review, Copilot CLI, and Agentic Autofix. Within the same repository, a repository fact captured by one feature can be used by another.
+4. Repository-level memory retains code references that support its facts. Before using a memory, Copilot revalidates those references against the current branch. Only validated facts are used.
+5. Memories that remain unused are automatically deleted after 28 days. Validation and use can restart the retention clock.
+6. Agentic Autofix remains best effort. GitHub reruns standard CodeQL checks to validate fixes, but does not guarantee confirmation that alerts from custom queries, extended queries, or third-party tools have been fixed.
+7. Both Copilot Memory and Agentic Autofix remain in public preview.
+### Claims that cannot be stated as facts
+- Do not claim GitHub has built a self-evolving security agent. It has not published performance data demonstrating continuous self-improvement.
+- Do not claim memory guarantees the next fix will be correct. Memory supplies context; the final fix still needs fresh validation.
+- Do not claim repair experience is shared across all repositories. Repository-level facts are used only within the same repository.
+- Do not claim memory is retained forever. Unused entries expire automatically.
+- Do not claim this update has improved fix success rates by a particular amount. GitHub has not published corresponding controlled data.
+### The core judgment in one sentence
+Useful memory for a coding agent should contain engineering facts and repair patterns with sources, revalidation, explicit scope, and expiry, rather than just chat summaries.
+
+Recommended platform: Juejin
+## GitHub lets security fixes accumulate experience: what should agent memory store?
+GitHub connected Agentic Autofix to Copilot Memory on September 25. The update itself is small, described in just a few changelog paragraphs, but it addresses a specific repetitive task for coding agents.
+Previously, after fixing a code-scanning alert, the repository rules learned during the repair might remain only in that session. When a similar alert appeared later, the agent had to read the code again, infer the project's conventions again, and try the repair again.
+Agentic Autofix now reads existing Copilot Memory first. If the repository already has stored facts or fix patterns relevant to the current alert, it can bring them into the repair. After the repair, Agentic Autofix also writes new fix patterns back to memory.
+Source: [GitHub changelog, 2026-09-25](https://github.blog/changelog/2026-09-25-agentic-autofix-now-uses-copilot-memory/).
+## Memory starts connecting multiple agent workflows
+Copilot Memory is not exclusive to Autofix. GitHub's documentation lists Copilot Cloud Agent, Copilot Code Review, Copilot CLI, and Agentic Autofix as users.
+This lets useful context move between different agents in one repository. If Cloud Agent discovers a database connection rule, Code Review can later check whether a new change violates it. If Code Review finds that two configuration files must stay synchronized, Cloud Agent can carry that fact into a later edit to either file.
+The September 25 change brings security repairs into this loop. A repair may now deliver both a patch and repository knowledge that can be reused later.
+Source: [GitHub Copilot Memory documentation](https://docs.github.com/en/enterprise-cloud@latest/copilot/concepts/agents/copilot-memory).
+## Revalidate before use
+Stale information is one of the most common problems with agent memory.
+An architectural rule that was correct a month ago may have changed in a refactor. A repair from the previous branch may not apply to the current code. If an agent treats an old summary as fact, memory will consistently pass that error to later tasks.
+GitHub's handling of repository-level facts is worth borrowing. Memory saves code references supporting a fact. Before a later agent uses that memory, it checks whether those references still hold on the current branch. Only validated facts enter the current context.
+Facts and preferences that go unused also expire automatically. The current documentation gives a period of 28 days. After a memory is successfully validated and used again, the clock can restart.
+Memory here is closer to cached facts with evidence than to an ever-growing chat summary.
+## Security repairs have a second validation step
+After generating code, Agentic Autofix does not assume the repair succeeded just because memory was available.
+GitHub's Code Scanning documentation is explicit. Agentic Autofix reruns CodeQL to check whether the repair resolves the corresponding alert. That validation has clear limits. GitHub cannot confirm that Agentic Autofix has fixed alerts produced by custom queries, security-extended queries, or third-party tools.
+Source: [GitHub Code Scanning Autofix documentation](https://docs.github.com/en/enterprise-cloud@latest/code-security/concepts/code-scanning/autofix-for-code-scanning).
+This distinction matters. Memory provides historical experience; the validator judges the current result. They cannot be collapsed into a single step where the agent decides for itself that the problem is fixed.
+## How this differs from ordinary chat memory
+Ordinary chat memory mainly saves repeated explanations. Users do not have to restate their preferences and background every time.
+Engineering memory in a coding agent has stricter requirements. It affects code, tests, and repairs, so it must answer at least four questions.
+First, where did this memory come from? Ideally, it points to specific code, test results, or a validated fix.
+Second, where can it be used? Repository facts must not automatically spread to other repositories, and user preferences must not become team rules.
+Third, when is it revalidated? Reading memory should include a check that the current code still supports its conclusion.
+Fourth, when is it deleted? Without expiry, memory keeps accumulating outdated information.
+GitHub's current Copilot Memory design addresses all four questions.
+## A design builders can copy directly
+If you are building your own coding agent, do not start by turning every historical conversation into vectors.
+First, save only engineering facts with future value, such as build commands, test entry points, cross-file constraints, validated repair patterns, and project-specific rules.
+Attach a source to every fact. That source might be a file, code location, test, PR, or tool result.
+Revalidate on read. If validation fails, leave it out of the prompt.
+Finally, add scope and expiry policies. Store repository facts, user preferences, and organization rules separately. Do not turn a local lesson into a global rule.

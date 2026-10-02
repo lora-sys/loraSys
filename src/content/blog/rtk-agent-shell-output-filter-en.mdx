@@ -1,0 +1,39 @@
+---
+title: 'RTK: filter shell output before it reaches a coding agent'
+description: 'RTK filters test, Git, search, and build noise before command output enters model context, applying context engineering at the tool-output boundary.'
+publishDate: '2026-09-12T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/rtk-agent-shell-output-filter/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: RTK filters repeated shell output and sends retained error information into model context'
+tags: ['AI', 'Agent', 'Coding Agent', 'Context Engineering', 'Shell', 'RTK']
+contentType: 'projects'
+topics: ['memory-context', 'devtools', 'agent-harness']
+language: 'en-US'
+translationOf: 'rtk-agent-shell-output-filter'
+draft: false
+---
+
+The original cover retains its Chinese labels. They mean "raw output," "RTK filtering," "retain errors," and "model context." The illustration shows long command output passing through a filter while error details continue into the model's context.
+
+## The 30-second version
+When a coding agent runs `git status`, `pytest`, `cargo test`, or a search command, it often receives lengthy output. Much of it consists of success logs, repeated lines, or formatting noise.
+RTK sits between the agent and the shell. Commands run as usual; RTK processes only the returned results. Test output can retain only failures, Git status can use a compact format, and search results can be grouped by file.
+The model sees less text, but the underlying commands still run in full.
+The most important qualification is that the project's "up to 90%" claim concerns Bash output compression, not a 90% reduction in the total bill.
+## Why it is interesting
+Many coding-agent optimizations focus on models, prompts, or context compaction. RTK chooses a more specific point: the last stage before tool results enter the model.
+This is a useful place for an engineering solution. You do not need to teach the agent to "read fewer logs." A hook can rewrite shell calls directly, with a different filter for each command type. Failures, exit codes, and stderr still need to be retained.
+Today's commit illustrates the difficulty. The project fixed stdout-only filters swallowing stderr. Compressing output must not come at the cost of losing errors.
+## 3 designs worth borrowing
+### 1. Filter at the tool boundary
+The agent does not need to invoke `rtk` explicitly every time. A hook or plugin can rewrite shell commands before execution. Putting the rule in the runtime is more reliable than putting it in a prompt.
+### 2. Filter by command type
+Useful information differs between `git status`, tests, lint, and search. RTK does not use one general-purpose summarizer. It defines a different structure for each command type, helping prevent a model-generated summary from dropping error details.
+### 3. Define what the measurements mean
+The README explicitly says that percentages concern Bash output only and that absolute token counts are estimates calculated as `bytes / 4`. Every agent optimization tool can borrow this practice. Define what you measure before discussing the gains.
+## How this connects to my work
+You can apply this boundary directly when working on agent runtimes, tool calling, and evaluations.
+First, send tool output through a deterministic output adapter. It handles deduplication, truncation, grouping, and conversion into structured fields.
+Second, designate error fields that must not be lost. Exit codes, stderr, failing test names, and key stack traces need a retention policy.
+Third, evaluate more than task success rate. Record each tool type's raw byte count, bytes sent to the model, error-retention rate, added latency, and final task success rate.
+This lets you determine whether shorter context and better task outcomes actually occur together.

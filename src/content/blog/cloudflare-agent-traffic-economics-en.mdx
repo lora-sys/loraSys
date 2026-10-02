@@ -1,0 +1,92 @@
+---
+title: 'Cloudflare data puts agent traffic on the website budget'
+description: 'Cloudflare and Fastly network data reveal repeated crawling, origin costs, access-policy questions, and the returns websites get from machine traffic.'
+publishDate: '2026-09-28T00:00:00Z'
+tags: ['AI Agent', 'Cloudflare', 'Web Infrastructure', 'AI Crawler', 'Agent Web']
+contentType: 'technical'
+topics: ['agents', 'web-development', 'runtime-infrastructure']
+language: 'en-US'
+translationOf: 'cloudflare-agent-traffic-economics'
+draft: false
+---
+
+## Facts and sources
+### Main primary sources
+1. [Cloudflare 2026 Annual Founders' Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/), September 27, 2026.
+2. [Fastly AI Traffic Grew 6.5x Faster Than Human Traffic This Year](https://www.fastly.com/blog/ai-traffic-grew-6-5x-faster-than-human-traffic-this-year), June 9, 2026.
+3. [Cloudflare Agent Readiness](https://blog.cloudflare.com/agent-readiness/), April 17, 2026.
+4. [Cloudflare Monetization Gateway](https://blog.cloudflare.com/monetization-gateway/), July 1, 2026.
+### Confirmed facts
+1. In its September 27, 2026 annual founders' letter, Cloudflare said it had expected automated traffic to exceed human traffic in the second half of 2027. The crossover it observed actually arrived in May 2026.
+2. Cloudflare also said that, in its data, more than half of the content fetched by good bots had not changed since the previous visit.
+3. Cloudflare's claim that automated traffic could reach 1,000 times human traffic within five years is a forecast, not an event that has already happened.
+4. On its own global network, Fastly observed approximately 30% growth in AI requests from January to May 2026, a growth rate about 6.5 times that of human traffic.
+5. In Fastly's May 2026 data, more than half of AI requests reached the origin server, at 51%. Less than 9% of human requests reached the origin.
+6. Cloudflare already provides Agent Readiness checks and Radar datasets to examine sites' machine discoverability, content formats, access controls, authentication, and payment capabilities.
+7. Cloudflare's Monetization Gateway lets sites set machine-payment access policies for webpages, datasets, APIs, and MCP tools.
+### Claims that should not be stated as facts
+1. Do not write that "bots already dominate the entire internet." Cloudflare and Fastly draw their data from their respective networks. Their coverage is large, but cannot be equated directly with the whole internet.
+2. Do not write that "AI traffic is already 1,000 times human traffic." Cloudflare's 1,000-fold figure is a forecast for the next five years.
+3. Do not write that "every AI agent wastes half its requests." More than half of content being unchanged is Cloudflare's observation of good-bot crawling. It does not describe every agent or every website.
+4. Do not write that "websites should block all AI crawlers." Machine traffic serves different purposes, including search, training, real-time fetching, and user-delegated tasks. These policies cannot be reduced to one switch.
+5. Do not write that "Agent Readiness or Monetization Gateway has solved the business model for the agent web." These are current implementations and product directions, not final industry standards.
+### The central judgment in one sentence
+Websites in the agent era need a separate machine-access cost in their performance budgets. A site needs to know why machines visit, what they read, whether they repeat a crawl, and whether a visit produces a citation, transaction, or payment.
+
+### Recommended platform
+Zhihu. The topic combines website infrastructure, AI agents, content distribution, and business models. Zhihu allows room for the data sources, engineering limits, and site policies.
+## Cloudflare says automated traffic has surpassed humans; websites need to budget for agents
+Cloudflare published its annual founders' letter on September 27, 2026. One data point deserves more attention than a product launch.
+Cloudflare originally expected automated traffic to surpass human traffic in the second half of 2027. It now says the crossover happened in May 2026.
+Source: [Cloudflare 2026 Annual Founders' Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/).
+This figure cannot be restated as "bots already dominate the whole internet." It is an observation from Cloudflare's own network. But another large edge network, Fastly, has seen the same direction of change.
+In data Fastly published in June 2026, AI requests grew about 30% from January to May 2026, roughly 6.5 times the growth rate of human traffic. Fastly also found that 51% of AI requests reached the origin, compared with less than 9% of human requests.
+Source: [Fastly AI Traffic Grew 6.5x Faster Than Human Traffic This Year](https://www.fastly.com/blog/ai-traffic-grew-6-5x-faster-than-human-traffic-this-year).
+The companies use different traffic classifications and network samples, so their numbers cannot be joined into one unified curve. But both point to the same engineering issue. Machine traffic is growing, and its cost structure differs from human browser traffic.
+## One agent answer can impose request costs on many sites
+When people search for a restaurant, they usually open a few results. An agent can read many more pages in a short time and return only one answer.
+Cloudflare uses a restaurant example in its letter. To recommend one restaurant, an agent might read a large number of menus. Only one restaurant ultimately gets the order, while the other sites still have to process the requests.
+Search crawlers have always existed. The real change is that request frequency, purpose, and the route to a return are diverging.
+Training crawlers collect content in bulk. Search crawlers maintain indexes. AI fetchers visit sites on demand in response to a user's question. Agents that perform actions may then read APIs, prices, inventory, and account state.
+Treating all this traffic as traditional bot traffic loses important business information.
+## Repeated crawling is becoming a source of waste
+Cloudflare also gives another figure in this letter. It says more than half of the content fetched by good bots has not changed since the previous visit.
+Source: [Cloudflare 2026 Annual Founders' Letter](https://blog.cloudflare.com/cloudflares-2026-annual-founders-letter/).
+If a page has not changed, fetching it in full again consumes site bandwidth, cache capacity, and origin resources. The crawler also incurs network, parsing, and pre-inference processing costs.
+The agent web therefore has a more basic problem than "add Markdown to pages." Machines need to know what has changed instead of taking everything again on each visit.
+Cloudflare says in the letter that it is working on mechanisms that let crawlers see more websites while fetching only changed content. The article does not publish full technical details, so this cannot yet be described as a deployed universal standard.
+The direction is clear, though. Optimizing websites for agents will add a layer of change detection and incremental fetching.
+## Sites need separate accounting for machine traffic
+Traditional website performance metrics focus on real users. Page load time, cache hit rate, conversion, and bounce rate all map to a human visit.
+An agent request does not necessarily produce a page view or a click.
+The same request therefore needs a few more fields.
+First, what type of visitor is it? A training crawler, search crawler, real-time fetcher, or agent carrying out a real user's task?
+Second, does the request hit the edge cache? If many machine requests reach the origin, site costs can multiply quickly.
+Third, does the visit produce a return? That could be search exposure, an AI citation, an order, an API call, or direct payment.
+Fourth, what permissions is the site willing to grant? Public documentation and expensive queries should not share the same access policy.
+This is why machine traffic needs more than a single Bot Traffic chart.
+## Agent Readiness addresses correct machine access
+Cloudflare released Agent Readiness in April this year. The tool checks whether a site provides machine-usable entry points for discoverability, content formats, bot access control, authentication, and payment.
+Source: [Cloudflare Agent Readiness](https://blog.cloudflare.com/agent-readiness/).
+Some checks are simple, such as robots.txt, sitemaps, and Markdown output. Others address permissions directly, such as OAuth discovery and Web Bot Auth. Some already cover machine payments and tool discovery.
+The tool's important contribution is breaking the question of whether agents can use a website into protocols and interfaces that can be checked, rather than merely assigning a score.
+For builders, the practical starting point is to inspect their documentation sites, product sites, and APIs. Do not begin by building an MCP server. First check whether existing HTTP resources are easy to discover and parse, and whether their permissions are clear.
+## Monetization Gateway addresses the price of machine access
+As machine access grows, websites face a more practical question.
+If many agent requests bring neither clicks nor ad impressions, how do sites recover the cost of content and APIs?
+Cloudflare released Monetization Gateway in July. Customers can set payment policies for webpages, datasets, APIs, and MCP tools. The current implementation uses x402.
+Source: [Cloudflare Monetization Gateway](https://blog.cloudflare.com/monetization-gateway/).
+This does not establish x402 as the final standard or imply that all content should be paid. It does establish that machine access is being treated as a separate billable activity.
+The change is especially practical for APIs and expensive data sources. API keys previously handled authentication and quotas. They may also need to express machine identity, the purpose of a call, its price, and payment credentials.
+## What builders can do now
+If you build websites, SaaS, or agent products, start by examining machine traffic separately.
+Record user agents, verified identities, access paths, cache state, the share of requests reaching the origin, and request purposes. Do not count only total requests.
+Then separate public content from expensive resources. Product documentation can be open to search and agents. Expensive queries, private data, and APIs with clear commercial value should have authentication, rate limits, and billing where needed.
+Next, check whether the content has a stable machine-readable format. Markdown, structured data, and clear API descriptions can lower parsing costs, but do not create a separate set of facts that differs from the webpage for the sake of agent SEO.
+Finally, examine repeated crawling. Provide versions, timestamps, ETags, or incremental interfaces for frequently updated resources so machines can decide whether another fetch is necessary.
+## Limits of these data
+Cloudflare's statement that automated traffic has surpassed human traffic comes from its own network. Fastly's growth figures also come from Fastly's network. Both companies cover a large volume of internet business, but neither samples the entire internet completely.
+Cloudflare forecasts that automated traffic could reach 1,000 times human traffic in five years. That number extrapolates current trends and cannot be treated as a certain growth path.
+There is another easy confusion. Automated traffic is not equivalent to AI agents. Traditional bots, API-driven systems, crawlers, and agents have different purposes.
+What we can establish today is narrower. Machine requests are growing quickly, AI requests are more likely to reach origin servers, and repeated crawling creates clear waste. Sites need to start measuring and managing this traffic separately.
+That is already enough to change a website's engineering budget.

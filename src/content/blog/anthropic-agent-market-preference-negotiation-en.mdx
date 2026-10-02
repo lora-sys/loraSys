@@ -1,0 +1,64 @@
+---
+title: 'Agent markets: 85% of the loss comes before negotiation'
+description: "Anthropic's book market experiment locates most efficiency loss in preference representation. A look at model choice, preference evals, and market rules."
+publishDate: '2026-09-25T00:00:00Z'
+tags: ['AI Agent', 'Anthropic', 'Multi-Agent', 'Eval', 'Negotiation']
+contentType: 'technical'
+topics: ['multi-agent', 'evaluation', 'ai-research']
+language: 'en-US'
+translationOf: 'anthropic-agent-market-preference-negotiation'
+draft: false
+---
+
+## Final topic evidence card
+Main primary sources:
+- [Anthropic Project Swap research page](https://www.anthropic.com/research/project-swap), published September 24, 2026.
+- [Project Swap technical report PDF](https://www-cdn.anthropic.com/3818cf6119b88f9714d995f6549fa8aac0bd5ab5/Project-Swap.pdf), covering experimental design, reruns, statistical methods, and appendices.
+- [Project Deal](https://www.anthropic.com/features/project-deal), Anthropic's earlier real-market experiment from April 24, 2026. Agents for 69 employees completed 186 transactions totaling more than $4,000.
+Confirmed facts:
+- Project Swap involved 201 Anthropic employees across six offices. Each participant brought a book they were willing to exchange.
+- Each person first had a short interview with Claude. Claude inferred their ranking of books from the interview, then gave that ranking to an agent to use in the trading market.
+- The study separately collected each participant's own ranking of 10 books as a comparison for preference representation.
+- Rankings Claude generated from short interviews had 61% pairwise agreement on book pairs the participants had actually compared. The random-guessing baseline is 50%.
+- Evaluated against participants' own rankings, the theoretically optimal allocation had an efficiency of 0.89, while the actual decentralized market averaged 0.55.
+- Inaccurate preference representation explained 85% of the efficiency loss; the trading market itself explained 15%.
+- With Claude-inferred preferences held fixed, stronger models generally achieved higher market efficiency. Two different negotiation instructions produced smaller differences.
+- This was not a pure simulation. Participants took home the physical books their agents acquired and completed a satisfaction survey afterward.
+Claims that cannot be presented as facts:
+- Do not claim that agents can already handle high-risk commercial transactions for people. The experiment involved books, with low stakes and monetary value.
+- Do not claim that 85% is a universal rule for all agent markets. It is a result from one organization, one kind of good, and specific model conditions.
+- Do not claim that stronger models always win in every market. The report covers only Anthropic's book-exchange market and the specified models.
+- Do not describe 61% as "61% accuracy in understanding users." It is pairwise agreement on book pairs the participants actually ranked.
+- Do not generalize the prompt differences in this experiment into "prompts do not matter."
+The core judgment in one sentence:
+Before an agent enters a market on a user's behalf, it needs to pass a preference-representation evaluation. If it has not learned what the user actually wants, negotiation strategy can only optimize the wrong objective.
+
+Recommended platform: Zhihu
+Title: Anthropic built a 201-person agent market. 85% of the efficiency loss came before negotiation
+The most important result in Project Swap is about something earlier than whether agents can bargain.
+Anthropic published Project Swap on September 24, 2026. Each of 201 employees brought a book they were willing to exchange. They first had a short interview with Claude, which inferred their book preferences and passed those preferences to an agent. The researchers also asked participants to rank 10 books themselves, allowing a comparison between the agent-inferred preferences and participants' own rankings.
+Source: [Project Swap](https://www.anthropic.com/research/project-swap). Technical details are in the [Project Swap PDF](https://www-cdn.anthropic.com/3818cf6119b88f9714d995f6549fa8aac0bd5ab5/Project-Swap.pdf).
+## The most important result comes before negotiation
+Claude's rankings from short interviews had 61% pairwise agreement on book pairs the participants had actually compared. Random guessing would achieve 50%. The interviews did capture some preferences, but they were far from enough to represent a person accurately.
+An optimal allocation based directly on participants' actual stated preferences scored 0.89 in efficiency. The actual decentralized agent market averaged 0.55. The researchers also calculated a theoretically optimal allocation using Claude's inferred preferences, which scored 0.60.
+The main loss, from 0.89 to 0.60, occurred during preference representation. Only the decline from 0.60 to 0.55 came from the trading process. On that basis, the report estimates that 85% of the gap came from agents representing human preferences inaccurately, and 15% from the trading mechanism itself.
+This changes the order of acceptance testing for agent products. Many products focus first on task completion and final results. Those metrics matter, but they are not the first layer. Once an agent misrepresents the user's goal, stronger execution may make it more consistent at accomplishing something the user never wanted.
+## Make user preference representation a separate evaluation
+An agent making decisions for a user faces two different problems. The first is representation: has it correctly represented the user's goals, preferences, constraints, and priorities? The second is optimization: can it find better actions based on that representation?
+Project Swap's value is that it measures these layers separately. Product teams can directly adopt this distinction.
+For event matching, do not look only at whether the agent completed a match. First prepare a set of human-confirmed preference examples and check whether the agent actually understands dates, cities, sizes, types, and non-negotiable conditions.
+A minimal version can follow Project Swap: ask users to make pairwise rankings among a small set of concrete options, then compare the agent's rankings. This makes problems easier to locate than a subjective satisfaction judgment such as "this agent really understands me."
+## Model choice affects results more than a negotiation persona
+Project Swap also reran many markets. The researchers held other conditions fixed and changed only the Claude model used by the agents. When scored using Claude's own inferred preferences, Haiku markets averaged about 0.75 in efficiency, while Opus markets averaged about 0.88. The gap between two different negotiation instructions was smaller.
+Anthropic observed a similar pattern in Project Deal in April of this year. Stronger-model agents generally achieved better objective results, but participants did not necessarily notice when they were disadvantaged. Source: [Project Deal](https://www.anthropic.com/features/project-deal).
+This suggests product teams should not devote most of their effort to negotiation personas. If the underlying model struggles to extract preferences, compare candidates, and update strategy, changing its tone will not close the capability gap.
+## Market rules still matter
+The 85% and 15% figures do not mean market design is unimportant. Project Swap used public trading histories, books as goods, and a limited experimental scale. Real agent markets also need to handle admission, default, privacy, and human confirmation.
+The experiment establishes an order of work. If a platform begins with inaccurate user preferences, even excellent matching and negotiation can only optimize those incorrect inputs.
+## How I would apply this result to an agent product
+First, evaluate user preference representation. Use human rankings, pairwise choices, and explicit constraints to check whether the agent actually understands the user.
+Second, evaluate negotiation quality. Hold correct preferences fixed, then assess the agent's matching, exchange, and negotiation capabilities.
+Third, check policy boundaries. Confirm that the agent does not disclose information that should remain private and follows conditions requiring human confirmation.
+Only then evaluate overall results, including task completion, user utility, and failure recovery.
+When results are poor, this lets you determine whether the problem comes from user expression, preference modeling, model capability, or market rules.
+Project Swap does not establish that agent markets are mature. It quantifies a more basic problem. Before an agent can make decisions for a user, its representation of that user needs to resemble the actual person.

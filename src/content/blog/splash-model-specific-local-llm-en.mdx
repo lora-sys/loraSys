@@ -1,0 +1,54 @@
+---
+title: 'Splash: a local LLM inference stack built for each model'
+description: 'Splash combines model packages, kernels, memory planning, and compatible local APIs into a model-specific inference stack for coding agents.'
+publishDate: '2026-09-18T00:00:00Z'
+heroImage:
+  src: '../../assets/blog/splash-model-specific-local-llm/lora-explainer-v2.webp'
+  alt: 'Original Chinese-labeled cover: a dedicated model package fits the machine memory budget and exposes a compatible API'
+tags: ['AI', 'LLM', 'Local AI', 'Inference', 'Splash']
+contentType: 'projects'
+topics: ['runtime-infrastructure', 'devtools']
+language: 'en-US'
+translationOf: 'splash-model-specific-local-llm'
+draft: false
+---
+
+The original cover retains its Chinese labels. They mean "dedicated model package," "machine memory budget," and "compatible API." The illustration shows a model-specific package assembled within the machine's memory budget and connected to an agent through a compatible interface.
+
+## Fact check
+- Project name: Splash.
+- Organization: IncoAI, with the GitHub organization `incoai`.
+- Official repository: [incoai/splash](https://github.com/incoai/splash).
+- Official article: [Splash launch post](https://inco.ai/blog/splash/).
+- Core function: run a small set of specially adapted models locally on Apple silicon, exposing interfaces compatible with OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages.
+- Coding-agent integration: the README provides `splash claude`, `splash codex`, `splash opencode`, and `splash hermes` launch commands.
+- Current model packages: the README lists `Qwen3.8-27B-Splash` and `Qwen3.6-35B-A3B-Splash`.
+- Key design: each model package includes its own speculative-decoding draft, Metal kernels compiled for the model's dimensions, and a memory plan calculated for the current machine.
+- Hardware requirements: Apple M3 or newer, macOS 26.4 or newer, and at least 36 GB of unified memory. The official recommendation is 48 GB or more.
+- Demo: after starting the service, open the local web UI at `127.0.0.1:8000`, or launch an installed coding agent directly from another terminal.
+- LICENSE: Apache 2.0.
+- Current status: the GitHub repository is public and not archived. Splash 1.0 was released on 2026-09-18. At the time of this retrieval on 2026-09-18, new `Splash 1.0` commits were still appearing that day.
+## Evidence cards
+1. The [official README](https://github.com/incoai/splash#readme) describes installation requirements, supported model packages, compatible APIs, coding-agent launch commands, and the three model-specific optimizations.
+2. The [Splash 1.0 release](https://github.com/incoai/splash/releases/tag/1.0) provides official installers, system requirements, and the 1.0 capability list.
+3. The [Apache 2.0 LICENSE](https://github.com/incoai/splash/blob/main/LICENSE) verifies the code license.
+4. The [Splash 1.0 commit](https://github.com/incoai/splash/commit/f58d36ddb046726adc8937ab67d07bdde015c0d6) verifies the latest commit at the time of retrieval.
+## The 30-second version
+Splash is a local LLM inference engine that runs only on Apple silicon.
+Supporting more models is not its first priority. Each Splash model package includes a dedicated draft model, Metal kernels, and a memory plan. At runtime, OpenAI- and Anthropic-compatible interfaces connect the local model to tools such as Claude Code, Codex, and OpenCode.
+Its trade-off is clear. Narrower model support allows deeper inference optimization for specific models and Mac hardware.
+## Why it is interesting
+Most local inference tools build a general-purpose runtime first, then adapt it to as many models as possible. Splash takes the opposite approach.
+It treats each model as a complete runtime package. The draft model, weight layout, Metal kernels, and memory budget can be designed together with the model. This sacrifices model coverage, but lets engineers focus performance work on specific tensor shapes, caches, and scheduling problems.
+For coding agents, the design has another practical benefit. Higher-level tools keep using familiar OpenAI or Anthropic APIs. Whether inference runs in the cloud does not require a change to the agent's call structure.
+## 3 designs worth borrowing
+## 1. Include the execution strategy in the model package
+A Splash model package contains more than weights. It also includes the corresponding draft model and requires the runtime to use specialized Metal kernels matched to the model's dimensions. The model and inference strategy ship together.
+## 2. Calculate the machine budget at startup
+At startup, Splash calculates the current machine's available Metal memory, subtracts the weights, draft, and request state, then decides the context, KV capacity, and batch limits. Configuration comes from the actual machine rather than one fixed set of defaults.
+## 3. Separate the inference backend from the agent interface
+Splash exposes OpenAI- and Anthropic-compatible interfaces. Clients such as Claude Code, Codex, and OpenCode do not need to understand the underlying Metal kernels. The inference backend can be replaced independently without changing the higher-level agent workflow.
+## How this connects to my work
+You now regularly use Codex, Claude Code, and other coding agents together. The useful reference in Splash is how it turns local inference into a compatible backend, rather than the claim that local models are cheaper.
+If you later add local models to your own agent harness, you can preserve the existing OpenAI or Anthropic interface layer and put model execution, caching, and hardware optimization in an independent runtime. Higher-level agents then do not need to change along with the inference engine.
+The current hardware threshold is also clear. Macs with less than 36 GB of unified memory do not meet the official requirements, so this is not a lightweight local-deployment option.
