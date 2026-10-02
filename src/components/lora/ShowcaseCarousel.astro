@@ -301,7 +301,7 @@ const mediaLabel = (item: ShowcaseItem) =>
       }
       hideLenses.push(hide)
       dismissLenses.push(() => {
-        if (!lens.hidden) dismissed = true
+        if (!lens.hidden || document.activeElement === trigger) dismissed = true
         hide()
       })
       const prepare = () => {
@@ -355,7 +355,16 @@ const mediaLabel = (item: ShowcaseItem) =>
       trigger.addEventListener('blur', hide)
       trigger.addEventListener('click', hide)
       image.addEventListener('error', hide)
-      image.addEventListener('load', hide)
+      image.addEventListener('load', () => {
+        hide()
+        if (
+          document.activeElement === trigger &&
+          trigger.matches(':focus-visible') &&
+          prepare() &&
+          bounds
+        )
+          position(bounds.width / 2, bounds.height / 2)
+      })
     })
     const hideAllLenses = () => hideLenses.forEach((hide) => hide())
     window.addEventListener('scroll', hideAllLenses, { passive: true, capture: true })
