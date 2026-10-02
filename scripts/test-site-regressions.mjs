@@ -421,6 +421,40 @@ try {
         assert.ok(await trigger.evaluate((element) => element === document.activeElement))
         await trigger.click()
         await viewer.locator('[data-viewer-play]').click()
+        const rapidCycle = await trigger.evaluate((element) => {
+          const dialog = document.querySelector('[data-archive-viewer]')
+          const close = dialog.querySelector('[data-viewer-close]')
+          const play = dialog.querySelector('[data-viewer-play]')
+          return new Promise((resolve) => {
+            let closedState
+            dialog.addEventListener('close', () => resolve({
+              closedState,
+              reopened: dialog.open,
+              overflow: document.documentElement.style.overflow,
+              loadedPlayers: dialog.querySelectorAll('iframe[src]').length
+            }), { once: true })
+            close.click()
+            close.click()
+            closedState = {
+              open: dialog.open,
+              overflow: document.documentElement.style.overflow,
+              loadedPlayers: dialog.querySelectorAll('iframe[src]').length,
+              focusRestored: document.activeElement === element
+            }
+            element.click()
+            play.click()
+          })
+        })
+        assert.deepEqual(rapidCycle.closedState, { open: false, overflow: initialOverflow, loadedPlayers: 0, focusRestored: true }, 'Repeated close must clean up synchronously')
+        assert.equal(rapidCycle.reopened, true, 'A queued close event must not dismiss the reopened dialog')
+        assert.equal(rapidCycle.overflow, 'hidden', 'A queued close event must not unlock an open dialog')
+        assert.equal(rapidCycle.loadedPlayers, 1, 'A queued close event must not unload the new player')
+        await viewer.locator('[data-viewer-next]').click()
+        assert.equal(await viewer.locator('[data-viewer-title]').textContent(), 'Maison Ikkoku', 'The reopened session must retain its card inventory')
+        await viewer.locator('[data-viewer-close]').click()
+        assert.equal(await page.evaluate(() => document.documentElement.style.overflow), initialOverflow)
+        await trigger.click()
+        await viewer.locator('[data-viewer-play]').click()
         assert.equal(await viewer.locator('iframe[src]').count(), 1)
         await page.goto(`${origin}${base}en/work/`, { waitUntil: 'load' })
         await page.goBack({ waitUntil: 'load' })

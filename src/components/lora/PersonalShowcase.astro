@@ -262,6 +262,7 @@ const copy = isEnglish
     let activeIndex = 0
     let returnTrigger: HTMLAnchorElement | null = null
     let previousOverflow = ''
+    let sessionActive = false
     let loadTimer: number | undefined
     let embedUrl = ''
     let playerTitle = ''
@@ -373,6 +374,23 @@ const copy = isEnglish
       viewer.scrollTop = 0
     }
 
+    const cleanupViewer = (restoreFocus = true) => {
+      if (!sessionActive) return
+      sessionActive = false
+      unload()
+      document.documentElement.style.overflow = previousOverflow
+      const trigger = returnTrigger
+      returnTrigger = null
+      activeItems = []
+      activeShelf = null
+      if (restoreFocus) trigger?.focus({ preventScroll: true })
+    }
+    const closeViewer = (restoreFocus = true) => {
+      if (viewer.open) viewer.close()
+      // Native close events are queued. Restore scroll and media before returning.
+      cleanupViewer(restoreFocus)
+    }
+
     root.addEventListener('click', (event) => {
       const target = event.target instanceof Element ? event.target : null
       const trigger = target?.closest<HTMLAnchorElement>('[data-viewer-trigger]')
@@ -390,6 +408,8 @@ const copy = isEnglish
         return
       event.preventDefault()
       if (viewer.open) return
+      // Also recover if another caller closed the dialog before its close event ran.
+      cleanupViewer(false)
       activeShelf = shelf
       activeItems = [
         ...shelf.querySelectorAll<HTMLAnchorElement>('[data-archive-card] [data-viewer-trigger]')
@@ -398,6 +418,7 @@ const copy = isEnglish
       syncViewer(Number(trigger.dataset.itemIndex) || 0)
       previousOverflow = document.documentElement.style.overflow
       viewer.showModal()
+      sessionActive = true
       document.documentElement.style.overflow = 'hidden'
       close.focus()
     })
@@ -470,19 +491,15 @@ const copy = isEnglish
       event.preventDefault()
       syncViewer(activeIndex + (event.key === 'ArrowLeft' ? -1 : 1))
     })
-    close.addEventListener('click', () => viewer.close())
-    window.addEventListener('pagehide', () => {
-      unload()
-      if (viewer.open) viewer.close()
-      document.documentElement.style.overflow = previousOverflow
+    close.addEventListener('click', () => closeViewer())
+    viewer.addEventListener('cancel', (event) => {
+      event.preventDefault()
+      closeViewer()
     })
+    window.addEventListener('pagehide', () => closeViewer(false))
     viewer.addEventListener('close', () => {
-      unload()
-      document.documentElement.style.overflow = previousOverflow
-      returnTrigger?.focus({ preventScroll: true })
-      returnTrigger = null
-      activeItems = []
-      activeShelf = null
+      // An old queued close event must not clear a newly opened session.
+      if (!viewer.open) cleanupViewer()
     })
   })
 </script>
