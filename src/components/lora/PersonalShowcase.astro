@@ -440,6 +440,27 @@ const copy = isEnglish
       if (next.disabled) previous.focus()
     })
     viewer.addEventListener('keydown', (event) => {
+      if (event.key === 'Tab') {
+        const focusable = [...viewer.querySelectorAll<HTMLElement>(
+          'a[href], button, input, select, textarea, iframe, [tabindex]'
+        )].filter((element) => element.tabIndex >= 0 &&
+          !element.matches(':disabled') && !element.closest('[hidden], [inert]') &&
+          element.getClientRects().length > 0 && getComputedStyle(element).visibility !== 'hidden')
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        const active = document.activeElement
+        if (!first || !last) {
+          event.preventDefault()
+          close.focus()
+        } else if (event.shiftKey && (active === first || !focusable.includes(active as HTMLElement))) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && (active === last || !focusable.includes(active as HTMLElement))) {
+          event.preventDefault()
+          first.focus()
+        }
+        return
+      }
       if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return
       const target = event.target instanceof Element ? event.target : null
       if (
@@ -468,12 +489,18 @@ const copy = isEnglish
 
 <style>
   .personal-showcase {
+    --collection-accent: #28655e;
+    --collection-on-accent: #ffffff;
     position: relative;
     isolation: isolate;
     display: grid;
     min-width: 0;
     gap: clamp(2.2rem, 5vw, 3.8rem);
     scroll-margin-top: 5.5rem;
+  }
+  :global(.dark) .personal-showcase {
+    --collection-accent: #8bd4c7;
+    --collection-on-accent: #162823;
   }
   .favorites-ticket {
     position: absolute;
@@ -593,7 +620,7 @@ const copy = isEnglish
     border: 1px solid hsl(var(--field-teal) / 0.35);
     border-radius: 0.2rem;
     padding: 0.3rem 0.55rem;
-    color: hsl(var(--field-teal));
+    color: var(--collection-accent);
     font-size: 0.7rem;
   }
   .viewer-artwork > a {
@@ -628,7 +655,7 @@ const copy = isEnglish
     align-items: center;
     min-height: 2.75rem;
     margin-top: 0.6rem;
-    color: hsl(var(--field-teal));
+    color: var(--collection-accent);
     font-size: 0.76rem;
     font-weight: 600;
     text-underline-offset: 0.2em;
@@ -699,13 +726,13 @@ const copy = isEnglish
     cursor: pointer;
   }
   .media-actions .viewer-play {
-    border-color: hsl(var(--field-teal));
-    background: hsl(var(--field-teal));
-    color: hsl(var(--field-paper));
+    border-color: var(--collection-accent);
+    background: var(--collection-accent);
+    color: var(--collection-on-accent);
   }
   .media-actions .viewer-original {
     border-color: hsl(var(--field-teal) / 0.45);
-    color: hsl(var(--field-teal));
+    color: var(--collection-accent);
   }
   .viewer-player {
     display: block;
@@ -782,7 +809,7 @@ const copy = isEnglish
     outline-offset: 3px;
   }
   .archive-viewer button:hover:not(:disabled) {
-    border-color: hsl(var(--field-teal));
+    border-color: var(--collection-accent);
   }
   @media (max-width: 640px) {
     .personal-heading {

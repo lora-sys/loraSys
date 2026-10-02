@@ -407,6 +407,10 @@ try {
         assert.match(await viewer.locator('[data-media-source]').textContent(), /KADOKAWAanime/)
         assert.equal(await viewer.locator('iframe[src]').count(), 0)
         await viewer.locator('[data-viewer-close]').focus()
+        await page.keyboard.press('Shift+Tab')
+        assert.ok(await viewer.locator('[data-viewer-next]').evaluate((element) => element === document.activeElement), 'Shift+Tab from the first control must wrap to the last enabled visible control')
+        await page.keyboard.press('Tab')
+        assert.ok(await viewer.locator('[data-viewer-close]').evaluate((element) => element === document.activeElement), 'Tab from the last control must wrap to Close')
         for (let n = 0; n < 14; n++) {
           await page.keyboard.press('Tab')
           assert.ok(await viewer.evaluate((element) => element.contains(document.activeElement)), 'Tab must stay inside the modal')
