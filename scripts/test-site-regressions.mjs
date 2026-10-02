@@ -388,7 +388,7 @@ try {
             assert.ok(state.transform.startsWith(`matrix(${zoom},`))
             assert.notEqual(state.background, 'none')
             assert.equal(state.animation, 'none')
-            assert.equal(state.duration, '0s')
+            assert.ok(state.duration.split(',').every(duration => parseFloat(duration) <= 0.00001), 'Lens must have no perceptible transition; respect the global reduced-motion 0.01ms rule')
             assert.equal(await lens.getAttribute('aria-hidden'), 'true')
             if (viewport.width === 1440 && reducedMotion === 'no-preference' && route === '')
               await capture(`${id}-original-circular-lens`)
@@ -430,7 +430,18 @@ try {
             await viewer.waitFor({ state: 'hidden' })
             await art.hover({ position: { x: 60, y: 80 } })
             await lens.waitFor({ state: 'visible' })
-            await shelf.locator('[data-track]').evaluate(element => { element.scrollLeft += 100 })
+            const track = shelf.locator('[data-track]')
+            const canScroll = await track.evaluate(element => element.scrollWidth > element.clientWidth + 2)
+            if (canScroll) {
+              const before = await track.evaluate(element => element.scrollLeft)
+              await track.evaluate(element => { element.scrollLeft = element.scrollLeft >= element.scrollWidth - element.clientWidth - 2 ? 0 : element.scrollWidth })
+              await page.waitForFunction(({ element, previous }) => Math.abs(element.scrollLeft - previous) > 2, { element: await track.elementHandle(), previous: before })
+            } else {
+              // A fully visible collection has no horizontal scroll event; exercise page scroll instead.
+              const before = await page.evaluate(() => scrollY)
+              await page.evaluate(() => scrollBy(0, -100))
+              await page.waitForFunction(previous => scrollY !== previous, before)
+            }
             await lens.waitFor({ state: 'hidden' })
           }
         }
