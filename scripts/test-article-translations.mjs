@@ -22,7 +22,7 @@ const fences = (body) => [...body.matchAll(/^```/gm)].length
 const urls = (body) => [...new Set(body.match(/https?:\/\/[^\s)\]"<>]+/g) ?? [])].sort()
 const components = (body) => [...withoutCode(body).matchAll(/<([A-Z][A-Za-z0-9]*)\b/g)].map((match) => match[1]).sort()
 const media = (body) => [...body.matchAll(/!\[[^\]]*\]\(([^)]+)\)|\bsrc="([^"]+)"/g)]
-  .map((match) => (match[1] ?? match[2]).replace(/-en\.svg$/, '.svg')).sort()
+  .map((match) => (match[1] ?? match[2]).replace(/-en\.(svg|html)$/, '.$1')).sort()
 
 assert.deepEqual(validateArticleTranslations(posts.map((post) => ({ id: post.id, ...post.data }))), [])
 const report = []

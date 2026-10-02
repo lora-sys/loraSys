@@ -1,0 +1,72 @@
+---
+title: "AI agent engineering reading list | 2026-09-11 to 09-17"
+description: "AI agent engineering readings for September 11 to 17, 2026, with key findings, engineering implications, suggested sections, and primary sources."
+publishDate: '2026-09-17T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+contentType: 'news'
+topics: ['mcp-skills', 'evaluation', 'security', 'multi-agent', 'agent-harness']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-11-17'
+draft: false
+---
+
+> This page was backfilled from chat history. It is an incremental selection made after the previous issue and preserves its independent version from that time.
+### This issue's takeaway
+Paper2Agent, TuiML, and Not All Agents Are Equal are the most useful papers to read together in this edition. They address how agents should use software interfaces, how to evaluate agent outputs, and how to measure agent PR quality on real GitHub repositories, respectively.
+### 1. TuiML: Machine Learning for AI Agents
+**What happened**
+TuiML gives every component machine-readable metadata and parameter schemas. An agent can search for capabilities, inspect parameters, compose workflows, and validate them before calling tools. Calls carry a seed and trace. The same specification can generate MCP, agent framework adapters, a Python API, and a CLI.
+**Engineering implications**
+An SDK for agents should build capability discovery, parameter constraints, execution records, and reproducibility into its interface design, rather than only providing a human-oriented API with an MCP wrapper.
+**Where to start**
+Read machine readable metadata, workflow validation, and one specification layer first.
+[Paper](https://arxiv.org/abs/2609.17984)
+### 2. Paper2Agent formally published in Nature
+**What happened**
+Paper2Agent uses an Environment Agent to get code running, an Extraction Agent to turn core capabilities into MCP tools, and a Testing Agent to execute them and compare the results with the paper. Tools that repeatedly fail testing are excluded from the final MCP server.
+**Engineering implications**
+The paper's engineering pipeline transfers well to internal enterprise SDKs, complex open-source projects, and data platforms: Source, Tool Extraction, Environment, Test, Lock, MCP.
+**Where to start**
+Read Overview of Paper2Agent and the Testing Agent's verification workflow first.
+[Published Nature paper](https://www.nature.com/articles/s41586-026-11044-y)
+### 3. Not All Agents Are Equal
+**What happened**
+The authors analyzed 37,623 agent PRs across 2,807 GitHub repositories, covering Codex, Devin, GitHub Copilot, Cursor, and Claude Code, and compared them with matched human PRs. Metrics include reverts, security smells, post-merge churn, and review effort.
+**Engineering implications**
+Coding-agent evaluation should include post-merge metrics. SWE-bench alone cannot tell us whether code remains stable after entering a real repository.
+**Where to start**
+Start with reverts, maintenance, and review effort. Do not treat observational data directly as a product ranking.
+[Paper](https://arxiv.org/abs/2609.17598)
+### 4. Google Zero Trust Agent Runtime
+**What happened**
+Google places agent safeguards outside the agent's code. Agent Gateway intercepts calls, Model Armor checks for prompt attacks and sensitive information, Semantic Governance evaluates user intent and business rules before tools execute, and Anomaly Detection analyzes behavior across turns.
+**Engineering implications**
+A guard for a single tool call is insufficient. Production-agent permission checks need to consider the current call, the original user intent, and historical state together.
+**Where to start**
+Read Judge intent, not just syntax and Catch multi turn exploits first.
+[Google article](https://developers.googleblog.com/build-zero-trust-ai-agents-that-judge-intent-not-just-syntax/)
+### 5. Collective Loss of Control in LLM Agent Systems
+**What happened**
+The authors constructed RogueHandoff 20, passing one agent's unsafe trajectory to another agent. The experiments also found that the default Docker backend could create information channels between instances that were supposed to be isolated.
+**Engineering implications**
+Multi-agent evaluation should inspect more than prompts and tools. Shared directories, caches, databases, message queues, and memory stores can all become hidden communication channels.
+**Where to start**
+Read the deployment audit and RogueHandoff 20 first.
+[Paper](https://arxiv.org/abs/2609.18460)
+### 6. Google open-sources its agent SDK generation pipeline
+**What happened**
+Google is moving SDK generation for the Gemini Interactions, Agents, and Webhooks APIs to the Speakeasy OpenAPI toolchain. It can generate multilingual SDKs, CLIs, and documentation MCP servers from OpenAPI.
+**Engineering implications**
+Deterministic generators and agents can divide the work. Generators can handle parts that require strict consistency, such as interface types, error systems, and streaming protocols. Agents can handle customization and explanation.
+**Where to start**
+Read What is open sourced today first, especially the documentation MCP server generator.
+[Google article](https://developers.googleblog.com/why-client-sdk-generation-belongs-in-the-open/)
+### 7. Spurious Tool Use
+**What happened**
+The paper finds that tool agents trained with reinforcement learning may learn false associations between superficial cues and tools. Adding irrelevant cues increased unnecessary tool calls by as much as 39% for some models. The authors add a tool necessity reward to suppress this behavior.
+**Engineering implications**
+Agent evaluation should test both whether a tool call is correct and cases in which no tool should be called.
+**Where to start**
+Read counterfactual evaluation and tool necessity reward first.
+[Paper](https://arxiv.org/abs/2609.16268)

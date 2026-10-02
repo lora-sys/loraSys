@@ -1,0 +1,72 @@
+---
+title: "AI agent engineering reading list | 2026-09-11 to 09-16"
+description: "AI agent engineering readings for September 11 to 16, 2026, with key findings, engineering implications, suggested sections, and primary sources."
+publishDate: '2026-09-16T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+contentType: 'news'
+topics: ['evaluation', 'multi-agent', 'security', 'agent-harness', 'mcp-skills']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-11-16'
+draft: false
+---
+
+> This page was backfilled from chat history. It preserves the version from that time without merging it with later incremental editions.
+### This issue's takeaway
+Start with Coding Agents Have Converged, Emergence World, and Authorization Architectures. They address the credibility of coding-agent leaderboards, risks in long-running multi-agent systems, and permission propagation in tool agents, respectively.
+### 1. Coding Agents Have Converged
+**What happened**
+The authors audited 254 SWE-bench submissions. Among the top 30 systems, no adjacent pair showed a statistically significant difference under a paired McNemar test. Changing the scaffold around the same model produced score differences as large as 29.8 percentage points.
+**Engineering implications**
+A coding agent's score cannot be equated directly with model capability. The harness, context strategy, tools, and execution environment may matter more than a few points on a leaderboard.
+**Where to start**
+Read model-scaffold interaction, paired comparison, and the five-step benchmark audit protocol first.
+[Paper](https://arxiv.org/abs/2609.17394)
+### 2. Emergence World
+**What happened**
+The authors ran 8 persistent worlds with 10 agents each, for 16 days in total, producing more than 850,000 LLM calls. Attacks included indirect prompt attacks, misinformation, and private-memory leaks. No world resisted all three attack categories, and some contaminated information continued to affect behavior after 46 hours.
+**Engineering implications**
+Passing short-task tests does not mean a system will still behave correctly after running for days. Persistent memory, propagation between agents, shared tools, and environmental state can all amplify delayed risks.
+**Where to start**
+Start with the three groups of stress events and how contaminated information enters persistent memory and keeps spreading.
+[Paper](https://arxiv.org/abs/2609.17320)
+### 3. HazardAuditor
+**What happened**
+The authors ran Claude Code, Codex, Hermes, and OpenClaw, converted browser, terminal, filesystem, and tool-call activity into standardized events, and then performed risk detection.
+**Engineering implications**
+Different coding agents use different internal formats, but their behavior can ultimately be normalized into file changes, shell commands, network requests, tool calls, and permission requests. Cross-harness evaluation should establish a common execution-event layer.
+**Where to start**
+Read canonical event representation first, then GuardPO's sequence-level optimization.
+[Paper](https://arxiv.org/abs/2609.15134)
+### 4. Authorization Architectures for Tool-Using AI Agents
+**What happened**
+The paper examines the authorization chain of tool agents, separating it into the human, operator, orchestrator, sub-agent, and tool endpoint. Its main concerns are runtime authorization and the aggregation of permissions after multiple levels of delegation.
+**Engineering implications**
+OAuth login does not solve permission propagation in multi-agent systems. A user authorizing an agent to do A does not mean its sub-agent should automatically receive tool permissions for A, B, and C.
+**Where to start**
+Start with principal hierarchy, delegation and scope propagation, and the runtime policy enforcement point.
+[Paper](https://arxiv.org/abs/2609.15906)
+### 5. RSIAgent
+**What happened**
+RSIAgent uses a curriculum agent, actor, and verifier to explore unfamiliar environments actively. They write success conditions, failure causes, and operational patterns to external memory, then freeze and reuse that memory for actual tasks.
+**Engineering implications**
+Learning an unfamiliar repository, enterprise application, or GUI environment can be separated into exploration, verification, memory consolidation, and task execution. All trial and error need not happen during the task itself.
+**Where to start**
+Read broad-then-deep exploration and the related ablation studies first.
+[Paper](https://arxiv.org/abs/2609.15364)
+### 6. Vercel AI SDK Harness native subscription authentication
+**What happened**
+HarnessAgent can reuse authentication already available on the host for Claude Code, Codex, Cursor, GitHub Copilot, OpenCode, Pi, and other tools. Real credentials remain on the host. The sandbox receives only placeholder credentials, which the host then replaces.
+**Engineering implications**
+When unifying coding-agent runtimes, the harness interface and credential boundary can be designed separately. Real tokens do not need to be placed inside the sandbox.
+**Where to start**
+Start with the direct, auto, and ai-gateway authentication modes and the host boundary.
+[Vercel article](https://vercel.com/changelog/ai-sdk-harness-native-subscription-authentication)
+### 7. GitHub Copilot Code Review's agent ensemble
+**What happened**
+GitHub updated Copilot Code Review. At Lite effort, multiple agents review code together, with added shell tools for verification. After subsequent commits fix an issue, Copilot can automatically resolve the original comment.
+**Engineering implications**
+Code review is moving from a single model judgment to a loop of tool-based verification, multi-agent analysis, and verification after a fix.
+**Where to start**
+Start with how shell tools verify review findings and how rereview determines whether an issue has been resolved.
+[GitHub article](https://github.blog/changelog/2026-09-11-auto-resolution-and-analysis-updates-in-copilot-code-review/)

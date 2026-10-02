@@ -1,0 +1,74 @@
+---
+title: "AI agent engineering reading list | 2026-09-21"
+description: "LangGraph human-approval schemas, Deep Agents safeguards for parallel writes to the same file, and tighter OAuth boundaries in the MCP Ruby SDK."
+publishDate: '2026-09-21T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Harness', 'MCP', 'Multi-Agent', 'Security']
+contentType: 'news'
+topics: ['multi-agent', 'mcp-skills', 'security', 'agent-harness', 'devtools']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-21'
+draft: false
+---
+
+This issue considers only additions or official releases from September 21, 2026, deduplicated against previous news logs. It retains 3 items. LangGraph 1.2.12 addresses missing type constraints on human-approval input. Deep Agents 0.7.16 handles conflicts when multiple execution branches modify the same file in parallel. MCP Ruby SDK 1.6.0 tightens OAuth metadata discovery and cross-origin request boundaries.
+
+## LangGraph 1.2.12 adds response_schema to interrupt
+
+### What happened
+
+LangGraph Python 1.2.12 was released on September 21. This version adds `response_schema` to `interrupt()`. When an agent pauses for human input, it can declare the structure of the resume value. Clients can use that schema to display a structured form instead of offering only free-form JSON input.
+
+When given a Pydantic model, TypedDict, or dataclass, LangGraph converts the type to JSON Schema and validates the input on resume. The validated object becomes the return value of `interrupt()`. If it receives a raw JSON Schema dictionary, the schema is exposed to the client, but the runtime does not automatically validate the resume value.
+
+### Engineering implications
+
+Human approval is a common source of unstructured input in long agent tasks. Previously, a harness often had to maintain its own approval forms and resume-value validation. Now the graph definition itself can carry a resume-value schema, allowing the frontend and execution layer to share the same structural constraints.
+
+Distinguish the two cases when using it. Pass a Python type when runtime enforcement is required. A JSON Schema dictionary is suitable for generating the interface, but should not be treated as backend validation.
+
+### Where to start
+
+Start with `add response_schema to interrupt()` in the [LangGraph 1.2.12 release](https://github.com/langchain-ai/langgraph/releases/tag/1.2.12). Then read the explanations of `Interrupt.response_schema` and `interrupt()` in [LangGraph types.py](https://github.com/langchain-ai/langgraph/blob/main/libs/langgraph/langgraph/types.py), focusing on validation differences between schema types.
+
+## Deep Agents 0.7.16 rejects parallel edits to the same file
+
+### What happened
+
+Deep Agents Python 0.7.16 was released on September 21. This version has two changes directly related to the harness. First, it rejects parallel edits to the same file to avoid conflicts when multiple execution branches change one file simultaneously. Second, it reloads skills when `skills_metadata` is reset to `None`.
+
+### Engineering implications
+
+Parallel agents do not mean that writes can run in parallel without restriction. When several sub-agents read an old file version and then submit changes, they can overwrite one another even if each individual change is correct. Deep Agents now rejects this class of parallel writes directly. This shows that file-level concurrency control belongs in the harness rather than being left to models to coordinate.
+
+If implementing your own coding agent, reads, searches, and independent verification can run in parallel. Writes to the same file need serialization, locking, or non-overlapping file ownership assigned in advance.
+
+The skill-reload change also shows that dynamic skill systems need an explicit invalidation mechanism. If disk content changes without invalidating runtime metadata, the agent may continue using old skill state.
+
+### Where to start
+
+Start with the [Deep Agents changelog](https://github.com/langchain-ai/deepagents/blob/main/libs/deepagents/CHANGELOG.md). Focus on `Reject parallel edits to the same file` and `Reload skills when skills_metadata is reset to None`. Then consider the filesystem and sub-agent designs in Deep Agents to determine which layer should intercept write conflicts.
+
+## MCP Ruby SDK 1.6.0 tightens OAuth discovery and request boundaries
+
+### What happened
+
+The official Model Context Protocol Ruby SDK 1.6.0 was released on September 21. Its OAuth provider adds `token_request_params` to allow extra token parameters required by an authorization server. It also adds `http_client_customizer` for configuring HTTP middleware on discovery, registration, and token requests.
+
+This customization comes with an origin restriction. The SDK rejects requests that leave the target origin of the current OAuth flow.
+
+The release also changes legacy discovery fallback logic. The SDK uses the old 2025-03-26 discovery path only when the server genuinely has not published Protected Resource Metadata. If the metadata request cannot reach the server, or returns 5xx or 429, the SDK raises `Flow::MetadataUnreachableError`. It no longer treats network errors or service failures as absent metadata and falls back. Authorization-server metadata returned by the legacy path must also declare the MCP server's origin as its issuer.
+
+### Engineering implications
+
+OAuth discovery code needs to distinguish a nonexistent resource from one that is temporarily unavailable. If timeouts, rate limits, and server errors are all treated as missing new metadata, automatic fallback to a legacy flow may bypass security constraints during failures.
+
+Extensible HTTP clients also need restrictions on redirects and cross-origin access. An MCP client may carry client credentials, token-request parameters, and authorization context. If custom middleware can send requests to another origin, the risk directly affects credential handling.
+
+### Where to start
+
+Read Added and Changed in [MCP Ruby SDK v1.6.0](https://github.com/modelcontextprotocol/ruby-sdk/releases/tag/v1.6.0) first. Focus on `http_client_customizer`, issuer validation for legacy authorization-server metadata, and the logic that stops fallback when Protected Resource Metadata is unreachable.
+
+## This issue's takeaway
+
+LangGraph adds structural constraints for human intervention. Deep Agents handles parallel-write conflicts. MCP Ruby SDK addresses OAuth discovery and cross-origin request boundaries. All three changes concern boundary handling in agent runtimes and harnesses, but they address different failures.

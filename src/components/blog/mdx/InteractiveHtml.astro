@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { src, title, caption, height = '620' } = Astro.props
+const openLabel = src.endsWith('-en.html') ? 'Open interactive panel separately' : '单独打开交互面板'
 
 if (!src.startsWith('/artifacts/blog/')) {
   throw new Error('InteractiveHtml only accepts local /artifacts/blog/ sources')
@@ -29,7 +30,7 @@ const frameHeight = Number.isFinite(parsedHeight)
   ></iframe>
   <figcaption>
     {caption && <span>{caption}</span>}
-    <a href={src} target='_blank' rel='noopener noreferrer'>单独打开交互面板</a>
+    <a href={src} target='_blank' rel='noopener noreferrer'>{openLabel}</a>
   </figcaption>
 </figure>
 

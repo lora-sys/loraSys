@@ -1,0 +1,122 @@
+---
+title: "AI agent engineering reading list | 2026-09-22"
+description: "Claude Opus 5.5 agent API compatibility, RRSI controls for harness overfitting, Harness-Zero behavior distillation, and Strands harness defaults."
+publishDate: '2026-09-22T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Harness', 'Agent Eval', 'AI Software Engineering']
+contentType: 'news'
+topics: ['agent-harness', 'evaluation', 'devtools', 'memory-context', 'agents']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-22'
+draft: false
+---
+
+This issue covers September 22, 2026. The previous issue covered through September 21. After deduplication, 4 items remain.
+
+Claude Opus 5.5 is a new September 22 release. RRSI, Harness-Zero, and Strands harness were all released or submitted on September 21 but were missing from the previous log. They are included here as missed items, not described as new September 22 releases.
+
+## Claude Opus 5.5 changes the compatibility layer for tool agents
+
+### What happened
+
+Anthropic released Claude Opus 5.5 on September 22. Anthropic says its performance on most work is close to Fable 5.1, with running costs about 40% below Opus 5 for typical workloads, cache-read prices 60% lower, and output speeds more than 30% faster. Anthropic also expanded safety testing for long tasks, impossible tasks, and scenarios based on real incidents.
+
+On the same day, Vercel described two API changes that directly affect agent harnesses. First, Opus 5.5 always uses adaptive thinking. Requests that disable thinking or set a fixed thinking budget are rejected. Second, the model no longer supports forcing `any` tool or a specific tool. Older harnesses that depend on forced tool choice may receive an HTTP 400 immediately.
+
+### Engineering implications
+
+The provider-adaptation layer in an agent runtime can no longer assume that all Anthropic models support a fixed reasoning budget and forced tool choice.
+
+For workflows that must call a particular business tool, the harness should validate the actual tool call after the model returns, then retry or fail according to business rules. When only stable JSON output is needed, structured outputs can be the first choice.
+
+Existing integrations also need compatibility tests for thinking and `tool_choice` configurations, rather than discovering 400 errors at runtime after a model upgrade.
+
+### Where to start
+
+Read Vercel's breaking API changes first, then Performance and cost-effectiveness on Anthropic's page and the long-task and safety evaluations in the corresponding system card.
+
+### Primary sources
+
+- [Anthropic: Claude Opus 5.5](https://www.anthropic.com/claude-opus-5-5)
+- [Vercel AI Gateway compatibility notes](https://vercel.com/changelog/claude-opus-5-5-now-available-on-ai-gateway)
+
+## RRSI adds overfitting controls to automated harness optimization
+
+### What happened
+
+RRSI was submitted to arXiv on September 21 and was not included in the previous log. The paper studies benchmark overfitting when automatically modifying an agent harness, adding constraints to both the proposal and selection stages.
+
+The proposal stage uses a gradually annealed modification budget to prevent a candidate from bundling too many changes and to encourage exploration of previously untried trajectories. The selection stage adds a critic to filter out proposals that clearly depend on a particular benchmark. A pruner then removes harness changes whose gains are too small, costs are too high, or value has disappeared.
+
+The authors tested on 8 benchmarks covering coding, agentic workspaces, and engineering design. The paper reports gains of up to 14.1 percentage points on the evolve split and up to 4.7 percentage points on 5 out-of-distribution benchmarks, while using about 30% fewer policy tokens than unregularized harness evolution.
+
+These figures come from the authors' experiments and should be interpreted only within the paper's model, task, and evaluation settings.
+
+### Engineering implications
+
+If a system automatically modifies prompts, tool sets, context management, or control flow, it should not use the same task set both to generate and select changes. Otherwise, the harness can easily encode benchmark-specific characteristics into its strategy.
+
+An implementation can borrow two layers of control directly. The first limits the scope of each harness patch. The second uses independent tasks and a critic to check whether a change works only on the training set. Out-of-distribution evaluation should also remain part of the release process.
+
+### Where to start
+
+Start with the proposal budget, critic, and pruner designs. Then read the out-of-distribution benchmark results and ablations to see which problem each regularization component addresses.
+
+### Primary sources
+
+- [RRSI paper](https://arxiv.org/abs/2609.24972)
+
+## Harness-Zero distills some harness behaviors into the model
+
+### What happened
+
+Harness-Zero was submitted to arXiv on September 21 and was not included in the previous log.
+
+During training, a stronger specialized harness remains in place. A harnessing agent checks the student model's output and corrects it into an action that the target harness can execute before actual execution. These corrected trajectories are then used to fine-tune the student model.
+
+After training, the specialized harness can be removed. The authors report that, under a fixed target harness, macro-average task success rose from 23.3% to 44.3%. The paper also reports that the model recovered an average of 82.3% of 28 categories of harness behavior patterns.
+
+These figures come from the authors' experiments.
+
+### Engineering implications
+
+This offers another approach to maintaining many domain-specific harnesses over time. Stable, learnable tool-use and workflow behaviors can be distilled into the model during training, reducing dependence on a complex harness behavior layer at inference time.
+
+Runtime infrastructure still cannot be removed. Permission controls, sandboxes, credential boundaries, retries, auditing, and side-effect controls still need to be provided by a harness or runtime. The paper addresses behavior transfer rather than runtime security boundaries.
+
+### Where to start
+
+Start with the training workflow for agent-as-harness correction. Then read the behavior-recovery analysis and success-rate results under a fixed target harness. Finally, read the limitations to identify which harness capabilities suit distillation and which must remain at runtime.
+
+### Primary sources
+
+- [Harness-Zero paper](https://arxiv.org/abs/2609.24974)
+
+## Strands harness provides default strategies for comparison
+
+### What happened
+
+Strands released an open-source general-purpose harness on September 21. It was not included in the previous log. The project uses the Apache 2.0 license and provides Python and TypeScript interfaces.
+
+The default harness includes shell access, file operations, web access, context management, long-term memory, session recovery, helper agents, checklists, and skills.
+
+Its context-management defaults are specific. Tool results are truncated when they exceed about 1500 tokens. Compaction triggers when context usage exceeds about 85%. There is also recovery logic after context overflow.
+
+Strands published its own results on 6 benchmarks. The project reports that, with the same Claude or GPT models, Strands harness cost 28% less on average while overall benchmark scores remained close to the comparison harnesses. These figures come from the project's own tests, not an independent reproduction.
+
+### Engineering implications
+
+This implementation is useful for checking the default parameters of an existing harness. Tool-result truncation thresholds, compaction triggers, overflow recovery, session recovery, and long-term memory can each be tested in controlled comparisons, rather than comparing only final task success rates.
+
+### Where to start
+
+Read benchmark setup and default context management in the official blog first. Then read What the default harness does in the documentation to inspect the default combination of shell, filesystem, memory, skills, helper agent, and session resume.
+
+### Primary sources
+
+- [Strands announcement](https://strandsagents.com/blog/introducing-strands-harness/)
+- [Strands harness documentation](https://strandsagents.com/latest/documentation/docs/user-guide/concepts/harness/)
+
+## This issue's takeaway
+
+The four items in this issue address different layers. Claude Opus 5.5 requires provider compatibility work first. RRSI addresses overfitting when harnesses are modified automatically. Harness-Zero studies which behaviors can move from a harness into a model. Strands provides an open-source harness that can be used directly to compare default parameters.

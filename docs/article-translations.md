@@ -29,3 +29,22 @@ The Tau event-loop PNG is retained with its Chinese labels. Its English caption 
 - After a production build, `bun scripts/test-article-translations.mjs` also checks reciprocal alternates, canonical URLs, visible switches, English return paths, aliases, listing counts, and RSS entries
 
 Structural equality supports review, but does not establish factual fidelity on its own. Read each original and translation before publication, including diagram labels and code examples. When a synchronized original changes later, review its translation separately. Do not overwrite the translated body automatically or mark an untranslated original as English.
+
+## October 2 coverage expansion
+
+The expansion is bounded to the 83 Chinese articles published in commit `c0518b79f997793b2182d1890fc8d8fb29614083`, tree `2a733eada9af7f4326b9131f3ea6fb29ad0e67d2`. At that point six had paired English editions; three other English articles were originals. The remaining 77 sources are being translated in reviewed batches. New Chinese articles after this snapshot are outside this completion pass.
+
+The first completed batch adds these ten full English reading lists, preserving the original dates, sections, links, numbers, and qualifications. These sources contain no media.
+
+- `ai-agent-engineering-news-2026-09-04-10` → `ai-agent-engineering-news-2026-09-04-10-en`
+- `ai-agent-engineering-news-2026-09-11-16` → `ai-agent-engineering-news-2026-09-11-16-en`
+- `ai-agent-engineering-news-2026-09-11-17` → `ai-agent-engineering-news-2026-09-11-17-en`
+- `ai-agent-engineering-news-2026-09-11-18` → `ai-agent-engineering-news-2026-09-11-18-en`
+- `ai-agent-engineering-news-2026-09-18-19` → `ai-agent-engineering-news-2026-09-18-19-en`
+- `ai-agent-engineering-news-2026-09-18-20` → `ai-agent-engineering-news-2026-09-18-20-en`
+- `ai-agent-engineering-news-2026-09-21` → `ai-agent-engineering-news-2026-09-21-en`
+- `ai-agent-engineering-news-2026-09-22` → `ai-agent-engineering-news-2026-09-22-en`
+- `ai-agent-engineering-news-2026-09-23` → `ai-agent-engineering-news-2026-09-23-en`
+- `ai-agent-engineering-news-2026-09-24-25` → `ai-agent-engineering-news-2026-09-24-25-en`
+
+The English archive now opens with English editions, including the English edition of the selected featured source. All and Chinese remain explicit language choices. The static HTML also defaults to English so the first render and no-JavaScript reading do not expose Chinese duplicates.

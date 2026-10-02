@@ -1,0 +1,124 @@
+---
+title: "AI agent engineering reading list | 2026-09-23"
+description: "GitHub Copilot local sandboxing, Agensh, CliffCompaction, SWE-Serve, and enterprise OpenTelemetry support in the Copilot app."
+publishDate: '2026-09-23T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Multi-Agent', 'Agent Eval', 'Harness', 'Security']
+contentType: 'news'
+topics: ['multi-agent', 'evaluation', 'agent-harness', 'security', 'devtools']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-23'
+draft: false
+---
+
+The previous issue covered through September 22, 2026. This issue includes only releases after that issue and materials submitted on the evening of September 22 that were not previously covered. It retains 5 items.
+
+Start with GitHub Copilot's local sandbox, Agensh, and CliffCompaction. They address agent execution boundaries, multi-agent scaling, and context compaction for long tasks, respectively.
+
+## GitHub Copilot's local sandbox adds project-level permission boundaries
+
+### What happened
+
+GitHub released local sandboxing for the Copilot app on September 23. Each project can separately restrict filesystem access, external network access, local network access, Git credentials, and GitHub CLI credentials. Enterprise policies can tighten permissions further. If the current operating system cannot enforce the requested isolation policy, the sandbox shell fails outright instead of falling back to unsandboxed execution.
+
+### Engineering implications
+
+This is a fail-closed design worth copying in an agent runtime. Files, networks, and credentials should be authorized separately. If a policy cannot be enforced, execution should be denied. A failed isolation setup must not give an agent full host access.
+
+Configuration changes apply only to new or restarted sessions. This also shows that a runtime needs to manage explicitly which policy version is bound to each session.
+
+### Where to start
+
+Start with the Filesystem, Network, and Credentials project settings. Then read about failure when the operating system cannot enforce a policy, and the distinction between the project's default policy and the current session's policy.
+
+### Primary sources
+
+- [GitHub update](https://github.blog/changelog/2026-09-23-local-sandboxing-in-the-github-copilot-app/)
+
+## Agensh scales multi-agent work to 1024 workers
+
+### What happened
+
+A Microsoft Research team submitted Agensh on the evening of September 22. It was not included in the previous issue. Agensh removes the central orchestrator. Workers read shared context, claim tasks, execute them, share findings, verify results, and merge progress asynchronously. The system maintains collaboration state through a shared workspace, a messaging interface, and shared context.
+
+The authors tested the 5 hardest ProgramBench tasks with GPT-5.6-sol high. As the agent count rose from 1 to 128, the average final test pass rate increased from 19.31% to 28.78%. On the pandoc task, scaling from 1 to 1024 agents raised the final test pass rate from 33.89% to 55.06%.
+
+These figures come from the authors' experiments and should be interpreted only within the paper's model, task, and evaluation settings.
+
+### Engineering implications
+
+A central scheduler can become a coordination bottleneck in large multi-agent systems. Agensh is closer to a distributed task system. The design work is in task claiming, shared state, conflict handling, result verification, and asynchronous merging, rather than adding an even more complex controller agent.
+
+### Where to start
+
+Read the multi-agent cooperation loop and its three basic components first. Then read the ProgramBench scaling experiments from 1 to 128 agents and the pandoc experiment with 1024 agents.
+
+### Primary sources
+
+- [Agensh paper](https://arxiv.org/abs/2609.26781)
+
+## CliffCompaction avoids compacting an already compacted result
+
+### What happened
+
+CliffCompaction was submitted on the evening of September 22 and was not included in the previous issue. It targets long coding-agent tasks at the million-token scale. The method only deletes or truncates original content; it does not rewrite existing content. Each compaction processes the original context again, rather than compacting the previous result, to avoid information drift from repeated summaries.
+
+The paper reports cost reductions of up to 50% under limited-context conditions while maintaining or improving Terminal-Bench performance. With test-time scaling, it gains more than 10 percentage points at less than the cost of two full-context runs. On KernelBench, CUDA kernel speedups reach 2.23 times after 200 steps and 3.58 times after 400 steps. The authors also open-sourced an API proxy that can connect to harnesses such as Claude Code and Codex.
+
+These results come from the authors' experiments.
+
+### Engineering implications
+
+A long-task context manager should not repeatedly summarize text that has already been summarized. A more stable implementation keeps the original events and tool outputs, then reselects original excerpts according to the current budget each time. This can reduce semantic drift during long runs and make replay and auditing easier.
+
+### Where to start
+
+Read the compaction algorithm and the never compact a compaction rule first. Then inspect the cost and success-rate curves on Terminal-Bench and the long-horizon KernelBench experiments.
+
+### Primary sources
+
+- [CliffCompaction paper](https://arxiv.org/abs/2609.26779)
+
+## SWE-Serve brings coding-agent evaluation to production inference stacks
+
+### What happened
+
+SWE-Serve was submitted on the evening of September 22 and was not included in the previous issue. It contains 53 repository-level tasks drawn from recent real SGLang changes, covering 6 categories of inference engineering. Tasks run on a CPU or a single H100 and use hidden functional tests, regression tests, end-to-end serving tests, and performance thresholds.
+
+Across 11 models and 31 configurations, the best configuration achieved a mean pass@1 of 75%. Among the 19 tasks with end-to-end tests, the pass rate was 69.4% when those tests were removed. With end-to-end verification included, it was only 45.9%. About one-third of patches that passed the other tests were rejected by the real serving workflow.
+
+These figures come from the authors' experiments.
+
+### Engineering implications
+
+A coding agent passing repository unit tests does not mean its changes are ready for production. Evaluations involving inference services, databases, queues, or external APIs should add real end-to-end service startup, request validation, regression checks, and performance thresholds.
+
+### Where to start
+
+Read task construction, no-op and oracle controls, and adversarial verifier review first. Then examine the gap between 69.4% and 45.9% on the 19 tasks with end-to-end coverage.
+
+### Primary sources
+
+- [SWE-Serve paper](https://arxiv.org/abs/2609.26777)
+
+## GitHub Copilot app supports enterprise OpenTelemetry
+
+### What happened
+
+GitHub released OpenTelemetry configuration for the Copilot app on September 22. It was not included in the previous issue. Enterprise administrators can use telemetry configuration in `managed-settings.json` to send agent sessions, model requests, and tool calls to existing monitoring systems. Prompt and response content is excluded by default and requires a separate content-capture setting to be enabled.
+
+### Engineering implications
+
+Production-agent observability needs to record the causal chain of sessions, model calls, and tool calls, but need not copy full prompts and outputs by default. Excluding content by default can reduce privacy and sensitive-data risks. Enterprises can also configure collection policies centrally instead of relying on each developer to set them up.
+
+### Where to start
+
+Start with the telemetry configuration entry point, the scope of session traces, and the settings that exclude prompt and response content by default.
+
+### Primary sources
+
+- [GitHub update](https://github.blog/changelog/2026-09-22-opentelemetry-in-the-github-copilot-app/)
+
+## This issue's takeaway
+
+The five items in this issue cover execution isolation, multi-agent collaboration, context compaction, production-grade coding-agent evaluation, and observability. They solve different problems and should not replace one another.
