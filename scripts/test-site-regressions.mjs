@@ -163,6 +163,70 @@ try {
       }
     } finally { await context.close() }
   })
+  await check('Delayed artwork respects keyboard focus, Escape, blur and an open dialog', async () => {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } })
+    try {
+      await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort())
+      const page = await context.newPage()
+      page.setDefaultTimeout(12000)
+      for (const language of ['', 'en/']) {
+        for (const state of ['focused', 'dismissed', 'blurred', 'dialog']) {
+          const pendingImages = []
+          let released = false
+          const holdImages = route => {
+            if (released) return route.continue()
+            pendingImages.push(route)
+          }
+          await page.route('**/images/anime/*', holdImages)
+          try {
+            await page.goto(`${origin}${base}${language}`, { waitUntil: 'load' })
+            await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })
+            const trigger = page.locator('[data-showcase-id="anime"] [data-archive-card] [data-viewer-trigger]').first()
+            const art = trigger.locator('[data-magnifier]')
+            const artwork = art.locator('img')
+            const lens = art.locator('[data-artwork-lens]')
+            await art.scrollIntoViewIfNeeded()
+            await page.keyboard.press('Tab')
+            await trigger.focus()
+            assert.ok(await trigger.evaluate(element => element === document.activeElement && element.matches(':focus-visible')))
+            assert.equal(await artwork.evaluate(image => image.complete && image.naturalWidth > 0), false)
+            assert.equal(await lens.isVisible(), false)
+            if (state === 'dismissed') await trigger.press('Escape')
+            if (state === 'blurred') await page.keyboard.press('Tab')
+            if (state === 'dialog') {
+              await trigger.press('Enter')
+              await page.locator('[data-archive-viewer]').waitFor({ state: 'visible' })
+            }
+            // Observe the real load event after the production listener, not a timed delay.
+            await artwork.evaluate(image => image.addEventListener('load', () => { image.dataset.testLoaded = 'true' }, { once: true }))
+            released = true
+            await Promise.all(pendingImages.splice(0).map(route => route.continue()))
+            await page.waitForFunction(image => image.dataset.testLoaded === 'true' && image.complete && image.naturalWidth > 0, await artwork.elementHandle())
+            if (state === 'focused') {
+              await lens.waitFor({ state: 'visible' })
+              const centered = await art.evaluate(element => {
+                const lens = element.querySelector('[data-artwork-lens]')
+                const bounds = element.getBoundingClientRect()
+                return Math.abs(parseFloat(lens.style.getPropertyValue('--lens-x')) - bounds.width / 2) < 1 && Math.abs(parseFloat(lens.style.getPropertyValue('--lens-y')) - bounds.height / 2) < 1
+              })
+              assert.ok(centered, 'A focused lazy image must reveal a centered lens when it finishes loading')
+            } else {
+              assert.equal(await lens.isVisible(), false, `Late image load must not reopen a ${state} lens`)
+            }
+            if (state === 'dialog') {
+              assert.ok(await page.locator('[data-viewer-close]').evaluate(element => element === document.activeElement))
+              await page.keyboard.press('Escape')
+              await page.locator('[data-archive-viewer]').waitFor({ state: 'hidden' })
+            }
+          } finally {
+            released = true
+            await Promise.all(pendingImages.map(route => route.abort().catch(() => {})))
+            await page.unroute('**/images/anime/*', holdImages)
+          }
+        }
+      }
+    } finally { await context.close() }
+  })
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const label = `${viewport.width}-${reducedMotion}`
