@@ -163,12 +163,28 @@ try {
       }
     } finally { await context.close() }
   })
-  await check('Delayed artwork respects keyboard focus, Escape, blur and an open dialog', async () => {
+  await check('Delayed artwork preserves keyboard focus through native scrolling, Escape, blur and a dialog', async () => {
     const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } })
     try {
       await context.route('**/*', route => new URL(route.request().url()).origin === origin ? route.continue() : route.abort())
       const page = await context.newPage()
       page.setDefaultTimeout(12000)
+      const waitForScrollToSettle = () => page.evaluate(() => new Promise((resolve, reject) => {
+        const started = performance.now()
+        let previous = scrollY
+        let stableFrames = 0
+        const check = () => {
+          if (performance.now() - started > 12000) {
+            reject(new Error('Native page scroll did not settle'))
+            return
+          }
+          stableFrames = scrollY === previous ? stableFrames + 1 : 0
+          previous = scrollY
+          if (stableFrames >= 3) resolve()
+          else requestAnimationFrame(check)
+        }
+        requestAnimationFrame(check)
+      }))
       for (const language of ['', 'en/']) {
         for (const state of ['focused', 'dismissed', 'blurred', 'dialog']) {
           const pendingImages = []
@@ -179,15 +195,16 @@ try {
           }
           await page.route('**/images/anime/*', holdImages)
           try {
+            await page.goto('about:blank')
             await page.goto(`${origin}${base}${language}`, { waitUntil: 'load' })
-            await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })
             const trigger = page.locator('[data-showcase-id="anime"] [data-archive-card] [data-viewer-trigger]').first()
             const art = trigger.locator('[data-magnifier]')
             const artwork = art.locator('img')
             const lens = art.locator('[data-artwork-lens]')
-            await art.scrollIntoViewIfNeeded()
+            const initialScroll = await page.evaluate(() => scrollY)
             await page.keyboard.press('Tab')
             await trigger.focus()
+            await page.waitForFunction(previous => scrollY !== previous, initialScroll)
             assert.ok(await trigger.evaluate(element => element === document.activeElement && element.matches(':focus-visible')))
             assert.equal(await artwork.evaluate(image => image.complete && image.naturalWidth > 0), false)
             assert.equal(await lens.isVisible(), false)
@@ -202,6 +219,13 @@ try {
             released = true
             await Promise.all(pendingImages.splice(0).map(route => route.continue()))
             await page.waitForFunction(image => image.dataset.testLoaded === 'true' && image.complete && image.naturalWidth > 0, await artwork.elementHandle())
+            await waitForScrollToSettle()
+            if (state !== 'dialog') {
+              const before = await page.evaluate(() => scrollY)
+              await page.evaluate(() => scrollBy(0, -120))
+              await page.waitForFunction(previous => scrollY !== previous, before)
+              await waitForScrollToSettle()
+            }
             if (state === 'focused') {
               await lens.waitFor({ state: 'visible' })
               const centered = await art.evaluate(element => {
@@ -209,7 +233,7 @@ try {
                 const bounds = element.getBoundingClientRect()
                 return Math.abs(parseFloat(lens.style.getPropertyValue('--lens-x')) - bounds.width / 2) < 1 && Math.abs(parseFloat(lens.style.getPropertyValue('--lens-y')) - bounds.height / 2) < 1
               })
-              assert.ok(centered, 'A focused lazy image must reveal a centered lens when it finishes loading')
+              assert.ok(centered, 'A focused lazy image must retain its centered lens after loading and native page scrolling')
             } else {
               assert.equal(await lens.isVisible(), false, `Late image load must not reopen a ${state} lens`)
             }
