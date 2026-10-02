@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto'
 import { readdir, readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { validateArticleTranslations } from './lib/article-translations.mjs'
 
 import {
   readFrontmatter,
@@ -139,10 +140,23 @@ function validateFile(file, source) {
 
 const blogFiles = await collectBlogFiles(BLOG_DIR)
 const errors = []
+const translationEntries = []
 for (const file of blogFiles) {
   const source = await readFile(file, 'utf8')
   errors.push(...validateFile(path.relative(process.cwd(), file), source))
+  try {
+    const { data } = readFrontmatter(source)
+    translationEntries.push({
+      id: path.relative(BLOG_DIR, file).replace(/\.mdx?$/, ''),
+      language: data.language,
+      translationOf: data.translationOf,
+      draft: data.draft
+    })
+  } catch {
+    // The file validator above already reports malformed frontmatter.
+  }
 }
+errors.push(...validateArticleTranslations(translationEntries))
 
 for (const repair of visualOverrides.diagram_repairs ?? []) {
   if (!repair.repaired_blob_sha) continue

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+<rect width="1440" height="900" fill="#F7F1E7"/>
+<text x="720" y="72" text-anchor="middle" font-size="40" font-family="sans-serif" font-weight="700" fill="#2B241F">When should you split work across agents?</text>
+<text x="720" y="112" text-anchor="middle" font-size="24" font-family="sans-serif" fill="#806B59">Check task dependencies before choosing how agents collaborate</text>
+<rect x="50" y="160" rx="26" width="640" height="620" fill="#FFF9EF" stroke="#806B59" stroke-width="2"/>
+<rect x="750" y="160" rx="26" width="640" height="620" fill="#FFF9EF" stroke="#806B59" stroke-width="2"/>
+<text x="370" y="215" text-anchor="middle" font-size="27" font-family="sans-serif" font-weight="700" fill="#2B241F">Tightly coupled: keep one agent</text>
+<text x="1070" y="215" text-anchor="middle" font-size="25" font-family="sans-serif" font-weight="700" fill="#2B241F">Sparse dependencies: delegate subagents</text>
+<g font-family="sans-serif" font-size="23" fill="#2B241F">
+<rect x="180" y="275" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="320" text-anchor="middle">Read the failing test</text>
+<line x1="370" y1="345" x2="370" y2="380" stroke="#D89B3C" stroke-width="6"/><polygon points="360,374 380,374 370,390" fill="#D89B3C"/>
+<rect x="180" y="390" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="435" text-anchor="middle">Check the implementation</text>
+<line x1="370" y1="460" x2="370" y2="495" stroke="#D89B3C" stroke-width="6"/><polygon points="360,489 380,489 370,505" fill="#D89B3C"/>
+<rect x="180" y="505" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="550" text-anchor="middle">Change the code</text>
+<line x1="370" y1="575" x2="370" y2="610" stroke="#D89B3C" stroke-width="6"/><polygon points="360,604 380,604 370,620" fill="#D89B3C"/>
+<rect x="180" y="620" rx="18" width="380" height="70" fill="#E9DDCE"/><text x="370" y="665" text-anchor="middle">Rerun the test</text>
+</g>
+<rect x="160" y="715" rx="16" width="420" height="40" fill="#C77C66" opacity="0.18"/>
+<text x="370" y="733" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#2B241F"><tspan font-family="sans-serif" x="370" dy="0">Each step relies heavily on the previous one.</tspan><tspan font-family="sans-serif" x="370" dy="18">Splitting adds coordination.</tspan></text>
+<g font-family="sans-serif" font-size="22" fill="#2B241F">
+<rect x="960" y="260" rx="18" width="220" height="64" fill="#F1C77C"/><text x="1070" y="300" text-anchor="middle">Main agent</text>
+<line x1="1070" y1="324" x2="1070" y2="360" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="360" x2="1290" y2="360" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="360" x2="850" y2="400" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="360" x2="1070" y2="400" stroke="#806B59" stroke-width="4"/>
+<line x1="1290" y1="360" x2="1290" y2="400" stroke="#806B59" stroke-width="4"/>
+<rect x="785" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="850" y="445" text-anchor="middle" font-size="18">Deployment</text><text x="850" y="480" text-anchor="middle" font-size="18">changes</text>
+<rect x="1005" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="1070" y="445" text-anchor="middle">Error</text><text x="1070" y="480" text-anchor="middle">logs</text>
+<rect x="1225" y="400" rx="18" width="130" height="120" fill="#8DAA91" opacity=".48"/>
+<text x="1290" y="445" text-anchor="middle" font-size="18">Dependency</text><text x="1290" y="480" text-anchor="middle" font-size="18">status</text>
+<line x1="850" y1="520" x2="850" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="520" x2="1070" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1290" y1="520" x2="1290" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="850" y1="570" x2="1290" y2="570" stroke="#806B59" stroke-width="4"/>
+<line x1="1070" y1="570" x2="1070" y2="610" stroke="#806B59" stroke-width="4"/>
+<rect x="940" y="610" rx="18" width="260" height="70" fill="#F1C77C"/><text x="1070" y="655" text-anchor="middle" font-size="18">Main agent combines results</text>
+</g>
+<rect x="870" y="715" rx="16" width="400" height="40" fill="#8DAA91" opacity="0.25"/>
+<text x="1070" y="733" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#2B241F"><tspan font-family="sans-serif" x="1070" dy="0">Subtasks proceed independently.</tspan><tspan font-family="sans-serif" x="1070" dy="18">Only needed results are exchanged at the end.</tspan></text>
+<text x="720" y="840" text-anchor="middle" font-size="26" font-family="sans-serif" font-weight="700" fill="#2B241F">Split agents by dependency structure, not by the number of roles</text>
+</svg>

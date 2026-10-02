@@ -44,7 +44,7 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
         <div>
           {relatedProjects.map((project) => (
             <a href={`/projects#${project.repository}`} data-astro-prefetch>
-              {project.title} <span aria-hidden='true'>↗</span>
+              {project.title} <span aria-hidden='true' data-link-arrow>↗</span>
             </a>
           ))}
         </div>
@@ -52,7 +52,7 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
     )
   }
   <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch
-    >阅读文章 <span aria-hidden='true'>↗</span></a
+    >阅读文章 <span aria-hidden='true' data-link-arrow>↗</span></a
   >
 </article>
 

@@ -286,7 +286,7 @@ Eve explicitly requires deployers to configure their own guardrails for approval
 
 Observability is where Eve looks most like a "productized backend framework." The official Observability documentation states that every Eve project gets Agent Runs by default: without a separate `instrumentation.ts`, you can see in the Vercel Dashboard runs broken down by trigger type, token input/output/cache volumes, turn counts, durations, and per-turn details including tool calls, reasoning, and timing.
 
-If you need integration with your company's existing tracing体系, Eve also supports registering OpenTelemetry exporters in `agent/instrumentation.ts`. The official example demonstrates a Braintrust exporter and states that any OTel-compatible backend can be connected, such as Honeycomb, Datadog, Jaeger, etc.
+If you need integration with your company's existing tracing system, Eve also supports registering OpenTelemetry exporters in `agent/instrumentation.ts`. The official example demonstrates a Braintrust exporter and states that any OTel-compatible backend can be connected, such as Honeycomb, Datadog, Jaeger, etc.
 
 Since the instrumentation file runs automatically before agent startup and any agent code, it's also suitable for unified telemetry initialization.
 
@@ -548,7 +548,7 @@ If your existing system comes from LangGraph, custom agent loops, OpenAI Agents 
 | Long flows/multi-turn recovery         | Migrate logic previously maintained by custom state machines to session/turn thinking; identify pause/resume boundaries |
 | Web/Slack entry points                 | Prefer built-in channels; use `defineChannel` only for custom surfaces                                                  |
 | Frontend deployment                    | If already using Next.js/Nuxt/SvelteKit, prioritize single-project mounting over dual services                          |
-| Scheduled tasks                        | Clarify UTC cron, whether审批/OAuth may trigger, whether handler mode is needed                                         |
+| Scheduled tasks                        | Clarify UTC cron, whether approvals/OAuth may trigger, whether handler mode is needed                                         |
 | Idempotency and rollback               | Design idempotency keys and compensation logic for all external side effects, since interrupted steps may re-run        |
 | Observability and privacy              | Enable Agent Runs, integrate OTel if needed, and assess sensitive data tracking disclosure obligations                  |
 

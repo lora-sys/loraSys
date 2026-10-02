@@ -135,7 +135,7 @@ const filterAttributes = filterable
             data-interaction='project_website'
             data-destination={project.repository}
           >
-            {leadStory ? t('项目说明', 'Project notes') : compactLocale === 'zh-CN' ? '项目页' : 'Project'} <span aria-hidden='true'>↗</span>
+            {leadStory ? t('项目说明', 'Project notes') : compactLocale === 'zh-CN' ? '项目页' : 'Project'} <span aria-hidden='true' data-link-arrow>↗</span>
           </a>
           {source && (
             <a
@@ -147,7 +147,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='github-circle' class='size-4' aria-hidden='true' />
-              {compactLocale === 'zh-CN' ? '仓库' : 'Repository'} <span aria-hidden='true'>↗</span>
+              {compactLocale === 'zh-CN' ? '仓库' : 'Repository'} <span aria-hidden='true' data-link-arrow>↗</span>
             </a>
           )}
         </div>
@@ -196,7 +196,7 @@ const filterAttributes = filterable
                 data-destination={story.kind}
               >
                 {displayLabel(story.kind, compactLocale)} · {story.label}
-                <span aria-hidden='true'>↗</span>
+                <span aria-hidden='true' data-link-arrow>↗</span>
               </a>
             ))}
           </div>
@@ -232,7 +232,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='earth' class='size-4' aria-hidden='true' />
-              {t('访问网站', 'Visit website')} <span aria-hidden='true'>↗</span>
+              {t('访问网站', 'Visit website')} <span aria-hidden='true' data-link-arrow>↗</span>
             </a>
           )
         }
@@ -246,7 +246,7 @@ const filterAttributes = filterable
               data-interaction='project_contribution'
               data-destination={project.repository}
             >
-              {t('贡献记录', 'Contribution PR')} <span aria-hidden='true'>↗</span>
+              {t('贡献记录', 'Contribution PR')} <span aria-hidden='true' data-link-arrow>↗</span>
             </a>
           )
         }
@@ -261,7 +261,7 @@ const filterAttributes = filterable
               data-destination={project.repository}
             >
               <Icon name='github-circle' class='size-4' aria-hidden='true' />
-              {project.source === 'External' ? t('原项目', 'Project') : t('源码', 'Source')} <span aria-hidden='true'>↗</span>
+              {project.source === 'External' ? t('原项目', 'Project') : t('源码', 'Source')} <span aria-hidden='true' data-link-arrow>↗</span>
             </a>
           )
         }

@@ -344,8 +344,41 @@ try {
         await page.waitForURL((url) => url.pathname.replace(/\/$/, '') === `${base}blog/loop-engineering-harness`)
         assert.equal(new URL(page.url()).searchParams.get('source'), 'legacy')
         assert.equal(decodeURIComponent(new URL(page.url()).hash.slice(1)), section)
-        assert.equal(await page.locator('link[rel="alternate"][hreflang="en-US"]').count(), 0, 'Chinese article must not claim its alias is a translation')
+        const englishAlternate = page.locator('link[rel="alternate"][hreflang="en-US"]')
+        assert.equal(await englishAlternate.count(), 1, 'The original now has a real English translation')
+        assert.equal(new URL(await englishAlternate.getAttribute('href')).pathname, `${base}blog/loop-engineering-harness-en`, 'Alternate points to the real translation, never the legacy alias')
         await capture('legacy-link')
+      })
+
+      await check(`${label} all six translations retain keyboard switches and readable media`, page, async () => {
+        const slugs = ['loop-engineering-harness', 'tau-agent-loop-events', 'long-running-agent-session-context-state', 'agent-credential-boundary-vault-broker', 'multi-agent-dependency-aware-delegation', 'free-vision-skill']
+        await open('en/writing?language=en-US')
+        await page.locator('#language-filter:not([disabled])').waitFor()
+        for (const slug of slugs) {
+          assert.equal(await page.locator(`[data-article]:visible a[href="${base}blog/${slug}-en"]`).count(), 1, `${slug}: discoverable English edition`)
+        }
+        for (const slug of slugs) {
+          await open(`blog/${slug}-en`)
+          assert.equal(await page.locator('html').getAttribute('lang'), 'en-US')
+          assert.equal(await page.locator('.site-header .locale-toggle').getAttribute('href'), `${base}blog/${slug}`)
+          assert.equal(await page.locator('[data-reading-progress]').count(), 1)
+          assert.equal(await page.locator('[data-reading-progress]').getAttribute('aria-label'), 'Reading progress')
+          assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), `${slug}: no horizontal overflow`)
+          const images = page.locator('#content img')
+          for (let index = 0; index < await images.count(); index++) {
+            const image = images.nth(index)
+            await image.scrollIntoViewIfNeeded()
+            await image.evaluate(element => element.decode())
+            assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0), `${slug}: article image loads`)
+          }
+          await page.locator('.article-translation-link a').press('Enter')
+          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${slug}`)
+          assert.equal(await page.locator('html').getAttribute('lang'), 'zh-CN')
+          await page.locator('.article-translation-link a').press('Enter')
+          await page.waitForURL(url => url.pathname.replace(/\/$/, '') === `${base}blog/${slug}-en`)
+          assert.equal(await page.locator('html').getAttribute('lang'), 'en-US')
+        }
+        await capture('translation-round-trip')
       })
 
       await check(`${label} web resume is primary and PDF stays optional`, page, async () => {

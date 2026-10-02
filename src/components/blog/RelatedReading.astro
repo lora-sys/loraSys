@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content'
 
 import { writingLabel } from '@/utils/writing'
+import { articleLanguage, originalArticleId } from '@/utils/article-translations'
 
 import LanguageBadge from './LanguageBadge.astro'
 import FormattedDate from './LocalDate.astro'
@@ -15,7 +16,10 @@ const { post, posts } = Astro.props
 const isChinese = post.data.language !== 'en-US'
 const currentTopics = new Set(post.data.topics)
 const related = posts
-  .filter((candidate) => candidate.id !== post.id)
+  .filter((candidate) =>
+    originalArticleId(candidate) !== originalArticleId(post) &&
+    articleLanguage(candidate) === articleLanguage(post)
+  )
   .map((candidate) => {
     const sharedTopics = candidate.data.topics.filter((tag) => currentTopics.has(tag))
     const sameLanguage = candidate.data.language === post.data.language

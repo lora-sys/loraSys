@@ -1,0 +1,44 @@
+/* Direction cues move independently so text and hit targets stay still. */
+[data-link-arrow] {
+  display: inline-block;
+  transition: transform 160ms ease;
+}
+a:focus-visible [data-link-arrow] { transform: translate(2px, -2px); }
+@media (hover: hover) and (pointer: fine) {
+  a:hover [data-link-arrow] { transform: translate(2px, -2px); }
+}
+a:active [data-link-arrow] { transform: translate(1px, -1px); }
+
+:is(.directory-filters, .filter-group) button,
+:is(.search-link, .menu-toggle, .more-toggle, #toggleDarkMode) {
+  transition: transform 140ms ease;
+}
+:is(.directory-filters, .filter-group) button:active,
+:is(.search-link, .menu-toggle, .more-toggle, #toggleDarkMode):active {
+  transform: scale(.97);
+}
+
+/* Opening a native disclosure keeps all of its content immediately available. */
+@keyframes disclosure-entry {
+  from { opacity:.65; transform:translateY(4px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is([data-work-archive], .writing-routes, .article-toc-condensed)[open] > :not(summary) {
+    animation: disclosure-entry 180ms ease-out;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-link-arrow],
+  :is(.directory-filters, .filter-group) button,
+  :is(.search-link, .menu-toggle, .more-toggle, #toggleDarkMode) {
+    transition:none;
+    transform:none !important;
+  }
+}
+
+/* Code actions must be discoverable without hover on touch screens. */
+@media (hover: none) {
+  .astro-code button.copy { opacity:1; }
+  .astro-code .language { right:4rem; }
+}

@@ -98,7 +98,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
             <strong>{item.title}</strong>
             <small>{item.meta}{item.detail ? ` · ${item.detail}` : ''}</small>
           </span>
-          <span aria-hidden='true'>↗</span>
+          <span aria-hidden='true' data-link-arrow>↗</span>
         </a>
       ))}
       <p class='directory-empty' hidden data-content-empty>没有匹配的内容。</p>
@@ -111,7 +111,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
       <ul>
         {opportunities.slice(0, 6).map((opportunity) => (
           <li>
-            <a href={`/projects#${opportunity.repository}`}>{opportunity.title}<span aria-hidden='true'>↗</span></a>
+            <a href={`/projects#${opportunity.repository}`}>{opportunity.title}<span aria-hidden='true' data-link-arrow>↗</span></a>
             <small><strong>{displayLabel(opportunity.priority, 'zh-CN')}</strong> · {displayLabel(opportunity.format, 'zh-CN')} · {opportunity.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</small>
             <small>{displayLabel(opportunity.reason, 'zh-CN')}</small>
           </li>
@@ -122,6 +122,8 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
 </section>
 
 <script>
+  import { enterFeedback, stopFeedback } from '@/utils/motion'
+
   document.querySelectorAll<HTMLElement>('[data-content-browser]').forEach((browser) => {
     const search = browser.querySelector<HTMLInputElement>('[data-content-search]')
     const items = [...document.querySelectorAll<HTMLElement>('[data-content-item]')]
@@ -141,7 +143,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
     const setPressed = (buttons: HTMLButtonElement[], key: string, value: string) => {
       buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset[key] === value)))
     }
-    const apply = () => {
+    const apply = (feedback = false) => {
       const query = search?.value.trim().toLocaleLowerCase() ?? ''
       let visible = 0
       items.forEach((item) => {
@@ -149,13 +151,21 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
           (kind === 'all' || item.dataset.contentKind === kind) &&
           (owner === 'all' || item.dataset.contentOwner === owner) &&
           (!query || (item.dataset.contentSearch ?? '').includes(query))
+        const wasHidden = item.hidden
+        if (!show) stopFeedback(item)
         item.hidden = !show
+        if (feedback && show && wasHidden) enterFeedback(item, false)
         if (show) visible += 1
       })
       const kindLabel = kind === 'all' ? '' : ` · 类型：${kindButtons.find((button) => button.dataset.kindFilter === kind)?.textContent?.trim() ?? kind}`
       const ownerLabel = owner === 'all' ? '' : ` · 来源：${owner === 'External' ? '外部贡献' : owner}`
       const hasFilters = kind !== 'all' || owner !== 'all' || Boolean(query)
-      if (status) status.textContent = `${visible} / ${items.length} 条内容${kindLabel}${ownerLabel}`
+      if (status) {
+        const message = `${visible} / ${items.length} 条内容${kindLabel}${ownerLabel}`
+        const changed = status.textContent !== message
+        status.textContent = message
+        if (feedback && changed) enterFeedback(status)
+      }
       if (summary) { summary.hidden = !hasFilters; summary.textContent = [kind !== 'all' ? `类型：${kindButtons.find((button) => button.dataset.kindFilter === kind)?.textContent?.trim() ?? kind}` : '', owner !== 'all' ? `来源：${owner === 'External' ? '外部贡献' : owner}` : '', query ? `关键词：${query}` : ''].filter(Boolean).join(' · ') }
       if (reset) reset.hidden = !hasFilters
       if (receipt) receipt.hidden = !hasFilters
@@ -165,14 +175,14 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
     kindButtons.forEach((button) => button.addEventListener('click', () => {
       kind = button.dataset.kindFilter ?? 'all'
       setPressed(kindButtons, 'kindFilter', kind)
-      syncUrl(); apply()
+      syncUrl(); apply(true)
     }))
     ownerButtons.forEach((button) => button.addEventListener('click', () => {
       owner = button.dataset.ownerFilter ?? 'all'
       setPressed(ownerButtons, 'ownerFilter', owner)
-      syncUrl(); apply()
+      syncUrl(); apply(true)
     }))
-    search?.addEventListener('input', () => { syncUrl(); apply() })
+    search?.addEventListener('input', () => { syncUrl(); apply(true) })
     receipt?.addEventListener('click', async () => { const text = `loraSys 筛选记录\n${summary?.textContent || '全部内容'}\n${visibleLabel()}`; try { await navigator.clipboard.writeText(text); receipt.textContent='已复制筛选记录'; window.setTimeout(()=>{receipt.textContent='复制筛选记录'},1600) } catch { receipt.textContent='复制失败，可选择并复制筛选条件' } })
     const visibleLabel = () => status?.textContent || '筛选完成'
     reset?.addEventListener('click', () => {
@@ -181,7 +191,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
       if (search) search.value = ''
       setPressed(kindButtons, 'kindFilter', kind)
       setPressed(ownerButtons, 'ownerFilter', owner)
-      syncUrl(); apply()
+      syncUrl(); apply(true)
       search?.focus()
     })
     window.addEventListener('popstate', () => {
@@ -193,7 +203,7 @@ const syncDate = new Intl.DateTimeFormat('zh-CN', {
       if (search) search.value = current.get('content-q') || ''
       setPressed(kindButtons, 'kindFilter', kind)
       setPressed(ownerButtons, 'ownerFilter', owner)
-      apply()
+      apply(true)
     })
     setPressed(kindButtons, 'kindFilter', kind)
     setPressed(ownerButtons, 'ownerFilter', owner)
