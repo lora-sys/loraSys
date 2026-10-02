@@ -365,7 +365,13 @@ try {
             const art = trigger.locator('[data-magnifier]')
             const lens = art.locator('[data-artwork-lens]')
             await art.scrollIntoViewIfNeeded()
-            await art.locator('img').evaluate(image => image.decode())
+            const artwork = art.locator('img')
+            try {
+              await page.waitForFunction(image => image.complete && image.naturalWidth > 0, await artwork.elementHandle())
+            } catch (error) {
+              const state = await artwork.evaluate(image => ({ src: image.src, currentSrc: image.currentSrc, complete: image.complete, naturalWidth: image.naturalWidth }))
+              throw new Error(`Artwork did not load: ${JSON.stringify(state)}`, { cause: error })
+            }
             await art.hover({ position: { x: 45, y: 65 } })
             await lens.waitFor({ state: 'visible' })
             const state = await lens.evaluate(element => {
