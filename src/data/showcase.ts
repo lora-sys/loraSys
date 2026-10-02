@@ -9,6 +9,8 @@ export interface ShowcaseItem {
   /** Force eager loading for posters that must be available without scroll, e.g. third-party CDN. */
   imageEager?: boolean
   href: string
+  medium?: string
+  mediumEn?: string
   mediaKind?: 'poster' | 'cover' | 'artwork'
   objectPosition?: string
   posterSource?: string
@@ -16,9 +18,16 @@ export interface ShowcaseItem {
   broadcastPalette?: [string, string]
   broadcastMotion?: { duration: number; x: number; y: number; scale: number }
   video?: {
-    provider: 'youtube'
+    provider: 'youtube' | 'bilibili'
     id: string
     sourceLabel: string
+    title?: string
+    titleEn?: string
+    sourceUrl?: string
+    watchUrl?: string
+    uploader?: string
+    checkedAt?: string
+    embed?: boolean
   }
   cta?: string
   spotify?: boolean
@@ -40,8 +49,19 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E4%BE%86%E8%87%AA%E6%B7%B1%E6%B7%B5',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#d99a33', '#4c8177'],
-    broadcastMotion: { duration: 9, x: .7, y: -.4, scale: 1.055 },
-    video: { provider: 'youtube', id: 'Sy7cLG6XHRY', sourceLabel: 'Official Made in Abyss anime website' },
+    broadcastMotion: { duration: 9, x: 0.7, y: -0.4, scale: 1.055 },
+    video: {
+      provider: 'youtube',
+      id: 'Sy7cLG6XHRY',
+      sourceLabel: 'miabyss.com',
+      title: '《来自深渊 觉醒的神秘》正式预告',
+      titleEn: 'Awakening Mystery · official trailer',
+      sourceUrl: 'https://miabyss.com/movie_part1/movie.html',
+      watchUrl: 'https://www.youtube.com/watch?v=Sy7cLG6XHRY',
+      uploader: 'KADOKAWAanime',
+      checkedAt: '2026-10-02',
+      embed: true
+    }
   },
   {
     name: '相聚一刻',
@@ -53,7 +73,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E7%9B%B8%E8%81%9A%E4%B8%80%E5%88%BB',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#a76550', '#d99a33'],
-    broadcastMotion: { duration: 9, x: -.5, y: .3, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: -0.5, y: 0.3, scale: 1.055 }
   },
   {
     name: 'Kimagure Orange☆Road / 橙路',
@@ -65,10 +85,22 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://kitsu.io/anime/kimagure-orange-road',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#d99a33', '#a76550'],
-    broadcastMotion: { duration: 9, x: .4, y: -.5, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: 0.4, y: -0.5, scale: 1.055 }
   },
   {
     name: 'City Hunter / 城市猎人',
+    video: {
+      provider: 'youtube',
+      id: 'nLdeQHeuHck',
+      sourceLabel: 'cityhunter-movie.com',
+      title: '《城市猎人 天使之泪》90秒预告',
+      titleEn: 'Angel Dust · 90-second official trailer',
+      sourceUrl: 'https://cityhunter-movie.com/news/?article_id=63198',
+      watchUrl: 'https://www.youtube.com/watch?v=nLdeQHeuHck',
+      uploader: 'Aniplex',
+      checkedAt: '2026-10-02',
+      embed: true
+    },
     description: '新宿的夜、神枪手与危险委托交织成的都市浪漫。',
     image: '/images/anime/city-hunter.jpg',
     href: 'https://kitsu.io/anime/city-hunter',
@@ -77,7 +109,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://kitsu.io/anime/city-hunter',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#4c8177', '#d99a33'],
-    broadcastMotion: { duration: 9, x: -.6, y: .2, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: -0.6, y: 0.2, scale: 1.055 }
   },
   {
     name: 'Steins;Gate',
@@ -89,7 +121,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E5%91%BD%E9%81%8B%E7%9F%B3%E4%B9%8B%E9%96%80',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#4c8177', '#755f48'],
-    broadcastMotion: { duration: 9, x: .5, y: -.3, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: 0.5, y: -0.3, scale: 1.055 }
   },
   {
     name: 'Attack on Titan',
@@ -101,7 +133,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E9%80%B2%E6%93%8A%E7%9A%84%E5%B7%A8%E4%BA%BA',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#a76550', '#4c8177'],
-    broadcastMotion: { duration: 9, x: -.4, y: .4, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: -0.4, y: 0.4, scale: 1.055 }
   },
   {
     name: 'Eureka Seven',
@@ -113,7 +145,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E4%BA%A4%E5%93%8D%E8%AF%97%E7%AF%87',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#4c8177', '#d99a33'],
-    broadcastMotion: { duration: 9, x: .6, y: -.2, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: 0.6, y: -0.2, scale: 1.055 }
   },
   {
     name: 'Bakuman',
@@ -125,7 +157,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E7%88%B6%E6%BC%AB%E7%8E%8B',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#d99a33', '#4c8177'],
-    broadcastMotion: { duration: 9, x: -.3, y: .5, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: -0.3, y: 0.5, scale: 1.055 }
   },
   {
     name: 'Death Note',
@@ -137,7 +169,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://zh.wikipedia.org/wiki/%E6%AD%BB%E4%BA%A1%E7%AC%94%E8%AE%B0',
     sourceLabel: 'Local archive asset; detail source is the linked title page',
     broadcastPalette: ['#755f48', '#a76550'],
-    broadcastMotion: { duration: 9, x: .4, y: -.4, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: 0.4, y: -0.4, scale: 1.055 }
   },
   {
     name: '天元突破红莲螺岩',
@@ -151,7 +183,7 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://myanimelist.net/anime/2001/Tengen_Toppa_Gurren_Lagann',
     sourceLabel: 'MyAnimeList poster; detail source: MyAnimeList',
     broadcastPalette: ['#a76550', '#d99a33'],
-    broadcastMotion: { duration: 9, x: .7, y: .2, scale: 1.055 },
+    broadcastMotion: { duration: 9, x: 0.7, y: 0.2, scale: 1.055 }
   },
   {
     name: '四月是你的谎言',
@@ -165,8 +197,8 @@ export const anime: ShowcaseItem[] = [
     posterSource: 'https://myanimelist.net/anime/23273/Shigatsu_wa_Kimi_no_Uso',
     sourceLabel: 'MyAnimeList poster; detail source: MyAnimeList',
     broadcastPalette: ['#d99a33', '#4c8177'],
-    broadcastMotion: { duration: 9, x: -.5, y: -.3, scale: 1.055 },
-  },
+    broadcastMotion: { duration: 9, x: -0.5, y: -0.3, scale: 1.055 }
+  }
 ]
 
 // Spotify verified track: Living Inside Of Your Love — Yutaka Yokokura
@@ -176,49 +208,75 @@ export const favorites: ShowcaseItem[] = [
   // Official series header artwork: https://dw9to29mmj727.cloudfront.net/promo/2016/5433-Tier03_SeriesHeader_20C_2000x800.jpg
   {
     name: '20世纪少年',
+    medium: '漫画',
+    mediumEn: 'Manga',
     nameEn: '20th Century Boys',
     description: '童年暗号、友情与末日预言，交织成一场跨越二十年的谜局。',
-    descriptionEn: 'Childhood codes, old friendships, and a doomsday mystery unfolding across decades.',
+    descriptionEn:
+      'Childhood codes, old friendships, and a doomsday mystery unfolding across decades.',
     image: '/images/favorites/20th-century-boys.webp',
     href: 'https://www.viz.com/naoki-urasawa-s-20th-century-boys',
     posterSource: 'https://www.viz.com/naoki-urasawa-s-20th-century-boys',
-    sourceLabel: 'Local archive artwork; detail source is the linked title page',
+    sourceLabel: 'Local archive artwork; detail source is the linked title page'
   },
   {
     name: 'The Shawshank Redemption',
+    medium: '电影',
+    mediumEn: 'Film',
     description: 'Hope is a good thing, maybe the best of things.',
     image: '/images/favorites/shawshank.webp',
     href: 'https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E',
-    posterSource: 'https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E',
-    sourceLabel: 'Local archive artwork; detail source is the linked title page',
+    posterSource:
+      'https://zh.wikipedia.org/wiki/%E8%82%96%E7%94%B3%E5%85%8B%E7%9A%84%E6%95%91%E8%B5%8E',
+    sourceLabel: 'Local archive artwork; detail source is the linked title page'
   },
   {
     name: 'Living Inside Of Your Love',
+    medium: '音乐',
+    mediumEn: 'Music',
     artist: 'Yutaka Yokokura',
     description: 'Yutaka Yokokura — a luminous jazz-fusion and city-pop favorite.',
     image: '/images/favorites/living-inside-of-your-love.jpg',
     href: 'https://open.spotify.com/embed/track/2RGoMak3qjAjMfR0duV2Dp?utm_source=generator&theme=0',
-    posterSource: 'https://open.spotify.com/embed/track/2RGoMak3qjAjMfR0duV2Dp?utm_source=generator&theme=0',
+    posterSource:
+      'https://open.spotify.com/embed/track/2RGoMak3qjAjMfR0duV2Dp?utm_source=generator&theme=0',
     sourceLabel: 'Local archive artwork; detail source is the linked title page',
     cta: 'Listen now',
-    spotify: true,
+    spotify: true
   },
   {
     name: 'Bitcoin',
+    medium: '想法',
+    mediumEn: 'Ideas',
     description: 'Digital scarcity, open networks, and programmable money.',
-    image: '/images/favorites/bitcoin.webp',
+    image: '/images/favorites/bitcoin-mark.webp',
     href: 'https://zh.wikipedia.org/wiki/%E6%AF%94%E7%89%B9%E5%B8%81',
-    posterSource: 'https://zh.wikipedia.org/wiki/%E6%AF%94%E7%89%B9%E5%B8%81',
-    sourceLabel: 'Local archive artwork; detail source is the linked title page',
+    posterSource: 'https://bitcoin.org/en/',
+    sourceLabel: 'Original BTC symbol illustration; reference: bitcoin.org'
   },
   {
     name: 'Black Myth: Wukong',
+    video: {
+      provider: 'bilibili',
+      id: 'BV1oH4y1c7Kk',
+      sourceLabel: 'bilibili.com',
+      title: '《黑神话：悟空》最终预告',
+      titleEn: 'Black Myth: Wukong · final trailer',
+      sourceUrl: 'https://www.bilibili.com/video/BV1oH4y1c7Kk/',
+      watchUrl: 'https://www.bilibili.com/video/BV1oH4y1c7Kk/',
+      uploader: '黑神话 / Game Science',
+      checkedAt: '2026-10-02',
+      embed: false
+    },
+    medium: '游戏',
+    mediumEn: 'Game',
     description: 'A Journey to the West reimagined.',
     image: '/images/favorites/black-myth-wukong.jpg',
     href: 'https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA',
-    posterSource: 'https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA',
-    sourceLabel: 'Local archive artwork; detail source is the linked title page',
-  },
+    posterSource:
+      'https://zh.wikipedia.org/wiki/%E9%BB%91%E7%A5%9E%E8%AF%9D%EF%BC%9A%E6%82%9F%E7%A9%BA',
+    sourceLabel: 'Local archive artwork; detail source is the linked title page'
+  }
 ]
 
 const copy: Record<string, [string, string, string, string]> = {
@@ -315,7 +373,18 @@ const copy: Record<string, [string, string, string, string]> = {
 }
 export const localizeShowcase = (item: ShowcaseItem, en: boolean): ShowcaseItem => {
   const entry = copy[item.name]
-  return { ...item, name: entry ? entry[en ? 2 : 0] : en ? item.nameEn ?? item.name : item.name,
-    description: entry ? entry[en ? 3 : 1] : en ? item.descriptionEn ?? item.description : item.description,
-    cta: item.spotify ? en ? 'Listen' : '收听' : item.cta }
+  return {
+    ...item,
+    name: entry ? entry[en ? 2 : 0] : en ? (item.nameEn ?? item.name) : item.name,
+    description: entry
+      ? entry[en ? 3 : 1]
+      : en
+        ? (item.descriptionEn ?? item.description)
+        : item.description,
+    medium: en ? (item.mediumEn ?? item.medium) : item.medium,
+    video: item.video
+      ? { ...item.video, title: en ? (item.video.titleEn ?? item.video.title) : item.video.title }
+      : undefined,
+    cta: item.spotify ? (en ? 'Listen' : '收听') : item.cta
+  }
 }

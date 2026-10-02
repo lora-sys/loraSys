@@ -1,8 +1,10 @@
 ---
-import type { ShowcaseItem } from '../../data/showcase'
 import { Image } from 'astro:assets'
+
 import loraHeart from '@/assets/lora-visual/v3/lora-icon-heart-v1.webp'
 import loraThinking from '@/assets/lora-visual/v3/lora-icon-thinking-v1.webp'
+
+import type { ShowcaseItem } from '../../data/showcase'
 
 interface Props {
   id: string
@@ -14,48 +16,159 @@ interface Props {
 
 const { id, title, eyebrow, items, locale = 'zh-CN' } = Astro.props
 const isEnglish = locale === 'en-US'
+const isAnime = id === 'anime'
 const labels = isEnglish
   ? {
       previous: `Previous ${title}`,
       next: `Next ${title}`,
       more: 'Open archive card',
-      browse: 'Use the controls or swipe horizontally to browse. Open a card for details.'
+      browse:
+        'Swipe or use the arrows to browse. When this strip has focus, use the arrow keys, Home or End.',
+      featured: 'First in the collection',
+      screening: 'Open card & trailer',
+      strip: 'The complete collection',
+      swipe: 'Scroll to explore',
+      trailer: 'Trailer',
+      video: 'Video',
+      music: 'Listen',
+      anime: 'Anime',
+      collection: 'Collection'
     }
   : {
-      previous: `上一项：${title}`,
-      next: `下一项：${title}`,
-      more: '打开档案卡片',
-      browse: '使用左右按钮或横向滑动浏览。打开卡片查看详情。'
+      previous: `上一组：${title}`,
+      next: `下一组：${title}`,
+      more: '打开档案',
+      browse: '横向滑动或使用左右按钮浏览。聚焦此列表时，可使用方向键、Home 和 End。',
+      featured: '从这部开始',
+      screening: '查看档案与预告',
+      strip: '完整片单',
+      swipe: '横向浏览',
+      trailer: '预告',
+      video: '视频',
+      music: '收听',
+      anime: '动画',
+      collection: '收藏'
     }
 const base = import.meta.env.BASE_URL.replace(/\/$/, '')
-const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHeart : undefined
+const imageUrl = (item: ShowcaseItem) =>
+  item.image.startsWith('http') ? item.image : `${base}${item.image}`
+const mascotMood = isAnime ? loraThinking : loraHeart
+const first = isAnime ? items[0] : undefined
+const directMediaUrl = (item: ShowcaseItem) =>
+  item.video?.watchUrl ||
+  (item.spotify ? item.href.replace('/embed/track/', '/track/').split('?')[0] : '')
+const directMediaLabel = (item: ShowcaseItem) =>
+  item.spotify
+    ? isEnglish
+      ? 'Listen on Spotify'
+      : '在 Spotify 收听'
+    : isEnglish
+      ? `Watch on ${item.video?.provider === 'bilibili' ? 'Bilibili' : 'YouTube'}`
+      : `在 ${item.video?.provider === 'bilibili' ? 'B站' : 'YouTube'} 观看原片`
+const mediaLabel = (item: ShowcaseItem) =>
+  item.video
+    ? `${item.video.provider === 'bilibili' ? 'Bilibili' : 'YouTube'} · ${item.video.provider === 'youtube' ? labels.trailer : labels.video}`
+    : item.spotify
+      ? `Spotify · ${labels.music}`
+      : ''
 ---
 
-<section class='showcase' aria-labelledby={`${id}-title`} data-carousel data-showcase-id={id}>
+<section
+  class:list={['showcase', { 'showcase--anime': isAnime }]}
+  aria-labelledby={`${id}-title`}
+  data-carousel
+  data-showcase-id={id}
+>
   <header class='showcase-heading'>
     <div class='showcase-title'>
       <div>
         <p>{eyebrow}</p>
-        <h2 id={`${id}-title`}>{title}</h2>
+        <h2 id={`${id}-title`}>
+          {title}<span class='collection-count'>{String(items.length).padStart(2, '0')}</span>
+        </h2>
       </div>
-      {mascotMood && <Image src={mascotMood} alt='' aria-hidden='true' class='showcase-mood' width={108} height={108} loading='lazy' />}
+      <Image
+        src={mascotMood}
+        alt=''
+        aria-hidden='true'
+        class='showcase-mood'
+        width={108}
+        height={108}
+        loading='lazy'
+      />
     </div>
     <div class='controls' aria-label={isEnglish ? `${title} controls` : `${title} 控制`}>
-      <button class='tactile-action' type='button' data-prev aria-label={labels.previous} disabled
-        >←</button
+      <button
+        type='button'
+        data-prev
+        aria-label={labels.previous}
+        aria-controls={`${id}-track`}
+        disabled>←</button
       >
       <button
-        class='tactile-action'
         type='button'
         data-next
         aria-label={labels.next}
+        aria-controls={`${id}-track`}
         disabled={items.length < 2}>→</button
       >
     </div>
   </header>
+  {
+    first && (
+      <a
+        class='exhibition-card'
+        href={first.href}
+        target='_blank'
+        rel='noopener noreferrer'
+        data-viewer-trigger
+        data-item-index='0'
+        aria-haspopup='dialog'
+      >
+        <div class='exhibition-copy'>
+          <span class='exhibition-label'>
+            <span aria-hidden='true'>01</span> {labels.featured}
+          </span>
+          <h3>{first.name}</h3>
+          <p>{first.description}</p>
+          <div class='exhibition-tags'>
+            <span>{first.medium || labels.anime}</span>
+            {first.video && <span>{mediaLabel(first)}</span>}
+          </div>
+          <span class='exhibition-action'>
+            <span class='play-mark' aria-hidden='true'>
+              ▷
+            </span>
+            {labels.more}
+            <span aria-hidden='true'>↗</span>
+          </span>
+        </div>
+        <div class='exhibition-art'>
+          <img
+            src={imageUrl(first)}
+            alt=''
+            width='600'
+            height='840'
+            loading='lazy'
+            decoding='async'
+            style={`object-position:${first.objectPosition ?? '50% 50%'}`}
+          />
+          <span class='exhibition-caption' aria-hidden='true'>
+            {eyebrow}
+          </span>
+        </div>
+      </a>
+    )
+  }
+  <div class='strip-heading'>
+    <p>{isAnime ? labels.strip : eyebrow}</p><span
+      >{labels.swipe} <span aria-hidden='true'>→</span></span
+    >
+  </div>
   <p id={`${id}-carousel-instructions`} class='sr-only'>{labels.browse}</p>
   <div
     class='track'
+    id={`${id}-track`}
     tabindex='0'
     data-track
     aria-label={title}
@@ -68,11 +181,19 @@ const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHear
           data-archive-card
           data-source-label={item.sourceLabel}
           data-poster-source={item.posterSource}
-          data-video-id={item.video?.provider === 'youtube' ? item.video.id : undefined}
+          data-medium={item.medium || (isAnime ? labels.anime : labels.collection)}
+          data-video-provider={item.video?.provider}
+          data-video-id={item.video?.id}
           data-video-source={item.video?.sourceLabel}
+          data-video-title={item.video?.title}
+          data-video-source-url={item.video?.sourceUrl}
+          data-video-watch-url={item.video?.watchUrl}
+          data-video-uploader={item.video?.uploader}
+          data-video-checked-at={item.video?.checkedAt}
+          data-video-embed={item.video ? String(item.video.embed !== false) : undefined}
           data-spotify={item.spotify ? item.href : undefined}
           data-media-title={
-            item.spotify ? [item.name, item.artist].filter(Boolean).join(' — ') : undefined
+            item.spotify ? [item.name, item.artist].filter(Boolean).join(' · ') : undefined
           }
         >
           <a
@@ -81,40 +202,66 @@ const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHear
             rel='noopener noreferrer'
             class='archive-card-link'
             data-viewer-trigger
+            data-item-index={i}
             aria-haspopup='dialog'
           >
-            <img
-              src={item.image.startsWith('http') ? item.image : `${base}${item.image}`}
-              alt={`${item.name} — ${item.description}`}
-              width='600'
-              height='840'
-              loading={item.imageEager ? 'eager' : 'lazy'}
-              decoding='async'
-              fetchpriority={item.imageEager ? 'high' : undefined}
-              referrerpolicy={item.image.startsWith('http') ? 'no-referrer' : undefined}
-              style={`--showcase-object-position:${item.objectPosition ?? '50% 50%'}`}
-              data-media-kind={item.mediaKind ?? (id === 'anime' ? 'poster' : 'cover')}
-              data-fallback={item.imageFallback}
-              onerror={
-                item.imageFallback
-                  ? `if(this.dataset.fallbackUsed!=='1'){this.dataset.fallbackUsed='1';this.src=this.dataset.fallback}`
-                  : undefined
-              }
-            />
-            <span class='archive-card-shade' aria-hidden='true' />
+            <div class='archive-art'>
+              <img
+                src={imageUrl(item)}
+                alt=''
+                width='600'
+                height='840'
+                loading={item.imageEager ? 'eager' : 'lazy'}
+                decoding='async'
+                fetchpriority={item.imageEager ? 'high' : undefined}
+                referrerpolicy={item.image.startsWith('http') ? 'no-referrer' : undefined}
+                style={`--showcase-object-position:${item.objectPosition ?? '50% 50%'}`}
+                data-media-kind={item.mediaKind ?? (isAnime ? 'poster' : 'cover')}
+                data-fallback={item.imageFallback}
+                onerror={
+                  item.imageFallback
+                    ? `if(this.dataset.fallbackUsed!=='1'){this.dataset.fallbackUsed='1';this.src=this.dataset.fallback}`
+                    : undefined
+                }
+              />
+              <span class='archive-number' aria-hidden='true'>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              {!isAnime && <span class='format-label'>{item.medium || labels.collection}</span>}
+              {(item.video || item.spotify) && (
+                <span class='media-label'>
+                  <span aria-hidden='true'>{item.video?.provider === 'bilibili' ? '↗' : '▷'}</span>
+                  {mediaLabel(item)}
+                </span>
+              )}
+            </div>
             <div class='archive-card-copy'>
-              <span>{String(i + 1).padStart(2, '0')}</span>
               <h3>{item.name}</h3>
               <p>{item.description}</p>
-              <b>{item.cta || labels.more} ↗</b>
+              <span class='archive-card-action'>
+                {labels.more}
+                <span aria-hidden='true'>↗</span>
+              </span>
             </div>
           </a>
+          {directMediaUrl(item) && (
+            <a
+              class='direct-media-link'
+              data-media-direct
+              href={directMediaUrl(item)}
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label={`${item.name} · ${directMediaLabel(item)}`}
+            >
+              {directMediaLabel(item)} <span aria-hidden='true'>↗</span>
+            </a>
+          )}
         </article>
       ))
     }
   </div>
   <div class='carousel-meta'>
-    <p data-index aria-live='polite'>1 / {items.length}</p>
+    <p data-index aria-live='off'>01 / {String(items.length).padStart(2, '0')}</p>
     <div class='progress' aria-hidden='true'><i data-progress></i></div>
   </div>
 </section>
@@ -127,252 +274,433 @@ const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHear
     const prev = root.querySelector<HTMLButtonElement>('[data-prev]')
     const next = root.querySelector<HTMLButtonElement>('[data-next]')
     const cards = [...root.querySelectorAll<HTMLElement>('[data-archive-card]')]
+    if (!track || !bar || !index || !prev || !next || !cards.length) return
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)')
-    if (!track || !bar || !index || !prev || !next || cards.length === 0) return
-
     let announceTimer: number | undefined
-    let startX = 0
-    let startLeft = 0
-    let dragged = false
-
-    const activeIndex = () => {
-      const left = track.getBoundingClientRect().left
-      return cards.reduce((nearest, card, candidate) => {
-        const distance = Math.abs(card.getBoundingClientRect().left - left)
-        const nearestDistance = Math.abs(cards[nearest].getBoundingClientRect().left - left)
-        return distance < nearestDistance ? candidate : nearest
-      }, 0)
+    const update = () => {
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth)
+      const position = Math.max(0, Math.min(maxScroll, track.scrollLeft))
+      const atEnd = position >= maxScroll - 2
+      const trackLeft = track.getBoundingClientRect().left
+      const nearest = cards.reduce(
+        (best, card, candidate) =>
+          Math.abs(card.getBoundingClientRect().left - trackLeft) <
+          Math.abs(cards[best].getBoundingClientRect().left - trackLeft)
+            ? candidate
+            : best,
+        0
+      )
+      const current = atEnd && maxScroll > 2 ? cards.length - 1 : nearest
+      index.textContent = `${String(current + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`
+      bar.style.transform = `scaleX(${maxScroll > 2 ? Math.max(1 / cards.length, position / maxScroll) : 1})`
+      prev.disabled = position <= 2
+      next.disabled = atEnd
     }
-    const update = (announce = false) => {
-      const current = activeIndex()
-      index.textContent = `${current + 1} / ${cards.length}`
-      bar.style.transform = `scaleX(${cards.length > 1 ? current / (cards.length - 1) : 1})`
-      prev.disabled = current === 0
-      next.disabled = current === cards.length - 1
-      if (announce) {
-        index.setAttribute('aria-live', 'polite')
-        if (announceTimer) window.clearTimeout(announceTimer)
-        announceTimer = window.setTimeout(() => index.setAttribute('aria-live', 'off'), 700)
-      }
+    const move = (left: number) => {
+      index.setAttribute('aria-live', 'polite')
+      if (announceTimer) window.clearTimeout(announceTimer)
+      track.scrollTo({ left, behavior: reducedMotion.matches ? 'auto' : 'smooth' })
+      announceTimer = window.setTimeout(() => index.setAttribute('aria-live', 'off'), 1000)
     }
-    const goTo = (candidate: number) => {
-      const target = Math.max(0, Math.min(cards.length - 1, candidate))
-      track.scrollTo({
-        left: cards[target].offsetLeft - track.offsetLeft,
-        behavior: reducedMotion.matches ? 'auto' : 'smooth'
-      })
-      update(true)
-    }
-
-    prev.addEventListener('click', () => goTo(activeIndex() - 1))
-    next.addEventListener('click', () => goTo(activeIndex() + 1))
-    track.addEventListener('scroll', () => update(), { passive: true })
+    prev.addEventListener('click', () => move(track.scrollLeft - track.clientWidth * 0.8))
+    next.addEventListener('click', () => move(track.scrollLeft + track.clientWidth * 0.8))
+    track.addEventListener('scroll', update, { passive: true })
     track.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-        event.preventDefault()
-        goTo(activeIndex() + (event.key === 'ArrowLeft' ? -1 : 1))
-      }
+      if (event.target !== track) return
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
+      event.preventDefault()
+      move(
+        event.key === 'Home'
+          ? 0
+          : event.key === 'End'
+            ? track.scrollWidth
+            : track.scrollLeft + (event.key === 'ArrowLeft' ? -1 : 1) * track.clientWidth * 0.8
+      )
     })
-    track.addEventListener('pointerdown', (event) => {
-      if (event.pointerType !== 'mouse' || reducedMotion.matches) return
-      startX = event.clientX
-      startLeft = track.scrollLeft
-      dragged = false
-      track.dataset.dragCandidate = 'true'
-    })
-    track.addEventListener('pointermove', (event) => {
-      if (!track.dataset.dragCandidate && !track.dataset.dragging) return
-      const delta = event.clientX - startX
-      if (!dragged && Math.abs(delta) > 10) {
-        dragged = true
-        delete track.dataset.dragCandidate
-        track.dataset.dragging = 'true'
-        track.setPointerCapture(event.pointerId)
-      }
-      if (dragged) track.scrollLeft = startLeft - delta
-    })
-    const stopDragging = (event: PointerEvent) => {
-      if (!track.dataset.dragCandidate && !track.dataset.dragging) return
-      const didDrag = dragged
-      if (track.dataset.dragging && track.hasPointerCapture?.(event.pointerId))
-        track.releasePointerCapture?.(event.pointerId)
-      delete track.dataset.dragCandidate
-      delete track.dataset.dragging
-      if (didDrag) root.dataset.suppressClick = 'true'
-      window.setTimeout(() => {
-        dragged = false
-        delete root.dataset.suppressClick
-      }, 0)
-    }
-    track.addEventListener('pointerup', stopDragging)
-    track.addEventListener('pointercancel', stopDragging)
-    track.addEventListener(
-      'click',
-      (event) => {
-        if (root.dataset.suppressClick !== 'true') return
-        event.preventDefault()
-        event.stopPropagation()
-      },
-      true
-    )
-
-    new ResizeObserver(() => update()).observe(track)
-    reducedMotion.addEventListener('change', () => update())
+    new ResizeObserver(update).observe(track)
     update()
   })
 </script>
 
 <style>
+  .direct-media-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    margin: 0 1rem 1rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.8rem;
+    color: hsl(var(--foreground));
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .direct-media-link:focus-visible {
+    outline: 2px solid hsl(var(--foreground));
+    outline-offset: 3px;
+  }
+
   .showcase {
+    min-width: 0;
     display: grid;
-    gap: 0.9rem;
+    gap: 1rem;
   }
   .showcase-heading {
     display: flex;
-    align-items: end;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
   }
   .showcase-title {
     display: flex;
     align-items: center;
-    gap: 0.45rem;
-  }
-  .showcase-mood {
-    width: 3.4rem;
-    height: 3.4rem;
-    flex: 0 0 auto;
-    object-fit: contain;
-    transition: transform 180ms ease;
-  }
-  .showcase:hover .showcase-mood,
-  .showcase:focus-within .showcase-mood {
-    transform: translateY(-0.2rem) rotate(4deg) scale(1.04);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .showcase-mood {
-      transition: none;
-    }
-    .showcase:hover .showcase-mood,
-    .showcase:focus-within .showcase-mood {
-      transform: none;
-    }
+    gap: 0.65rem;
   }
   .showcase-heading p {
     margin: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.69rem;
-    text-transform: uppercase;
-    letter-spacing: 0.11em;
+    letter-spacing: 0.08em;
   }
   .showcase h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin: 0.35rem 0 0;
-    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
-    font-weight: 630;
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+  }
+  .collection-count {
+    border: 1px solid hsl(var(--border));
+    border-radius: 50%;
+    padding: 0.3rem 0.35rem;
+    color: hsl(var(--muted-foreground));
+    font:
+      0.65rem ui-monospace,
+      monospace;
+    letter-spacing: 0;
+  }
+  .showcase-mood {
+    width: 3.6rem;
+    height: 3.6rem;
+    object-fit: contain;
   }
   .controls {
     display: flex;
-    gap: 0.4rem;
+    gap: 0.45rem;
   }
   .controls button {
     display: inline-grid;
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 2.75rem;
+    height: 2.75rem;
     place-items: center;
     border: 1px solid hsl(var(--border));
     border-radius: 50%;
-    background: hsl(var(--background));
+    background: hsl(var(--field-paper));
     color: hsl(var(--foreground));
-    transition:
-      background-color 140ms ease,
-      border-color 140ms ease;
+    cursor: pointer;
   }
-  .controls button:hover,
-  .controls button:focus-visible {
-    border-color: hsl(var(--field-amber));
-    background: hsl(var(--muted));
-  }
-  .controls button:focus-visible,
-  .archive-card-link:focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 3px;
+  .controls button:hover:not(:disabled) {
+    border-color: hsl(var(--field-teal));
+    background: hsl(var(--field-teal) / 0.08);
   }
   .controls button:disabled {
-    opacity: 0.38;
+    opacity: 0.35;
     cursor: not-allowed;
   }
-  .track {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(15rem, 42%);
-    gap: 1rem;
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x mandatory;
-    padding: 0.35rem 0.2rem 1rem;
-    scrollbar-width: none;
-    touch-action: pan-x;
+  .showcase :is(button, a, [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--field-teal));
+    outline-offset: 4px;
   }
-  .track::-webkit-scrollbar {
-    display: none;
-  }
-  .track[data-dragging] {
-    scroll-snap-type: none;
-    user-select: none;
-  }
-  .archive-card {
+  .exhibition-card {
     position: relative;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
     min-height: 21rem;
     overflow: hidden;
-    border: 1px solid hsl(var(--border));
-    border-radius: 0.85rem;
-    background: hsl(var(--card));
-    scroll-snap-align: start;
+    border: 1px solid hsl(var(--field-ink) / 0.22);
+    border-radius: 0.65rem;
+    background: hsl(var(--field-warm) / 0.45);
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    box-shadow: 3px 4px 0 hsl(var(--field-ink) / 0.08);
   }
-  .archive-card-link {
+  .exhibition-copy {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    padding: clamp(1.4rem, 4vw, 3.5rem);
+  }
+  .exhibition-label {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: hsl(var(--field-teal));
+    font-size: 0.69rem;
+    letter-spacing: 0.08em;
+  }
+  .exhibition-label > span {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 1px solid hsl(var(--field-teal) / 0.4);
+    border-radius: 50%;
+    font-family: ui-monospace, monospace;
+    letter-spacing: 0;
+  }
+  .exhibition-copy h3 {
+    max-width: 12ch;
+    margin: 1rem 0 0.65rem;
+    font-size: clamp(2rem, 4.8vw, 3.6rem);
+    line-height: 1.12;
+    font-weight: 650;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+  .exhibition-copy > p {
+    max-width: 29ch;
+    margin: 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+  .exhibition-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 1rem;
+  }
+  .exhibition-tags > span {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid hsl(var(--field-ink) / 0.16);
+    border-radius: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.65rem;
+  }
+  .exhibition-action {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.55rem;
+    min-height: 2.5rem;
+    color: hsl(var(--field-teal));
+    font-size: 0.8rem;
+    font-weight: 650;
+  }
+  .play-mark {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border: 1px solid hsl(var(--field-teal) / 0.4);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    transition: transform 160ms ease;
+  }
+  .exhibition-card:hover .play-mark {
+    transform: scale(1.06);
+  }
+  .exhibition-art {
+    position: relative;
+    min-height: 22rem;
+    background: #263b36;
+    overflow: hidden;
+  }
+  .exhibition-art::after {
+    position: absolute;
+    content: '';
+    inset: 0;
+    background: linear-gradient(0deg, rgb(13 29 25 / 0.8), transparent 32%);
+  }
+  .exhibition-art img {
     position: absolute;
     inset: 0;
-    display: block;
-    color: white;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .exhibition-caption {
+    position: absolute;
+    z-index: 1;
+    bottom: 1.2rem;
+    left: 1.4rem;
+    right: 1.4rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid rgb(255 255 255 / 0.35);
+    color: #fff8eb;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+  .strip-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.35rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .strip-heading p {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+  .strip-heading > span {
+    font-size: 0.65rem;
+  }
+  .track {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(14.5rem, 26%);
+    gap: 1rem;
+    padding: 0.4rem 0.4rem 0.8rem;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  .showcase--anime .track {
+    grid-auto-columns: minmax(10.5rem, 18.8%);
+    gap: 0.8rem;
+  }
+  .archive-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.4rem;
+    background: hsl(var(--field-paper));
+    scroll-snap-align: start;
+  }
+  .archive-card:focus-within {
+    outline: 2px solid hsl(var(--field-teal));
+    outline-offset: 3px;
+  }
+  .archive-card-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    color: hsl(var(--foreground));
     text-decoration: none;
   }
-  .archive-card-link > img {
+  .archive-art {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    background: hsl(var(--muted));
+  }
+  .showcase--anime .archive-art {
+    aspect-ratio: 3 / 4;
+  }
+  .archive-art::after {
+    position: absolute;
+    content: '';
+    inset: 55% 0 0;
+    background: linear-gradient(transparent, rgb(0 0 0 / 0.45));
+    pointer-events: none;
+  }
+  .archive-art img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: var(--showcase-object-position, 50% 50%);
+    transition: transform 180ms ease;
   }
-  .archive-card-shade {
+  .archive-card-link:hover .archive-art img {
+    transform: scale(1.025);
+  }
+  .archive-number {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(transparent 30%, rgb(0 0 0 / 0.84));
+    z-index: 1;
+    top: 0.65rem;
+    left: 0.65rem;
+    display: grid;
+    min-width: 1.7rem;
+    height: 1.7rem;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 0.2rem;
+    background: rgb(24 28 24 / 0.75);
+    color: #fff8eb;
+    place-items: center;
+    font:
+      0.6rem ui-monospace,
+      monospace;
+  }
+  .format-label {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    border: 1px solid rgb(255 255 255 / 0.45);
+    border-radius: 0.2rem;
+    padding: 0.35rem 0.55rem;
+    background: #f5eee1;
+    color: #3b443c;
+    font-size: 0.64rem;
+    font-weight: 650;
+  }
+  .media-label {
+    position: absolute;
+    z-index: 1;
+    bottom: 0.65rem;
+    left: 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    border: 1px solid rgb(255 255 255 / 0.4);
+    border-radius: 1rem;
+    background: rgb(24 28 24 / 0.8);
+    padding: 0.3rem 0.55rem;
+    color: white;
+    font-size: 0.59rem;
   }
   .archive-card-copy {
-    position: absolute;
-    inset: auto 1rem 1rem;
-    display: grid;
-    gap: 0.35rem;
-  }
-  .archive-card-copy > span {
-    font-size: 0.67rem;
-    letter-spacing: 0.13em;
-    opacity: 0.78;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1rem;
   }
   .archive-card-copy h3 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 650;
+    line-height: 1.4;
   }
   .archive-card-copy p {
     margin: 0;
-    color: rgb(255 255 255 / 0.78);
-    font-size: 0.78rem;
-    line-height: 1.5;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.74rem;
+    line-height: 1.7;
   }
-  .archive-card-copy b {
-    margin-top: 0.15rem;
-    font-size: 0.7rem;
+  .archive-card-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.1rem;
+    margin-top: auto;
+    padding-top: 0.65rem;
+    color: hsl(var(--field-teal));
+    font-size: 0.68rem;
     font-weight: 600;
+  }
+  .showcase--anime .archive-card-copy {
+    padding: 0.8rem;
+  }
+  .showcase--anime .archive-card-copy h3 {
+    font-size: 0.84rem;
+  }
+  .showcase--anime .archive-card-copy p {
+    font-size: 0.68rem;
   }
   .carousel-meta {
     display: grid;
@@ -383,7 +711,9 @@ const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHear
   .carousel-meta p {
     margin: 0;
     color: hsl(var(--muted-foreground));
-    font-size: 0.64rem;
+    font:
+      0.64rem ui-monospace,
+      monospace;
     font-variant-numeric: tabular-nums;
   }
   .progress {
@@ -395,21 +725,95 @@ const mascotMood = id === 'anime' ? loraThinking : id === 'favorites' ? loraHear
     display: block;
     width: 100%;
     height: 100%;
-    transform: scaleX(0);
+    transform: scaleX(0.1);
     transform-origin: left;
-    background: hsl(var(--foreground));
+    background: hsl(var(--field-teal));
   }
   @media (max-width: 640px) {
-    .track {
-      grid-auto-columns: 82%;
+    .exhibition-card {
+      grid-template-columns: 1fr 0.8fr;
+      min-height: 19rem;
     }
-    .archive-card {
-      min-height: 20rem;
+    .exhibition-copy {
+      padding: 1.2rem;
+    }
+    .exhibition-copy h3 {
+      font-size: clamp(1.8rem, 7vw, 2.5rem);
+    }
+    .exhibition-copy > p {
+      font-size: 0.76rem;
+    }
+    .exhibition-art {
+      min-height: 19rem;
+    }
+    .exhibition-label {
+      font-size: 0.59rem;
+      gap: 0.4rem;
+    }
+    .exhibition-label > span {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    .exhibition-tags {
+      gap: 0.3rem;
+    }
+    .exhibition-tags > span {
+      font-size: 0.58rem;
+    }
+    .exhibition-action {
+      margin-top: 1rem;
+      font-size: 0.68rem;
+      gap: 0.35rem;
+    }
+    .play-mark {
+      width: 1.9rem;
+      height: 1.9rem;
+      flex-shrink: 0;
+    }
+    .exhibition-caption {
+      display: none;
+    }
+    .track {
+      grid-auto-columns: minmax(14rem, 72%);
+      gap: 0.8rem;
+    }
+    .showcase--anime .track {
+      grid-auto-columns: minmax(10.2rem, 44%);
+    }
+    .showcase-mood {
+      width: 2.8rem;
+      height: 2.8rem;
+    }
+  }
+  @media (max-width: 380px) {
+    .exhibition-card {
+      grid-template-columns: 1fr;
+    }
+    .exhibition-art {
+      grid-row: 1;
+      min-height: 13rem;
+    }
+    .exhibition-copy h3 {
+      max-width: none;
+    }
+    .exhibition-copy > p {
+      max-width: none;
+    }
+    .showcase-title {
+      gap: 0.35rem;
+    }
+    .showcase h2 {
+      gap: 0.45rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .controls button {
+    .archive-art img,
+    .play-mark {
       transition: none;
+    }
+    .archive-card-link:hover .archive-art img,
+    .exhibition-card:hover .play-mark {
+      transform: none;
     }
     .track {
       scroll-behavior: auto;

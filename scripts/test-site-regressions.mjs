@@ -105,6 +105,34 @@ async function check(name, fn) {
 }
 
 try {
+  await check('Collection original links work without JavaScript in both languages', async () => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } })
+    try {
+      await context.route('**/*', (route) => new URL(route.request().url()).origin === origin ? route.continue() : route.abort())
+      const page = await context.newPage()
+      const expected = [
+        'https://www.youtube.com/watch?v=Sy7cLG6XHRY',
+        'https://www.youtube.com/watch?v=nLdeQHeuHck',
+        'https://open.spotify.com/track/2RGoMak3qjAjMfR0duV2Dp',
+        'https://www.bilibili.com/video/BV1oH4y1c7Kk/'
+      ]
+      for (const route of ['', 'en/']) {
+        await page.goto(`${origin}${base}${route}`, { waitUntil: 'load' })
+        assert.equal(await page.locator('[data-archive-card]').count(), 16)
+        const links = page.locator('[data-media-direct]')
+        assert.deepEqual(await links.evaluateAll((elements) => elements.map((element) => element.href)), expected)
+        for (const link of await links.all()) {
+          await link.scrollIntoViewIfNeeded()
+          assert.equal(await link.isVisible(), true)
+          assert.equal(await link.getAttribute('target'), '_blank')
+          assert.ok((await link.getAttribute('rel')).includes('noopener'))
+          assert.equal(await link.evaluate((element) => Boolean(element.parentElement.closest('a'))), false, 'Media links must never nest inside card links')
+          assert.ok(await link.getAttribute('aria-label'))
+        }
+        assert.equal(await page.locator('[data-archive-viewer] iframe[src]').count(), 0)
+      }
+    } finally { await context.close() }
+  })
   for (const viewport of [{ width: 1440, height: 1000 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
     for (const reducedMotion of ['no-preference', 'reduce']) {
       const label = `${viewport.width}-${reducedMotion}`
@@ -274,11 +302,12 @@ try {
         assert.ok(await viewer.locator('[data-viewer-image]').getAttribute('alt'), 'Archive poster needs alt text')
         assert.equal(await viewer.locator('[data-viewer-image]').evaluate((element) => getComputedStyle(element).objectFit), 'contain', 'Archive posters should remain uncropped')
         assert.equal(await viewer.locator('[data-viewer-status]').getAttribute('role'), 'status')
-        assert.equal(await viewer.locator('[data-viewer-backdrop]').count(), 1, 'Archive viewer needs a backdrop around the uncropped poster')
+        assert.equal(await viewer.locator('.viewer-artwork').count(), 1, 'Archive viewer needs a dedicated artwork panel around the uncropped poster')
+        assert.equal(await viewer.getAttribute('aria-labelledby'), 'archive-viewer-title', 'Archive dialog must be named by its visible title')
         assert.equal(await viewer.locator('[data-viewer-detail]').getAttribute('href'), await trigger.getAttribute('href'), 'Viewer details should retain the originating card destination')
         assert.equal(await viewer.locator('[data-viewer-prev]').isDisabled(), true)
         const initial = await viewer.locator('[data-viewer-count]').textContent()
-        const secondTitle = (await shelf.locator('[data-viewer-trigger] h3').nth(1).textContent()).trim()
+        const secondTitle = (await shelf.locator('[data-archive-card] [data-viewer-trigger] h3').nth(1).textContent()).trim()
         await page.keyboard.press('ArrowRight')
         assert.notEqual(await viewer.locator('[data-viewer-count]').textContent(), initial, 'Arrow navigation should change the archive item')
         assert.equal(await viewer.locator('[data-viewer-title]').textContent(), secondTitle)
@@ -318,7 +347,7 @@ try {
         await viewer.locator('[data-viewer-prev]').click()
         await playButton.click()
         await player.waitFor({ state: 'visible' })
-        assert.equal(await player.getAttribute('src'), `https://www.youtube.com/embed/${videoIds[videoIndex]}?autoplay=1&mute=1&rel=0`)
+        assert.equal(await player.getAttribute('src'), `https://www.youtube.com/embed/${videoIds[videoIndex]}?autoplay=0&rel=0`)
         assert.equal(await viewer.locator('iframe[src]').count(), 1, 'Only one player may be active')
         assert.equal(await playButton.isVisible(), false)
         await viewer.locator('[data-viewer-next]').click()
@@ -336,6 +365,66 @@ try {
         })
         assert.equal(await viewer.locator('iframe[src], audio, video').count(), 0, 'Closing the viewer must leave no loaded player behind')
         assert.ok(await trigger.evaluate((element) => element === document.activeElement), 'Closing the viewer should restore focus after video playback')
+      })
+
+      await check(`${label}: collection media sources and external-only Bilibili`, async () => {
+        await open()
+        const favorites = page.locator('[data-showcase-id="favorites"]')
+        const cards = favorites.locator('[data-archive-card]')
+        assert.equal(await cards.count(), 5, 'All five favorites must remain')
+        assert.ok((await cards.nth(3).locator('img').getAttribute('src')).endsWith('/images/favorites/bitcoin-mark.webp'), 'Bitcoin must use the corrected BTC illustration')
+        const wukong = cards.filter({ has: page.locator('[data-viewer-trigger]') }).nth(4)
+        await wukong.locator('[data-viewer-trigger]').click()
+        const viewer = page.locator('[data-archive-viewer]')
+        await viewer.waitFor({ state: 'visible' })
+        assert.equal(await viewer.locator('[data-viewer-original]').getAttribute('href'), 'https://www.bilibili.com/video/BV1oH4y1c7Kk/')
+        assert.equal(await viewer.locator('[data-viewer-play]').isVisible(), false, 'Bilibili must remain external-only without the new frame host')
+        assert.equal(await viewer.locator('iframe[src]').count(), 0)
+        assert.equal(await viewer.locator('[data-media-checked]').textContent(), '2026-10-02')
+        assert.ok((await viewer.locator('[data-media-source]').textContent()).includes('Game Science'))
+        await viewer.locator('[data-viewer-close]').click()
+        await cards.nth(2).locator('[data-viewer-trigger]').click()
+        await viewer.waitFor({ state: 'visible' })
+        assert.equal(await viewer.locator('[data-viewer-original]').getAttribute('href'), 'https://open.spotify.com/track/2RGoMak3qjAjMfR0duV2Dp')
+        assert.equal(await viewer.locator('iframe[src]').count(), 0, 'Spotify must also wait for activation')
+        await viewer.locator('[data-viewer-play]').click()
+        assert.ok((await viewer.locator('[data-viewer-player]').getAttribute('src')).startsWith('https://open.spotify.com/embed/track/'))
+        await viewer.locator('[data-viewer-stop]').click()
+        assert.equal(await viewer.locator('iframe[src]').count(), 0, 'Stop must unload the player')
+        assert.equal(await viewer.locator('[data-viewer-play]').isVisible(), true)
+        await viewer.locator('[data-viewer-close]').click()
+      })
+
+      await check(`${label}: English media dialog repeat activation Tab and history`, async () => {
+        await open('en/')
+        const trigger = page.locator('[data-showcase-id="anime"] [data-viewer-trigger]').first()
+        const viewer = page.locator('[data-archive-viewer]')
+        const initialOverflow = await page.evaluate(() => document.documentElement.style.overflow)
+        await trigger.evaluate((element) => { element.click(); element.click() })
+        await viewer.waitFor({ state: 'visible' })
+        assert.equal(await viewer.locator('[data-viewer-play]').textContent(), 'Load YouTube player')
+        assert.match(await viewer.locator('[data-media-title]').textContent(), /official trailer/)
+        assert.match(await viewer.locator('[data-media-source]').textContent(), /KADOKAWAanime/)
+        assert.equal(await viewer.locator('iframe[src]').count(), 0)
+        await viewer.locator('[data-viewer-close]').focus()
+        for (let n = 0; n < 14; n++) {
+          await page.keyboard.press('Tab')
+          assert.ok(await viewer.evaluate((element) => element.contains(document.activeElement)), 'Tab must stay inside the modal')
+        }
+        await page.keyboard.press('Escape')
+        await viewer.waitFor({ state: 'hidden' })
+        assert.equal(await page.evaluate(() => document.documentElement.style.overflow), initialOverflow, 'Repeated activation must not leave scroll locked')
+        assert.ok(await trigger.evaluate((element) => element === document.activeElement))
+        await trigger.click()
+        await viewer.locator('[data-viewer-play]').click()
+        assert.equal(await viewer.locator('iframe[src]').count(), 1)
+        await page.goto(`${origin}${base}en/work/`, { waitUntil: 'load' })
+        await page.goBack({ waitUntil: 'load' })
+        assert.equal(await page.locator('[data-archive-viewer]').evaluate((element) => element.open), false, 'Back must not restore a playing modal')
+        assert.equal(await page.locator('[data-archive-viewer] iframe[src]').count(), 0)
+        assert.notEqual(await page.evaluate(() => document.documentElement.style.overflow), 'hidden')
+        await page.goForward({ waitUntil: 'load' })
+        assert.ok(page.url().includes('/en/work'))
       })
 
       await check(`${label}: source labels filtering empty state and browser history`, async () => {
