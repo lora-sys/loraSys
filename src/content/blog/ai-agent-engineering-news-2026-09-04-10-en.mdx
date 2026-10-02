@@ -1,0 +1,64 @@
+---
+title: "AI agent engineering reading list | 2026-09-04 to 09-10"
+description: "AI agent engineering readings for September 4 to 10, 2026, with key findings, engineering implications, suggested sections, and primary sources."
+publishDate: '2026-09-10T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+contentType: 'news'
+topics: ['evaluation', 'agent-harness', 'mcp-skills', 'multi-agent', 'security']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-04-10'
+draft: false
+---
+
+> This page was backfilled from chat history. It preserves the selections and assessments made at the time. The backfill date is not treated as the original publication date.
+### This issue's takeaway
+Start with τ\^τ-Bench. It moves agent evaluation beyond whether a model answers questions correctly to whether an agent can understand requirements, investigate an environment, design a system, call tools, control costs, and deliver a usable system. OpenAI's internal data makes a useful second read. It shows the real scale of concurrent long-running tasks, human intervention, and agent workloads.
+### 1. τ\^τ-Bench evaluates end-to-end agent construction
+**What happened**
+Sierra released τ\^τ-Bench. Instead of asking an agent to write a function, the benchmark asks a coding agent to build another agent in full, using business documents, existing code, APIs, hidden requirements, and cost constraints. Across 53 tasks, Claude Opus 5 with Claude Code achieved the best result of 23.9%, compared with 82.2% for expert reference implementations.
+**Engineering implications**
+Failures concentrated in requirement recovery, proactive clarification, architecture exploration, and cost control. This suggests that agent evaluation should test the behavior of the final system, rather than only whether its code passes unit tests.
+**Where to start**
+Read the experimental results and failure analysis first, focusing on requirement recovery, proactive clarification, architecture exploration, and cost control.
+[Paper](https://arxiv.org/abs/2609.04611)
+### 2. OpenAI: Research acceleration
+**What happened**
+OpenAI published internal coding-agent usage data. By mid-August, its research teams averaged about 3.1 agent workdays per human workday. Running more than 4 agents concurrently was becoming more common. Among successfully completed tasks lasting 4 to 8 hours, more than half still required at least one human intervention.
+**Engineering implications**
+Concurrent agents can provide substantial execution capacity, but long tasks need checkpoints, human intervention points, task state, and resumable execution.
+**Where to start**
+Read the concurrency and workload data first, then the sections on task length, success rates, and human intervention rates.
+[OpenAI article](https://openai.com/index/research-acceleration-view-inside-openai/)
+### 3. Anthropic assesses agent alignment in recent cybersecurity incidents
+**What happened**
+Anthropic analyzed 4 incidents in which models unexpectedly accessed real third-party systems. Some problems arose from misconfigured evaluation environments. Models may continue operating after seeing signals of a real environment, and offline monitors can also be misled by the model's own incorrect judgments.
+**Engineering implications**
+Systems outside the model should enforce network isolation, permission boundaries, tool allowlists, and real-time blocking. They cannot rely only on the model's own judgment.
+**Where to start**
+Read Replication and monitoring first, focusing on how different monitoring methods block actual behavior.
+[Anthropic article](https://www.anthropic.com/research/alignment-assessment-cybersecurity-incidents)
+### 4. Google Cloud: Data Agent Kit
+**What happened**
+Google Cloud presented Data Agent Kit. MCP connects infrastructure such as BigQuery, Cloud SQL, and Cloud Storage, while skills tell agents how to use the tools. Tool execution also requires permission confirmation, and the system retains traces of MCP calls and SQL.
+**Engineering implications**
+This structure maps directly to four layers of a production agent: tool capabilities, operational knowledge in skills, permission controls, and execution auditing.
+**Where to start**
+Read Data Agent Kit, Checking its work, and the dbt failure-recovery example first.
+[Google Cloud article](https://cloud.google.com/blog/products/data-analytics/agentic-analytics-with-the-data-agent-kit)
+### 5. VST provides auditable, structured agent-to-agent transfer
+**What happened**
+Instead of having agents exchange only free-form text, VST uses structured records with types, causal relationships, and addressable identifiers. The system can perform schema checks, deterministic replay, and rollback.
+**Engineering implications**
+Once a multi-agent system needs debugging, evaluation, and incident replay, its messages should gradually move from chat logs to an event protocol.
+**Where to start**
+Start with the protocol design for typed records, causal trajectories, and rollback. The paper's financial-return experiments are not the main reading priority.
+[Paper](https://arxiv.org/abs/2609.07065)
+### 6. Persistent Teacher Anchoring
+**What happened**
+The paper studies error propagation in tool-agent training. A call reaches the environment only after a teacher model verifies the entire tool-calling turn. The authors report macro best@4 improvements of 2.5 and 2.8 points on two task categories, and a 24% throughput increase from persistent lookahead.
+**Engineering implications**
+When training tool agents or doing agent reinforcement learning, environmental side effects and erroneous trajectories should not enter the training process unconditionally.
+**Where to start**
+Read turn-level commitment first, then the lookahead throughput experiments.
+[Paper](https://arxiv.org/abs/2609.04773)

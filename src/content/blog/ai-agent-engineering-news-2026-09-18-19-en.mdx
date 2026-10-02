@@ -1,0 +1,56 @@
+---
+title: "AI agent engineering reading list | 2026-09-18 to 09-19"
+description: "AI agent engineering readings for September 18 to 19, 2026, with key findings, engineering implications, suggested sections, and primary sources."
+publishDate: '2026-09-19T00:00:00Z'
+tags: ['AI', 'Agent', 'News Log', 'Weekly', 'Engineering']
+contentType: 'news'
+topics: ['agent-harness', 'memory-context', 'mcp-skills', 'evaluation', 'devtools']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-18-19'
+draft: false
+---
+
+> This page was backfilled from chat history. It records incremental additions after the previous edition.
+### This issue's takeaway
+Start with An Empirical Study of Harness Design for Coding Agents and RAFT. The first asks which harness components actually help. The second asks at what level of state detail historical experience should be retrieved for long tasks.
+### 1. An Empirical Study of Harness Design for Coding Agents
+**What happened**
+The authors held the main agent loop fixed and changed only planning, tool interfaces, and context management. The experiments covered 4 models, SWE-bench Verified, and Terminal-Bench 2.1, testing 176 configurations in total.
+**Engineering implications**
+The main value of context management is to prevent context overflow during long tasks. Rule-based deletion, with model-generated summaries when needed, offers a good cost-benefit balance. Planning improves success rates more for weaker models, while its main benefit for stronger models is lower cost. The tool set should also depend on the model's Bash capability.
+**Where to start**
+Start with the five context-management ablations, then read planning, action space, and trajectory analysis.
+[Paper](https://arxiv.org/abs/2609.20804)
+### 2. Amazon Bedrock AgentCore Runtime V2
+**What happened**
+AWS updated AgentCore Runtime. The new version dynamically allocates and reclaims session memory and adds environment snapshots to shorten startup for new instances. Each session continues to use microVM isolation.
+**Engineering implications**
+Long-task agents usually reach peak memory usage only during certain stages. Reclaiming resources by stage and restoring snapshots are closer to what an agent-suited serverless runtime needs.
+**Where to start**
+Start with elastic memory reclamation, snapshot based cold start, session isolation, and persistence.
+[AWS announcement](https://aws.amazon.com/about-aws/whats-new/2026/09/new-agentcore-runtime-generally-available/)
+### 3. Vercel mcp-handler adds experimental WebMCP support
+**What happened**
+mcp-handler 2.2.0 can explicitly expose existing MCP tools to agents in the browser. Calls still proxy back to the server-side MCP endpoint and reuse the identity of the currently signed-in user.
+**Engineering implications**
+Web pages are becoming structured environments that agents can operate directly. Existing MCP tools can be reused for browser agents, but there must be explicit limits on which tools are exposed to the frontend.
+**Where to start**
+Start with how the signed-in session is reused and how MCP tools map to WebMCP tools.
+[Vercel article](https://vercel.com/changelog/webmcp-mcp-handler)
+### 4. OpenAI Codex CLI 0.155.0 and 0.155.1
+**What happened**
+Codex added Touch ID verification for MCP requests, OAuth credential-expiry notices, more complete authorization evidence, remote-state cleanup when switching accounts, and thread and goal recovery after a daemon restart. Version 0.155.1 also fixed provider compatibility issues caused by the default reasoning-summary behavior.
+**Engineering implications**
+Coding agents are developing a real execution control plane, including identity, approval evidence, session recovery, remote state, and the MCP credential lifecycle.
+**Where to start**
+Start with MCP verification, authorization evidence, daemon recovery, and identity invalidation.
+[Official Codex releases](https://github.com/openai/codex/releases)
+### 5. RAFT: Stateful Retrieval for Troubleshooting Agents
+**What happened**
+RAFT treats historical tickets as more than static documents. It converts each case into a timeline state chain. An agent retrieves similar historical states based on its current intermediate state, then reads the subsequent resolution trajectory for that case.
+**Engineering implications**
+Code debugging, operations, customer support, and data analysis are all long tasks whose states keep changing. The useful retrieval condition is often the state execution has reached now, rather than the overall semantic similarity of an entire ticket.
+**Where to start**
+Read timeline entry abstraction and entry level retrieval first. The case graph can wait until later.
+[Paper](https://arxiv.org/abs/2609.20754)

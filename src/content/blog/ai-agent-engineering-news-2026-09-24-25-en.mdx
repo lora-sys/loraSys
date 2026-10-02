@@ -1,0 +1,62 @@
+---
+title: "AI agent engineering reading list | 2026-09-24 to 09-25"
+description: "Five updates on proactive safety intervention timing, state revision, TeamHarness, enterprise MCP permissions, and tool-result handling."
+publishDate: '2026-09-25T00:00:00Z'
+tags: ['AI Agent', 'Agent Eval', 'Harness', 'MCP', 'AI Engineering']
+contentType: 'news'
+topics: ['evaluation', 'security', 'multi-agent', 'agent-harness', 'mcp-skills']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-24-25'
+draft: false
+---
+
+## This issue's takeaway
+This issue retains 5 items. Start with PASTABench and Agent-Editing World Model. The former moves agent safety evaluation beyond after-the-fact judgments to ask when intervention is required. The latter directly addresses how incorrect assumptions and outdated plans contaminate later decisions in long tasks. On the engineering side, read about Alibaba Cloud AgentCore's TeamHarness and how TeamViewer preserves permission boundaries when exposing real remote-operations capabilities as MCP tools.
+## 1. PASTABench evaluates when safety monitoring should intervene
+**What happened**
+PASTABench proposes Decoupled Proactive Safety Monitoring, separating agent safety monitoring into three questions: whether to intervene, when to intervene, and what the risk is. The benchmark contains 1,139 multi-turn trajectories covering 5 risk categories and 13 subcategories. The authors also define an Optimal Intervention Window, using Earliest-Signal and Trigger as two time points to evaluate whether a monitor acts within the right window. Among 16 models, even the best model achieved an optimally timed intervention rate of only 40.74%.
+**Engineering implications**
+Many guards only judge whether the current tool call is dangerous or score a trajectory after it ends. PASTABench shows that runtime safety also needs an intervention-timing metric. Intervening too early disrupts legitimate tasks; intervening too late means side effects have already occurred. Agent evaluation can separate unsafe-action detection into risk detection, intervention timing, and intervention decision metrics.
+**Where to start**
+Read Decoupled Proactive Safety Monitoring and Optimal Intervention Window first, then the lexical-overfitting experiments. The authors find that some smaller models depend on dangerous keywords for their safety scores. Replacing risk-related vocabulary substantially reduces their proactive-monitoring ability.
+**Primary source**
+[PASTABench paper](https://arxiv.org/abs/2609.28197)
+## 2. Agent-Editing World Model removes incorrect reasoning from agent state
+**What happened**
+Instead of trying to predict high-entropy tool responses, AEWM judges how current reasoning and actions affect subsequent task state. It first uses an Action Judge to classify actions as Critical, Exploratory, or Noisy, then uses State Revision to modify reasoning-action continuations that would contaminate later decisions. EditAct feeds the revised state directly into subsequent execution rather than merely appending a critique. The paper reports that Action Judge achieves 70.5% macro-F1, 10.6 points above the strongest baseline. Across six benchmarks and three agent backbones, EditAct improves on the strongest baseline by an average of 3.2 to 6.7 points.
+**Engineering implications**
+A common problem in long-task agents is not missing context, but incorrect assumptions, failed attempts, and outdated plans that remain in context. Ordinary compaction compresses this material but does not necessarily correct the state. AEWM offers another approach: turn the context manager into a state editor that explicitly identifies which history should be retained, explored, corrected, or deleted.
+**Where to start**
+Read the definition of task-state contamination first, followed by Action Judge, State Revision, and EditAct. Finally, read AEWM-RFT. The authors use verified revision trajectories for rejection-sampling fine-tuning, gaining a further 2.2 to 2.6 points over Self-RFT.
+**Primary source**
+[Agent-Editing World Model paper](https://arxiv.org/abs/2609.28416)
+## 3. Alibaba Cloud AgentCore adds TeamHarness and AG-UI operational details
+**What happened**
+Alibaba Cloud updated AgentCore's English product documentation on September 24, adding operational explanations for TeamHarness and AG-UI. AgentCore places agents, models, skills, MCP tools, credentials, teams, and workspaces in a unified control plane. TeamHarness uses Leader and Worker roles. The Leader creates asynchronous tasks, Workers divide and execute work in task rooms, and the Leader combines the results. After a task is created, the user does not need to keep the original session online. The managed harness exposes an AG-UI interface, returns events over SSE, and supports a separate stop endpoint.
+**Engineering implications**
+This design moves multi-agent collaboration from conventions inside prompts into the runtime. Task state, member roles, credentials, MCP tools, budgets, and stop operations have their own controls. When building a multi-agent runtime, Leader/Worker roles, asynchronous tasks, execution that survives disconnection, unified credentials, and an MCP registry are closer to a production system than simply letting several agents chat among themselves.
+**Where to start**
+Read the typical TeamHarness workflow and division of tasks first. Then read the start, reconnect, stop, and session ID rules in the AG-UI protocol reference. Next, inspect the Credential, Tool, Team, and Observability designs in the AgentCore product overview.
+**Primary sources**
+[AgentCore product overview](https://www.alibabacloud.com/help/en/agentcore/agentcore-product-overview)
+[TeamHarness instructions](https://www.alibabacloud.com/help/en/agentcore/team-collaboration-instructions-collaboration-teamharness)
+[AG-UI protocol reference](https://www.alibabacloud.com/help/en/agentcore/ag-ui-protocol-reference)
+## 4. TeamViewer's MCP integration brings real IT operations to standard tools
+**What happened**
+TeamViewer released its MCP integration on September 24. Microsoft Copilot, Claude, and custom agents can use TeamViewer MCP to query device health and performance, access session data and logs, and trigger some remote operations, such as restarting a device or initiating a remote connection. The MCP layer builds on TeamViewer's existing REST API and retains its security and compliance capabilities. TeamViewer has not exposed every feature through MCP. In-session capabilities remain with its Tia agent and human-facing interface.
+**Engineering implications**
+This is a concrete example of production permission boundaries. An MCP server should not expose the entire product API indiscriminately. Low-risk queries and limited actions can enter the agent tool layer, while high-risk, highly interactive capabilities or those requiring human judgment remain in a dedicated runtime or UI. This separation is worth considering for device management, cloud operations, and enterprise administration systems.
+**Where to start**
+Read How TeamViewer MCP works and What stays the same first. Focus on which capabilities MCP exposes, which it explicitly excludes, and how it reuses the existing REST API's permission and compliance mechanisms.
+**Primary source**
+[TeamViewer MCP article](https://www.teamviewer.com/en-us/insights/introducing-teamviewer-model-context-protocol-integration/)
+## 5. Deep Agents 0.7.19 tightens file and multimodal tool-result boundaries
+**What happened**
+LangChain released deepagents 0.7.19 on September 24. Updates include recovery after failed media reads, dedicated middleware to filter multimodal content unsupported by the model, restrictions on tool-result offload paths, and shortening excessively long IDs. On the same day, deepagents-code 0.1.76 fixed login resolution and search for plugin MCP servers and added plugin-server labels in the MCP Viewer.
+**Engineering implications**
+These fixes reflect two practical problems in coding-agent harnesses. First, a harness cannot assume the model supports every content type a tool returns. It needs capability filtering and fallback handling. Second, offloading large results to the filesystem requires path restrictions, or context offloading creates another file-access boundary. The source of an MCP server should also appear in observability and authorization interfaces, rather than displaying only a tool name.
+**Where to start**
+Start with media rejection recovery, multimodal filtering, and bounded offload paths in deepagents 0.7.19. Then read about plugin MCP resolution and MCP Viewer labels in deepagents-code 0.1.76.
+**Primary source**
+[Official Deep Agents releases](https://github.com/langchain-ai/deepagents/releases)

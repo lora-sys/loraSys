@@ -1,0 +1,78 @@
+---
+title: "AI agent engineering reading list | 2026-09-18 to 09-20"
+description: "OpenAI Agents SDK runtime-boundary fixes, stage-aware memory retrieval in AdaRepair-Mem, and static configuration checks with Agent Lint."
+publishDate: '2026-09-20T00:00:00Z'
+tags: ['AI Agent', 'Agent Engineering', 'Memory', 'Security', 'Developer Tools']
+contentType: 'news'
+topics: ['memory-context', 'security', 'agent-harness', 'devtools', 'mcp-skills']
+series: 'agent-engineering-reading'
+language: 'en-US'
+translationOf: 'ai-agent-engineering-news-2026-09-18-20'
+draft: false
+---
+
+This issue covers September 18 to September 20, 2026. It has been deduplicated against previous news logs. Harness Design, AgentCore Runtime V2, WebMCP, Codex CLI 0.155.x, and RAFT, already recorded for September 18 to 19, are not repeated. This issue retains 3 items.
+
+## OpenAI Agents SDK patches runtime boundaries on its main branch
+
+### What happened
+
+OpenAI merged a batch of runtime fixes into `openai-agents-python` on September 20. The latest official release is still 0.22.3, released on September 17, so these changes should be understood as progress on the main branch, not described as an already released new version.
+
+One fix adds a pending-event limit to streaming callbacks when an agent is used as a tool, with a default limit of 1024. If a slow callback continually falls behind event production, the SDK cancels the nested run and callback dispatch instead of allowing the queue to grow without bound.
+
+Commits on the same day also cover inbound-message size limits for Realtime WebSockets, path normalization for sandbox host authorization, host-source validation in sandbox manifests, retries for trace rate limits, and retention of structured guardrail diagnostics during persistence.
+
+### Engineering implications
+
+These changes focus on common boundary problems in production agents. Streaming callbacks need backpressure, sandbox permission decisions need normalized paths, network inputs need size limits, failed trace exports need an explicit retry strategy, and guardrail results must retain their structured diagnostics when written to persistent state.
+
+If a harness handles only the normal path, these problems tend to appear in long tasks, nested agents, slow consumers, and recovery from errors.
+
+### Where to start
+
+Start with the [streaming callback backpressure fix](https://github.com/openai/openai-agents-python/commit/f23da76), focusing on `on_stream_max_pending_events`, the bounded `asyncio.Queue`, cancellation when the queue fills, and failure propagation. Then browse the sandbox, Realtime, tracing, and persistence fixes in the [September 20 commit list](https://github.com/openai/openai-agents-python/commits).
+
+## AdaRepair-Mem separates coding-agent experience retrieval by repair stage
+
+### What happened
+
+AdaRepair-Mem appeared in the September 18 arXiv update batch. The paper studies experiential memory for repository-level automated repair. The authors identify three problems. Repositories differ greatly in how much historical experience they have accumulated, retrieving more memories does not reliably improve repair success, and different repair stages need different experience.
+
+The paper therefore adds coverage-aware retrieval, quality-aware selection, and stage-aware routing to handle memory for reproduction, localization, patch generation, patch refinement, and validation separately.
+
+The authors evaluated the method on SWE-Bench-Lite and SWE-Bench-Verified. They report that it is more effective for repositories with little historical experience, reduces noisy retrieval, and helps failed patches proceed into refinement. These numbers and conclusions come from the authors' experiments and should not be generalized to all coding agents.
+
+### Engineering implications
+
+Agent memory is poorly served by a single vector store that retrieves a fixed set of historical trajectories by similarity. A coding agent needs different kinds of experience at different stages. When repository history is insufficient, it also needs an explicit cross-repository fallback strategy.
+
+This design can transfer to debugging agents. Reproducing a failure, locating code, generating changes, and repairing again after failed tests can use different memory pools and ranking rules.
+
+### Where to start
+
+Read the authors' analysis of the three memory failure modes first, then coverage-aware retrieval, quality-aware selection, and stage-aware routing. In the experiments, focus on repositories with limited historical coverage and on how failed patches change after entering refinement.
+
+The primary source is the [AdaRepair-Mem paper](https://arxiv.org/abs/2609.20130).
+
+## Agent Lint treats agent configuration as a static-analysis target
+
+### What happened
+
+Agent Lint's current public version examples use 4.0.3. The project checks configuration files for Claude Code, Cursor, and Codex, as well as `AGENTS.md`, agent skills, and MCP configurations. Its repository currently lists 294 rules in 19 categories and provides a GitHub Action, pre-commit support, and JSON diagnostic output.
+
+It checks static configuration. It does not actually run agents or determine whether their results are correct. The project README explicitly states that passing lint does not prove that an agent is safe or correct.
+
+### Engineering implications
+
+Coding-agent projects already have a set of problems that can be checked at commit time, such as skill metadata, MCP configuration, Codex configuration, paths, and naming constraints. There is no need to wait until agents run to discover these problems through evaluation.
+
+A better division of responsibility is to catch deterministic configuration errors with static checks first, then use runtime evaluation to check tool selection, task completion rates, and side effects. Agent Lint fits the first layer.
+
+### Where to start
+
+Start with the Rules Reference in the [Agent Lint repository](https://github.com/zhupanov/agent-lint), focusing on the Codex, Skills, and MCP rule categories. When adding it to continuous integration, pin a specific version rather than following a floating version.
+
+## This issue's takeaway
+
+This batch of OpenAI Agents SDK commits is the most useful starting point for checking boundary handling in an existing agent runtime. AdaRepair-Mem is better suited to improving memory design. Agent Lint provides a less expensive static gate. They solve different problems and should not replace one another.

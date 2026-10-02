@@ -7,6 +7,7 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 import ArticleClassification from '@/components/blog/ArticleClassification.astro'
 import WritingTaxonomy from '@/components/blog/WritingTaxonomy.astro'
 import { writingLabel, type WritingKind } from '@/utils/writing'
+import { articleLanguage, originalArticleId } from '@/utils/article-translations'
 
 interface Props {
   activeKind?: WritingKind
@@ -24,16 +25,20 @@ const posts = (await getBlogCollection())
           : post.data.series === activeValue)
   )
   .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
-const languageOf = (post: (typeof posts)[number]) => post.data.language ?? 'zh-CN'
+const languageOf = articleLanguage
 const englishCount = posts.filter((post) => languageOf(post) === 'en-US').length
 const chineseCount = posts.filter((post) => languageOf(post) === 'zh-CN').length
 const featuredPost =
   featuredPostIds
-    .map((id) => posts.find((post) => post.id === id))
-    .find((post) => post !== undefined) ?? posts[0]
+    .map((id) => posts.find((post) => originalArticleId(post) === id && languageOf(post) === 'en-US'))
+    .find((post) => post !== undefined) ?? posts.find((post) => languageOf(post) === 'en-US') ?? posts[0]
+const featuredEditions = featuredPost
+  ? posts.filter((post) => originalArticleId(post) === originalArticleId(featuredPost))
+      .sort((left, right) => Number(languageOf(right) === 'en-US') - Number(languageOf(left) === 'en-US'))
+  : []
 const browsePath =
   activeKind && activeValue ? `/en/writing/${activeKind}/${activeValue}` : '/en/writing'
-const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
+const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
 ---
 
 <PageLayout
@@ -59,7 +64,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       {
         activeKind ? (
           <span data-writing-header-count>
-            {posts.length} {posts.length === 1 ? 'article' : 'articles'}
+            {englishCount} {englishCount === 1 ? 'article' : 'articles'}
           </span>
         ) : (
           <span>
@@ -74,7 +79,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       <label for='language-filter'>Filter articles by language</label>
       <select id='language-filter' name='language' data-writing-language disabled>
         <option value='all'>All articles ({posts.length})</option>
-        <option value='en-US'>English ({englishCount})</option>
+        <option value='en-US' selected>English ({englishCount})</option>
         <option value='zh-CN'>Chinese ({chineseCount})</option>
       </select>
     </div>
@@ -88,10 +93,12 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
       </p>
     </noscript>
     {
-      featuredPost && (
+      featuredEditions.map((featuredPost) => (
         <section
           class='featured'
-          aria-labelledby='featured-title'
+          aria-labelledby={`featured-title-${featuredPost.id}`}
+          hidden={languageOf(featuredPost) !== 'en-US'}
+          data-original-id={originalArticleId(featuredPost)}
           data-article
           data-content-type={featuredPost.data.contentType}
           data-series={featuredPost.data.series}
@@ -113,7 +120,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
             </>
           </div>
           <ArticleClassification data={featuredPost.data} locale='en-US' compact />
-          <h2 id='featured-title'>
+          <h2 id={`featured-title-${featuredPost.id}`}>
             <a lang={languageOf(featuredPost)} href={withBasePath(`/blog/${featuredPost.id}`)}>
               {featuredPost.data.title}
             </a>
@@ -123,7 +130,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
             Read this note <span aria-hidden='true'>↗</span>
           </a>
         </section>
-      )
+      ))
     }
     {
       posts.length > 0 && (
@@ -136,13 +143,15 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
                   : 'Published notes'}
               </h2>
               <span id='article-count' aria-live='polite'>
-                Newest first · {posts.length} {posts.length === 1 ? 'article' : 'articles'}
+                Newest first · {englishCount} {englishCount === 1 ? 'article' : 'articles'}
               </span>
             </>
           </header>
           <ol>
             {publicationRows.map((post) => (
               <li
+                hidden={languageOf(post) !== 'en-US'}
+                data-original-id={originalArticleId(post)}
                 data-article
                 data-content-type={post.data.contentType}
                 data-series={post.data.series}
@@ -183,7 +192,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
     {posts.length === 0 && <p class='empty'>No articles are published yet.</p>}
     <p class='empty' id='filter-empty' hidden>
       No articles match this language.
-      <a href={withBasePath(browsePath)}>Show all languages</a>
+      <a href={withBasePath(`${browsePath}?language=all`)}>Show all languages</a>
       <a href={withBasePath('/en/writing')}>Clear all filters</a>
     </p>
   </main>
@@ -197,13 +206,12 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   const filterEmpty = document.querySelector<HTMLElement>('#filter-empty')
 
   const applyLanguage = () => {
-    const requested = new URL(location.href).searchParams.get('language') ?? 'all'
-    const language = ['en-US', 'zh-CN'].includes(requested) ? requested : 'all'
+    const requested = new URL(location.href).searchParams.get('language') ?? 'en-US'
+    const language = ['all', 'en-US', 'zh-CN'].includes(requested) ? requested : 'en-US'
     if (languageFilter) languageFilter.value = language
     for (const link of document.querySelectorAll<HTMLAnchorElement>('.writing-taxonomy a')) {
       const destination = new URL(link.href)
-      if (language === 'all') destination.searchParams.delete('language')
-      else destination.searchParams.set('language', language)
+      destination.searchParams.set('language', language)
       link.href = destination.href
     }
     let visibleCount = 0
@@ -220,8 +228,7 @@ const publicationRows = posts.filter((post) => post.id !== featuredPost?.id)
   }
   languageFilter?.addEventListener('change', () => {
     const url = new URL(location.href)
-    if (languageFilter.value === 'all') url.searchParams.delete('language')
-    else url.searchParams.set('language', languageFilter.value)
+    url.searchParams.set('language', languageFilter.value)
     history.pushState(null, '', url)
     applyLanguage()
   })
