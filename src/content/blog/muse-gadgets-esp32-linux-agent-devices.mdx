@@ -1,0 +1,81 @@
+---
+title: 'Muse Gadgets 把 ESP32 和 Raspberry Pi 接进 Muse'
+description: 'Muse Gadgets 用 ESP32 与 Linux Device SDK 把屏幕、按钮、传感器、执行器、文件和命令接成 Muse 的设备端点。'
+publishDate: 2026-10-03
+tags: ['ai-agent', 'esp32', 'raspberry-pi', 'hardware', 'coding-agent']
+contentType: 'projects'
+topics: ['agents', 'devtools', 'runtime-infrastructure']
+language: 'zh-CN'
+draft: false
+---
+
+## 30 秒看懂
+
+Muse Gadgets 是一套把 Muse 接到自制硬件的开源 Device SDK。
+
+你可以使用 ESP32 接屏幕、按钮、音频、传感器和执行器，也可以使用 Raspberry Pi 或其他 Linux 机器。设备通过 Muse App 配对后，就能成为 Muse 的输入输出端。
+
+项目还有一个适合 Coding Agent 的设计。ESP32 和 Linux SDK 目录都提供 `AGENTS.md`，把工具链、构建、烧录和调试步骤写进仓库。Coding Agent 可以按照这些规则协助完成设备开发。
+
+## 事实核验
+
+项目仓库是 [facebookincubator/muse-gadget-sdk](https://github.com/facebookincubator/muse-gadget-sdk)，位于 Meta 的 facebookincubator 组织下。项目入口是 [gadgets.muse.ai](https://gadgets.muse.ai)。
+
+官方 README 说明，开发者可以把现有 ESP32 板、Raspberry Pi 或其他 Linux 机器做成 Muse gadget。
+
+ESP32 SDK 面向屏幕、按钮、音频和其他传感器或执行器。Linux SDK 可以让 Muse 在设备上运行命令、读写文件，也允许开发者扩展自己的命令。
+
+ESP32 和 Linux gadget 都通过 Muse iOS 或 Android App 配对。开发者需要先打开 Developer mode，每台 gadget 需要 SDK token。
+
+官方仓库在设备 SDK 目录中提供 `AGENTS.md`。ESP32 文档还给出了让支持这类仓库指令的 Coding Agent完成工具链安装、构建、烧录和日志读取的流程。
+
+ESP32 SDK 还提供桌面 simulator。没有开发板时，开发者可以先运行生产 UI 和头像渲染相关逻辑，再切到真机。
+
+仓库使用 Apache License 2.0，同时对部分第三方文件保留各自许可证范围。截至 2026 年 10 月 4 日核验，仓库公开且未归档，最新提交为 `693cde9`，提交时间为 2026 年 10 月 3 日 19:06 UTC。
+
+## 证据卡
+
+| 事实 | 官方证据 | 结论 |
+| --- | --- | --- |
+| 可以自制硬件端点 | README 明确写明可使用 ESP32、Raspberry Pi 和 Linux 设备，并连接屏幕、按钮、传感器和执行器 | 通过 |
+| Linux 设备可以执行实际任务 | Linux SDK 提供命令执行、文件读写和设备状态能力 | 通过 |
+| 项目针对 Coding Agent 准备了仓库规则 | SDK 目录提供 `AGENTS.md`，ESP32 文档给出 Agent 辅助构建和烧录流程 | 通过 |
+| 项目仍在维护 | 2026 年 10 月 3 日仍有新提交 | 通过 |
+| 开源许可 | 主仓库 LICENSE 为 Apache License 2.0 | 通过 |
+
+## 为什么这个项目值得看
+
+很多 Agent Demo 的输入输出仍然停留在网页、终端和聊天窗口。
+
+Muse Gadgets 做的是设备侧接口。它没有要求开发者重新实现一个 Agent Runtime，而是提供 ESP32 和 Linux 两条设备路径，让现成硬件承担输入输出任务。
+
+这适合演示，也适合工程拆分。按钮、屏幕、传感器和执行器有直接反馈。复杂推理仍然留在成熟 Agent Runtime 中，硬件只负责与现实世界交互。
+
+## 3 个值得借鉴的设计
+
+### 1. 给 Coding Agent 写设备开发规则
+
+项目把工具链安装、构建、烧录和日志读取写进 `AGENTS.md`。硬件开发最容易卡在环境与命令细节，这些步骤直接进入仓库后，Coding Agent 不需要每次重新猜测。
+
+### 2. 同时提供微控制器和 Linux 两条路径
+
+ESP32 适合按钮、屏幕、音频和传感器。Linux 设备适合文件、Shell、已有服务和更复杂的外设。
+
+两条路径覆盖了不同的设备复杂度，又可以接入同一个上层 Agent。
+
+### 3. 没有开发板也能先跑 simulator
+
+ESP32 SDK 提供桌面 simulator。开发者可以先修改 UI 和渲染，再切到实体设备。这能缩短硬件项目最慢的反馈周期。
+
+## 对实体 Agent Demo 的启发
+
+如果要做一个实体 Agent，模型和 Agent loop 没必要塞进微控制器。开发板可以只处理真实世界的输入输出，复杂推理继续运行在服务器、桌面或其他成熟环境里。
+
+另一个可以直接复用的做法是把设备构建、验证和调试规则写进仓库。这样 Coding Agent 能执行固定流程，团队也能把这些流程放进回归测试。
+
+## 来源
+
+- [Muse Gadget SDK](https://github.com/facebookincubator/muse-gadget-sdk)
+- [ESP32 Device SDK](https://github.com/facebookincubator/muse-gadget-sdk/blob/main/esp32/README.md)
+- [Linux Device SDK](https://github.com/facebookincubator/muse-gadget-sdk/blob/main/linux/README.md)
+- [LICENSE](https://github.com/facebookincubator/muse-gadget-sdk/blob/main/LICENSE)

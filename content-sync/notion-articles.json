@@ -1188,6 +1188,41 @@
       "source_last_edited_at": "2026-10-04T02:16:53.373Z",
       "status": "duplicate",
       "note": "Temporary duplicate Moli record containing only a short conclusion. The complete source page is the primary mapping; do not create a second article."
+    },
+    {
+      "source_page_id_sha256": "83b23b307560c4a47fcf82bbd4421e523d8cec9dec42e9ee7fffa40dad9db74a",
+      "slug": "gboard-verifiable-federated-learning-privacy",
+      "content_fingerprint": "git-blob:befef90fe4fb14bb951b1c2d6de53de2b04b5ab9",
+      "source_last_edited_at": "2026-10-03T01:36:34.888Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete technical longform published from the source page. Candidate scoring, social copy, video script, SEO plan, visual brief, and maintenance notes were excluded. The source page contains no attached media blocks; native cover is null, so heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "53967fc4bee4c505dc171aade1eddd6db0123e11c024942b9b1b5ce7e6551e",
+      "slug": "muse-gadgets-esp32-linux-agent-devices",
+      "content_fingerprint": "git-blob:fcb485e081d46a5b28121f011a322d68a7866707",
+      "source_last_edited_at": "2026-10-03T01:29:20.615Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete public project article. Candidate scoring, social/video copy, visual brief, publishing notes, and maintenance notes were excluded. The source page contains no attached media blocks; native cover is null, so heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "b64b2aaff42a39ea1ae6de1615c7493f801c4a62618e597810d07df099351750",
+      "slug": "deepseek-harness-composable-agent-runtime",
+      "source_last_edited_at": "2026-10-02T02:05:57.666Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-10-02-deepseek-harness-main.svg",
+          "source_block_id": "block.99ce6955-afc5-4c5d-8d73-e9647eabac0c",
+          "position": 1,
+          "status": "blocked",
+          "note": "The source image is currently exposed only through a short-lived signed binary URL. The available attachment download path cannot retrieve arbitrary historical binary files, so original bytes were not recoverable in this run."
+        }
+      ],
+      "note": "Complete article body exists, but one source image remains unrecovered. Publication is blocked by the media completeness gate."
     }
   ]
 }
