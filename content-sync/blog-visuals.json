@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "reviewed_at": "2026-09-30",
+  "reviewed_at": "2026-10-04",
   "scope": "Article editorial visuals and source-preserving diagram contrast repairs",
   "sync_policy": "Preserve these site-side hero overrides when updating article prose. Keep research figures, numerical charts, official demos and source media independent from editorial illustrations. Retired files are retained for provenance.",
   "entries": [
@@ -493,6 +493,36 @@
         "sha256": "25c0e77191fc40fd461ee4c69b511435f309c778bc8b1da8c258810a2fbe083d"
       },
       "source_evidence": "Unchanged. Only the listed editorial lead images were replaced for display."
+    },
+    {
+      "slug": "agent-instant-steering-preemption-recoverable-tools",
+      "replacement": "src/assets/blog/agent-instant-steering-preemption-recoverable-tools/cover-codex-cli.png",
+      "placement": "heroImage",
+      "alt": "OpenAI Codex CLI 官方界面主视觉",
+      "replacement_kind": "verified stable official source image",
+      "provenance": "Exact official image from openai/codex .github/codex-cli-splash.png. Reused as site hero only; not counted as Notion source media.",
+      "qa": {
+        "status": "passed",
+        "visual_review": "Official Codex CLI splash image inspected before use",
+        "format": "png",
+        "source_blob_sha": "d0f50e55bd2fb212496fb874718ab1eee82add11"
+      },
+      "source_evidence": "Article source diagrams remain unchanged and independent from the hero image."
+    },
+    {
+      "slug": "emdash-decentralized-plugin-registry",
+      "replacement": "src/assets/blog/emdash-decentralized-plugin-registry/cover-emdash-blog.jpg",
+      "placement": "heroImage",
+      "alt": "EmDash 官方仓库展示的博客站点界面",
+      "replacement_kind": "verified stable official source image",
+      "provenance": "Exact official image from emdash-cms/emdash assets/templates/blog/latest/homepage-light-desktop.jpg. Reused as site hero only; not counted as Notion source media.",
+      "qa": {
+        "status": "passed",
+        "visual_review": "Official EmDash site screenshot inspected before use",
+        "format": "jpg",
+        "source_blob_sha": "2c1d46f41e73f146cce84efd3fe668fd5a8e1fcf"
+      },
+      "source_evidence": "Article source body and evidence remain unchanged."
     }
   ],
   "diagram_repairs": [

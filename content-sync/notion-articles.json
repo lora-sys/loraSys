@@ -906,7 +906,7 @@
           "note": "Original SVG bytes recovered from the source attachment and stored locally."
         }
       ],
-      "note": "Complete recursive-discovery article. All five source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
+      "note": "Complete recursive-discovery article. All five source SVG attachments were recovered and localized in order. Site hero now reuses the stable official Codex CLI splash image; this is a site-side cover and is not counted as Notion source media."
     },
     {
       "source_page_id_sha256": "e123cb47329db67a8b8fca7ad2296a8f2c55f06733be3470d0922bf7073df720",
@@ -1053,7 +1053,7 @@
       "source_last_edited_at": "2026-09-30T01:53:53.514Z",
       "status": "synced",
       "media": [],
-      "note": "Complete public project article. Source body contains no attached media blocks. Native page cover is null and visual production was not persisted, so heroImage remains in the cover backlog."
+      "note": "Complete public project article. Source body contains no attached media blocks. Site hero now reuses a stable official EmDash repository screenshot; this is a site-side cover and is not counted as Notion source media."
     },
     {
       "source_page_id_sha256": "1f855f6ac9588aa5e0d97d42cca6146bcdcdca01425b718f37856dd3cb582065",
