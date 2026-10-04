@@ -1199,7 +1199,7 @@
       "note": "Complete technical longform published from the source page. Candidate scoring, social copy, video script, SEO plan, visual brief, and maintenance notes were excluded. The source page contains no attached media blocks; native cover is null, so heroImage remains in the cover backlog."
     },
     {
-      "source_page_id_sha256": "53967fc4bee4c505dc171aade1eddd6db0123e11c024942b9b1b5ce7e6551e",
+      "source_page_id_sha256": "53967fc4bee4c505dc171aade1eddd6db0123e11c024942b9b1b8b5ce7e6551e",
       "slug": "muse-gadgets-esp32-linux-agent-devices",
       "content_fingerprint": "git-blob:fcb485e081d46a5b28121f011a322d68a7866707",
       "source_last_edited_at": "2026-10-03T01:29:20.615Z",
