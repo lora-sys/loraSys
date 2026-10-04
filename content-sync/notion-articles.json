@@ -1172,6 +1172,22 @@
       "status": "synced",
       "media": [],
       "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
+    },
+    {
+      "source_page_id_sha256": "a662b42f587174c719b6fdbfb56bb9e57155b0adabf7604e956e93d68654e100",
+      "slug": "moli-structure-first-browser-agent",
+      "content_fingerprint": "git-blob:0f986aba67b32b642c03e2d176cbdc30b7fa265e",
+      "source_last_edited_at": "2026-10-04T02:16:07.623Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete public project article. The source page contains no attached media blocks. A planned visual was not persisted as source media, and the native cover is null, so heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "7340a74cf5c8e43e05081f691a1ef7d1a1ae20dbb9077ba46aa2436e61c60091",
+      "slug": "moli-structure-first-browser-agent",
+      "source_last_edited_at": "2026-10-04T02:16:53.373Z",
+      "status": "duplicate",
+      "note": "Temporary duplicate Moli record containing only a short conclusion. The complete source page is the primary mapping; do not create a second article."
     }
   ]
 }

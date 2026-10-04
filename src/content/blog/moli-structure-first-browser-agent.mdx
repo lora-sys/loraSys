@@ -1,0 +1,80 @@
+---
+title: 'Moli：浏览器 Agent 默认只读结构，需要时再渲染'
+description: 'Moli 把 DOM 与样式作为结构源数据，只在坐标、命中测试和截图等任务需要时计算 layout 与 paint。'
+publishDate: 2026-10-04
+tags: ['ai-agent', 'browser-agent', 'browser-automation', 'rust', 'playwright']
+contentType: 'projects'
+topics: ['agents', 'runtime-infrastructure', 'devtools', 'web-development']
+language: 'zh-CN'
+draft: false
+---
+
+## 30 秒看懂
+
+Moli 是一个面向 AI Agent 的开源 headless browser。Agent 只需要抽取文字、查询 DOM、运行 JavaScript、检查网络或存储时，它直接读取浏览器运行时状态，不做真实 layout 和 paint。任务需要元素坐标、命中测试或坐标输入时，再计算 layout。需要截图时，再从当前 DOM 和样式生成一帧像素。
+
+它同时提供 CLI、CDP、WebDriver Classic 和 WebDriver BiDi。Playwright 可以通过 CDP 直接连接。因此，现有自动化工具可以继续使用，而浏览器执行层可以把昂贵的视觉计算改成显式能力。
+
+## 事实核验
+
+Moli 由 Lexmount 组织维护。官方仓库将它定义为面向 AI Agent 的 headless browser，并明确说明它是独立浏览器内核，不是 Chromium wrapper。项目主要使用 Rust，内部组合了 V8、Servo 与 Stylo、Taffy、Parley 等组件。
+
+官方 README 把浏览器请求分成不同成本路径：
+
+| Agent 请求 | Moli 的处理方式 |
+| --- | --- |
+| 抽取 HTML 或 Markdown、查询 DOM、运行 JavaScript、检查网络或存储 | 直接读取运行时状态，不触发真实 layout 或 paint |
+| 读取元素几何、命中测试、发送坐标输入 | 执行一次 layout，并保留最新的冻结布局树 |
+| 截图 | 从当前 DOM 与样式重新构建布局，渲染新的一帧，使用后丢弃 paint state |
+
+默认的 `moli serve` 面向 DOM 优先工作负载。需要真实几何、坐标输入或截图时，可以启用 `--layout`。图片、字体、音频、视频等可选资源也可以单独打开。这个设计让结构操作和视觉操作拥有不同的资源成本。
+
+Moli 支持 Linux、macOS 和 Windows。自动化接口包括 CDP、WebDriver Classic 和 WebDriver BiDi，同一个端点可以服务这三类协议。官方 README 也给出了 Playwright 通过 CDP 连接的示例。
+
+截至 2026 年 10 月 4 日核验，最新正式 Release 是 v1.1.12，发布时间为 2026 年 9 月 30 日。仓库最新提交是 `7106a4e`，提交时间为 2026 年 10 月 3 日 21:20 UTC。项目仍处于活跃开发状态。
+
+README 将文档定义的 Agent Browser 场景描述为可用于生产。这是项目方对当前能力范围的表述，不代表它与 Chrome 完全兼容。官方同时明确列出边界，包括没有 GUI、持续窗口、GPU compositor，以及不追求完整的高保真 Canvas、WebGL 和媒体能力。
+
+主要来源：
+
+- [Moli 官方仓库](https://github.com/lexmount/moli)
+- [Moli Releases](https://github.com/lexmount/moli/releases)
+- [Moli Browser](https://browser.lexmount.com)
+
+## 证据卡
+
+Moli 的关键机制可以概括成一句话：结构优先，像素按需。
+
+原生 DOM 和样式状态是源数据。普通抽取和脚本操作直接读取这些状态。真实 layout 是临时计算结果。截图需要像素时才执行软件渲染，并在使用后丢弃 paint state。
+
+这意味着 Agent Harness 可以明确记录某一步是否启用了 layout、是否请求了视觉资源，以及截图是否真的必要。浏览器资源预算因此可以和任务需求直接对应。
+
+## 为什么这个设计值得看
+
+Browser Agent 的很多步骤并不需要持续维护完整画面。检索文本、读取 DOM、执行脚本和检查网络状态，本质上都可以沿结构路径完成。
+
+Moli 把昂贵能力默认关闭。任务只有在需要坐标或视觉证据时才进入 layout 和 paint。这比让每个步骤都维持完整页面像素状态更容易做资源控制，也更容易做回归测试。
+
+它还保留了现有自动化协议。项目不要求上层 Agent 全部改用新的专有接口。CDP、WebDriver Classic 和 BiDi 仍然可以接在同一个内核上。
+
+## 3 个值得借鉴的设计
+
+### 1. 昂贵能力默认关闭
+
+默认模式优先服务 DOM 场景。真实几何、坐标输入、截图和可选媒体资源都需要显式开启。系统可以据此把资源消耗与任务需求对应起来。
+
+### 2. DOM 与样式是源数据
+
+layout 和 paint 是派生结果，不需要长期维护另一套持续更新的视觉状态。这样可以减少状态同步和无效计算。
+
+### 3. 先兼容现有协议
+
+CDP、WebDriver Classic 和 BiDi 共用同一个浏览器内核。Playwright 等现有工具仍然可以连接。运行时可以改变底层成本模型，而不必同时重写上层自动化接口。
+
+## 对 Agent Harness 的启发
+
+浏览器执行层可以进一步拆成结构路径和视觉路径。
+
+研究、抓取和 DOM 检查默认走结构路径。只有需要真实坐标、视觉判断或截图证据时，再打开 layout 和视觉资源。每一步都可以记录是否进入了视觉路径，并把它作为成本和回归测试的一部分。
+
+多 Agent 系统也可以采用同样的边界。负责研究和采集的 Agent 不必持续获得完整截图。需要视觉确认的步骤再切换到视觉路径，可以减少不必要的浏览器资源占用。
