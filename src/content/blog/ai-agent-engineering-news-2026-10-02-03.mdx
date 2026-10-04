@@ -1,0 +1,68 @@
+---
+title: '2026-10-02 至 2026-10-03｜AI Agent 工程阅读清单'
+description: '6 条 Agent 工程材料，覆盖 Harness 排名反转、事务队列、Reviewer 证据、结果级 Eval、MCP 延迟加载与受保护隧道。'
+publishDate: 2026-10-03
+tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'mcp']
+contentType: 'news'
+topics: ['agent-harness', 'evaluation', 'runtime-infrastructure', 'mcp-skills', 'security']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+本期主检索区间为 2026 年 10 月 2 日至 10 月 3 日。已检查数据库现有周报并按具体材料去重。本期保留 6 条。Google Spanner queues 和 Cloudflare Protected Quick Tunnels 是 10 月 2 日的新发布。其余 4 条发布于 10 月 1 日，但上一期没有收录，本期补录。
+## 1. Finding the Right Fit：模型排名会随 Harness 大幅反转
+### 发生了什么
+论文评估 66 个配置，将 OpenHands、DeepSeek Harness、PI、openJiuwen 与五个模型组合，并在 TUA-Bench、ALE-CLI、Terminal-Bench 4 上测试。Terminal-Bench 4 中，Claude 在 OpenHands 里比 GPT 高 7.94 分，但在 PI 里低 30.16 分。五个模型中有四个模型的最佳 Harness 会随 Benchmark 改变。作者公开了适配器、评测代码和 6204 条已评分轨迹。
+### 工程意义
+模型评测不能脱离 Harness。Tool Schema、错误返回格式、上下文组织和执行循环会明显改变结果。实际回归测试应保留模型、Harness 和任务集的组合矩阵。
+### 先读哪里
+先读 Terminal-Bench 4 的排名反转和成本对比，再看 matched trajectories，重点看 Harness 如何把失败结果返回给模型。
+### 一手来源
+[arXiv：Finding the Right Fit](https://arxiv.org/abs/2610.00917)
+## 2. Google Spanner queues 把 Agent 状态和异步动作放进同一事务
+### 发生了什么
+Google Cloud 在 10 月 2 日宣布 Spanner queues 正式可用。Agent 的状态变化和后续异步任务可以在同一事务中提交。它支持延迟投递、流式消费、任务租约、续租和事务内确认，也给出了多 Agent handoff、长期记忆、人工审批超时和长任务的例子。
+### 工程意义
+长任务不应把“状态已经更新”和“任务已经派发”放在两个互不关联的提交点。多 Agent Runtime 可以采用原子提交、任务幂等、租约和最终状态与确认一起提交的设计。
+### 先读哪里
+先读 “Key capabilities for agentic architectures”，再读 “Streaming consumption, lease renewal, and atomic acknowledgment”。
+### 一手来源
+[Google Cloud：Spanner queues](https://cloud.google.com/blog/products/databases/spanner-queues-provide-native-transactional-messaging)
+## 3. Groundability：Coding Agent Reviewer 的关键是可验证证据
+### 发生了什么
+论文研究较弱 Reviewer 能否可靠审核更强的 Coding Agent。实验包含 411 条带执行标签的轨迹和 101 个受控案例。固定证据格式后，六个 Reviewer 中有五个在 122 条留出轨迹上同时改善缺陷发现率和误拒率，其中两个 Reviewer 对全部轨迹分类正确。论文还发现 Reviewer 模型大小不能稳定预测审核质量。
+### 工程意义
+Coding Agent Review 不应只让另一个模型阅读 Diff 和总结。更可靠的流程是先产生执行证据，再让 Reviewer 判断。生成测试应先在原始仓库失败，再在补丁应用后通过。
+### 先读哪里
+先读 official execution evidence 的上限实验，再看 frozen cascade，以及 coverage、risk、catch、over-rejection 四个指标。
+### 一手来源
+[arXiv：Groundability, Not Scale Alone](https://arxiv.org/abs/2610.01023)
+## 4. Argo-Bench 用最终业务后果评测企业 Data Agent
+### 发生了什么
+Argo-Bench 提供 210 个数据科学和分析任务，模拟一个包含 8100 万笔订单、235 张 ERP 表和 75 亿行数据的外卖平台。Agent 必须从仓库重建事实并执行具体业务动作。评分器检查最终结果，而不是比较 SQL 字符串。最强模型只有 34.8% 的任务达到 95 分以上，平均得分 59.5。
+### 工程意义
+企业 Agent Eval 应验证外部状态是否正确，而不是只检查查询是否成功、代码是否相似或 Agent 是否声称完成。涉及数据库、工单、订单、预算和运维操作的评测，应建立隐藏 Ground Truth 和结果级 Verifier。
+### 先读哪里
+先读任务构造和隐藏 Ground Truth，再看 consequence-based grader、可执行参考解和 14 个模型的结果。
+### 一手来源
+[arXiv：Argo-Bench](https://arxiv.org/abs/2610.02122)
+## 5. Pi 1.0 加入原生 MCP，并把长任务能力拆到 Pi Durable
+### 发生了什么
+Earendil 在 10 月 1 日发布 Pi 1.0，本期补录。新版本加入 Codemode、原生 MCP、Virtual Models、延迟 Tool 加载、Anthropic Cache Warming，以及会话中途调整 Prompt 和 Tool 的 system message。团队同时发布实验性的 Pi Durable，用于长时间运行和可恢复的 Agent 应用。
+### 工程意义
+MCP Tool 不需要全部预加载进上下文。延迟加载可以减少常驻 Tool Schema 的 Token 成本。终端 Coding Agent 与长期持久化 Runtime 也可以拆成不同层，避免基础 Harness 同时承担交互、恢复、并发和长期状态。
+### 先读哪里
+先读 Codemode、Deferred tool loading、Virtual models 和 Mid-conversation system messages，再看 Pi Durable 为什么被拆成独立 Package。
+### 一手来源
+[Earendil：Pi 1.0](https://earendil.com/posts/pi-1-0/)
+## 6. Cloudflare 给 Coding Agent 常用的 Quick Tunnel 加入访问控制
+### 发生了什么
+Cloudflare 在 10 月 2 日发布 Protected Quick Tunnels。新版 Quick Tunnel 可以限制只有指定邮箱或域名完成验证后才能访问本地服务。Cloudflare 明确把 Coding Agent、本地开发服务器和本地 MCP Server 列为使用场景，并支持结构化输出供 Agent 读取。
+### 工程意义
+Agent 为了展示页面或连接远程客户端时，可能把本地服务暴露到外网。访问控制不应只依赖 Agent 指令。Runtime 应把建立外部访问入口视为需要明确权限的动作，并在保护模式检查失败时停止，而不是自动降级为公开访问。
+### 先读哪里
+先读 “Control who can access your service” 和 “Make it your agent's default”，再看认证与授权如何拆分，以及保护模式的失败处理。
+### 一手来源
+[Cloudflare：Protected Quick Tunnels](https://blog.cloudflare.com/protected-quick-tunnels/)

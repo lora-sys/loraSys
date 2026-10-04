@@ -1,0 +1,63 @@
+---
+title: '2026-10-01 至 2026-10-02｜AI Agent 工程阅读清单'
+description: '5 条 Agent 工程材料，聚焦 Coding Agent Session、结构化决策、任务级 Git Fork、企业访问边界与长期 Harness 运行经验。'
+publishDate: 2026-10-02
+tags: ['ai-agent', 'engineering-news', 'harness', 'agent-eval', 'multi-agent']
+contentType: 'news'
+topics: ['agent-harness', 'multi-agent', 'evaluation', 'security', 'memory-context']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+本期保留 5 条高价值工程材料，已与历史周报去重。
+## 1. GitHub 把 Coding Agent 的 Session、环境和合并流程做成独立对象
+### 发生了什么
+GitHub 在 10 月 1 日汇总发布 VS Code 1.136 到 1.140 的 Copilot Agent 更新。HydraFusion 可以自动选择模型和工作流。Agent automation 支持周期任务。Agent merge 可以处理 Review 反馈、失败检查、合并冲突和 Workflow 重跑。
+Agent 还可以创建新的 Chat 或 Session。VS Code 会把相关 Session 组织成层级结构。Copilot、Claude 和 Codex 的 Agent Session 可以直接创建 Pull Request，也可以在 Dev Container 中运行并复用项目已有的工具和依赖。
+### 工程意义
+Coding Agent 的状态不适合只存在一条聊天记录里。实现类似系统时，应显式建模 Session、父子关系、Workspace、运行环境、Pull Request 和 Merge 状态。子任务拆分后的来源关系和后续合并过程也应由 Runtime 保存。
+### 先读哪里
+先读 “Agents window”，重点看 HydraFusion、agent merge、related chats and sessions。再读 “Workspaces and environments” 中的 Dev Container Session。
+### 一手来源
+[GitHub：Copilot in VS Code, September 2026 releases](https://github.blog/changelog/2026-10-01-github-copilot-in-vs-code-september-2026-releases/)
+## 2. Cloudflare Clef
+本条记录 10 月 1 日发布的 Clef 工程更新。工程上值得关注的是结构化决策接口，它适合处理 Agent 运行中的固定分类步骤。实际使用前仍要用自己的任务集做评测。
+### 发生了什么
+Cloudflare 在 10 月 1 日发布 Clef 和 Clef-flash，并以 Apache 2.0 开源。两种模型会返回结构化结果和对应概率。官方给出了工具选择、业务分类和延迟测试数据。
+### 工程意义
+Clef 的价值是把固定分类步骤改成结构化决策。这样可以减少解析成本，并降低部分高频步骤的响应时间。实际使用前仍要用自己的任务集做评测。
+### 先读哪里
+先读 “What is a decision model”，再看官方列出的质量和延迟测试。
+### 一手来源
+Cloudflare 官方博客，文章 “Introducing Clef: our open-source decision models, and new RL fine-tuning platform”。
+## 3. Cloudflare Artifacts 增加任务级 Git Fork 和事件驱动 Review
+### 发生了什么
+Cloudflare 在 10 月 1 日宣布 Artifacts 进入 open beta。它可以为每个 Agent、Session、Task 或用户创建独立 Repository。Worker 可以在任务到达时 Fork 项目，为 Agent 创建隔离 Repository。Repository 的创建、Fork、Push、Clone 和 Fetch 等操作会发出事件，后续可以触发 CI、Code Review Agent 或部署流程。
+### 工程意义
+多个 Coding Agent 不应长期共享同一个可写 Workspace。任务级 Fork 可以隔离文件状态、Commit 历史和权限范围。完成 Push 后，再由事件触发独立 Review、CI 和部署检查，可以减少 Agent 自己维护额外流程状态。
+### 先读哪里
+先读 “Artifacts is in open beta”。重点看 Worker binding 如何 Fork Repository，再读 “React to every change with event subscriptions”。
+### 一手来源
+Cloudflare 官方博客，文章 “We want you to build the next Git platform on Cloudflare”。
+## 4. Cloudflare OS 用 Gatekeeper 管理 Agent Workspace 到企业系统的访问
+### 发生了什么
+Cloudflare 在 10 月 1 日开放 Cloudflare OS 托管版等待名单。组织管理员可以控制谁能访问 Agent Workspace、哪些组织 Skills 和 Context 可用，以及 Agent 可以连接哪些系统。
+本次更新还允许 Agent 挂载已有 GitHub Repository。Google Workspace 集成通过 Gatekeeper 连接。Cloudflare 将 Gatekeeper 定义为位于 Cloudflare OS 与外部服务之间的服务专用 Worker。
+### 工程意义
+企业 Agent 不应直接持有每个外部服务的完整访问能力。服务专用 Gatekeeper 可以把权限范围、审计和服务规则放到 Agent 外部执行。Agent Workspace 负责推理和任务状态，访问层负责外部系统边界。
+### 先读哪里
+先读托管版的组织级访问控制。再读 “Mount Git repos and work with code” 和 “Work across Google Workspace”。
+### 一手来源
+Cloudflare 官方博客，文章 “Cloudflare OS: your company’s agent workspace, managed for you”。
+## 5. BootLoops 给出了多项目长期 Agent Harness 的真实运行经验
+### 发生了什么
+Anthropic 在 10 月 1 日发布 Matthew Schwartz 的工程实践文章。BootLoops 是一个开源 Harness，不属于 Anthropic。作者用它管理约 400 个候选问题，并在三个月内推进 36 篇手稿、18 个领域和 19 位合作者参与的项目。
+实际运行方式是每个项目一个独立 Session，再用一个主 Session 做协调、计算资源分配和结果验证。后台 Agent 的中间结果写入各自目录。作者还单独设置写作、工具验证和对抗式复核 Session。长任务发生上下文压缩后，他会让 Agent 整理文件并把最新计划固化下来。
+### 工程意义
+这篇材料最有价值的不是科学结果，而是它暴露的 Harness 失败点。长任务会丢上下文，模型会过早宣布完成，也会在低收益路径上持续消耗计算。作者的处理方法是把计划和中间状态写入文件，分离执行与复核 Session，并为完成条件设定严格验收标准。
+### 先读哪里
+先读 “The technical details”，重点看项目 Session、主协调 Session、后台 Agent 和中间结果存储。再读 failure modes，尤其是上下文压缩、完成条件和长期计算三个问题。
+### 一手来源
+Anthropic Research，文章 “Claude-shaped science”。文章末尾提供 BootLoops 官网和开源仓库。

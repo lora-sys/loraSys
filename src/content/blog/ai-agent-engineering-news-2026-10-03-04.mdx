@@ -1,0 +1,61 @@
+---
+title: '2026-10-03 至 2026-10-04｜AI Agent 工程阅读清单'
+description: '5 条 Agent 工程材料，覆盖 Gateway 级 Web Search、增量 Tool Catalog、统一可观测性、高风险确定性判定与自进化 Harness。'
+publishDate: 2026-10-04
+tags: ['ai-agent', 'engineering-news', 'harness', 'mcp', 'security']
+contentType: 'news'
+topics: ['agent-harness', 'mcp-skills', 'evaluation', 'security', 'runtime-infrastructure']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+本期主检索区间为 2026 年 10 月 3 日至 10 月 4 日。已检查数据库现有周报，并按具体材料去重。本期保留 5 条。Cloudflare Web Search API 和 Codex 的增量 Tool Catalog 是 10 月 3 日的新发布或新合并。Cloudflare Observability 和 AWS Adjudicated Query 发布于 10 月 2 日，但上一期没有收录，本期补录。Self-Evolving Harness 提交于 9 月 29 日，此前各期没有收录，本期作为漏收补入。
+本期最值得先读的是 Codex 的增量 Tool Catalog 和 AWS Adjudicated Query。前者直接处理长会话里 Tool Schema 反复变化导致的上下文膨胀与缓存失效。后者给出一个适合高风险业务 Agent 的明确边界，模型只负责把自然语言映射到受控操作和解释结果，最终判定由确定性规则引擎完成。
+## 1. Cloudflare Web Search API 把实时检索放进 AI Gateway
+### 发生了什么
+Cloudflare 在 10 月 3 日发布 Web Search API。AI Gateway 可以直接接入 [Ceramic.ai](http://Ceramic.ai)、Exa 和 Linkup，并统一处理认证、计费和请求日志。调用方可以通过 REST API 或 Workers binding 使用搜索结果。Cloudflare要求合作搜索提供方遵守其 Verified Bot 规则，并在结果中返回来源链接。官方还预告 Web Search 会进入 AI Gateway 的原生 Server Tools。
+### 工程意义
+Web Search 开始从每个 Agent 自己实现的 Tool 变成 Gateway 级能力。这样可以把搜索供应商切换、访问控制、日志、成本和数据保留策略放进统一控制面。对多 Agent 系统尤其有用，因为不同 Agent 不需要分别维护搜索 Key 和 Tool Schema。检索结果仍属于外部不可信内容，Harness 需要继续做来源标注、内容隔离和提示注入防护。
+### 先读哪里
+先读 “Using Web Search API via AI Gateway”，重点看 REST API、Workers binding、Bring Your Own Key 和日志。再看 “Coming soon: Server tools”，理解 Cloudflare 准备怎样把搜索从客户端 Tool 移到 Gateway。
+### 一手来源
+[Cloudflare：Introducing Web Search API via AI Gateway](https://blog.cloudflare.com/introducing-web-search-api/)
+## 2. Codex 开始只发送新增或变化的 Tool 定义
+### 发生了什么
+OpenAI Codex 在 10 月 3 日合并 PR 50540。启用 IncrementalTools 后，Responses Lite 会把 Tool 定义记录到 world state 和 conversation history。第一次请求发送完整 Catalog，后续只追加新增或变化的 Tool 定义。Tool 被删除或 namespace 指令变化时，会发送 developer notice。远程上下文压缩也会复用历史中的 Tool 定义。
+### 工程意义
+动态 MCP、App Tool 和自定义 Tool 会在长会话里变化。如果每一轮都重发完整 Tool Schema，会增加 Token、破坏稳定前缀，并降低 Prompt Cache 的复用率。增量 Catalog 把 Tool 状态变成显式会话状态，适合长期 Coding Agent 和动态插件系统。实现时还需要给 Tool 定义做稳定哈希，并明确处理新增、修改、删除和模型切换。
+### 先读哪里
+直接看 PR 的 “What changed” 和 “Testing”。重点看 initial catalog、additional_tools、removed tools、stable hashing，以及模型切换后只有一个 Tool 定义变化的测试场景。
+### 一手来源
+[OpenAI Codex PR 50540：Send incremental tool catalog updates in Responses Lite](https://github.com/openai/codex/pull/50540)
+## 3. Cloudflare Observability 给 Agent 提供统一 SQL 与 MCP 查询面
+### 发生了什么
+Cloudflare 在 10 月 2 日发布八项 Observability 更新。本期补录。新的统一 SQL API 可以查询 Workers logs、Containers security events、HTTP request logs、Analytics 和 Traces。Agent 可以通过新的 cf CLI 或 Cloudflare Observability MCP Server 查询这些数据。Alert 也可以通过 Webhook 把异常直接交给 Agent。Cloudflare Traces 使用 OpenTelemetry span，并支持通过 OTLP 导出。
+### 工程意义
+生产 Agent 修复故障时，最缺的往往不是代码上下文，而是可靠的生产证据。统一查询面可以让 Agent 用同一套认证和查询语义读取日志、Trace 和安全事件。更重要的是，它把“发现异常”和“让 Agent 开始调查”接了起来。实际部署时应该保留只读调查权限和代码修改权限之间的边界，并记录 Agent 使用了哪些生产证据。
+### 先读哪里
+先读统一 SQL API 和 Observability MCP Server。再读 Cloudflare Traces 的 Agent investigation 部分，看 Agent 如何比较失败与成功 Trace，并把 Trace 对应到仓库代码。最后看 Alert Webhook 的触发方式。
+### 一手来源
+[Cloudflare：8 major updates to Cloudflare Observability](https://blog.cloudflare.com/one-observability-platform/)
+[Cloudflare：Introducing Cloudflare Traces](https://blog.cloudflare.com/cloudflare-tracing/)
+## 4. AWS Adjudicated Query 把高风险判定留给确定性规则引擎
+### 发生了什么
+AWS 在 10 月 2 日发布 Adjudicated Query 参考架构，本期补录。聊天 Agent 只负责把自然语言问题转换成固定的 typed operations，并解释规则引擎返回的结果。模型不直接写查询，也不决定扫描对象集合，更不做最终合规判定。每次全量检查都生成 completeness receipt，并验证 compliant、in-breach、ambiguous、unreadable 四类计数之和等于 scanned。
+### 工程意义
+这套模式适合合规、审批、财务控制等不能接受漏项的 Agent。LLM 可以负责语言理解，但业务判定和全量性证明由确定性系统完成。Eval 也因此可以验证明确不变量，而不是只检查 Agent 的最终文字答案。对于高风险 Agent，可以把“自然语言理解”“受控 Tool Call”“确定性判定”“结果说明”分成独立层。
+### 先读哪里
+先读 “How the Adjudicated Query pattern solves it”。重点看 bounded conversational layer、versioned rules、completeness receipt 和“不允许静默漏记录”的实现。然后看 “When to use this pattern”，判断哪些业务值得采用这种架构。
+### 一手来源
+[AWS：Sweep thousands of leases for compliance using Amazon Quick and the Adjudicated Query pattern](https://aws.amazon.com/blogs/machine-learning/sweep-thousands-of-leases-for-compliance-using-amazon-quick-and-the-adjudicated-query-pattern/)
+## 5. Self-Evolving Harness 让同一个 Agent 修改运行自己的 Harness
+### 发生了什么
+Self-Evolving Harness 于 9 月 29 日提交到 arXiv，此前周报没有收录，本期补录。作者让同一个冻结模型使用同一版 Harness 先执行任务，再读取完整运行记录并直接修改 Harness。训练阶段混合五个不同领域的 Benchmark，并用另外五个没有参与演化的 Benchmark 测试泛化。作者从 49 行 seed harness 开始，第一阶段在训练分布任务上平均提高 4.48 分，在分布外任务上平均提高 12.64 分。继续在 Claw-Eval 上演化后，得分从 66.17 提高到 68.06。
+### 工程意义
+这篇论文把 Harness 优化从人工调 Prompt 和规则，推进到基于真实轨迹的自动修改。更值得注意的是，最终出现的机制并不神秘，包括输出截断、历史压缩和独立 Review。这说明 Harness 自改进应该绑定多任务 Eval、留出任务和回归测试，否则很容易只对单一 Benchmark 过拟合。
+### 先读哪里
+先读两阶段训练流程和训练任务与分布外任务的隔离方式。然后看 emerged mechanisms，重点看 output truncation、history compaction 和 independent review。最后看 Claw-Eval 的持续演化结果，关注能力提升是否以其他任务退化为代价。
+### 一手来源
+[arXiv：Self-Evolving Harness on Multiple Tasks with the Agent as Its Own Optimizer](https://arxiv.org/abs/2609.38372)

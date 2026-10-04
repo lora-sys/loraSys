@@ -1145,6 +1145,33 @@
         }
       ],
       "note": "Public article body and fact gate are complete, but all three attached source visuals were not recoverable as local bytes in this run. Media completeness is a hard gate, so no public MDX was created."
+    },
+    {
+      "source_page_id_sha256": "69c3aebbdd509c93a4f29f3f964ce8ce4ea8d00071129d2ceb7b7c72c86aeefd",
+      "slug": "ai-agent-engineering-news-2026-10-01-02",
+      "content_fingerprint": "git-blob:392f489d3b2109a3a1cb03bba7e63ac7979175fc",
+      "source_last_edited_at": "2026-10-02T00:05:54.343Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
+    },
+    {
+      "source_page_id_sha256": "45da01d9a1c0e8bfcf1844f4470747693dc618da258dcf46cb120c3d7696a400",
+      "slug": "ai-agent-engineering-news-2026-10-02-03",
+      "content_fingerprint": "git-blob:e1cfa1c934d133605a63fbb8952b6ba17d87a14c",
+      "source_last_edited_at": "2026-10-03T00:06:59.455Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
+    },
+    {
+      "source_page_id_sha256": "4d34c8c62ec319f2208ac2913a21c0ca8576ac13b739132f8f9553b82ef4e66b",
+      "slug": "ai-agent-engineering-news-2026-10-03-04",
+      "content_fingerprint": "git-blob:33bfd82cbe3c39a9278c96253a2a9ccd946982b5",
+      "source_last_edited_at": "2026-10-04T00:04:51.219Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
     }
   ]
 }
