@@ -30,4 +30,7 @@ export async function followReadingLink(page, link) {
   await link.click({ noWaitAfter: true })
   // Wait for the destination DOM, not unrelated media delaying the load event.
   await page.waitForURL(target, { waitUntil: 'domcontentloaded' })
+  // Cross-document transitions can still intercept the next real click after DOM ready.
+  // Observe completion instead of clicking through the overlay or disabling animation.
+  await page.waitForFunction(() => !document.activeViewTransition, null, { timeout: 5000 })
 }

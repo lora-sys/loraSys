@@ -54,6 +54,11 @@ test('reading navigation waits for destination DOM even when media never reaches
       assert.equal(url, 'https://example.test/base/blog/series/example')
       assert.equal(options.waitUntil, 'domcontentloaded')
       calls.push('destination-dom')
+    },
+    waitForFunction: async (predicate, argument, options) => {
+      assert.match(predicate.toString(), /activeViewTransition/)
+      assert.equal(options.timeout, 5000)
+      calls.push('transition-finished')
     }
   }
   const link = {
@@ -64,5 +69,15 @@ test('reading navigation waits for destination DOM even when media never reaches
     }
   }
   await followReadingLink(page, link)
-  assert.deepEqual(calls, ['real-click', 'destination-dom'])
+  assert.deepEqual(calls, ['real-click', 'destination-dom', 'transition-finished'])
+})
+
+test('a stuck view transition fails navigation instead of being clicked through', async () => {
+  const page = {
+    url: () => 'https://example.test/base/blog',
+    waitForURL: async () => {},
+    waitForFunction: async () => { throw new Error('View transition did not finish') }
+  }
+  const link = { getAttribute: async () => '/base/blog/article', click: async () => {} }
+  await assert.rejects(followReadingLink(page, link), /View transition did not finish/)
 })
