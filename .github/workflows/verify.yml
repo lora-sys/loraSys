@@ -36,6 +36,8 @@ jobs:
         run: bun install --frozen-lockfile
       - name: Validate retained snapshots
         run: bun run validate:sync
+      - name: Test reading audit contracts
+        run: node --test scripts/lib/reading-quality.test.mjs
       - name: Check Astro types
         run: bun run check
       - name: Build production output

@@ -7,12 +7,13 @@ import os from 'node:os'
 import { pathToFileURL } from 'node:url'
 
 import { assertSearchPagination } from './lib/search-regressions.mjs'
+import { readSearchIndex, searchResultsReady, followReadingLink } from './lib/reading-quality.mjs'
 
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright')
 const dist = path.resolve(process.argv[2] ?? 'dist')
 const output = path.resolve(process.env.SITE_TEST_OUTPUT ?? path.join(os.tmpdir(), 'lorasys-reading-quality'))
 await mkdir(output, { recursive: true })
-const report = { startedAt: new Date().toISOString(), mode: process.env.SITE_TEST_URL ? 'published-site' : 'production-build', checks: [], measurements: [], screenshots: [], searches: [], htmlHashes: {} }
+const report = { networkFailures: [], slowRequests: [], startedAt: new Date().toISOString(), mode: process.env.SITE_TEST_URL ? 'published-site' : 'production-build', checks: [], measurements: [], screenshots: [], searches: [], htmlHashes: {} }
 const failures = []
 const contentDirectory = path.resolve(import.meta.dirname, '../src/content/blog')
 const translatedEditions = []
@@ -74,13 +75,14 @@ const save = () => writeFile(path.join(output, 'reading-quality.json'), JSON.str
 const text = (html, attr) => html.match(new RegExp(`${attr}=["']([^"']+)`))?.[1]
 
 async function check(name, page, fn) {
+  const started = performance.now()
   try {
     await fn()
-    report.checks.push({ name, passed: true })
+    report.checks.push({ name, passed: true, durationMs: Math.round(performance.now() - started) })
     console.log(`PASS ${name}`)
   } catch (error) {
     failures.push(name)
-    report.checks.push({ name, passed: false, error: String(error.stack ?? error) })
+    report.checks.push({ name, passed: false, durationMs: Math.round(performance.now() - started), error: String(error.stack ?? error) })
     console.error(`FAIL ${name}: ${error.message}`)
     const filename = `FAIL-${name.replace(/[^a-z0-9]+/gi, '-')}.png`
     try { await page.screenshot({ path: path.join(output, filename), animations: 'disabled', timeout: 10000 }); report.screenshots.push(filename) } catch {}
@@ -103,8 +105,16 @@ try {
       page.setDefaultNavigationTimeout(30000)
       const pageErrors = []
       page.on('pageerror', (error) => pageErrors.push(error.message))
+      page.on('requestfailed', (request) => report.networkFailures.push({ label, url: request.url(), error: request.failure()?.errorText }))
+      page.on('response', (response) => {
+        if (response.status() >= 400) report.networkFailures.push({ label, url: response.url(), status: response.status() })
+      })
+      page.on('requestfinished', (request) => {
+        const { responseEnd } = request.timing()
+        if (responseEnd >= 1000) report.slowRequests.push({ label, url: request.url(), durationMs: Math.round(responseEnd) })
+      })
       const open = async (route = '') => {
-        const response = await page.goto(new URL(route, site).href, { waitUntil: 'load' })
+        const response = await page.goto(new URL(route, site).href, { waitUntil: 'domcontentloaded' })
         assert.equal(response?.status(), 200, route)
         report.htmlHashes[route || '/'] = createHash('sha256').update(await response.body()).digest('hex')
         await page.evaluate(() => document.fonts.ready)
@@ -364,28 +374,27 @@ try {
         await open('search')
         const input = page.locator('.pagefind-ui__search-input')
         await input.fill('Harness')
-        await page.locator('.pagefind-ui__result-link').first().waitFor({ state: 'visible' })
+        // Ranking changes as articles are published; archives may fill the first page.
+        // Exercise the real article filter rather than assuming an unfiltered rank.
+        await page.locator('[data-search-type="article"]:not([disabled])').click()
+        await page.waitForFunction(searchResultsReady, { query: 'Harness', kind: 'article' })
         const links = await page.locator('.pagefind-ui__result-link').evaluateAll((items) => items.map((item) => ({ title: item.textContent, href: item.href })))
-        assert.ok(links.some((item) => item.href.includes('/blog/')), 'Search must retain matching articles')
+        assert.ok(links.length > 0 && links.every((item) => new URL(item.href).pathname.startsWith(`${base}blog/`)), 'Article filtering must retain canonical matching articles')
         assert.ok(links.every((item) => !/\/en\/writing\/[^/?#]+/.test(new URL(item.href).pathname)), 'Search must not show legacy duplicates')
         // The UI includes section links for a page. Check page-level uniqueness in the index.
-        const indexed = await page.evaluate(async (base) => {
-          const pagefind = await import(`${location.origin}${base}pagefind/pagefind.js`)
-          const result = await pagefind.search('Harness')
-          return Promise.all(result.results.map(async (item) => {
-            const data = await item.data()
-            return { title: data.meta.title, href: new URL(data.url, location.origin).href }
-          }))
-        }, base)
+        const indexed = await page.evaluate(readSearchIndex, { base, query: 'Harness' })
         assert.ok(indexed.length > 0, 'Page-level search must contain results')
         const urls = indexed.map((item) => new URL(item.href).pathname)
         assert.equal(new Set(urls).size, urls.length, 'Index must not repeat a page')
         assert.ok(urls.every((url) => !/\/en\/writing\/[^/]+/.test(url)), 'Index must exclude legacy article aliases')
         report.searches.push({ label, indexed, links })
         await capture('search')
-        const article = page.locator('.pagefind-ui__result-link').filter({ hasText: /Harness/i }).first()
-        await article.click()
-        assert.ok(new URL(page.url()).pathname.startsWith(base), 'Search destination keeps the deployment base')
+        const article = page.locator('.pagefind-ui__result-link').first()
+        const destination = new URL(await article.getAttribute('href'), site)
+        assert.ok(destination.pathname.startsWith(`${base}blog/`), 'Search destination is a canonical article under the deployment base')
+        await followReadingLink(page, article)
+        await page.locator('#content').waitFor({ state: 'visible' })
+        assert.equal(new URL(page.url()).pathname, destination.pathname, 'Search opens the selected article')
       })
 
       await check(`${label} old article link preserves query and section`, page, async () => {
@@ -669,24 +678,26 @@ try {
   const noJs = await browser.newContext({ viewport: { width: 320, height: 740 }, javaScriptEnabled: false })
   const noJsPage = await noJs.newPage()
   await check('writing taxonomy has a narrow-screen no-JavaScript fallback', noJsPage, async () => {
-    await noJsPage.goto(new URL('blog', site).href)
+    await noJsPage.goto(new URL('blog', site).href, { waitUntil: 'domcontentloaded' })
     await noJsPage.locator('.writing-taxonomy summary').press('Enter')
-    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' }).click()
+    const typeLink = noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' })
+    await followReadingLink(noJsPage, typeLink)
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     await noJsPage.locator('.writing-taxonomy summary').press('Enter')
-    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: 'AI Agent 工程阅读清单' }).click()
+    const seriesLink = noJsPage.locator('.writing-taxonomy a').filter({ hasText: 'AI Agent 工程阅读清单' })
+    await followReadingLink(noJsPage, seriesLink)
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     assert.ok(await noJsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
     await noJsPage.screenshot({ path: path.join(output, '320-no-js-writing-series.png'), animations: 'disabled' })
     report.screenshots.push('320-no-js-writing-series.png')
   })
   await check('English archive defaults to English before JavaScript and without it', noJsPage, async () => {
-    await noJsPage.goto(new URL('en/writing', site).href)
+    await noJsPage.goto(new URL('en/writing', site).href, { waitUntil: 'domcontentloaded' })
     assert.equal(await noJsPage.locator('#language-filter').inputValue(), 'en-US')
     assert.equal(await noJsPage.locator('[data-article][data-language="zh-CN"]:visible').count(), 0)
     assert.ok(await noJsPage.locator('[data-article][data-language="en-US"]:visible').count() > 0)
     assert.equal(await noJsPage.locator('.featured:visible').getAttribute('data-language'), 'en-US')
-    await noJsPage.getByRole('link', { name: 'Browse English articles without JavaScript' }).click()
+    await followReadingLink(noJsPage, noJsPage.getByRole('link', { name: 'Browse English articles without JavaScript' }))
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     assert.ok(await noJsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
   })

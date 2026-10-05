@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { readSearchIndex } from './reading-quality.mjs'
 
 // Uses the complete index as the oracle, then checks each UI page against that set.
 export async function assertSearchPagination(page, base, open, route = 'search') {
@@ -7,18 +8,11 @@ export async function assertSearchPagination(page, base, open, route = 'search')
   await input.waitFor({ state: 'visible' })
   const query = route.startsWith('en/') ? 'Agent' : 'Glassbox'
   await input.fill(query)
-  const indexed = await page.evaluate(async ({ base, query }) => {
-    const pagefind = await import(`${location.origin}${base}pagefind/pagefind.js`)
-    await pagefind.filters()
-    const read = async (filters) => {
-      const found = await pagefind.search(query, { filters })
-      return Promise.all(found.results.map(async (item) => {
-        const data = await item.data()
-        return { url: new URL(data.url, location.origin).pathname.replace(/\/$/, ''), kind: data.filters['search-kind']?.[0] }
-      }))
-    }
-    return { all: await read({}), articles: await read({ 'search-kind': ['article'] }), projects: await read({ 'search-kind': ['project'] }) }
-  }, { base, query })
+  const indexed = {}
+  for (const [name, filters] of [['all', {}], ['articles', { 'search-kind': ['article'] }], ['projects', { 'search-kind': ['project'] }]]) {
+    const items = await page.evaluate(readSearchIndex, { base, query, filters })
+    indexed[name] = items.map((item) => ({ url: new URL(item.href).pathname.replace(/\/$/, ''), kind: item.kind }))
+  }
   assert.ok(indexed.all.length > 5, `${route}: query must exercise pagination`)
   assert.ok(indexed.all.every((item) => item.kind), 'Every indexed result needs stable type metadata')
   assert.deepEqual(indexed.articles.map((item) => item.url).sort(), indexed.all.filter((item) => item.kind === 'article').map((item) => item.url).sort())
