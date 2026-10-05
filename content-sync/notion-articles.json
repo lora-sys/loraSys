@@ -1180,7 +1180,7 @@
       "source_last_edited_at": "2026-10-04T02:16:07.623Z",
       "status": "synced",
       "media": [],
-      "note": "Complete public project article. The source page contains no attached media blocks. A planned visual was not persisted as source media, and the native cover is null, so heroImage remains in the cover backlog."
+      "note": "Complete public project article. The source page contains no attached media blocks. Site hero now reuses the verified official Moli Browser banner from the project repository; this site-side cover is not counted as source media."
     },
     {
       "source_page_id_sha256": "7340a74cf5c8e43e05081f691a1ef7d1a1ae20dbb9077ba46aa2436e61c60091",
@@ -1205,7 +1205,7 @@
       "source_last_edited_at": "2026-10-03T01:29:20.615Z",
       "status": "synced",
       "media": [],
-      "note": "Complete public project article. Candidate scoring, social/video copy, visual brief, publishing notes, and maintenance notes were excluded. The source page contains no attached media blocks; native cover is null, so heroImage remains in the cover backlog."
+      "note": "Complete public project article. Candidate scoring, social/video copy, visual brief, publishing notes and maintenance notes were excluded. The source page contains no attached media blocks. Site hero now reuses the verified official Muse Gadgets repository main visual; this site-side cover is not counted as source media."
     },
     {
       "source_page_id_sha256": "b64b2aaff42a39ea1ae6de1615c7493f801c4a62618e597810d07df099351750",
@@ -1223,6 +1223,33 @@
         }
       ],
       "note": "Complete article body exists, but one source image remains unrecovered. Publication is blocked by the media completeness gate."
+    },
+    {
+      "source_page_id_sha256": "5089ad3417b0ef76123e58652370cbc3c66c88b28c7386d1d3bf4fe456aaec13",
+      "slug": "ai-agent-engineering-news-2026-10-04-05",
+      "content_fingerprint": "git-blob:b0a2580b422e1ceea189bd9dfd687bcd7f255091",
+      "source_last_edited_at": "2026-10-05T00:04:46.914Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete engineering-news source page contains six substantive entries with primary sources and no attached media blocks. publishDate uses the coverage end date. Native cover is null; heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "f48e9e3d5022d744220a38c011a88cf53f89b256c6cbf042537d60fc66d7dcc8",
+      "slug": "meta-ai-math-research-provenance",
+      "content_fingerprint": "git-blob:8b98385f427bbcb1f0f5b2586765918777b20ab9",
+      "source_last_edited_at": "2026-10-05T01:05:23.151Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete technical longform published from the source page. Candidate scoring, social copy, video script, SEO plan, visual brief and maintenance notes were excluded. Generated visuals named in the source were not persisted as source media blocks and are not counted as source media. Native cover is null; heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "9416d2f50e5d0691c3ebf358f3cf644007e1157e68e334fc4eb28b396f0eaa8e",
+      "slug": "impeccable-ai-frontend-design-workflow",
+      "content_fingerprint": "git-blob:23b5b947455e421f91c14747e928632afecf94db",
+      "source_last_edited_at": "2026-10-05T01:22:27.054Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete public project article published from the source page. Candidate screening, social and video copy, visual briefs, publishing notes and maintenance notes were excluded. The source page contains no attached media blocks. Native cover is null; heroImage remains in the cover backlog."
     }
   ]
 }

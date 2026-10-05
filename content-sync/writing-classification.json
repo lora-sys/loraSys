@@ -1176,6 +1176,49 @@
       ],
       "basis": "reviewed-content",
       "note": "自有黑客松原型的架构、运行机制与实现范围"
+    },
+    {
+      "slug": "ai-agent-engineering-news-2026-10-04-05",
+      "contentType": "news",
+      "topics": [
+        "agents",
+        "agent-harness",
+        "evaluation",
+        "security",
+        "memory-context"
+      ],
+      "series": "agent-engineering-reading",
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "类型": "周报"
+      }
+    },
+    {
+      "slug": "meta-ai-math-research-provenance",
+      "contentType": "technical",
+      "topics": [
+        "ai-research",
+        "agents",
+        "evaluation"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "科技内容主包"
+      }
+    },
+    {
+      "slug": "impeccable-ai-frontend-design-workflow",
+      "contentType": "projects",
+      "topics": [
+        "devtools",
+        "web-development",
+        "product-design",
+        "agents"
+      ],
+      "basis": "source-metadata",
+      "sourceMetadata": {
+        "任务类型": "有趣项目介绍"
+      }
     }
   ]
 }

@@ -1,0 +1,145 @@
+---
+title: '2026-10-04 至 2026-10-05｜AI Agent 工程阅读清单'
+description: '6 条 Agent 工程材料，覆盖托管 daemon、真实 Coding Agent 数据、重复评测、Skill 权限传递、长期 Memory 与 Kubernetes 故障修复。'
+publishDate: 2026-10-05
+tags: ['ai-agent', 'engineering-news', 'harness', 'evaluation', 'security', 'memory']
+contentType: 'news'
+topics: ['agents', 'agent-harness', 'evaluation', 'security', 'memory-context']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+
+本期覆盖 2026 年 10 月 4 日至 10 月 5 日，共保留 6 条。10 月 4 日当天达到门槛的新工程改动是 Codex 的 remote-control 托管 daemon。其余 5 条是此前检索窗口内已经公开、但尚未进入日志的高价值材料。SWE-chat 属于旧论文的 v2 实质更新，数据规模和主要统计结果均有明显变化。
+
+本期最值得先读的是 Codex 的 daemon 生命周期、Agents Are Systems 的重复试验结果，以及 Chaining Skills 的权限传递攻击。三条分别对应长期 Harness 运行、Agent Eval 可信度和 Skill 组合安全。
+
+## 1. Codex 把 remote-control 接入托管 daemon
+
+### 发生了什么
+
+OpenAI Codex 在 10 月 4 日合并 PR 50803。普通的 `codex remote-control` 在 daemon 自动启动已开启且环境符合条件时，会启动或复用托管 daemon，并在该 daemon 上启用 remote control。没有可用托管后端，或 Windows 不允许 detached launch 时，Codex 回退到前台 server。新参数 `--no-daemon` 可以显式要求前台运行。
+
+实现还定义了 daemon 的适用边界。存在原始配置覆盖、Workload Identity、外部 exec server URL、Windows 提权进程或 Windows 挂载的 WSL CODEX_HOME 时，不进入默认托管路径。
+
+### 工程意义
+
+长期 Agent 的远程控制不适合依赖临时前台进程。把连接状态和远程控制能力交给托管 daemon，可以让 Session 生命周期与终端窗口分离。Runtime 还应明确判断后台进程是否安全可用，并为不满足条件的环境保留可观察的前台路径。测试需要同时覆盖 daemon 和 fallback 生命周期。
+
+### 先读哪里
+
+先看 commit 的 “What changed”，再看 `daemon_eligible` 的条件判断，以及 app-server-daemon README 对 `remote-control`、`start`、`stop` 和 `--no-daemon` 的语义说明。
+
+### 一手来源
+
+[OpenAI Codex commit 8f82b8a](https://github.com/openai/codex/commit/8f82b8a31cfdf690479067a179eba2c761102643)
+
+## 2. SWE-chat v2 把真实 Coding Agent 数据扩到近 1.8 万个 Session
+
+### 发生了什么
+
+SWE-chat 在 10 月 1 日发布 v2，并被 COLM 2026 接收。数据快照更新到 9 月 4 日，覆盖 707 个公开 GitHub 仓库、近 1.8 万个 Coding Agent Session、约 23 万条用户 Prompt、200 万次 Agent Tool Call 和 1160 万条事件。
+
+论文 Appendix B 比较了两个版本。v2 的 Session 数量超过 v1 的三倍，仓库从 205 个增至 707 个，Agent 代码最终保留进 Commit 的比例从 44.3% 升到 59.4%。41.1% 的 Session 属于 Agent 写入至少 99% 已提交代码的模式。包含中断后，用户在 50.2% 的 Claude Code Prompt Turn 中发生纠正、拒绝或失败反馈。Vibe coding 每千行新增代码引入的 Semgrep 安全问题数量约为 human-only 的 3.8 倍。
+
+### 工程意义
+
+真实 Coding Agent 的质量不能只用一次任务是否通过来衡量。生产 Harness 还应记录 Agent 代码有多少真正进入 Commit、用户在哪一步纠正 Agent、Tool Call 成本、最终安全扫描结果，以及人和 Agent 的代码归属。离线 Eval 也应加入多轮纠正和用户中断。
+
+### 先读哪里
+
+先读 Appendix B “Differences between the SWE-chat v1 and v2 releases”，再读 4.2、4.3、4.4，以及 Appendix E.5 和 E.6。
+
+### 一手来源
+
+[SWE-chat 官方网站](https://www.swe-chat.com/)
+
+[arXiv：SWE-chat v2](https://arxiv.org/abs/2604.20779)
+
+## 3. Agents Are Systems 证明 Agent Eval 必须重复运行同一配置
+
+### 发生了什么
+
+论文在四个科学任务上系统改变五个配置轴，包括任务信息、Reasoning、Self-verification、运行时间和 Backbone Model。主实验对每个任务测试 432 个配置，每个配置重复 5 次，共 8640 次主实验运行，并公开超过 1.8 万条 Agent 轨迹。
+
+结果显示，即使配置完全相同，约 54% 的有效尝试得分方差仍来自 run-to-run noise。任务信息是影响最大的配置轴，效果超过模型大小和时间预算。单纯在 Prompt 中要求 Agent 验证答案效果很弱，提供专门验证 Tool 后，验证行为才出现明显变化。
+
+### 工程意义
+
+Agent Eval 不能用一次运行给模型或 Harness 排名。至少要为关键配置重复运行，报告完成率、方差和置信区间。想让 Agent 稳定执行某种行为时，应优先检查是否能把行为做成 Tool、Verifier 或运行时约束。
+
+### 先读哪里
+
+先读 4.2 Results 中 “Agent outcomes are noisy” 和 “Information has the largest axis effect”，再看 4.3 Ablations 的 “Verification works better at the system level” 和 Appendix A.3。
+
+### 一手来源
+
+[arXiv：Agents Are Systems, Not Models](https://arxiv.org/abs/2610.01618)
+
+[公开代码与轨迹](https://github.com/lusxvr/rethinking-agent-evaluation)
+
+## 4. Chaining Skills 发现跨 Skill 的文字记录可以伪造授权
+
+### 发生了什么
+
+论文提出 APEX，用多个 Skill 组成攻击链。上游 Skill 先诱导 Agent 写下一份包含真实任务进度和虚假用户授权的记录，下游 Skill 再读取这份记录并执行攻击者指定动作。
+
+在 SkillsBench 的四类目标动作和六个模型上，攻击链在 690 次尝试中成功 512 次，成功率为 74.2%。GPT-5.4 上完整 Skill Chain 的成功率为 84.3%，把同样流程合并成单个 Skill 后只有 17.4%。
+
+作者还测试了 Prompt 防御。要求 Agent 对照原始请求检查 Skill 生成文件后，GPT-5.4 攻击成功率从 84.3% 降到 59.1%，但 72 个正常 Skill 任务的测试通过率也从 86.7% 降到 56.3%。
+
+### 工程意义
+
+Agent 自己写入的任务记录、handoff 文件和 Skill 输出不能自动获得用户授权的权威性。进度事实和操作权限必须分开存储。涉及删除、付款、发布、权限变更等动作时，Runtime 应保存授权来源和作用域，并在 Tool 执行前验证。安全评测也需要测试 Skill 组合。
+
+### 先读哪里
+
+先读 3 Threat model 和 4.3 “Why task progress does not establish permission”，再看 5.1 Attack effectiveness 和 6.3 的防御实验。
+
+### 一手来源
+
+[arXiv：Chaining Skills to Hijack LLM Agents](https://arxiv.org/abs/2610.01564)
+
+## 5. Mem++ 把长期 Memory 从写入时压缩改成读取时选择
+
+### 发生了什么
+
+Mem++ 针对多人、多文档、长期变化的组织记忆。它不在写入时用生成模型把文档压成事实或图边，而是保留完整文档，并记录时间和作者。读取时先按查询时间过滤，只让当时已经存在的文档参与检索，再融合 lexical 和 semantic ranking。
+
+在 OrgMemBench 上，Mem++ 比最强 Memory System 基线高 8.0 到 13.1 分。使用 gpt-4.1-mini 时，它比普通 RAG 的总分高 2.6 分。在 LoCoMo 上取得最高平均 LLM Judge 分数，在 LongMemEval-S 上排名第二。
+
+### 工程意义
+
+长期 Agent Memory 不应把生成式摘要当成唯一真相。更稳妥的实现是把原始记录作为不可变来源，保存来源、作者和时间。摘要、实体图和检索索引都作为可重建的派生层，查询时再根据时间和任务选择证据。
+
+### 先读哪里
+
+先读 3.2 Memory Building and Storing，重点看 Whole-Document Ingestion、Provenance and Time Anchoring、Append-Only Incremental Updates，再读 3.3 Temporal Scoping 和 4.2 Main Results。
+
+### 一手来源
+
+[arXiv：Mem++](https://arxiv.org/abs/2610.02002)
+
+[Mem++ 代码](https://github.com/AIDAChip-Inc/mem-plus-plus)
+
+## 6. Incident-Arena 用真实 Kubernetes 故障测试 Agent 修复能力
+
+### 发生了什么
+
+Incident-Arena 在 9 月 30 日发布，本期补录。它包含 20 个由人工构造的生产故障任务，运行在真实开源应用的临时 Kubernetes 集群中，并持续施加负载。故障覆盖配置、运行状态和镜像层。
+
+Functional Verifier 会检查服务是否恢复、系统级指标是否保持稳定，以及修复是否引入新的不安全回归。论文当前 HTML 版本报告，单次 Agent Trial 平均消耗约 400 万 Token、执行 68 个 Step。最强配置的 Pass@1 为 64.3%。
+
+### 工程意义
+
+生产运维 Agent 的 Eval 必须检查系统最终状态。Agent 修改了配置或宣称故障已修复，都不能作为通过条件。更可靠的测试环境应该提供真实服务、持续流量、可注入故障和隐藏 Functional Verifier，还要专门测试“Agent 声称完成但实际没有完成”的情况。
+
+### 先读哪里
+
+先读 3.3 Verifier Design，再看 5.1 Failure Taxonomy、5.2 “Agents are mainly bottlenecked on knowing when to stop”、5.4 Reward Hacking Behaviour 和 Appendix J。
+
+### 一手来源
+
+[arXiv：Incident-Arena](https://arxiv.org/abs/2610.00648)

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "reviewed_at": "2026-10-04",
+  "reviewed_at": "2026-10-05",
   "scope": "Article editorial visuals and source-preserving diagram contrast repairs",
   "sync_policy": "Preserve these site-side hero overrides when updating article prose. Keep research figures, numerical charts, official demos and source media independent from editorial illustrations. Retired files are retained for provenance.",
   "entries": [
@@ -523,6 +523,36 @@
         "source_blob_sha": "2c1d46f41e73f146cce84efd3fe668fd5a8e1fcf"
       },
       "source_evidence": "Article source body and evidence remain unchanged."
+    },
+    {
+      "slug": "moli-structure-first-browser-agent",
+      "replacement": "src/assets/blog/moli-structure-first-browser-agent/cover-moli-browser.jpg",
+      "placement": "heroImage",
+      "alt": "Moli Browser 官方主视觉，强调结构优先与按需像素渲染",
+      "replacement_kind": "verified stable official source image",
+      "provenance": "Exact official banner from lexmount/moli assets/moli-browser-banner.jpg. Reused as site hero only; not counted as source media.",
+      "qa": {
+        "status": "passed",
+        "visual_review": "Official Moli Browser banner inspected as a rendered bitmap before use; it clearly identifies Moli Browser and its structure-first, pixels-on-demand positioning.",
+        "format": "jpg",
+        "source_blob_sha": "675dec1690c7402851c9628d2db086580cba9a31"
+      },
+      "source_evidence": "Article source body remains unchanged; the site-side hero is independent from source media."
+    },
+    {
+      "slug": "muse-gadgets-esp32-linux-agent-devices",
+      "replacement": "src/assets/blog/muse-gadgets-esp32-linux-agent-devices/cover-muse-gadgets.png",
+      "placement": "heroImage",
+      "alt": "Muse Gadgets 官方主视觉，展示多款可接入 Muse 的开发设备",
+      "replacement_kind": "verified stable official source image",
+      "provenance": "Exact official main visual from facebookincubator/muse-gadget-sdk .github/images/muse-gadgets-light.png. Reused as site hero only; not counted as source media.",
+      "qa": {
+        "status": "passed",
+        "visual_review": "Official Muse Gadgets main image inspected as a rendered bitmap before use; it shows the supported device family and is suitable as a project card hero.",
+        "format": "png",
+        "source_blob_sha": "9d3002338626465e5cf81c0d6e9f2d6b0a785a3d"
+      },
+      "source_evidence": "Article source body remains unchanged; the site-side hero is independent from source media."
     }
   ],
   "diagram_repairs": [

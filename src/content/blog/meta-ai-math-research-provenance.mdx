@@ -1,0 +1,79 @@
+---
+title: 'Meta 的 AI 数学论文开始标注模型参与'
+description: 'Meta 公布 6 篇与 Muse Spark 协作的数学论文。更值得关注的是贡献来源、第二组复核、并行结果和形式化验证怎样进入公开论文。'
+publishDate: 2026-10-05
+tags: ['ai-research', 'research-agent', 'meta-ai', 'mathematics', 'evaluation']
+contentType: 'technical'
+topics: ['ai-research', 'agents', 'evaluation']
+language: 'zh-CN'
+draft: false
+---
+
+## 30 秒看懂
+
+Meta Research 在 2026 年 10 月 2 日公开了 6 篇与 Muse Spark 协作完成的数学论文。Meta 表示其中 5 篇回答了此前开放的研究问题。
+
+更值得看的是研究过程怎样留下可检查记录。研究者负责选题和引导，第二组数学家复核。论文还区分 Human 与 AI 辅助内容。遇到并行出现的外部结果，作者把它们写进论文，而不是把模型结果包装成唯一发现。
+
+## 研究者用的不是专门科研 Agent
+
+Meta 明确说明，研究者使用 Muse Spark 1.1 和 1.2 的 Thinking Mode，并通过普通 [meta.ai](https://meta.ai/) 聊天界面完成协作，没有使用定制研究 scaffold。
+
+这不等于模型没有使用工具。群论案例里，Muse Spark 生成了 GAP 搜索程序，研究者用它寻找反例。真正能复用的重点是研究流程怎么处理模型提出的候选结果。
+
+来源：[Meta Research](https://research.meta.ai/blog/solving-open-research-problems-together)
+
+## 群论案例把这套流程写得最清楚
+
+其中一篇论文研究 Kida 提出的猜想，询问所有有限 semiabelian group 是否一定都是 monomial group。
+
+论文给出一个 384 阶反例。Meta 的博客写明，Muse Spark 生成了 GAP 搜索程序，程序找到候选反例。研究者随后验证结果并完成数学论证。
+
+论文首页写着 “with Muse Spark via meta.ai”，并列出两名 reviewer。Statement of AI Use 说明，模型帮助探索思路、发展候选论证和起草材料，研究者负责引导、检查和修正数学内容，并对最终论文负责。论文页边还把内容标成 Human 或 AI。
+
+来源：[Semiabelian Groups Need Not Be Monomial](https://ai.meta.com/research/publications/semiabelian-groups-need-not-be-monomial/)
+
+## 这篇论文还有一个外部对照
+
+9 月 16 日，AI Agent Nilradical 已经公开另一个 2592 阶反例。它的公开仓库包含 Lean 形式化证明、审计文件、验证记录和固定 commit。Nilradical 没有声称自己的反例是最小阶。Meta 后来的论文给出 384 阶反例，并说明这个结果与 Nilradical 独立完成。
+
+来源：[Nilradical Lean formalization](https://github.com/alunik/kourovka-lean/blob/5a6b2c18e326b7b0281f00b64cade629acbfe1f5/Kourovka/Problems/P21_68/README.md)
+
+这类并行结果给 AI 协作研究增加了外部参照。独立团队、不同方法和形式化验证可以帮助暴露错误，也能区分“得到同一结论”和“复制同一路径”。
+
+## Meta 这批论文实际用了三层验收
+
+第一层是研究者自己检查和修正。人类研究者选择问题、控制研究方向、检查数学内容，并对最终稿负责。
+
+第二层是另一组数学家复核。Meta 为每个项目列出 reviewer。这个过程不应写成传统同行评审，但它至少把“生成结果的人”和“复核结果的人”分开。
+
+第三层是贡献来源可追踪。至少群论论文明确通过页边标记区分 Human 与 AI 辅助内容。
+
+## 为什么这比“AI 解题数量”更值得看
+
+开放研究没有标准答案。模型可能提出漂亮但错误的证明，也可能重复已经有人公开的路线。
+
+研究 Agent 的产出至少要保留四类记录：
+
+1. 问题和关键思路是谁提出的。
+2. 模型生成了哪些搜索代码、证明候选或正文。
+3. 谁检查和修正了这些内容。
+4. 是否存在独立结果、形式化证明或其他可重复验证。
+
+Meta 这批论文没有解决科研验证的全部问题，但它把这些记录直接放进了公开产物。
+
+## 这不等于 AI 已经能独立做数学研究
+
+Meta 发布的是 6 篇人机协作论文，不是 6 篇模型独立研究。其中 5 篇回答此前开放的问题，不是全部 6 篇。
+
+第二组数学家的内部复核不能直接写成期刊或会议同行评审。群论案例也存在独立并行结果。Nilradical 更早公开了另一个反例，而且提供 Lean 形式化验证。
+
+这些边界说明研究 Agent 的进展应该怎样描述。不要只统计论文数量。把研究过程做成可以追溯、复核和比较的记录，外部读者才能判断 AI 在结果里到底贡献了什么。
+
+## Builder 可以直接借鉴什么
+
+每个关键结论都保存来源，记录是人提出、模型提出还是共同修改。让独立 reviewer 检查关键步骤，它可以是人，也可以是不同模型，但必须和原生成路径分开。
+
+能执行验证就保存验证脚本。数学可以接 Lean 或计算代数系统。代码研究可以保留测试、benchmark 和 commit。
+
+发现并行工作时，把差异写出来，不要只追求“首次”。这不会自动让结果正确，但能让错误更容易被发现，也让成果更容易被别人复核。

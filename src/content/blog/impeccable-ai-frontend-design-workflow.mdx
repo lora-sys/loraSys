@@ -1,0 +1,77 @@
+---
+title: 'Impeccable：把 AI 前端设计要求变成可检查的工作流'
+description: 'Impeccable 把 PRODUCT.md、DESIGN.md、61 条确定性规则和浏览器组件 Review 组合成 AI Coding 的前端设计验收流程。'
+publishDate: 2026-10-05
+tags: ['ai-coding', 'frontend', 'design-review', 'devtools', 'impeccable']
+contentType: 'projects'
+topics: ['devtools', 'web-development', 'product-design', 'agents']
+language: 'zh-CN'
+draft: false
+---
+
+## 30 秒看懂
+
+Impeccable 是给 AI coding agent 用的前端设计 Skill。它先把产品事实写进 `PRODUCT.md`，把视觉系统放进 `DESIGN.md`。Agent 再用 24 个命令执行审查、排版、动效和收尾。61 条确定性规则先抓明确问题，剩下需要视觉判断的部分放到浏览器里让人验收。
+
+## 事实核验
+
+官方 README 把 Impeccable 定义为 AI coding agent 的设计指导工具。当前包含 1 个 Skill、24 个命令、浏览器实时迭代，以及 61 条针对 AI 生成前端的确定性 detector rules。
+
+`/impeccable init` 会检查项目，把受众、用途、使用场景、约束、语气和证据写进 `PRODUCT.md`。已有或新建的视觉系统单独记录在 `DESIGN.md`。
+
+CLI 和浏览器扩展可以运行确定性规则，不需要 LLM 和 API key。README 明确提到低对比度、文字溢出、常见 AI UI 模式和设计系统漂移等检查方向。
+
+Skill 4.4.0 增加了浏览器组件 Review。组件和参考图可以并排验收。首屏通过后，后续页面沿用已确认方向。源文件发生变化后，对应组件会重新进入 Review。当前最新 Skill Release 是 4.5.0，发布时间为 2026 年 10 月 2 日。
+
+官方 Quick start 是在项目根目录运行 `npx impeccable install`，随后在支持的 AI coding tool 中运行 `/impeccable init`。项目采用 Apache License 2.0。
+
+主要来源：
+
+- [Impeccable 官方仓库](https://github.com/pbakaus/impeccable)
+- [官方文档](https://impeccable.style/docs/)
+- [官方 Releases](https://github.com/pbakaus/impeccable/releases)
+- [Neo Mirai case study](https://impeccable.style/cases/neo-mirai)
+
+## 证据卡
+
+### 项目上下文
+
+`PRODUCT.md` 保存受众、目标、约束和语气，`DESIGN.md` 保存视觉系统。产品事实和视觉方向不必混进同一条超长 Prompt。
+
+### 确定性检测
+
+官方 README 当前列出 61 条 detector rules，用来检查低对比度、文字溢出、常见 AI UI 模式和设计系统漂移等可以明确判断的问题。
+
+### 浏览器验收
+
+Skill 4.4.0 把组件 Review 放进浏览器。首屏可以先验收，后续页面沿用已确认方向。源文件变化后，对应组件重新进入 Review。
+
+### 真实案例
+
+官方 Neo Mirai case study 提供实际设计流程和结果，可以直接核对项目描述与工作流。
+
+## 为什么这个项目值得看
+
+AI coding agent 已经能快速写完前端，但设计约束经常只存在于一次对话里。换会话、换模型、换执行阶段后，这些要求容易丢失。
+
+Impeccable 把项目事实和视觉系统存成项目文件，后续命令直接复用。它还把能确定判断的问题交给规则。低对比度、文字溢出和设计系统漂移不需要每次再让模型重新判断。
+
+最后一层仍然保留人工视觉判断。浏览器组件 Review 和首屏验收处理那些很难靠静态规则决定的问题。
+
+## 3 个值得借鉴的设计
+
+### 1. 把产品事实和视觉系统分开存
+
+`PRODUCT.md` 记录受众、目标、约束和语气。`DESIGN.md` 记录视觉系统。两类信息分开维护，后续 Agent 可以稳定复用。
+
+### 2. 先跑确定性 detector，再做主观 Review
+
+能写成规则的问题先由规则处理。模型和人只看剩下的判断题。
+
+### 3. 让验收状态跟着组件变化
+
+已经通过的组件可以保留结果。文件发生变化后再重新 Review，比每轮都把整页从头检查一遍更适合 Agent 工作流。
+
+## 对 AI 前端工作流的启发
+
+这套结构可以直接迁到复杂的 Agent 前端项目。先固定产品事实和设计规范。每次 Agent 修改 UI 后先跑确定性检查，再进入视觉 Review。换模型或换会话时，也不需要重新解释项目目标和已有视觉规范。
