@@ -1250,6 +1250,74 @@
       "status": "synced",
       "media": [],
       "note": "Complete public project article published from the source page. Candidate screening, social and video copy, visual briefs, publishing notes and maintenance notes were excluded. The source page contains no attached media blocks. Native cover is null; heroImage remains in the cover backlog."
+    },
+    {
+      "source_page_id_sha256": "db161c6e36eec2b2ca74459a1152e1c5114486b64b4c4a9c6528a98cc7b6061e",
+      "slug": "self-evolving-harness-heldout-regression",
+      "source_last_edited_at": "2026-10-04T15:34:12.584Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-10-04-self-evolving-harness-loop.svg",
+          "source_block_id": "block:f7e6b965-2f50-4ffc-9b8a-0eb4e61a6887",
+          "position": 1,
+          "status": "blocked",
+          "note": "Source page exposes an internal attachment reference in this run; original SVG bytes were not recoverable through the available source reading path."
+        }
+      ],
+      "note": "Complete recursive-discovery learning article with fact boundaries and primary sources. Publication remains blocked because its single source mechanism diagram has not been recovered as stable bytes."
+    },
+    {
+      "source_page_id_sha256": "9dca7c37f4ce69d5e58036b4d38d27d443b84096d08450a5deaa44c0399c6ca6",
+      "slug": "agent-transactional-queue-lease-idempotency",
+      "source_last_edited_at": "2026-10-03T16:44:28.074Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "2026-10-03-dual-write-atomic-queue.svg",
+          "source_block_id": "block:42c0b26b-17c6-4d10-adba-82f91e0f7f98",
+          "position": 1,
+          "status": "blocked",
+          "note": "Source page exposes an internal attachment reference; original SVG bytes were not recoverable through the available source reading path."
+        },
+        {
+          "kind": "image",
+          "source_name": "2026-10-03-lease-flow.svg",
+          "source_block_id": "block:89d993e6-3a8e-45f8-a93d-f4aacc862326",
+          "position": 2,
+          "status": "blocked",
+          "note": "Source page exposes an internal attachment reference; original SVG bytes were not recoverable through the available source reading path."
+        },
+        {
+          "kind": "image",
+          "source_name": "image1_bE1RXzx.max-1500x1500.png",
+          "source_block_id": "external:google-cloud-spanner-queues",
+          "position": 3,
+          "stable_source": "https://storage.googleapis.com/gweb-cloudblog-publish/images/image1_bE1RXzx.max-1500x1500.png",
+          "status": "synced",
+          "note": "Stable official Google Cloud image referenced by the source article. It is not enough to satisfy the two missing source SVG attachments."
+        }
+      ],
+      "note": "Complete recursive-discovery learning article. Two source SVG diagrams remain unrecovered, so the media completeness gate blocks publication."
+    },
+    {
+      "source_page_id_sha256": "1b6607a48376e9d7f67de3f4aa1eb6beb19b6804af9c2f1bfa94f8a5cb1b57c7",
+      "slug": "agent-model-routing-cache-affinity",
+      "source_last_edited_at": "2026-10-01T16:53:55.110Z",
+      "status": "blocked",
+      "media": [
+        {
+          "kind": "image",
+          "source_name": "01-router-mechanism.svg",
+          "source_block_id": "block:3431e50a-c246-462b-9595-88dc97aa7c29",
+          "position": 1,
+          "status": "blocked",
+          "note": "Source page exposes an internal attachment reference; original SVG bytes were not recovered in this run."
+        }
+      ],
+      "note": "Recursive-discovery page is still incomplete: the body currently ends during section 1. Publication is blocked by incomplete prose and one unrecovered source diagram."
     }
   ]
 }
