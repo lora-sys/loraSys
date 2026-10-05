@@ -13,7 +13,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(
 const dist = path.resolve(process.argv[2] ?? 'dist')
 const output = path.resolve(process.env.SITE_TEST_OUTPUT ?? path.join(os.tmpdir(), 'lorasys-reading-quality'))
 await mkdir(output, { recursive: true })
-const report = { networkFailures: [], slowRequests: [], startedAt: new Date().toISOString(), mode: process.env.SITE_TEST_URL ? 'published-site' : 'production-build', checks: [], measurements: [], screenshots: [], searches: [], htmlHashes: {} }
+const report = { navigationTimings: [], networkFailures: [], slowRequests: [], startedAt: new Date().toISOString(), mode: process.env.SITE_TEST_URL ? 'published-site' : 'production-build', checks: [], measurements: [], screenshots: [], searches: [], htmlHashes: {} }
 const failures = []
 const contentDirectory = path.resolve(import.meta.dirname, '../src/content/blog')
 const translatedEditions = []
@@ -676,19 +676,32 @@ try {
   })
   await context.close()
   const noJs = await browser.newContext({ viewport: { width: 320, height: 740 }, javaScriptEnabled: false })
+  await noJs.tracing.start({ screenshots: true, snapshots: true })
   const noJsPage = await noJs.newPage()
+  const measureNavigation = async (name, fn) => {
+    const started = performance.now()
+    try { return await fn() } finally {
+      report.navigationTimings.push({ name, durationMs: Math.round(performance.now() - started) })
+    }
+  }
+  noJsPage.on('requestfailed', (request) => report.networkFailures.push({ label: '320-no-js', url: request.url(), error: request.failure()?.errorText }))
+  noJsPage.on('requestfinished', (request) => {
+    const { responseEnd } = request.timing()
+    if (responseEnd >= 1000) report.slowRequests.push({ label: '320-no-js', url: request.url(), durationMs: Math.round(responseEnd) })
+  })
   await check('writing taxonomy has a narrow-screen no-JavaScript fallback', noJsPage, async () => {
-    await noJsPage.goto(new URL('blog', site).href, { waitUntil: 'domcontentloaded' })
-    await noJsPage.locator('.writing-taxonomy summary').press('Enter')
+    await measureNavigation('no-js open blog', () => noJsPage.goto(new URL('blog', site).href, { waitUntil: 'domcontentloaded' }))
+    await measureNavigation('no-js expand taxonomy', () => noJsPage.locator('.writing-taxonomy summary').press('Enter'))
     const typeLink = noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' })
-    await followReadingLink(noJsPage, typeLink)
+    await measureNavigation('no-js follow type', () => followReadingLink(noJsPage, typeLink))
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
-    await noJsPage.locator('.writing-taxonomy summary').press('Enter')
+    await measureNavigation('no-js expand taxonomy', () => noJsPage.locator('.writing-taxonomy summary').press('Enter'))
     const seriesLink = noJsPage.locator('.writing-taxonomy a').filter({ hasText: 'AI Agent 工程阅读清单' })
-    await followReadingLink(noJsPage, seriesLink)
+    await measureNavigation('no-js follow series', () => followReadingLink(noJsPage, seriesLink))
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     assert.ok(await noJsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
-    await noJsPage.screenshot({ path: path.join(output, '320-no-js-writing-series.png'), animations: 'disabled' })
+    report.noJsTransition = await noJsPage.evaluate(() => ({ active: Boolean(document.activeViewTransition), animations: document.getAnimations().map(animation => ({ playState: animation.playState, currentTime: animation.currentTime, timing: animation.effect?.getComputedTiming() })) }))
+    await measureNavigation('no-js screenshot', () => noJsPage.screenshot({ path: path.join(output, '320-no-js-writing-series.png'), animations: 'disabled' }))
     report.screenshots.push('320-no-js-writing-series.png')
   })
   await check('English archive defaults to English before JavaScript and without it', noJsPage, async () => {
@@ -701,6 +714,7 @@ try {
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     assert.ok(await noJsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
   })
+  await noJs.tracing.stop({ path: path.join(output, 'no-js-navigation-trace.zip') })
   await noJs.close()
 } finally {
   await browser.close()
