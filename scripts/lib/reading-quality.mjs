@@ -34,3 +34,14 @@ export async function followReadingLink(page, link) {
   // Observe completion instead of clicking through the overlay or disabling animation.
   await page.waitForFunction(() => !document.activeViewTransition, null, { timeout: 5000 })
 }
+
+export function automaticViewTransitionsEnabled(root = document, matches = query => matchMedia(query).matches) {
+  const walk = rules => [...rules].some(rule => {
+    if (rule.media && !matches(rule.conditionText)) return false
+    if (/^@view-transition\b/.test(rule.cssText)) return /navigation:\s*auto\b/.test(rule.cssText)
+    return rule.cssRules ? walk(rule.cssRules) : false
+  })
+  return [...root.styleSheets].some(sheet => {
+    try { return walk(sheet.cssRules) } catch { return false }
+  })
+}

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { readSearchIndex, searchResultsReady, followReadingLink } from './reading-quality.mjs'
+import { readSearchIndex, searchResultsReady, followReadingLink, automaticViewTransitionsEnabled } from './reading-quality.mjs'
 
 test('complete index hydration retains lower-ranked articles with bounded concurrency', async () => {
   let active = 0
@@ -80,4 +80,14 @@ test('a stuck view transition fails navigation instead of being clicked through'
   }
   const link = { getAttribute: async () => '/base/blog/article', click: async () => {} }
   await assert.rejects(followReadingLink(page, link), /View transition did not finish/)
+})
+
+
+test('view transitions remain enabled with scripting and fall back without scripting', () => {
+  const root = { styleSheets: [{ cssRules: [{
+    cssText: '@media (scripting: enabled) {...}', media: {}, conditionText: '(scripting: enabled)',
+    cssRules: [{ cssText: '@view-transition { navigation: auto; }' }]
+  }] }] }
+  assert.equal(automaticViewTransitionsEnabled(root, () => true), true)
+  assert.equal(automaticViewTransitionsEnabled(root, () => false), false)
 })

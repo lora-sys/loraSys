@@ -7,7 +7,7 @@ import os from 'node:os'
 import { pathToFileURL } from 'node:url'
 
 import { assertSearchPagination } from './lib/search-regressions.mjs'
-import { readSearchIndex, searchResultsReady, followReadingLink } from './lib/reading-quality.mjs'
+import { readSearchIndex, searchResultsReady, followReadingLink, automaticViewTransitionsEnabled } from './lib/reading-quality.mjs'
 
 const { chromium } = await import(process.env.PLAYWRIGHT_MODULE ? pathToFileURL(path.resolve(process.env.PLAYWRIGHT_MODULE)).href : 'playwright')
 const dist = path.resolve(process.argv[2] ?? 'dist')
@@ -132,6 +132,7 @@ try {
       for (const route of ['projects', 'en/work']) {
         await check(`${label} ${route} shows first project title without scrolling`, page, async () => {
           await open(route)
+          assert.equal(await page.evaluate(automaticViewTransitionsEnabled), true, 'Keep native route transitions for script-enabled browsers')
           const card = page.locator('.work-page [data-project-card]').first()
           await page.waitForFunction(() => {
             const card = document.querySelector('.work-page [data-project-card]')
@@ -691,6 +692,8 @@ try {
   })
   await check('writing taxonomy has a narrow-screen no-JavaScript fallback', noJsPage, async () => {
     await measureNavigation('no-js open blog', () => noJsPage.goto(new URL('blog', site).href, { waitUntil: 'domcontentloaded' }))
+    assert.equal(await noJsPage.evaluate(() => matchMedia('(scripting: none)').matches), true, 'Exercise the real no-script CSS fallback')
+    assert.equal(await noJsPage.evaluate(automaticViewTransitionsEnabled), false, 'No-script navigation must not create an intercepting transition overlay')
     await measureNavigation('no-js expand taxonomy', () => noJsPage.locator('.writing-taxonomy summary').press('Enter'))
     const typeLink = noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' })
     await measureNavigation('no-js follow type', () => followReadingLink(noJsPage, typeLink))

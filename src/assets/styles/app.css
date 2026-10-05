@@ -153,9 +153,11 @@ html[data-theme-transition='true']
     animation-timing-function: var(--motion-spring);
   }
 
-  /* 跨文档路由过渡：同源导航时的轻淡入淡出，渐进增强，不支持的浏览器保持即时跳转。 */
-  @view-transition {
-    navigation: auto;
+  /* 无脚本浏览器使用即时导航，避免跨页快照遮挡后续原生链接。 */
+  @media (scripting: enabled) {
+    @view-transition {
+      navigation: auto;
+    }
   }
 
   @keyframes vt-page-out {
