@@ -285,7 +285,7 @@ try {
         await page.goForward()
         assert.equal(await page.locator('[data-article]:visible').count(), seriesEnglishCount)
         await page.locator('#language-filter').selectOption('all')
-        assert.equal(await page.locator('[data-article]:visible').count(), seriesCount)
+        assert.equal(seriesCount, await page.locator('[data-article]:visible').count())
         await open('en/writing/topic/multi-agent?language=en-US')
         await page.waitForFunction(() => {
           const filter = document.querySelector('#language-filter')
@@ -361,12 +361,16 @@ try {
       })
 
       await check(`${label} search UI returns canonical articles only`, page, async () => {
-        await open('search')
+        // All-content relevance ranking may put five archives before any article.
+        // Exercise the real article filter rather than assuming a fixed first-page mix.
+        await open('search?type=article')
+        await page.locator('[data-search-type="article"]:not([disabled])[aria-pressed="true"]').waitFor({ state: 'visible' })
         const input = page.locator('.pagefind-ui__search-input')
         await input.fill('Harness')
         await page.locator('.pagefind-ui__result-link').first().waitFor({ state: 'visible' })
         const links = await page.locator('.pagefind-ui__result-link').evaluateAll((items) => items.map((item) => ({ title: item.textContent, href: item.href })))
         assert.ok(links.some((item) => item.href.includes('/blog/')), 'Search must retain matching articles')
+        assert.ok(links.every((item) => /\/blog\/[^/]+\/?$/.test(new URL(item.href).pathname)), 'Article filter must return canonical article destinations only')
         assert.ok(links.every((item) => !/\/en\/writing\/[^/?#]+/.test(new URL(item.href).pathname)), 'Search must not show legacy duplicates')
         // The UI includes section links for a page. Check page-level uniqueness in the index.
         const indexed = await page.evaluate(async (base) => {
@@ -379,11 +383,12 @@ try {
         }, base)
         assert.ok(indexed.length > 0, 'Page-level search must contain results')
         const urls = indexed.map((item) => new URL(item.href).pathname)
+        assert.ok(urls.some((url) => /\/blog\/[^/]+\/?$/.test(url)), 'Complete unfiltered index must retain matching articles')
         assert.equal(new Set(urls).size, urls.length, 'Index must not repeat a page')
         assert.ok(urls.every((url) => !/\/en\/writing\/[^/]+/.test(url)), 'Index must exclude legacy article aliases')
         report.searches.push({ label, indexed, links })
         await capture('search')
-        const article = page.locator('.pagefind-ui__result-link').filter({ hasText: /Harness/i }).first()
+        const article = page.locator('.pagefind-ui__result-link').first()
         await article.click()
         assert.ok(new URL(page.url()).pathname.startsWith(base), 'Search destination keeps the deployment base')
       })
