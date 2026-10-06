@@ -14,7 +14,7 @@
     "article:import": "bun scripts/import-article-html.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
-    "check": "bun run content:validate && bun run showcase:validate && astro check",
+    "check": "bun run content:validate && bun run test:search && bun run showcase:validate && astro check",
     "astro": "astro",
     "pure": "astro-pure",
     "format": "prettier --write  '**/*.{js,jsx,ts,tsx,md,mdx,astro}'",
@@ -23,7 +23,8 @@
     "clean": "rm -rf .astro .vercel dist",
     "cache:avatars": "tsx preset/scripts/cacheAvatars.ts",
     "content:validate": "bun scripts/validate-blog-mdx.mjs",
-    "showcase:validate": "bun scripts/validate-showcase-media.mjs"
+    "showcase:validate": "bun scripts/validate-showcase-media.mjs",
+    "test:search": "node --test test/search-routing.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",

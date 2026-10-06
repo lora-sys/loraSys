@@ -8,7 +8,10 @@ export function searchKindForPath(pathname: string, baseUrl = '/'): SearchKind {
   const hasBase = base && (pathname === base || pathname.startsWith(`${base}/`))
   const path = hasBase ? pathname.slice(base.length) || '/' : pathname
   if (/^\/(?:projects|en\/work|en\/projects)(?:\/|$)/.test(path)) return 'project'
-  if (/^\/(?:blog|en\/writing)(?:\/|$)/.test(path)) return 'article'
+  // Only a canonical post is an article. Lists, taxonomy pages and legacy aliases are archives.
+  const article = path.match(/^\/blog\/([^/]+)\/?$/)
+  if (article && !/^\d+$/.test(article[1]) && !['language', 'type', 'topic', 'series'].includes(article[1])) return 'article'
+  if (/^\/(?:blog|en\/writing)(?:\/|$)/.test(path)) return 'archive'
   if (/^\/notes(?:\/|$)/.test(path)) return 'note'
   if (/^\/lab(?:\/|$)/.test(path)) return 'lab'
   if (/^\/talks(?:\/|$)/.test(path)) return 'talk'
