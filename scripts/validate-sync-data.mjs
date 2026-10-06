@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+import { assertContributionSnapshot } from './lib/external-contributions.mjs'
 
 const root = new URL('../src/data/', import.meta.url)
 const failures = []
@@ -28,8 +29,15 @@ function isGithubUrl(value) {
 }
 
 const projectsSnapshot = await load('github-projects.json')
-const contributionsSnapshot = await load('external-contributions.json')
+let contributionsSnapshot = await load('external-contributions.json')
 const contributionCalendar = await load('contributions.json')
+
+try {
+  assertContributionSnapshot(contributionsSnapshot)
+} catch (error) {
+  failures.push(`external-contributions.json: ${error.message}`)
+  contributionsSnapshot = null
+}
 
 const projects = listProjects(projectsSnapshot)
 const projectKeys = new Set()

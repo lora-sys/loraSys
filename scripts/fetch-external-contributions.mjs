@@ -1,106 +1,28 @@
-import { readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile, rename, rm } from 'node:fs/promises'
+import { refreshExternalContributions } from './lib/external-contributions.mjs'
 
 const output = new URL('../src/data/external-contributions.json', import.meta.url)
 const overridesUrl = new URL('./contribution-overrides.json', import.meta.url)
-const token = process.env.GITHUB_TOKEN
 const login = 'lora-sys'
-
 const overrides = JSON.parse(await readFile(overridesUrl, 'utf8'))
-
-async function readSnapshot() {
-  try {
-    return JSON.parse(await readFile(output, 'utf8'))
-  } catch {
-    return { syncVersion: 2, lastUpdated: null, source: `GitHub GraphQL / user:${login}`, allowlist: Object.keys(overrides), contributions: [], warnings: [] }
-  }
-}
-
-if (!token) {
-  console.warn('GITHUB_TOKEN is unavailable; keeping the stored external contribution snapshot.')
-  process.exit(0)
-}
-
-const query = `
-  query($login: String!) {
-    user(login: $login) {
-      pullRequests(first: 100, states: [OPEN, CLOSED, MERGED], orderBy: { field: UPDATED_AT, direction: DESC }) {
-        nodes {
-          title
-          url
-          state
-          mergedAt
-          updatedAt
-          repository {
-            nameWithOwner
-            url
-            description
-            isFork
-            isArchived
-          }
-        }
-      }
-    }
-  }
-`
-
+let previous = null
 try {
-  const response = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      authorization: `Bearer ${token}`,
-      'content-type': 'application/json',
-      'user-agent': 'loraSys-pages'
-    },
-    body: JSON.stringify({ query, variables: { login } })
-  })
-  if (!response.ok) throw new Error(`GitHub returned ${response.status}`)
-  const json = await response.json()
-  if (json.errors?.length || !json.data?.user) {
-    throw new Error(json.errors?.[0]?.message ?? 'GitHub user missing')
-  }
+  previous = JSON.parse(await readFile(output, 'utf8'))
+} catch {
+  // A successful complete refresh may recover a missing snapshot. A failed one must fail CI.
+}
 
-  const selected = new Map()
-  for (const pr of json.data.user.pullRequests.nodes ?? []) {
-    if (!pr?.repository?.nameWithOwner) continue
-    const key = pr.repository.nameWithOwner.toLowerCase()
-    const override = overrides[key]
-    if (!override || pr.repository.isFork || pr.repository.isArchived) continue
-    const current = selected.get(key) ?? {
-      repository: pr.repository.nameWithOwner,
-      repositoryUrl: pr.repository.url,
-      description: pr.repository.description ?? '',
-      label: override.label,
-      note: override.note,
-      priority: override.priority,
-      prUrl: override.prUrl ?? null,
-      projectUrl: override.projectUrl ?? null,
-      pullRequests: []
-    }
-    current.pullRequests.push({
-      title: pr.title,
-      url: pr.url,
-      state: pr.state,
-      mergedAt: pr.mergedAt,
-      updatedAt: pr.updatedAt
-    })
-    selected.set(key, current)
-  }
-
-  const contributions = [...selected.values()]
-    .map((item) => ({ ...item, pullRequests: item.pullRequests.slice(0, 3) }))
-    .sort((left, right) => left.priority - right.priority)
-  const snapshot = {
-    syncVersion: 2,
-    lastUpdated: new Date().toISOString(),
-    source: `GitHub GraphQL / user:${login}`,
-    allowlist: Object.keys(overrides),
-    contributions,
-    warnings: []
-  }
-  await writeFile(output, `${JSON.stringify(snapshot, null, 2)}\n`)
-  console.log(`Stored ${contributions.length} curated external contribution projects.`)
-} catch (error) {
-  const snapshot = await readSnapshot()
-  if (!Array.isArray(snapshot.contributions)) throw error
-  console.warn(`External contribution refresh failed; using stored snapshot: ${error.message}`)
+const result = await refreshExternalContributions({ token: process.env.GITHUB_TOKEN, login, overrides, previous })
+const temporary = new URL(`./external-contributions.json.${process.pid}.tmp`, output)
+try {
+  await writeFile(temporary, `${JSON.stringify(result.snapshot, null, 2)}\n`)
+  await rename(temporary, output)
+} finally {
+  await rm(temporary, { force: true })
+}
+for (const warning of result.snapshot.warnings) console.warn(warning)
+if (result.refreshed) {
+  console.log(`Stored ${result.snapshot.contributions.length} curated external contribution projects after ${result.pages} pages / ${result.fetchedPullRequests} PRs.`)
+} else {
+  console.warn('External contribution refresh incomplete; retained the stored snapshot with a warning.')
 }
