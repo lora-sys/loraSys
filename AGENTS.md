@@ -104,7 +104,7 @@
 
 Astro 负责把 `src/pages/` 和 `src/layouts/` 渲染为静态页面。`src/components/` 提供可复用的页面模块和渐进增强的客户端交互；`src/data/` 保存经过校验的静态快照与站点配置；`src/content/blog/` 保存已经审核并可公开构建的文章。
 
-`scripts/` 负责从 GitHub 获取或整理项目与贡献元数据、校验同步数据、生成审计报告、导入 HTML 候选和执行发布前审计。GitHub Actions 在 `main` 推送、定时任务或手动触发时运行同步、质量门、构建和 GitHub Pages 部署。站点没有数据库和后端写操作，任何访客可见更新都来自提交后的静态构建。
+`scripts/` 负责从 GitHub 获取或整理项目与贡献元数据、校验同步数据、生成审计报告、导入 HTML 候选和执行发布前审计。GitHub Actions 分两层。`deploy.yml` 在 `main` 推送、定时任务或手动触发时运行同步、质量门、构建和 GitHub Pages 部署；PR 到 `main` 由 `verify.yml` 与 `verify-i18n.yml` 跑构建、浏览器回归和本地化/Lighthouse 审计；部署成功后 `verify-live.yml` 与 `verify-live-i18n.yml` 对线上站点做只读复核。站点没有数据库和后端写操作，任何访客可见更新都来自提交后的静态构建。
 
 ## 代码在哪里
 
@@ -118,7 +118,7 @@ Astro 负责把 `src/pages/` 和 `src/layouts/` 渲染为静态页面。`src/com
 - `src/assets/`：项目封面、原创视觉资产和其他随构建优化的媒体。
 - `scripts/`：同步、校验、报告、内容导入和发布审计脚本。
 - `packages/pure/`：本仓库使用的 Astro Pure 主题源；不要把站点定制和上游主题改动混在同一个提交。
-- `.github/workflows/`：GitHub Actions 的同步、构建和 GitHub Pages 部署流程。
+- `.github/workflows/`：CI 定义。`deploy.yml` 负责同步、构建和 GitHub Pages 部署；`verify.yml`、`verify-i18n.yml` 在 PR 上跑浏览器回归与本地化/Lighthouse 审计；`verify-live.yml`、`verify-live-i18n.yml` 在部署完成后对线上站点做只读验证。
 - `content-drafts/review/`：被忽略的本地审核候选区；其中内容不应被当作已经发布。
 
 ## 品味与工程取舍
