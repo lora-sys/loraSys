@@ -1318,6 +1318,15 @@
         }
       ],
       "note": "Recursive-discovery page is still incomplete: the body currently ends during section 1. Publication is blocked by incomplete prose and one unrecovered source diagram."
+    },
+    {
+      "source_page_id_sha256": "0c5cfeb856a7893211a91aed1d8681747dcc75c873bd0825ddb33c83f1f4a2b8",
+      "slug": "ai-agent-engineering-news-2026-10-05-06",
+      "content_fingerprint": "git-blob:b605bb8e6b496bea9f55d3bd0d2066f9288f4fbc",
+      "source_last_edited_at": "2026-10-06T00:04:46.326Z",
+      "status": "synced",
+      "media": [],
+      "note": "Complete engineering-news source page contains five substantive entries with primary sources and no attached media blocks. publishDate uses the coverage end date. Native cover is null; heroImage remains in the cover backlog."
     }
   ]
 }
