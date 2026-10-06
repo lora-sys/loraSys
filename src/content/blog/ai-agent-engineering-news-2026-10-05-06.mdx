@@ -1,0 +1,119 @@
+---
+title: '2026-10-05 至 2026-10-06｜AI Agent 工程阅读清单'
+description: '5 条 Agent 工程材料，覆盖代码审查评测、Compaction 上下文恢复、Guardian 权限检查点、Skill 前置条件与多 Agent Workflow。'
+publishDate: 2026-10-06
+tags: ['ai-agent', 'engineering-news', 'harness', 'evaluation', 'security', 'multi-agent']
+contentType: 'news'
+topics: ['agents', 'agent-harness', 'evaluation', 'security', 'multi-agent']
+series: 'agent-engineering-reading'
+language: 'zh-CN'
+draft: false
+---
+
+## 本期结论
+
+本期覆盖 2026 年 10 月 5 日至 10 月 6 日，共保留 5 条。前四条来自 10 月 5 日的新发布或新合并改动，第五条是此前漏掉但达到筛选门槛的工程材料。
+
+最值得先读的是 GitHub ReviewBench、Codex 的 Compaction 上下文重建，以及 Guardian 的动作时上下文。它们分别解决代码审查 Agent 如何做可信评测、长任务压缩后如何恢复完整运行状态，以及安全审查如何避免使用过期权限和有损摘要。
+
+## 1. GitHub 发布 ReviewBench，用生产实验校准代码审查 Agent 评测
+
+### 发生了什么
+
+GitHub 在 10 月 5 日发布 ReviewBench。它根据 1.039 亿个 GitHub Pull Request 的总体分布构建样本，最终使用 187 个开源仓库中的 219 个 Pull Request，覆盖 19 种语言。Golden set 同时收集真实人工 Review、作者后续修复、静态分析和多个前沿模型发现，再进行去重和统一标注。
+
+ReviewBench 同时提供 grounded precision、grounded recall、augmented precision 和 augmented recall。后两项会继续判断没有命中固定 Golden set 的新发现是否有效，避免更强的 Review Agent 因为发现了基准集遗漏的问题而被当成误报。GitHub 还公开了数据集、Judge Prompt、Judge 配置和自助运行器。独立高级工程师重新标注已有 finding 时，与基准标签的一致率为 96.6%。
+
+GitHub 还给出一次离线到线上校准结果。一个多模型 Code Review 实验在线 A/B 中 addressed rate 提高 8.0%，recall 提高 13.6%，评论量提高 61%，单次 Review 成本下降 8.0%。ReviewBench 对关键问题评论量的预测增幅为 227%，线上实际为 262%。
+
+### 工程意义
+
+代码审查 Agent 的评测不能只用固定答案集，也不能只看评论数量。随着 Agent 变强，固定 Golden set 会逐渐遗漏有效发现。实际评测应同时记录已知问题召回、误报、新发现有效性、严重性和成本，再用线上实验检查离线指标是否真的对应生产效果。
+
+### 先读哪里
+
+先读 “How ReviewBench works”，重点看多来源 Golden set、grounded 与 augmented 两组指标和严重性切片。再读 “How we’ve used ReviewBench”，看离线指标与 Copilot Code Review 线上 A/B 结果怎样对应。
+
+### 一手来源
+
+[GitHub：ReviewBench](https://github.blog/ai-and-ml/github-copilot/reviewbench-an-open-benchmark-for-ai-code-review/)
+
+## 2. Codex 修复 Compaction 后的上下文缺失
+
+### 发生了什么
+
+Codex 在 10 月 5 日合并 PR 51117。此前手动、Turn 前和 Turn 后的 Compaction 会等到下一轮才重建初始上下文，因此保存的 replacement history 可能缺少更新后的 instructions 和 Skill catalog。
+
+新实现会在本地和远程 Compaction 时直接安装初始上下文，并为每次 replacement 保存匹配的完整 world-state 和 turn-context baseline。即使负责 Compaction 的模型与当前模型不同，也会按照当前模型重建上下文并重新计算 Token 使用量。测试覆盖 resume、fork、模型切换、checkpoint baseline 和 Cloud Skill catalog 在 Compaction 后的保留。
+
+### 工程意义
+
+长任务的 Compaction 不能只保存摘要。恢复时还需要重建当前有效指令、Skill 目录、环境状态和模型对应的上下文基线。否则 resume 或 fork 后可能继续使用过期状态。
+
+### 先读哪里
+
+先读 PR 的 “Why” 和 “What changed”。重点看 replacement history 中的 full world-state、turn-context baseline、当前模型 Token 重算，以及 resume 和 fork 的回归测试。
+
+### 一手来源
+
+[OpenAI Codex PR 51117](https://github.com/openai/codex/pull/51117)
+
+## 3. Codex Guardian 改用动作发生时的检查点和权限上下文
+
+### 发生了什么
+
+Codex 在 10 月 5 日合并两组相关改动。PR 51137 解决 Guardian 自身 Compaction 后证据失效的问题。Reviewer 可以在原有审查截止时间内，从动作发生时保存的 parent checkpoint 重新启动一次，而不是依赖有损的 Reviewer 摘要。恢复后继续接收 checkpoint 之后新增的 transcript 和授权信息。
+
+PR 51067 修复 MCP elicitation 的上下文时间点。此前 Guardian 使用 Turn 开始时的环境状态，可能看不到 Tool 调用前刚刚就绪的远程环境，也可能继续使用已经过期的权限状态。现在每个 live MCP invocation 会绑定 issuing step 的 Guardian review context，elicitation 继续使用这份环境和权限快照。
+
+### 工程意义
+
+安全审查使用的上下文必须和被审查动作处于同一时间点。Turn 开始时的权限、压缩后的摘要或可复用 Reviewer Session 都可能已经过期。长期 Agent 应把执行动作、审批证据和权限快照绑定到同一个 checkpoint。
+
+### 先读哪里
+
+先读 PR 51137 的 checkpoint recovery、transcript source 和 post-checkpoint authorization。再读 PR 51067 的 issuing-step context，重点看远程环境在 Turn 中途变化时如何避免使用旧权限。
+
+### 一手来源
+
+[OpenAI Codex PR 51137](https://github.com/openai/codex/pull/51137)
+
+[OpenAI Codex PR 51067](https://github.com/openai/codex/pull/51067)
+
+## 4. Codex 在模型推理前强制检查环境所需 Skills
+
+### 发生了什么
+
+Codex 在 10 月 5 日合并 PR 51157。环境现在可以通过 environment/add 或 environments.toml 声明 skills.required。模型推理开始前，Runtime 会检查这些 Skill 是否启用，并确认它们确实由当前选中的环境提供。Skill 缺失、被禁用、来自错误环境或环境初始化失败时，Turn 会在发出模型请求前结束。环境取消选择后，对应要求也停止生效。
+
+### 工程意义
+
+这把 Skill 从 Prompt 中的约定变成 Runtime 的前置条件。需要特定工具链、测试能力或内部流程的任务，可以在消耗模型 Token 前先验证能力是否完整，也能减少 Agent 开始工作后才发现关键 Skill 不存在的无效运行。
+
+### 先读哪里
+
+直接读 PR 的 “What changed” 和 “Testing”。重点看 available、missing、disabled、wrong-environment 和 failed setup 五类测试，以及要求如何随环境选择和取消选择而变化。
+
+### 一手来源
+
+[OpenAI Codex PR 51157](https://github.com/openai/codex/pull/51157)
+
+## 5. 补录 Kiro Workflows 的多 Agent Runtime 实践
+
+### 发生了什么
+
+Kiro 在 9 月 30 日发布 Workflows，本期补录。Workflow 由独立 Agent Step、顺序、循环和并行分支组成。每个 Step 使用独立 Session 和新上下文，因此 Reviewer 不直接继承 Coder 的推理历史。Workflow 可以在 Step 之间根据新发现调整后续计划，但不会改写已经完成的工作和正在执行的 Step。
+
+Kiro 团队称，他们已经用这套机制运行数千次 Workflow。典型 Workflow 有 5 到 10 个 Step，包含多模型 Review 和自动修复循环。实现任务使用独立 Git worktree。内置 publish-pr 会创建 Pull Request，并处理失败的 CI 和可安全解决的 Review 反馈。涉及设计、Scope 或用户体验变化时会请求人工确认。
+
+### 工程意义
+
+多 Agent 编排应该由 Runtime 保存步骤、依赖、循环上限和停止条件，而不是让一个长对话记住全部流程。独立 Session 和独立 worktree 能减少上下文污染，也能降低并行修改冲突。
+
+### 先读哪里
+
+先读 “Building Kiro with workflows”。再读 “Inside a workflow” 和 feature-pipeline。重点看独立 worktree、repeat 上限、并行 Reviewer、最终 requirements validation 和人工确认点。
+
+### 一手来源
+
+[Kiro：Introducing workflows](https://kiro.dev/blog/introducing-workflows/)
