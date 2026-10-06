@@ -22,7 +22,8 @@ import ArticleFieldNote from '@/components/blog/ArticleFieldNote.astro'
 import ArticleHero from '@/components/blog/ArticleHero.astro'
 import LanguageBadge from '@/components/blog/LanguageBadge.astro'
 import RelatedReading from '@/components/blog/RelatedReading.astro'
-import { Comment, PageInfo } from '@/components/waline'
+import { PageInfo } from '@/components/waline'
+import GiscusComments from '@/components/community/GiscusComments.astro'
 import { writingLabel } from '@/utils/writing'
 import { alternateArticle, articleLanguage, originalArticleId } from '@/utils/article-translations'
 import agentRunbookMargin from '@/assets/lora-visual/v2/lora-v2-agent-runbook.webp'
@@ -303,8 +304,8 @@ const articleFieldNote = {
     </div>
 
     {
-      /* Comment */
-      !isDraft && enableComment && config.integ.waline.enable && <Comment class='mt-3 sm:mt-6' />
+      /* Comments: public GitHub Discussions via giscus */
+      !isDraft && enableComment && <GiscusComments title={title} lang={locale} />
     }
   </Fragment>
 

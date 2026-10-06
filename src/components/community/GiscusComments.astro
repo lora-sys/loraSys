@@ -1,0 +1,417 @@
+---
+/**
+ * Per-article comment section backed by GitHub Discussions via giscus.
+ *
+ * Mapping is 'specific' with the article title as term: 'title' mapping
+ * ignores data-term and keys on document.title (which carries the site-name
+ * suffix), so renaming the site or the title format would orphan every
+ * existing discussion.
+ */
+interface Props {
+  title: string
+  lang?: 'zh-CN' | 'en-US'
+}
+
+const { title, lang = 'zh-CN' } = Astro.props
+
+const copy =
+  lang === 'en-US'
+    ? {
+        heading: 'Comments',
+        description: 'Comments are public and managed through GitHub Discussions.',
+        loading: 'Preparing the comment section…',
+        loadingHelp:
+          'Sign in with GitHub once the comment box is ready, or open the repository discussions directly.',
+        fallbackLink: 'Open GitHub Discussions ↗',
+        privacy: 'Comments are published to the public discussions of the lora-sys/loraSys repository.',
+        ready: 'Comment section loaded.',
+        retry: 'Retry',
+        failure: 'The comment section failed to load. You can join the discussion on GitHub.'
+      }
+    : {
+        heading: '评论',
+        description: '评论公开保存在 GitHub Discussions。',
+        loading: '正在准备评论区…',
+        loadingHelp: '评论框就绪后可以使用 GitHub 登录参与讨论，也可以直接打开仓库 Discussions。',
+        fallbackLink: '打开 GitHub Discussions ↗',
+        privacy: '评论会发布到 lora-sys/loraSys 仓库的公开 Discussions。',
+        ready: '评论区已加载。',
+        retry: '重试',
+        failure: '评论区加载失败。可以直接到 GitHub Discussions 参与，或点击重试。'
+      }
+
+const giscus = {
+  repo: 'lora-sys/loraSys',
+  repoId: 'R_kgDORZoeSQ',
+  category: 'Announcements',
+  categoryId: 'DIC_kwDORZoeSc4C9UW6',
+  mapping: 'specific',
+  term: title,
+  strict: '0',
+  reactionsEnabled: '1',
+  emitMetadata: '0',
+  lang: lang === 'en-US' ? 'en' : 'zh-CN'
+}
+---
+
+<section class='article-comments' aria-labelledby='article-comments-title'>
+  <header>
+    <h2 id='article-comments-title'>{copy.heading}</h2>
+    <p>{copy.description}</p>
+  </header>
+
+  <div
+    class='giscus-frame'
+    aria-live='polite'
+    data-giscus-frame
+    data-ready-text={copy.ready}
+    data-failure-text={copy.failure}
+    data-retry-text={copy.retry}
+    data-repo={giscus.repo}
+    data-repo-id={giscus.repoId}
+    data-category={giscus.category}
+    data-category-id={giscus.categoryId}
+    data-mapping={giscus.mapping}
+    data-term={giscus.term}
+    data-strict={giscus.strict}
+    data-reactions-enabled={giscus.reactionsEnabled}
+    data-emit-metadata={giscus.emitMetadata}
+    data-lang={giscus.lang}
+  >
+    <div class='giscus-loading'>
+      <span class='giscus-skeleton' aria-hidden='true'><i></i><i></i><i></i></span>
+      <div>
+        <p>{copy.loading}</p>
+        <small>{copy.loadingHelp}</small>
+        <a
+          href='https://github.com/lora-sys/loraSys/discussions'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          {copy.fallbackLink}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <p class='article-comments-privacy'>{copy.privacy}</p>
+</section>
+
+<script>
+  const GISCUS_SRC = 'https://giscus.app/client.js'
+  const GISCUS_ORIGIN = 'https://giscus.app'
+  const LOAD_TIMEOUT_MS = 10000
+
+  // These data-* attributes carry the giscus configuration rendered above.
+  // The theme is deliberately absent: the host site resolves it at mount time
+  // and re-syncs on changes, because giscus only follows the OS preference.
+  const giscusKeys = [
+    'repo',
+    'repoId',
+    'category',
+    'categoryId',
+    'mapping',
+    'term',
+    'strict',
+    'reactionsEnabled',
+    'emitMetadata',
+    'lang'
+  ] as const
+
+  // The site theme lives on <html class="… dark">, not in prefers-color-scheme;
+  // giscus only follows the OS preference, so the host supplies the theme.
+  const resolveTheme = () =>
+    document.documentElement.classList.contains('dark') ? 'dark' : 'light'
+
+  const pending = new WeakMap<HTMLElement, { observer: MutationObserver; timer: number }>()
+
+  const clearPending = (frame: HTMLElement) => {
+    const entry = pending.get(frame)
+    if (!entry) return
+    clearTimeout(entry.timer)
+    entry.observer.disconnect()
+    pending.delete(frame)
+  }
+
+  const markFailed = (frame: HTMLElement, keepWatch = false) => {
+    if (frame.dataset.giscusFailed === 'true') return
+    frame.dataset.giscusFailed = 'true'
+    if (!keepWatch) {
+      clearPending(frame)
+    } else {
+      const entry = pending.get(frame)
+      if (entry) clearTimeout(entry.timer)
+    }
+    const loading = frame.querySelector('.giscus-loading')
+    if (!loading) return
+    const label = loading.querySelector('p')
+    if (label) {
+      frame.dataset.loadingLabel = label.textContent ?? ''
+      label.textContent = frame.dataset.failureText ?? ''
+    }
+    loading.querySelector('small')?.remove()
+    const fallbackLink = loading.querySelector('a')
+    const retry = document.createElement('button')
+    retry.type = 'button'
+    retry.className = 'giscus-retry'
+    retry.textContent = frame.dataset.retryText ?? ''
+    retry.addEventListener('click', () => retryGiscus(frame))
+    if (fallbackLink) fallbackLink.after(retry)
+    else loading.appendChild(retry)
+  }
+
+  const retryGiscus = (frame: HTMLElement) => {
+    delete frame.dataset.giscusFailed
+    delete frame.dataset.giscusMounted
+    const loading = frame.querySelector('.giscus-loading')
+    if (loading) {
+      const label = loading.querySelector('p')
+      if (label) label.textContent = frame.dataset.loadingLabel ?? ''
+      loading.querySelector('.giscus-retry')?.remove()
+    }
+    activate(frame)
+  }
+
+  const markReady = (frame: HTMLElement) => {
+    delete frame.dataset.giscusFailed
+    delete frame.dataset.loadingLabel
+    clearPending(frame)
+    frame.querySelector('.giscus-loading')?.remove()
+    // A theme change during the mount-to-ready gap was missed; sync once now.
+    syncTheme()
+    const ready = document.createElement('p')
+    ready.className = 'giscus-ready'
+    ready.textContent = frame.dataset.readyText ?? ''
+    frame.appendChild(ready)
+  }
+
+  const mountGiscus = (frame: HTMLElement) => {
+    if (frame.dataset.giscusMounted === 'true') return
+    frame.dataset.giscusMounted = 'true'
+
+    const script = document.createElement('script')
+    script.src = GISCUS_SRC
+    script.async = true
+    script.crossOrigin = 'anonymous'
+    script.dataset.theme = resolveTheme()
+    for (const key of giscusKeys) {
+      const value = frame.dataset[key]
+      if (value) script.dataset[key] = value
+    }
+    script.onerror = () => markFailed(frame)
+    frame.appendChild(script)
+  }
+
+  const activate = (frame: HTMLElement) => {
+    if (frame.dataset.giscusFailed === 'true') return
+    mountGiscus(frame)
+
+    const observer = new MutationObserver(() => {
+      if (!frame.querySelector('iframe.giscus-frame')) return
+      // A timed-out giscus that still arrives recovers the failure state.
+      markReady(frame)
+    })
+    observer.observe(frame, { childList: true, subtree: true })
+
+    const timer = window.setTimeout(() => {
+      if (!frame.querySelector('iframe.giscus-frame')) markFailed(frame, true)
+    }, LOAD_TIMEOUT_MS)
+
+    pending.set(frame, { observer, timer })
+  }
+
+  const syncTheme = () => {
+    document.querySelectorAll<HTMLElement>('[data-giscus-frame]').forEach((frame) => {
+      const theme = resolveTheme()
+      // A mounted-but-not-yet-ready widget has no iframe to message; updating
+      // the injected script keeps the widget that will eventually load in sync.
+      const script = frame.querySelector<HTMLIFrameElement>('script[src="' + GISCUS_SRC + '"]')
+      if (script) script.dataset.theme = theme
+      const iframe = frame.querySelector<HTMLIFrameElement>('iframe.giscus-frame')
+      iframe?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme } } },
+        GISCUS_ORIGIN
+      )
+    })
+  }
+
+  new MutationObserver(syncTheme).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  })
+
+  // Comments sit at the end of a long article; keep the giscus script out of
+  // the first paint and load it shortly before the section scrolls into view.
+  const frames = Array.from(document.querySelectorAll<HTMLElement>('[data-giscus-frame]'))
+  if (frames.length) {
+    if (!('IntersectionObserver' in window)) {
+      frames.forEach(activate)
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return
+            observer.unobserve(entry.target)
+            activate(entry.target as HTMLElement)
+          })
+        },
+        { rootMargin: '480px 0px', threshold: 0 }
+      )
+      frames.forEach((frame) => observer.observe(frame))
+    }
+  }
+</script>
+
+<style>
+  .article-comments {
+    margin-block: 2rem;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1.35rem;
+  }
+
+  .article-comments header h2 {
+    margin: 0;
+    font-size: clamp(1.25rem, 3vw, 1.7rem);
+    font-weight: 560;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  .article-comments header p {
+    margin: 0.45rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    line-height: 1.6;
+  }
+
+  .giscus-frame {
+    position: relative;
+    min-height: 12rem;
+    margin-top: 1.2rem;
+  }
+
+  .giscus-loading {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: 0.8rem;
+    min-height: 10rem;
+    border: 1px dashed hsl(var(--border));
+    border-radius: 0.75rem;
+    background: hsl(var(--background) / 0.46);
+    padding: 1rem;
+  }
+
+  .giscus-skeleton {
+    display: grid;
+    gap: 0.32rem;
+    padding-top: 0.08rem;
+  }
+
+  .giscus-skeleton i {
+    display: block;
+    height: 0.28rem;
+    border-radius: 999px;
+    background: hsl(var(--muted));
+  }
+
+  .giscus-skeleton i:nth-child(2) {
+    width: 74%;
+  }
+
+  .giscus-skeleton i:nth-child(3) {
+    width: 48%;
+  }
+
+  .giscus-loading p,
+  .giscus-loading small {
+    display: block;
+  }
+
+  .giscus-loading p {
+    margin: 0;
+    color: hsl(var(--foreground));
+    font-size: 0.78rem;
+    font-weight: 620;
+  }
+
+  .giscus-loading small {
+    max-width: 48ch;
+    margin-top: 0.42rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.7rem;
+    line-height: 1.55;
+  }
+
+  .giscus-loading a {
+    display: inline-block;
+    margin-top: 0.65rem;
+    color: hsl(var(--foreground));
+    font-size: 0.7rem;
+    text-decoration: none;
+  }
+
+  .giscus-loading a:hover,
+  .giscus-loading a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* giscus creates the iframe without an intrinsic width; the host page owns it. */
+  .giscus-frame :global(iframe.giscus-frame) {
+    width: 100%;
+    border: none;
+  }
+
+  .giscus-frame :global(.giscus) {
+    width: 100%;
+  }
+
+  /* Live-region announcement when the section finishes loading; visually hidden.
+     Matched via the container because the element is created at runtime. */
+  .giscus-frame :global(.giscus-ready) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Runtime-created retry button shown in the failure state. */
+  .giscus-frame :global(.giscus-retry) {
+    margin-left: 0.9rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.45rem;
+    background: hsl(var(--card));
+    color: hsl(var(--foreground));
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 620;
+    padding: 0.28rem 0.75rem;
+    cursor: pointer;
+  }
+
+  .giscus-frame :global(.giscus-retry:hover),
+  .giscus-frame :global(.giscus-retry:focus-visible) {
+    border-color: hsl(var(--foreground));
+  }
+
+  .giscus-frame :global(.giscus-retry:focus-visible) {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  .article-comments-privacy {
+    margin: 1rem 0 0;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.68rem;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 480px) {
+    .giscus-loading {
+      grid-template-columns: 1.8rem minmax(0, 1fr);
+    }
+  }
+</style>
