@@ -443,6 +443,8 @@ try {
             assert.equal(await frameElement.getAttribute('sandbox'), 'allow-scripts')
             const frame = await frameElement.contentFrame()
             await frame.locator('body').waitFor()
+            const loadedFrame = await (await frameElement.elementHandle()).contentFrame()
+            await loadedFrame.waitForLoadState('load')
             assert.equal(await frame.locator('html').getAttribute('lang'), 'en-US', `${edition.id}: interactive labels are English`)
             for (const control of await frame.locator('[role="tab"], .filter').all()) {
               await control.click()
