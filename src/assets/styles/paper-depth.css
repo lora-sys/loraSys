@@ -54,23 +54,23 @@
     .contact-intro,
     .now-hero,
     .site-card
-  ) {
+  ):not(.project-card--compact) {
   box-shadow: var(--paper-lift);
   background-color: hsl(var(--field-paper));
   border-radius: 0.65rem;
 }
 /* Only artwork tilts. Copy and hit targets keep their flat reading plane. */
-.site-frame :is(.project-card--lead, .project-card--featured) {
+.site-frame :is(.project-card--lead, .project-card--featured):not(.project-card--compact) {
   perspective: 1000px;
   overflow: visible;
 }
-.site-frame :is(.project-card--lead, .project-card--featured) .project-media {
+.site-frame :is(.project-card--lead, .project-card--featured):not(.project-card--compact) .project-media {
   transform-origin: center bottom;
   transition: transform 190ms ease;
   box-shadow: 0 1px 0 hsl(var(--border));
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .site-frame :is(.project-card--lead, .project-card--featured):hover .project-media {
+  .site-frame :is(.project-card--lead, .project-card--featured):not(.project-card--compact):hover .project-media {
     transform: rotateX(2deg) rotateY(-1deg) translateZ(8px);
   }
   .site-frame .notes-grid > li:hover > article {

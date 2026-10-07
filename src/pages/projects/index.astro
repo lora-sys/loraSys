@@ -5,6 +5,7 @@ import { demoByRepo } from '@/data/project-demos'
 import { getProjectStories } from '@/data/project-stories'
 import { projects } from '@/data/projects'
 import { socialLinks } from '@/data/social'
+import { withBasePath } from '@/i18n/site'
 import syncReport from '@/data/sync-report.json'
 import { getThemeRoadmap } from '@/data/theme-roadmap'
 
@@ -103,7 +104,7 @@ const directoryItems: DirectoryItem[] = [
     title: '作品',
     description: 'Lora 的个人作品页，收录 AI Agent、学习产品、开发工具、黑客松与开源实验。'
   }}
-  highlightColor='#d99a33'
+
 >
   <Fragment slot='head'>
     <CollectionPageJsonLd
@@ -154,7 +155,7 @@ const directoryItems: DirectoryItem[] = [
     <aside class='work-principle'>
       <span>怎么浏览</span>
       <p>不需要按时间翻项目。可以直接按你感兴趣的主题进去看。</p>
-      <a href='/blog'>也可以先读文章 <span aria-hidden='true'>→</span></a>
+      <a href={withBasePath('/blog')}>也可以先读文章 <span aria-hidden='true'>→</span></a>
     </aside>
 
     <ThemeQuickNav themes={themeRoadmap} />
@@ -189,7 +190,7 @@ const directoryItems: DirectoryItem[] = [
 
     <aside class='project-outro' aria-labelledby='project-outro-title'>
       <div><p>交流与合作</p><h2 id='project-outro-title'>有一个值得认真构建的想法？</h2></div>
-      <a class='tactile-action' href='/contact'>联系我 <span aria-hidden='true'>→</span></a>
+      <a class='tactile-action' href={withBasePath('/contact')}>联系我 <span aria-hidden='true'>→</span></a>
     </aside>
   </main>
 </PageLayout>
@@ -206,6 +207,10 @@ const directoryItems: DirectoryItem[] = [
 </script>
 
 <style>
+  /* Closed details must skip the large archive's layout, not only its paint. */
+  .work-archive:not([open]) > .archive-content {
+    display: none;
+  }
   .work-page {
     display: flex;
     width: min(100%, 70rem);

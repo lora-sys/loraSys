@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content'
 import { getProjectsForStory } from '@/data/project-stories'
 import { projects } from '@/data/projects'
+import { withBasePath } from '@/i18n/site'
 import { displayLabel } from '@/i18n/ui'
 
 import ArticleClassification from './ArticleClassification.astro'
@@ -33,7 +34,7 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
   </div>
   <ArticleClassification data={post.data} compact />
   <h3 lang={post.data.language}>
-    <a href={`/blog/${post.id}`} data-astro-prefetch>{post.data.title}</a>
+    <a href={withBasePath(`/blog/${post.id}`)} data-astro-prefetch>{post.data.title}</a>
   </h3>
   <p class='description' lang={post.data.language}>{post.data.description}</p>
   <p class='why-read'><b>阅读要点</b>{whyRead}</p>
@@ -43,15 +44,18 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
         <span>关联项目</span>
         <div>
           {relatedProjects.map((project) => (
-            <a href={`/projects#${project.repository}`} data-astro-prefetch>
-              {project.title} <span aria-hidden='true' data-link-arrow>↗</span>
+            <a href={withBasePath(`/projects#${project.repository}`)} data-astro-prefetch>
+              {project.title}{' '}
+              <span aria-hidden='true' data-link-arrow>
+                ↗
+              </span>
             </a>
           ))}
         </div>
       </div>
     )
   }
-  <a class='read-link' href={`/blog/${post.id}`} data-astro-prefetch
+  <a class='read-link' href={withBasePath(`/blog/${post.id}`)} data-astro-prefetch
     >阅读文章 <span aria-hidden='true' data-link-arrow>↗</span></a
   >
 </article>
@@ -68,7 +72,7 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
     border-radius: 0.9rem;
     padding: clamp(1.1rem, 2.6vw, 1.6rem);
     background: hsl(var(--card));
-    transition: border-color 160ms ease;
+    transition: transform 180ms ease;
   }
 
   .featured-writing:hover,
@@ -82,7 +86,7 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
     justify-content: space-between;
     gap: 0.75rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
+    font-size: 0.8125rem;
     line-height: 1.5;
   }
 
@@ -200,6 +204,11 @@ const relatedProjects = getProjectsForStory(`/blog/${post.id}`).flatMap((reposit
   @media (prefers-reduced-motion: reduce) {
     .featured-writing {
       transition: none;
+    }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .featured-writing:hover {
+      transform: translateY(-3px);
     }
   }
 </style>

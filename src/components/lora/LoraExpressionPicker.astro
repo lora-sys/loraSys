@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets'
 import expressionSprite from '@/assets/lora-visual/v3/lora-expression-sprite-v1.webp'
 
 interface Props {
@@ -102,11 +103,10 @@ const cycleLabel = isEnglish
 <div class='expression-picker' data-expression-picker aria-label={pickerLabel}>
   <div class='expression-preview'>
     <button class='expression-stage' type='button' aria-label={cycleLabel} data-expression-stage>
-      <img
-        src={expressionSprite.src}
+      <Image
+        src={expressionSprite}
+        quality={74}
         alt=''
-        width='1218'
-        height='1218'
         loading='lazy'
         decoding='async'
         data-expression-sheet
@@ -338,6 +338,9 @@ const cycleLabel = isEnglish
     padding-top: 0.55rem;
   }
 
+  .expression-library:not([open]) > .expression-grid {
+    display: none;
+  }
   .expression-library summary {
     width: fit-content;
     margin-inline: auto;

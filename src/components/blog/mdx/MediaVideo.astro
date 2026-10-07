@@ -7,13 +7,15 @@ interface Props {
 
 const { src, title, caption } = Astro.props
 
-if (!src.startsWith('/media/blog/')) {
+const sourcePath = new URL(decodeURIComponent(src), 'https://local.invalid').pathname
+if (!src.startsWith('/media/blog/') || !sourcePath.startsWith('/media/blog/')) {
   throw new Error('MediaVideo only accepts local /media/blog/ sources')
 }
 
-const type = src.endsWith('.webm')
+const extensionPath = sourcePath.toLowerCase()
+const type = extensionPath.endsWith('.webm')
   ? 'video/webm'
-  : src.endsWith('.mov')
+  : extensionPath.endsWith('.mov')
     ? 'video/quicktime'
     : 'video/mp4'
 ---

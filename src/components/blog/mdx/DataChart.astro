@@ -199,18 +199,21 @@ const formatValue = (value: number) => {
   }
 
   .mdx-data-chart-row:hover,
-  .mdx-data-chart-row:focus-visible,
   .mdx-data-chart-row[data-active='true'] {
     background: hsl(var(--muted) / 0.45);
-    outline: none;
+  }
+
+  .mdx-data-chart-row:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   .mdx-data-chart-label {
-    overflow: hidden;
+    min-width: 0;
     color: hsl(var(--muted-foreground));
     font-size: 0.75rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
   }
 
   .mdx-data-chart-track {
@@ -240,8 +243,8 @@ const formatValue = (value: number) => {
   .mdx-data-chart figcaption {
     margin-top: 0.65rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
-    line-height: 1.45;
+    font-size: 0.75rem;
+    line-height: 1.55;
   }
 
   @media (max-width: 640px) {

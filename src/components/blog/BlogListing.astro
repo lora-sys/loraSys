@@ -4,6 +4,7 @@ import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import projectSnapshot from '@/data/github-projects.json'
 import { fieldNotes } from '@/data/notes'
+import { withBasePath } from '@/i18n/site'
 
 import { Paginator } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/BaseLayout.astro'
@@ -22,10 +23,20 @@ interface Props {
   activeLanguage?: 'zh-CN' | 'en-US'
   activeKind?: WritingKind
   activeValue?: string
+  newsPosts?: CollectionEntry<'blog'>[]
+  newsCount?: number
 }
 
-const { page, collectionsCount, featuredPosts, activeLanguage, activeKind, activeValue } =
-  Astro.props
+const {
+  page,
+  collectionsCount,
+  featuredPosts,
+  activeLanguage,
+  activeKind,
+  activeValue,
+  newsPosts = [],
+  newsCount = 0
+} = Astro.props
 const curation: Record<string, { theme: string; whyRead: string }> = {
   'agent-budget-memory-evaluation': {
     theme: 'Agent Systems',
@@ -58,10 +69,13 @@ const curation: Record<string, { theme: string; whyRead: string }> = {
 }
 const featuredForView = (page.currentPage === 1 ? featuredPosts : [])
   .filter((post) => !activeLanguage || post.data.language === activeLanguage)
-  .slice(0, 1)
+  .slice(0, 3)
   .map((post) => ({
     post,
-    ...(curation[post.id] ?? { theme: 'Build Notes', whyRead: '一篇来自公开构建过程的技术记录。' })
+    ...(curation[post.data.translationOf ?? post.id] ?? {
+      theme: 'Build Notes',
+      whyRead: '一篇来自公开构建过程的技术记录。'
+    })
   }))
 const languageTitle =
   activeLanguage === 'zh-CN' ? '中文文章' : activeLanguage === 'en-US' ? '英文文章' : '全部文章'
@@ -81,6 +95,9 @@ const paginationProps = {
   ...(page.url.next && { nextUrl: { text: '下一页', url: page.url.next } })
 }
 const compactHeader = Boolean(activeKind || activeLanguage || page.currentPage > 1)
+const newsPath = withBasePath(
+  `/blog/type/news${activeLanguage ? `/language/${activeLanguage}` : ''}`
+)
 const browseBase = activeKind && activeValue ? `/blog/${activeKind}/${activeValue}` : '/blog'
 const languageFilters = [
   { title: '全部', href: browseBase, active: !activeLanguage },
@@ -140,7 +157,7 @@ const languageFilters = [
           languageFilters.map(({ title, href, active, lang }) => (
             <a
               class='tactile-action'
-              href={href}
+              href={withBasePath(href)}
               lang={lang}
               aria-current={active ? 'page' : undefined}
             >
@@ -149,12 +166,13 @@ const languageFilters = [
           ))
         }
       </nav>
-      <a class='notes-route tactile-action' href='/notes'>短笔记 ↗</a>
+      <a class='notes-route tactile-action' href={withBasePath('/notes')}>短笔记 ↗</a>
       <details class='writing-routes'>
         <summary><span>更多阅读路径</span><span aria-hidden='true'>+</span></summary>
         <nav aria-label='更多阅读方式'>
-          <a class='tactile-action' href='/en/writing?language=en-US' hreflang='en-US'>英文文章 ↗</a>
-          <a class='tactile-action' href='/archives'>完整归档 ↗</a>
+          <a class='tactile-action' href={withBasePath('/en/writing?language=en-US')} hreflang='en-US'>英文文章 ↗</a
+          >
+          <a class='tactile-action' href={withBasePath('/archives')}>完整归档 ↗</a>
         </nav>
       </details>
     </div>
@@ -166,10 +184,10 @@ const languageFilters = [
             <div>
               <>
                 <p class='eyebrow'>编辑精选</p>
-                <h2 id='featured-writing-title'>先读这一篇</h2>
+                <h2 id='featured-writing-title'>精选文章，先从这里开始</h2>
               </>
             </div>
-            <p>从一篇有完整背景和证据的构建记录开始。</p>
+            <p>先看方法、架构与工程实践，再按主题继续阅读。</p>
           </header>
           <div class='featured-grid'>
             {featuredForView.map(({ post, theme, whyRead }) => (
@@ -184,14 +202,16 @@ const languageFilters = [
       page.data.length === 0 ? (
         <div class='empty-state'>
           <p>暂时没有符合条件的文章。</p>
-          {activeLanguage && <a href={browseBase}>查看全部语言</a>}
-          <a href='/blog'>清除全部筛选</a>
+          {activeLanguage && <a href={withBasePath(browseBase)}>查看全部语言</a>}
+          <a href={withBasePath('/blog')}>清除全部筛选</a>
         </div>
       ) : (
         <section class='all-notes animate' aria-labelledby='all-notes-title'>
           <header class='all-notes-heading'>
             <h2 id='all-notes-title'>
-              {activeKind && activeValue ? writingLabel(activeKind, activeValue) : '按发布时间浏览'}
+              {activeKind && activeValue
+                ? writingLabel(activeKind, activeValue)
+                : '专题、教程与项目实践'}
             </h2>
             <small>
               第 {page.currentPage} 页 · {page.data.length} / {collectionsCount}
@@ -201,12 +221,17 @@ const languageFilters = [
             <div class='content-grid'>
               <section aria-label={`${languageTitle} 文章列表`} id='content'>
                 <div class='list-heading'>
-                  <span>从最近发布开始</span>
-                  <a href='/archives' data-astro-prefetch>
+                  <span>{activeKind ? '按发布时间浏览' : '长期内容，按发布时间浏览'}</span>
+                  <a href={withBasePath('/archives')} data-astro-prefetch>
                     完整归档 →
                   </a>
                 </div>
-                <ul class='post-list'>
+                <ul
+                  class:list={[
+                    'post-list',
+                    { 'post-list--grid': !(activeKind === 'type' && activeValue === 'news') }
+                  ]}
+                >
                   {page.data
                     .filter(
                       (post) =>
@@ -215,11 +240,46 @@ const languageFilters = [
                         )
                     )
                     .map((post) => (
-                      <BlogPostCard {post} />
+                      <BlogPostCard
+                        {post}
+                        variant={activeKind === 'type' && activeValue === 'news' ? 'list' : 'grid'}
+                      />
                     ))}
                 </ul>
                 <Paginator {...paginationProps} />
               </section>
+              {newsPosts.length > 0 && (
+                <aside class='news-digest' aria-labelledby='news-digest-title'>
+                  <header>
+                    <p class='eyebrow'>近期材料</p>
+                    <h2 id='news-digest-title'>新闻与阅读清单</h2>
+                    <p>按日期整理的新材料。专题与实践单独展示，方便深入阅读。</p>
+                  </header>
+                  <ol>
+                    {newsPosts.map((post) => (
+                      <li>
+                        <time datetime={post.data.publishDate.toISOString()}>
+                          {post.data.publishDate.toLocaleDateString('zh-CN', {
+                            month: 'long',
+                            day: 'numeric',
+                            timeZone: 'UTC'
+                          })}
+                        </time>
+                        <h3>
+                          <a href={withBasePath(`/blog/${post.id}`)} lang={post.data.language}>
+                            {post.data.title}
+                            <span aria-hidden='true'> ↗</span>
+                          </a>
+                        </h3>
+                        <p>{post.data.description}</p>
+                      </li>
+                    ))}
+                  </ol>
+                  <a class='news-browse tactile-action' href={newsPath}>
+                    查看全部 {newsCount} 篇清单 <span aria-hidden='true'>↗</span>
+                  </a>
+                </aside>
+              )}
             </div>
           </div>
         </section>
@@ -227,7 +287,8 @@ const languageFilters = [
     }
 
     <footer class='writing-stats'>
-      <span>{collectionsCount} 篇长文</span>
+      <span>{collectionsCount} 篇{activeKind ? '文章' : '专题与实践'}</span>
+      {newsCount > 0 && <span>{newsCount} 篇新闻与阅读清单</span>}
       <span>{fieldNotes.length} 篇短笔记</span>
       <span>{Object.keys(projectSnapshot.projects).length} 个公开仓库</span>
     </footer>
@@ -235,6 +296,10 @@ const languageFilters = [
 </PageLayout>
 
 <style>
+  :global(#main-content:has(> .blog-shell)) {
+    max-width: 72rem;
+  }
+
   .editorial-header {
     position: relative;
     isolation: isolate;
@@ -361,15 +426,14 @@ const languageFilters = [
     max-width: 28rem;
     margin: 0;
     color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
+    font-size: 0.875rem;
     line-height: 1.55;
     text-align: right;
   }
 
   .featured-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    max-width: 55rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
   }
 
@@ -506,7 +570,83 @@ const languageFilters = [
   .content-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: clamp(2rem, 6vw, 5rem);
+    gap: 2rem;
+  }
+  .content-grid:has(.news-digest) {
+    grid-template-columns: minmax(0, 2.4fr) minmax(15rem, 1fr);
+  }
+  .post-list--grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .news-digest {
+    align-self: start;
+    min-width: 0;
+    padding: 1.2rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.75rem;
+    background: hsl(var(--muted) / 0.35);
+  }
+  .news-digest h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    line-height: 1.4;
+  }
+  .news-digest header > p:last-child {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+  .news-digest ol {
+    padding: 0;
+    margin: 1.25rem 0;
+    list-style: none;
+  }
+  .news-digest li {
+    padding: 1rem 0;
+    border-top: 1px solid hsl(var(--border));
+  }
+  .news-digest time {
+    font-size: 0.8125rem;
+    color: hsl(var(--muted-foreground));
+  }
+  .news-digest h3 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .news-digest a {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .news-digest a:focus-visible {
+    outline: 2px solid hsl(var(--field-teal));
+    outline-offset: 4px;
+  }
+  .news-digest h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .news-digest li > p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: hsl(var(--muted-foreground));
+  }
+  .news-browse {
+    display: flex;
+    min-height: 2.75rem;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 0.75rem;
+    font-size: 0.875rem;
+  }
+  @media (max-width: 1100px) {
+    .content-grid:has(.news-digest) {
+      grid-template-columns: 1fr;
+    }
   }
 
   .list-heading {
@@ -515,7 +655,7 @@ const languageFilters = [
     gap: 1rem;
     margin-bottom: 0.8rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
+    font-size: 0.875rem;
   }
 
   .list-heading a,
@@ -561,6 +701,9 @@ const languageFilters = [
       text-align: left;
     }
     .featured-grid {
+      grid-template-columns: 1fr;
+    }
+    .post-list--grid {
       grid-template-columns: 1fr;
     }
 

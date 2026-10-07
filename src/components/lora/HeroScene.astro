@@ -17,22 +17,22 @@ const en = locale === 'en-US'
       <Image
         src={paperStage}
         alt=''
-        widths={[480, 640, 720, 800, 1200]}
-        sizes='(max-width: 900px) 90vw, 48rem'
-        loading='eager'
-        fetchpriority='high'
-        decoding='sync'
+        widths={[240, 320, 480, 640, 960]}
+        sizes='(max-width: 700px) 14rem, 30rem'
+        loading='lazy'
+        fetchpriority='auto'
+        decoding='async'
       />
     </div>
     <div class='hero-figure'>
       <Image
         src={heroIllustration}
         alt={en
-          ? 'Lora and Mochi sit together on a paper notebook.'
-          : 'Lora 和 Mochi 坐在纸本笔记上。'}
-        widths={[480, 640, 800, 1200]}
-        sizes='(max-width: 900px) min(63.64vw, 17.02rem), 42rem'
-        quality={90}
+          ? 'Lora and Mochi sit together.'
+          : 'Lora 和 Mochi 坐在一起。'}
+        widths={[240, 320, 480, 640, 800]}
+        sizes='(max-width: 700px) 10rem, 22rem'
+        quality={84}
         loading='eager'
         fetchpriority='high'
         decoding='sync'
@@ -229,6 +229,23 @@ const en = locale === 'en-US'
     }
     .scene-camera {
       transform: none;
+      transform-style: flat;
+    }
+    .hero-scene {
+      perspective: none;
+    }
+    .scene-paper {
+      display: none;
+    }
+    .scene-paper,
+    .hero-figure {
+      transform: none;
+    }
+    .scene-paper :global(img),
+    .hero-figure :global(img),
+    :global(.dark) .scene-paper :global(img),
+    :global(.dark) .hero-figure :global(img) {
+      filter: none;
     }
   }
   @media (prefers-reduced-motion: reduce) {

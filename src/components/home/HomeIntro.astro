@@ -1,0 +1,82 @@
+---
+import HeroScene from '@/components/lora/HeroScene.astro'
+
+interface Props {
+  locale?: 'zh-CN' | 'en-US'
+}
+const { locale = 'zh-CN' } = Astro.props
+const en = locale === 'en-US'
+const links = en
+  ? [['work', 'Selected work'], ['writing', 'Writing'], ['now', 'Now'], ['contact', 'Contact']]
+  : [['work', '精选作品'], ['writing', '构建笔记'], ['now', '最近在做'], ['contact', '联系我']]
+---
+
+<section class='home-intro' aria-labelledby='home-title'>
+  <div class='intro-meta'>
+    <p>{en ? "Student developer / Xi'an, China" : '学生开发者 / 中国·西安'}</p>
+    <span>Lora Field Notes</span>
+  </div>
+  <div class='intro-spread'>
+    <div class='intro-copy'>
+      <h1 id='home-title'>Lora<span>.</span></h1>
+      <p class='intro-title'>{en ? 'Agents, tools and' : 'Agent、工具与'}<br />{en ? 'notes from building.' : '构建笔记。'}</p>
+      <p class='intro-description'>{en ? 'Explore the projects, read the source, follow the work in progress.' : '看看项目，读读源码，翻翻正在进行的记录。'}</p>
+    </div>
+    <div class='intro-art'><HeroScene {locale} /></div>
+  </div>
+  <nav class='intro-index' aria-label={en ? 'Explore this page' : '探索首页内容'}>
+    {links.map(([id, label], index) => (
+      <a href={`#${id}`}>
+        <span class='index-number' aria-hidden='true'>{String(index + 1).padStart(2, '0')}</span>
+        <span>{label}</span><span class='index-arrow' aria-hidden='true'>↘</span>
+      </a>
+    ))}
+  </nav>
+</section>
+
+<style>
+  .home-intro { padding-top: clamp(1.5rem, 3vw, 3rem); }
+  .intro-meta { display:flex; justify-content:space-between; gap:1rem; color:hsl(var(--muted-foreground)); font-size:.75rem; }
+  .intro-meta p { margin:0; }
+  .intro-meta > span { font-family:ui-monospace, monospace; letter-spacing:.025em; }
+  .intro-spread { display:grid; grid-template-columns: 1fr 1fr; align-items:center; min-height:23rem; gap:1rem; }
+  .intro-copy { position:relative; z-index:2; padding-block:1.5rem 2.5rem; }
+  h1 { margin:0 0 1rem -.06em; font-family:var(--font-display); font-size:clamp(6rem, 13vw, 11.5rem); font-weight:750; letter-spacing:-.085em; line-height:.85; }
+  h1 span { color:hsl(var(--field-teal)); }
+  .intro-title { margin:0; font-family:var(--font-display); font-size:clamp(1.5rem, 3vw, 2.8rem); font-weight:620; letter-spacing:-.045em; line-height:1.2; }
+  .intro-description { max-width:30rem; margin:1.2rem 0 0; color:hsl(var(--muted-foreground)); font-size:.9rem; line-height:1.7; }
+  .intro-art { min-width:0; width:min(100%,28rem); justify-self:end; padding-bottom:1.5rem; }
+  .intro-art :global(.scene-motion) { bottom:0; }
+  .intro-art :global(.hero-scene) { width:100%; max-width:none; }
+  .intro-index { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-block:1px solid hsl(var(--border)); }
+  .intro-index a { position:relative; display:flex; align-items:center; gap:.8rem; min-height:4.25rem; padding:.8rem 1rem; color:hsl(var(--foreground)); font-size:.9rem; font-weight:600; text-decoration:none; isolation:isolate; }
+  .intro-index a + a { border-inline-start:1px solid hsl(var(--border)); }
+  .intro-index a::before { position:absolute; inset:0; z-index:-1; background:hsl(var(--field-teal) / .1); content:''; transform:scaleY(0); transform-origin:bottom; transition:transform var(--motion-base) var(--motion-spring); }
+  .intro-index a:is(:hover,:focus-visible)::before { transform:scaleY(1); }
+  .intro-index a:focus-visible { outline:2px solid hsl(var(--field-teal)); outline-offset:-3px; }
+  .index-number { color:hsl(var(--muted-foreground)); font-family:ui-monospace,monospace; font-size:.7rem; font-weight:400; }
+  .index-arrow { margin-inline-start:auto; transition:transform var(--motion-base) var(--motion-spring); }
+  .intro-index a:is(:hover,:focus-visible) .index-arrow { transform:translate(2px,2px); }
+  .intro-index a:active { transform:scale(.98); }
+  @media (prefers-reduced-motion:no-preference) {
+    .intro-copy { animation:intro-arrive var(--motion-story) var(--motion-spring); }
+    @keyframes intro-arrive { from { transform:translateY(10px); } to { transform:translateY(0); } }
+  }
+  @media (max-width:700px) {
+    .intro-meta { font-size:.65rem; }
+    .intro-spread { position:relative; grid-template-columns:1fr; min-height:0; gap:0; }
+    .intro-copy { padding-block:1.5rem 0; }
+    h1 { font-size:clamp(6.5rem, 25vw, 10rem); }
+    .intro-title { font-size:1.5rem; }
+    .intro-description { max-width:24rem; font-size:.85rem; }
+    .intro-art { width:min(100%,13rem); justify-self:end; margin-top:-.5rem; padding-bottom:0; }
+    .intro-index a { min-height:3.5rem; font-size:.75rem; padding:.5rem; gap:.25rem; }
+    .index-number { display:none; }
+    .index-arrow { font-size:.75rem; }
+    .intro-index a > span:not(.index-arrow) { overflow-wrap:normal; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .intro-index a, .intro-index a::before, .index-arrow { transition:none; }
+    .intro-index a:active, .intro-index a:is(:hover,:focus-visible) .index-arrow { transform:none; }
+  }
+</style>

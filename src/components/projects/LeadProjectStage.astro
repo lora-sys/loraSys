@@ -1,9 +1,7 @@
 ---
-import { demoByRepo } from '@/data/project-demos'
 import type { Project } from '@/data/projects'
 
 import ProjectCard from '@/components/projects/ProjectCard.astro'
-import ProjectDemo from '@/components/projects/ProjectDemo.astro'
 
 interface Props {
   project: Project
@@ -15,17 +13,11 @@ interface Props {
 }
 
 const { project, locale = 'zh-CN', rationale, hideRationale = false, anchor = false, priority = false } = Astro.props
-const demo = demoByRepo[project.repository]
-const copy = locale === 'en-US'
-  ? rationale ?? 'See the current work, source and related notes.'
-  : rationale ?? '查看当前能力、源码和相关构建记录。'
 ---
 
 <div class='lead-project-stage'>
-  <ProjectCard project={project} variant='lead' lens={false} compact compactLocale={locale} {anchor} {priority}>
-    {demo && <ProjectDemo kind={demo} locale={locale} slot='demo' />}
-  </ProjectCard>
-  {!hideRationale && <p class='work-rationale'>{copy}</p>}
+  <ProjectCard project={project} variant='lead' lens={false} compact compactLocale={locale} {anchor} {priority} />
+  {rationale && !hideRationale && <p class='work-rationale'>{rationale}</p>}
 </div>
 
 <style>

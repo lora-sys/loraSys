@@ -1,8 +1,20 @@
 ---
 const { class: className, ...props } = Astro.props
+const isEnglish = Astro.url.pathname.split('/').includes('en')
+const scrollHint = isEnglish ? 'Scroll horizontally to see all columns' : '横向滚动查看其余列'
+const scrollLabel = isEnglish ? 'Scrollable data table' : '可横向滚动的数据表格'
 ---
 
-<div class='mdx-table-shell not-prose' data-mdx-table>
+<div
+  class='mdx-table-shell not-prose'
+  data-mdx-table
+  data-scroll-label={scrollLabel}
+  data-scroll-label-en='Scrollable data table'
+  data-scroll-label-zh='可横向滚动的数据表格'
+  data-scroll-hint-en='Scroll horizontally to see all columns'
+  data-scroll-hint-zh='横向滚动查看其余列'
+>
+  <span class='mdx-table-scroll-hint' aria-hidden='true'>{scrollHint}</span>
   <table {...props} class:list={['mdx-table', className]}>
     <slot />
   </table>
@@ -13,13 +25,25 @@ const { class: className, ...props } = Astro.props
     document.querySelectorAll<HTMLElement>('[data-mdx-table]').forEach((shell) => {
       if (shell.dataset.tableReady === 'true') return
       shell.dataset.tableReady = 'true'
+      const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
+      const hint = shell.querySelector<HTMLElement>('.mdx-table-scroll-hint')
+      if (hint) {
+        hint.textContent = isEnglish
+          ? shell.dataset.scrollHintEn ?? 'Scroll horizontally to see all columns'
+          : shell.dataset.scrollHintZh ?? '横向滚动查看其余列'
+      }
+      shell.dataset.scrollLabel = isEnglish
+        ? shell.dataset.scrollLabelEn ?? 'Scrollable data table'
+        : shell.dataset.scrollLabelZh ?? '可横向滚动的数据表格'
       const updateOverflow = () => {
         const overflow = shell.scrollWidth > shell.clientWidth + 1
         if (overflow) {
           shell.tabIndex = 0
-          shell.setAttribute('aria-label', 'Scrollable data table')
+          shell.setAttribute('role', 'region')
+          shell.setAttribute('aria-label', shell.dataset.scrollLabel ?? 'Scrollable data table')
         } else {
           shell.removeAttribute('tabindex')
+          shell.removeAttribute('role')
           shell.removeAttribute('aria-label')
         }
         shell.toggleAttribute('data-overflow', overflow)
@@ -50,6 +74,15 @@ const { class: className, ...props } = Astro.props
   }
   .mdx-table-shell[data-overflow] { scrollbar-gutter: stable; }
   .mdx-table-shell:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; }
+  .mdx-table-scroll-hint {
+    display: none;
+    padding: 0.4rem 0.7rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.8);
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+  .mdx-table-shell[data-overflow] .mdx-table-scroll-hint { display: block; }
   .mdx-table {
     width: 100%;
     min-width: 36rem;
@@ -72,6 +105,14 @@ const { class: className, ...props } = Astro.props
     font-size: 0.72rem;
     font-weight: 650;
     letter-spacing: 0.015em;
+  }
+  .mdx-table :global(caption) {
+    padding: 0.65rem 0.78rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.75rem;
+    line-height: 1.55;
+    text-align: left;
+    caption-side: bottom;
   }
   .mdx-table :global(tbody tr:last-child td) { border-bottom: 0; }
   .mdx-table :global(tbody tr:nth-child(even)) { background: hsl(var(--background) / 0.32); }

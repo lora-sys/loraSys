@@ -146,7 +146,7 @@ try {
 
       await check(`${label} Chinese homepage keeps recent Chinese originals`, page, async () => {
         await open('')
-        const links = page.locator('#writing .writing-item > a')
+        const links = page.locator('#writing .writing-item a[href]')
         assert.ok(await links.count() > 0 && await links.count() <= 3)
         for (const link of await links.all()) {
           const href = await link.getAttribute('href')
@@ -292,7 +292,7 @@ try {
           return filter instanceof HTMLSelectElement && !filter.disabled && filter.value === 'en-US'
         })
         const topicEnglishCount = await page.locator('[data-article]:visible').count()
-        assert.equal((await page.locator('#article-count').textContent()).trim(), `Newest first · ${topicEnglishCount} ${topicEnglishCount === 1 ? 'article' : 'articles'}`, 'Filtered counts use the correct singular or plural')
+        assert.equal((await page.locator('#article-count').textContent()).trim(), `${topicEnglishCount} ${topicEnglishCount === 1 ? 'article' : 'articles'} across all sections`, 'Filtered counts use the correct singular or plural')
         await open('blog/type/news/language/en-US')
         assert.equal(await page.locator('.empty-state').isVisible(), englishNewsCount === 0, 'Empty language/type selection stays readable')
         await page.locator('.language-filter a').filter({ hasText: '中文' }).click()
@@ -327,7 +327,7 @@ try {
           assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null)
           assert.equal(await page.locator('[data-writing-selection]').isVisible(), true)
           assert.equal(await page.locator('[data-writing-reset]').isVisible(), true)
-          const firstTitle = page.locator(route.startsWith('en/') ? '.featured h2' : '.post-link').first()
+          const firstTitle = page.locator(route.startsWith('en/') ? '[data-article]:visible :is(h2,h3)' : '.post-link').first()
           const box = await firstTitle.boundingBox()
           assert.ok(box && box.y >= 0 && box.y < viewport.height, `${route}: first article must start in the first viewport: ${JSON.stringify(box)}`)
           assert.equal(await page.evaluate(() => scrollY), 0)

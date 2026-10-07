@@ -109,7 +109,6 @@ const filterAttributes = filterable
     {priority}
     {lens}
     locale={compactLocale}
-    quality={compact ? 84 : undefined}
     sizes={variant === 'lead'
       ? `(max-width: 639px) ${mobilePosterSize}, (min-width: 1024px) 58vw, 100vw`
       : `(min-width: 1024px) 35vw, (min-width: 640px) 46vw, ${mobilePosterSize}`}
@@ -124,10 +123,16 @@ const filterAttributes = filterable
               ? ({ building: '构建中', active: '持续维护', archived: '已归档' }[project.status])
               : statusLabel}
           </span>
+          <span
+            class='project-source'
+            title={`${t('来源', 'Source')}: ${project.source}`}
+            aria-label={`${t('项目来源', 'Project source')}: ${sourceLabel}`}
+          >
+            {sourceLabel}
+          </span>
         </div>
         <div class='project-heading'><h3>{project.title}</h3></div>
         <p>{project.description || (compactLocale === 'zh-CN' ? '暂未发布项目说明。' : 'No description published yet.')}</p>
-        <slot name='demo' />
         <div class='project-actions'>
           <a
             class='primary tactile-action'
@@ -380,8 +385,6 @@ const filterAttributes = filterable
     content-visibility: auto;
     contain-intrinsic-size: auto 38rem;
     transition:
-      border-color 220ms ease,
-      box-shadow 220ms ease,
       transform 220ms ease;
   }
 
@@ -474,6 +477,24 @@ const filterAttributes = filterable
     box-shadow: 0 24px 55px -42px hsl(var(--foreground) / 0.56);
   }
 
+  :global(.site-frame) .project-card--compact {
+    overflow: hidden;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.35rem;
+    background-color: hsl(var(--card));
+    box-shadow: none;
+    perspective: none;
+  }
+
+  :global(.site-frame) .project-card--compact:is(:hover, :focus-within) {
+    box-shadow: none;
+  }
+
+  :global(.site-frame) .project-card--compact .project-media {
+    box-shadow: none;
+    transform: none;
+  }
+
   .project-body {
     position: relative;
     z-index: 3;
@@ -495,6 +516,8 @@ const filterAttributes = filterable
   .project-body--compact .compact-status {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .project-card--compact .project-body {
@@ -506,7 +529,17 @@ const filterAttributes = filterable
   }
 
   .project-card--compact .project-heading h3 {
-    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+    font-size: 2rem;
+  }
+
+  .project-card--compact.project-card--lead .project-heading h3 {
+    font-size: 2.5rem;
+  }
+
+  .project-card--compact .project-source {
+    border-radius: 0.35rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
   }
 
   .project-card--compact .project-body > p {
@@ -720,8 +753,6 @@ const filterAttributes = filterable
     font-weight: 560;
     text-decoration: none;
     transition:
-      background 180ms ease,
-      color 180ms ease,
       transform 180ms ease;
   }
 
@@ -768,6 +799,14 @@ const filterAttributes = filterable
 
     .project-heading > span {
       max-width: 100%;
+    }
+
+    .project-card--compact .project-heading h3 {
+      font-size: clamp(1.4rem, 6vw, 1.7rem);
+    }
+
+    .project-card--compact.project-card--lead .project-heading h3 {
+      font-size: clamp(1.65rem, 7.5vw, 2.1rem);
     }
   }
 

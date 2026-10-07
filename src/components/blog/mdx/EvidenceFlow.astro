@@ -5,6 +5,7 @@ interface Props {
   source?: string
 }
 const { title, items, source } = Astro.props
+const isEnglish = Astro.url.pathname.split('/').includes('en')
 const entries = items.split('|').map((item) => {
   const [label = '', detail = ''] = item.split('::', 2).map((part) => part.trim())
   return { label, detail }
@@ -14,11 +15,18 @@ const entries = items.split('|').map((item) => {
 {entries.length > 1 && (
   <section class='evidence-flow not-prose' data-evidence-flow>
     {title && <h3>{title}</h3>}
-    <div class='flow-track' role='list' aria-label={title ?? 'Evidence flow'}>
+    <div
+      class='flow-track'
+      role='group'
+      aria-label={title ?? (isEnglish ? 'Evidence flow' : '证据流程')}
+      data-flow-group
+      data-localized-label={title ? undefined : 'true'}
+      data-label-en='Evidence flow'
+      data-label-zh='证据流程'
+    >
       {entries.map((item, index) => (
         <button
           type='button'
-          role='listitem'
           class='flow-step'
           data-flow-step
           data-index={index}
@@ -45,7 +53,15 @@ const entries = items.split('|').map((item) => {
       const steps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-flow-step]'))
       const copy = Array.from(root.querySelectorAll<HTMLElement>('[data-flow-copy]'))
       const detail = root.querySelector<HTMLElement>('[data-flow-detail]')
+      const group = root.querySelector<HTMLElement>('[data-flow-group]')
       if (!detail || !steps.length) return
+      if (group?.dataset.localizedLabel === 'true') {
+        const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
+        group.setAttribute(
+          'aria-label',
+          isEnglish ? group.dataset.labelEn ?? 'Evidence flow' : group.dataset.labelZh ?? '证据流程'
+        )
+      }
       const activate = (index: number) => {
         steps.forEach((step, i) => step.setAttribute('aria-pressed', i === index ? 'true' : 'false'))
         detail.textContent = copy[index]?.textContent ?? ''

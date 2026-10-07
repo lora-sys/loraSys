@@ -6,15 +6,16 @@ import { getBlogCollection } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ArticleClassification from '@/components/blog/ArticleClassification.astro'
 import WritingTaxonomy from '@/components/blog/WritingTaxonomy.astro'
-import { writingLabel, type WritingKind } from '@/utils/writing'
 import { articleLanguage, originalArticleId } from '@/utils/article-translations'
+import { writingLabel, type WritingKind } from '@/utils/writing'
 
 interface Props {
   activeKind?: WritingKind
   activeValue?: string
 }
 const { activeKind, activeValue } = Astro.props
-const posts = (await getBlogCollection())
+const allPosts = await getBlogCollection()
+const posts = allPosts
   .filter(
     (post) =>
       !activeKind ||
@@ -28,17 +29,41 @@ const posts = (await getBlogCollection())
 const languageOf = articleLanguage
 const englishCount = posts.filter((post) => languageOf(post) === 'en-US').length
 const chineseCount = posts.filter((post) => languageOf(post) === 'zh-CN').length
-const featuredPost =
-  featuredPostIds
-    .map((id) => posts.find((post) => originalArticleId(post) === id && languageOf(post) === 'en-US'))
-    .find((post) => post !== undefined) ?? posts.find((post) => languageOf(post) === 'en-US') ?? posts[0]
+const featuredPost = !activeKind
+  ? (featuredPostIds
+      .map((id) =>
+        posts.find((post) => originalArticleId(post) === id && languageOf(post) === 'en-US')
+      )
+      .find((post) => post !== undefined) ??
+    posts.find((post) => languageOf(post) === 'en-US') ??
+    posts[0])
+  : undefined
 const featuredEditions = featuredPost
-  ? posts.filter((post) => originalArticleId(post) === originalArticleId(featuredPost))
-      .sort((left, right) => Number(languageOf(right) === 'en-US') - Number(languageOf(left) === 'en-US'))
+  ? posts
+      .filter((post) => originalArticleId(post) === originalArticleId(featuredPost))
+      .sort(
+        (left, right) =>
+          Number(languageOf(right) === 'en-US') - Number(languageOf(left) === 'en-US')
+      )
   : []
+const selectedPosts = featuredPostIds
+  .map((id) =>
+    allPosts.find((post) => originalArticleId(post) === id && languageOf(post) === 'en-US')
+  )
+  .filter((post) => post !== undefined)
+const curatedPosts =
+  !activeKind && featuredPost
+    ? selectedPosts.filter((post) => originalArticleId(post) !== originalArticleId(featuredPost))
+    : []
 const browsePath =
   activeKind && activeValue ? `/en/writing/${activeKind}/${activeValue}` : '/en/writing'
 const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
+const longformRows = publicationRows.filter((post) => post.data.contentType !== 'news')
+const newsRows = publicationRows.filter((post) => post.data.contentType === 'news')
+const mainRows = longformRows.length > 0 ? longformRows : publicationRows
+const secondaryNewsRows = longformRows.length > 0 ? newsRows : []
+const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US').length
+const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) === 'en-US').length
 ---
 
 <PageLayout
@@ -82,6 +107,7 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
         <option value='en-US' selected>English ({englishCount})</option>
         <option value='zh-CN'>Chinese ({chineseCount})</option>
       </select>
+      <span id='article-count' aria-live='polite'>{englishCount} articles across all sections</span>
     </div>
     <noscript>
       <p>
@@ -133,55 +159,30 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
       ))
     }
     {
-      posts.length > 0 && (
-        <section class='publication-list' aria-labelledby='publication-title'>
-          <header>
-            <>
-              <h2 id='publication-title'>
-                {activeKind && activeValue
-                  ? writingLabel(activeKind, activeValue, 'en-US')
-                  : 'Published notes'}
-              </h2>
-              <span id='article-count' aria-live='polite'>
-                Newest first · {englishCount} {englishCount === 1 ? 'article' : 'articles'}
-              </span>
-            </>
+      curatedPosts.length >= 3 && (
+        <section class='curated' aria-labelledby='curated-title' data-curated-navigation>
+          <header class='section-heading'>
+            <div>
+              <p class='section-kicker'>A starting point</p>
+              <h2 id='curated-title'>Selected writing</h2>
+            </div>
+            <span>{curatedPosts.length} notes from the collection</span>
           </header>
-          <ol>
-            {publicationRows.map((post) => (
-              <li
-                hidden={languageOf(post) !== 'en-US'}
-                data-original-id={originalArticleId(post)}
-                data-article
-                data-content-type={post.data.contentType}
-                data-series={post.data.series}
-                data-language={languageOf(post)}
-              >
-                <time datetime={post.data.publishDate.toISOString()}>
-                  {post.data.publishDate.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
-                </time>
-                <div>
-                  <h3>
-                    <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>
-                      {post.data.title}
-                    </a>
-                  </h3>
-                  <p lang={languageOf(post)}>{post.data.description}</p>
-                  <ArticleClassification data={post.data} locale='en-US' />
-                  <span class='language-badge'>
-                    {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
-                  </span>
-                </div>
+          <ol class='curated-grid'>
+            {curatedPosts.map((post, index) => (
+              <li>
                 <a
-                  class='row-link'
+                  class='curated-card'
+                  lang={languageOf(post)}
                   href={withBasePath(`/blog/${post.id}`)}
-                  aria-label={`Read ${post.data.title}`}
+                  data-language={languageOf(post)}
                 >
-                  <span aria-hidden='true'>↗</span>
+                  <span class='curated-number'>{String(index + 1).padStart(2, '0')}</span>
+                  <span class='curated-title'>{post.data.title}</span>
+                  <span class='curated-description'>{post.data.description}</span>
+                  <span class='curated-read'>
+                    Read this note <span aria-hidden='true'>↗</span>
+                  </span>
                 </a>
               </li>
             ))}
@@ -189,7 +190,128 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
         </section>
       )
     }
-    {posts.length === 0 && <p class='empty'>No articles are published yet.</p>}
+    {
+      posts.length > 0 && (
+        <div class='publication-layout'>
+          {mainRows.length > 0 && (
+            <section
+              class='publication-list publication-list--main'
+              aria-labelledby='publication-title'
+            >
+              <header class='section-heading'>
+                <div>
+                  <p class='section-kicker'>
+                    {longformRows.length > 0 ? 'Ideas to revisit' : 'Filtered collection'}
+                  </p>
+                  <h2 id='publication-title'>
+                    {activeKind && activeValue
+                      ? writingLabel(activeKind, activeValue, 'en-US')
+                      : 'Long reads and practical guides'}
+                  </h2>
+                </div>
+                <div class='section-counts'>
+                  <span data-section-count='main'>
+                    {mainEnglishCount} {mainEnglishCount === 1 ? 'article' : 'articles'}
+                  </span>
+                </div>
+              </header>
+              <ol class='article-grid' data-section-list='main'>
+                {mainRows.map((post) => (
+                  <li
+                    class='article-card'
+                    hidden={languageOf(post) !== 'en-US'}
+                    data-original-id={originalArticleId(post)}
+                    data-article
+                    data-content-type={post.data.contentType}
+                    data-series={post.data.series}
+                    data-language={languageOf(post)}
+                  >
+                    <time datetime={post.data.publishDate.toISOString()}>
+                      {post.data.publishDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </time>
+                    <div class='article-card-copy'>
+                      <h3>
+                        <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>
+                          {post.data.title}
+                        </a>
+                      </h3>
+                      <p lang={languageOf(post)}>{post.data.description}</p>
+                      <ArticleClassification data={post.data} locale='en-US' />
+                      <span class='language-badge'>
+                        {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p class='section-empty' data-section-empty='main' hidden>
+                {longformRows.length > 0
+                  ? 'No long-form articles match this language.'
+                  : 'No articles match this language.'}
+              </p>
+            </section>
+          )}
+          {secondaryNewsRows.length > 0 && (
+            <section class='publication-list publication-list--news' aria-labelledby='news-title'>
+              <header class='section-heading'>
+                <div>
+                  <p class='section-kicker'>Reading list</p>
+                  <h2 id='news-title'>News notes</h2>
+                </div>
+                <span data-section-count='news'>
+                  {newsEnglishCount} {newsEnglishCount === 1 ? 'note' : 'notes'}
+                </span>
+              </header>
+              <ol class='news-list' data-section-list='news'>
+                {secondaryNewsRows.map((post) => (
+                  <li
+                    hidden={languageOf(post) !== 'en-US'}
+                    data-original-id={originalArticleId(post)}
+                    data-article
+                    data-content-type={post.data.contentType}
+                    data-series={post.data.series}
+                    data-language={languageOf(post)}
+                  >
+                    <time datetime={post.data.publishDate.toISOString()}>
+                      {post.data.publishDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </time>
+                    <div>
+                      <h3>
+                        <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>
+                          {post.data.title}
+                        </a>
+                      </h3>
+                      <ArticleClassification data={post.data} locale='en-US' compact />
+                    </div>
+                    <span class='language-badge'>
+                      {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+              <p class='section-empty' data-section-empty='news' hidden>
+                No news notes match this language.
+              </p>
+            </section>
+          )}
+        </div>
+      )
+    }
+    {
+      posts.length === 0 && (
+        <p class='empty'>
+          {activeKind ? 'No articles match this collection yet.' : 'No articles are published yet.'}
+        </p>
+      )
+    }
     <p class='empty' id='filter-empty' hidden>
       No articles match this language.
       <a href={withBasePath(`${browsePath}?language=all`)}>Show all languages</a>
@@ -204,6 +326,14 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
   const articleCount = document.querySelector<HTMLElement>('#article-count')
   const headerCount = document.querySelector<HTMLElement>('[data-writing-header-count]')
   const filterEmpty = document.querySelector<HTMLElement>('#filter-empty')
+  const curatedNavigation = document.querySelector<HTMLElement>('[data-curated-navigation]')
+  const curatedCards = [
+    ...(curatedNavigation?.querySelectorAll<HTMLElement>('[data-language]') ?? [])
+  ]
+  const sectionLists = [...document.querySelectorAll<HTMLOListElement>('[data-section-list]')]
+  const sectionEmpties = [...document.querySelectorAll<HTMLElement>('[data-section-empty]')]
+  const newsCount = document.querySelector<HTMLElement>('[data-section-count="news"]')
+  const mainCount = document.querySelector<HTMLElement>('[data-section-count="main"]')
 
   const applyLanguage = () => {
     const requested = new URL(location.href).searchParams.get('language') ?? 'en-US'
@@ -221,10 +351,27 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
       if (visible) visibleCount += 1
     }
     if (articleCount)
-      articleCount.textContent = `Newest first · ${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
+      articleCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'} across all sections`
     if (headerCount)
       headerCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'article' : 'articles'}`
     if (filterEmpty) filterEmpty.hidden = visibleCount !== 0
+    for (const card of curatedCards) {
+      card.hidden = language !== 'all' && card.dataset.language !== language
+    }
+    if (curatedNavigation) curatedNavigation.hidden = curatedCards.every((card) => card.hidden)
+    for (const list of sectionLists) {
+      const rows = [...list.querySelectorAll<HTMLElement>('[data-article]')]
+      const count = rows.filter((article) => !article.hidden).length
+      list.hidden = count === 0
+      const empty = sectionEmpties.find(
+        (item) => item.dataset.sectionEmpty === list.dataset.sectionList
+      )
+      if (empty) empty.hidden = count !== 0
+      if (list.dataset.sectionList === 'main' && mainCount)
+        mainCount.textContent = `${count} ${count === 1 ? 'article' : 'articles'}`
+      if (list.dataset.sectionList === 'news' && newsCount)
+        newsCount.textContent = `${count} ${count === 1 ? 'note' : 'notes'}`
+    }
   }
   languageFilter?.addEventListener('change', () => {
     const url = new URL(location.href)
@@ -239,6 +386,10 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
 </script>
 
 <style>
+  :global(#main-content:has(> .writing-page)) {
+    max-width: 72rem;
+  }
+
   .writing-page {
     display: grid;
     gap: 1.6rem;
@@ -322,7 +473,7 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
     align-items: center;
     gap: 0.65rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.75rem;
+    font-size: 0.875rem;
   }
   .filter select {
     min-height: 2.5rem;
@@ -379,9 +530,7 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
     line-height: 1.13;
   }
   .featured h2 a,
-  .read,
-  .publication-list h3 a,
-  .row-link {
+  .read {
     color: hsl(var(--foreground));
     text-decoration: none;
   }
@@ -400,90 +549,240 @@ const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
     font-size: 0.75rem;
     font-weight: 640;
   }
-  .publication-list > header {
+  .curated,
+  .publication-list {
+    min-width: 0;
+  }
+  .section-heading {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
     gap: 1rem;
     border-bottom: 1px solid hsl(var(--border));
     padding-block: 1rem;
   }
-  .publication-list > header h2 {
+  .section-heading > div {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .section-kicker {
     margin: 0;
-    font-size: 1.2rem;
+    color: hsl(var(--field-amber-strong));
+    font-size: 0.62rem;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .section-heading h2 {
+    margin: 0;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
     font-weight: 580;
     letter-spacing: -0.03em;
+    line-height: 1.2;
   }
-  .publication-list > header span {
+  .section-heading > span {
+    flex: 0 0 auto;
     color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
   }
-  .publication-list ol {
+  .section-counts {
+    display: grid;
+    flex: 0 0 auto;
+    justify-items: end;
+    gap: 0.2rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .curated-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin: 0;
+    padding: 1rem 0 0;
+    list-style: none;
+  }
+  .curated-card {
+    display: grid;
+    min-height: 12rem;
+    align-content: start;
+    gap: 0.65rem;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.85rem;
+    padding: 1rem;
+    color: hsl(var(--foreground));
+    text-decoration: none;
+    transition:
+      transform 160ms ease,
+      opacity 160ms ease;
+  }
+  .curated-card:hover {
+    transform: translateY(-2px);
+  }
+  .curated-card:active {
+    transform: scale(0.99);
+    opacity: 0.84;
+  }
+  .curated-number {
+    color: hsl(var(--field-amber-strong));
+    font-size: 0.67rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.08em;
+  }
+  .curated-title {
+    font-size: clamp(1rem, 1.5vw, 1.22rem);
+    font-weight: 590;
+    letter-spacing: -0.025em;
+    line-height: 1.3;
+  }
+  .curated-description {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+  .curated-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    color: hsl(var(--foreground));
+    font-size: 0.76rem;
+    font-weight: 640;
+  }
+  .publication-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.56fr);
+    align-items: start;
+    gap: clamp(1.25rem, 4vw, 3.25rem);
+  }
+  .publication-layout:not(:has(.publication-list--news)) {
+    grid-template-columns: 1fr;
+  }
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.25rem;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .publication-list li {
+  .article-card {
     display: grid;
-    grid-template-columns: 6.5rem minmax(0, 1fr) 2rem;
-    align-items: start;
-    gap: 1rem;
+    align-content: start;
+    gap: 0.55rem;
+    min-width: 0;
     border-bottom: 1px solid hsl(var(--border));
-    padding: 1.1rem 0.2rem;
+    padding: 1.15rem 0.15rem 1.25rem;
   }
-  .publication-list time {
-    padding-top: 0.25rem;
+  .article-card time,
+  .news-list time {
     color: hsl(var(--muted-foreground));
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-variant-numeric: tabular-nums;
   }
-  .publication-list h3 {
+  .article-card-copy {
+    min-width: 0;
+  }
+  .article-card h3,
+  .news-list h3 {
     margin: 0;
-    font-size: clamp(1rem, 1.6vw, 1.25rem);
-    font-weight: 560;
+    font-size: clamp(1rem, 1.35vw, 1.25rem);
+    font-weight: 570;
     line-height: 1.35;
   }
-  .publication-list li p {
-    max-width: 64ch;
-    margin: 0.4rem 0 0;
+  .article-card h3 a,
+  .news-list h3 a {
+    color: hsl(var(--foreground));
+    text-decoration: none;
+  }
+  .article-card p {
+    margin: 0.5rem 0 0;
     color: hsl(var(--muted-foreground));
-    font-size: 0.78rem;
-    line-height: 1.6;
+    font-size: 0.88rem;
+    line-height: 1.65;
   }
-  .publication-list li .language-badge {
+  .article-card .language-badge {
     display: inline-block;
-    margin-top: 0.55rem;
+    margin-top: 0.65rem;
   }
-  .row-link {
+  .news-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .news-list li {
     display: grid;
-    width: 2rem;
-    height: 2rem;
-    place-items: center;
-    border-radius: 50%;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 0.55rem 0.65rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding: 0.85rem 0.1rem;
   }
-  .publication-list a:hover {
+  .news-list time {
+    grid-column: 1 / -1;
+  }
+  .news-list h3 {
+    font-size: 0.94rem;
+    line-height: 1.42;
+  }
+  .news-list .language-badge {
+    margin-top: 0.05rem;
+    white-space: nowrap;
+  }
+  .article-card a:hover,
+  .news-list a:hover,
+  .featured h2 a:hover {
     text-decoration: underline;
     text-underline-offset: 0.2em;
+  }
+  .curated-card:focus-visible,
+  .writing-page a:focus-visible,
+  .filter select:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+  .section-empty {
+    border-left: 2px solid hsl(var(--field-amber));
+    margin: 1rem 0 0;
+    padding: 0.35rem 0 0.35rem 0.9rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.85rem;
   }
   .empty {
     border-left: 2px solid hsl(var(--field-amber));
     padding-left: 0.9rem;
   }
-  @media (max-width: 560px) {
-    .publication-list li {
-      grid-template-columns: minmax(0, 1fr) 2rem;
-      gap: 0.3rem 0.8rem;
+  @media (max-width: 900px) {
+    .publication-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
     }
-    .publication-list li time {
-      grid-column: 1;
+  }
+  @media (max-width: 620px) {
+    .curated-grid,
+    .article-grid {
+      grid-template-columns: minmax(0, 1fr);
     }
-    .publication-list li div {
-      grid-column: 1;
-      grid-row: 2;
+    .curated-card {
+      min-height: auto;
     }
-    .publication-list li .row-link {
-      grid-column: 2;
-      grid-row: 1 / span 2;
+    .section-heading {
+      align-items: start;
+    }
+    .section-counts {
+      justify-items: start;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .curated-card {
+      transition: none;
+    }
+    .curated-card:hover,
+    .curated-card:active {
+      transform: none;
+      opacity: 1;
     }
   }
 </style>

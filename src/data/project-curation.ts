@@ -19,4 +19,5 @@ export const homepageFeatured = <T extends { repository: string }>(projects: T[]
   return homepageFeaturedRepositories
     .map((repository) => byRepository.get(repository))
     .filter((project): project is T => Boolean(project))
+    .slice(0, 3)
 }

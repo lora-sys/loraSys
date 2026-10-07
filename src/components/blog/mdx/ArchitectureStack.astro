@@ -5,6 +5,7 @@ interface Props {
   source?: string
 }
 const { title, layers, source } = Astro.props
+const isEnglish = Astro.url.pathname.split('/').includes('en')
 const entries = layers.split('|').map((item) => {
   const [label = '', summary = '', detail = ''] = item.split('::', 3).map((part) => part.trim())
   return { label, summary, detail }
@@ -15,9 +16,17 @@ const entries = layers.split('|').map((item) => {
   <section class='architecture-stack not-prose' data-architecture-stack>
     {title && <h3>{title}</h3>}
     <div class='stack-shell'>
-      <div class='stack-layers' role='list' aria-label={title ?? 'Architecture layers'}>
+      <div
+        class='stack-layers'
+        role='group'
+        aria-label={title ?? (isEnglish ? 'Architecture layers' : '架构层次')}
+        data-stack-group
+        data-localized-label={title ? undefined : 'true'}
+        data-label-en='Architecture layers'
+        data-label-zh='架构层次'
+      >
         {entries.map((item, index) => (
-          <button type='button' role='listitem' data-stack-layer aria-pressed={index === 0 ? 'true' : 'false'}>
+          <button type='button' data-stack-layer aria-pressed={index === 0 ? 'true' : 'false'}>
             <span>{String(entries.length - index).padStart(2, '0')}</span>
             <strong>{item.label}</strong>
             <small>{item.summary}</small>
@@ -39,6 +48,14 @@ const entries = layers.split('|').map((item) => {
       const layers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-stack-layer]'))
       const copy = Array.from(root.querySelectorAll<HTMLElement>('[data-stack-copy]'))
       const detail = root.querySelector<HTMLElement>('[data-stack-detail]')
+      const group = root.querySelector<HTMLElement>('[data-stack-group]')
+      if (group?.dataset.localizedLabel === 'true') {
+        const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
+        group.setAttribute(
+          'aria-label',
+          isEnglish ? group.dataset.labelEn ?? 'Architecture layers' : group.dataset.labelZh ?? '架构层次'
+        )
+      }
       if (!detail) return
       layers.forEach((layer, index) => layer.addEventListener('click', () => {
         layers.forEach((item, i) => item.setAttribute('aria-pressed', i === index ? 'true' : 'false'))

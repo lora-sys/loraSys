@@ -1,5 +1,6 @@
 ---
 import { projects } from '@/data/profile'
+import { withBasePath } from '@/i18n/site'
 import { demoByRepo } from '@/data/project-demos'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
@@ -31,7 +32,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
     description:
       'Projects by Lora: personal agents, learning products, developer tools, hackathon builds, and open-source experiments.'
   }}
-  highlightColor='#d99a33'
+
 >
   <main class='work-page'>
     <header class='work-hero'>
@@ -82,7 +83,7 @@ const demoFor = (project: (typeof projects)[number]) => demoByRepo[project.repos
           The complete directory includes every synced project and contribution.
         </p>
       </div>
-      <a href='/projects#archive'>Browse the project archive <span aria-hidden='true'>↗</span></a>
+      <a href={withBasePath('/projects#archive')}>Browse the project archive <span aria-hidden='true'>↗</span></a>
     </aside>
   </main>
 </PageLayout>

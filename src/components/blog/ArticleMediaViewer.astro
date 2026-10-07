@@ -1,0 +1,93 @@
+---
+import type { SiteLocale } from '@/i18n/site'
+interface Props { locale: SiteLocale }
+const { locale } = Astro.props
+const en = locale === 'en-US'
+---
+<dialog class='article-media-viewer' data-article-media-viewer aria-label={en ? 'Expanded article media' : '文章大图'}>
+  <header>
+    <p data-media-caption></p>
+    <form method='dialog'><button type='submit' autofocus>{en ? 'Close' : '关闭'} <span aria-hidden='true'>×</span></button></form>
+  </header>
+  <div class='media-viewer-body' data-media-body></div>
+</dialog>
+<script>
+  const viewer = document.querySelector<HTMLDialogElement>('[data-article-media-viewer]')
+  const body = viewer?.querySelector<HTMLElement>('[data-media-body]')
+  const caption = viewer?.querySelector<HTMLElement>('[data-media-caption]')
+  const content = document.getElementById('content')
+  if (viewer && body && caption && content) {
+    const en = document.documentElement.lang.startsWith('en')
+    let trigger: HTMLButtonElement | undefined
+    const enhance = () => {
+      content.querySelectorAll<HTMLElement>('img, .mermaid-diagram svg').forEach((media) => {
+        if (media.closest('a, button') || media.dataset.mediaEnhanced) return
+        media.dataset.mediaEnhanced = 'true'
+        const description = media.getAttribute('alt') || media.closest('figure')?.querySelector('figcaption')?.textContent?.trim() || (en ? 'Article diagram' : '文章图解')
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.className = 'article-media-trigger'
+        button.setAttribute('aria-label', `${en ? 'Expand image' : '查看大图'} ${description}`)
+        button.setAttribute('aria-haspopup', 'dialog')
+        media.before(button)
+        button.append(media)
+        const hint = document.createElement('span')
+        hint.className = 'article-media-hint'
+        hint.textContent = en ? 'Expand image ↗' : '查看大图 ↗'
+        hint.setAttribute('aria-hidden', 'true')
+        button.append(hint)
+        button.addEventListener('click', () => {
+          if (viewer.open) return
+          trigger = button
+          let expanded = media.cloneNode(true) as HTMLElement | SVGElement
+          expanded.removeAttribute('id')
+          if (media instanceof SVGElement) {
+            const image = new Image()
+            image.alt = description
+            image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(media))}`
+            image.className = 'expanded-diagram'
+            expanded = image
+          }
+          if (expanded instanceof HTMLImageElement) {
+            expanded.removeAttribute('srcset')
+            expanded.removeAttribute('sizes')
+            if (media instanceof HTMLImageElement) expanded.src = media.src
+          }
+          body.replaceChildren(expanded)
+          caption.textContent = description
+          viewer.showModal()
+          document.documentElement.classList.add('article-media-open')
+        })
+      })
+    }
+    viewer.addEventListener('close', () => {
+      body.replaceChildren()
+      document.documentElement.classList.remove('article-media-open')
+      trigger?.focus({ preventScroll: true })
+    })
+    viewer.addEventListener('click', (event) => {
+      if (event.target !== viewer) return
+      const rect = viewer.getBoundingClientRect()
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) viewer.close()
+    })
+    document.addEventListener('article-diagram-ready', enhance)
+    enhance()
+  }
+</script>
+<style is:global>
+  #content .article-media-trigger { display:block; width:100%; padding:0; border:0; background:transparent; color:inherit; cursor:zoom-in; }
+  #content .article-media-trigger:focus-visible { outline:2px solid hsl(var(--field-teal)); outline-offset:4px; border-radius:.4rem; }
+  #content .article-media-hint { display:block; margin-top:.4rem; text-align:end; color:hsl(var(--field-teal)); font:500 .75rem/1.5 var(--font-display); }
+  html.article-media-open { overflow:hidden; }
+  .article-media-viewer { width:min(96vw,90rem); max-width:none; max-height:92dvh; padding:0; border:1px solid hsl(var(--border)); border-radius:.75rem; background:hsl(var(--background)); color:hsl(var(--foreground)); }
+  .article-media-viewer::backdrop { background:hsl(28 12% 8% / .75); }
+  .article-media-viewer header { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem; border-bottom:1px solid hsl(var(--border)); }
+  .article-media-viewer header p { margin:0; min-width:0; max-width:70ch; overflow-wrap:anywhere; font-size:.85rem; }
+  .article-media-viewer button { min-height:2.75rem; padding:.5rem .85rem; border:1px solid hsl(var(--border)); border-radius:.4rem; background:hsl(var(--card)); color:inherit; cursor:pointer; white-space:nowrap; }
+  .article-media-viewer button:focus-visible { outline:2px solid hsl(var(--field-teal)); outline-offset:3px; }
+  .media-viewer-body { overflow:auto; max-height:calc(92dvh - 6rem); padding:1rem; overscroll-behavior:contain; }
+  .media-viewer-body img { display:block; max-width:100%; height:auto; margin:auto; }
+  .media-viewer-body svg { display:block; width:max(100%,50rem); max-width:none !important; height:auto; margin:auto; }
+  .media-viewer-body .expanded-diagram { width:max(100%,50rem); max-width:none; }
+  @media print { .article-media-viewer { display:none; } }
+</style>

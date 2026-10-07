@@ -1,10 +1,14 @@
 ---
+import { randomUUID } from 'node:crypto'
+
 interface Props {
   title?: string
   steps: string
   source?: string
 }
 const { title, steps, source } = Astro.props
+const tabSetId = `trace-explorer-${randomUUID()}`
+const isEnglish = Astro.url.pathname.split('/').includes('en')
 const entries = steps.split('|').map((item) => {
   const [label = '', state = '', detail = ''] = item.split('::', 3).map((part) => part.trim())
   return { label, state, detail }
@@ -15,13 +19,23 @@ const entries = steps.split('|').map((item) => {
   <section class='trace-explorer not-prose' data-trace-explorer>
     {title && <h3>{title}</h3>}
     <div class='trace-layout'>
-      <div class='trace-list' role='tablist' aria-label={title ?? 'Run trace'}>
+      <div
+        class='trace-list'
+        role='tablist'
+        aria-label={title ?? (isEnglish ? 'Run trace' : '运行轨迹')}
+        data-trace-tablist
+        data-localized-label={title ? undefined : 'true'}
+        data-label-en='Run trace'
+        data-label-zh='运行轨迹'
+      >
         {entries.map((item, index) => (
           <button
             type='button'
             role='tab'
             class='trace-step'
+            id={`${tabSetId}-tab-${index}`}
             data-trace-step
+            aria-controls={`${tabSetId}-panel-${index}`}
             aria-selected={index === 0 ? 'true' : 'false'}
             tabindex={index === 0 ? 0 : -1}
           >
@@ -33,7 +47,14 @@ const entries = steps.split('|').map((item) => {
       </div>
       <div class='trace-panel'>
         {entries.map((item, index) => (
-          <article data-trace-panel hidden={index !== 0}>
+          <article
+            role='tabpanel'
+            id={`${tabSetId}-panel-${index}`}
+            aria-labelledby={`${tabSetId}-tab-${index}`}
+            tabindex='0'
+            data-trace-panel
+            hidden={index !== 0}
+          >
             <span>{item.state}</span>
             <strong>{item.label}</strong>
             <p>{item.detail}</p>
@@ -52,6 +73,14 @@ const entries = steps.split('|').map((item) => {
       root.dataset.ready = 'true'
       const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-trace-step]'))
       const panels = Array.from(root.querySelectorAll<HTMLElement>('[data-trace-panel]'))
+      const tablist = root.querySelector<HTMLElement>('[data-trace-tablist]')
+      if (tablist?.dataset.localizedLabel === 'true') {
+        const isEnglish = document.documentElement.lang.toLowerCase().startsWith('en')
+        tablist.setAttribute(
+          'aria-label',
+          isEnglish ? tablist.dataset.labelEn ?? 'Run trace' : tablist.dataset.labelZh ?? '运行轨迹'
+        )
+      }
       const activate = (index: number, focus = false) => {
         tabs.forEach((tab, i) => {
           const active = i === index

@@ -73,7 +73,7 @@ const pageMood = isProjectPage
           : loraNeutral
 ---
 
-<header class='site-header' data-site-header>
+<header class='site-header' data-site-header data-section-path={withBasePath(pathname.startsWith('/blog/') ? locale === 'en-US' ? '/en/writing' : '/blog' : pathname)}>
   <a class='brand' href={home} aria-label={locale === 'en-US' ? 'Lora home' : 'Lora 首页'}>
     <span class='brand-avatar' aria-hidden='true'>
       <Image class='brand-avatar__mood' src={pageMood} alt='' width={80} height={80} />
@@ -276,6 +276,7 @@ const pageMood = isProjectPage
     ?.querySelectorAll('a')
     .forEach((link) => link.addEventListener('click', () => setMore(false)))
   const currentPath = window.location.pathname.replace(/\/$/, '') || '/'
+  const sectionPath = header?.dataset.sectionPath?.replace(/\/$/, '') || currentPath
   document
     .querySelectorAll<HTMLAnchorElement>(
       '[data-primary-nav] a, [data-more-nav] a, [data-mobile-nav] a'
@@ -283,6 +284,7 @@ const pageMood = isProjectPage
     .forEach((link) => {
       const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '') || '/'
       if (linkPath === currentPath) link.setAttribute('aria-current', 'page')
+      else if (sectionPath === linkPath || currentPath.startsWith(`${linkPath}/`)) link.setAttribute('aria-current', 'location')
     })
 
   document.addEventListener('keydown', (event) => {
@@ -468,7 +470,7 @@ const pageMood = isProjectPage
     background:hsl(var(--field-amber-strong)); transform:scaleX(0); transform-origin:left;
     transition:transform 160ms ease;
   }
-  .primary-nav > a:is(:focus-visible, [aria-current='page'])::after { transform:scaleX(1); }
+  .primary-nav > a:is(:focus-visible, [aria-current])::after { transform:scaleX(1); }
   @media (hover:hover) and (pointer:fine) {
     .primary-nav > a:hover::after { transform:scaleX(1); }
   }
@@ -484,9 +486,9 @@ const pageMood = isProjectPage
     transform: translateY(-1px);
   }
 
-  .primary-nav a[aria-current='page'],
-  .mobile-nav a[aria-current='page'],
-  .more-nav a[aria-current='page'] {
+  .primary-nav a[aria-current],
+  .mobile-nav a[aria-current],
+  .more-nav a[aria-current] {
     background: hsl(var(--field-amber) / 0.12);
     box-shadow: inset 0 -2px hsl(var(--field-amber));
     color: hsl(var(--foreground));

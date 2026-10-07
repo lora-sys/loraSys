@@ -9,7 +9,8 @@ interface Props {
 const { src, title, caption, height = '620' } = Astro.props
 const openLabel = src.endsWith('-en.html') ? 'Open interactive panel separately' : '单独打开交互面板'
 
-if (!src.startsWith('/artifacts/blog/')) {
+const sourcePath = new URL(decodeURIComponent(src), 'https://local.invalid').pathname
+if (!src.startsWith('/artifacts/blog/') || !sourcePath.startsWith('/artifacts/blog/')) {
   throw new Error('InteractiveHtml only accepts local /artifacts/blog/ sources')
 }
 

@@ -27,9 +27,9 @@ const copy = isEnglish
       next: 'Next item',
       detail: 'About this work',
       poster: 'Artwork source',
-      media: 'Video & audio',
+      media: 'Recommended video and audio',
       source: 'Source',
-      detailsSource: 'Details: ',
+      detailsSource: 'Title details: ',
       checked: 'Link checked',
       stop: 'Stop & unload player',
       playTrailer: 'Load YouTube player',
@@ -63,9 +63,9 @@ const copy = isEnglish
       next: '下一项',
       detail: '了解这部作品',
       poster: '图片来源',
-      media: '视频与音乐',
+      media: '推荐视频与音乐',
       source: '来源',
-      detailsSource: '资料来源：',
+      detailsSource: '作品资料：',
       checked: '链接核验',
       stop: '停止并关闭播放器',
       playTrailer: '加载 YouTube 播放器',
@@ -313,8 +313,13 @@ const copy = isEnglish
       detail.href = trigger.href
       const artworkUrl = httpsUrl(card.dataset.posterSource)
       posterSource.hidden = !artworkUrl
-      if (artworkUrl) posterSource.href = artworkUrl
-      else posterSource.removeAttribute('href')
+      if (artworkUrl) {
+        posterSource.href = artworkUrl
+        posterSource.textContent = `${labels.poster}: ${card.dataset.sourceLabel || new URL(artworkUrl).hostname} ↗`
+      } else {
+        posterSource.removeAttribute('href')
+        posterSource.textContent = labels.poster
+      }
 
       const provider = card.dataset.videoProvider
       const videoId = card.dataset.videoId ?? ''
@@ -646,6 +651,8 @@ const copy = isEnglish
     font-size: 0.7rem;
   }
   .viewer-artwork > a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
     padding-block: 0.5rem;
     color: hsl(var(--muted-foreground));
     font-size: 0.7rem;

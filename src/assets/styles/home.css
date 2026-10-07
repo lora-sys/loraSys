@@ -1,0 +1,50 @@
+/* Both languages share one editorial hierarchy. Reading pages keep their own measure. */
+.site-frame:has(.home-page) .site-header { margin-bottom:0; }
+.home-page .eyebrow {
+  margin:0;
+  color:hsl(var(--field-teal));
+  font-size:.75rem;
+  font-weight:650;
+  letter-spacing:.04em;
+}
+.site-frame .home-page .home-flow {
+  border-top:0;
+  padding-top:3rem;
+  gap:clamp(3.5rem, 7vw, 6rem);
+}
+.home-page .home-section + .home-section {
+  border-top:1px solid hsl(var(--border));
+  padding-top:clamp(2rem,4vw,3.5rem);
+}
+.home-page .section-heading h2 { font-weight:650; }
+.home-page .writing-list { gap:0; }
+.home-page .writing-item {
+  display:grid;
+  grid-template-columns:9rem minmax(0,1fr);
+  gap:.5rem 2rem;
+  border-top:1px solid hsl(var(--border));
+  padding-block:1.4rem;
+}
+.home-page .writing-item time { padding-top:.25rem; font-family:ui-monospace,monospace; font-size:.75rem; }
+.home-page .writing-item h3 { font-size:clamp(1.05rem, 1.5vw, 1.4rem); line-height:1.45; }
+.home-page .writing-item h3 a { display:flex; justify-content:space-between; align-items:baseline; gap:1rem; }
+.home-page .writing-item h3 a span { flex:none; color:hsl(var(--field-teal)); transition:transform var(--motion-base) var(--motion-spring); }
+.home-page .writing-item h3 a:is(:hover,:focus-visible) span { transform:translate(2px,-2px); }
+.home-page .writing-item p,
+.home-page .writing-item .article-language { grid-column:2; }
+.home-page .focus-item { border-top:0; padding:0; }
+.home-page .focus-item > span { color:hsl(var(--field-teal)); }
+.home-page .focus-item + .focus-item { border-inline-start:1px solid hsl(var(--border)); padding-inline-start:1.5rem; }
+@media (max-width:900px) {
+  .home-page .focus-item + .focus-item { border-inline-start:0; padding-inline-start:0; border-top:1px solid hsl(var(--border)); padding-top:1rem; }
+}
+@media (max-width:600px) {
+  .home-page .writing-item { grid-template-columns:1fr; gap:.6rem; }
+  .home-page .writing-item p,
+  .home-page .writing-item .article-language { grid-column:1; }
+  .site-frame .home-page .home-flow { padding-top:2rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .home-page .writing-item h3 a span { transition:none; }
+  .home-page .writing-item h3 a:is(:hover,:focus-visible) span { transform:none; }
+}

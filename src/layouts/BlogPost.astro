@@ -14,18 +14,18 @@ import { withBasePath, type SiteLocale } from '@/i18n/site'
 import { text } from '@/i18n/ui'
 import config from 'virtual:config'
 
-import { MediumZoom } from 'astro-pure/advanced'
 import { TOC } from 'astro-pure/components/pages'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import ArticleAttribution from '@/components/blog/ArticleAttribution.astro'
 import ArticleFieldNote from '@/components/blog/ArticleFieldNote.astro'
 import ArticleHero from '@/components/blog/ArticleHero.astro'
+import ArticleMediaViewer from '@/components/blog/ArticleMediaViewer.astro'
 import LanguageBadge from '@/components/blog/LanguageBadge.astro'
 import RelatedReading from '@/components/blog/RelatedReading.astro'
-import { PageInfo } from '@/components/waline'
 import GiscusComments from '@/components/community/GiscusComments.astro'
-import { writingLabel } from '@/utils/writing'
+import { PageInfo } from '@/components/waline'
 import { alternateArticle, articleLanguage, originalArticleId } from '@/utils/article-translations'
+import { writingLabel } from '@/utils/writing'
 import agentRunbookMargin from '@/assets/lora-visual/v2/lora-v2-agent-runbook.webp'
 import mediaWorkbenchMargin from '@/assets/lora-visual/v2/lora-v2-media-workbench.webp'
 import sandboxSpecimenSlip from '@/assets/lora-visual/v2/lora-v2-sandbox.webp'
@@ -75,10 +75,7 @@ const blogBase = `${basePath.replace(/\/$/, '')}/`
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site)
 const siteUrl = new URL(import.meta.env.BASE_URL, Astro.site)
 const homeUrl = new URL(withBasePath(locale === 'en-US' ? '/en' : '/'), Astro.site)
-const blogIndexUrl = new URL(
-  withBasePath(locale === 'en-US' ? '/en/writing' : '/blog'),
-  Astro.site
-)
+const blogIndexUrl = new URL(withBasePath(locale === 'en-US' ? '/en/writing' : '/blog'), Astro.site)
 const socialImageUrl = new URL(socialImage, Astro.url).href
 const articleJsonLd = {
   '@context': 'https://schema.org',
@@ -111,9 +108,9 @@ const breadcrumbJsonLd = {
 const articleJsonLdText = JSON.stringify(articleJsonLd).replace(/</g, '\\u003c')
 const breadcrumbJsonLdText = JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c')
 const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-text-opacity))'
-const chronologicalPosts = posts.filter((entry) => articleLanguage(entry) === locale).sort(
-  (left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf()
-)
+const chronologicalPosts = posts
+  .filter((entry) => articleLanguage(entry) === locale)
+  .sort((left, right) => right.data.publishDate.valueOf() - left.data.publishDate.valueOf())
 const postIndex = chronologicalPosts.findIndex((entry) => entry.id === id)
 const previousPost = chronologicalPosts[postIndex - 1]
 const nextPost = chronologicalPosts[postIndex + 1]
@@ -210,17 +207,31 @@ const articleFieldNote = {
       <div class='mt-3 flex items-center gap-2 not-italic'>
         <LanguageBadge language={data.language} />
         <span class='text-xs text-muted-foreground'>
-          {data.translationOf ? 'English translation' : data.language === 'en-US' ? 'Article in English' : '中文长文'}
+          {
+            data.translationOf
+              ? 'English translation'
+              : data.language === 'en-US'
+                ? 'Article in English'
+                : '中文长文'
+          }
         </span>
       </div>
-      {translation && alternatePath && (
-        <p class='article-translation-link'>
-          <a href={withBasePath(alternatePath)} hreflang={articleLanguage(translation)} lang={articleLanguage(translation)}>
-            {data.translationOf ? '阅读中文原文' : 'Read in English'}
-          </a>
-          {data.translationOf && <span> · Translated from the original article; source publication date retained</span>}
-        </p>
-      )}
+      {
+        translation && alternatePath && (
+          <p class='article-translation-link'>
+            <a
+              href={withBasePath(alternatePath)}
+              hreflang={articleLanguage(translation)}
+              lang={articleLanguage(translation)}
+            >
+              {data.translationOf ? '阅读中文原文' : 'Read in English'}
+            </a>
+            {data.translationOf && (
+              <span> · Translated from the original article; source publication date retained</span>
+            )}
+          </p>
+        )
+      }
       {
         !isDraft && enableComment && config.integ.waline.enable && (
           <PageInfo locale={locale} comment class='mt-1' />
@@ -243,7 +254,10 @@ const articleFieldNote = {
           </h2>
           <div class='build-context-list'>
             {linkedProjects.map((project) => (
-              <a href={`/projects#${project.repository}`} data-interaction='article_project_link'>
+              <a
+                href={withBasePath(`/projects#${project.repository}`)}
+                data-interaction='article_project_link'
+              >
                 <span>{project.source === 'ACAMLab' ? 'ACAMLab' : 'lora-sys'}</span>
                 {project.title}
                 <span aria-hidden='true'>↗</span>
@@ -309,10 +323,11 @@ const articleFieldNote = {
     }
   </Fragment>
 
-  <slot name='bottom-sidebar' slot='bottom-sidebar' />
+  <Fragment slot='bottom-sidebar'>
+    <slot name='bottom-sidebar' />
+    {config.integ.mediumZoom.enable && <ArticleMediaViewer {locale} />}
+  </Fragment>
 </PageLayout>
-
-{config.integ.mediumZoom.enable && <MediumZoom />}
 
 <style>
   .article-translation-link {
@@ -472,9 +487,13 @@ const articleFieldNote = {
       const { svg, bindFunctions } = await mermaid.render(`mermaid-${index}`, source)
       const figure = document.createElement('figure')
       figure.className = 'mermaid-diagram not-prose'
-      figure.setAttribute('aria-label', 'Architecture diagram')
+      figure.setAttribute(
+        'aria-label',
+        document.documentElement.lang.startsWith('en') ? 'Article diagram' : '文章图解'
+      )
       figure.innerHTML = svg
       container.replaceWith(figure)
+      document.dispatchEvent(new Event('article-diagram-ready'))
       bindFunctions?.(figure)
     } catch (error) {
       delete block.dataset.mermaidRendered
@@ -904,11 +923,10 @@ const articleFieldNote = {
   #content > h4 {
     margin-top: 1.7rem;
     margin-bottom: 0.55rem;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.015em;
     line-height: 1.45;
-    text-transform: uppercase;
   }
 
   #content :where(ul, ol) {
@@ -953,6 +971,7 @@ const articleFieldNote = {
   }
 
   #content :not(pre) > code {
+    overflow-wrap: anywhere;
     border: 1px solid hsl(var(--border));
     border-radius: 0.25rem;
     background: hsl(var(--muted) / 0.56);
@@ -963,26 +982,62 @@ const articleFieldNote = {
   }
 
   #content .astro-code {
+    padding-top: 3rem;
     margin-block: 1.65rem;
     overflow: hidden;
     border: 1px solid hsl(var(--border));
     border-radius: 0.42rem;
     background: hsl(var(--card) / 0.66) !important;
     box-shadow: none;
-    font-size: 0.8rem;
-    line-height: 1.62;
+    font-size: 0.9rem;
+    line-height: 1.75;
   }
 
   #content .astro-code pre {
+    position: relative;
     padding-block: 1rem;
     background: transparent !important;
+  }
+
+  #content .astro-code pre,
+  #content .astro-code pre code {
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 
   #content .astro-code .language,
   #content .astro-code .title,
   #content .astro-code button.copy {
-    font-size: 0.64rem;
+    font-size: 0.75rem;
     letter-spacing: 0.05em;
+  }
+
+  #content .astro-code .language {
+    opacity: 1;
+    transition: none;
+    top: 0.8rem;
+    left: 0.75rem;
+    right: auto;
+    color: hsl(var(--foreground));
+  }
+  #content .astro-code button.copy {
+    top: 0.35rem;
+    opacity: 1;
+    transition: opacity 180ms;
+  }
+  #content .astro-code code::before {
+    top: 1rem;
+  }
+  #content .astro-code:has(.title) .language {
+    display: none;
+  }
+  #content .astro-code .title {
+    max-width: calc(100% - 4.5rem);
+  }
+
+  #content .astro-code .line::before {
+    color: hsl(var(--foreground) / 0.68);
   }
 
   #content .astro-code code::before,
@@ -1008,7 +1063,7 @@ const articleFieldNote = {
     max-width: 62ch;
     margin-top: 0.65rem;
     color: hsl(var(--muted-foreground));
-    font-size: 0.72rem;
+    font-size: 0.82rem;
     line-height: 1.55;
   }
 
@@ -1043,14 +1098,23 @@ const articleFieldNote = {
   #content .mdx-callout-heading {
     margin-bottom: 0.35rem;
   }
+  #content .mdx-callout[data-tone='tip'] {
+    border-left-color: hsl(var(--field-teal));
+  }
+  #content .mdx-callout[data-tone='warning'] {
+    border-left-color: hsl(var(--field-clay));
+  }
+  #content .mdx-callout[data-tone='data'] {
+    border-left-color: hsl(var(--field-indigo));
+  }
 
   #content .mdx-callout-heading span {
     display: none;
   }
 
   #content .mdx-callout-heading p {
-    font-size: 0.66rem;
-    letter-spacing: 0.08em;
+    font-size: 0.8rem;
+    letter-spacing: 0.025em;
   }
 
   #content .mdx-callout-body {
@@ -1075,8 +1139,8 @@ const articleFieldNote = {
 
   #content .mdx-table th {
     background: transparent;
-    font-size: 0.66rem;
-    letter-spacing: 0.05em;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
     text-transform: uppercase;
   }
 
@@ -1178,7 +1242,7 @@ const articleFieldNote = {
 
     #content .astro-code {
       margin-inline: -0.1rem;
-      font-size: 0.76rem;
+      font-size: 0.875rem;
     }
 
     #content .mdx-key-points article {

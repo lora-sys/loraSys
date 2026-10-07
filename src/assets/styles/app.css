@@ -105,8 +105,10 @@ html {
 }
 
 html {
-  scroll-behavior: smooth;
+  /* Long articles should reach an anchor immediately; carousels own their motion. */
+  scroll-behavior: auto;
   scroll-padding-top: 5.5rem;
+  scrollbar-gutter: stable;
 }
 
 /* Global */
@@ -128,7 +130,6 @@ body {
 .field-asset {
   box-shadow: var(--field-shadow);
   transition:
-    filter var(--motion-story) ease,
     opacity var(--motion-story) ease;
 }
 
@@ -139,11 +140,7 @@ html.dark .field-asset {
 html[data-theme-transition='true']
   :is(body, .site-header, .field-asset, .magic-card, .notes-grid > li, .lab-ledger, article) {
   transition:
-    background-color var(--motion-story) ease,
-    color var(--motion-story) ease,
-    border-color var(--motion-story) ease,
-    box-shadow var(--motion-story) ease,
-    filter var(--motion-story) ease;
+    opacity var(--motion-story) ease;
 }
 
 @supports (view-transition-name: none) {
@@ -154,8 +151,10 @@ html[data-theme-transition='true']
   }
 
   /* 跨文档路由过渡：同源导航时的轻淡入淡出，渐进增强，不支持的浏览器保持即时跳转。 */
-  @view-transition {
-    navigation: auto;
+  @media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
   }
 
   @keyframes vt-page-out {
@@ -186,7 +185,6 @@ html[data-theme-transition='true']
 
   html[data-theme-transition='true']::view-transition-new(root) {
     animation-name: theme-reveal;
-    clip-path: circle(0 at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%));
   }
 
   @keyframes theme-fade-out {
@@ -196,14 +194,14 @@ html[data-theme-transition='true']
   }
 
   @keyframes theme-reveal {
+    from { opacity:0; }
     to {
-      clip-path: circle(150vmax at var(--theme-origin-x, 50%) var(--theme-origin-y, 50%));
+      opacity:1;
     }
   }
 }
 
 a {
-  transition: color 0.2s ease;
   &:hover {
     color: hsl(var(--primary) / var(--un-text-opacity, 1));
   }
@@ -221,10 +219,7 @@ a {
 /* Use this class when an action needs a small, honest tactile response. */
 .tactile-action {
   transition:
-    transform var(--motion-quick) var(--motion-spring),
-    box-shadow var(--motion-base) ease,
-    background-color var(--motion-base) ease,
-    border-color var(--motion-base) ease;
+    transform var(--motion-quick) var(--motion-spring);
 }
 
 /* The shared eyebrow formula: small, uppercase, amber, tracking wide. */
@@ -260,6 +255,16 @@ html.dark .eyebrow {
 @media (hover: hover) and (pointer: fine) {
   .tactile-action:hover {
     box-shadow: var(--field-shadow);
+  }
+}
+
+@keyframes field-dialog-open {
+  from { opacity:0; transform:translateY(10px) scale(.99); }
+  to { opacity:1; transform:none; }
+}
+@media (prefers-reduced-motion:no-preference) {
+  :is([data-archive-viewer], [data-article-media-viewer])[open] {
+    animation:field-dialog-open var(--motion-story) var(--motion-spring);
   }
 }
 

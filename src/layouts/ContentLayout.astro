@@ -52,9 +52,9 @@ const {
             class='animate top-20 min-w-48 basis-60 overflow-y-scroll max-md:hidden z-40 fixed md:sticky md:order-2 lg:shrink-0 max-md:border max-md:px-4 max-md:py-3 max-md:bg-muted max-md:rounded-xl'
             style='height:calc(100vh - 7rem);'
             id='sidebar'
-            aria-hidden='true'
             tabindex='-1'
           >
+            <button type='button' class='sidebar-close' data-sidebar-close>{lang === 'en-US' ? 'Close contents' : '关闭目录'} <span aria-hidden='true'>×</span></button>
             <slot name='sidebar' />
           </aside>
           <div
@@ -118,24 +118,30 @@ const {
   const sidebarButton = document.getElementById('sidebar-btn')
   const sidebar = document.getElementById('sidebar')
   const sidebarShade = document.getElementById('sidebar-shade') as HTMLElement
+  const mobile = matchMedia('(max-width:900px)')
+  const closeSidebar = () => {
+    if (!sidebar) return
+    sidebar.classList.remove('show')
+    if (sidebarShade) sidebarShade.style.display = 'none'
+    sidebar.setAttribute('aria-hidden', String(mobile.matches))
+    sidebar.inert = mobile.matches
+    sidebarButton?.setAttribute('aria-expanded', 'false')
+  }
 
   if (sidebarShade) {
     sidebarShade.addEventListener('click', () => {
-      toggleSidebar()
+      closeSidebar()
+      sidebarButton?.focus()
     })
   }
 
   function toggleSidebar() {
     if (sidebar && sidebar.classList.contains('show')) {
-      sidebar.classList.remove('show')
-      sidebarShade.style.display = 'none'
-      sidebar.setAttribute('aria-hidden', 'true')
-      ;(sidebar as HTMLElement).inert = true
-      sidebarButton?.setAttribute('aria-expanded', 'false')
+      closeSidebar()
       ;(sidebarButton as HTMLElement)?.focus()
     } else if (sidebar) {
       sidebar.classList.add('show')
-      sidebarShade.style.display = 'block'
+      if (sidebarShade) sidebarShade.style.display = 'block'
       sidebar.setAttribute('aria-hidden', 'false')
       ;(sidebar as HTMLElement).inert = false
       sidebarButton?.setAttribute('aria-expanded', 'true')
@@ -147,21 +153,38 @@ const {
     toggleSidebar()
   })
   if (sidebar) {
-    const mobile = matchMedia('(max-width:769px)').matches
-    ;(sidebar as HTMLElement).inert = mobile
-    sidebar.setAttribute('aria-hidden', mobile.toString())
+    closeSidebar()
+    mobile.addEventListener('change', closeSidebar)
+    sidebar.querySelector('[data-sidebar-close]')?.addEventListener('click', () => { closeSidebar(); sidebarButton?.focus() })
+    sidebar.addEventListener('click', (event) => {
+      const link = (event.target as HTMLElement).closest<HTMLAnchorElement>('a[href^="#"]')
+      if (!mobile.matches || !link) return
+      closeSidebar()
+      const target = document.getElementById(decodeURIComponent(link.hash.slice(1)))
+      target?.setAttribute('tabindex', '-1')
+      target?.focus({ preventScroll: true })
+    })
   }
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && sidebar?.classList.contains('show')) toggleSidebar()
+    if (event.key === 'Tab' && mobile.matches && sidebar?.classList.contains('show')) {
+      const items = Array.from(sidebar.querySelectorAll<HTMLElement>('a[href],button,summary,[tabindex="0"]')).filter((item) => item.getClientRects().length)
+      const first = items[0]
+      const last = items.at(-1)
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
+    }
   })
 </script>
 <style>
-  @media (min-width: 769px) {
+  .sidebar-close { display:none; }
+  @media (min-width: 901px) {
     #sidebar-shade {
       display: none !important;
     }
   }
-  @media (max-width: 769px) {
+  @media (max-width: 900px) {
+    .sidebar-close { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:2.75rem; margin-bottom:1rem; padding:.5rem .75rem; border:1px solid hsl(var(--border)); border-radius:.4rem; background:hsl(var(--background)); color:hsl(var(--foreground)); }
     aside.show {
       display: block !important;
       opacity: 1;
@@ -191,7 +214,7 @@ const {
       animation-fill-mode: forwards;
       right: 0;
       top: 0 !important;
-      height: 100vh !important;
+      height: 100dvh !important;
       min-width: 40vw !important;
       max-width: 75vw !important;
       border-top-right-radius: 0 !important;
