@@ -1,0 +1,73 @@
+---
+import { withBasePath, type SiteLocale } from '@/i18n/site'
+const { locale } = Astro.props as { locale: SiteLocale }
+const english = locale === 'en-US'
+---
+<button id="contact-launcher" type="button" aria-label={english ? 'Open chat' : '打开聊天'} aria-controls="contact-loading">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-1-4a8.5 8.5 0 1 1 18-4.5Z" stroke="currentColor" stroke-width="1.8"/><path d="M7 11h.01M12 11h.01M17 11h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+</button>
+<dialog id="contact-loading" aria-label={english ? 'Connect to chat' : '连接聊天服务'} data-loading={english ? 'Connecting to chat…' : '正在连接聊天服务…'} data-error={english ? 'Chat could not connect. Reload the page or use another contact method.' : '聊天服务未能连接。请刷新页面，或使用其他联系方式。'}>
+  <form method="dialog"><button aria-label={english ? 'Close' : '关闭'}>×</button></form>
+  <p role="status"></p>
+  <button id="contact-retry" type="button" hidden>{english ? 'Reload page' : '刷新页面'}</button>
+  <a href={withBasePath(english ? '/en/contact' : '/contact')}>{english ? 'Other contact methods' : '其他联系方式'}</a>
+</dialog>
+<script>
+  type Widget = { showChat: () => void; shadowRoot?: ShadowRoot }
+  const contactWindow = window as typeof window & { contactWidget?: Widget; ContactWidgetOnReady?: () => void }
+  const launcher = document.querySelector<HTMLButtonElement>('#contact-launcher')!
+  const dialog = document.querySelector<HTMLDialogElement>('#contact-loading')!
+  const status = dialog.querySelector<HTMLElement>('[role="status"]')!
+  const retry = document.querySelector<HTMLButtonElement>('#contact-retry')!
+  let state: 'idle' | 'loading' | 'ready' | 'error' = 'idle'
+  let timer: ReturnType<typeof setTimeout>
+  const fail = () => {
+    state = 'error'
+    status.textContent = dialog.dataset.error!
+    retry.hidden = false
+  }
+  const open = () => {
+    if (state === 'ready') {
+      contactWindow.contactWidget?.showChat()
+      return
+    }
+    if (!dialog.open) dialog.showModal()
+    if (state === 'loading') return
+    if (state === 'error') { fail(); return }
+    state = 'loading'
+    status.textContent = dialog.dataset.loading!
+    retry.hidden = true
+    contactWindow.ContactWidgetOnReady = () => {
+      clearTimeout(timer)
+      if (!contactWindow.contactWidget?.shadowRoot) { fail(); return }
+      state = 'ready'
+      const root = contactWindow.contactWidget?.shadowRoot
+      if (root) {
+        const style = document.createElement('style')
+        style.textContent = '.trtc-float-card{display:none!important}'
+        root.append(style)
+      }
+      if (dialog.open) { dialog.close(); contactWindow.contactWidget?.showChat() }
+    }
+    const script = document.createElement('script')
+    script.id = 'contact-sdk'
+    script.src = 'https://trtc.io/knocket-sdk/sdk.js?identifier=c1e0fafc03e4ade6c4&v=1791433552245'
+    script.async = true
+    script.addEventListener('error', () => { clearTimeout(timer); fail() }, { once: true })
+    timer = setTimeout(fail, 30000)
+    document.body.append(script)
+  }
+  launcher.addEventListener('click', open)
+  retry.addEventListener('click', () => window.location.reload())
+</script>
+<style>
+  #contact-launcher{position:fixed;right:24px;bottom:24px;z-index:1000;width:56px;height:56px;border:0;border-radius:50%;background:#ff6631;color:white;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 12px #0002}
+  #contact-launcher:focus-visible{outline:3px solid #167c80;outline-offset:4px}
+  dialog{width:min(360px,calc(100vw - 32px));border:1px solid #d8cfc3;border-radius:16px;padding:24px;background:#fffaf3;color:#222}
+  dialog::backdrop{background:#0004}
+  form{text-align:right}form button{border:0;background:transparent;font-size:24px;cursor:pointer}
+  p{margin:16px 0}a{color:#167c80}#contact-retry{margin-right:16px}
+  @media(max-width:640px){#contact-launcher{right:16px;bottom:16px}}
+  @media print{#contact-launcher,dialog{display:none}}
+</style>
+

@@ -6,6 +6,7 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import SiteFooter from '@/components/layout/SiteFooter.astro'
 import SiteHeader from '@/components/layout/SiteHeader.astro'
+import ContactWidget from '@/components/ContactWidget.astro'
 import config from '@/site-config'
 import { searchKindForPath, SEARCH_KIND_FILTER } from '@/utils/search'
 
@@ -323,10 +324,6 @@ const footerPrimary =
         }
       }
     </style>
-    <script
-      is:inline
-      src="https://trtc.io/knocket-sdk/sdk.js?identifier=c1e0fafc03e4ade6c4&v=1791433552245"
-      async
-    ></script>
+    <ContactWidget {locale} />
   </body>
 </html>
