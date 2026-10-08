@@ -55,6 +55,8 @@
 
 ## 开发、同步与预览
 
+撰写、导入、同步、翻译或维护博客文章时，使用 `.agents/skills/lorasys-blog-writing/SKILL.md`。文字采用其中 `references/writing.md` 的 unslop 规则，维护者当前指令优先。MDX 展示与媒体处理同时遵守 `docs/mdx-content-contract.md`。此 skill 不授权推送或发布。
+
 - 安装依赖：`bun install --frozen-lockfile`。
 - 本地开发：`bun run dev`。不要假设端口，读取 Astro 控制台输出的实际地址。
 - 生产构建：`NODE_OPTIONS=--max-old-space-size=3072 bun run build`。
