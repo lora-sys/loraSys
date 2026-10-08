@@ -1,0 +1,2 @@
+# Reviewed SVG assets use byte-exact Git blob hashes.
+*.svg -text
