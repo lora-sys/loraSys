@@ -63,11 +63,13 @@ const english = locale === 'en-US'
 <style>
   #contact-launcher{position:fixed;right:24px;bottom:24px;z-index:1000;width:56px;height:56px;border:0;border-radius:50%;background:#ff6631;color:white;display:grid;place-items:center;cursor:pointer;box-shadow:0 3px 12px #0002}
   #contact-launcher:focus-visible{outline:3px solid #167c80;outline-offset:4px}
+  :global(body:has(#action-buttons)) #contact-launcher{right:96px}
   dialog{width:min(360px,calc(100vw - 32px));border:1px solid #d8cfc3;border-radius:16px;padding:24px;background:#fffaf3;color:#222}
   dialog::backdrop{background:#0004}
   form{text-align:right}form button{border:0;background:transparent;font-size:24px;cursor:pointer}
   p{margin:16px 0}a{color:#167c80}#contact-retry{margin-right:16px}
   @media(max-width:640px){#contact-launcher{right:16px;bottom:16px}}
+  @media(max-width:640px){:global(body:has(#action-buttons)) #contact-launcher{right:80px}}
   @media print{#contact-launcher,dialog{display:none}}
 </style>
 
