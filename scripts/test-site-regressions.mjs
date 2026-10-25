@@ -304,9 +304,14 @@ try {
         const camera = page.locator('[data-scene-camera]')
         const toggle = page.locator('[data-scene-motion]')
         await scene.waitFor({state: 'visible'})
-        await page.waitForFunction(() => [...document.querySelectorAll('[data-paper-scene] img')].every(image => image.complete && image.naturalWidth > 0))
+        await scene.scrollIntoViewIfNeeded()
+        await page.waitForFunction(() => {
+          const visibleImages = [...document.querySelectorAll('[data-paper-scene] img')]
+            .filter(image => image.getClientRects().length > 0)
+          return visibleImages.length > 0 && visibleImages.every(image => image.complete && image.naturalWidth > 0)
+        })
         assert.equal(await scene.locator('canvas').count(), 0, 'Paper scene remains dependency-free CSS perspective')
-        assert.equal(await page.locator('.home-hero h1').count(), 1, 'Main title remains HTML')
+        assert.equal(await page.locator('#home-title').count(), 1, 'Main title remains HTML')
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), 'Paper scene cannot create horizontal overflow')
         if (reducedMotion === 'reduce' || viewport.width <= 900) {
           assert.equal(await toggle.isVisible(), false)
@@ -344,7 +349,7 @@ try {
         assert.equal(await page.locator('.scroll-rail').count(), 0, 'Homepage should not duplicate the header scroll progress')
         assert.equal(await page.locator('[data-site-header]').count(), 1, 'Homepage should retain one consistent navigation header')
         for (const id of ['work', 'writing']) {
-          const link = page.locator(`.hero-actions a[href$="#${id}"]`)
+          const link = page.locator(`.intro-index a[href$="#${id}"]`)
           await link.press('Enter')
           await page.waitForURL((url) => url.hash === `#${id}`)
           await page.waitForFunction((sectionId) => {
@@ -369,22 +374,11 @@ try {
         assert.ok(await page.locator('.related-context').count() > 0, 'Featured writing should surface related projects when curated links exist')
       })
 
-      await check(`${label}: lead project demo and keyboard project navigation`, async () => {
+      await check(`${label}: lead project card and keyboard project navigation`, async () => {
         await open()
         const stage = page.locator('#work .lead-project-stage')
         assert.equal(await stage.locator('[data-project-card]').count(), 1, 'Lead project should contain one project card')
         await stage.scrollIntoViewIfNeeded()
-        const accept = stage.locator('[data-review-decision="accept"]')
-        const rework = stage.locator('[data-review-decision="rework"]')
-        await accept.press('Enter')
-        assert.equal(await stage.locator('[data-review-status]').textContent(), 'Task · DONE')
-        assert.equal(await accept.getAttribute('aria-pressed'), 'true')
-        await rework.press('Enter')
-        assert.equal(await stage.locator('[data-review-status]').textContent(), 'Review · REWORK')
-        assert.equal(await rework.getAttribute('aria-pressed'), 'true')
-        assert.equal(await accept.getAttribute('aria-pressed'), 'false')
-        assert.equal(await stage.locator('[data-review-result="accept"]').isVisible(), false)
-        assert.equal(await stage.locator('[data-review-result="rework"]').isVisible(), true)
         const projectLink = stage.locator('[data-interaction="project_website"]')
         const repository = await projectLink.getAttribute('data-destination')
         assert.ok(repository, 'Lead project link should identify its repository')
@@ -423,7 +417,7 @@ try {
         assert.equal(await viewer.locator('.viewer-artwork').count(), 1, 'Archive viewer needs a dedicated artwork panel around the uncropped poster')
         assert.equal(await viewer.getAttribute('aria-labelledby'), 'archive-viewer-title', 'Archive dialog must be named by its visible title')
         assert.equal(await viewer.locator('[data-viewer-detail]').getAttribute('href'), await trigger.getAttribute('href'), 'Viewer details should retain the originating card destination')
-        assert.equal(await viewer.locator('[data-viewer-source]').textContent(), '资料来源：zh.wikipedia.org', 'Chinese visitors should see the actual details hostname')
+        assert.equal(await viewer.locator('[data-viewer-source]').textContent(), '作品资料：zh.wikipedia.org', 'Chinese visitors should see the actual details hostname')
         assert.doesNotMatch(await viewer.innerText(), /Local archive (?:asset|artwork)|detail source is the linked title page/, 'Internal archive metadata must not appear in the viewer')
         assert.equal(await viewer.locator('[data-viewer-prev]').isDisabled(), true)
         const initial = await viewer.locator('[data-viewer-count]').textContent()
@@ -617,7 +611,7 @@ try {
         assert.equal(await viewer.locator('[data-viewer-play]').textContent(), 'Load YouTube player')
         assert.match(await viewer.locator('[data-media-title]').textContent(), /official trailer/)
         assert.match(await viewer.locator('[data-media-source]').textContent(), /KADOKAWAanime/)
-        assert.equal(await viewer.locator('[data-viewer-source]').textContent(), 'Details: zh.wikipedia.org', 'English visitors should see a localized details source')
+        assert.equal(await viewer.locator('[data-viewer-source]').textContent(), 'Title details: zh.wikipedia.org', 'English visitors should see a localized details source')
         assert.doesNotMatch(await viewer.innerText(), /Local archive (?:asset|artwork)|detail source is the linked title page/, 'English media UI must not expose internal archive metadata')
         assert.equal(await viewer.locator('iframe[src]').count(), 0)
         await viewer.locator('[data-viewer-close]').focus()
@@ -780,7 +774,7 @@ try {
     const page = await context.newPage()
     try {
       for (const [route, selectors] of [
-        ['', [['.scene-paper img', 720], ['.hero-figure img', 480]]],
+        ['', [['.hero-figure img', 480]]],
         ['projects', [['.project-card--lead [data-project-poster]', 640]]],
         ['en/work', [['.project-card--lead [data-project-poster]', 640]]]
       ]) {

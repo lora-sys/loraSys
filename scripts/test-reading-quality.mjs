@@ -216,13 +216,22 @@ try {
         const currentValue = await filter.inputValue()
         let currentIndex = options.findIndex((item) => item.value === currentValue)
         assert.ok(currentIndex >= 0, 'Default filter value should match an option')
-        await filter.focus()
-        while (currentIndex !== englishIndex) {
-          const key = currentIndex < englishIndex ? 'ArrowDown' : 'ArrowUp'
-          await filter.press(key)
-          currentIndex += key === 'ArrowDown' ? 1 : -1
+        if (process.platform === 'darwin') {
+          // macOS Chromium routes native select navigation through the OS popup, which headless key input cannot commit.
+          await filter.selectOption(options[englishIndex].value)
+        } else {
+          await filter.focus()
+          while (currentIndex !== englishIndex) {
+            const key = currentIndex < englishIndex ? 'ArrowDown' : 'ArrowUp'
+            await filter.press(key)
+            currentIndex += key === 'ArrowDown' ? 1 : -1
+          }
         }
-        assert.equal(await filter.inputValue(), options[englishIndex].value, 'Keyboard should select English')
+        assert.equal(
+          await filter.inputValue(),
+          options[englishIndex].value,
+          process.platform === 'darwin' ? 'Selection should choose English' : 'Keyboard should select English'
+        )
         assert.equal(await english.isVisible(), true, 'English filter should keep an English article visible')
         assert.equal(await chinese.isVisible(), false, 'English filter should hide the latest Chinese article')
 
@@ -441,15 +450,18 @@ try {
           for (const frameElement of await frames.all()) {
             await frameElement.scrollIntoViewIfNeeded()
             assert.equal(await frameElement.getAttribute('sandbox'), 'allow-scripts')
-            const frame = await frameElement.contentFrame()
-            await frame.locator('body').waitFor()
-            const loadedFrame = await (await frameElement.elementHandle()).contentFrame()
-            await loadedFrame.waitForLoadState('load')
+            const frameHandle = await frameElement.elementHandle()
+            assert.ok(frameHandle, `${edition.id}: embedded frame element exists`)
+            const frame = await frameHandle.contentFrame()
+            assert.ok(frame, `${edition.id}: embedded frame exists`)
+            await frame.locator('html[lang="en-US"]').waitFor()
+            await frame.waitForFunction(() => document.readyState === 'complete')
             assert.equal(await frame.locator('html').getAttribute('lang'), 'en-US', `${edition.id}: interactive labels are English`)
-            for (const control of await frame.locator('[role="tab"], .filter').all()) {
+            for (const [controlIndex, control] of (await frame.locator('[role="tab"], .filter').all()).entries()) {
               await control.click()
               const active = await control.getAttribute('aria-selected') ?? await control.getAttribute('aria-pressed')
-              assert.equal(active, 'true', `${edition.id}: interactive control responds`)
+              const label = (await control.textContent()).trim() || `control ${controlIndex}`
+              assert.equal(active, 'true', `${edition.id}: ${label} responds`)
             }
           }
           const videos = page.locator('#content [data-media-video] video')
@@ -632,6 +644,49 @@ try {
         await mediaCompare.scrollIntoViewIfNeeded()
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
         await capture('mdx-minimax-compare')
+      })
+
+      await check(`${label} FDE embedded dashboards load on demand and switch with the keyboard`, page, async () => {
+        for (const route of [
+          'blog/fde-enterprise-ai-engineering-role',
+          'blog/fde-enterprise-ai-engineering-role-en'
+        ]) {
+          await open(route)
+          const english = route.endsWith('-en')
+          const dashboards = [
+            { file: `fde-global-job-spectrum${english ? '-en' : ''}.html`, kind: 'tabs' },
+            { file: `fde-china-market-dashboard${english ? '-en' : ''}.html`, kind: 'tabs' },
+            { file: `fde-case-evidence-explorer${english ? '-en' : ''}.html`, kind: 'filters' }
+          ]
+
+          for (const dashboard of dashboards) {
+            const selector = `iframe[src*="${dashboard.file}"]`
+            const iframe = page.locator(selector)
+            assert.equal(await iframe.count(), 1, `${route}: expected one ${dashboard.file} iframe`)
+            const frameHandle = await iframe.elementHandle()
+            const dashboardFrame = await frameHandle.contentFrame()
+            assert.ok(dashboardFrame, `${route}: ${dashboard.file} iframe must have a frame`)
+            await iframe.scrollIntoViewIfNeeded()
+            await dashboardFrame.locator(`html[lang="${english ? 'en-US' : 'zh-CN'}"]`).waitFor()
+            await dashboardFrame.waitForFunction(() => document.readyState === 'complete')
+
+            const embedded = page.frameLocator(selector)
+            if (dashboard.kind === 'tabs') {
+              const tabs = embedded.locator('[role="tab"]')
+              assert.ok(await tabs.count() >= 2, `${dashboard.file}: expected at least two tabs`)
+              await tabs.first().press('ArrowRight')
+              assert.equal(await tabs.nth(1).getAttribute('aria-selected'), 'true')
+              assert.equal(await embedded.locator('[role="tabpanel"]').nth(1).isVisible(), true)
+            } else {
+              const filters = embedded.locator('.filter')
+              assert.ok(await filters.count() >= 2, `${dashboard.file}: expected at least two case filters`)
+              await filters.first().press('ArrowRight')
+              assert.equal(await filters.nth(1).getAttribute('aria-pressed'), 'true')
+              assert.notEqual((await embedded.locator('#title').textContent()).trim(), '')
+            }
+          }
+        }
+        await capture('fde-embedded-controls')
       })
 
       await check(`${label} no uncaught application errors`, page, async () => assert.deepEqual(pageErrors, []))
