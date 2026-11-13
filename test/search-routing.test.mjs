@@ -15,11 +15,10 @@ const { searchKindForPath, searchKindFilters, readSearchState, writeSearchState 
 
 const archiveRoutes = [
   '/blog', '/blog/2', '/blog/20', '/blog/language', '/blog/language/en-US',
-  '/blog/type', '/blog/type/news', '/blog/type/news/2',
+  '/blog/type', '/blog/type/technical', '/blog/type/technical/2',
   '/blog/topic', '/blog/topic/security', '/blog/series',
-  '/blog/series/agent-engineering-reading', '/en/writing',
-  '/en/writing/type/news', '/en/writing/topic/security',
-  '/en/writing/series/agent-engineering-reading',
+  '/en/writing',
+  '/en/writing/type/technical', '/en/writing/topic/security',
   '/en/writing/loop-engineering-harness', '/tags', '/tags/harness', '/archives'
 ]
 for (const base of ['/', '/loraSys/']) {
@@ -31,7 +30,7 @@ for (const base of ['/', '/loraSys/']) {
     }
   })
   test(`canonical originals and translations stay articles under ${base}`, () => {
-    for (const slug of ['loop-engineering-harness', 'loop-engineering-harness-en', 'ai-agent-engineering-news-2026-10-05-06']) {
+    for (const slug of ['loop-engineering-harness', 'loop-engineering-harness-en', 'agent-design-pattern-catalog']) {
       for (const suffix of ['', '/']) {
         assert.equal(searchKindForPath(`${base}blog/${slug}${suffix}`, base), 'article', slug)
       }

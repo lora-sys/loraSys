@@ -3,7 +3,7 @@
   "scope": {
     "sourceCommit": "c0518b79f997793b2182d1890fc8d8fb29614083",
     "sourceTree": "2a733eada9af7f4326b9131f3ea6fb29ad0e67d2",
-    "chineseArticles": 83,
+    "chineseArticles": 67,
     "newTranslations": 77,
     "preexistingTranslations": 6,
     "englishOriginals": [
@@ -14,10 +14,10 @@
     "futureSourceChanges": "Outside this bounded source snapshot; review separately"
   },
   "coverage": {
-    "pairedChineseArticles": 83,
-    "publishedChinese": 83,
-    "publishedEnglish": 86,
-    "publishedEditions": 169,
+    "pairedChineseArticles": 67,
+    "publishedChinese": 67,
+    "publishedEnglish": 70,
+    "publishedEditions": 137,
     "englishSVGDiagrams": 57,
     "newEnglishSVGDiagrams": 45,
     "englishInteractiveHtmlArtifacts": 3,
@@ -125,150 +125,6 @@
       "sourcePublishDate": "2026-09-13T00:00:00Z",
       "originalPath": "/blog/agentic-workflows-noop-triage",
       "englishPath": "/blog/agentic-workflows-noop-triage-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-04-10",
-      "english": "ai-agent-engineering-news-2026-09-04-10-en",
-      "sourceSHA256": "56e9ac0471b5f37f0366030f5941f99b184677efee2db89004fed0cd01a15906",
-      "englishSHA256": "bc4573abbff2f8a23cc575fa0d4726a168d32ddbc5aed46953ddb3f91d23e7e8",
-      "sourcePublishDate": "2026-09-10T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-04-10",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-04-10-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-11-16",
-      "english": "ai-agent-engineering-news-2026-09-11-16-en",
-      "sourceSHA256": "e2909229a0214aad4b9fbe0af4833a0a1458c0d78423c42c6480da16674c895a",
-      "englishSHA256": "0e47a54b20bf5978f475a7bef03501b1506ff3840bba0ac0ef8c87b2d511cf5f",
-      "sourcePublishDate": "2026-09-16T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-16",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-16-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-11-17",
-      "english": "ai-agent-engineering-news-2026-09-11-17-en",
-      "sourceSHA256": "0ad7033f11ebb67dfd971d266e8ff55a66fd6e788b75dd8e738c6bc5b76d5579",
-      "englishSHA256": "ae49e4039e06dd79711a8032dbe75fe661cf0ce4e6ca1474fe56b5ffe9c2f42f",
-      "sourcePublishDate": "2026-09-17T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-17",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-17-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-11-18",
-      "english": "ai-agent-engineering-news-2026-09-11-18-en",
-      "sourceSHA256": "534f55244d30df43bd568c5c4d2320d165c04a392f61164f1997d88b774228f1",
-      "englishSHA256": "a7ad5e54ab4f910cedb9d2dc1dbcc8892e3f860b93a1ebf623d2b9080502efc1",
-      "sourcePublishDate": "2026-09-18T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-11-18",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-11-18-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-18-19",
-      "english": "ai-agent-engineering-news-2026-09-18-19-en",
-      "sourceSHA256": "d1c36e5ee8064280f4a499c0dc71aebd6aebd7857c56f2a5e8b33cd91618e73d",
-      "englishSHA256": "def6c7f57df32e644f07d20d811132de8038acadd632ccf8a49236a126022e07",
-      "sourcePublishDate": "2026-09-19T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-18-19",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-18-19-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-18-20",
-      "english": "ai-agent-engineering-news-2026-09-18-20-en",
-      "sourceSHA256": "fe0e7656b6cdd7e4178292385e78b89fddc9cc5624cfdce9f052112dd27f7dc3",
-      "englishSHA256": "833de6d67e90607b661cdeb50a0d9b41b22fb568cc42d1c05d06eecf704fa1f1",
-      "sourcePublishDate": "2026-09-20T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-18-20",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-18-20-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-21",
-      "english": "ai-agent-engineering-news-2026-09-21-en",
-      "sourceSHA256": "6df6f22b181b6255cebea38fda146d684bfb81e6562129a9ddc879580e918c6e",
-      "englishSHA256": "2c1c5b30446f21e75115d816bde17d24e8db947e73206a6fba667cf84bce3e07",
-      "sourcePublishDate": "2026-09-21T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-21",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-21-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-22",
-      "english": "ai-agent-engineering-news-2026-09-22-en",
-      "sourceSHA256": "2ef75e2e6d5a992e6add735494f0523291da013e449be3c390cc2218ccc2e748",
-      "englishSHA256": "a2a03556e49b544c8e2dc2067128af38df8b03ee5be9d3d7a2e141e784bbd549",
-      "sourcePublishDate": "2026-09-22T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-22",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-22-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-23",
-      "english": "ai-agent-engineering-news-2026-09-23-en",
-      "sourceSHA256": "a80ec0645245ad6ef71b565ba6d63492d2d84dfcd353b59645707a9a82cbc801",
-      "englishSHA256": "b9d32f704a49cb8358f5d80962bc2be8eb467629a0a7cb7b5863b0366ec17ca0",
-      "sourcePublishDate": "2026-09-23T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-23",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-23-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-24-25",
-      "english": "ai-agent-engineering-news-2026-09-24-25-en",
-      "sourceSHA256": "471a7e3b10b62eb2c5ba563a06435667989cfbba8ff0caacb3284a3a44a4b11e",
-      "englishSHA256": "c3381230059a3a8ec8bc2d01866a472a3114b5460a0f0d93d19b31150c60818e",
-      "sourcePublishDate": "2026-09-25T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-24-25",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-24-25-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-25-26",
-      "english": "ai-agent-engineering-news-2026-09-25-26-en",
-      "sourceSHA256": "e52872c97697588df1db19bd8419840d45d30c0af77fb8decbc02deedec489bd",
-      "englishSHA256": "ca5d60133701dfe17edafd4f5655df5f96d709eb9970a06c84071c81637c0340",
-      "sourcePublishDate": "2026-09-26T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-25-26",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-25-26-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-26-27",
-      "english": "ai-agent-engineering-news-2026-09-26-27-en",
-      "sourceSHA256": "8c31cbc5bc692f0126b90a78975a875882f7ce862bd8e6555b5609c5ca7fa4d4",
-      "englishSHA256": "074fb12f6af66de2870738523d6fbdecd3ac0dcc0453eac54829b80c11033108",
-      "sourcePublishDate": "2026-09-27T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-26-27",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-26-27-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-27-28",
-      "english": "ai-agent-engineering-news-2026-09-27-28-en",
-      "sourceSHA256": "53f77e5d47d7dd722d664079295cd87935488fed8e6887bbd2ece46b94cb6967",
-      "englishSHA256": "529445c79ec1f44fe180ce57759a01fd093515bec0c64f348e53511db2e1a22f",
-      "sourcePublishDate": "2026-09-28T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-27-28",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-27-28-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-28-29",
-      "english": "ai-agent-engineering-news-2026-09-28-29-en",
-      "sourceSHA256": "39e0c6db590e8cb2d10bc115b7f7635c6804f3f2f5dee9f714fd0719f5211628",
-      "englishSHA256": "fe4a721a7c17e6905df0f0396e2e48020a5ac3fe36973ecfdfbf3bf0f4b6163e",
-      "sourcePublishDate": "2026-09-29T00:00:00Z",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-28-29",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-28-29-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-29-30",
-      "english": "ai-agent-engineering-news-2026-09-29-30-en",
-      "sourceSHA256": "020cec0bd8567a93b6b0af880852c86f5b5be03720dade00f25125784c57cf01",
-      "englishSHA256": "1b2e1f04aea5d1fa75614cb471070f0f8d72b399e9bcd407cdb74f7358e0b819",
-      "sourcePublishDate": "2026-09-30",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-29-30",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-29-30-en"
-    },
-    {
-      "original": "ai-agent-engineering-news-2026-09-30-10-01",
-      "english": "ai-agent-engineering-news-2026-09-30-10-01-en",
-      "sourceSHA256": "f6c03bae1e64b7f2f735faf355bfbf015bd344576ee899c898b48578ea684c62",
-      "englishSHA256": "b5165f570222eb3ba41035839adaf4c8cd34a1623ddda6b21d7b25b165589178",
-      "sourcePublishDate": "2026-10-01",
-      "originalPath": "/blog/ai-agent-engineering-news-2026-09-30-10-01",
-      "englishPath": "/blog/ai-agent-engineering-news-2026-09-30-10-01-en"
     },
     {
       "original": "ai-engineering-harness",

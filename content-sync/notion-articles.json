@@ -52,41 +52,6 @@
       "note": "Hero image now reuses the already-localized authored main visual; source body and source media remain unchanged."
     },
     {
-      "source_page_id_sha256": "ebc21f7e23886dcab38ec5bf6abe9bb14f71a8c01a4af792ae9627309fd10119",
-      "slug": "ai-agent-engineering-news-2026-09-04-10",
-      "content_fingerprint": "git-blob:161f88b7b201866c1ce061c4da6b2a7c8b3b028c",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "dc66fe4fc7c7f2c587c2c56b0b9e66f3dbfe961925b987013f5b676063b5646b",
-      "slug": "ai-agent-engineering-news-2026-09-11-16",
-      "content_fingerprint": "git-blob:cf2cc20accb4ccb1eaf61d6510b36134e44a7a35",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "9fee585e651e9de270237b51188873fada1df13be19b7408c14cba2bf2e7fd96",
-      "slug": "ai-agent-engineering-news-2026-09-11-17",
-      "content_fingerprint": "git-blob:71eebd507d74e0ef7be7a4791b779634647bf79f",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "3e57d322d25043bf31df15fe4052a75b233b44ff39729d191460de1b0ef80251",
-      "slug": "ai-agent-engineering-news-2026-09-11-18",
-      "content_fingerprint": "git-blob:0340295887ccf87be8933a8e2148942e2b32a5db",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
-      "source_page_id_sha256": "60d6de724da1e64f6e3c09a5e2256fa24ec98a580ab850dd50bff7222fa4083b",
-      "slug": "ai-agent-engineering-news-2026-09-18-19",
-      "content_fingerprint": "git-blob:7727e9b8593daedb5ac86728d38a42529480c7a2",
-      "source_last_edited_at": "2026-09-20T02:44:30.992Z",
-      "status": "synced"
-    },
-    {
       "source_page_id_sha256": "2dcd0557fc015c0f03d2dca1dd4966cfef4c545f30642f5ced249e6dad1fa449",
       "slug": "anthropic-embedded-evaluator-access",
       "content_fingerprint": "git-blob:d877568220676d8223d447de1628d9b0239953f9",
@@ -426,15 +391,6 @@
       "media": []
     },
     {
-      "source_page_id_sha256": "7ef3e2b37f7054a243e4f656ab150532a210157a5d1f2dd7bfba7114f3b3c3e2",
-      "slug": "ai-agent-engineering-news-2026-09-18-20",
-      "content_fingerprint": "git-blob:0f7e68d3c20ec852e16ce78f8927f13ca796c3e4",
-      "source_last_edited_at": "2026-09-21T00:05:15.150Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date 2026-09-20; the source page contains no media blocks.",
-      "media": []
-    },
-    {
       "source_page_id_sha256": "900488673129433263ed6ea70ea88283ff37cfd806c31a30b35ac3d8b31433c9",
       "slug": "multi-agent-dependency-aware-delegation",
       "content_fingerprint": "git-blob:bf927950c9c3dac44f83672923598f66494bf496",
@@ -479,15 +435,6 @@
           "note": "Original SVG bytes recovered from the Notion source and localized."
         }
       ]
-    },
-    {
-      "source_page_id_sha256": "a0b5dd9668345df7b0704830c6b5835cbf5715c06dd2b7b4bc34817fbbc6c139",
-      "slug": "ai-agent-engineering-news-2026-09-21",
-      "content_fingerprint": "git-blob:2c3f846dab65082c78032c79acb1f96e02cde8da",
-      "source_last_edited_at": "2026-09-22T00:01:45.543Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date 2026-09-21; the source page contains no media blocks.",
-      "media": []
     },
     {
       "source_page_id_sha256": "a98a254ffe1654d75339963a48ca06c40203ac737f8ee8b52992da2161579007",
@@ -547,15 +494,6 @@
       "source_last_edited_at": "2026-09-22T02:03:13.544Z",
       "status": "synced",
       "note": "Source remained 已研究 only because generated cover visual QA failed. The public article body and fact gate were complete, and the source page itself contains no media blocks.",
-      "media": []
-    },
-    {
-      "source_page_id_sha256": "5b29d6ea5b8fc9e6778660aabc99cae6b2641da3f10d070366a75b1ab26b8322",
-      "slug": "ai-agent-engineering-news-2026-09-22",
-      "content_fingerprint": "git-blob:2e790acde84bc32fab74548b804a0e6dd1dc6f8d",
-      "source_last_edited_at": "2026-09-23T00:06:37.874Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date 2026-09-22; three Sep 21 items are explicitly labeled as prior-log omissions instead of Sep 22 releases. The source page contains no media blocks.",
       "media": []
     },
     {
@@ -649,15 +587,6 @@
       ]
     },
     {
-      "source_page_id_sha256": "34ef5cc8e3b61c9e08766f25efb502e7be41bfa8e65228ba9611f57400cd2532",
-      "slug": "ai-agent-engineering-news-2026-09-23",
-      "content_fingerprint": "git-blob:d555b0320f9976a9c850ff6ff366511ab8e006da",
-      "source_last_edited_at": "2026-09-24T00:04:53.540Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date 2026-09-23; Sep 22 late submissions are explicitly labeled as previous-log omissions. The source page contains no media blocks.",
-      "media": []
-    },
-    {
       "source_page_id_sha256": "631fbc2923a2fd6f6780925c06014e48e1c2f4b1011eddbcf98c9ae24c7a944e",
       "slug": "financial-markets-zero-to-one-roadmap",
       "content_fingerprint": "git-blob:2087f0af459e2e66bba3a98e64a295ae847e3bbb",
@@ -693,42 +622,6 @@
           "note": "Rebuilt from the source article's exact 10000 account, 1% risk, 100 entry, 98 stop and 50-unit example. Website caption states it is not the original attachment."
         }
       ]
-    },
-    {
-      "source_page_id_sha256": "0398e9aeaf1b5c0aa44d4a03cf4e7ab72678306d1c1d12dd957316a2a2679c2a",
-      "slug": "ai-agent-engineering-news-2026-09-24-25",
-      "content_fingerprint": "git-blob:8299ee29220ac1cab090092c853698d34e25ca4e",
-      "source_last_edited_at": "2026-09-25T00:04:00.000Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date. The source page contains no body media blocks.",
-      "media": []
-    },
-    {
-      "source_page_id_sha256": "624f31144f922b6f7798e34fd5d4cea6df9c7f544c77e98e2a611aba4551a9e1",
-      "slug": "ai-agent-engineering-news-2026-09-25-26",
-      "content_fingerprint": "git-blob:19bd0e2b5242b80bce6148541cd3b58d0ceea804",
-      "source_last_edited_at": "2026-09-26T00:02:00.000Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date. The source page contains no body media blocks.",
-      "media": []
-    },
-    {
-      "source_page_id_sha256": "7381851210277e6d77b1a924fca3207173123c848a32f4930a7bdc2a6b08b1f8",
-      "slug": "ai-agent-engineering-news-2026-09-26-27",
-      "content_fingerprint": "git-blob:ec0b01986fb10895c501ebc786bddb4f27a820f8",
-      "source_last_edited_at": "2026-09-27T00:06:00.000Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date. The source page contains no body media blocks.",
-      "media": []
-    },
-    {
-      "source_page_id_sha256": "36684590a88e960dc80fc9f66cf2fc8e977dcfa75d8a1d2b59f6c0692d8b4822",
-      "slug": "ai-agent-engineering-news-2026-09-27-28",
-      "content_fingerprint": "git-blob:aa0702cf0b3718276cd95e501c1402bdb517c23b",
-      "source_last_edited_at": "2026-09-28T00:03:00.000Z",
-      "status": "synced",
-      "note": "News log status 已沉淀. publishDate follows the coverage end date. The source page contains no body media blocks.",
-      "media": []
     },
     {
       "source_page_id_sha256": "1ca83495fe29345f79f9265ffab38ad10cb8aff3671017b78fd422c2ebf054f3",
@@ -821,15 +714,6 @@
       "media": []
     },
     {
-      "source_page_id_sha256": "d42fe88a877589861588e0a23fd264bbe5fce3dee66cfc3b54949896f9f5dc2f",
-      "slug": "ai-agent-engineering-news-2026-09-28-29",
-      "content_fingerprint": "git-blob:7b15f7ac17bbc586b6e496478db7b56b5edead63",
-      "source_last_edited_at": "2026-09-29T00:04:20.391Z",
-      "status": "synced",
-      "note": "News log published using coverage end date. Source body media count: 0.",
-      "media": []
-    },
-    {
       "source_page_id_sha256": "6b834c719c7e9bca5be3f2ff26c1054bc6e314bc9375879779b1209c47315d1f",
       "slug": "openai-agents-api-browser-authentication",
       "content_fingerprint": "git-blob:b4b7971e6948e04a47970d80a06149c16423b9c6",
@@ -837,15 +721,6 @@
       "status": "synced",
       "media": [],
       "note": "Complete source page has no attached media blocks. Three image filenames appear only in the production brief and were never attached to the source page. Native cover is null; cover remains in backlog."
-    },
-    {
-      "source_page_id_sha256": "91fd19883b787ca14d955731b86580c4f39cdebe8b733e84a1b4b89ed10d710c",
-      "slug": "ai-agent-engineering-news-2026-09-29-30",
-      "content_fingerprint": "git-blob:f795b72795b57d784623f5896cad731db5b74f41",
-      "source_last_edited_at": "2026-09-30T00:02:04.962Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. Coverage ends 2026-09-30; older NVIDIA and paper items are explicitly dated as backfills."
     },
     {
       "source_page_id_sha256": "5426321dd2afcbb43e650cb90b632e8df2b16e0aee4db2574e7fe0ea23b658ff",
@@ -1038,15 +913,6 @@
       "note": "Complete recursive-discovery article. All four source SVG attachments were recovered and localized in order. Native cover is null; source visuals are mechanism diagrams, so no heroImage was assigned."
     },
     {
-      "source_page_id_sha256": "5eb91552a4c1b03cc5f52d5db280f4cadc7ec13b20cbd124e36b99b5a803024e",
-      "slug": "ai-agent-engineering-news-2026-09-30-10-01",
-      "content_fingerprint": "git-blob:ddab54c1e359c93da1028c143c50365a9b28465e",
-      "source_last_edited_at": "2026-10-01T00:01:39.319Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. Coverage ends 2026-10-01 and publishDate uses the coverage end date."
-    },
-    {
       "source_page_id_sha256": "9598207c70b2f5959a40884b639903908256a65fb057ed2174a46595f6cb4c5c",
       "slug": "emdash-decentralized-plugin-registry",
       "content_fingerprint": "git-blob:24cf3190b7e7a00bce18824c67a40530e3c03ffa",
@@ -1147,33 +1013,6 @@
       "note": "Public article body and fact gate are complete, but all three attached source visuals were not recoverable as local bytes in this run. Media completeness is a hard gate, so no public MDX was created."
     },
     {
-      "source_page_id_sha256": "69c3aebbdd509c93a4f29f3f964ce8ce4ea8d00071129d2ceb7b7c72c86aeefd",
-      "slug": "ai-agent-engineering-news-2026-10-01-02",
-      "content_fingerprint": "git-blob:392f489d3b2109a3a1cb03bba7e63ac7979175fc",
-      "source_last_edited_at": "2026-10-02T00:05:54.343Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
-    },
-    {
-      "source_page_id_sha256": "45da01d9a1c0e8bfcf1844f4470747693dc618da258dcf46cb120c3d7696a400",
-      "slug": "ai-agent-engineering-news-2026-10-02-03",
-      "content_fingerprint": "git-blob:e1cfa1c934d133605a63fbb8952b6ba17d87a14c",
-      "source_last_edited_at": "2026-10-03T00:06:59.455Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
-    },
-    {
-      "source_page_id_sha256": "4d34c8c62ec319f2208ac2913a21c0ca8576ac13b739132f8f9553b82ef4e66b",
-      "slug": "ai-agent-engineering-news-2026-10-03-04",
-      "content_fingerprint": "git-blob:33bfd82cbe3c39a9278c96253a2a9ccd946982b5",
-      "source_last_edited_at": "2026-10-04T00:04:51.219Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete engineering-news source page contains text and ordinary source hyperlinks with no attached media blocks. Native cover is null; cover remains in backlog. publishDate uses the coverage end date."
-    },
-    {
       "source_page_id_sha256": "a662b42f587174c719b6fdbfb56bb9e57155b0adabf7604e956e93d68654e100",
       "slug": "moli-structure-first-browser-agent",
       "content_fingerprint": "git-blob:0f986aba67b32b642c03e2d176cbdc30b7fa265e",
@@ -1223,15 +1062,6 @@
         }
       ],
       "note": "Complete article body exists, but one source image remains unrecovered. Publication is blocked by the media completeness gate."
-    },
-    {
-      "source_page_id_sha256": "5089ad3417b0ef76123e58652370cbc3c66c88b28c7386d1d3bf4fe456aaec13",
-      "slug": "ai-agent-engineering-news-2026-10-04-05",
-      "content_fingerprint": "git-blob:b0a2580b422e1ceea189bd9dfd687bcd7f255091",
-      "source_last_edited_at": "2026-10-05T00:04:46.914Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete engineering-news source page contains six substantive entries with primary sources and no attached media blocks. publishDate uses the coverage end date. Native cover is null; heroImage remains in the cover backlog."
     },
     {
       "source_page_id_sha256": "f48e9e3d5022d744220a38c011a88cf53f89b256c6cbf042537d60fc66d7dcc8",
@@ -1318,15 +1148,6 @@
         }
       ],
       "note": "Recursive-discovery page is still incomplete: the body currently ends during section 1. Publication is blocked by incomplete prose and one unrecovered source diagram."
-    },
-    {
-      "source_page_id_sha256": "0c5cfeb856a7893211a91aed1d8681747dcc75c873bd0825ddb33c83f1f4a2b8",
-      "slug": "ai-agent-engineering-news-2026-10-05-06",
-      "content_fingerprint": "git-blob:b605bb8e6b496bea9f55d3bd0d2066f9288f4fbc",
-      "source_last_edited_at": "2026-10-06T00:04:46.326Z",
-      "status": "synced",
-      "media": [],
-      "note": "Complete engineering-news source page contains five substantive entries with primary sources and no attached media blocks. publishDate uses the coverage end date. Native cover is null; heroImage remains in the cover backlog."
     }
   ]
 }

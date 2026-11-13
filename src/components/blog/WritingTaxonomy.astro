@@ -36,7 +36,9 @@ const groupLabels = {
     </summary>
     <div class='taxonomy-groups'>
       {
-        (['type', 'topic', 'series'] as const).map((kind) => (
+        (['type', 'topic', 'series'] as const)
+          .filter((kind) => Object.keys(writingGroups[kind]).length > 0 || kind === 'type')
+          .map((kind) => (
           <nav
             class:list={['taxonomy-group', { 'type-filter': kind === 'type' }]}
             aria-label={groupLabels[kind]}

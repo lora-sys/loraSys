@@ -27,7 +27,7 @@ const blog = defineCollection({
         .min(1)
         .max(5)
         .refine((topics) => new Set(topics).size === topics.length, 'topics must be unique'),
-      series: z.enum(seriesIds).optional(),
+      series: (seriesIds.length > 0 ? z.enum(seriesIds) : z.string()).optional(),
       // Optional
       updatedDate: z.coerce.date().optional(),
       heroImage: z

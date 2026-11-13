@@ -20,17 +20,14 @@ export const getStaticPaths = (async ({ paginate }) => {
     const featuredPosts = featuredPostIds
       .map((id) => filtered.find((post) => post.id === id || post.data.translationOf === id))
       .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
-    const articles = filtered.filter((post) => post.data.contentType !== 'news')
-    const news = filtered.filter((post) => post.data.contentType === 'news')
+    const articles = filtered
     return paginate(articles, {
       pageSize: config.content.blogPageSize,
       params: { language },
       props: {
         activeLanguage: language,
         collectionsCount: articles.length,
-        featuredPosts,
-        newsPosts: news.slice(0, 3),
-        newsCount: news.length
+        featuredPosts
       }
     })
   })
@@ -41,11 +38,11 @@ interface Props {
   collectionsCount: number
   featuredPosts: CollectionEntry<'blog'>[]
   activeLanguage: SupportedLanguage
-  newsPosts: CollectionEntry<'blog'>[]
-  newsCount: number
+  newsPosts?: CollectionEntry<'blog'>[]
+  newsCount?: number
 }
 
-const { page, collectionsCount, featuredPosts, activeLanguage, newsPosts, newsCount } = Astro.props
+const { page, collectionsCount, featuredPosts, activeLanguage } = Astro.props
 ---
 
-<BlogListing {page} {collectionsCount} {featuredPosts} {activeLanguage} {newsPosts} {newsCount} />
+<BlogListing {page} {collectionsCount} {featuredPosts} {activeLanguage} />

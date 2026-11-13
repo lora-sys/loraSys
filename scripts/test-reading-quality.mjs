@@ -266,12 +266,11 @@ try {
 
       })
 
-      await check(`${label} writing types, topics and series share classification across locales`, page, async () => {
+      await check(`${label} writing types and topics share classification across locales`, page, async () => {
         await open('en/writing')
-        const englishNewsCount = await page.locator('[data-article][data-content-type="news"][data-language="en-US"]').count()
         const types = await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.contentType))
-        assert.ok(types.length > 0 && types.every((type) => ['technical', 'projects', 'guides', 'news'].includes(type)), 'Every article has a visible canonical type')
-        for (const type of ['technical', 'projects', 'guides', 'news']) {
+        assert.ok(types.length > 0 && types.every((type) => ['technical', 'projects', 'guides'].includes(type)), 'Every article has a visible canonical type')
+        for (const type of ['technical', 'projects', 'guides']) {
           await open(`en/writing/type/${type}`)
           const classified = await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.contentType))
           assert.equal(classified.length, types.filter((value) => value === type).length)
@@ -280,21 +279,6 @@ try {
           assert.ok(await page.locator(`.type-filter a[aria-current="page"][href$="/${type}"]`).count())
           assert.ok((await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.contentType))).every((value) => value === type))
         }
-        await open('en/writing/series/agent-engineering-reading?language=all')
-        const seriesCount = await page.locator('[data-article]').count()
-        assert.ok(seriesCount > 0)
-        assert.ok((await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.series))).every((value) => value === 'agent-engineering-reading'))
-        const seriesEnglishCount = await page.locator('[data-article][data-language="en-US"]').count()
-        await page.locator('#language-filter').selectOption('en-US')
-        assert.equal(await page.locator('[data-article]:visible').count(), seriesEnglishCount)
-        assert.equal(await page.locator('#filter-empty').isVisible(), seriesEnglishCount === 0)
-        await page.goBack()
-        await page.locator('#filter-empty').waitFor({ state: 'hidden' })
-        assert.equal(await page.locator('[data-article]:visible').count(), seriesCount, 'Back restores the language and complete series')
-        await page.goForward()
-        assert.equal(await page.locator('[data-article]:visible').count(), seriesEnglishCount)
-        await page.locator('#language-filter').selectOption('all')
-        assert.equal(seriesCount, await page.locator('[data-article]:visible').count())
         await open('en/writing/topic/multi-agent?language=en-US')
         await page.waitForFunction(() => {
           const filter = document.querySelector('#language-filter')
@@ -302,21 +286,10 @@ try {
         })
         const topicEnglishCount = await page.locator('[data-article]:visible').count()
         assert.equal((await page.locator('#article-count').textContent()).trim(), `${topicEnglishCount} ${topicEnglishCount === 1 ? 'article' : 'articles'} across all sections`, 'Filtered counts use the correct singular or plural')
-        await open('blog/type/news/language/en-US')
-        assert.equal(await page.locator('.empty-state').isVisible(), englishNewsCount === 0, 'Empty language/type selection stays readable')
+        await open('blog/type/technical/language/en-US')
         await page.locator('.language-filter a').filter({ hasText: '中文' }).click()
         await page.locator('.post-card').first().waitFor({ state: 'visible' })
-        assert.ok((await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.contentType))).every((value) => value === 'news'))
-        await open('blog/series/agent-engineering-reading')
-        const seriesIds = new Set()
-        while (true) {
-          for (const href of await page.locator('.post-link').evaluateAll((items) => items.map((item) => item.href))) seriesIds.add(new URL(href).pathname)
-          const next = page.getByRole('link', { name: '下一页', exact: true })
-          if (!await next.count()) break
-          await next.click()
-          await page.locator('.post-card').first().waitFor({ state: 'visible' })
-        }
-        assert.equal(seriesIds.size, seriesCount, 'Series pagination must retain every installment across old page boundaries')
+        assert.ok((await page.locator('[data-article]').evaluateAll((items) => items.map((item) => item.dataset.contentType))).every((value) => value === 'technical'))
         await open('blog/topic/security')
         const summary = page.locator('.writing-taxonomy summary')
         assert.equal(await page.locator('.writing-taxonomy details').getAttribute('open'), null, 'Selected topics remain collapsed so articles stay near the top')
@@ -733,10 +706,10 @@ try {
   await check('writing taxonomy has a narrow-screen no-JavaScript fallback', noJsPage, async () => {
     await noJsPage.goto(new URL('blog', site).href)
     await noJsPage.locator('.writing-taxonomy summary').press('Enter')
-    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: '新闻与阅读清单' }).click()
+    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: '技术文章' }).click()
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     await noJsPage.locator('.writing-taxonomy summary').press('Enter')
-    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: 'AI Agent 工程阅读清单' }).click()
+    await noJsPage.locator('.writing-taxonomy a').filter({ hasText: '项目与实践' }).click()
     assert.ok(await noJsPage.locator('.post-card').count() > 0)
     assert.ok(await noJsPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1))
     await noJsPage.screenshot({ path: path.join(output, '320-no-js-writing-series.png'), animations: 'disabled' })

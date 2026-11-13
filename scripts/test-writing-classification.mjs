@@ -13,25 +13,22 @@ assert.deepEqual(validateClassification(valid), [])
 for (const data of [
   { topics: ['agents'] },
   { ...valid, contentType: 'AI' },
+  { ...valid, contentType: 'news' },
   { ...valid, topics: [] },
   { ...valid, topics: ['AI Agent'] },
   { ...valid, topics: ['agents', 'agents'] },
-  { ...valid, series: 'unknown' },
-  { ...valid, series: 'agent-engineering-reading' }
+  { ...valid, series: 'unknown' }
 ])
   assert.ok(validateClassification(data).length, JSON.stringify(data))
-assert.deepEqual(validateClassification({ contentType: 'news', topics: ['agents'] }), [])
-assert.deepEqual(mapSourceClassification('engineering-news', '增量补充'), {
-  contentType: 'news',
-  series: 'agent-engineering-reading'
-})
+assert.deepEqual(validateClassification({ contentType: 'projects', topics: ['agents'] }), [])
 assert.deepEqual(mapSourceClassification('editorial', '有趣项目介绍'), { contentType: 'projects' })
 assert.throws(() => mapSourceClassification('editorial', '产品机会雷达'), /Unmapped/)
+assert.throws(() => mapSourceClassification('engineering-news', '周报'), /Unmapped/)
 assert.throws(() => mapSourceClassification('unknown', '周报'), /Unmapped/)
 const article =
-  '---\ntitle: "News: a title"\ncontentType: news\ntopics:\n  - agents\n---\n# Body\n\n![Image](./unchanged.webp)\n'
+  '---\ntitle: "Project: a title"\ncontentType: projects\ntopics:\n  - agents\n---\n# Body\n\n![Image](./unchanged.webp)\n'
 const parsed = readFrontmatter(article)
-assert.equal(parsed.data.title, 'News: a title')
+assert.equal(parsed.data.title, 'Project: a title')
 assert.deepEqual(validateClassification(parsed.data), [])
 assert.equal(parsed.prefix + parsed.body, article)
 console.log('Writing classification regression checks passed.')
@@ -42,12 +39,6 @@ assert.deepEqual(normalizeSourceTopics(['AI Agent', 'MCP', 'Harness', 'AI 软件
   'agent-harness'
 ])
 assert.throws(() => normalizeSourceTopics(['unreviewed topic']), /Unmapped/)
-assert.ok(
-  validateSourceClassification('engineering-news', '周报', {
-    contentType: 'news',
-    topics: ['agents']
-  }).length
-)
 
 assert.ok(
   validateSourceClassification('editorial', '有趣项目介绍', {

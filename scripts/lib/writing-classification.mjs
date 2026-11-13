@@ -26,8 +26,6 @@ export function validateClassification(data) {
   }
   if (data.series !== undefined && !Object.hasOwn(taxonomy.series, data.series))
     errors.push(`unknown series: ${String(data.series)}`)
-  if (data.series === 'agent-engineering-reading' && data.contentType !== 'news')
-    errors.push('agent-engineering-reading belongs to the news content type')
   return errors
 }
 

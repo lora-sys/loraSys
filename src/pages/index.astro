@@ -18,7 +18,7 @@ import LeadProjectStage from '@/components/projects/LeadProjectStage.astro'
 import ProjectCard from '@/components/projects/ProjectCard.astro'
 
 const allPosts = sortMDByDate(await getBlogCollection()).filter(
-  (post) => post.data.language !== 'en-US' && post.data.contentType !== 'news'
+  (post) => post.data.language !== 'en-US'
 )
 const latestPostDate = allPosts[0]?.data?.publishDate
   ? new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(

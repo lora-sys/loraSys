@@ -16,9 +16,7 @@ import ProjectCard from '@/components/projects/ProjectCard.astro'
 import { recentEnglishArticles } from '@/utils/article-translations'
 
 const allPosts = sortMDByDate(await getBlogCollection())
-const recentPosts = recentEnglishArticles(
-  allPosts.filter((post) => post.data.contentType !== 'news')
-)
+const recentPosts = recentEnglishArticles(allPosts)
 const allFeatured = projects.filter((project) => project.featured)
 const featured = homepageFeatured(allFeatured)
 const [leadProject, ...supportingProjects] = featured

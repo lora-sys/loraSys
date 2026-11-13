@@ -16,15 +16,12 @@ export const getStaticPaths = (async ({ paginate }) => {
   const featuredPosts = featuredPostIds
     .map((id) => collections.find((post) => post.id === id))
     .filter((post): post is CollectionEntry<'blog'> => Boolean(post))
-  const articles = collections.filter((post) => post.data.contentType !== 'news')
-  const news = collections.filter((post) => post.data.contentType === 'news')
+  const articles = collections
   return paginate(articles, {
     pageSize: config.content.blogPageSize,
     props: {
       collectionsCount: articles.length,
-      featuredPosts,
-      newsPosts: news.slice(0, 3),
-      newsCount: news.length
+      featuredPosts
     }
   })
 }) satisfies GetStaticPaths
@@ -33,11 +30,11 @@ interface Props {
   page: Page<CollectionEntry<'blog'>>
   collectionsCount: number
   featuredPosts: CollectionEntry<'blog'>[]
-  newsPosts: CollectionEntry<'blog'>[]
-  newsCount: number
+  newsPosts?: CollectionEntry<'blog'>[]
+  newsCount?: number
 }
 
-const { page, collectionsCount, featuredPosts, newsPosts, newsCount } = Astro.props
+const { page, collectionsCount, featuredPosts } = Astro.props
 ---
 
-<BlogListing {page} {collectionsCount} {featuredPosts} {newsPosts} {newsCount} />
+<BlogListing {page} {collectionsCount} {featuredPosts} />

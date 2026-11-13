@@ -16,8 +16,6 @@ const reviewedSeries = new Map(
 const reviewedSources = new Map(
   reviewed.entries.flatMap((entry) => {
     const metadata = entry.sourceMetadata
-    if (metadata?.['类型'])
-      return [[entry.slug, { source: 'engineering-news', type: metadata['类型'] }]]
     if (metadata?.['任务类型'])
       return [[entry.slug, { source: 'editorial', type: metadata['任务类型'] }]]
     return []

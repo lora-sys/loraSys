@@ -7,7 +7,7 @@ export type WritingSeries = keyof typeof taxonomy.series
 export type WritingKind = 'type' | 'topic' | 'series'
 export const contentTypeIds = Object.keys(taxonomy.contentTypes) as [ContentType, ...ContentType[]]
 export const topicIds = Object.keys(taxonomy.topics) as [WritingTopic, ...WritingTopic[]]
-export const seriesIds = Object.keys(taxonomy.series) as [WritingSeries, ...WritingSeries[]]
+export const seriesIds = Object.keys(taxonomy.series) as string[] as [WritingSeries, ...WritingSeries[]]
 export const writingGroups = {
   type: taxonomy.contentTypes,
   topic: taxonomy.topics,

@@ -11,10 +11,6 @@
     "guides": {
       "zh-CN": "学习指南",
       "en-US": "Learning guides"
-    },
-    "news": {
-      "zh-CN": "新闻与阅读清单",
-      "en-US": "News & reading lists"
     }
   },
   "topics": {
@@ -75,27 +71,8 @@
       "en-US": "Finance"
     }
   },
-  "series": {
-    "agent-engineering-reading": {
-      "zh-CN": "AI Agent 工程阅读清单",
-      "en-US": "AI agent engineering reading lists"
-    }
-  },
+  "series": {},
   "sourceMappings": {
-    "engineering-news": {
-      "周报": {
-        "contentType": "news",
-        "series": "agent-engineering-reading"
-      },
-      "增量补充": {
-        "contentType": "news",
-        "series": "agent-engineering-reading"
-      },
-      "历史回填": {
-        "contentType": "news",
-        "series": "agent-engineering-reading"
-      }
-    },
     "editorial": {
       "有趣项目介绍": {
         "contentType": "projects"

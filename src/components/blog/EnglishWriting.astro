@@ -58,12 +58,8 @@ const curatedPosts =
 const browsePath =
   activeKind && activeValue ? `/en/writing/${activeKind}/${activeValue}` : '/en/writing'
 const publicationRows = posts.filter((post) => !featuredEditions.includes(post))
-const longformRows = publicationRows.filter((post) => post.data.contentType !== 'news')
-const newsRows = publicationRows.filter((post) => post.data.contentType === 'news')
-const mainRows = longformRows.length > 0 ? longformRows : publicationRows
-const secondaryNewsRows = longformRows.length > 0 ? newsRows : []
+const mainRows = publicationRows
 const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US').length
-const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) === 'en-US').length
 ---
 
 <PageLayout
@@ -201,7 +197,7 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
               <header class='section-heading'>
                 <div>
                   <p class='section-kicker'>
-                    {longformRows.length > 0 ? 'Ideas to revisit' : 'Filtered collection'}
+                    {!activeKind ? 'Ideas to revisit' : 'Filtered collection'}
                   </p>
                   <h2 id='publication-title'>
                     {activeKind && activeValue
@@ -249,56 +245,7 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
                 ))}
               </ol>
               <p class='section-empty' data-section-empty='main' hidden>
-                {longformRows.length > 0
-                  ? 'No long-form articles match this language.'
-                  : 'No articles match this language.'}
-              </p>
-            </section>
-          )}
-          {secondaryNewsRows.length > 0 && (
-            <section class='publication-list publication-list--news' aria-labelledby='news-title'>
-              <header class='section-heading'>
-                <div>
-                  <p class='section-kicker'>Reading list</p>
-                  <h2 id='news-title'>News notes</h2>
-                </div>
-                <span data-section-count='news'>
-                  {newsEnglishCount} {newsEnglishCount === 1 ? 'note' : 'notes'}
-                </span>
-              </header>
-              <ol class='news-list' data-section-list='news'>
-                {secondaryNewsRows.map((post) => (
-                  <li
-                    hidden={languageOf(post) !== 'en-US'}
-                    data-original-id={originalArticleId(post)}
-                    data-article
-                    data-content-type={post.data.contentType}
-                    data-series={post.data.series}
-                    data-language={languageOf(post)}
-                  >
-                    <time datetime={post.data.publishDate.toISOString()}>
-                      {post.data.publishDate.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </time>
-                    <div>
-                      <h3>
-                        <a lang={languageOf(post)} href={withBasePath(`/blog/${post.id}`)}>
-                          {post.data.title}
-                        </a>
-                      </h3>
-                      <ArticleClassification data={post.data} locale='en-US' compact />
-                    </div>
-                    <span class='language-badge'>
-                      {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-              <p class='section-empty' data-section-empty='news' hidden>
-                No news notes match this language.
+                No articles match this language.
               </p>
             </section>
           )}
@@ -332,7 +279,6 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
   ]
   const sectionLists = [...document.querySelectorAll<HTMLOListElement>('[data-section-list]')]
   const sectionEmpties = [...document.querySelectorAll<HTMLElement>('[data-section-empty]')]
-  const newsCount = document.querySelector<HTMLElement>('[data-section-count="news"]')
   const mainCount = document.querySelector<HTMLElement>('[data-section-count="main"]')
 
   const applyLanguage = () => {
@@ -369,8 +315,6 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
       if (empty) empty.hidden = count !== 0
       if (list.dataset.sectionList === 'main' && mainCount)
         mainCount.textContent = `${count} ${count === 1 ? 'article' : 'articles'}`
-      if (list.dataset.sectionList === 'news' && newsCount)
-        newsCount.textContent = `${count} ${count === 1 ? 'note' : 'notes'}`
     }
   }
   languageFilter?.addEventListener('change', () => {
@@ -653,12 +597,8 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
   }
   .publication-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 0.56fr);
-    align-items: start;
-    gap: clamp(1.25rem, 4vw, 3.25rem);
-  }
-  .publication-layout:not(:has(.publication-list--news)) {
     grid-template-columns: 1fr;
+    gap: clamp(1.25rem, 4vw, 3.25rem);
   }
   .article-grid {
     display: grid;
@@ -676,8 +616,7 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
     border-bottom: 1px solid hsl(var(--border));
     padding: 1.15rem 0.15rem 1.25rem;
   }
-  .article-card time,
-  .news-list time {
+  .article-card time {
     color: hsl(var(--muted-foreground));
     font-size: 0.72rem;
     font-variant-numeric: tabular-nums;
@@ -685,15 +624,13 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
   .article-card-copy {
     min-width: 0;
   }
-  .article-card h3,
-  .news-list h3 {
+  .article-card h3 {
     margin: 0;
     font-size: clamp(1rem, 1.35vw, 1.25rem);
     font-weight: 570;
     line-height: 1.35;
   }
-  .article-card h3 a,
-  .news-list h3 a {
+  .article-card h3 a {
     color: hsl(var(--foreground));
     text-decoration: none;
   }
@@ -707,32 +644,7 @@ const newsEnglishCount = secondaryNewsRows.filter((post) => languageOf(post) ===
     display: inline-block;
     margin-top: 0.65rem;
   }
-  .news-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .news-list li {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: 0.55rem 0.65rem;
-    border-bottom: 1px solid hsl(var(--border));
-    padding: 0.85rem 0.1rem;
-  }
-  .news-list time {
-    grid-column: 1 / -1;
-  }
-  .news-list h3 {
-    font-size: 0.94rem;
-    line-height: 1.42;
-  }
-  .news-list .language-badge {
-    margin-top: 0.05rem;
-    white-space: nowrap;
-  }
   .article-card a:hover,
-  .news-list a:hover,
   .featured h2 a:hover {
     text-decoration: underline;
     text-underline-offset: 0.2em;
