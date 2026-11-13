@@ -32,7 +32,10 @@ Structural equality supports review, but does not establish factual fidelity on 
 
 ## October 2 coverage expansion
 
-The expansion is bounded to the 83 Chinese articles published in commit `c0518b79f997793b2182d1890fc8d8fb29614083`, tree `2a733eada9af7f4326b9131f3ea6fb29ad0e67d2`. At that point six had paired English editions; three other English articles were originals. All remaining 77 sources have now been translated and checked in bounded groups. New Chinese articles after this snapshot are outside this completion pass.
+> [!NOTE]
+> The daily news digest items (`ai-agent-engineering-news-*`) referenced in the initial October passes were pruned to eliminate repetitive short summaries in favor of high-depth technical articles and guides.
+
+The expansion is bounded to the 83 Chinese articles published in commit `c0518b79f997793b2182d1890fc8d8fb29614083`, tree `2a733eada9af7f4326b9131f3ea6fb29ad0e67d2`. At that point six had paired English editions; three other English articles were originals. All remaining sources have been translated and checked in bounded groups. New Chinese articles after this snapshot are outside this completion pass.
 
 The first completed batch adds these ten full English reading lists, preserving the original dates, sections, links, numbers, and qualifications. These sources contain no media.
 

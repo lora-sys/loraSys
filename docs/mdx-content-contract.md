@@ -11,9 +11,9 @@ contentType: technical
 topics: [agents, evaluation]
 ```
 
-The four content types are `technical` (技术文章), `projects` (项目与实践), `guides` (学习指南), and `news` (新闻与阅读清单). A type describes what the reader will get; a topic describes the subject; a series groups installments. Language remains a separate field. Preserve existing `tags` and their historical URLs, but use normalized topics for new navigation and related-reading selection.
+The three content types are `technical` (技术文章), `projects` (项目与实践), and `guides` (学习指南). A type describes what the reader will get; a topic describes the subject; a series groups installments. Language remains a separate field. Preserve existing `tags` and their historical URLs, but use normalized topics for new navigation and related-reading selection. (Note: daily news aggregation and `agent-engineering-reading` have been retired from the site's taxonomy).
 
-The engineering-news source types 周报, 增量补充, and 历史回填 map to `news` with `series: agent-engineering-reading`. This series includes only engineering reading lists. Other news does not inherit that series, and another recurring publication needs a separately reviewed series ID. The editorial source task 有趣项目介绍 maps to `projects`; 科技内容主包 maps to `technical`. 产品机会雷达 is not an automatic publication source. Source metadata has priority over title/tag guesses. If the source type is absent, unknown, or conflicts with a reviewed article, block that candidate for review rather than defaulting to technical.
+The editorial source task 有趣项目介绍 maps to `projects`; 科技内容主包 maps to `technical`. 产品机会雷达 is not an automatic publication source. Source metadata has priority over title/tag guesses. If the source type is absent, unknown, or conflicts with a reviewed article, block that candidate for review rather than defaulting to technical.
 
 For existing articles, preserve the reviewed classification unless the source changes its purpose. A superseded source record must not overwrite a current dedicated article's classification. The one-time reviewed mapping is `content-sync/writing-classification.json`. It records only public-safe categorical metadata, never private page IDs or URLs. The stable source identity, existing slug, publication date, article body, and site-side reading enhancements remain unchanged during classification updates.
 
