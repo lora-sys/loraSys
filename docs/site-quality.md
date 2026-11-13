@@ -20,8 +20,8 @@ The localization workflow additionally checks every rendered HTML file and local
 
 Lighthouse runs against a gzip-enabled production preview using its mobile simulation. Record its actual scores and metrics. A successful measurement step is not proof that a performance target was met. Inlined styles avoid several blocking requests on the initial navigation but increase HTML size and reduce cross-page stylesheet caching; retain this setting only with measured results.
 
-## After publishing
+## Release audits
 
-The read-only published-localization workflow checks the deployed site after the existing Pages deployment succeeds. It does not submit forms, post comments, call model APIs or write production data. Preserve the deployed revision, screenshots and reports with the audit result.
+Production output is audited during `bun run build` via `scripts/audit-release.mjs` and `scripts/audit-writing-taxonomy.mjs`, ensuring required files, metadata, unique `h1` headings, taxonomy consistency, and clean internal links without duplicated prefixes.
 
-Passing these suites does not establish physical-device, Safari, Firefox or screen-reader compatibility. These require separate verification. Third-party services that load only after consent or a visitor action are not silently enabled for a test.
+Automated pull-request verification (`.github/workflows/verify.yml`) runs headless browser suites, accessibility (axe-core) checks, and Lighthouse audits against the exact production artifact before merge. Passing these suites does not establish physical-device, Safari, Firefox or screen-reader compatibility, which require separate manual verification when design changes occur. Third-party services that load only after consent or visitor interaction are never silently enabled for tests.

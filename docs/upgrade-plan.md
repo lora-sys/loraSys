@@ -1,6 +1,6 @@
-# loraSys 体验升级计划 2026 年 8 月
-
-本文保留 2026-08-26 的审计与升级计划。文中的代码状态、页面数量、性能数据和待办均属于当时记录，不代表当前仓库状态。执行相关任务前重新核对代码与验证结果。当前开发规则见 `AGENTS.md`，交互约束见 `docs/interaction-matrix.md`。
+> [!NOTE]
+> **归档参考文档**：本文记录 2026-08 体验升级的技术设计与推导历史。文中规划的所有关键阶段（阶段 0 工作区整理、阶段 1 语言切换、阶段 2 证据层与现场感、阶段 3 Field Notes 结构化等）均已全部在主分支落地实施完毕。
+> 当前架构事实、开发规则请以 [`AGENTS.md`](/Users/lora/loraSys/AGENTS.md) 与 [`README.md`](/Users/lora/loraSys/README.md) 为准，交互约束参见 [`docs/interaction-matrix.md`](/Users/lora/loraSys/docs/interaction-matrix.md)。
 
 ## 基线事实（已核实）
 
