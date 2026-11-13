@@ -15,12 +15,12 @@
 | 能力 | 现状位置 |
 | --- | --- |
 | 项目卡片最近活动时间 | `ProjectCard.astro` 已显示 `Updated {pushedAt}`（标签硬编码英文） |
-| 外部贡献展示 | `/projects` 页已直接导入快照渲染：归档目录显示仓库、PR 数量与同步日期；但 PR 级状态（Merged/Open/Closed）与 PR 链接只在未被任何页面挂载的孤儿组件 `ExternalContributions.astro` 中实现，访客实际看不到（见阶段 2.4） |
+| 外部贡献展示 | `/projects` 页已直接导入快照渲染归档目录（仓库、PR 数量与同步日期）；未挂载的孤儿组件 `ExternalContributions.astro` 已彻底清理，统一由 `/projects` 维护 |
 | 文章阅读进度条 | `blog/[...id].astro` 与 `en/writing/[...id].astro` 均有固定顶部进度条 |
 | 文章下一篇导航 | `BlogPost.astro` 已有 nextPost 链接 |
 | 相关文章推荐 | `RelatedReading.astro` 按标签共现 + 语言加权（标题硬编码英文） |
 | 文章 TOC 概览折叠 | `BlogPost.astro` 已实现 h2 级概览 + 展开全文 |
-| 首页区块导航编号 | `HomeSectionNav.astro` 已有 01–05 索引与琥珀活动态 |
+| 首页区块导航编号 | 首页 01–05 索引已内联至各区块标题，孤儿组件 `HomeSectionNav.astro` 已清理 |
 | 404 页 Mochi 文案 | `404.astro` 已有"路的尽头没有东西"场景 |
 | 短笔记 related 字段 | `notes/index.astro` 已用 related 链接到文章（方向：笔记→文章） |
 | 阅读书签资产使用 | `reading-marker` 已用于首页写作区与 `BlogListing` |

@@ -5,6 +5,7 @@ import syncReport from '@/data/sync-report.json'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { HIGHLIGHT_AMBER } from '@/i18n/ui'
 import FreshnessStatus from '@/components/lora/FreshnessStatus.astro'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
 
@@ -42,7 +43,7 @@ const synced = new Intl.DateTimeFormat('en-US', {
     title: 'Now',
     description: 'What Lora is building, learning, reading, and listening to now.'
   }}
-  highlightColor='#d99a33'
+  highlightColor={HIGHLIGHT_AMBER}
 >
   <main class='now-page'>
     <header class='now-hero'>

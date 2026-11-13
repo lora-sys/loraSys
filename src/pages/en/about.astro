@@ -5,6 +5,7 @@ import { profile, projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { HIGHLIGHT_AMBER } from '@/i18n/ui'
 import ResumePreview from '@/components/resume/ResumePreview.astro'
 import journeyFragment from '@/assets/lora-visual/v2/lora-v2-about-journey.webp'
 
@@ -31,7 +32,7 @@ const capabilities = [
     description:
       'About Lora, an AI agent developer and full-stack engineer building inspectable systems in public.'
   }}
-  highlightColor='#d99a33'
+  highlightColor={HIGHLIGHT_AMBER}
 >
   <main class='about-page'>
     <header>

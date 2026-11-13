@@ -9,6 +9,9 @@ export const uiLocale = (pathname: string): SiteLocale => {
 export const text = (locale: SiteLocale, zh: string, en: string) => locale === 'en-US' ? en : zh
 export const dateLabel = (value: Date | string, locale: SiteLocale) =>
   new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(value))
+export const monthDayLabel = (value: Date | string, locale: SiteLocale) =>
+  new Intl.DateTimeFormat(locale, { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(value))
+export const HIGHLIGHT_AMBER = 'hsl(var(--field-amber))'
 const labels: Record<string, string> = {
   building: '构建中', active: '持续维护', archived: '已归档', High: '优先', Medium: '后续', 'Build note': '构建笔记', 'Project update': '项目进展', 'Lab note': '实验笔记',
   'Featured work without a Story': '精选项目尚无关联记录', 'Active build needs context': '构建中的项目需要说明', 'Recent repository push': '最近有代码更新',

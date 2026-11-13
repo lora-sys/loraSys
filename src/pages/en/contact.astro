@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import { socialLinks } from '@/data/social'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { HIGHLIGHT_AMBER } from '@/i18n/ui'
 import CopyAction from '@/components/layout/CopyAction.astro'
 import correspondence from '@/assets/lora-visual/v2/lora-v2-contact-correspondence.webp'
 
@@ -18,7 +19,7 @@ const channels = socialLinks.filter((link) =>
     description:
       'Say hello to Lora about projects, open source, learning, content, or a concrete technical problem.'
   }}
-  highlightColor='#d99a33'
+  highlightColor={HIGHLIGHT_AMBER}
 >
   <main class='contact-page'>
     <header>

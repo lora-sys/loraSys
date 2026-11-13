@@ -2,6 +2,7 @@
 import { friendLinks } from '@/data/links'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import { HIGHLIGHT_AMBER } from '@/i18n/ui'
 import FriendConstellation from '@/components/links/FriendConstellation.astro'
 
 const active = friendLinks.filter((link) => link.status === 'active')
@@ -13,7 +14,7 @@ const active = friendLinks.filter((link) => link.status === 'active')
     title: 'Links',
     description: 'A small constellation of verified, reciprocal connections around Lora’s work.'
   }}
-  highlightColor='#d99a33'
+  highlightColor={HIGHLIGHT_AMBER}
 >
   <main class='links-page'>
     <header>

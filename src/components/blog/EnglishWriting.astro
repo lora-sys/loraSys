@@ -1,10 +1,12 @@
 ---
 import { featuredPostIds } from '@/data/featured-posts'
 import { withBasePath } from '@/i18n/site'
+import { dateLabel, HIGHLIGHT_AMBER } from '@/i18n/ui'
 
 import { getBlogCollection } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import ArticleClassification from '@/components/blog/ArticleClassification.astro'
+import LanguageBadge from '@/components/blog/LanguageBadge.astro'
 import WritingTaxonomy from '@/components/blog/WritingTaxonomy.astro'
 import { articleLanguage, originalArticleId } from '@/utils/article-translations'
 import { writingLabel, type WritingKind } from '@/utils/writing'
@@ -70,7 +72,7 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
     description:
       'Published notes on agent systems, tools, and building in public, in Chinese and English.'
   }}
-  highlightColor='#d99a33'
+  highlightColor={HIGHLIGHT_AMBER}
 >
   <main class:list={['writing-page', { 'writing-page--filtered': Boolean(activeKind) }]}>
     <header>
@@ -129,15 +131,13 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
           <div class='featured-label'>
             <>
               <span>Featured note</span>
-              <span class='language-badge'>
-                {languageOf(featuredPost) === 'en-US' ? 'English' : 'Chinese'}
-              </span>
+              <LanguageBadge
+                language={languageOf(featuredPost)}
+                label={languageOf(featuredPost) === 'en-US' ? 'English' : 'Chinese'}
+                compact
+              />
               <time datetime={featuredPost.data.publishDate.toISOString()}>
-                {featuredPost.data.publishDate.toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric'
-                })}
+                {dateLabel(featuredPost.data.publishDate, 'en-US')}
               </time>
             </>
           </div>
@@ -223,11 +223,7 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
                     data-language={languageOf(post)}
                   >
                     <time datetime={post.data.publishDate.toISOString()}>
-                      {post.data.publishDate.toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+                      {dateLabel(post.data.publishDate, 'en-US')}
                     </time>
                     <div class='article-card-copy'>
                       <h3>
@@ -237,9 +233,11 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
                       </h3>
                       <p lang={languageOf(post)}>{post.data.description}</p>
                       <ArticleClassification data={post.data} locale='en-US' />
-                      <span class='language-badge'>
-                        {languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
-                      </span>
+                      <LanguageBadge
+                        language={languageOf(post)}
+                        label={languageOf(post) === 'en-US' ? 'English' : 'Chinese'}
+                        compact
+                      />
                     </div>
                   </li>
                 ))}
@@ -453,18 +451,6 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  .featured-label .language-badge,
-  .language-badge {
-    width: fit-content;
-    border: 1px solid hsl(var(--border));
-    border-radius: 999px;
-    padding: 0.2rem 0.45rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.62rem;
-    font-weight: 550;
-    letter-spacing: normal;
-    text-transform: none;
-  }
   .featured h2 {
     max-width: 22ch;
     margin: 0;
@@ -640,8 +626,8 @@ const mainEnglishCount = mainRows.filter((post) => languageOf(post) === 'en-US')
     font-size: 0.88rem;
     line-height: 1.65;
   }
-  .article-card .language-badge {
-    display: inline-block;
+  .article-card :global(.language-badge) {
+    display: inline-flex;
     margin-top: 0.65rem;
   }
   .article-card a:hover,

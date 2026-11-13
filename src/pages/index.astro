@@ -6,6 +6,7 @@ import { profile, projects } from '@/data/profile'
 import { homepageFeatured } from '@/data/project-curation'
 import syncReport from '@/data/sync-report.json'
 import { withBasePath } from '@/i18n/site'
+import { dateLabel, monthDayLabel } from '@/i18n/ui'
 
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import PageLayout from '@/layouts/BaseLayout.astro'
@@ -21,9 +22,7 @@ const allPosts = sortMDByDate(await getBlogCollection()).filter(
   (post) => post.data.language !== 'en-US'
 )
 const latestPostDate = allPosts[0]?.data?.publishDate
-  ? new Intl.DateTimeFormat('zh-CN', { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(
-      new Date(allPosts[0].data.publishDate)
-    )
+  ? monthDayLabel(allPosts[0].data.publishDate, 'zh-CN')
   : null
 const allSelectedProjects = projects.filter((project) => project.featured)
 const featuredProjects = homepageFeatured(allSelectedProjects)
@@ -54,13 +53,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
           >
           <div class='section-meta'>
             <EvidenceBadge kind='verified' /><time datetime={syncReport.syncedAt.slice(0, 10)}
-              >同步于 {
-                new Intl.DateTimeFormat('zh-CN', {
-                  month: 'long',
-                  day: 'numeric',
-                  timeZone: 'UTC'
-                }).format(new Date(syncReport.syncedAt))
-              }</time
+              >同步于 {monthDayLabel(syncReport.syncedAt, 'zh-CN')}</time
             >
           </div>
         </header>
@@ -106,12 +99,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
               {recentPosts.map((post) => (
                 <li class='writing-item'>
                   <time datetime={post.data.publishDate.toISOString()}>
-                    {new Intl.DateTimeFormat('zh-CN', {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                      timeZone: 'UTC'
-                    }).format(post.data.publishDate)}
+                    {dateLabel(post.data.publishDate, 'zh-CN')}
                   </time>
                   <h3>
                     <a href={withBasePath(`/blog/${post.id}`)}>
@@ -187,183 +175,3 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '')
     </div>
   </main>
 </PageLayout>
-
-<style>
-  .home-page {
-    width: 100%;
-  }
-  .home-flow {
-    display: grid;
-    width: min(100%, 70rem);
-    gap: clamp(4.5rem, 10vw, 7.5rem);
-    margin: 0 auto;
-    padding: 1rem clamp(1rem, 4vw, 2.5rem) 4rem;
-  }
-  .home-section,
-  .contact-anchor {
-    scroll-margin-top: 5.5rem;
-  }
-  .section-heading {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: end;
-    gap: 0.8rem 1.5rem;
-    margin-bottom: 1.4rem;
-  }
-  .section-heading h2 {
-    max-width: 25ch;
-    margin: 0.5rem 0 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.7rem, 4vw, 2.75rem);
-    font-weight: 640;
-    letter-spacing: -0.045em;
-    line-height: 1.08;
-    text-wrap: balance;
-  }
-  .text-link {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.76rem;
-    font-weight: 620;
-    text-decoration: none;
-  }
-  .text-link:hover,
-  .text-link:focus-visible {
-    color: hsl(var(--foreground));
-    text-decoration: underline;
-    text-underline-offset: 0.2rem;
-  }
-  .section-meta {
-    display: flex;
-    grid-column: 1 / -1;
-    align-items: center;
-    gap: 0.5rem;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.67rem;
-  }
-  .supporting-work {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  .writing-list {
-    display: grid;
-    gap: 1rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .writing-item {
-    display: grid;
-    gap: 0.35rem;
-    border-top: 1px solid hsl(var(--border));
-    padding-top: 1rem;
-  }
-  .writing-item time {
-    color: hsl(var(--muted-foreground));
-    font-size: 0.67rem;
-  }
-  .writing-item h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 650;
-  }
-  .writing-item h3 a {
-    color: hsl(var(--foreground));
-    text-decoration: none;
-  }
-  .writing-item h3 a:hover,
-  .writing-item h3 a:focus-visible {
-    text-decoration: underline;
-    text-underline-offset: 0.2rem;
-  }
-  .writing-item p,
-  .focus-item p,
-  .about-content p {
-    max-width: 48rem;
-    margin: 0;
-    color: hsl(var(--muted-foreground));
-    font-size: 0.84rem;
-    line-height: 1.7;
-  }
-  .empty-note {
-    border-top: 1px solid hsl(var(--border));
-    padding-top: 1rem;
-    color: hsl(var(--muted-foreground));
-  }
-  .focus-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  .focus-item {
-    border-top: 1px solid hsl(var(--border));
-    padding-top: 0.9rem;
-  }
-  .focus-item > span {
-    color: hsl(var(--field-amber-strong));
-    font-family: ui-monospace, monospace;
-    font-size: 0.67rem;
-  }
-  .focus-item h3 {
-    margin: 0.45rem 0;
-    font-size: 1rem;
-    font-weight: 650;
-  }
-  .focus-item h3 a {
-    color: inherit;
-  }
-  .about-content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(15rem, 18rem);
-    align-items: center;
-    gap: 2rem;
-    border-block: 1px solid hsl(var(--border));
-    padding: 1.4rem 0;
-  }
-  .about-content > div {
-    display: grid;
-    gap: 0.8rem;
-  }
-  .contact-outro {
-    display: grid;
-    gap: 0.7rem;
-    border: 1px solid hsl(var(--border));
-    border-radius: var(--radius-lg);
-    padding: clamp(1.4rem, 4vw, 2.4rem);
-    background: hsl(var(--card));
-  }
-  .contact-outro h2 {
-    max-width: 20ch;
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: clamp(1.65rem, 5vw, 2.6rem);
-    font-weight: 640;
-    letter-spacing: -0.04em;
-    line-height: 1.04;
-  }
-  .contact-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 0.6rem;
-  }
-
-  @media (max-width: 900px) {
-    .supporting-work,
-    .focus-grid {
-      grid-template-columns: 1fr;
-    }
-    .section-heading {
-      grid-template-columns: 1fr;
-      align-items: start;
-    }
-    .section-meta {
-      grid-column: auto;
-    }
-    .about-content {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

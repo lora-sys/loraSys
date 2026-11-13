@@ -1,23 +1,44 @@
 ---
 import { Icon } from 'astro-pure/user'
-import { withBasePath } from '@/i18n/site'
+import { withBasePath, type SiteLocale } from '@/i18n/site'
 import LoraVisual from '@/components/lora/LoraVisual.astro'
+
+interface Props {
+  locale?: SiteLocale
+}
+
+const { locale = 'zh-CN' } = Astro.props
+const isEn = locale === 'en-US'
 ---
 
 <section class='contact-outro' aria-labelledby='contact-outro-title'>
   <LoraVisual asset='contactCorrespondence' class='contact-scene' />
   <div>
-    <span class='eyebrow'>联系</span>
-    <h2 id='contact-outro-title'>想聊聊正在做的东西？</h2>
+    <span class='eyebrow'>{isEn ? 'Contact' : '联系'}</span>
+    <h2 id='contact-outro-title'>{isEn ? 'Want to say hello or talk about a project?' : '想聊聊正在做的东西？'}</h2>
     <p>
-      如果你有项目、写作、开源或学习方向想交流，可以从这里联系我。
+      {
+        isEn
+          ? 'If you want to discuss a project, writing, open source, or learning direction, you can reach out here.'
+          : '如果你有项目、写作、开源或学习方向想交流，可以从这里联系我。'
+      }
     </p>
   </div>
   <div class='actions'>
-    <a class='primary' href={withBasePath('/contact')}>发一封消息 <span aria-hidden='true'>→</span></a>
-    <a href='https://github.com/lora-sys' target='_blank' rel='me noopener noreferrer'>
-      <Icon name='github-circle' class='size-4' /> GitHub
+    <a class='primary' href={withBasePath(isEn ? '/en/contact' : '/contact')}>
+      {isEn ? 'Write a message' : '发一封消息'} <span aria-hidden='true'>&rarr;</span>
     </a>
+    {
+      isEn ? (
+        <a href={withBasePath('/contact')}>
+          中文联系页 <span aria-hidden='true'>&nearr;</span>
+        </a>
+      ) : (
+        <a href='https://github.com/lora-sys' target='_blank' rel='me noopener noreferrer'>
+          <Icon name='github-circle' class='size-4' /> GitHub
+        </a>
+      )
+    }
   </div>
 </section>
 

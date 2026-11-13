@@ -2,18 +2,21 @@
 interface Props {
   language?: string
   compact?: boolean
+  label?: string
+  class?: string
 }
 
-const { language = 'zh-CN', compact = false } = Astro.props
+const { language = 'zh-CN', compact = false, label, class: className } = Astro.props
 const isEnglish = language.toLowerCase().startsWith('en')
+const badgeText = label ?? (isEnglish ? 'EN' : '中文')
 ---
 
 <span
-  class:list={['language-badge', { compact }]}
+  class:list={['language-badge', { compact }, className]}
   lang={isEnglish ? 'en-US' : 'zh-CN'}
   title={isEnglish ? 'Article in English' : '中文文章'}
 >
-  <span>{isEnglish ? 'EN' : '中文'}</span>
+  <span>{badgeText}</span>
 </span>
 
 <style>
